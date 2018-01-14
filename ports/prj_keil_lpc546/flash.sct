@@ -1,0 +1,55 @@
+#! armcc -E
+
+#define STACK_SIZE 0x1800
+; must use "VECTOR_RAM", "RW_m_data", "VECTOR_ROM" as names to work with "InstallIRQHandler()" API
+
+
+LR_IROM2 0x00000000 384*1024 {
+  ; >>> RO regions
+	  VECTOR_ROM +0 0x200 { ; vector table
+		* (RESET,+FIRST)
+	  }
+	  
+	  TEXT_ROOT +0  { ; load address = execution address
+		* (InRoot$$Sections)
+	  }
+  ; <<<
+	  TEXT_ROM +0  { ; load address = execution address
+		.ANY (+RO)
+	  }
+
+  ; >>> RAMX regions
+	  ; RAM vector table, unless "InstallIRQHandler()" is called, not used
+	  ARM_LIB_STACK 0x04000000 EMPTY STACK_SIZE { ; Stack region growing down
+	  }
+	  
+	  FAST_RAM 0x04000000 + STACK_SIZE 32*1024-STACK_SIZE {
+		//fsl_dma.o spi.o i2c.o ff.o py_swim.o (+RW +ZI)
+		vm.o obj.o objarray.o objfloat.o objlist.o objobject.o  (+RO)
+		nlrthumb.o objfun.o  nativeglue.o malloc.o (+RO)
+		lpc_swim*.o fusion.o integration.o (+RO)
+	  }
+
+  ; <<<
+  
+  ; >>> AHB RAM (2 cycles access) regions, main R/W
+	  RW_m_data 0x20000000 (64+64+32)*1024 { ; RW data
+		.ANY (+RW +ZI)
+		 modmath.o modarray.o  map.o (+RO)
+	  }
+	  VECTOR_RAM +0 EMPTY 0x200 { ; RAM vector region (in RAMX)
+	  } 
+	  ARM_LIB_HEAP +0 EMPTY 0x100 ; Heap region growing up
+      {}
+	  MPY_HEAP_START +0 EMPTY 4 {
+	  }
+  ; <<<
+  
+  ; >>> SDRAM >>>
+	  ;RW_FB 0xA0000000 EMPTY UNINIT 1024*1024  {
+	  ;}
+	  
+	  ;RW_SDRAM 0xA0100000 EMPTY UNINIT (32-1)*1024*1024  {
+	  ;}
+; <<<
+}
