@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"nlr.h": "c",
+			"irq.h": "c",
+			"stdio.h": "c"
+		}
+	}
+}
