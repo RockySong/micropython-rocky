@@ -27,7 +27,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>
-#include "fsl_dma.h"
+#include "fsl_edma.h"
 #include "hal_wrapper.h"
 #include "dma.h"
 #include "py/obj.h"

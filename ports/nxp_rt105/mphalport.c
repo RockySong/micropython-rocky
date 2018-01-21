@@ -7,7 +7,7 @@
 #include "usb_app.h"
 #include "uart.h"
 #include "fsl_gpio.h"
-#include "fsl_iocon.h"
+#include "fsl_iomux.h"
 #include "fsl_debug_console.h"
 bool mp_hal_ticks_cpu_enabled = false;
 

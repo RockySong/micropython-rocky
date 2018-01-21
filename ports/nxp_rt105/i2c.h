@@ -23,8 +23,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-#include "fsl_i2c.h"
-#include "fsl_i2c_dma.h"
+#include "fsl_lpi2c.h"
+#include "fsl_lpi2c_edma.h"
 
 #include "dma.h"
 
@@ -78,19 +78,19 @@ typedef enum {
 
 typedef struct _pyb_i2c_obj_t {
     mp_obj_base_t base;
-    I2C_Type *pI2C;
+    LPI2C_Type *pI2C;
     pyb_i2c_t ndx;
 	clock_name_t myClock;
-	clock_attach_id_t clockSel;
-	SYSCON_RSTn_t resetNdx;
+	clock_mux_t clockSel;
+	// SYSCON_RSTn_t resetNdx;  // call LPI2C_MasterReset();
     IRQn_Type irqn;
 	uint32_t mstBaudrate;
 	uint32_t flags;
 	bool isUseDMA;
 	bool isMaster;
-	i2c_master_config_t mstCfg;
-	i2c_master_dma_handle_t hMstDma;
-	i2c_slave_config_t slvCfg;
+	lpi2c_master_config_t mstCfg;
+	// lpi2c_master_dma_handle_t hMstDma;
+	// lpi2c_slave_config_t slvCfg;
 } pyb_i2c_obj_t;
 
 // use this for OwnAddress1 to configure I2C in master mode

@@ -27,7 +27,7 @@
 #ifndef __MICROPY_INCLUDED_STMHAL_DMA_H__
 #define __MICROPY_INCLUDED_STMHAL_DMA_H__
 
-#include "fsl_dma.h"
+#include "fsl_edma.h"
 
 typedef union {
     uint32_t bmChnEn[2];
@@ -38,7 +38,7 @@ void dma_init(uint32_t dmaNdx, uint32_t chnNdx);
 // disable one channel, if all channels are disabled, Deinit DMA itself
 void dma_deinit(uint32_t dmaNdx, uint32_t chnNdx);
 // abort one channel
-void dma_invalidate_channel(uint32_t dmaNdx, dma_handle_t *ph);
+void dma_invalidate_channel(uint32_t dmaNdx, void *ph);
 // called from systick to process DMA idle timer
 void dma_idle_handler(uint32_t tick);
 

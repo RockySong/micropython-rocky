@@ -22,7 +22,7 @@ FROZEN_MPY_DIR ?= modules
 include $(TOP)/py/py.mk
 
 LD_DIR=boards
-HAL_DIR=sdk
+HAL_DIR=mcusdk
 USBDEV_DIR=$(HAL_DIR)/middleware/sdkusb
 #USBHOST_DIR=usbhost
 FATFS_DIR=lib/oofatfs
@@ -42,6 +42,7 @@ INC += -I.
 INC += -I..
 INC += -I$(TOP)
 INC += -I$(TOP)/py
+INC += -I$(TOP)/lib
 INC += -I$(BUILD)
 INC += -I$(TOP)/lib/cmsis/inc
 INC += -I$(HAL_DIR)
@@ -58,7 +59,7 @@ INC += -Iay_imu/math
 #INC += -I$(USBHOST_DIR)
 
 CFLAGS_CORTEX_M4 = -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -fsingle-precision-constant -Wdouble-promotion -mtune=cortex-m4 -mcpu=cortex-m4
-CFLAGS_CORTEX_M7 = -mthumb -mfpu=fpv4-d16 -mfloat-abi=hard -fsingle-precision-constant -Wdouble-promotion -mtune=cortex-m7 -mcpu=cortex-m7
+CFLAGS_CORTEX_M7 = -mthumb -mfpu=fpv5-d16 -mfloat-abi=hard -fsingle-precision-constant -Wdouble-promotion -mtune=cortex-m7 -mcpu=cortex-m7
 
 
 CFLAGS = $(INC) -Wall -Wpointer-arith -std=gnu99 -nostdlib $(CFLAGS_MOD)
@@ -187,7 +188,7 @@ DRIVERS_SRC_C = $(addprefix drivers/,\
 
 SRC_C = \
 	main.c \
-	./mcusdk/system_LPC54608.c \
+	./mcusdk/system_MIMXRT1052.c \
 	irq.c \
 	pendsv.c \
 	systick.c  \
@@ -273,7 +274,7 @@ SRC_C_BKUP = \
 	$(wildcard boards/$(BOARD)/*.c)    
     
 SRC_O = \
-	startup_LPC54608.o \
+	startup_MIMXRT1052.o \
 	gchelper.o \
 
 SRC_HAL = $(addprefix $(HAL_DIR)/src/mcu32$(MCU_SERIES)xx_,\
@@ -429,7 +430,7 @@ $(BUILD)/firmware.elf: $(OBJ)
 
 MAKE_PINS = boards/make-pins.py
 BOARD_PINS = boards/$(BOARD)/pins.csv
-PREFIX_FILE = boards/lpc546xx_prefix.c
+PREFIX_FILE = boards/mimxrt105x_prefix.c
 GEN_PINS_SRC = $(BUILD)/pins_$(BOARD).c
 GEN_PINS_HDR = $(HEADER_BUILD)/pins.h
 GEN_PINS_QSTR = $(BUILD)/pins_qstr.h
@@ -476,8 +477,8 @@ $(BUILD)/pins_$(BOARD).o: $(BUILD)/pins_$(BOARD).c
 GEN_MCUCONST_HDR = $(HEADER_BUILD)/modmcu_const.h
 GEN_MCUCONST_QSTR = $(BUILD)/modmcu_qstr.h
 GEN_MCUCONST_MPZ = $(HEADER_BUILD)/modmcu_mpz.h
-CMSIS_MCU_LOWER = $(shell echo $(CMSIS_MCU) | tr '[:upper:]' '[:lower:]')
-CMSIS_MCU_HDR = mcusdk/$(CMSIS_MCU_LOWER).h
+CMSIS_MCU_UPPER = $(shell echo $(CMSIS_MCU) | tr '[:lower:]' '[:upper:]')
+CMSIS_MCU_HDR = mcusdk/$(CMSIS_MCU_UPPER).h
 
 $(BUILD)/modmcu_qstr.h: $(CMSIS_MCU_HDR) make-mcuconst.py | $(HEADER_BUILD)
 	$(ECHO) "Rocky's create modmcu_qstr.h"
@@ -499,3 +500,4 @@ $(GEN_CDCINF_FILE): $(CDCINF_TEMPLATE) $(INSERT_USB_IDS) $(USB_IDS_FILE) | $(HEA
 	$(Q)$(PYTHON) $(INSERT_USB_IDS) $(USB_IDS_FILE) $< > $@
 
 include $(TOP)/py/mkrules.mk
+

@@ -46,12 +46,12 @@
 #endif
 
 #if 1 // USE_INTERNAL
-	uint64_t s_c8FlhCache[FLASH_BLOCK_SIZE / 8];	
+	uint64_t s_c8FlhCache[SECTOR_USE_SIZE / 8];	
 	#if 1 // defined(LPC54608) 
 		#define CACHE_MEM_START_ADDR (s_c8FlhCache) // CCM data RAM, 64k
-		#define FLASH_SECTOR_SIZE_MAX (512) // 1K max, logic sector, 2 pages. size of CCM
-		#define FLASH_MEM_SEG1_START_ADDR (0x00070000) // sector 1
-		#define FLASH_MEM_SEG1_NUM_BLOCKS (64*1024/FLASH_BLOCK_SIZE)
+		#define FLASH_SECTOR_SIZE_MAX SECTOR_USE_SIZE
+		#define FLASH_MEM_SEG1_START_ADDR FLASH_DISK_BASE_ADDR
+		#define FLASH_MEM_SEG1_NUM_BLOCKS (FLASH_DISK_SIZE / FLASH_BLOCK_SIZE)
 	#else
 		#error "no storage support for this MCU"
 	#endif
@@ -61,7 +61,7 @@
 		#define FLASH_MEM_SEG2_NUM_BLOCKS (0) // no second segment
 	#endif
 
-	#define FLASH_PART1_START_BLOCK (FLASH_MEM_SEG1_START_ADDR / FLASH_BLOCK_SIZE)
+	#define FLASH_PART1_START_BLOCK (FLASH_DISK_OFS / FLASH_BLOCK_SIZE)
 	#define FLASH_PART1_NUM_BLOCKS (FLASH_MEM_SEG1_NUM_BLOCKS + FLASH_MEM_SEG2_NUM_BLOCKS)
 
 	#define FLASH_FLAG_DIRTY        (1)

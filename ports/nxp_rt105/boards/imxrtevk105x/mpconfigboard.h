@@ -5,7 +5,7 @@
 #define MICROPY_HW_MCU_NAME         "LPC54608"
 
 #define MICROPY_HW_UART_REPL    	(0)	// uart ID of REPL uart
-#define MICROPY_HW_HAS_SWITCH       (1)
+#define MICROPY_HW_HAS_SWITCH       (0)
 #define MICROPY_HW_HAS_FLASH        (1)
 #define MICROPY_HW_HAS_SDCARD       (1)
 #define MICROPY_HW_HAS_LCD          (0)
@@ -15,7 +15,7 @@
 #define MICROPY_HW_ENABLE_SERVO     (0)
 #define MICROPY_HW_ENABLE_DAC       (0)
 #define MICROPY_HW_ENABLE_CAN       (0)
-#define MICROPY_MW_ENABLE_SWIM		(1)
+#define MICROPY_MW_ENABLE_SWIM		(0)
 // XTAL is 12MHz
 
 typedef enum _enum_rootPtrs

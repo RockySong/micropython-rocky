@@ -27,11 +27,11 @@
 #ifndef __MICROPY_INCLUDED_STMHAL_PIN_H__
 #define __MICROPY_INCLUDED_STMHAL_PIN_H__
 
-#include "fsl_iocon.h"
+#include "fsl_iomuxc.h"
 #include "fsl_gpio.h"
 // This file requires pin_defs_xxx.h (which has port specific enums and
 // defines, so we include it here. It should never be included directly
-#include "pin_defs_lpc546.h"
+#include "pin_defs_imxrt105.h"
 // rocky del #include MICROPY_PIN_DEFS_PORT_H
 #include "py/obj.h"
 
@@ -45,11 +45,10 @@ typedef struct {
 
   union {
     void          *reg;
-
-    CTIMER_Type *pCT32;
-	I2C_Type *pI2C;
-	USART_Type *pUART;
-	SPI_Type *pSPI;
+	TMR_Type *pQTmr;
+	LPI2C_Type *pI2C;
+	LPUART_Type *pUART;
+	LPSPI_Type *pSPI;
   };
 } pin_af_obj_t;
 

@@ -9,13 +9,13 @@ import csv
 
 SUPPORTED_FN = {
     #'GPIO'  : ['PIN'],
-    'QTIMER': ['TIMER0',  'TIMER1',  'TIMER2', 'TIMER3'],
+    'TMR': ['TMR0',  'TMR1',  'TMR2', 'TMR3'],
     'GPT'   : ['CLK', 'CAPTURE1', 'CAPTURE2', 'COMPARE1', 'COMPARE2', 'COMPARE3'],
     'LPI2C' : ['SDA', 'SCL'],
     'LPUART': ['RX', 'TX', 'CTS_B', 'RTS_B'],
-    'LPSPI' : ['PCS', 'SCK', 'SDI', 'SDO'],
+    'LPSPI' : ['PCS0', 'SCK', 'SDI', 'SDO'],
     'SAI'   : ['TX_BCLK', 'TX_SYNC', 'TX_DATA', 'TX_DATA0', 'TX_DATA1', 'TX_DATA2', 'TX_DATA3',
-            'RX_DATA', 'RX_DATA0'],
+            'RX_BCLK', 'RX_SYNC', 'RX_DATA', 'RX_DATA0', 'MCLK'],
 }
 
 CONDITIONAL_VAR = {
@@ -92,6 +92,10 @@ class AlternateFunction(object):
         self.func = ''
         self.fn_num = None
         self.pin_type = ''
+        # >>> i.mx rt pin map
+        self.inSelReg = ''
+        self.inSelVal = ''
+        # <<<
         self.supported = False
 
         af_words = af_str.split('_', 1)
@@ -151,7 +155,8 @@ class Pin(object):
         self.adc_num = 0
         self.adc_channel = 0
         self.board_pin = False
-
+        self.afReg = ''
+        self.padCfgReg = ''
     def port_letter(self):
         return chr(self.port + ord('0'))
 
@@ -212,8 +217,8 @@ class Pin(object):
             print("// ",  end='')
         print('};')
         print('')
-        print('const pin_obj_t pin_{:s} = PIN({:s}, {:d}, {:s}, {:s}, {:d});'.format(
-            self.cpu_pin_name(), self.port_letter(), self.pin,
+        print('const pin_obj_t pin_{:s} = PIN({:s}, {:s}, {:d}, {:s}, {:s}, {:d});'.format(
+            self.cpu_pin_name(), self.cpu_pin_name(), self.port_letter(), self.pin,
             self.alt_fn_name(null_if_0=True),
             self.adc_num_str(), self.adc_channel))
         print('')
@@ -274,6 +279,25 @@ class Pins(object):
                         pin.parse_adc(row[af_idx])
                 self.cpu_pins.append(NamedPin(pin.cpu_pin_name(), pin))
 
+    def parse_pinmap_file(self, filename):
+        with open(filename, 'r') as csvfile:
+            dictPinNameLen = {'AD':8 , 'B0': 5 , 'B1':5 , 'EM':6 , 'SD':8 , 'ON':6 , 'ST':8 , 'WA':6}
+            rows = csv.reader(csvfile)
+            n = 0
+            for row in rows:
+                n += 1
+                if n == 1:
+                    continue
+                s = row[0]
+                sPinName = s[0: dictPinNameLen[s[:2]] ]
+                myPin = self.find_pin(sPinName)
+                if myPin == None:
+                    continue
+                myPin.afReg = row[1]
+                myPin.padCfgReg = row[5]
+                print(myPin.imxrtName, row[1], row[5])
+                #todo: add InSelReg
+        
     def parse_board_file(self, filename):
         with open(filename, 'r') as csvfile:
             rows = csv.reader(csvfile)
@@ -402,6 +426,13 @@ def main():
         default="stm32f4xx_af.csv"
     )
     parser.add_argument(
+        "-m", "--pinmap",
+        dest="pinmap_filename",
+        help="Specifies the pinmap file for the i.mx rt105x, as its pin name is not regular, and has 2 level muxing, unlike normal MCUs!",
+        default='.\\mimxrt105x_pinmap.csv'
+    )
+
+    parser.add_argument(
         "--af-const",
         dest="af_const_filename",
         help="Specifies header file for alternate function constants.",
@@ -438,7 +469,7 @@ def main():
     )
     
     if len(sys.argv) < 2:
-        sys.argv = ['.\\make-pins.py', '--board', '.\\imxrtevk105x\\pins.csv', '--af', '.\\mimxrt105x_af.csv', '--prefix', '.\\mimxrt105x_prefix.c', '--hdr', '..\\build-imxrtevk105x\\genhdr\\pins.h', '--qstr', '..\\build-imxrtevk105x\\pins_qstr.h', '--af-const', '..\\build-imxrtevk105x\\genhdr\\pins_af_const.h', '--af-py', '..\\build-imxrtevk105x\\pins_af.py']
+        sys.argv = ['.\\make-pins.py', '--board', '.\\imxrtevk105x\\pins.csv', '--af', '.\\mimxrt105x_af.csv', '--pinmap', '.\\mimxrt105x_pinmap.csv', '--prefix', '.\\mimxrt105x_prefix.c', '--hdr', '..\\build-imxrtevk105x\\genhdr\\pins.h', '--qstr', '..\\build-imxrtevk105x\\pins_qstr.h', '--af-const', '..\\build-imxrtevk105x\\genhdr\\pins_af_const.h', '--af-py', '..\\build-imxrtevk105x\\pins_af.py']
     args = parser.parse_args(sys.argv[1:])
     print("// args=", sys.argv)
     pins = Pins()
@@ -448,7 +479,10 @@ def main():
     if args.af_filename:
         print('// --af {:s}'.format(args.af_filename))
         pins.parse_af_file(args.af_filename, 1, 2, 7)
-
+    if args.pinmap_filename:
+        print('// --pinmap {:s}'.format(args.pinmap_filename))
+        pins.parse_pinmap_file(args.pinmap_filename)
+        return
     if args.board_filename:
         print('// --board {:s}'.format(args.board_filename))
         pins.parse_board_file(args.board_filename)

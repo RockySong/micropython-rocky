@@ -25,9 +25,9 @@
  */
 
 // The LPX54608 has 3 LEDs
-#define MICROPY_HW_LED1             (pin_314) // red
-#define MICROPY_HW_LED2             (pin_33) // green
-#define MICROPY_HW_LED3             (pin_22) // yellow
+#define MICROPY_HW_LED1             (pin_AD_B0_09) // red
+// #define MICROPY_HW_LED2             (pin_33) // green
+// #define MICROPY_HW_LED3             (pin_22) // yellow
 
 #define MICROPY_HW_LED1_PWM         { CTIMER3, 1, IOCON_FUNC3}
 #define MICROPY_HW_LED3_PWM         { CTIMER1, 1, IOCON_FUNC4}

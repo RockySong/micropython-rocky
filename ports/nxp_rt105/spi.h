@@ -24,8 +24,8 @@
  * THE SOFTWARE.
  */
 
-#include "fsl_spi.h"
-#include "fsl_spi_dma.h"
+#include "fsl_lpspi.h"
+#include "fsl_lpspi_edma.h"
 
 #include "dma.h"
 
@@ -69,11 +69,10 @@ typedef enum {
 
 typedef struct _pyb_spi_obj_t {
     mp_obj_base_t base;
-    SPI_Type *pSPI;
+    LPSPI_Type *pSPI;
     pyb_spi_t ndx;
 	clock_name_t myClock;
-	clock_attach_id_t clockSel;
-	SYSCON_RSTn_t resetNdx;
+	clock_mux_t clockSel;
     IRQn_Type irqn;
 	uint32_t mstBaudrate;
 	uint32_t flags;
@@ -83,9 +82,9 @@ typedef struct _pyb_spi_obj_t {
 	const pin_obj_t *pSCK;
 	const pin_obj_t *pMISO;	
 	const pin_obj_t *pMOSI;
-	spi_master_config_t mstCfg;
-	spi_dma_handle_t hMstDma;
-	spi_slave_config_t slvCfg;
+	lpspi_master_config_t mstCfg;
+	// lpspi_edma_handle_t hMstDma;
+	lpspi_slave_config_t slvCfg;
 } pyb_spi_obj_t;
 
 extern const mp_obj_type_t pyb_spi_type;

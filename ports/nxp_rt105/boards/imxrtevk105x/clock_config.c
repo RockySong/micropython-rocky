@@ -1,9 +1,11 @@
 /*
- * Copyright (c) 2015, Freescale Semiconductor, Inc.
+ * The Clear BSD License
+ * Copyright 2017 NXP
  * All rights reserved.
- *
+ * 
  * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * are permitted (subject to the limitations in the disclaimer below) provided
+ *  that the following conditions are met:
  *
  * o Redistributions of source code must retain the above copyright notice, this list
  *   of conditions and the following disclaimer.
@@ -12,10 +14,11 @@
  *   list of conditions and the following disclaimer in the documentation and/or
  *   other materials provided with the distribution.
  *
- * o Neither the name of Freescale Semiconductor, Inc. nor the names of its
+ * o Neither the name of the copyright holder nor the names of its
  *   contributors may be used to endorse or promote products derived from this
  *   software without specific prior written permission.
  *
+ * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -30,11 +33,18 @@
 
 #include "fsl_common.h"
 #include "clock_config.h"
-#include "fsl_power.h"
 
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
+/* ARM PLL configuration for RUN mode */
+const clock_arm_pll_config_t armPllConfig = {.loopDivider = 100U};
+
+/* SYS PLL configuration for RUN mode */
+const clock_sys_pll_config_t sysPllConfig = {.loopDivider = 1U};
+
+/* USB1 PLL configuration for RUN mode */
+const clock_usb_pll_config_t usb1PllConfig = {.loopDivider = 0U};
 
 /*******************************************************************************
  * Variables
@@ -45,75 +55,57 @@ extern uint32_t SystemCoreClock;
 /*******************************************************************************
  * Code
  ******************************************************************************/
-
-void BOARD_BootClockVLPR(void)
+static void BOARD_BootClockGate(void)
 {
-    POWER_DisablePD(kPDRUNCFG_PD_FRO_EN); /*!< Ensure FRO is on so that we can switch to its 12MHz mode temporarily*/
-    CLOCK_AttachClk(kFRO12M_to_MAIN_CLK); /*!< Switch to 12MHz */
-    CLOCK_SetupFROClocking(12000000);     /*!< Turn off high speed output of FRO */
-    CLOCK_SetFLASHAccessCyclesForFreq(12000000); /*!< Set FLASH waitstates for core */
-    POWER_SetVoltageForFreq(12000000);           /*!< Set voltage for core */
-    SystemCoreClock = 12000000;                  /*!< Update information about frequency */
+    /* Disable all unused peripheral clock */
+    CCM->CCGR0 = 0x00C0000FU;
+    CCM->CCGR1 = 0x30000000U;
+    CCM->CCGR2 = 0xFF3F303FU;
+    CCM->CCGR3 = 0xF0000330U;
+    CCM->CCGR4 = 0x0000FF3CU;
+    CCM->CCGR5 = 0xF003330FU;
+    CCM->CCGR6 = 0x00FC0F00U;
 }
 
 void BOARD_BootClockRUN(void)
 {
-    POWER_DisablePD(kPDRUNCFG_PD_FRO_EN); /*!< Ensure FRO is on so that we can switch to its 12MHz mode temporarily*/
-    CLOCK_AttachClk(
-        kFRO12M_to_MAIN_CLK);          /*!< Switch to 12MHz first to ensure we can change voltage without accidentally
-                                       being below the voltage for current speed */
-    POWER_SetVoltageForFreq(48000000); /*!< Set voltage for core */
-    CLOCK_SetFLASHAccessCyclesForFreq(48000000); /*!< Set FLASH waitstates for core */
-    CLOCK_SetupFROClocking(48000000);            /*!< Setup CPU to run off FRO 48MHz output*/
-    CLOCK_AttachClk(kFRO_HF_to_MAIN_CLK);        /*!< Switch main clock to 48MHz */
-    SystemCoreClock = 48000000;                  /*!< Update information about frequency */
+    /* Boot ROM did initialize the XTAL, here we only sets external XTAL OSC freq */
+    CLOCK_SetXtalFreq(24000000U);
+    CLOCK_SetRtcXtalFreq(32768U);
+
+    CLOCK_SetMux(kCLOCK_PeriphClk2Mux, 0x1); /* Set PERIPH_CLK2 MUX to OSC */
+    CLOCK_SetMux(kCLOCK_PeriphMux, 0x1);     /* Set PERIPH_CLK MUX to PERIPH_CLK2 */
+
+    /* Setting the VDD_SOC to 1.5V. It is necessary to config AHB to 600Mhz */
+    DCDC->REG3 = (DCDC->REG3 & (~DCDC_REG3_TRG_MASK)) | DCDC_REG3_TRG(0x12);
+
+    CLOCK_InitArmPll(&armPllConfig); /* Configure ARM PLL to 1200M */
+#ifndef SKIP_SYSCLK_INIT
+    CLOCK_InitSysPll(&sysPllConfig); /* Configure SYS PLL to 528M */
+#endif
+#ifndef XIP_EXTERNAL_FLASH
+    CLOCK_InitUsb1Pll(&usb1PllConfig); /* Configure USB1 PLL to 480M */
+#endif
+    CLOCK_SetDiv(kCLOCK_ArmDiv, 0x1); /* Set ARM PODF to 0, divide by 2 */
+    CLOCK_SetDiv(kCLOCK_AhbDiv, 0x0); /* Set AHB PODF to 0, divide by 1 */
+    CLOCK_SetDiv(kCLOCK_IpgDiv, 0x3); /* Set IPG PODF to 3, divede by 4 */
+
+    CLOCK_SetMux(kCLOCK_PrePeriphMux, 0x3); /* Set PRE_PERIPH_CLK to PLL1, 1200M */
+    CLOCK_SetMux(kCLOCK_PeriphMux, 0x0);    /* Set PERIPH_CLK MUX to PRE_PERIPH_CLK */
+
+    /* Disable unused clock */
+    BOARD_BootClockGate();
+
+    /* Power down all unused PLL */
+    CLOCK_DeinitAudioPll();
+    CLOCK_DeinitVideoPll();
+    CLOCK_DeinitEnetPll();
+    CLOCK_DeinitUsb2Pll();
+
+    /* Configure UART divider to default */
+    CLOCK_SetMux(kCLOCK_UartMux, 0); /* Set UART source to PLL3 80M */
+    CLOCK_SetDiv(kCLOCK_UartDiv, 0); /* Set UART divider to 1 */
+
+    /* Update core clock */
+    SystemCoreClockUpdate();
 }
-
-void BOARD_BootClockFROHF96M(void)
-{
-    POWER_DisablePD(kPDRUNCFG_PD_FRO_EN); /*!< Ensure FRO is on so that we can switch to its 12MHz mode temporarily*/
-    CLOCK_AttachClk(
-        kFRO12M_to_MAIN_CLK);          /*!< Switch to 12MHz first to ensure we can change voltage without accidentally
-                                       being below the voltage for current speed */
-    POWER_SetVoltageForFreq(96000000); /*!< Set voltage for core */
-    CLOCK_SetFLASHAccessCyclesForFreq(96000000); /*!< Set FLASH waitstates for core */
-    CLOCK_SetupFROClocking(96000000);            /*!< Setup CPU to run off FRO 96MHz output*/
-    CLOCK_AttachClk(kFRO_HF_to_MAIN_CLK);        /*!< Switch main clock to 96MHz */
-    SystemCoreClock = 96000000;                  /*!< Update information about frequency */
-}
-
-void BOARD_BootClock180M(void)
-{
-    /*!< Set up the clock sources */
-    /*!< Set up FRO */
-    POWER_DisablePD(kPDRUNCFG_PD_FRO_EN);                   /*!< Ensure FRO is on  */
-    CLOCK_AttachClk(kFRO12M_to_MAIN_CLK);                  /*!< Switch to FRO 12MHz first to ensure we can change voltage without accidentally
-                                                                being below the voltage for current speed */
-    POWER_SetVoltageForFreq(180000000U);             /*!< Set voltage for the one of the fastest clock outputs: System clock output */
-    CLOCK_SetFLASHAccessCyclesForFreq(180000000U);    /*!< Set FLASH wait states for core */
-
-    /*!< Set up SYS PLL */
-    const pll_setup_t pllSetup = {
-        .pllctrl =  SYSCON_SYSPLLCTRL_SELI(32U) | SYSCON_SYSPLLCTRL_SELP(16U) | SYSCON_SYSPLLCTRL_SELR(0U),
-        .pllmdec = (SYSCON_SYSPLLMDEC_MDEC(8191U)),
-        .pllndec = (SYSCON_SYSPLLNDEC_NDEC(770U)),
-        .pllpdec = (SYSCON_SYSPLLPDEC_PDEC(98U)),
-        .pllRate = 180000000U,
-        .flags =  PLL_SETUPFLAG_WAITLOCK | PLL_SETUPFLAG_POWERUP
-    };
-    
-    CLOCK_AttachClk(kFRO12M_to_SYS_PLL);        /*!< Set sys pll clock source*/
-    CLOCK_SetPLLFreq(&pllSetup);                     /*!< Configure PLL to the desired value */
-
-
-    /*!< Set up dividers */
-    CLOCK_SetClkDiv(kCLOCK_DivAhbClk, 1U, false);                  /*!< Reset divider counter and set divider to value 1 */
-
-    /*!< Set up clock selectors - Attach clocks to the peripheries */
-    CLOCK_AttachClk(kSYS_PLL_to_MAIN_CLK);                  /*!< Switch MAIN_CLK to SYS_PLL */
-    SYSCON->MAINCLKSELA = ((SYSCON->MAINCLKSELA & ~SYSCON_MAINCLKSELA_SEL_MASK) | SYSCON_MAINCLKSELA_SEL(3U)); /*!< Switch MAINCLKSELA to FRO_HF even it is not used for MAINCLKSELB */
-    /* Set SystemCoreClock variable. */
-    SystemCoreClock = 180000000;
-} 
-
-

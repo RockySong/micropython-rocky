@@ -39,14 +39,22 @@ static inline mp_uint_t mp_hal_ticks_cpu(void) {
 #define mp_hal_pin_obj_t const pin_obj_t*
 #define mp_hal_get_pin_obj(o)   pin_find(o)
 #define mp_hal_pin_name(p)      ((p)->name)
+
+static inline GPIO_Type * _find_gpio(const pin_obj_t *p){
+	GPIO_Type *gps[] = {0, GPIO1, GPIO2, GPIO3, GPIO4, GPIO5,};
+	if (p->port > 5)
+		while(1);
+	return gps[p->port];
+}
+
 #define mp_hal_pin_input(p)     mp_hal_pin_config((p), MP_HAL_PIN_MODE_INPUT, MP_HAL_PIN_PULL_NONE, PIN_ALT_NC)
 #define mp_hal_pin_output(p)    mp_hal_pin_config((p), MP_HAL_PIN_MODE_OUTPUT, MP_HAL_PIN_PULL_NONE, PIN_ALT_NC)
 #define mp_hal_pin_open_drain(p) mp_hal_pin_config((p), MP_HAL_PIN_MODE_OPEN_DRAIN, MP_HAL_PIN_PULL_NONE, PIN_ALT_NC)
-#define mp_hal_pin_high(p)      GPIO_WritePinOutput(GPIO, (p)->port, (p)->pin, 1)
-#define mp_hal_pin_low(p)       GPIO_WritePinOutput(GPIO, (p)->port, (p)->pin, 0)
+#define mp_hal_pin_high(p)      GPIO_WritePinOutput(_find_gpio(p), (p)->pin, 1)
+#define mp_hal_pin_low(p)       GPIO_WritePinOutput(_find_gpio(p), (p)->pin, 0)
 #define mp_hal_pin_od_low(p)    mp_hal_pin_low(p)
 #define mp_hal_pin_od_high(p)   mp_hal_pin_high(p)
-#define mp_hal_pin_read(p)      (((p)->gpio->B[p->port][p->pin]))
+#define mp_hal_pin_read(p)      (GPIO_PinRead(_find_gpio(p), (p)->pin))
 #define mp_hal_pin_write(p, v)  do { if (v) { mp_hal_pin_high(p); } else { mp_hal_pin_low(p); } } while (0)
 
 void mp_hal_gpio_clock_enable(uint32_t portNum);

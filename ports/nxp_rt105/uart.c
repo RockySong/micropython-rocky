@@ -29,8 +29,7 @@
 #include <stdarg.h>
 #include "fsl_common.h"
 #include "fsl_clock.h"
-#include "fsl_flexcomm.h"
-#include "fsl_usart.h"
+#include "fsl_lpuart.h"
 
 #include "py/nlr.h"
 #include "py/runtime.h"
@@ -86,7 +85,7 @@ typedef usart_handle_t UART_HandleTypeDef;
 struct _pyb_uart_obj_t {
     mp_obj_base_t base;
 	USART_Type *pDev;
-	clock_attach_id_t clockSel;
+	clock_mux_t clockSel;
 	clock_ip_name_t clk_ip_name;
     IRQn_Type irqn;
     pyb_uart_t uart_id;
@@ -205,7 +204,7 @@ STATIC bool uart_init2(pyb_uart_obj_t *uart_obj) {
     USART_Type *UARTx;
     IRQn_Type irqn;
     int uart_unit;
-	clock_attach_id_t clkSel;
+	clock_mux_t clkSel;
 	clock_ip_name_t clk_ip_name;
     const pin_obj_t *pins[4] = {0};
     switch (uart_obj->uart_id) {

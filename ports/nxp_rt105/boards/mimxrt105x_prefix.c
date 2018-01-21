@@ -17,15 +17,15 @@
     .reg = (af_ptr) \
 }
 
-#define PIN(p_port, p_pin, p_af, p_adc_num, p_adc_channel) \
+#define PIN(p_name, p_port, p_pin, p_af, p_adc_num, p_adc_channel) \
 { \
     { &pin_type }, \
-    .name = MP_QSTR_ ## p_port ## p_pin, \
+    .name = MP_QSTR_ ## p_name, \
     .port = PORT_ ## p_port, \
     .pin = (p_pin), \
     .num_af = (sizeof(p_af) / sizeof(pin_af_obj_t)), \
     .pin_mask = (1 << ((p_pin) & 0x0f)), \
-    .gpio = GPIO, \
+    .gpio = GPIO ## p_port, \
     .af = p_af, \
     .adc_num = p_adc_num, \
     .adc_channel = p_adc_channel, \

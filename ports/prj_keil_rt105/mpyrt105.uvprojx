@@ -3276,6 +3276,11 @@
               <FileType>5</FileType>
               <FilePath>..\nxp_rt105\pin_defs_lpc546.h</FilePath>
             </File>
+            <File>
+              <FileName>flash_hyper.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt105\flash_hyper.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -4269,6 +4274,31 @@
               <FileName>vector.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\nxp_rt105\ay_imu\math\vector.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>flexspi_xip</GroupName>
+          <Files>
+            <File>
+              <FileName>fsl_flexspi_nor_boot.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt105\mcusdk\xip\fsl_flexspi_nor_boot.c</FilePath>
+            </File>
+            <File>
+              <FileName>fsl_flexspi_nor_boot.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\nxp_rt105\mcusdk\xip\fsl_flexspi_nor_boot.h</FilePath>
+            </File>
+            <File>
+              <FileName>fsl_flexspi_nor_flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt105\mcusdk\xip\fsl_flexspi_nor_flash.c</FilePath>
+            </File>
+            <File>
+              <FileName>fsl_flexspi_nor_flash.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\nxp_rt105\mcusdk\xip\fsl_flexspi_nor_flash.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -8005,6 +8035,11 @@
               <FileType>5</FileType>
               <FilePath>..\nxp_rt105\pin_defs_lpc546.h</FilePath>
             </File>
+            <File>
+              <FileName>flash_hyper.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt105\flash_hyper.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -8848,6 +8883,31 @@
               <FileName>vector.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\nxp_rt105\ay_imu\math\vector.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>flexspi_xip</GroupName>
+          <Files>
+            <File>
+              <FileName>fsl_flexspi_nor_boot.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt105\mcusdk\xip\fsl_flexspi_nor_boot.c</FilePath>
+            </File>
+            <File>
+              <FileName>fsl_flexspi_nor_boot.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\nxp_rt105\mcusdk\xip\fsl_flexspi_nor_boot.h</FilePath>
+            </File>
+            <File>
+              <FileName>fsl_flexspi_nor_flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt105\mcusdk\xip\fsl_flexspi_nor_flash.c</FilePath>
+            </File>
+            <File>
+              <FileName>fsl_flexspi_nor_flash.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\nxp_rt105\mcusdk\xip\fsl_flexspi_nor_flash.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -12567,6 +12627,11 @@
               <FileType>5</FileType>
               <FilePath>..\nxp_rt105\pin_defs_lpc546.h</FilePath>
             </File>
+            <File>
+              <FileName>flash_hyper.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt105\flash_hyper.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -13056,6 +13121,31 @@
               <FileName>vector.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\nxp_rt105\ay_imu\math\vector.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>flexspi_xip</GroupName>
+          <Files>
+            <File>
+              <FileName>fsl_flexspi_nor_boot.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt105\mcusdk\xip\fsl_flexspi_nor_boot.c</FilePath>
+            </File>
+            <File>
+              <FileName>fsl_flexspi_nor_boot.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\nxp_rt105\mcusdk\xip\fsl_flexspi_nor_boot.h</FilePath>
+            </File>
+            <File>
+              <FileName>fsl_flexspi_nor_flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt105\mcusdk\xip\fsl_flexspi_nor_flash.c</FilePath>
+            </File>
+            <File>
+              <FileName>fsl_flexspi_nor_flash.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\nxp_rt105\mcusdk\xip\fsl_flexspi_nor_flash.h</FilePath>
             </File>
           </Files>
         </Group>

@@ -1,9 +1,12 @@
 /*
+ * The Clear BSD License
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
+ * Copyright 2016-2017 NXP
  * All rights reserved.
- *
+ * 
  * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * are permitted (subject to the limitations in the disclaimer below) provided
+ *  that the following conditions are met:
  *
  * o Redistributions of source code must retain the above copyright notice, this list
  *   of conditions and the following disclaimer.
@@ -16,6 +19,7 @@
  *   contributors may be used to endorse or promote products derived from this
  *   software without specific prior written permission.
  *
+ * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -28,107 +32,70 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "pin_mux.h"
+/*
+ * TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
+!!GlobalInfo
+product: Pins v3.0
+processor: MIMXRT1052xxxxx
+package_id: MIMXRT1052DVL6A
+mcu_data: i_mx_1_0
+processor_version: 0.0.3
+ * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
+ */
+
 #include "fsl_common.h"
-#include "fsl_iocon.h"
+#include "fsl_iomuxc.h"
+#include "pin_mux.h"
 
-void BOARD_InitPins(void)
-{
-    /* enable clock for IOCON */
-    CLOCK_EnableClock(kCLOCK_Iocon);
-	// USB0_VBUS pin
-	IOCON_PinMuxSet(IOCON, 0, 22, IOCON_MODE_INACT | IOCON_FUNC7 | IOCON_DIGITAL_EN | IOCON_INPFILT_OFF);
-    /* USART0 RX/TX pin */
-    IOCON_PinMuxSet(IOCON, 0, 29, IOCON_MODE_INACT | IOCON_FUNC1 | IOCON_DIGITAL_EN | IOCON_INPFILT_OFF);
-    IOCON_PinMuxSet(IOCON, 0, 30, IOCON_MODE_INACT | IOCON_FUNC1 | IOCON_DIGITAL_EN | IOCON_INPFILT_OFF);
+/*
+ * TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
+BOARD_InitPins:
+- options: {callFromInitBoot: 'true', coreID: core0, enableClock: 'true'}
+- pin_list:
+  - {pin_num: L14, peripheral: LPUART1, signal: RX, pin_signal: GPIO_AD_B0_13, slew_rate: Slow, software_input_on: Disable, open_drain: Disable, speed: MHZ_100, drive_strength: R0_6,
+    pull_keeper_select: Keeper, pull_keeper_enable: Enable, pull_up_down_config: Pull_Down_100K_Ohm, hysteresis_enable: Disable}
+  - {pin_num: K14, peripheral: LPUART1, signal: TX, pin_signal: GPIO_AD_B0_12, slew_rate: Slow, software_input_on: Disable, open_drain: Disable, speed: MHZ_100, drive_strength: R0_6,
+    pull_keeper_select: Keeper, pull_keeper_enable: Enable, pull_up_down_config: Pull_Down_100K_Ohm, hysteresis_enable: Disable}
+ * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
+ */
 
-    /* I2C2 SCL/SDA pin */
-    IOCON_PinMuxSet(IOCON, 3, 23, (IOCON_FUNC1 | IOCON_MODE_PULLUP | IOCON_DIGITAL_EN));
-    IOCON_PinMuxSet(IOCON, 3, 24, (IOCON_FUNC1 | IOCON_MODE_PULLUP | IOCON_DIGITAL_EN));
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : BOARD_InitPins
+ * Description   : Configures pin routing and optionally pin electrical features.
+ *
+ *END**************************************************************************/
+void BOARD_InitPins(void) {
+  CLOCK_EnableClock(kCLOCK_Iomuxc);          /* iomuxc clock (iomuxc_clk_enable): 0x03u */
 
-    /* /WAKE signal for the touch controller, has to be set to log.1 for normal operation */
-    IOCON_PinMuxSet(IOCON, 2, 27, (IOCON_FUNC0 | IOCON_DIGITAL_EN));
-
-    /* LCD pin. */
-    IOCON_PinMuxSet(IOCON, 2, 21, IOCON_MODE_INACT | IOCON_FUNC1 | IOCON_DIGITAL_EN | IOCON_INPFILT_OFF); /* R3 */
-    IOCON_PinMuxSet(IOCON, 2, 22, IOCON_MODE_INACT | IOCON_FUNC1 | IOCON_DIGITAL_EN | IOCON_INPFILT_OFF); /* R4 */
-    IOCON_PinMuxSet(IOCON, 2, 23, IOCON_MODE_INACT | IOCON_FUNC1 | IOCON_DIGITAL_EN | IOCON_INPFILT_OFF); /* R5 */
-    IOCON_PinMuxSet(IOCON, 2, 24, IOCON_MODE_INACT | IOCON_FUNC1 | IOCON_DIGITAL_EN | IOCON_INPFILT_OFF); /* R6 */
-    IOCON_PinMuxSet(IOCON, 2, 25, IOCON_MODE_INACT | IOCON_FUNC1 | IOCON_DIGITAL_EN | IOCON_INPFILT_OFF); /* R7 */
-
-    IOCON_PinMuxSet(IOCON, 2, 28, IOCON_MODE_INACT | IOCON_FUNC1 | IOCON_DIGITAL_EN | IOCON_INPFILT_OFF); /* G2 */
-    IOCON_PinMuxSet(IOCON, 2, 29, IOCON_MODE_INACT | IOCON_FUNC1 | IOCON_DIGITAL_EN | IOCON_INPFILT_OFF); /* G3 */
-    IOCON_PinMuxSet(IOCON, 2, 30, IOCON_MODE_INACT | IOCON_FUNC1 | IOCON_DIGITAL_EN | IOCON_INPFILT_OFF); /* G4 */
-    IOCON_PinMuxSet(IOCON, 2, 31, IOCON_MODE_INACT | IOCON_FUNC1 | IOCON_DIGITAL_EN | IOCON_INPFILT_OFF); /* G5 */
-    IOCON_PinMuxSet(IOCON, 3, 0, IOCON_MODE_INACT | IOCON_FUNC1 | IOCON_DIGITAL_EN | IOCON_INPFILT_OFF);  /* G6 */
-    IOCON_PinMuxSet(IOCON, 3, 1, IOCON_MODE_INACT | IOCON_FUNC1 | IOCON_DIGITAL_EN | IOCON_INPFILT_OFF);  /* G7 */
-
-    IOCON_PinMuxSet(IOCON, 3, 5, IOCON_MODE_INACT | IOCON_FUNC1 | IOCON_DIGITAL_EN | IOCON_INPFILT_OFF); /* B3 */
-    IOCON_PinMuxSet(IOCON, 3, 6, IOCON_MODE_INACT | IOCON_FUNC1 | IOCON_DIGITAL_EN | IOCON_INPFILT_OFF); /* B4 */
-    IOCON_PinMuxSet(IOCON, 3, 7, IOCON_MODE_INACT | IOCON_FUNC1 | IOCON_DIGITAL_EN | IOCON_INPFILT_OFF); /* B5 */
-    IOCON_PinMuxSet(IOCON, 3, 8, IOCON_MODE_INACT | IOCON_FUNC1 | IOCON_DIGITAL_EN | IOCON_INPFILT_OFF); /* B6 */
-    IOCON_PinMuxSet(IOCON, 3, 9, IOCON_MODE_INACT | IOCON_FUNC1 | IOCON_DIGITAL_EN | IOCON_INPFILT_OFF); /* B7 */
-
-    IOCON_PinMuxSet(IOCON, 2, 13, IOCON_MODE_INACT | IOCON_FUNC1 | IOCON_ANALOG_EN | IOCON_INPFILT_OFF);  /* DCLK */
-    IOCON_PinMuxSet(IOCON, 2, 11, IOCON_MODE_INACT | IOCON_FUNC1 | IOCON_DIGITAL_EN | IOCON_INPFILT_OFF); /* PWR */
-    IOCON_PinMuxSet(IOCON, 2, 16, IOCON_MODE_INACT | IOCON_FUNC1 | IOCON_DIGITAL_EN | IOCON_INPFILT_OFF); /* LP */
-    IOCON_PinMuxSet(IOCON, 2, 14, IOCON_MODE_INACT | IOCON_FUNC1 | IOCON_DIGITAL_EN | IOCON_INPFILT_OFF); /* FP */
-    IOCON_PinMuxSet(IOCON, 2, 15, IOCON_MODE_INACT | IOCON_FUNC1 | IOCON_DIGITAL_EN | IOCON_INPFILT_OFF); /* AC */
-
-    /* EMC SDRAM Pins setting. */
-    IOCON_PinMuxSet(IOCON, 0, 18, IOCON_MODE_INACT | IOCON_FASTI2C_EN | IOCON_FUNC6 | IOCON_DIGITAL_EN); /*EMC_A[0] */
-    IOCON_PinMuxSet(IOCON, 0, 19, IOCON_MODE_INACT | IOCON_FASTI2C_EN | IOCON_FUNC6 | IOCON_DIGITAL_EN); /*EMC_A[1] */
-    IOCON_PinMuxSet(IOCON, 0, 20, IOCON_MODE_INACT | IOCON_FASTI2C_EN | IOCON_FUNC6 | IOCON_DIGITAL_EN); /*EMC_A[2] */
-    IOCON_PinMuxSet(IOCON, 0, 21, IOCON_MODE_INACT | IOCON_FASTI2C_EN | IOCON_FUNC6 | IOCON_DIGITAL_EN); /*EMC_A[3] */
-    IOCON_PinMuxSet(IOCON, 1, 5, IOCON_MODE_INACT | IOCON_FASTI2C_EN | IOCON_FUNC6 | IOCON_DIGITAL_EN);  /*EMC_A[4] */
-    IOCON_PinMuxSet(IOCON, 1, 6, IOCON_MODE_INACT | IOCON_FASTI2C_EN | IOCON_FUNC6 | IOCON_DIGITAL_EN);  /*EMC_A[5] */
-    IOCON_PinMuxSet(IOCON, 1, 7, IOCON_MODE_INACT | IOCON_FASTI2C_EN | IOCON_FUNC6 | IOCON_DIGITAL_EN);  /*EMC_A[6] */
-    IOCON_PinMuxSet(IOCON, 1, 8, IOCON_MODE_INACT | IOCON_FASTI2C_EN | IOCON_FUNC6 | IOCON_DIGITAL_EN);  /*EMC_A[7] */
-    IOCON_PinMuxSet(IOCON, 1, 26, IOCON_MODE_INACT | IOCON_FASTI2C_EN | IOCON_FUNC6 | IOCON_DIGITAL_EN); /*EMC_A[8] */
-    IOCON_PinMuxSet(IOCON, 1, 27, IOCON_MODE_INACT | IOCON_FASTI2C_EN | IOCON_FUNC6 | IOCON_DIGITAL_EN); /*EMC_A[9] */
-    IOCON_PinMuxSet(IOCON, 1, 16, IOCON_MODE_INACT | IOCON_FASTI2C_EN | IOCON_FUNC6 | IOCON_DIGITAL_EN); /*EMC_A[10] */
-    IOCON_PinMuxSet(IOCON, 1, 23, IOCON_MODE_INACT | IOCON_FASTI2C_EN | IOCON_FUNC6 | IOCON_DIGITAL_EN); /*EMC_A[11] */
-    IOCON_PinMuxSet(IOCON, 1, 24, IOCON_MODE_INACT | IOCON_FASTI2C_EN | IOCON_FUNC6 | IOCON_DIGITAL_EN); /*EMC_A[12] */
-    IOCON_PinMuxSet(IOCON, 1, 25, IOCON_MODE_INACT | IOCON_FASTI2C_EN | IOCON_FUNC6 | IOCON_DIGITAL_EN); /*EMC_A[13] */
-    IOCON_PinMuxSet(IOCON, 3, 25, IOCON_MODE_INACT | IOCON_FASTI2C_EN | IOCON_FUNC6 | IOCON_DIGITAL_EN); /*EMC_A[14] */
-
-    IOCON_PinMuxSet(IOCON, 0, 2, IOCON_MODE_INACT | IOCON_FASTI2C_EN | IOCON_FUNC6 | IOCON_DIGITAL_EN);  /*EMC_D[0] */
-    IOCON_PinMuxSet(IOCON, 0, 3, IOCON_MODE_INACT | IOCON_FASTI2C_EN | IOCON_FUNC6 | IOCON_DIGITAL_EN);  /*EMC_D[1] */
-    IOCON_PinMuxSet(IOCON, 0, 4, IOCON_MODE_INACT | IOCON_FASTI2C_EN | IOCON_FUNC6 | IOCON_DIGITAL_EN);  /*EMC_D[2] */
-    IOCON_PinMuxSet(IOCON, 0, 5, IOCON_MODE_INACT | IOCON_FASTI2C_EN | IOCON_FUNC6 | IOCON_DIGITAL_EN);  /*EMC_D[3] */
-    IOCON_PinMuxSet(IOCON, 0, 6, IOCON_MODE_INACT | IOCON_FASTI2C_EN | IOCON_FUNC6 | IOCON_DIGITAL_EN);  /*EMC_D[4] */
-    IOCON_PinMuxSet(IOCON, 0, 7, IOCON_MODE_INACT | IOCON_FASTI2C_EN | IOCON_FUNC6 | IOCON_DIGITAL_EN);  /*EMC_D[5] */
-    IOCON_PinMuxSet(IOCON, 0, 8, IOCON_MODE_INACT | IOCON_FASTI2C_EN | IOCON_FUNC6 | IOCON_DIGITAL_EN);  /*EMC_D[6] */
-    IOCON_PinMuxSet(IOCON, 0, 9, IOCON_MODE_INACT | IOCON_FASTI2C_EN | IOCON_FUNC6 | IOCON_DIGITAL_EN);  /*EMC_D[7] */
-    IOCON_PinMuxSet(IOCON, 1, 19, IOCON_MODE_INACT | IOCON_FASTI2C_EN | IOCON_FUNC6 | IOCON_DIGITAL_EN); /*EMC_D[8] */
-    IOCON_PinMuxSet(IOCON, 1, 20, IOCON_MODE_INACT | IOCON_FASTI2C_EN | IOCON_FUNC6 | IOCON_DIGITAL_EN); /*EMC_D[9] */
-    IOCON_PinMuxSet(IOCON, 1, 21, IOCON_MODE_INACT | IOCON_FASTI2C_EN | IOCON_FUNC6 | IOCON_DIGITAL_EN); /*EMC_D[10] */
-    IOCON_PinMuxSet(IOCON, 1, 4, IOCON_MODE_INACT | IOCON_FASTI2C_EN | IOCON_FUNC6 | IOCON_DIGITAL_EN);  /*EMC_D[11] */
-    IOCON_PinMuxSet(IOCON, 1, 28, IOCON_MODE_INACT | IOCON_FASTI2C_EN | IOCON_FUNC6 | IOCON_DIGITAL_EN); /*EMC_D[12] */
-    IOCON_PinMuxSet(IOCON, 1, 29, IOCON_MODE_INACT | IOCON_FASTI2C_EN | IOCON_FUNC6 | IOCON_DIGITAL_EN); /*EMC_D[13] */
-    IOCON_PinMuxSet(IOCON, 1, 30, IOCON_MODE_INACT | IOCON_FASTI2C_EN | IOCON_FUNC6 | IOCON_DIGITAL_EN); /*EMC_D[14] */
-    IOCON_PinMuxSet(IOCON, 1, 31, IOCON_MODE_INACT | IOCON_FASTI2C_EN | IOCON_FUNC6 | IOCON_DIGITAL_EN); /*EMC_D[15] */
-
-    IOCON_PinMuxSet(IOCON, 1, 9, IOCON_MODE_INACT | IOCON_FASTI2C_EN | IOCON_FUNC6 | IOCON_DIGITAL_EN);  /*EMC_CASN */
-    IOCON_PinMuxSet(IOCON, 1, 10, IOCON_MODE_INACT | IOCON_FASTI2C_EN | IOCON_FUNC6 | IOCON_DIGITAL_EN); /*EMC_RASN */
-    IOCON_PinMuxSet(IOCON, 1, 11, IOCON_MODE_INACT | IOCON_FASTI2C_EN | IOCON_FUNC6 | IOCON_DIGITAL_EN); /*EMC_CLK[0] */
-    IOCON_PinMuxSet(IOCON, 1, 12,
-                    IOCON_MODE_INACT | IOCON_FASTI2C_EN | IOCON_FUNC6 | IOCON_DIGITAL_EN); /*EMC_DYCSN[0] */
-    IOCON_PinMuxSet(IOCON, 1, 13, IOCON_MODE_INACT | IOCON_FASTI2C_EN | IOCON_FUNC6 | IOCON_DIGITAL_EN); /*EMC_DQM[0] */
-    IOCON_PinMuxSet(IOCON, 1, 14, IOCON_MODE_INACT | IOCON_FASTI2C_EN | IOCON_FUNC6 | IOCON_DIGITAL_EN); /*EMC_DQM[1] */
-    IOCON_PinMuxSet(IOCON, 1, 15, IOCON_MODE_INACT | IOCON_FASTI2C_EN | IOCON_FUNC6 | IOCON_DIGITAL_EN); /*EMC_CKE[0] */
-    IOCON_PinMuxSet(IOCON, 0, 15, IOCON_MODE_INACT | IOCON_FASTI2C_EN | IOCON_FUNC6 | IOCON_DIGITAL_EN); /*EMC_WEN */
-	
-	// >>> buttons
-	SYSCON->AHBCLKCTRLSET[0] = 1<<11 | 0x3F<<13;	// clock to mux, iocon, gpios
-	
-	// Other keys conflict with EMC!
-	// P1_1, PINT1, SW5
-//	INPUTMUX->PINTSEL[1] = 1 * 32 + 1;
-//	GPIO->DIRCLR[0] = 1<<1;
-//	IOCON_PinMuxSet(IOCON, 1, 1, 0 /*Func*/| 2<<4/*pUp*/|1<<8/*Digital*/);
-//	PINT->ISEL &= ~(1UL<<1);	// INT1 edge
-//	PINT->SIENF = 1<<1;		// falling
-//	NVIC_EnableIRQ(PIN_INT1_IRQn);
-	// <<<
+  IOMUXC_SetPinMux(
+      IOMUXC_GPIO_AD_B0_12_LPUART1_TX,        /* GPIO_AD_B0_12 is configured as LPUART1_TX */
+      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
+  IOMUXC_SetPinMux(
+      IOMUXC_GPIO_AD_B0_13_LPUART1_RX,        /* GPIO_AD_B0_13 is configured as LPUART1_RX */
+      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
+  IOMUXC_SetPinConfig(
+      IOMUXC_GPIO_AD_B0_12_LPUART1_TX,        /* GPIO_AD_B0_12 PAD functional properties : */
+      0x10B0u);                               /* Slew Rate Field: Slow Slew Rate
+                                                 Drive Strength Field: R0/6
+                                                 Speed Field: medium(100MHz)
+                                                 Open Drain Enable Field: Open Drain Disabled
+                                                 Pull / Keep Enable Field: Pull/Keeper Enabled
+                                                 Pull / Keep Select Field: Keeper
+                                                 Pull Up / Down Config. Field: 100K Ohm Pull Down
+                                                 Hyst. Enable Field: Hysteresis Disabled */
+  IOMUXC_SetPinConfig(
+      IOMUXC_GPIO_AD_B0_13_LPUART1_RX,        /* GPIO_AD_B0_13 PAD functional properties : */
+      0x10B0u);                               /* Slew Rate Field: Slow Slew Rate
+                                                 Drive Strength Field: R0/6
+                                                 Speed Field: medium(100MHz)
+                                                 Open Drain Enable Field: Open Drain Disabled
+                                                 Pull / Keep Enable Field: Pull/Keeper Enabled
+                                                 Pull / Keep Select Field: Keeper
+                                                 Pull Up / Down Config. Field: 100K Ohm Pull Down
+                                                 Hyst. Enable Field: Hysteresis Disabled */
 }
+
+/*******************************************************************************
+ * EOF
+ ******************************************************************************/

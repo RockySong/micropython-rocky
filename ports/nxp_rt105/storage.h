@@ -25,6 +25,8 @@
  */
 #ifndef _STORAGE_H_
 #define _STORAGE_H_
+#include "flash.h"
+
 #define FLASH_BLOCK_SIZE (512)	// this is not physical block sie, and must set to 512 for easy FatFS and USB MSC porting
 #define STORAGE_SYSTICK_MASK    (0x1ff) // 512 ticks
 #define STORAGE_IDLE_TICK(tick) (((tick) & STORAGE_SYSTICK_MASK) == 2)

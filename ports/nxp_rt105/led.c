@@ -29,7 +29,7 @@
 #include "py/nlr.h"
 #include "py/runtime.h"
 #include "py/mphal.h"
-#include "fsl_iocon.h"
+#include "fsl_iomuxc.h"
 #include "led.h"
 #include "pin.h"
 #include "genhdr/pins.h"

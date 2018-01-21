@@ -418,26 +418,12 @@ STATIC uint update_reset_mode(uint reset_mode) {
 
 HAL_StatusTypeDef HAL_Init(void)
 {
-	/* Board pin, clock, debug console init */
-	/* attach 12 MHz clock to FLEXCOMM0 (debug console) */
-	CLOCK_AttachClk(BOARD_DEBUG_UART_CLK_ATTACH);
-
-	/* Route Main clock to LCD. */
-	CLOCK_AttachClk(kMCLK_to_LCD_CLK);
-
-	/* attach 12 MHz clock to FLEXCOMM2 (I2C master for touch controller) */
-	CLOCK_AttachClk(kFRO12M_to_FLEXCOMM2);
-
-	CLOCK_EnableClock(kCLOCK_Gpio2);
-
-	CLOCK_SetClkDiv(kCLOCK_DivLcdClk, 1, true);
-
-	BOARD_InitPins();
-	BOARD_BootClockHSRUN();
-	BOARD_BootClock180M();	
+    BOARD_ConfigMPU();
+    BOARD_InitPins();
+    BOARD_BootClockRUN();
+    BOARD_InitDebugConsole();
 	
 	BOARD_InitDebugConsole();
-	BOARD_InitSDRAM();
 
 	/* Set Interrupt Group Priority */
 	NVIC_SetPriorityGrouping(3);
@@ -451,14 +437,14 @@ HAL_StatusTypeDef HAL_Init(void)
 
 #if defined(__CC_ARM)
 	#define STACK_SIZE	(0x1800)
-	uint32_t  _ram_start = 0x20000000, _ram_end = 0x20010000, _estack = 0x04000000 + STACK_SIZE, _heap_end = 0x20028000;
+	uint32_t  _ram_start = 0x20200000, _ram_end = 0x20010000, _estack = 0x20000000 + STACK_SIZE, _heap_end = 0x20240000;
 	extern unsigned int Image$$MPY_HEAP_START$$Base;
 	uint32_t _heap_start = (uint32_t) &Image$$MPY_HEAP_START$$Base;
 #elif defined(__ICCARM__)
 	extern unsigned int CHEAP$$Limit[], lg_c1Stack[];
 	uint32_t _heap_start = (uint32_t)CHEAP$$Limit;	// we put HEAP at the last of DATA region, so we can assume mpy heap start here
 	
-	uint32_t  _ram_start = 0x20000000, _ram_end = (uint32_t)CHEAP$$Limit, _estack = 0x04000000 + (uint32_t)lg_c1Stack, _heap_end = 0x20028000;
+	uint32_t  _ram_start = 0x20200000, _ram_end = (uint32_t)CHEAP$$Limit, _estack = 0x04000000 + (uint32_t)lg_c1Stack, _heap_end = 0x20028000;
 #endif
 
 int main(void) {

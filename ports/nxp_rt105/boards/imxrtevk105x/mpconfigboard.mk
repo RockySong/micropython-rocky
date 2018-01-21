@@ -1,6 +1,6 @@
-MCU_SERIES = LPC54
+MCU_SERIES = IMXRT105
 # must be the same name defined in fsl_device_registers.h
-CMSIS_MCU = LPC54608
-SDK_MCU = CPU_LPC54608J512BD208
-AF_FILE = boards/lpc54608_af.csv
-LD_FILE = boards/lpc54608.ld
+CMSIS_MCU = MIMXRT1052
+SDK_MCU = CPU_MIMXRT1052DVL6A
+AF_FILE = boards/mimxrt105x_af.csv
+LD_FILE = boards/flexspi_xip.ld
