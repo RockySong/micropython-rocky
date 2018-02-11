@@ -7,7 +7,7 @@
 #include "usb_app.h"
 #include "uart.h"
 #include "fsl_gpio.h"
-#include "fsl_iomux.h"
+#include "fsl_iomuxc.h"
 #include "fsl_debug_console.h"
 bool mp_hal_ticks_cpu_enabled = false;
 
@@ -90,36 +90,53 @@ void mp_hal_ticks_cpu_enable(void) {
 }
 
 void mp_hal_gpio_clock_enable(uint32_t portNum) {
-	SYSCON_Type *pSysCon = SYSCON;
-	if (portNum < 4) {
-		pSysCon->AHBCLKCTRLSET[0] = portNum + 14;  // GPIO 0,1,2,3
-	} else {
-		pSysCon->AHBCLKCTRLSET[2] = portNum + 7;  // GPIO 4,5
-	}
+	 // i.MX RT's GPIO port starts from 1, and clock gate is not ordered in GPIO order
+	const static clock_ip_name_t tab[] = {(clock_ip_name_t)0, kCLOCK_Gpio1, kCLOCK_Gpio2, kCLOCK_Gpio3, kCLOCK_Gpio4, kCLOCK_Gpio5};
+	CLOCK_EnableClock(tab[portNum]); 
+
 }
 
-void mp_hal_pin_config(const pin_obj_t *pin_obj, uint32_t mode, uint32_t pull, uint32_t alt) {
-    if (alt == 0)
-		mp_hal_gpio_clock_enable(pin_obj->port);
-	CLOCK_EnableClock(kCLOCK_Iocon);
+void mp_hal_pin_config(const pin_obj_t *p, const pin_af_obj_t *af, uint32_t alt, uint32_t padCfgVal ) {
+	uint32_t isInputPathForcedOn = 0;
 
-	if (alt == PIN_ALT_NC)
-		alt = IOCON->PIO[pin_obj->port][pin_obj->pin] & 0x0F;
-	if (mode == MP_HAL_PIN_MODE_OPEN_DRAIN) {
-		// check if it is true OD pin
-		if (pin_obj->port == 0 && (pin_obj->pin == 13 || pin_obj->pin == 14) ||
-			pin_obj->port == 3 && (pin_obj->pin == 23 || pin_obj->pin == 24)) {
-			mode = GPIO_TRUE_OD_GPIO4mA , pull = 0;
-		}
-	}
-	IOCON_PinMuxSet(IOCON, pin_obj->port, pin_obj->pin, alt | pull | mode);
+	CLOCK_EnableClock(kCLOCK_Iomuxc);
+	
+	if (alt == PIN_ALT_NC) 
+		alt = REG_READ32(p->afReg) & 7;
+	isInputPathForcedOn =  (alt != 5);	// Alt 5 is GPIO
+	isInputPathForcedOn = 1;
+	IOMUXC_SetPinMux(p->afReg, alt, af->inSelReg, af->inSelVal, p->cfgReg, isInputPathForcedOn);
+	IOMUXC_SetPinConfig(p->afReg,alt,af->inSelReg, af->inSelVal, p->cfgReg, padCfgVal);
 }
 
-bool mp_hal_pin_config_alt(mp_hal_pin_obj_t pin, uint32_t mode, uint32_t pull, uint8_t fn, uint8_t unit) {
-    const pin_af_obj_t *af = pin_find_af(pin, fn, unit);
+bool mp_hal_pin_config_alt(mp_hal_pin_obj_t pin, uint32_t padCfg,  uint8_t fn) {
+    const pin_af_obj_t *af = pin_find_af(pin, fn);
     if (af == NULL) {
         return false;
     }
-    mp_hal_pin_config(pin, mode, pull, af->idx);
+	mp_hal_pin_config(pin, af, af->idx, padCfg);
     return true;
 }
+
+void mp_hal_ConfigGPIO(const pin_obj_t *p, uint32_t gpioMode, uint32_t isInitialHighForOutput)
+{
+	GPIO_Type *pGPIO = p->gpio;
+	uint32_t pinMask = 1 << p->pin;
+	mp_hal_gpio_clock_enable(p->port);
+	pGPIO->IMR &= ~pinMask;	 // disable pin IRQ
+	if (gpioMode & (1<<31)) {
+		// output
+		if (isInitialHighForOutput)
+			pGPIO->DR |= pinMask;
+		else
+			pGPIO->DR &= ~pinMask;
+		pGPIO->GDIR |= pinMask;
+		
+	} else {
+		// input
+		pGPIO->GDIR &= ~pinMask;
+	}
+	mp_hal_pin_config_alt(p, gpioMode, AF_FN_GPIO);
+}
+
+

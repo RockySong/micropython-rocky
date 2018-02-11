@@ -38,7 +38,7 @@
 
 // mpy automatically flush flash cache in a timely manner, to avoid doing it in high priority SysTick IRQ handler,
 // it manually fires another low priority IRQ just like Pend SV's style, we borrow the reserved 46 IRQ in LPC546xx
-#define TRIGGER_FLASH_IRQ()	NVIC->STIR = Reserved46_IRQn	// borrow this reserved IRQ number to simulate flash IRQ
+#define TRIGGER_FLASH_IRQ()	NVIC->STIR = Reserved168_IRQn	// borrow this reserved IRQ number to simulate flash IRQ
 
 typedef enum cur_media_enum
 {

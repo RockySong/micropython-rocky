@@ -59,10 +59,10 @@ const pin_obj_t *pin_find_named_pin(const mp_obj_dict_t *named_pins, mp_obj_t na
     return NULL;
 }
 
-const pin_af_obj_t *pin_find_af(const pin_obj_t *pin, uint8_t fn, uint8_t unit) {
+const pin_af_obj_t *pin_find_af(const pin_obj_t *pin, uint8_t fn) {
     const pin_af_obj_t *af = pin->af;
     for (mp_uint_t i = 0; i < pin->num_af; i++, af++) {
-        if (af->fn == fn && af->unit == unit) {
+        if (af->fn == fn) {
             return af;
         }
     }

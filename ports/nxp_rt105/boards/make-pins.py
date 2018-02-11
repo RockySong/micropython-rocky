@@ -135,8 +135,8 @@ class AlternateFunction(object):
         fn_num = self.fn_num
         if fn_num is None:
             fn_num = 0
-        print('({:2d}, {:8s}, {:2d}, {:10s}, {:8s}), // {:s}'.format(self.idx,
-              self.func, fn_num, self.pin_type, self.ptr(), self.af_str))
+        print('({:2d}, {:8s}, {:2d}, {:16s}, {:11s}, {:11s}, {:4s}), // {:s}'.format(self.idx,
+              self.func, fn_num, self.pin_type, self.ptr(), self.inSelReg, self.inSelVal, self.af_str))
         print_conditional_endif(cond_var)
 
     def qstr_list(self):
@@ -217,10 +217,11 @@ class Pin(object):
             print("// ",  end='')
         print('};')
         print('')
-        print('const pin_obj_t pin_{:s} = PIN({:s}, {:s}, {:d}, {:s}, {:s}, {:d});'.format(
+        print('const pin_obj_t pin_{:s} = PIN({:s}, {:s}, {:d}, {:s}, {:s}, {:d}, {:s}, {:s});'.format(
             self.cpu_pin_name(), self.cpu_pin_name(), self.port_letter(), self.pin,
             self.alt_fn_name(null_if_0=True),
-            self.adc_num_str(), self.adc_channel))
+            self.adc_num_str(), self.adc_channel,
+            self.afReg, self.padCfgReg))
         print('')
 
     def print_header(self, hdr_file):
@@ -289,15 +290,30 @@ class Pins(object):
                 if n == 1:
                     continue
                 s = row[0]
-                sPinName = s[0: dictPinNameLen[s[:2]] ]
+                nameLen = dictPinNameLen[s[:2]]
+                sPinName = s[0: nameLen]
+                sAfName = s[nameLen+1:]
                 myPin = self.find_pin(sPinName)
                 if myPin == None:
                     continue
                 myPin.afReg = row[1]
                 myPin.padCfgReg = row[5]
-                print(myPin.imxrtName, row[1], row[5])
+                afNdx = int(row[2][2])
+                #print(myPin.imxrtName, sAfName, row[1], row[5], afNdx)
                 #todo: add InSelReg
-        
+
+                for af in myPin.alt_fn:
+                    if af.idx == afNdx:
+                        if sAfName == 'LPSPI2_SDO':
+                            i = 3
+                        if af.af_str != sAfName:
+                            pass
+                           # print('warning: mux naming inconsistent: {:s} != {:s}'.format(af.af_str, sAfName))
+                        if sAfName[:4] == 'GPIO' and len(row[3]) > 1:
+                            print (sAfName)
+                        af.inSelReg = row[3]
+                        af.inSelVal = row[4]
+        return 0
     def parse_board_file(self, filename):
         with open(filename, 'r') as csvfile:
             rows = csv.reader(csvfile)
@@ -482,7 +498,6 @@ def main():
     if args.pinmap_filename:
         print('// --pinmap {:s}'.format(args.pinmap_filename))
         pins.parse_pinmap_file(args.pinmap_filename)
-        return
     if args.board_filename:
         print('// --board {:s}'.format(args.board_filename))
         pins.parse_board_file(args.board_filename)

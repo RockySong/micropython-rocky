@@ -181,58 +181,74 @@ const pin_obj_t *pin_find(mp_obj_t user_obj) {
 
 /// \method __str__()
 /// Return a string describing the pin object.
+#define _INC_PRINT(...) do { \
+	snprintf(s + sNdx, sLenRem, __VA_ARGS__); \
+	sNdx = strlen(s); \
+	sLenRem = sizeof(s) - sNdx; }while(0)
+
 STATIC void pin_print(const mp_print_t *print, mp_obj_t self_in, mp_print_kind_t kind) {
     pin_obj_t *self = self_in;
+	char s[128];
+	const char* ppSpd[] = {"50MHz", "100MHz", "100MHz", "200MHz"};
+	const char* ppPull[] = {"pDn100K", "pUp47K", "pUp100K", "pUp22K"};
+	uint32_t sNdx, sLenRem = sizeof(s);
 
-    // pin name
-    mp_printf(print, "Pin(Pin.cpu.%q, mode=Pin.", self->name);
+	McuPinCfgReg_t cfg;
+	McuPinMuxReg_t mux;
+	uint32_t afNdx;
+	const char *pName;
+	size_t qstrLen;
+	pName = (const char*) qstr_data(self->name, &qstrLen);
+	_INC_PRINT("Pin %s (P%02d.%02d):\r\n", pName, self->port, self->pin);
+	
+    cfg.v32 = REG_READ32(self->cfgReg);
+	mux.v32 = REG_READ32(self->afReg);
+	afNdx = pin_get_af(self);
+	if (cfg.b11_1_OD_isOD)
+		_INC_PRINT("OD, ");
+	else
+		_INC_PRINT("--, ");
 
-    uint32_t mode = pin_get_mode(self);
-
-    if (!(mode & GPIO_MODE_DIGITAL)) {
+    if (!(cfg.b12_1_PKE_digiInEn)) {
         // analog
-        mp_print_str(print, "ANALOG)");
-
+		_INC_PRINT("Analog/Hiz\r\n");
     } else {
-        // IO mode
-        qstr mode_qst = 0;
-        if (0 == (mode & GPIO_MODE_OUTPUT_PP)) {
-            mode_qst = MP_QSTR_IN;
-        } else if (mode == GPIO_MODE_OUTPUT_PP) {
-            mode_qst = MP_QSTR_OUT;
-        }
-        mp_print_str(print, qstr_str(mode_qst));
-		if (mode & GPIO_MODE_OUTPUT_OD)
-			mp_print_str(print, qstr_str(MP_QSTR_OPEN_DRAIN));
+    	_INC_PRINT("Digital, mux=%d, ", afNdx & 7);
 
-        // pull mode
-        qstr pull_qst = MP_QSTR_NULL;
-        uint32_t pull = pin_get_pull(self);
-        if (pull == GPIO_PULLUP) {
-            pull_qst = MP_QSTR_PULL_UP;
-        } else if (pull == GPIO_PULLDOWN) {
-            pull_qst = MP_QSTR_PULL_DOWN;
-		} else if (pull == GPIO_REPEATER) {
-			pull_qst = MP_QSTR_REPEATER;
-		}
-
-		if (pull_qst != MP_QSTR_NULL) {
-            mp_printf(print, ", pull=Pin.%q", pull_qst);
-        }
-		mp_uint_t alt = mode & 0xF;
-		if (alt == 0)
-			mp_printf(print, "Func=GPIO");
-		else
-		{
-            mp_uint_t af_idx = pin_get_af(self);
-            const pin_af_obj_t *af_obj = pin_find_af_by_index(self, af_idx);
-            if (af_obj == NULL) {
-                mp_printf(print, ", af=%d)", af_idx);
-            } else {
-                mp_printf(print, ", af=Pin.%q)", af_obj->name);
-            }
-        }
+    	if (afNdx == 5) {
+			_INC_PRINT("GPIO:");
+			if (self->gpio->GDIR & (1<<self->pin))
+				_INC_PRINT("OUT, ");
+			else
+				_INC_PRINT(" IN, ");
+    	}
     }
+	if (cfg.b00_1_SRE_isFastSlew)
+		_INC_PRINT("Slew=Fast, ");
+	else
+		_INC_PRINT("Slew=Slow, ");
+
+	_INC_PRINT("drive=%d/8, ", cfg.b03_3_DSE_driveStrength);
+	_INC_PRINT("%s, ", ppSpd[cfg.b06_2_Speed]);
+	if (cfg.b13_1_PUE_keepOrPull == 0)
+		_INC_PRINT("keeper, ");
+	else
+		_INC_PRINT("%s, ", ppPull[cfg.b14_2_PUS_PullSel]);
+
+	if (cfg.b16_1_HYS)
+		_INC_PRINT("HYS, ");
+	else
+		_INC_PRINT("---, ");
+
+	if (mux.b04_1_inForceOn)
+		_INC_PRINT("INON, ");
+	else
+		_INC_PRINT("----, ");
+	if (afNdx & 0x10) {
+		_INC_PRINT("not selected! ");
+	}
+
+	mp_printf(print, "%s\r\n", s);
 }
 
 STATIC mp_obj_t pin_obj_init_helper(const pin_obj_t *pin, mp_uint_t n_args, const mp_obj_t *args, mp_map_t *kw_args);
@@ -330,9 +346,9 @@ STATIC mp_obj_t pin_obj_init_helper(const pin_obj_t *self, mp_uint_t n_args, con
         { MP_QSTR_pull, MP_ARG_OBJ, {.u_obj = mp_const_none}},
         { MP_QSTR_af, MP_ARG_INT, {.u_int = 4}}, // KEEP for porting compatibility
         { MP_QSTR_value, MP_ARG_KW_ONLY | MP_ARG_OBJ, {.u_obj = MP_OBJ_NULL}},
-        { MP_QSTR_alt, MP_ARG_KW_ONLY | MP_ARG_INT, {.u_int = 0}},
-		{ MP_QSTR_inv, MP_ARG_KW_ONLY | MP_ARG_BOOL, {.u_bool = false}},
-		{ MP_QSTR_flt, MP_ARG_KW_ONLY | MP_ARG_BOOL, {.u_bool = false}},
+        { MP_QSTR_alt, MP_ARG_KW_ONLY | MP_ARG_INT, {.u_int = 5}},
+		{ MP_QSTR_spd, MP_ARG_KW_ONLY | MP_ARG_BOOL, {.u_bool = false}},
+		{ MP_QSTR_hys, MP_ARG_KW_ONLY | MP_ARG_BOOL, {.u_bool = false}},
     };
 	pin_init_t args;
     // parse args
@@ -367,13 +383,9 @@ STATIC mp_obj_t pin_obj_init_helper(const pin_obj_t *self, mp_uint_t n_args, con
 		args.alt.u_int | (args.mode.u_int & 0xFFF) | 1<<8/*digital*/| pull | args.inv.u_bool<<7 | (!args.flt.u_bool)<<9 );
 	if (args.alt.u_int == 0) {
 		// Select GPIO
-		// >>> enable GPIO port clock
-		if (self->port < 4)
-			CLOCK_EnableClock((clock_ip_name_t)(kCLOCK_Gpio0 + self->port));
-		else
-			CLOCK_EnableClock((clock_ip_name_t)(kCLOCK_Gpio4 + self->port - 4));
-		// <<<
-		if (args.mode.u_int == GPIO_MODE_INPUT)
+		mp_hal_gpio_clock_enable(self->port);
+		if (0 == (args.mode.u_int & GPIO_PAD_OUTPUT_MASK))
+			IOMUXC_SetPinMux(self->afReg, self->adc_num, self->, uint32_t inputDaisy, uint32_t configRegister, uint32_t inputOnfield)
 			self->gpio->DIRCLR[self->port] = 1 << self->pin;
 		else {
 			if (args.val0.u_obj != MP_OBJ_NULL) {
@@ -536,19 +548,20 @@ STATIC const mp_rom_map_elem_t pin_locals_dict_table[] = {
 
     // class constants
 
-    { MP_ROM_QSTR(MP_QSTR_IN),        MP_ROM_INT(GPIO_MODE_INPUT) },
-    { MP_ROM_QSTR(MP_QSTR_OUT),       MP_ROM_INT(GPIO_MODE_OUTPUT_PP) },
-    { MP_ROM_QSTR(MP_QSTR_OPEN_DRAIN), MP_ROM_INT(GPIO_MODE_OUTPUT_OD) }, 
-    { MP_ROM_QSTR(MP_QSTR_ALT),       MP_ROM_INT(GPIO_MODE_AF_PP) },
-    { MP_ROM_QSTR(MP_QSTR_ALT_OPEN_DRAIN), MP_ROM_INT(GPIO_MODE_OUTPUT_OD) },	// not used in LPC
+	{ MP_ROM_QSTR(MP_QSTR_HIZ),        	MP_ROM_INT(IOPAD_IN_HIZ) },
+    { MP_ROM_QSTR(MP_QSTR_ANALOG),      MP_ROM_INT(GPIO_MODE_ANALOG) },
+    { MP_ROM_QSTR(MP_QSTR_IN),          MP_ROM_INT(GPIO_MODE_INPUT) },
+	{ MP_ROM_QSTR(MP_QSTR_IN_PUP),		MP_ROM_INT(GPIO_MODE_INPUT_PUP) },
+	{ MP_ROM_QSTR(MP_QSTR_IN_PUP_WEAK), MP_ROM_INT(GPIO_MODE_INPUT_PUP_WEAK) },
+	{ MP_ROM_QSTR(MP_QSTR_IN_PDN),	    MP_ROM_INT(GPIO_MODE_INPUT_PDN) },
 
-    { MP_ROM_QSTR(MP_QSTR_PULL_UP),   MP_ROM_INT(GPIO_PULLUP) },
-    { MP_ROM_QSTR(MP_QSTR_PULL_DOWN), MP_ROM_INT(GPIO_PULLDOWN) },
-	{ MP_ROM_QSTR(MP_QSTR_REPEATER),  MP_ROM_INT(GPIO_REPEATER) },	// new in LPC
-	{ MP_ROM_QSTR(MP_QSTR_INVERTER),  MP_ROM_INT(GPIO_MODE_INPUT) },	// new in LPC
-
-
-// rocky ignore #include "genhdr/pins_af_const.h"
+	{ MP_ROM_QSTR(MP_QSTR_OUT),     	MP_ROM_INT(GPIO_MODE_OUTPUT_PP) },
+	{ MP_ROM_QSTR(MP_QSTR_OUT_WEAK),    MP_ROM_INT(GPIO_MODE_OUTPUT_PP_WEAK) },
+	{ MP_ROM_QSTR(MP_QSTR_OPEN_DRAIN),  MP_ROM_INT(GPIO_MODE_OUTPUT_OD) },
+	{ MP_ROM_QSTR(MP_QSTR_OD_PUP),      MP_ROM_INT(GPIO_MODE_OUTPUT_OD_PUP) },
+	// >>> below are custom cfg
+	{ MP_ROM_QSTR(MP_QSTR_SLEW_FAST),   MP_ROM_INT(IOPAD_OUT_SLEW_FAST) },
+	{ MP_ROM_QSTR(MP_QSTR_HYS),   		MP_ROM_INT(IOPAD_IN_HYST) },
 };
 
 STATIC MP_DEFINE_CONST_DICT(pin_locals_dict, pin_locals_dict_table);

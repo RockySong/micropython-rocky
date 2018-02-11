@@ -26,8 +26,8 @@ static inline mp_uint_t mp_hal_ticks_cpu(void) {
 #define MP_HAL_PIN_FMT                  "%q"
 #define MP_HAL_PIN_MODE_INPUT           (GPIO_MODE_INPUT)
 #define MP_HAL_PIN_MODE_OUTPUT          (GPIO_MODE_OUTPUT_PP)
-#define MP_HAL_PIN_MODE_INV             (GPIO_INVERTER)
-#define MP_HAL_PIN_MODE_DIGITAL         (GPIO_MODE_DIGITAL)
+// #define MP_HAL_PIN_MODE_INV             (GPIO_INVERTER)
+// #define MP_HAL_PIN_MODE_DIGITAL         (GPIO_MODE_DIGITAL)
 #define MP_HAL_PIN_MODE_OPEN_DRAIN      (GPIO_MODE_OUTPUT_OD)
 #define MP_HAL_PIN_MODE_ALT_OPEN_DRAIN  (GPIO_MODE_OUTPUT_OD)
 #define MP_HAL_PIN_PULL_NONE             0 // (GPIO_NOPULL)
@@ -47,16 +47,40 @@ static inline GPIO_Type * _find_gpio(const pin_obj_t *p){
 	return gps[p->port];
 }
 
-#define mp_hal_pin_input(p)     mp_hal_pin_config((p), MP_HAL_PIN_MODE_INPUT, MP_HAL_PIN_PULL_NONE, PIN_ALT_NC)
-#define mp_hal_pin_output(p)    mp_hal_pin_config((p), MP_HAL_PIN_MODE_OUTPUT, MP_HAL_PIN_PULL_NONE, PIN_ALT_NC)
-#define mp_hal_pin_open_drain(p) mp_hal_pin_config((p), MP_HAL_PIN_MODE_OPEN_DRAIN, MP_HAL_PIN_PULL_NONE, PIN_ALT_NC)
-#define mp_hal_pin_high(p)      GPIO_WritePinOutput(_find_gpio(p), (p)->pin, 1)
-#define mp_hal_pin_low(p)       GPIO_WritePinOutput(_find_gpio(p), (p)->pin, 0)
+static inline void mp_hal_pin_high(const pin_obj_t *pPin) {
+	GPIO_PinWrite(pPin->gpio, pPin->pin, 1);
+	
+}
+
+static inline void mp_hal_pin_low(const pin_obj_t *pPin) {
+	GPIO_PinWrite(pPin->gpio, pPin->pin, 0);
+}
+
+static inline void mp_hal_pin_toggle(const pin_obj_t *pPin)
+{
+	uint32_t a, pinNdx = pPin->pin;
+	a = (0 == GPIO_PinRead(pPin->gpio, pinNdx) );
+	GPIO_PinWrite(pPin->gpio, pinNdx, a);
+	
+}
+
+#define REG_READ32(reg)  (*((volatile uint32_t *)(reg)))
+#define REG_WRITE32(reg,val32)  (*((volatile uint32_t *)(reg))) = val32
+#define REG_OR32(reg,val32)		(*((volatile uint32_t *)(reg))) |= val32
+#define REG_AND32(reg,val32)		(*((volatile uint32_t *)(reg))) &= val32
+
+
+#define mp_hal_pin_input(p)     mp_hal_pin_config_alt((p), GPIO_MODE_INPUT, AF_FN_GPIO)
+#define mp_hal_pin_output(p)    mp_hal_pin_config_alt((p), GPIO_MODE_OUTPUT_PP, AF_FN_GPIO)
+#define mp_hal_pin_open_drain(p) mp_hal_pin_config_alt((p), GPIO_MODE_OUTPUT_OD_PUP, AF_FN_GPIO)
 #define mp_hal_pin_od_low(p)    mp_hal_pin_low(p)
 #define mp_hal_pin_od_high(p)   mp_hal_pin_high(p)
 #define mp_hal_pin_read(p)      (GPIO_PinRead(_find_gpio(p), (p)->pin))
 #define mp_hal_pin_write(p, v)  do { if (v) { mp_hal_pin_high(p); } else { mp_hal_pin_low(p); } } while (0)
 
 void mp_hal_gpio_clock_enable(uint32_t portNum);
-void mp_hal_pin_config(mp_hal_pin_obj_t pin, uint32_t mode, uint32_t pull, uint32_t alt);
-bool mp_hal_pin_config_alt(mp_hal_pin_obj_t pin, uint32_t mode, uint32_t pull, uint8_t fn, uint8_t unit);
+void mp_hal_pin_config(const pin_obj_t *p, const pin_af_obj_t *af, uint32_t alt, uint32_t padCfgVal );
+bool mp_hal_pin_config_alt(mp_hal_pin_obj_t pin, uint32_t padCfg,  uint8_t fn);
+
+void mp_hal_ConfigGPIO(const pin_obj_t *p, uint32_t gpioMode, uint32_t isInitialHighForOutput);
+

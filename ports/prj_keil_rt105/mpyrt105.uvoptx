@@ -3462,7 +3462,7 @@
 
   <Group>
     <GroupName>extmod</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -4566,7 +4566,7 @@
 
   <Group>
     <GroupName>port</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -5693,8 +5693,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt105\pin_defs_lpc546.c</PathWithFileName>
-      <FilenameWithoutPath>pin_defs_lpc546.c</FilenameWithoutPath>
+      <PathWithFileName>..\nxp_rt105\pin_defs_mcu.c</PathWithFileName>
+      <FilenameWithoutPath>pin_defs_mcu.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -5705,8 +5705,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt105\pin_defs_lpc546.h</PathWithFileName>
-      <FilenameWithoutPath>pin_defs_lpc546.h</FilenameWithoutPath>
+      <PathWithFileName>..\nxp_rt105\pin_defs_mcu.h</PathWithFileName>
+      <FilenameWithoutPath>pin_defs_mcu.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -6878,7 +6878,7 @@
 
   <Group>
     <GroupName>flexspi_xip</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -6927,6 +6927,26 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\nxp_rt105\mcusdk\xip\fsl_flexspi_nor_flash.h</PathWithFileName>
       <FilenameWithoutPath>fsl_flexspi_nor_flash.h</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+  </Group>
+
+  <Group>
+    <GroupName>fleg_ftl</GroupName>
+    <tvExp>1</tvExp>
+    <tvExpOptDlg>0</tvExpOptDlg>
+    <cbSel>0</cbSel>
+    <RteFlg>0</RteFlg>
+    <File>
+      <GroupNumber>17</GroupNumber>
+      <FileNumber>487</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\nxp_rt105\flegftl\flegftl.c</PathWithFileName>
+      <FilenameWithoutPath>flegftl.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

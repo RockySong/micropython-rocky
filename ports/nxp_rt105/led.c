@@ -67,17 +67,10 @@ STATIC const pyb_led_obj_t pyb_led_obj[] = {
 #define NUM_LEDS MP_ARRAY_SIZE(pyb_led_obj)
 
 void led_init(void) {
-	gpio_pin_config_t t;
-	t.pinDirection = kGPIO_DigitalOutput , t.outputLogic = 1;
     /* Turn off LEDs and initialize */
     for (int led = 0; led < NUM_LEDS; led++) {
         const pin_obj_t *led_pin = pyb_led_obj[led].led_pin;
-        mp_hal_gpio_clock_enable(led_pin->port);
-		mp_hal_pin_config(led_pin, 1<<7/*Digital*/ | 1<<8/*10ns Filter off*/, 0 /*no pull*/, 0 /*alt 0*/);
-		GPIO_PinInit(led_pin->gpio, led_pin->port, led_pin->pin, &t);
-		// led_pin->gpio->DIRSET[led_pin->port] = 1<<led_pin->pin;
-        MICROPY_HW_LED_OFF(led_pin);
-    }
+		mp_hal_ConfigGPIO(led_pin, GPIO_MODE_OUTPUT_PP, 1);    }
 }
 
 #if defined(MICROPY_HW_LED1_PWM) \
@@ -108,10 +101,15 @@ void led_init(void) {
 #define LED_PWM_TIM_PERIOD (10000) // TIM runs at 1MHz and fires every 10ms
 
 typedef struct _led_pwm_config_t {
-    CTIMER_Type *tim;
+	union{
+		GPT_Type *pGPT;
+		TMR_Type *pTMR;
+		PWM_Type *pPWM;
+	};
+	uint8_t tim_type; // 0 = GPT, 1 = TMR, 2 = (Flex)PWM
     uint8_t tim_id;
-    uint8_t tim_channel;
-    uint8_t alt_func;
+    uint8_t tim_channel;	// encoded channel, different timer has different interpretation
+    uint8_t alt_func;	// alt func index of pin mux
 } led_pwm_config_t;
 
 const led_pwm_config_t led_pwm_config[] = {
@@ -184,8 +182,7 @@ void led_toggle(pyb_led_t led) {
     #endif
 
     const pin_obj_t *led_pin = pyb_led_obj[led - 1].led_pin;
-    led_pin->gpio->NOT[led_pin->port] = 1 << led_pin->pin;
-
+	mp_hal_pin_toggle(led_pin);
 }
 
 int led_get_intensity(pyb_led_t led) {
@@ -215,9 +212,9 @@ void led_set_intensity(pyb_led_t led, mp_int_t intensity) {
 
 void led_debug(int n, int delay) {
     led_state(1, n & 1);
-    led_state(2, n & 2);
-    led_state(3, n & 4);
-    led_state(4, n & 8);
+    // led_state(2, n & 2);
+    // led_state(3, n & 4);
+    // led_state(4, n & 8);
     mp_hal_delay_ms(delay);
 }
 

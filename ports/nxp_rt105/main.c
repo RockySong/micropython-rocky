@@ -45,8 +45,8 @@
 #include "pybthread.h"
 #include "gccollect.h"
 #include "modmachine.h"
-#include "i2c.h"
-#include "spi.h"
+// #include "i2c.h"
+// #include "spi.h"
 #include "uart.h"
 // #include "timer.h"
 #include "led.h"
@@ -575,8 +575,8 @@ soft_reset:
     rng_init0();
 #endif
 
-	i2c_init0();
-	spi_init0();
+	// rocky ignore: i2c_init0();
+	// rocky ignore: spi_init0();
 	pyb_usb_init0();
 
     // Initialise the local flash filesystem.

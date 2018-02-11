@@ -61,7 +61,7 @@
 		#define FLASH_MEM_SEG2_NUM_BLOCKS (0) // no second segment
 	#endif
 
-	#define FLASH_PART1_START_BLOCK (FLASH_DISK_OFS / FLASH_BLOCK_SIZE)
+	#define FLASH_PART1_START_BLOCK (0 / FLASH_BLOCK_SIZE)
 	#define FLASH_PART1_NUM_BLOCKS (FLASH_MEM_SEG1_NUM_BLOCKS + FLASH_MEM_SEG2_NUM_BLOCKS)
 
 	#define FLASH_FLAG_DIRTY        (1)
@@ -153,7 +153,7 @@ void storage_init(void) {
         #endif
         flash_is_initialised = true;
     }
-	NVIC_EnableIRQ(Reserved46_IRQn);  // reserved IRQ is borrowed to trigger flash cache flush
+	NVIC_EnableIRQ(Reserved168_IRQn);  // reserved IRQ is borrowed to trigger flash cache flush
     #if USE_INTERNAL
 	#if 0
     // Enable the flash IRQ, which is used to also call our storage IRQ handler

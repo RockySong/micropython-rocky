@@ -40,6 +40,8 @@ extern const pin_obj_t pin_SD_B0_02;
 extern const pin_af_obj_t pin_SD_B0_02_af[];
 extern const pin_obj_t pin_SD_B0_03;
 extern const pin_af_obj_t pin_SD_B0_03_af[];
+extern const pin_obj_t pin_WAKEUP;
+extern const pin_af_obj_t pin_WAKEUP_af[];
 extern const pin_obj_t * const pin_adc1[];
 extern const pin_obj_t * const pin_adc2[];
 extern const pin_obj_t * const pin_adc3[];
@@ -65,3 +67,5 @@ extern const pin_obj_t * const pin_adc3[];
 #define pyb_pin_A3 pin_AD_B1_05
 #define pyb_pin_A4 pin_AD_B1_01
 #define pyb_pin_A5 pin_AD_B1_00
+#define pyb_pin_LED pin_AD_B0_09
+#define pyb_pin_KEY pin_WAKEUP

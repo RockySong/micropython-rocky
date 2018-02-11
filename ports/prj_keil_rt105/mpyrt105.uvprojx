@@ -1891,6 +1891,56 @@
               <FileName>fsl_lpi2c_freertos.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\nxp_rt105\mcusdk\drivers\fsl_lpi2c_freertos.c</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>0</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Cads>
+                    <interw>2</interw>
+                    <Optim>0</Optim>
+                    <oTime>2</oTime>
+                    <SplitLS>2</SplitLS>
+                    <OneElfS>2</OneElfS>
+                    <Strict>2</Strict>
+                    <EnumInt>2</EnumInt>
+                    <PlainCh>2</PlainCh>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <wLevel>0</wLevel>
+                    <uThumb>2</uThumb>
+                    <uSurpInc>2</uSurpInc>
+                    <uC99>2</uC99>
+                    <useXO>2</useXO>
+                    <v6Lang>0</v6Lang>
+                    <v6LangP>0</v6LangP>
+                    <vShortEn>2</vShortEn>
+                    <vShortWch>2</vShortWch>
+                    <v6Lto>2</v6Lto>
+                    <v6WtE>2</v6WtE>
+                    <v6Rtti>2</v6Rtti>
+                    <VariousControls>
+                      <MiscControls></MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Cads>
+                </FileArmAds>
+              </FileOption>
             </File>
             <File>
               <FileName>fsl_lpspi.c</FileName>
@@ -1906,6 +1956,56 @@
               <FileName>fsl_lpspi_freertos.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\nxp_rt105\mcusdk\drivers\fsl_lpspi_freertos.c</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>0</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Cads>
+                    <interw>2</interw>
+                    <Optim>0</Optim>
+                    <oTime>2</oTime>
+                    <SplitLS>2</SplitLS>
+                    <OneElfS>2</OneElfS>
+                    <Strict>2</Strict>
+                    <EnumInt>2</EnumInt>
+                    <PlainCh>2</PlainCh>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <wLevel>0</wLevel>
+                    <uThumb>2</uThumb>
+                    <uSurpInc>2</uSurpInc>
+                    <uC99>2</uC99>
+                    <useXO>2</useXO>
+                    <v6Lang>0</v6Lang>
+                    <v6LangP>0</v6LangP>
+                    <vShortEn>2</vShortEn>
+                    <vShortWch>2</vShortWch>
+                    <v6Lto>2</v6Lto>
+                    <v6WtE>2</v6WtE>
+                    <v6Rtti>2</v6Rtti>
+                    <VariousControls>
+                      <MiscControls></MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Cads>
+                </FileArmAds>
+              </FileOption>
             </File>
             <File>
               <FileName>fsl_lpuart.c</FileName>
@@ -1921,6 +2021,56 @@
               <FileName>fsl_lpuart_freertos.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\nxp_rt105\mcusdk\drivers\fsl_lpuart_freertos.c</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>0</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Cads>
+                    <interw>2</interw>
+                    <Optim>0</Optim>
+                    <oTime>2</oTime>
+                    <SplitLS>2</SplitLS>
+                    <OneElfS>2</OneElfS>
+                    <Strict>2</Strict>
+                    <EnumInt>2</EnumInt>
+                    <PlainCh>2</PlainCh>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <wLevel>0</wLevel>
+                    <uThumb>2</uThumb>
+                    <uSurpInc>2</uSurpInc>
+                    <uC99>2</uC99>
+                    <useXO>2</useXO>
+                    <v6Lang>0</v6Lang>
+                    <v6LangP>0</v6LangP>
+                    <vShortEn>2</vShortEn>
+                    <vShortWch>2</vShortWch>
+                    <v6Lto>2</v6Lto>
+                    <v6WtE>2</v6WtE>
+                    <v6Rtti>2</v6Rtti>
+                    <VariousControls>
+                      <MiscControls></MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Cads>
+                </FileArmAds>
+              </FileOption>
             </File>
             <File>
               <FileName>fsl_pit.c</FileName>
@@ -2584,6 +2734,56 @@
               <FileName>i2c.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\nxp_rt105\i2c.c</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>0</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Cads>
+                    <interw>2</interw>
+                    <Optim>0</Optim>
+                    <oTime>2</oTime>
+                    <SplitLS>2</SplitLS>
+                    <OneElfS>2</OneElfS>
+                    <Strict>2</Strict>
+                    <EnumInt>2</EnumInt>
+                    <PlainCh>2</PlainCh>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <wLevel>0</wLevel>
+                    <uThumb>2</uThumb>
+                    <uSurpInc>2</uSurpInc>
+                    <uC99>2</uC99>
+                    <useXO>2</useXO>
+                    <v6Lang>0</v6Lang>
+                    <v6LangP>0</v6LangP>
+                    <vShortEn>2</vShortEn>
+                    <vShortWch>2</vShortWch>
+                    <v6Lto>2</v6Lto>
+                    <v6WtE>2</v6WtE>
+                    <v6Rtti>2</v6Rtti>
+                    <VariousControls>
+                      <MiscControls></MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Cads>
+                </FileArmAds>
+              </FileOption>
             </File>
             <File>
               <FileName>spi.c</FileName>
@@ -2596,7 +2796,7 @@
                   <RVCTZI>0</RVCTZI>
                   <RVCTOtherData>0</RVCTOtherData>
                   <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>2</IncludeInBuild>
+                  <IncludeInBuild>0</IncludeInBuild>
                   <AlwaysBuild>2</AlwaysBuild>
                   <GenerateAssemblyFile>2</GenerateAssemblyFile>
                   <AssembleAssemblyFile>2</AssembleAssemblyFile>
@@ -2709,6 +2909,56 @@
               <FileName>uart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\nxp_rt105\uart.c</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>0</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Cads>
+                    <interw>2</interw>
+                    <Optim>0</Optim>
+                    <oTime>2</oTime>
+                    <SplitLS>2</SplitLS>
+                    <OneElfS>2</OneElfS>
+                    <Strict>2</Strict>
+                    <EnumInt>2</EnumInt>
+                    <PlainCh>2</PlainCh>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <wLevel>0</wLevel>
+                    <uThumb>2</uThumb>
+                    <uSurpInc>2</uSurpInc>
+                    <uC99>2</uC99>
+                    <useXO>2</useXO>
+                    <v6Lang>0</v6Lang>
+                    <v6LangP>0</v6LangP>
+                    <vShortEn>2</vShortEn>
+                    <vShortWch>2</vShortWch>
+                    <v6Lto>2</v6Lto>
+                    <v6WtE>2</v6WtE>
+                    <v6Rtti>2</v6Rtti>
+                    <VariousControls>
+                      <MiscControls></MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Cads>
+                </FileArmAds>
+              </FileOption>
             </File>
             <File>
               <FileName>usb_app.c</FileName>
@@ -3267,14 +3517,14 @@
               <FilePath>..\nxp_rt105\hal_wrapper.h</FilePath>
             </File>
             <File>
-              <FileName>pin_defs_lpc546.c</FileName>
+              <FileName>pin_defs_mcu.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt105\pin_defs_lpc546.c</FilePath>
+              <FilePath>..\nxp_rt105\pin_defs_mcu.c</FilePath>
             </File>
             <File>
-              <FileName>pin_defs_lpc546.h</FileName>
+              <FileName>pin_defs_mcu.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\nxp_rt105\pin_defs_lpc546.h</FilePath>
+              <FilePath>..\nxp_rt105\pin_defs_mcu.h</FilePath>
             </File>
             <File>
               <FileName>flash_hyper.c</FileName>
@@ -4299,6 +4549,16 @@
               <FileName>fsl_flexspi_nor_flash.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\nxp_rt105\mcusdk\xip\fsl_flexspi_nor_flash.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>fleg_ftl</GroupName>
+          <Files>
+            <File>
+              <FileName>flegftl.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt105\flegftl\flegftl.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -8026,14 +8286,14 @@
               <FilePath>..\nxp_rt105\hal_wrapper.h</FilePath>
             </File>
             <File>
-              <FileName>pin_defs_lpc546.c</FileName>
+              <FileName>pin_defs_mcu.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt105\pin_defs_lpc546.c</FilePath>
+              <FilePath>..\nxp_rt105\pin_defs_mcu.c</FilePath>
             </File>
             <File>
-              <FileName>pin_defs_lpc546.h</FileName>
+              <FileName>pin_defs_mcu.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\nxp_rt105\pin_defs_lpc546.h</FilePath>
+              <FilePath>..\nxp_rt105\pin_defs_mcu.h</FilePath>
             </File>
             <File>
               <FileName>flash_hyper.c</FileName>
@@ -8908,6 +9168,16 @@
               <FileName>fsl_flexspi_nor_flash.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\nxp_rt105\mcusdk\xip\fsl_flexspi_nor_flash.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>fleg_ftl</GroupName>
+          <Files>
+            <File>
+              <FileName>flegftl.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt105\flegftl\flegftl.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -12618,14 +12888,14 @@
               <FilePath>..\nxp_rt105\hal_wrapper.h</FilePath>
             </File>
             <File>
-              <FileName>pin_defs_lpc546.c</FileName>
+              <FileName>pin_defs_mcu.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt105\pin_defs_lpc546.c</FilePath>
+              <FilePath>..\nxp_rt105\pin_defs_mcu.c</FilePath>
             </File>
             <File>
-              <FileName>pin_defs_lpc546.h</FileName>
+              <FileName>pin_defs_mcu.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\nxp_rt105\pin_defs_lpc546.h</FilePath>
+              <FilePath>..\nxp_rt105\pin_defs_mcu.h</FilePath>
             </File>
             <File>
               <FileName>flash_hyper.c</FileName>
@@ -13146,6 +13416,16 @@
               <FileName>fsl_flexspi_nor_flash.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\nxp_rt105\mcusdk\xip\fsl_flexspi_nor_flash.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>fleg_ftl</GroupName>
+          <Files>
+            <File>
+              <FileName>flegftl.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt105\flegftl\flegftl.c</FilePath>
             </File>
           </Files>
         </Group>

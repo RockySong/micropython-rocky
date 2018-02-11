@@ -56,11 +56,20 @@ extern int DbgConsole_Printf(const char *fmt_s, ...);
 }
 #endif /* __cplusplus */
 
+/*
 #if defined(SDK_DEBUGCONSOLE) && (SDK_DEBUGCONSOLE < 1)
 #define usb_echo printf
 #else
 #define usb_echo DbgConsole_Printf
 #endif
+*/
+#include "py/nlr.h"
+#include "py/runtime.h"
+#include "py/mphal.h"
+#include "py/misc.h"
+
+#undef usb_echo
+#define usb_echo(...) mp_printf(MP_PYTHON_PRINTER, __VA_ARGS__)
 
 #if defined(__ICCARM__)
 
@@ -380,6 +389,7 @@ _Pragma("diag_suppress=Pm120")
 #endif
 
 #define USB_DATA_ALIGN_SIZE MAX(USB_CACHE_LINESIZE, USB_DATA_ALIGN)
+#define	USB_DATA_ALIGNMENT USB_RAM_ADDRESS_ALIGNMENT(USB_DATA_ALIGN_SIZE) 
 
 #define USB_DATA_ALIGN_SIZE_MULTIPLE(n) ((n + USB_DATA_ALIGN_SIZE - 1) & (~(USB_DATA_ALIGN_SIZE - 1)))
 

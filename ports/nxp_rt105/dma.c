@@ -36,7 +36,7 @@
 volatile dma_idle_count_t dma_idle;
 
 #define DMA_INVALID_CHANNEL 0xff    // Value stored in dma_last_channel which means invalid
-
+#if 0
 void dma_init(uint32_t dmaNdx, uint32_t chnNdx){
 	assert(dmaNdx == 0);
 	uint32_t bmOldChnEn;
@@ -86,3 +86,4 @@ void dma_idle_handler(uint32_t tick) {
 	}
 }
 
+#endif

@@ -362,8 +362,8 @@ void SysTick_Handler(void) {
 }
 
 // Handle a flash (erase/program) interrupt.
-void Reserved46_IRQHandler(void) {
-    IRQ_ENTER(Reserved46_IRQn);
+void Reserved168_IRQHandler(void) {
+    IRQ_ENTER(Reserved168_IRQn);
     // This calls the real flash IRQ handler, if needed
     /*
     uint32_t flash_cr = FLASH->CR;
@@ -373,7 +373,7 @@ void Reserved46_IRQHandler(void) {
     */
     // This call the storage IRQ handler, to check if the flash cache needs flushing
     storage_irq_handler();
-    IRQ_EXIT(Reserved46_IRQn);
+    IRQ_EXIT(Reserved168_IRQn);
 }
 
 

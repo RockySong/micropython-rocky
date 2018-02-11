@@ -8,7 +8,6 @@
 /*******************************************************************************
 * Definitions
 ******************************************************************************/
-#define FLEXSPI FLEXSPI
 #define FLASH_KB_SIZE (64*1024)  // size in KB !
 #define FLEXSPI_AMBA_BASE FlexSPI_AMBA_BASE
 #define FLASH_PAGE_SIZE 512

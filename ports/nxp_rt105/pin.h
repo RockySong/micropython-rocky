@@ -31,7 +31,7 @@
 #include "fsl_gpio.h"
 // This file requires pin_defs_xxx.h (which has port specific enums and
 // defines, so we include it here. It should never be included directly
-#include "pin_defs_imxrt105.h"
+#include "pin_defs_mcu.h"
 // rocky del #include MICROPY_PIN_DEFS_PORT_H
 #include "py/obj.h"
 
@@ -42,6 +42,10 @@ typedef struct {
   uint8_t fn;
   uint8_t unit;
   uint8_t type;
+  // >>> i.mx RT uses 2 levels of muxing (DAISYCHAIN, 'INPUT_SELECT' registers)
+  uint32_t inSelReg;
+  uint32_t inSelVal;
+  // <<<
 
   union {
     void          *reg;
@@ -62,6 +66,10 @@ typedef struct {
   uint32_t adc_num  : 3;    // 1 bit per ADC
   uint32_t pin_mask;
   GPIO_Type *gpio;
+  // >>> i.MX RT's pin alt_fn mux reg and pin cfg reg are not ordered in GPIO order, have to record the mapping
+  uint32_t afReg;
+  uint32_t cfgReg;
+  // <<<
   const pin_af_obj_t *af;
 } pin_obj_t;
 
@@ -98,7 +106,7 @@ uint32_t pin_get_pull(const pin_obj_t *pin);
 uint32_t pin_get_af(const pin_obj_t *pin);
 const pin_obj_t *pin_find(mp_obj_t user_obj);
 const pin_obj_t *pin_find_named_pin(const mp_obj_dict_t *named_pins, mp_obj_t name);
-const pin_af_obj_t *pin_find_af(const pin_obj_t *pin, uint8_t fn, uint8_t unit);
+const pin_af_obj_t *pin_find_af(const pin_obj_t *pin, uint8_t fn);
 const pin_af_obj_t *pin_find_af_by_index(const pin_obj_t *pin, mp_uint_t af_idx);
 const pin_af_obj_t *pin_find_af_by_name(const pin_obj_t *pin, const char *name);
 
