@@ -35,7 +35,8 @@
 #include "extmod/vfs_fat.h"
 #include "hal_wrapper.h"
 #include "systick.h"
-#include "flash.h"
+#include "flegftl.h"
+#include "flash_hyper.h"
 #include "led.h"
 #include "storage.h"
 
@@ -46,7 +47,8 @@
 #endif
 
 #if 1 // USE_INTERNAL
-	uint64_t s_c8FlhCache[SECTOR_USE_SIZE / 8];	
+	uint64_t s_c8FlhCache[FLEG_PAGE_SIZE / 8];	
+	FlegDevice_t s_dev;
 	#if 1 // defined(LPC54608) 
 		#define CACHE_MEM_START_ADDR (s_c8FlhCache) // CCM data RAM, 64k
 		#define FLASH_SECTOR_SIZE_MAX SECTOR_USE_SIZE
@@ -61,17 +63,15 @@
 		#define FLASH_MEM_SEG2_NUM_BLOCKS (0) // no second segment
 	#endif
 
-	#define FLASH_PART1_START_BLOCK (0 / FLASH_BLOCK_SIZE)
-	#define FLASH_PART1_NUM_BLOCKS (FLASH_MEM_SEG1_NUM_BLOCKS + FLASH_MEM_SEG2_NUM_BLOCKS)
+	#define FLASH_PART1_START_BLOCK 123
+	#define FLASH_PART1_NUM_BLOCKS FLEG_LPU_CNT
 
 	#define FLASH_FLAG_DIRTY        (1)
 	#define FLASH_FLAG_FORCE_WRITE  (2)
 	#define FLASH_FLAG_ERASED       (4)
 	static bool flash_is_initialised = false;
 	static __IO uint8_t flash_flags = 0;
-	static uint32_t flash_cache_sector_id;
-	static uint32_t flash_cache_sector_start;
-	static uint32_t flash_cache_sector_size;
+	static uint32_t flash_cache_lba_id;
 	static uint32_t flash_tick_counter_last_write;
 
 	static void flash_cache_flush(void) {
@@ -82,39 +82,6 @@
 			}
 		}
 
-	}
-
-	static uint8_t *flash_cache_get_addr_for_write(uint32_t flash_addr) {
-	    uint32_t flash_sector_start;
-	    uint32_t flash_sector_size;
-	    uint32_t flash_sector_id = flash_get_sector_info(flash_addr, &flash_sector_start, &flash_sector_size);
-	    if (flash_sector_size > FLASH_SECTOR_SIZE_MAX) {
-	        flash_sector_size = FLASH_SECTOR_SIZE_MAX;
-	    }
-	    if (flash_cache_sector_id != flash_sector_id) {
-	        flash_cache_flush();
-	        memcpy((void*)CACHE_MEM_START_ADDR, (const void*)flash_sector_start, flash_sector_size);
-	        flash_cache_sector_id = flash_sector_id;
-	        flash_cache_sector_start = flash_sector_start;
-	        flash_cache_sector_size = flash_sector_size;
-	    }
-	    flash_flags |= FLASH_FLAG_DIRTY;
-	    led_state(PYB_LED_RED, 1); // indicate a dirty cache with LED on
-	    flash_tick_counter_last_write = HAL_GetTick();
-	    return (uint8_t*)CACHE_MEM_START_ADDR + flash_addr - flash_sector_start;
-	}
-
-	static uint8_t *flash_cache_get_addr_for_read(uint32_t flash_addr) {
-	    uint32_t flash_sector_start;
-	    uint32_t flash_sector_size;
-	    uint32_t flash_sector_id = flash_get_sector_info(flash_addr, &flash_sector_start, &flash_sector_size);
-	    if (flash_cache_sector_id == flash_sector_id) {
-	        // in cache, copy from there
-			assert(flash_sector_id != 0);
-	        return (uint8_t*)CACHE_MEM_START_ADDR + flash_addr - flash_sector_start;
-	    }
-	    // not in cache, copy straight from flash
-	    return (uint8_t*)flash_addr;
 	}
 
 #else
@@ -146,8 +113,10 @@ void storage_init(void) {
     if (!flash_is_initialised) {
         #if USE_INTERNAL
         flash_flags = 0;
-        flash_cache_sector_id = 0;
+        flash_cache_lba_id = 0;
         flash_tick_counter_last_write = 0;
+		flexspi_nor_init();
+		FLEG_Init(&s_dev, 0, HyperErase, HyperPageProgram, Hyper16bitProgram, HyperRead, HyperFlush);
         #else
         mp_spiflash_init((mp_spiflash_t*)&spiflash);
         #endif
@@ -166,16 +135,16 @@ void storage_init(void) {
 }
 
 uint32_t storage_get_block_size(void) {
-    return FLASH_BLOCK_SIZE;
+    return FLEG_PAGE_SIZE;
 }
 
 uint32_t storage_get_block_count(void) {
-	return FLASH_PART1_NUM_BLOCKS;
+	return FLEG_LPU_CNT;
 }
 
 uint32_t storage_get_block_offset(void)
 {
-	return FLASH_PART1_START_BLOCK;
+	return 0;
 }
 
 void storage_flush(void) {
@@ -224,21 +193,6 @@ static void build_partition(uint8_t *buf, int boot, int type, uint32_t start_blo
 
 #if USE_INTERNAL
 
-static uint32_t convert_block_to_flash_addr(uint32_t block) {
-    if (FLASH_PART1_START_BLOCK <= block && block < FLASH_PART1_START_BLOCK + FLASH_PART1_NUM_BLOCKS) {
-        // a block in partition 1
-        block -= FLASH_PART1_START_BLOCK;
-        if (block < FLASH_MEM_SEG1_NUM_BLOCKS) {
-            return FLASH_MEM_SEG1_START_ADDR + block * FLASH_BLOCK_SIZE;
-        } else if (block < FLASH_MEM_SEG1_NUM_BLOCKS + FLASH_MEM_SEG2_NUM_BLOCKS) {
-            return FLASH_MEM_SEG2_START_ADDR + (block - FLASH_MEM_SEG1_NUM_BLOCKS) * FLASH_BLOCK_SIZE;
-        }
-        // can add more flash segments here if needed, following above pattern
-    }
-    // bad block
-    return -1;
-}
-
 #endif
 
 bool storage_read_block(uint8_t *dest, uint32_t block) {
@@ -262,35 +216,26 @@ bool storage_read_block(uint8_t *dest, uint32_t block) {
 
     } else {
         #if USE_INTERNAL
-
-        // non-MBR block, get data from flash memory, possibly via cache
-        uint32_t flash_addr = convert_block_to_flash_addr(block);
-        if (flash_addr == -1) {
-            // bad block number
-            return false;
-        }
-        uint8_t *src = flash_cache_get_addr_for_read(flash_addr);
-        memcpy(dest, src, FLASH_BLOCK_SIZE);
-        return true;
-
+		int ret = FLEG_PageRead(&s_dev, block, dest);
+      	return ret >= 0 ? true:false;
         #else
 
-        // non-MBR block, get data from SPI flash
+	        // non-MBR block, get data from SPI flash
 
-        if (block < FLASH_PART1_START_BLOCK || block >= FLASH_PART1_START_BLOCK + FLASH_PART1_NUM_BLOCKS) {
-            // bad block number
-            return false;
-        }
+	        if (block < FLASH_PART1_START_BLOCK || block >= FLASH_PART1_START_BLOCK + FLASH_PART1_NUM_BLOCKS) {
+	            // bad block number
+	            return false;
+	        }
 
-        // we must disable USB irqs to prevent MSC contention with SPI flash
-        uint32_t basepri = raise_irq_pri(IRQ_PRI_OTG_FS);
+	        // we must disable USB irqs to prevent MSC contention with SPI flash
+	        uint32_t basepri = raise_irq_pri(IRQ_PRI_OTG_FS);
 
-        mp_spiflash_read((mp_spiflash_t*)&spiflash,
-            (block - FLASH_PART1_START_BLOCK) * FLASH_BLOCK_SIZE, FLASH_BLOCK_SIZE, dest);
+	        mp_spiflash_read((mp_spiflash_t*)&spiflash,
+	            (block - FLASH_PART1_START_BLOCK) * FLASH_BLOCK_SIZE, FLASH_BLOCK_SIZE, dest);
 
-        restore_irq_pri(basepri);
+	        restore_irq_pri(basepri);
 
-        return true;
+	        return true;
 
         #endif
     }
@@ -304,36 +249,25 @@ bool storage_write_block(const uint8_t *src, uint32_t block) {
 
     } else {
         #if USE_INTERNAL
-
-        // non-MBR block, copy to cache
-        uint32_t flash_addr = convert_block_to_flash_addr(block);
-        if (flash_addr == -1) {
-            // bad block number
-            return false;
-        }
-        uint8_t *dest = flash_cache_get_addr_for_write(flash_addr);
-        memcpy(dest, src, FLASH_BLOCK_SIZE);
-        return true;
-
+		int ret = FLEG_PageWrite(&s_dev, block, src);
+		return ret >= 0 ? true : false;
         #else
+	        // non-MBR block, write to SPI flash
 
-        // non-MBR block, write to SPI flash
+	        if (block < FLASH_PART1_START_BLOCK || block >= FLASH_PART1_START_BLOCK + FLASH_PART1_NUM_BLOCKS) {
+	            // bad block number
+	            return false;
+	        }
 
-        if (block < FLASH_PART1_START_BLOCK || block >= FLASH_PART1_START_BLOCK + FLASH_PART1_NUM_BLOCKS) {
-            // bad block number
-            return false;
-        }
+	        // we must disable USB irqs to prevent MSC contention with SPI flash
+	        uint32_t basepri = raise_irq_pri(IRQ_PRI_OTG_FS);
 
-        // we must disable USB irqs to prevent MSC contention with SPI flash
-        uint32_t basepri = raise_irq_pri(IRQ_PRI_OTG_FS);
+	        int ret = mp_spiflash_write((mp_spiflash_t*)&spiflash,
+	            (block - FLASH_PART1_START_BLOCK) * FLASH_BLOCK_SIZE, FLASH_BLOCK_SIZE, src);
 
-        int ret = mp_spiflash_write((mp_spiflash_t*)&spiflash,
-            (block - FLASH_PART1_START_BLOCK) * FLASH_BLOCK_SIZE, FLASH_BLOCK_SIZE, src);
+	        restore_irq_pri(basepri);
 
-        restore_irq_pri(basepri);
-
-        return ret == 0;
-
+	        return ret == 0;
         #endif
     }
 }
@@ -363,37 +297,10 @@ void storage_irq_handler(void) {
         return;
     }
 
-    // This code uses interrupts to erase the flash
-    /*
-    if (flash_erase_state == 0) {
-        flash_erase_it(flash_cache_sector_start, (const uint32_t*)CACHE_MEM_START_ADDR, flash_cache_sector_size / 4);
-        flash_erase_state = 1;
-        return;
-    }
-
-    if (flash_erase_state == 1) {
-        // wait for erase
-        // TODO add timeout
-        #define flash_erase_done() (__HAL_FLASH_GET_FLAG(FLASH_FLAG_BSY) == RESET)
-        if (!flash_erase_done()) {
-            return;
-        }
-        flash_erase_state = 2;
-    }
-    */
-
-    // This code erases the flash directly, waiting for it to finish
-    if (!(flash_flags & FLASH_FLAG_ERASED)) {
-        flash_erase(flash_cache_sector_start, (const uint32_t*)CACHE_MEM_START_ADDR, flash_cache_sector_size / 4);
-        flash_flags |= FLASH_FLAG_ERASED;
-    }
-
     // If not a forced write, wait at least 5 seconds after last write to flush
     // On file close and flash unmount we get a forced write, so we can afford to wait a while
     if ((flash_flags & FLASH_FLAG_FORCE_WRITE) || sys_tick_has_passed(flash_tick_counter_last_write, 5000)) {
-        // sync the cache RAM buffer by writing it to the flash page
-        flash_write(flash_cache_sector_start, (const uint32_t*)CACHE_MEM_START_ADDR, flash_cache_sector_size / 4);
-        // clear the flash flags now that we have a clean cache
+		FLEG_PageWrite(&s_dev, flash_cache_lba_id, s_c8FlhCache);
         flash_flags = 0;
         // indicate a clean cache with LED off
         led_state(PYB_LED_RED, 0);

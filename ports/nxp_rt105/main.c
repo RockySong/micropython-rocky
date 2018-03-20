@@ -422,9 +422,6 @@ HAL_StatusTypeDef HAL_Init(void)
     BOARD_InitPins();
     BOARD_BootClockRUN();
     BOARD_InitDebugConsole();
-	
-	BOARD_InitDebugConsole();
-
 	/* Set Interrupt Group Priority */
 	NVIC_SetPriorityGrouping(3);
 	
@@ -445,6 +442,8 @@ HAL_StatusTypeDef HAL_Init(void)
 	uint32_t _heap_start = (uint32_t)CHEAP$$Limit;	// we put HEAP at the last of DATA region, so we can assume mpy heap start here
 	
 	uint32_t  _ram_start = 0x20200000, _ram_end = (uint32_t)CHEAP$$Limit, _estack = 0x04000000 + (uint32_t)lg_c1Stack, _heap_end = 0x20028000;
+#elif defined(__GNUC__)
+extern uint32_t _ram_start, _ram_end, _estack, _heap_end, _heap_start;
 #endif
 
 int main(void) {
@@ -488,7 +487,7 @@ soft_reset:
     led_state(2, 1);
 #else
     led_state(1, 1);
-    led_state(2, 0);
+    led_state(1, 0);
 #endif
     led_state(3, 0);
     led_state(4, 0);
@@ -517,7 +516,7 @@ soft_reset:
     mp_thread_init();
     #endif
     // GC init
-#ifdef __CC_ARM
+#if defined(__CC_ARM) || defined(__ICCARM__)
     // Stack limit should be less than real stack size, so we have a chance
     // to recover from limit hit.  (Limit is measured in bytes.)
     // Note: stack control relies on main thread being initialised above
@@ -525,7 +524,7 @@ soft_reset:
     mp_stack_set_limit(STACK_SIZE);
 	
     gc_init((void*) _heap_start, (void*) _heap_end);
-#else
+#elif defined(__GNUC__)
     // Stack limit should be less than real stack size, so we have a chance
     // to recover from limit hit.  (Limit is measured in bytes.)
     // Note: stack control relies on main thread being initialised above
@@ -721,6 +720,11 @@ soft_reset_exit:
 
     first_soft_reset = false;
     goto soft_reset;
+}
+
+void _exit(int x) {
+	printf("main() exit!\r\n");
+	while (1) {}
 }
 
 // own impl of alloca, has risk that later alloca overlap with earlier alloca

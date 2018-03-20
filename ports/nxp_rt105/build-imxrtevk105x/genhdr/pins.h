@@ -10,6 +10,10 @@ extern const pin_obj_t pin_AD_B0_10;
 extern const pin_af_obj_t pin_AD_B0_10_af[];
 extern const pin_obj_t pin_AD_B0_11;
 extern const pin_af_obj_t pin_AD_B0_11_af[];
+extern const pin_obj_t pin_AD_B0_12;
+extern const pin_af_obj_t pin_AD_B0_12_af[];
+extern const pin_obj_t pin_AD_B0_13;
+extern const pin_af_obj_t pin_AD_B0_13_af[];
 extern const pin_obj_t pin_AD_B1_00;
 extern const pin_af_obj_t pin_AD_B1_00_af[];
 extern const pin_obj_t pin_AD_B1_01;
@@ -69,3 +73,5 @@ extern const pin_obj_t * const pin_adc3[];
 #define pyb_pin_A5 pin_AD_B1_00
 #define pyb_pin_LED pin_AD_B0_09
 #define pyb_pin_KEY pin_WAKEUP
+#define pyb_pin_DBG_RXD pin_AD_B0_13
+#define pyb_pin_DBG_TXD pin_AD_B0_12

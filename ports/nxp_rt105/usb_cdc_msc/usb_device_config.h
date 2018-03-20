@@ -48,10 +48,10 @@
 #define USB_DEVICE_CONFIG_KHCI (0U)
 
 /*! @brief EHCI instance count */
-#define USB_DEVICE_CONFIG_EHCI (0U)
+#define USB_DEVICE_CONFIG_EHCI (1U)
 
 /*! @brief LPC USB IP3511 FS instance count */
-#define USB_DEVICE_CONFIG_LPCIP3511FS (1U)
+#define USB_DEVICE_CONFIG_LPCIP3511FS (0U)
 
 /*! @brief LPC USB IP3511 HS instance count */
 #define USB_DEVICE_CONFIG_LPCIP3511HS (0U)
@@ -133,7 +133,9 @@
 #define USB_DEVICE_CONFIG_KEEP_ALIVE_MODE (0U)
 
 /*! @brief Whether the transfer buffer is cache-enabled or not. */
-#define USB_DEVICE_CONFIG_BUFFER_PROPERTY_CACHEABLE (0U)
+#define USB_DEVICE_CONFIG_BUFFER_PROPERTY_CACHEABLE (1U)
+#define FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL (1U)
+
 
 /*! @brief Whether the low power mode is enabled or not. */
 #define USB_DEVICE_CONFIG_LOW_POWER_MODE (0U)

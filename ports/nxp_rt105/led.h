@@ -30,8 +30,8 @@
 // #define MICROPY_HW_LED3             (pin_22) // yellow
 
 // >>> rocky: dummy example
-#define MICROPY_HW_LED1_PWM         { GPT2, 1, 3}
-#define MICROPY_HW_LED3_PWM         { GPT2, 1, 3}
+// #define MICROPY_HW_LED1_PWM         { GPT2, 1, 3}
+// #define MICROPY_HW_LED3_PWM         { GPT2, 1, 3}
 // <<<
 #define MICROPY_HW_LED_ON(pin)      (mp_hal_pin_low(pin))
 #define MICROPY_HW_LED_OFF(pin)     (mp_hal_pin_high(pin))

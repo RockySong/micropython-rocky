@@ -40,6 +40,7 @@ CROSS_COMPILE = arm-none-eabi-
 
 INC += -I.
 INC += -I..
+INC += -I./boards/$(BOARD)
 INC += -I$(TOP)
 INC += -I$(TOP)/py
 INC += -I$(TOP)/lib
@@ -48,40 +49,36 @@ INC += -I$(TOP)/lib/cmsis/inc
 INC += -I$(HAL_DIR)
 INC += -I$(HAL_DIR)/drivers
 INC += -I$(HAL_DIR)/utilities
+INC += -I$(HAL_DIR)/utilities/io
+INC += -I$(HAL_DIR)/utilities/log
+INC += -I$(HAL_DIR)/utilities/str
 INC += -Iusb_cdc_msc
 INC += -Inxp_swim/inc
 INC += -Isdmmc
+INC += -Iflegftl
 INC += -I$(USBDEV_DIR)/include
 INC += -I$(USBDEV_DIR)/device
 INC += -I$(USBDEV_DIR)/osa
+INC += -I$(HAL_DIR)/middleware/sdkusb/phy
 INC += -Iay_imu/core
 INC += -Iay_imu/math
 #INC += -I$(USBHOST_DIR)
 
 CFLAGS_CORTEX_M4 = -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -fsingle-precision-constant -Wdouble-promotion -mtune=cortex-m4 -mcpu=cortex-m4
-CFLAGS_CORTEX_M7 = -mthumb -mfpu=fpv5-d16 -mfloat-abi=hard -fsingle-precision-constant -Wdouble-promotion -mtune=cortex-m7 -mcpu=cortex-m7
-
-
-CFLAGS = $(INC) -Wall -Wpointer-arith -std=gnu99 -nostdlib $(CFLAGS_MOD)
-CFLAGS += -D$(SDK_MCU)
-CFLAGS += $(CFLAGS_CORTEX_M7)
-CFLAGS += $(COPT)
-CFLAGS += -Iboards/$(BOARD)
-CFLAGS += -DMCU32_HAL_H='<mcu32$(MCU_SERIES)xx_hal.h>'
+CFLAGS_CORTEX_M7 = -mthumb -DCPU_MIMXRT1052DVL6A -g -DMCU_SERIES_F7 -fno-common -ffunction-sections -fdata-sections -ffreestanding -fno-builtin -mfpu=fpv5-d16 -mfloat-abi=hard -fsingle-precision-constant -Wdouble-promotion -mtune=cortex-m7 -mcpu=cortex-m7
+CFLAGS = $(INC) -Wpointer-arith -Werror -std=gnu99 -g
+CFLAGS += $(CFLAGS_CORTEX_M7) 
+CFLAGS += -Wno-int-conversion -Wno-incompatible-pointer-types
+CFLAGS += $(COPT) 
 CFLAGS += -DUSB_STACK_BM
-ifeq ($(MICROPY_FLOAT_IMPL),double)
-CFLAGS += -DMICROPY_FLOAT_IMPL=MICROPY_FLOAT_IMPL_DOUBLE
-else
-CFLAGS += -DMICROPY_FLOAT_IMPL=MICROPY_FLOAT_IMPL_FLOAT
-CFLAGS += -fsingle-precision-constant -Wdouble-promotion
-endif
+#CFLAGS += -DUSB_DEVICE_CONFIG_BUFFER_PROPERTY_CACHEABLE=1
+#CFLAGS += -DFSL_SDK_ENABLE_DRIVER_CACHE_CONTROL=1
 
-LDFLAGS = -nostdlib -L $(LD_DIR) -T $(LD_FILE) -Map=$(@:.elf=.map) --cref
+LDFLAGS = -L $(LD_DIR) -T $(LD_FILE) -Xlinker -Map=$(@:.elf=.map) -Xlinker --cref
 LIBS = $(shell $(CC) $(CFLAGS) -print-libgcc-file-name)
 
-# Remove uncalled code from the final image.
 CFLAGS += -fdata-sections -ffunction-sections
-LDFLAGS += --gc-sections
+LDFLAGS += -Xlinker --gc-sections
 
 # Debugging/Optimization
 ifeq ($(DEBUG), 1)
@@ -100,7 +97,6 @@ SRC_LIB = $(addprefix lib/,\
 	timeutils/timeutils.c \
 	utils/pyexec.c \
 	utils/interrupt_char.c \
-	utils/sys_stdio_mphal.c \
 	)
 
 ifeq ($(MICROPY_FLOAT_IMPL),double)
@@ -192,9 +188,13 @@ SRC_C = \
 	irq.c \
 	pendsv.c \
 	systick.c  \
+	mphalport.c \
+	isr.c \
+	hal_wrapper.c \
 	pybthread.c \
 	led.c \
 	pin_named_pins.c \
+	pin_defs_mcu.c \
 	bufhelper.c \
 	gccollect.c \
 	pybstdio.c \
@@ -206,19 +206,19 @@ SRC_C = \
 	modutime.c \
 	modusocket.c \
 	modnetwork.c \
+	flash_hyper.c \
 	pin.c \
 	uart.c \
-	i2c.c \
-	spi.c \
 	usb_app.c \
 	usrsw.c \
-	flash.c \
 	storage.c \
 	fatfs_port.c \
 	sdcard.c \
+	usbd_msc_storage.c \
+	./sdmmc/port_usdhc_irq/fsl_sdmmc_event.c \
+	./sdmmc/port_usdhc_irq/fsl_sdmmc_host.c \
 	./nxp_swim/py_swim.c \
-	oled_128128.c \
-	./ay_imu/py_imu.c \
+	./flegftl/flegftl.c \
 	$(wildcard boards/$(BOARD)/*.c)
 
 SRC_C_BKUP = \
@@ -238,6 +238,7 @@ SRC_C_BKUP = \
 	timer.c \
 	led.c \
 	pin.c \
+	pin_defs_mcu.c \
 	pin_named_pins.c \
 	bufhelper.c \
 	dma.c \
@@ -274,48 +275,55 @@ SRC_C_BKUP = \
 	$(wildcard boards/$(BOARD)/*.c)    
     
 SRC_O = \
-	startup_MIMXRT1052.o \
+	startup_MIMXRT1052_gcc.o \
 	gchelper.o \
-
-SRC_HAL = $(addprefix $(HAL_DIR)/src/mcu32$(MCU_SERIES)xx_,\
-	hal.c \
-	hal_adc.c \
-	hal_adc_ex.c \
-	hal_can.c \
-	hal_cortex.c \
-	hal_dac.c \
-	hal_dac_ex.c \
-	hal_dma.c \
-	hal_flash.c \
-	hal_flash_ex.c \
-	hal_gpio.c \
-	hal_i2c.c \
-	hal_pcd.c \
-	hal_pcd_ex.c \
-	hal_pwr.c \
-	hal_pwr_ex.c \
-	hal_rcc.c \
-	hal_rcc_ex.c \
-	hal_rng.c \
-	hal_rtc.c \
-	hal_rtc_ex.c \
-	hal_sd.c \
-	hal_spi.c \
-	hal_tim.c \
-	hal_tim_ex.c \
-	hal_uart.c \
-	ll_sdmmc.c \
-	ll_usb.c \
+	
+SRC_UTIL = 	$(addprefix $(HAL_DIR)/utilities/, \
+	io/fsl_io.c \
+	log/fsl_log.c \
+	str/fsl_str.c \
+	fsl_debug_console.c \
+	)
+SRC_HAL = $(addprefix $(HAL_DIR)/drivers/, \
+    fsl_clock.c \
+	fsl_cache.c \
+	fsl_flexspi.c \
+	fsl_gpio.c \
+	fsl_lpspi.c \
+	fsl_lpuart.c\
+	fsl_usdhc.c \
+	)
+	
+SRC_CDC_MSC = $(addprefix usb_cdc_msc/,\
+	usb_device_ch9.c \
+	usb_device_msc.c \
+	usb_device_msc_ufi.c \
+	usb_device_class.c \
+	usb_device_descriptor.c \
+	usb_device_cdc_acm.c \
+	virtual_com.c \
+	ring_buffer.c \
+	composite.c \
 	)
 
-SRC_USBDEV = $(addprefix $(USBDEV_DIR)/,\
-	core/src/usbd_core.c \
-	core/src/usbd_ctlreq.c \
-	core/src/usbd_ioreq.c \
-	class/src/usbd_cdc_msc_hid.c \
-	class/src/usbd_msc_bot.c \
-	class/src/usbd_msc_scsi.c \
-	class/src/usbd_msc_data.c \
+SRC_USBD = $(addprefix $(HAL_DIR)/middleware/sdkusb/device/usb_device_,\
+	ehci.c \
+	dci.c \
+	)
+
+SRC_SD = $(addprefix ./sdmmc/fsl_, \
+	sd.c \
+	sdmmc_common.c \
+	)
+
+SRC_PY = $(HAL_DIR)/middleware/sdkusb/phy/usb_phy.c
+
+SRC_OSA = $(HAL_DIR)/middleware/sdkusb/osa/usb_osa_bm.c	
+
+SRC_VFS = $(addprefix $(TOP)/extmod/vfs, \
+	.c \
+	_fat.c \
+	_fat_diskio.c \
 	)
 
 ifneq ($(MICROPY_PY_WIZNET5K),0)
@@ -359,9 +367,16 @@ OBJ += $(PY_O)
 OBJ += $(addprefix $(BUILD)/, $(SRC_LIB:.c=.o))
 OBJ += $(addprefix $(BUILD)/, $(DRIVERS_SRC_C:.c=.o))
 OBJ += $(addprefix $(BUILD)/, $(SRC_C:.c=.o))
-OBJ += $(addprefix $(BUILD)/, $(SRC_O))
+
+OBJ += $(addprefix $(BUILD)/, $(SRC_UTIL:.c=.o))
 OBJ += $(addprefix $(BUILD)/, $(SRC_HAL:.c=.o))
-OBJ += $(addprefix $(BUILD)/, $(SRC_USBDEV:.c=.o))
+OBJ += $(addprefix $(BUILD)/, $(SRC_CDC_MSC:.c=.o))
+OBJ += $(addprefix $(BUILD)/, $(SRC_USBD:.c=.o))
+OBJ += $(addprefix $(BUILD)/, $(SRC_PY:.c=.o))
+OBJ += $(addprefix $(BUILD)/, $(SRC_SD:.c=.o))
+OBJ += $(addprefix $(BUILD)/, $(SRC_OSA:.c=.o))
+
+OBJ += $(addprefix $(BUILD)/, $(SRC_O))
 OBJ += $(addprefix $(BUILD)/, $(SRC_MOD:.c=.o))
 OBJ += $(BUILD)/pins_$(BOARD).o
 
@@ -424,13 +439,18 @@ $(BUILD)/firmware.hex: $(BUILD)/firmware.elf
 	$(Q)$(OBJCOPY) -O ihex $< $@
 
 $(BUILD)/firmware.elf: $(OBJ)
+#	$(ECHO) "LINK $@"
+#	$(Q)$(LD) $(LDFLAGS) -o $@ $^ $(LIBS)
+#	$(Q)$(SIZE) $@
 	$(ECHO) "LINK $@"
-	$(Q)$(LD) $(LDFLAGS) -o $@ $^ $(LIBS)
+	$(Q)$(CC) $(CFLAGS) $(LDFLAGS) -g -o $@ $^ $(LIBS) -lm
 	$(Q)$(SIZE) $@
-
+	
+	
 MAKE_PINS = boards/make-pins.py
 BOARD_PINS = boards/$(BOARD)/pins.csv
 PREFIX_FILE = boards/mimxrt105x_prefix.c
+PINMAP_FILE = boards/mimxrt105x_pinmap.csv
 GEN_PINS_SRC = $(BUILD)/pins_$(BOARD).c
 GEN_PINS_HDR = $(HEADER_BUILD)/pins.h
 GEN_PINS_QSTR = $(BUILD)/pins_qstr.h
@@ -469,7 +489,7 @@ main.c: $(GEN_CDCINF_HEADER)
 # both pins_$(BOARD).c and pins.h
 $(BUILD)/%_$(BOARD).c $(HEADER_BUILD)/%.h $(HEADER_BUILD)/%_af_const.h $(BUILD)/%_qstr.h: boards/$(BOARD)/%.csv $(MAKE_PINS) $(AF_FILE) $(PREFIX_FILE) | $(HEADER_BUILD)
 	$(ECHO) "Create $@"
-	$(Q)$(PYTHON) $(MAKE_PINS) --board $(BOARD_PINS) --af $(AF_FILE) --prefix $(PREFIX_FILE) --hdr $(GEN_PINS_HDR) --qstr $(GEN_PINS_QSTR) --af-const $(GEN_PINS_AF_CONST) --af-py $(GEN_PINS_AF_PY) > $(GEN_PINS_SRC)
+	$(Q)$(PYTHON) $(MAKE_PINS) --board $(BOARD_PINS) --af $(AF_FILE) --prefix $(PREFIX_FILE) --hdr $(GEN_PINS_HDR) --qstr $(GEN_PINS_QSTR) --af-const $(GEN_PINS_AF_CONST) --pinmap $(PINMAP_FILE) --af-py $(GEN_PINS_AF_PY) > $(GEN_PINS_SRC)
 
 $(BUILD)/pins_$(BOARD).o: $(BUILD)/pins_$(BOARD).c
 	$(call compile_c)

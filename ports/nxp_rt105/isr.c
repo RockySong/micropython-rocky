@@ -136,7 +136,7 @@ typedef struct {
     uint32_t    r0, r1, r2, r3, r12, lr, pc, xpsr;
 } ExceptionRegisters_t;
 
-int pyb_hard_fault_debug = 0;
+int pyb_hard_fault_debug = 1;
 
 #if defined(__CC_ARM) || defined(__ICCARM__)
 #define _ESTACK _estack
@@ -144,6 +144,7 @@ int pyb_hard_fault_debug = 0;
 #define _RAM_END _ram_end
 #define _HEAP_END _heap_end
 #else
+extern uint32_t _ram_start, _ram_end, _estack, _heap_end, _heap_start;
 #define _ESTACK &_estack
 #define _RAM_START &_ram_start
 #define _RAM_END &_ram_end
@@ -317,6 +318,7 @@ void PendSV_Handler(void) {
   * @retval None
   */
 extern void dma_idle_handler(uint32_t tick);
+extern void SDMMC_Tick_Handler(void);
 void SysTick_Handler(void) {
     // Instead of calling HAL_IncTick we do the increment here of the counter.
     // This is purely for efficiency, since SysTick is called 1000 times per
@@ -326,7 +328,7 @@ void SysTick_Handler(void) {
     // without the volatile specifier.
     extern uint32_t uwTick;
     uwTick += 1;
-
+	SDMMC_Tick_Handler();
     // Read the systick control regster. This has the side effect of clearing
     // the COUNTFLAG bit, which makes the logic in mp_hal_ticks_us
     // work properly.
@@ -346,7 +348,6 @@ void SysTick_Handler(void) {
         dma_idle_handler(uwTick);
     }
 	*/
-	dma_idle_handler(uwTick);
 
     #if MICROPY_PY_THREAD
     if (pyb_thread_enabled) {

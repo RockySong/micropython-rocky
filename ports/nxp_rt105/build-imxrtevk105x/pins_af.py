@@ -23,4 +23,6 @@ PINS_AF = (
   ('A5', (2, 'LPUART2_CTS_B'), (3, 'LPI2C1_SCL'), (5, 'GPIO1_PIN16'), ),
   ('LED', (3, 'SAI2_TX_DATA'), (5, 'GPIO1_PIN9'), (7, 'GPT2_CLK'), ),
   ('KEY', (5, 'GPIO5_PIN0'), ),
+  ('DBG_RXD', (0, 'LPI2C4_SDA'), (1, 'GPT1_CLK'), (2, 'LPUART1_RX'), (5, 'GPIO1_PIN13'), ),
+  ('DBG_TXD', (0, 'LPI2C4_SCL'), (2, 'LPUART1_TX'), (5, 'GPIO1_PIN12'), ),
 )

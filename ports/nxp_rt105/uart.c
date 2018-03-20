@@ -28,6 +28,7 @@
 #include <string.h>
 #include <stdarg.h>
 #include "fsl_common.h"
+#include "fsl_debug_console.h"
 #include "fsl_clock.h"
 #include "fsl_lpuart.h"
 
@@ -47,7 +48,7 @@
 /// \moduleref pyb
 /// \class UART - duplex serial communication bus
 ///
-/// UART implements the standard UART/USART duplex serial communications protocol.  At
+/// UART implements the standard UART/LPUART duplex serial communications protocol.  At
 /// the physical level it consists of 2 lines: RX and TX.  The unit of communication
 /// is a character (not to be confused with a string character) which can be 8 or 9
 /// bits wide.
@@ -81,14 +82,15 @@
 #define UART_CLKSRC_HZ	11059200
 #define CHAR_WIDTH_8BIT (0)
 #define CHAR_WIDTH_9BIT (1)
-typedef usart_handle_t UART_HandleTypeDef;
+#define UART_CLOCK_SRC_SEL 0	// 0=PLLUSB1, 1=XTAL24M
+typedef lpuart_handle_t UART_HandleTypeDef;
 struct _pyb_uart_obj_t {
     mp_obj_base_t base;
-	USART_Type *pDev;
-	clock_mux_t clockSel;
+	LPUART_Type *pDev;
 	clock_ip_name_t clk_ip_name;
     IRQn_Type irqn;
     pyb_uart_t uart_id;
+	uint8_t muxAlt;
     bool is_enabled;
     byte char_width;                    // 0 for 7,8 bit chars, 1 for 9 bit chars
     uint16_t char_mask;                 // 0x7f for 7 bit, 0xff for 8 bit, 0x1ff for 9 bit
@@ -98,7 +100,7 @@ struct _pyb_uart_obj_t {
     // volatile uint16_t read_buf_head;    // indexes first empty slot
     // uint16_t read_buf_tail;             // indexes first full slot (not full if equals head)
     
-    usart_config_t config;
+    lpuart_config_t config;
     // usart_handle_t uart;
     volatile uint16_t read_buf_head;    // indexes first empty slot
     uint16_t read_buf_tail;             // indexes first full slot (not full if equals head)	
@@ -106,25 +108,49 @@ struct _pyb_uart_obj_t {
     uint16_t read_buf_len;
 };
 
-#define UART_TXFIFO_FILL_CNT(p)  (USART_GetStatusFlags(p) & 0x1F<<8)
-#define UART_RXFIFO_FILL_CNT(p) (USART_GetStatusFlags(p) & 0x1F<<16)
-#define UART_TXFIFO_IS_NOT_FULL(p) (USART_GetStatusFlags(p) & USART_FIFOSTAT_TXNOTFULL_MASK)
-#define UART_RXFIFO_IS_NOT_EMPTY(p) (USART_GetStatusFlags(p) & USART_FIFOSTAT_RXNOTEMPTY_MASK)
+pyb_uart_obj_t *s_pUarts[10];
 
-#define UART_RX_IRQ_EN(p) (p->FIFOINTENSET = USART_FIFOINTENSET_RXLVL_MASK)
-#define UART_RX_IRQ_DIS(p) (p->FIFOINTENCLR = USART_FIFOINTENSET_RXLVL_MASK)
+
+#define UART_TXFIFO_FILL_CNT(p)  ((p->WATER >> 8) & 0Xff)
+#define UART_RXFIFO_FILL_CNT(p) 	((p->WATER >> 24) & 0Xff)
+#define UART_TXFIFO_IS_NOT_FULL(p) (UART_RXFIFO_FILL_CNT(p) != LPUART_FIFO_CAP)
+#define UART_RXFIFO_IS_NOT_EMPTY(p) (UART_RXFIFO_FILL_CNT(p) != 0)
+
+#define UART_RX_IRQ_EN(p) (p->CTRL |= (1 << 21))
+#define UART_RX_IRQ_DIS(p) (p->CTRL &= ~(1 << 21))
 
 
 STATIC mp_obj_t pyb_uart_deinit(mp_obj_t self_in);
-uint32_t CLOCK_SetFRGClock(uint32_t freq);	// in this version of SDK, this API is missing in header
+
+uint32_t _GetUartClock(void) {
+	const uint32_t constDiv = 6;
+
+	if (CLOCK_GetMux(kCLOCK_UartMux) == 1)
+		return 24*1024*1024;
+	else
+		return CLOCK_GetPllFreq(kCLOCK_PllUsb1) / constDiv;
+}
+
+uint32_t _ConfigUartClock(uint32_t clkSrcSel)
+{
+	CLOCK_SetDiv(kCLOCK_UartDiv, 1 - 1);	// to keep simple, do not use divider
+	if (clkSrcSel != 0) {
+		CLOCK_SetMux(kCLOCK_UartMux, 1);	// mux1 = XTAL24M
+	} else {
+		clock_usb_pll_config_t pllCfg;
+		pllCfg.loopDivider = 0;	// 0=XTAL*20=480MHz , 1=*22
+		CLOCK_InitUsb1Pll(&pllCfg);
+		CLOCK_SetMux(kCLOCK_UartMux, 0);	// mux0 = PLLUSB1
+	}
+	return _GetUartClock();
+} 
+
+
 void uart_init0(void) {
     for (int i = 0; i < MP_ARRAY_SIZE(MP_STATE_PORT(pyb_uart_obj_all)); i++) {
         MP_STATE_PORT(pyb_uart_obj_all)[i] = NULL;
     }
-	// >>> init FRG
-	CLOCK_AttachClk(kFRO12M_to_FRG);
-	CLOCK_SetFRGClock(11059200);
-	// <<<
+	_ConfigUartClock(UART_CLOCK_SRC_SEL);
 }
 
 // unregister all interrupt sources
@@ -186,27 +212,26 @@ STATIC bool uart_exists(int uart_id) {
         default: return false;
     }
 }
-
+#define UART_PIN_TXD	0
+#define UART_PIN_RXD	1
 #define UART_INIT_HLP(n) \
 case PYB_UART_##n: \
-	uart_unit = n; \
-	UARTx = USART##n; \
-	irqn = FLEXCOMM##n##_IRQn; \
-	clk_ip_name = kCLOCK_Flexcomm##n; \
-	pins[0] = &MICROPY_HW_UART##n##_TX; \
-	pins[1] = &MICROPY_HW_UART##n##_RX; \
-	clkSel = kFRG_to_FLEXCOMM##n; \
-	CLOCK_EnableClock(kCLOCK_Flexcomm##n); \
+	UARTx = LPUART##n; \
+	irqn = LPUART##n##_IRQn; \
+	clk_ip_name = kCLOCK_Lpuart##n; \
+	muxAlt = MICROPY_HW_UART##n##_ALT; \
+	pins[UART_PIN_TXD] = &MICROPY_HW_UART##n##_TX; \
+	pins[UART_PIN_RXD] = &MICROPY_HW_UART##n##_RX; \
 	break;
 
 // assumes Init parameters have been set up correctly
 STATIC bool uart_init2(pyb_uart_obj_t *uart_obj) {
-    USART_Type *UARTx;
+    LPUART_Type *UARTx;
     IRQn_Type irqn;
-    int uart_unit;
-	clock_mux_t clkSel;
+	uint8_t muxAlt;
 	clock_ip_name_t clk_ip_name;
-    const pin_obj_t *pins[4] = {0};
+	
+    const pin_obj_t *pins[2]; // pins[0]: TX ; pins[1]: RX
     switch (uart_obj->uart_id) {
         #if defined(MICROPY_HW_UART0_TX) && defined(MICROPY_HW_UART0_RX)
 		UART_INIT_HLP(0);
@@ -251,23 +276,10 @@ STATIC bool uart_init2(pyb_uart_obj_t *uart_obj) {
             // UART does not exist or is not configured for this board
             return false;
     }
-
-    for (uint i = 0; i < 4; i++) {
-        if (pins[i] != NULL) {
-            bool ret = mp_hal_pin_config_alt(pins[i], GPIO_FILTEROFF | GPIO_MODE_DIGITAL, MP_HAL_PIN_PULL_UP, AF_FN_UART, uart_unit);
-            if (!ret) {
-                return false;
-            }
-        }
-    }
-
-    uart_obj->irqn = irqn;
-    uart_obj->pDev = UARTx;
-	uart_obj->is_enabled = 1;
-	uart_obj->clockSel = clkSel;
-	uart_obj->clk_ip_name = clk_ip_name;
-    uart_obj->is_enabled = true;
-
+	mp_hal_pin_config_alt(pins[UART_PIN_TXD], GPIO_MODE_OUTPUT_PP, muxAlt);
+	mp_hal_pin_config_alt(pins[UART_PIN_RXD], GPIO_MODE_INPUT_PUP_WEAK, muxAlt);
+    uart_obj->irqn = irqn , uart_obj->muxAlt = muxAlt , uart_obj->pDev = UARTx;
+	uart_obj->is_enabled = 1 , uart_obj->clk_ip_name = clk_ip_name , uart_obj->is_enabled = true;
     return true;
 }
 
@@ -332,7 +344,7 @@ int uart_rx_char(pyb_uart_obj_t *self) {
         return data;
     } else {
         // no buffering
-        return self->pDev->FIFORD & self->char_mask;    
+        return LPUART_ReadByte(self->pDev);  
 	}
 }
 
@@ -351,7 +363,7 @@ STATIC bool uart_tx_wait(pyb_uart_obj_t *self, uint32_t timeout) {
     }
 }
 
-#define __HAL_UART_GET_FLAG(p, flag) (USART_GetStatusFlags(p) & flag)
+#define __HAL_UART_GET_FLAG(p, flag) (LPUART_GetStatusFlags(p) & flag)
 
 // Waits at most timeout milliseconds for UART flag to be set.
 // Returns true if flag is/was set, false on timeout.
@@ -373,7 +385,7 @@ static bool uart_wait_for_idle(pyb_uart_obj_t *self, uint32_t timeout)
 {
 	uint32_t start = HAL_GetTick();
 	while (1) {
-		if (self->pDev->STAT & 1<<3)
+		if (UART_RXFIFO_FILL_CNT(self->pDev) == 0)	// bug warning: this only guarantee FIFO is empty, but shiftreg may stil working!
 			return true;
         if (timeout == 0 || HAL_GetTick() - start >= timeout) {
             return false; // timeout
@@ -411,10 +423,7 @@ STATIC size_t uart_tx_data(pyb_uart_obj_t *self, const void *src_in, size_t num_
     size_t num_tx = 0;
 
     while (num_tx < num_chars) {
-        if (!uart_wait_flag_set(self, USART_FIFOSTAT_TXNOTFULL_MASK, timeout)) {
-            *errcode = MP_ETIMEDOUT;
-            return num_tx;
-        }
+		while (!UART_TXFIFO_IS_NOT_FULL(self->pDev)) {}
         uint32_t data;
         if (self->char_width == CHAR_WIDTH_9BIT) {
             data = *((uint16_t*)src) & 0x1ff;
@@ -422,7 +431,7 @@ STATIC size_t uart_tx_data(pyb_uart_obj_t *self, const void *src_in, size_t num_
         } else {
             data = *src++;
         }
-		self->pDev->FIFOWR = data;
+		self->pDev->DATA = data;
         ++num_tx;
     }
 
@@ -460,45 +469,53 @@ void uart_tx_strn_cooked(pyb_uart_obj_t *uart_obj, const char *str, uint len) {
 void uart_irq_handler(void *base, void* pCtx) {
     // get the uart object
     pyb_uart_obj_t *self = (pyb_uart_obj_t*)pCtx;
-	USART_Type *pDev = (USART_Type*) base;
+	LPUART_Type *pDev = (LPUART_Type*) base;
     if (self == NULL) {
         // UART object has not been set, so we can't do anything, not
         // even disable the IRQ.  This should never happen.
         return;
     }
-
-    if (pDev->FIFOSTAT & USART_FIFOSTAT_RXERR_MASK)
-    {
-        /* Clear rx error state. */
-        pDev->FIFOSTAT |= USART_FIFOSTAT_RXERR_MASK;
-        /* clear rxFIFO */
-        pDev->FIFOCFG |= USART_FIFOCFG_EMPTYRX_MASK;
-    }
-    else {
-		while (UART_RXFIFO_FILL_CNT(self->pDev)) {
-			int data = self->pDev->FIFORD;
-			data &= self->char_mask;
-
-			if (mp_interrupt_char != -1 && data == mp_interrupt_char) {
-				pendsv_kbd_intr();
-				return;
-			}
-			if (self->read_buf_len != 0) {
-				uint16_t next_head = (self->read_buf_head + 1) % self->read_buf_len;
-				if (next_head != self->read_buf_tail) {
-					if (self->char_width == CHAR_WIDTH_9BIT) {
-						((uint16_t*)self->read_buf)[self->read_buf_head] = data;
-					} else {
-						self->read_buf[self->read_buf_head] = data;
-					}
-					self->read_buf_head = next_head;
-				} else { // No room: leave char in buf, disable interrupt
-					UART_RX_IRQ_DIS(self->pDev);
+	uint8_t rxCnt = (pDev->WATER >> 24) & 7;
+	int data;
+	// clear all possible error flags
+	LPUART_ClearStatusFlags(pDev,
+		kLPUART_RxOverrunFlag | kLPUART_NoiseErrorFlag | kLPUART_FramingErrorFlag | kLPUART_ParityErrorFlag);
+	while (rxCnt--) {
+		data = LPUART_ReadByte(pDev);
+		if (self->uart_id == repl_uart_id && mp_interrupt_char != -1 && data == mp_interrupt_char) {
+			pendsv_kbd_intr();
+			// return;
+		}
+		if (self->read_buf_len != 0) {
+			uint16_t next_head = (self->read_buf_head + 1) % self->read_buf_len;
+			if (next_head != self->read_buf_tail) {
+				if (self->char_width == CHAR_WIDTH_9BIT) {
+					((uint16_t*)self->read_buf)[self->read_buf_head] = data;
+				} else {
+					self->read_buf[self->read_buf_head] = data;
 				}
+				self->read_buf_head = next_head;
+			} else { // No room: leave char in buf, disable interrupt
+				UART_RX_IRQ_DIS(self->pDev);
 			}
 		}
-    }
+
+	}
 }
+
+#define LPUART_IRQHANDLER_ENTRY(n) \
+void LPUART##n##_IRQHandler(void) { \
+	uart_irq_handler(LPUART##n, s_pUarts[n]); \
+}
+
+LPUART_IRQHANDLER_ENTRY(1)
+LPUART_IRQHANDLER_ENTRY(2)
+LPUART_IRQHANDLER_ENTRY(3)
+LPUART_IRQHANDLER_ENTRY(4)
+LPUART_IRQHANDLER_ENTRY(5)
+LPUART_IRQHANDLER_ENTRY(6)
+LPUART_IRQHANDLER_ENTRY(7)
+LPUART_IRQHANDLER_ENTRY(8)
 
 /******************************************************************************/
 /* Micro Python bindings                                                      */
@@ -508,13 +525,13 @@ STATIC void pyb_uart_print(const mp_print_t *print, mp_obj_t self_in, mp_print_k
     if (!self->is_enabled) {
         mp_printf(print, "UART(%u)", self->uart_id);
     } else {
-        mp_int_t bits = (self->config.bitCountPerChar == kUSART_7BitsPerChar ? 7 : 8);
+        mp_int_t bits = (self->config.dataBitsCount == kLPUART_SevenDataBits ? 7 : 8);
 
         mp_printf(print, "UART(%u, baudrate=%u, bits=%u, parity=",
             self->uart_id, self->config.baudRate_Bps, bits);
-        if (self->config.parityMode == kUSART_ParityDisabled) {
+        if (self->config.parityMode == kLPUART_ParityDisabled) {
             mp_print_str(print, "None");
-        } else if (self->config.parityMode == kUSART_ParityEven)  {
+        } else if (self->config.parityMode == kLPUART_ParityEven)  {
             mp_print_str(print, "Even");
         } else
 			mp_print_str(print, "Odd");
@@ -530,7 +547,7 @@ STATIC void pyb_uart_print(const mp_print_t *print, mp_obj_t self_in, mp_print_k
         }
         */
         mp_printf(print, ", stop=%u, timeout=%u, timeout_char=%u, read_buf_len=%u)",
-            self->config.stopBitCount == kUSART_OneStopBit ? 1 : 2,
+            self->config.stopBitCount == kLPUART_OneStopBit ? 1 : 2,
             self->timeout, self->timeout_char,
             self->read_buf_len == 0 ? 0 : self->read_buf_len - 1); // -1 to adjust for usable length of buffer
     }
@@ -572,36 +589,36 @@ STATIC mp_obj_t pyb_uart_init_helper(pyb_uart_obj_t *self, mp_uint_t n_args, con
         MP_ARRAY_SIZE(allowed_args), allowed_args, (mp_arg_val_t*)&args);
 
     // set the UART configuration values
-    usart_config_t *init = &self->config;
+    lpuart_config_t *init = &self->config;
 
     // baudrate
-    USART_GetDefaultConfig(init);
+    LPUART_GetDefaultConfig(init);
     init->baudRate_Bps = args.baudrate.u_int;
 	init->enableRx = init->enableTx = true;
 
     // parity
     mp_int_t bits = args.bits.u_int;
     if (args.parity.u_obj == mp_const_none) {
-        init->parityMode = kUSART_ParityDisabled;
+        init->parityMode = kLPUART_ParityDisabled;
     } else {
         mp_int_t parity = mp_obj_get_int(args.parity.u_obj);
-        init->parityMode = (parity & 1) ? kUSART_ParityOdd : kUSART_ParityEven;
+        init->parityMode = (parity & 1) ? kLPUART_ParityOdd : kLPUART_ParityEven;
         // bits += 1; // STs convention has bits including parity
     }
 
     // number of bits
     if (bits == 7) {
-        init->bitCountPerChar = kUSART_7BitsPerChar;
+        init->dataBitsCount = kLPUART_SevenDataBits;
     } else if (bits == 8) {
-        init->bitCountPerChar = kUSART_8BitsPerChar;
+        init->dataBitsCount = kLPUART_EightDataBits;
     } else {
         nlr_raise(mp_obj_new_exception_msg_varg(&mp_type_ValueError, "unsupported combination of bits and parity"));
     }
 
     // stop bits
     switch (args.stop.u_int) {
-        case 1: init->stopBitCount = kUSART_OneStopBit; break;
-        default: init->stopBitCount = kUSART_TwoStopBit; break;
+        case 1: init->stopBitCount = kLPUART_OneStopBit; break;
+        default: init->stopBitCount = kLPUART_TwoStopBit; break;
     }
 
 	// >>> not supported in current SDK
@@ -617,8 +634,7 @@ STATIC mp_obj_t pyb_uart_init_helper(pyb_uart_obj_t *self, mp_uint_t n_args, con
     if (!uart_init2(self)) {
         nlr_raise(mp_obj_new_exception_msg_varg(&mp_type_ValueError, "UART(%d) does not exist", self->uart_id));
     }
-	
-	FLEXCOMM_SetIRQHandler(self->pDev, uart_irq_handler, self);
+	s_pUarts[self->uart_id] = self;
     // set timeout
     self->timeout = args.timeout.u_int;
 
@@ -633,11 +649,11 @@ STATIC mp_obj_t pyb_uart_init_helper(pyb_uart_obj_t *self, mp_uint_t n_args, con
 
     // setup the read buffer
     
-    if (init->bitCountPerChar == kUSART_7BitsPerChar) {
+    if (init->dataBitsCount == kLPUART_SevenDataBits) {
         self->char_mask = 0x7F;
         self->char_width = 0;
     } else {
-        if (init->bitCountPerChar == kUSART_8BitsPerChar) {
+        if (init->dataBitsCount == kLPUART_EightDataBits) {
 			self->char_mask = 0xFF;
 			self->char_width = 0;
         }
@@ -651,17 +667,15 @@ STATIC mp_obj_t pyb_uart_init_helper(pyb_uart_obj_t *self, mp_uint_t n_args, con
         self->read_buf_len = 0;
         self->read_buf = NULL;
         NVIC_DisableIRQ(self->irqn);
-		USART_DisableInterrupts(self->pDev, (uint32_t)-1L);
+		LPUART_DisableInterrupts(self->pDev, (uint32_t)-1L);
     } else {
 		if (args.read_buf_len.u_int < 8)
 			self->read_buf_len = 8;
 		else
 			self->read_buf_len = args.read_buf_len.u_int;
         self->read_buf = m_new(byte, self->read_buf_len << self->char_width);
-
-		CLOCK_AttachClk(self->clockSel);
-
-		status_t ret = USART_Init(self->pDev, &self->config, UART_CLKSRC_HZ);
+		uint32_t clk = _GetUartClock();
+		status_t ret = LPUART_Init(self->pDev, &self->config, clk);
 		if (ret != kStatus_Success) {
 			nlr_raise(mp_obj_new_exception_msg_varg(&mp_type_ValueError, "set baudrate %d is not possible", args.baudrate.u_int));
 		}
@@ -697,7 +711,8 @@ STATIC mp_obj_t pyb_uart_make_new(const mp_obj_type_t *type, size_t n_args, size
     if (MP_OBJ_IS_STR(args[0])) {
         const char *port = mp_obj_str_get_str(args[0]);
 		
-        if (0) {
+        if (0)	// use this trick to use same "else if"
+	    {
 
 		#ifdef MICROPY_HW_UART_REPL_NAME
         } else if (strcmp(port, MICROPY_HW_UART_REPL_NAME) == 0) {
@@ -781,7 +796,7 @@ STATIC MP_DEFINE_CONST_FUN_OBJ_KW(pyb_uart_init_obj, 1, pyb_uart_init);
 STATIC mp_obj_t pyb_uart_deinit(mp_obj_t self_in) {
     pyb_uart_obj_t *self = self_in;
     self->is_enabled = false;
-	USART_Deinit(self->pDev);
+	LPUART_Deinit(self->pDev);
 	NVIC_DisableIRQ(self->irqn);
 	CLOCK_DisableClock(self->clk_ip_name);
     return mp_const_none;

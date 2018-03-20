@@ -3,18 +3,18 @@
 #define STACK_SIZE 0x1800
 ; must use "VECTOR_RAM", "RW_m_data", "VECTOR_ROM" as names to work with "InstallIRQHandler()" API
 
-LR_XIP_FLASH_INFO 0x60000000  {
+LR_XIP_FLASH_INFO 0x60100000  {
   ; >>> RO regions
 	ER_boot_hdr_conf +0 0x1000 {
 	* (.boot_hdr.conf)
 	}
-	ER_boot_hdr_ivt 0x60001000 0x20 {
+	ER_boot_hdr_ivt 0x60101000 0x20 {
 	* (.boot_hdr.ivt)
 	}
-	ER_boot_hdr_boot_data 0x60001020 0x10{
+	ER_boot_hdr_boot_data +0 0x10{
 	* (.boot_hdr.boot_data)
 	}  
-	ER_boot_hdr_dcd_data 0x60001030{
+	ER_boot_hdr_dcd_data +0 {
 	* (.boot_hdr.dcd_data)
 	}
 }
@@ -29,11 +29,7 @@ LR_XIP_FLASH 0x60002000 {
 		.ANY (+RO)
 	}
 
-	ER_ITCM 0x04000000 128*1024 { ; Stack region growing down
-		* (.ram_code)
-	}
-
-	ER_ITCM 0x04000000 128*1024 { ; Stack region growing down
+	ER_ITCM 0x00000000 128*1024 { ; Stack region growing down
 		vm.o obj.o objarray.o objfloat.o objlist.o objobject.o  (+RO)
 		nlrthumb.o objfun.o  nativeglue.o malloc.o (+RO)	
 		objdict.o  modmath.o modarray.o modbuiltins.o modmicropython.o map.o (+RO)

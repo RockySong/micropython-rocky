@@ -338,72 +338,37 @@ STATIC MP_DEFINE_CONST_CLASSMETHOD_OBJ(pin_debug_obj, (mp_obj_t)&pin_debug_fun_o
 
 // init(mode, pull=None, af=-1, *, value, alt, inv=0)
 typedef struct _pin_init_t{
-		mp_arg_val_t mode, pull, af, val0, alt, inv, flt;
+		mp_arg_val_t mode, value, alt, fastslew, hys, pad_expert_cfg;
 }pin_init_t;
 STATIC mp_obj_t pin_obj_init_helper(const pin_obj_t *self, mp_uint_t n_args, const mp_obj_t *pos_args, mp_map_t *kw_args) {
     static const mp_arg_t allowed_args[] = {
         { MP_QSTR_mode, MP_ARG_REQUIRED | MP_ARG_INT },
-        { MP_QSTR_pull, MP_ARG_OBJ, {.u_obj = mp_const_none}},
-        { MP_QSTR_af, MP_ARG_INT, {.u_int = 4}}, // KEEP for porting compatibility
-        { MP_QSTR_value, MP_ARG_KW_ONLY | MP_ARG_OBJ, {.u_obj = MP_OBJ_NULL}},
+		// embedded in "mode" { MP_QSTR_pull, MP_ARG_KW_ONLY | MP_ARG_OBJ, {.u_obj = MP_OBJ_NULL}},
+        { MP_QSTR_value, MP_ARG_KW_ONLY | MP_ARG_BOOL, {.u_bool = true}},
         { MP_QSTR_alt, MP_ARG_KW_ONLY | MP_ARG_INT, {.u_int = 5}},
-		{ MP_QSTR_spd, MP_ARG_KW_ONLY | MP_ARG_BOOL, {.u_bool = false}},
+		{ MP_QSTR_fastslew, MP_ARG_KW_ONLY | MP_ARG_BOOL, {.u_bool = false}},
 		{ MP_QSTR_hys, MP_ARG_KW_ONLY | MP_ARG_BOOL, {.u_bool = false}},
+		// if this arg is specified, it overrides mode & hys. User must have i.mx RT105 pad cfg h/w know how to use (SW_PAD_CTL_<PAD>)
+		{ MP_QSTR_pad_expert_cfg, MP_ARG_KW_ONLY | MP_ARG_INT, {.u_int = MP_OBJ_NULL}},	
     };
 	pin_init_t args;
     // parse args
     mp_arg_parse_all(n_args, pos_args, kw_args, MP_ARRAY_SIZE(allowed_args), allowed_args, (mp_arg_val_t*)&args);
-
-    if (!IS_GPIO_MODE(args.mode.u_int)) {
-        nlr_raise(mp_obj_new_exception_msg_varg(&mp_type_ValueError, "invalid pin mode: %d", args.mode.u_int));
+	mp_uint_t alt = args.alt.u_int;
+	mp_uint_t hys = (args.hys.u_bool != 0) << 16;	// HYS bit
+	mp_uint_t slew = (args.fastslew.u_bool != 0) << 0;	// SRE bit
+	mp_uint_t padCfg;
+    if (args.pad_expert_cfg.u_obj != MP_OBJ_NULL) {
+		padCfg = mp_obj_get_int(&args.pad_expert_cfg);
+    } else {
+		padCfg = args.mode.u_int | hys | slew;		
     }
-
-    // get pull mode
-    uint pull = IOCON_MODE_INACT;
-    if (args.pull.u_obj != mp_const_none) {
-        pull = mp_obj_get_int(args.pull.u_obj);
-    }
-
-    if (!IS_GPIO_PULL(pull)) {
-        nlr_raise(mp_obj_new_exception_msg_varg(&mp_type_ValueError, "invalid pin pull: %d", pull));
-    }
-
-    // // enable the peripheral clock for the port of this pin
-    // mp_hal_gpio_clock_enable(self->port);
-
-    // // if given, set the pin value before initialising to prevent glitches
-    // if (args.val0.u_obj != MP_OBJ_NULL) {
-    //    mp_hal_pin_write(self, mp_obj_is_true(args.val0.u_obj));
-    // }
-	// rocky: todo: configure the GPIO as requested (mode, pull, af, self->pin_mask)
-	// OD (bit 11) is encoded in args.mode
-
-	CLOCK_EnableClock(kCLOCK_Iocon);
-	IOCON_PinMuxSet(IOCON, self->port, self->pin, 
-		args.alt.u_int | (args.mode.u_int & 0xFFF) | 1<<8/*digital*/| pull | args.inv.u_bool<<7 | (!args.flt.u_bool)<<9 );
-	if (args.alt.u_int == 0) {
-		// Select GPIO
-		mp_hal_gpio_clock_enable(self->port);
-		if (0 == (args.mode.u_int & GPIO_PAD_OUTPUT_MASK))
-			IOMUXC_SetPinMux(self->afReg, self->adc_num, self->, uint32_t inputDaisy, uint32_t configRegister, uint32_t inputOnfield)
-			self->gpio->DIRCLR[self->port] = 1 << self->pin;
-		else {
-			if (args.val0.u_obj != MP_OBJ_NULL) {
-				
-				GPIO_WritePinOutput(GPIO, self->port, self->pin, mp_obj_is_true(args.val0.u_obj));
-			}
-			self->gpio->DIRSET[self->port] = 1 << self->pin;
-		}
+	if (alt == 5) {
+		// config GPIO
+		mp_hal_ConfigGPIO(self, padCfg, args.value.u_int);
+	} else {
+		mp_hal_pin_config_alt(self, padCfg, alt);
 	}
-	/* rocky ignore
-	GPIO_InitTypeDef GPIO_InitStructure;
-    GPIO_InitStructure.Pin = self->pin_mask;
-    GPIO_InitStructure.Mode = mode;
-    GPIO_InitStructure.Pull = pull;
-    GPIO_InitStructure.Speed = GPIO_SPEED_FAST;
-    GPIO_InitStructure.Alternate = af;
-    HAL_GPIO_Init(self->gpio, &GPIO_InitStructure);
-	*/
     return mp_const_none;
 }
 

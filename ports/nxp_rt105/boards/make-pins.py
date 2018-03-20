@@ -445,7 +445,7 @@ def main():
         "-m", "--pinmap",
         dest="pinmap_filename",
         help="Specifies the pinmap file for the i.mx rt105x, as its pin name is not regular, and has 2 level muxing, unlike normal MCUs!",
-        default='.\\mimxrt105x_pinmap.csv'
+        default='./mimxrt105x_pinmap.csv'
     )
 
     parser.add_argument(
@@ -485,7 +485,7 @@ def main():
     )
     
     if len(sys.argv) < 2:
-        sys.argv = ['.\\make-pins.py', '--board', '.\\imxrtevk105x\\pins.csv', '--af', '.\\mimxrt105x_af.csv', '--pinmap', '.\\mimxrt105x_pinmap.csv', '--prefix', '.\\mimxrt105x_prefix.c', '--hdr', '..\\build-imxrtevk105x\\genhdr\\pins.h', '--qstr', '..\\build-imxrtevk105x\\pins_qstr.h', '--af-const', '..\\build-imxrtevk105x\\genhdr\\pins_af_const.h', '--af-py', '..\\build-imxrtevk105x\\pins_af.py']
+        sys.argv = ['./make-pins.py', '--board', './imxrtevk105x/pins.csv', '--af', './mimxrt105x_af.csv', '--pinmap', './mimxrt105x_pinmap.csv', '--prefix', './mimxrt105x_prefix.c', '--hdr', '../build-imxrtevk105x/genhdr/pins.h', '--qstr', '../build-imxrtevk105x/pins_qstr.h', '--af-const', '../build-imxrtevk105x/genhdr/pins_af_const.h', '--af-py', '../build-imxrtevk105x/pins_af.py']
     args = parser.parse_args(sys.argv[1:])
     print("// args=", sys.argv)
     pins = Pins()

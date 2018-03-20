@@ -27,7 +27,6 @@
 #include "py/runtime.h"
 #include "py/mphal.h"
 #include "irq.h"
-#include "systick.h"
 #include "pybthread.h"
 
 __IO uint32_t uwTick;

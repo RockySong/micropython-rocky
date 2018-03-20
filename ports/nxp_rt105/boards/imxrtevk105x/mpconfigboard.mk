@@ -3,4 +3,4 @@ MCU_SERIES = IMXRT105
 CMSIS_MCU = MIMXRT1052
 SDK_MCU = CPU_MIMXRT1052DVL6A
 AF_FILE = boards/mimxrt105x_af.csv
-LD_FILE = boards/flexspi_xip.ld
+LD_FILE = MIMXRT1052xxxxx.ld

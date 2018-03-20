@@ -7,7 +7,8 @@ extern __IO uint32_t uwTick;
 __weak HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
 {
   /*Configure the SysTick to have interrupt in 1ms time basis*/
-  SysTick_Config(SystemCoreClock/1000U);
+    // SysTick_Config(SystemCoreClock/1000U);
+	SysTick_Config(CLOCK_GetFreq(kCLOCK_CoreSysClk) / 1000U);
 
   /*Configure the SysTick IRQ priority */
   HAL_NVIC_SetPriority(SysTick_IRQn, TickPriority ,0U);

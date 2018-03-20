@@ -45,35 +45,6 @@ typedef struct {
     uint32_t sector_count;
 } flash_layout_t;
 
-static const flash_layout_t flash_layout[] = {
-    { (uint32_t)0, (uint32_t)SECTOR_USE_SIZE, FLASH_DISK_SECTOR_CNT},
-};
-
-
-uint32_t flash_get_sector_info(uint32_t addr, uint32_t *start_addr, uint32_t *size) {
-    if (addr >= flash_layout[0].base_address) {
-        uint32_t sector_index = 0;
-        for (int i = 0; i < MP_ARRAY_SIZE(flash_layout); ++i) {
-            for (int j = 0; j < flash_layout[i].sector_count; ++j) {
-                uint32_t sector_start_next = flash_layout[i].base_address
-                    + (j + 1) * flash_layout[i].sector_size;
-                if (addr < sector_start_next) {
-                    if (start_addr != NULL) {
-                        *start_addr = flash_layout[i].base_address
-                            + j * flash_layout[i].sector_size;
-                    }
-                    if (size != NULL) {
-                        *size = flash_layout[i].sector_size;
-                    }
-                    return sector_index;
-                }
-                ++sector_index;
-            }
-        }
-    }
-    return 0;
-}
-
 void flash_erase(uint32_t flash_dest, const uint32_t *src, uint32_t num_word32) {
 	uint32_t sec0;
 	uint32_t secCnt;

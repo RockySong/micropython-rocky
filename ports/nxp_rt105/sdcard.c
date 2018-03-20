@@ -32,8 +32,8 @@
 #include "lib/oofatfs/ff.h"
 #include "extmod/vfs_fat.h"
 #include "fsl_debug_console.h"
-#include "fsl_host.h"
-#include "fsl_card.h"
+#include "fsl_sdmmc_host.h"
+#include "fsl_sd.h"
 
 #include "sdcard.h"
 #include "pin.h"
@@ -48,62 +48,7 @@
 #define usb_echo(...) mp_printf(MP_PYTHON_PRINTER, __VA_ARGS__)
 
 #if MICROPY_HW_HAS_SDCARD
-/*
-#if defined(MCU_SERIES_F7) || defined(MCU_SERIES_L4)
 
-// The F7 has 2 SDMMC units but at the moment we only support using one of them in
-// a given build.  If a boards config file defines MICROPY_HW_SDMMC2_CK then SDMMC2
-// is used, otherwise SDMMC1 is used.
-
-#if defined(MICROPY_HW_SDMMC2_CK)
-#define SDIO SDMMC2
-#define SDMMC_CLK_ENABLE() __HAL_RCC_SDMMC2_CLK_ENABLE()
-#define SDMMC_CLK_DISABLE() __HAL_RCC_SDMMC2_CLK_DISABLE()
-#define SDMMC_IRQn SDMMC2_IRQn
-#define SDMMC_TX_DMA dma_SDMMC_2_TX
-#define SDMMC_RX_DMA dma_SDMMC_2_RX
-#else
-#define SDIO SDMMC1
-#define SDMMC_CLK_ENABLE() __HAL_RCC_SDMMC1_CLK_ENABLE()
-#define SDMMC_CLK_DISABLE() __HAL_RCC_SDMMC1_CLK_DISABLE()
-#define SDMMC_IRQn SDMMC1_IRQn
-#define SDMMC_TX_DMA dma_SDIO_0_TX
-#define SDMMC_RX_DMA dma_SDIO_0_RX
-#endif
-
-// The F7 & L4 series calls the peripheral SDMMC rather than SDIO, so provide some
-// #defines for backwards compatability.
-
-#define SDIO_CLOCK_EDGE_RISING              SDMMC_CLOCK_EDGE_RISING
-#define SDIO_CLOCK_EDGE_FALLING             SDMMC_CLOCK_EDGE_FALLING
-
-#define SDIO_CLOCK_BYPASS_DISABLE           SDMMC_CLOCK_BYPASS_DISABLE
-#define SDIO_CLOCK_BYPASS_ENABLE            SDMMC_CLOCK_BYPASS_ENABLE
-
-#define SDIO_CLOCK_POWER_SAVE_DISABLE       SDMMC_CLOCK_POWER_SAVE_DISABLE
-#define SDIO_CLOCK_POWER_SAVE_ENABLE        SDMMC_CLOCK_POWER_SAVE_ENABLE
-
-#define SDIO_BUS_WIDE_1B                    SDMMC_BUS_WIDE_1B
-#define SDIO_BUS_WIDE_4B                    SDMMC_BUS_WIDE_4B
-#define SDIO_BUS_WIDE_8B                    SDMMC_BUS_WIDE_8B
-
-#define SDIO_HARDWARE_FLOW_CONTROL_DISABLE  SDMMC_HARDWARE_FLOW_CONTROL_DISABLE
-#define SDIO_HARDWARE_FLOW_CONTROL_ENABLE   SDMMC_HARDWARE_FLOW_CONTROL_ENABLE
-
-#define SDIO_TRANSFER_CLK_DIV               SDMMC_TRANSFER_CLK_DIV
-
-#else
-
-// These are definitions for F4 MCUs so there is a common macro across all MCUs.
-
-#define SDMMC_CLK_ENABLE() __SDIO_CLK_ENABLE()
-#define SDMMC_CLK_DISABLE() __SDIO_CLK_DISABLE()
-#define SDMMC_IRQn SDIO_IRQn
-#define SDMMC_TX_DMA dma_SDIO_0_TX
-#define SDMMC_RX_DMA dma_SDIO_0_RX
-
-#endif
-*/
 // TODO: Since SDIO is fundamentally half-duplex, we really only need to
 //       tie up one DMA channel. However, the HAL DMA API doesn't
 // seem to provide a convenient way to change the direction. I believe that
@@ -117,183 +62,171 @@
 // static DMA_HandleTypeDef sd_rx_dma, sd_tx_dma;
 
 /* State in Card driver. */
+
 typedef sd_card_t SD_HandleTypeDef;
+// g_sd must NOT be put in cacheable RAM
 sd_card_t g_sd;
 
-#define IOCON_PIO_DIGITAL_EN        0x0100u   /*!< Enables digital function */
-#define IOCON_PIO_FUNC1               0x01u   /*!< Selects pin function 1 */
-#define IOCON_PIO_FUNC2               0x02u   /*!< Selects pin function 2 */
-#define IOCON_PIO_FUNC7               0x07u   /*!< Selects pin function 7 */
-#define IOCON_PIO_INPFILT_OFF       0x0200u   /*!< Input filter disabled */
-#define IOCON_PIO_INV_DI              0x00u   /*!< Input function is not inverted */
-#define IOCON_PIO_MODE_INACT          0x00u   /*!< No addition pin function */
-#define IOCON_PIO_MODE_PULLUP         0x20u   /*!< Selects pull-up function */
-#define IOCON_PIO_OPENDRAIN_DI        0x00u   /*!< Open drain is disabled */
-#define IOCON_PIO_SLEW_FAST         0x0400u   /*!< Fast mode, slew rate control is disabled */
-#define IOCON_PIO_SLEW_STANDARD       0x00u   /*!< Standard mode, output slew rate control is enabled */
-#define PIN3_IDX                         3u   /*!< Pin number for pin 3 in a port 2 */
-#define PIN4_IDX                         4u   /*!< Pin number for pin 4 in a port 2 */
-#define PIN5_IDX                         5u   /*!< Pin number for pin 5 in a port 2 */
-#define PIN6_IDX                         6u   /*!< Pin number for pin 6 in a port 2 */
-#define PIN7_IDX                         7u   /*!< Pin number for pin 7 in a port 2 */
-#define PIN8_IDX                         8u   /*!< Pin number for pin 8 in a port 2 */
-#define PIN9_IDX                         9u   /*!< Pin number for pin 9 in a port 2 */
-#define PIN10_IDX                       10u   /*!< Pin number for pin 10 in a port 2 */
-#define PIN15_IDX                       15u   /*!< Pin number for pin 15 in a port 3 */
-#define PIN22_IDX                       22u   /*!< Pin number for pin 22 in a port 0 */
-#define PIN27_IDX                       27u   /*!< Pin number for pin 27 in a port 1 */
-#define PIN28_IDX                       28u   /*!< Pin number for pin 28 in a port 1 */
-#define PIN29_IDX                       29u   /*!< Pin number for pin 29 in a port 0 */
-#define PIN30_IDX                       30u   /*!< Pin number for pin 30 in a port 0 */
-#define PORT0_IDX                        0u   /*!< Port index */
-#define PORT1_IDX                        1u   /*!< Port index */
-#define PORT2_IDX                        2u   /*!< Port index */
-#define PORT3_IDX                        3u   /*!< Port index */
+/*! @brief SDMMC host detect card configuration */
+
+bool s_cardInserted = false;
+void SDCARD_DetectCallBack(bool isInserted, void *userData)
+{
+    s_cardInserted = isInserted;
+}
+
+
+static const sdmmchost_detect_card_t s_sdCardDetect = {
+#ifndef BOARD_SD_DETECT_TYPE
+    .cdType = kSDMMCHOST_DetectCardByGpioCD,
+#else
+    .cdType = BOARD_SD_DETECT_TYPE,
+#endif
+    .cdTimeOut_ms = (~0U),
+    .cardInserted = SDCARD_DetectCallBack,
+    .cardRemoved = SDCARD_DetectCallBack,
+};
 
 void _sdcard_pin_init(void)
 {
-	const uint32_t port1_pin27_config = (
-	  IOCON_PIO_FUNC2 | 									   /* Pin is configured as SD_D(4) */
-	  IOCON_PIO_MODE_PULLUP |								   /* Selects pull-up function */
-	  IOCON_PIO_INV_DI |									   /* Input function is not inverted */
-	  IOCON_PIO_DIGITAL_EN |								   /* Enables digital function */
-	  IOCON_PIO_INPFILT_OFF |								   /* Input filter disabled */
-	  IOCON_PIO_SLEW_STANDARD | 							   /* Standard mode, output slew rate control is enabled */
-	  IOCON_PIO_OPENDRAIN_DI								   /* Open drain is disabled */
-	);
-	IOCON_PinMuxSet(IOCON, PORT1_IDX, PIN27_IDX, port1_pin27_config); /* PORT1 PIN27 (coords: F10) is configured as SD_D(4) */
-	const uint32_t port1_pin28_config = (
-	  IOCON_PIO_FUNC2 | 									   /* Pin is configured as SD_D(5) */
-	  IOCON_PIO_MODE_PULLUP |								   /* Selects pull-up function */
-	  IOCON_PIO_INV_DI |									   /* Input function is not inverted */
-	  IOCON_PIO_DIGITAL_EN |								   /* Enables digital function */
-	  IOCON_PIO_INPFILT_OFF |								   /* Input filter disabled */
-	  IOCON_PIO_SLEW_STANDARD | 							   /* Standard mode, output slew rate control is enabled */
-	  IOCON_PIO_OPENDRAIN_DI								   /* Open drain is disabled */
-	);
-	IOCON_PinMuxSet(IOCON, PORT1_IDX, PIN28_IDX, port1_pin28_config); /* PORT1 PIN28 (coords: E12) is configured as SD_D(5) */
-	const uint32_t port1_pin29_config = (
-	  IOCON_PIO_FUNC2 | 									   /* Pin is configured as SD_D(6) */
-	  IOCON_PIO_MODE_PULLUP |								   /* Selects pull-up function */
-	  IOCON_PIO_INV_DI |									   /* Input function is not inverted */
-	  IOCON_PIO_DIGITAL_EN |								   /* Enables digital function */
-	  IOCON_PIO_INPFILT_OFF |								   /* Input filter disabled */
-	  IOCON_PIO_SLEW_STANDARD | 							   /* Standard mode, output slew rate control is enabled */
-	  IOCON_PIO_OPENDRAIN_DI								   /* Open drain is disabled */
-	);
-	IOCON_PinMuxSet(IOCON, PORT1_IDX, PIN29_IDX, port1_pin29_config); /* PORT1 PIN29 (coords: C11) is configured as SD_D(6) */
-	const uint32_t port1_pin30_config = (
-	  IOCON_PIO_FUNC2 | 									   /* Pin is configured as SD_D(7) */
-	  IOCON_PIO_MODE_PULLUP |								   /* Selects pull-up function */
-	  IOCON_PIO_INV_DI |									   /* Input function is not inverted */
-	  IOCON_PIO_DIGITAL_EN |								   /* Enables digital function */
-	  IOCON_PIO_INPFILT_OFF |								   /* Input filter disabled */
-	  IOCON_PIO_SLEW_STANDARD | 							   /* Standard mode, output slew rate control is enabled */
-	  IOCON_PIO_OPENDRAIN_DI								   /* Open drain is disabled */
-	);
-	IOCON_PinMuxSet(IOCON, PORT1_IDX, PIN30_IDX, port1_pin30_config); /* PORT1 PIN30 (coords: A8) is configured as SD_D(7) */
-	const uint32_t port2_pin10_config = (
-	  IOCON_PIO_FUNC2 | 									   /* Pin is configured as SD_CARD_DET_N */
-	  IOCON_PIO_MODE_INACT |								   /* No addition pin function */
-	  IOCON_PIO_INV_DI |									   /* Input function is not inverted */
-	  IOCON_PIO_DIGITAL_EN |								   /* Enables digital function */
-	  IOCON_PIO_INPFILT_OFF |								   /* Input filter disabled */
-	  IOCON_PIO_SLEW_STANDARD | 							   /* Standard mode, output slew rate control is enabled */
-	  IOCON_PIO_OPENDRAIN_DI								   /* Open drain is disabled */
-	);
-	IOCON_PinMuxSet(IOCON, PORT2_IDX, PIN10_IDX, port2_pin10_config); /* PORT2 PIN10 (coords: P1) is configured as SD_CARD_DET_N */
-	const uint32_t port2_pin3_config = (
-	  IOCON_PIO_FUNC2 | 									   /* Pin is configured as SD_CLK */
-	  IOCON_PIO_MODE_INACT |								   /* No addition pin function */
-	  IOCON_PIO_INV_DI |									   /* Input function is not inverted */
-	  IOCON_PIO_DIGITAL_EN |								   /* Enables digital function */
-	  IOCON_PIO_INPFILT_OFF |								   /* Input filter disabled */
-	  IOCON_PIO_SLEW_FAST | 								   /* Fast mode, slew rate control is disabled */
-	  IOCON_PIO_OPENDRAIN_DI								   /* Open drain is disabled */
-	);
-	IOCON_PinMuxSet(IOCON, PORT2_IDX, PIN3_IDX, port2_pin3_config); /* PORT2 PIN3 (coords: B1) is configured as SD_CLK */
-	const uint32_t port2_pin4_config = (
-	  IOCON_PIO_FUNC2 | 									   /* Pin is configured as SD_CMD */
-	  IOCON_PIO_MODE_INACT |								   /* No addition pin function */
-	  IOCON_PIO_INV_DI |									   /* Input function is not inverted */
-	  IOCON_PIO_DIGITAL_EN |								   /* Enables digital function */
-	  IOCON_PIO_INPFILT_OFF |								   /* Input filter disabled */
-	  IOCON_PIO_SLEW_FAST | 								   /* Fast mode, slew rate control is disabled */
-	  IOCON_PIO_OPENDRAIN_DI								   /* Open drain is disabled */
-	);
-	IOCON_PinMuxSet(IOCON, PORT2_IDX, PIN4_IDX, port2_pin4_config); /* PORT2 PIN4 (coords: D3) is configured as SD_CMD */
-	const uint32_t port2_pin5_config = (
-	  IOCON_PIO_FUNC2 | 									   /* Pin is configured as SD_POW_EN */
-	  IOCON_PIO_MODE_INACT |								   /* No addition pin function */
-	  IOCON_PIO_INV_DI |									   /* Input function is not inverted */
-	  IOCON_PIO_DIGITAL_EN |								   /* Enables digital function */
-	  IOCON_PIO_INPFILT_OFF |								   /* Input filter disabled */
-	  IOCON_PIO_SLEW_STANDARD | 							   /* Standard mode, output slew rate control is enabled */
-	  IOCON_PIO_OPENDRAIN_DI								   /* Open drain is disabled */
-	);
-	IOCON_PinMuxSet(IOCON, PORT2_IDX, PIN5_IDX, port2_pin5_config); /* PORT2 PIN5 (coords: C1) is configured as SD_POW_EN */
-	const uint32_t port2_pin6_config = (
-	  IOCON_PIO_FUNC2 | 									   /* Pin is configured as SD_D(0) */
-	  IOCON_PIO_MODE_INACT |								   /* No addition pin function */
-	  IOCON_PIO_INV_DI |									   /* Input function is not inverted */
-	  IOCON_PIO_DIGITAL_EN |								   /* Enables digital function */
-	  IOCON_PIO_INPFILT_OFF |								   /* Input filter disabled */
-	  IOCON_PIO_SLEW_FAST | 								   /* Fast mode, slew rate control is disabled */
-	  IOCON_PIO_OPENDRAIN_DI								   /* Open drain is disabled */
-	);
-	IOCON_PinMuxSet(IOCON, PORT2_IDX, PIN6_IDX, port2_pin6_config); /* PORT2 PIN6 (coords: F3) is configured as SD_D(0) */
-	const uint32_t port2_pin7_config = (
-	  IOCON_PIO_FUNC2 | 									   /* Pin is configured as SD_D(1) */
-	  IOCON_PIO_MODE_INACT |								   /* No addition pin function */
-	  IOCON_PIO_INV_DI |									   /* Input function is not inverted */
-	  IOCON_PIO_DIGITAL_EN |								   /* Enables digital function */
-	  IOCON_PIO_INPFILT_OFF |								   /* Input filter disabled */
-	  IOCON_PIO_SLEW_FAST | 								   /* Fast mode, slew rate control is disabled */
-	  IOCON_PIO_OPENDRAIN_DI								   /* Open drain is disabled */
-	);
-	IOCON_PinMuxSet(IOCON, PORT2_IDX, PIN7_IDX, port2_pin7_config); /* PORT2 PIN7 (coords: J2) is configured as SD_D(1) */
-	const uint32_t port2_pin8_config = (
-	  IOCON_PIO_FUNC2 | 									   /* Pin is configured as SD_D(2) */
-	  IOCON_PIO_MODE_INACT |								   /* No addition pin function */
-	  IOCON_PIO_INV_DI |									   /* Input function is not inverted */
-	  IOCON_PIO_DIGITAL_EN |								   /* Enables digital function */
-	  IOCON_PIO_INPFILT_OFF |								   /* Input filter disabled */
-	  IOCON_PIO_SLEW_FAST | 								   /* Fast mode, slew rate control is disabled */
-	  IOCON_PIO_OPENDRAIN_DI								   /* Open drain is disabled */
-	);
-	IOCON_PinMuxSet(IOCON, PORT2_IDX, PIN8_IDX, port2_pin8_config); /* PORT2 PIN8 (coords: F4) is configured as SD_D(2) */
-	const uint32_t port2_pin9_config = (
-	  IOCON_PIO_FUNC2 | 									   /* Pin is configured as SD_D(3) */
-	  IOCON_PIO_MODE_INACT |								   /* No addition pin function */
-	  IOCON_PIO_INV_DI |									   /* Input function is not inverted */
-	  IOCON_PIO_DIGITAL_EN |								   /* Enables digital function */
-	  IOCON_PIO_INPFILT_OFF |								   /* Input filter disabled */
-	  IOCON_PIO_SLEW_FAST | 								   /* Fast mode, slew rate control is disabled */
-	  IOCON_PIO_OPENDRAIN_DI								   /* Open drain is disabled */
-	);
-	IOCON_PinMuxSet(IOCON, PORT2_IDX, PIN9_IDX, port2_pin9_config); /* PORT2 PIN9 (coords: K2) is configured as SD_D(3) */
-	const uint32_t port3_pin15_config = (
-	  IOCON_PIO_FUNC2 | 									   /* Pin is configured as SD_WR_PRT */
-	  IOCON_PIO_MODE_INACT |								   /* No addition pin function */
-	  IOCON_PIO_INV_DI |									   /* Input function is not inverted */
-	  IOCON_PIO_DIGITAL_EN |								   /* Enables digital function */
-	  IOCON_PIO_INPFILT_OFF |								   /* Input filter disabled */
-	  IOCON_PIO_SLEW_STANDARD | 							   /* Standard mode, output slew rate control is enabled */
-	  IOCON_PIO_OPENDRAIN_DI								   /* Open drain is disabled */
-	);
-	IOCON_PinMuxSet(IOCON, PORT3_IDX, PIN15_IDX, port3_pin15_config); /* PORT3 PIN15 (coords: D2) is configured as SD_WR_PRT */
+  CLOCK_EnableClock(kCLOCK_Iomuxc);          /* iomuxc clock (iomuxc_clk_enable): 0x03u */
 
+  IOMUXC_SetPinMux(
+      IOMUXC_GPIO_AD_B0_05_GPIO1_IO05,        /* GPIO_AD_B0_05 is configured as GPIO1_IO05 */
+      0U);                                    /* Software Input On Field: Input Path is determined by functionality */                              /* Software Input On Field: Input Path is determined by functionality */
+  IOMUXC_SetPinMux(
+      IOMUXC_GPIO_B1_12_GPIO2_IO28,           /* GPIO_B1_12 is configured as GPIO2_IO28 */
+      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
+  IOMUXC_SetPinMux(
+      IOMUXC_GPIO_B1_14_USDHC1_VSELECT,       /* GPIO_B1_14 is configured as USDHC1_VSELECT */
+      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
+  IOMUXC_SetPinMux(
+      IOMUXC_GPIO_SD_B0_00_USDHC1_CMD,        /* GPIO_SD_B0_00 is configured as USDHC1_CMD */
+      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
+  IOMUXC_SetPinMux(
+      IOMUXC_GPIO_SD_B0_01_USDHC1_CLK,        /* GPIO_SD_B0_01 is configured as USDHC1_CLK */
+      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
+  IOMUXC_SetPinMux(
+      IOMUXC_GPIO_SD_B0_02_USDHC1_DATA0,      /* GPIO_SD_B0_02 is configured as USDHC1_DATA0 */
+      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
+  IOMUXC_SetPinMux(
+      IOMUXC_GPIO_SD_B0_03_USDHC1_DATA1,      /* GPIO_SD_B0_03 is configured as USDHC1_DATA1 */
+      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
+  IOMUXC_SetPinMux(
+      IOMUXC_GPIO_SD_B0_04_USDHC1_DATA2,      /* GPIO_SD_B0_04 is configured as USDHC1_DATA2 */
+      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
+  IOMUXC_SetPinMux(
+      IOMUXC_GPIO_SD_B0_05_USDHC1_DATA3,      /* GPIO_SD_B0_05 is configured as USDHC1_DATA3 */
+      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
+  IOMUXC_SetPinConfig(
+      IOMUXC_GPIO_AD_B0_05_GPIO1_IO05,        /* GPIO_AD_B0_05 PAD functional properties : */
+      0x10B0u);                               /* Slew Rate Field: Slow Slew Rate
+                                                 Drive Strength Field: R0/6
+                                                 Speed Field: medium(100MHz)
+                                                 Open Drain Enable Field: Open Drain Disabled
+                                                 Pull / Keep Enable Field: Pull/Keeper Enabled
+                                                 Pull / Keep Select Field: Keeper
+                                                 Pull Up / Down Config. Field: 100K Ohm Pull Down
+                                                 Hyst. Enable Field: Hysteresis Disabled */
+
+  IOMUXC_SetPinConfig(	// SD0_CD_SW
+      IOMUXC_GPIO_B1_12_GPIO2_IO28,           /* GPIO_B1_12 PAD functional properties : */
+      0x017089u);                             /* Slew Rate Field: Fast Slew Rate
+                                                 Drive Strength Field: R0(260 Ohm @ 3.3V, 150 Ohm@1.8V, 240 Ohm for DDR)
+                                                 Speed Field: medium(100MHz)
+                                                 Open Drain Enable Field: Open Drain Disabled
+                                                 Pull / Keep Enable Field: Pull/Keeper Enabled
+                                                 Pull / Keep Select Field: Pull
+                                                 Pull Up / Down Config. Field: 47K Ohm Pull Up
+                                                 Hyst. Enable Field: Hysteresis Enabled */
+  IOMUXC_SetPinConfig( // SD0_VSELECT
+      IOMUXC_GPIO_B1_14_USDHC1_VSELECT,       /* GPIO_B1_14 PAD functional properties : */
+      0x0170A1u);                             /* Slew Rate Field: Fast Slew Rate
+                                                 Drive Strength Field: R0/4
+                                                 Speed Field: medium(100MHz)
+                                                 Open Drain Enable Field: Open Drain Disabled
+                                                 Pull / Keep Enable Field: Pull/Keeper Enabled
+                                                 Pull / Keep Select Field: Pull
+                                                 Pull Up / Down Config. Field: 47K Ohm Pull Up
+                                                 Hyst. Enable Field: Hysteresis Enabled */
+  IOMUXC_SetPinConfig(
+      IOMUXC_GPIO_SD_B0_00_USDHC1_CMD,        /* GPIO_SD_B0_00 PAD functional properties : */
+      0x017089u);                             /* Slew Rate Field: Fast Slew Rate
+                                                 Drive Strength Field: R0(260 Ohm @ 3.3V, 150 Ohm@1.8V, 240 Ohm for DDR)
+                                                 Speed Field: medium(100MHz)
+                                                 Open Drain Enable Field: Open Drain Disabled
+                                                 Pull / Keep Enable Field: Pull/Keeper Enabled
+                                                 Pull / Keep Select Field: Pull
+                                                 Pull Up / Down Config. Field: 47K Ohm Pull Up
+                                                 Hyst. Enable Field: Hysteresis Enabled */
+  IOMUXC_SetPinConfig(
+      IOMUXC_GPIO_SD_B0_01_USDHC1_CLK,        /* GPIO_SD_B0_01 PAD functional properties : */
+      0x014089u);                             /* Slew Rate Field: Fast Slew Rate
+                                                 Drive Strength Field: R0(260 Ohm @ 3.3V, 150 Ohm@1.8V, 240 Ohm for DDR)
+                                                 Speed Field: medium(100MHz)
+                                                 Open Drain Enable Field: Open Drain Disabled
+                                                 Pull / Keep Enable Field: Pull/Keeper Disabled
+                                                 Pull / Keep Select Field: Keeper
+                                                 Pull Up / Down Config. Field: 47K Ohm Pull Up
+                                                 Hyst. Enable Field: Hysteresis Enabled */
+  IOMUXC_SetPinConfig(
+      IOMUXC_GPIO_SD_B0_02_USDHC1_DATA0,      /* GPIO_SD_B0_02 PAD functional properties : */
+      0x017089u);                             /* Slew Rate Field: Fast Slew Rate
+                                                 Drive Strength Field: R0(260 Ohm @ 3.3V, 150 Ohm@1.8V, 240 Ohm for DDR)
+                                                 Speed Field: medium(100MHz)
+                                                 Open Drain Enable Field: Open Drain Disabled
+                                                 Pull / Keep Enable Field: Pull/Keeper Enabled
+                                                 Pull / Keep Select Field: Pull
+                                                 Pull Up / Down Config. Field: 47K Ohm Pull Up
+                                                 Hyst. Enable Field: Hysteresis Enabled */
+  IOMUXC_SetPinConfig(
+      IOMUXC_GPIO_SD_B0_03_USDHC1_DATA1,      /* GPIO_SD_B0_03 PAD functional properties : */
+      0x017089u);                             /* Slew Rate Field: Fast Slew Rate
+                                                 Drive Strength Field: R0(260 Ohm @ 3.3V, 150 Ohm@1.8V, 240 Ohm for DDR)
+                                                 Speed Field: medium(100MHz)
+                                                 Open Drain Enable Field: Open Drain Disabled
+                                                 Pull / Keep Enable Field: Pull/Keeper Enabled
+                                                 Pull / Keep Select Field: Pull
+                                                 Pull Up / Down Config. Field: 47K Ohm Pull Up
+                                                 Hyst. Enable Field: Hysteresis Enabled */
+  IOMUXC_SetPinConfig(
+      IOMUXC_GPIO_SD_B0_04_USDHC1_DATA2,      /* GPIO_SD_B0_04 PAD functional properties : */
+      0x017089u);                             /* Slew Rate Field: Fast Slew Rate
+                                                 Drive Strength Field: R0(260 Ohm @ 3.3V, 150 Ohm@1.8V, 240 Ohm for DDR)
+                                                 Speed Field: medium(100MHz)
+                                                 Open Drain Enable Field: Open Drain Disabled
+                                                 Pull / Keep Enable Field: Pull/Keeper Enabled
+                                                 Pull / Keep Select Field: Pull
+                                                 Pull Up / Down Config. Field: 47K Ohm Pull Up
+                                                 Hyst. Enable Field: Hysteresis Enabled */
+  IOMUXC_SetPinConfig(
+      IOMUXC_GPIO_SD_B0_05_USDHC1_DATA3,      /* GPIO_SD_B0_05 PAD functional properties : */
+      0x017089u);                             /* Slew Rate Field: Fast Slew Rate
+                                                 Drive Strength Field: R0(260 Ohm @ 3.3V, 150 Ohm@1.8V, 240 Ohm for DDR)
+                                                 Speed Field: medium(100MHz)
+                                                 Open Drain Enable Field: Open Drain Disabled
+                                                 Pull / Keep Enable Field: Pull/Keeper Enabled
+                                                 Pull / Keep Select Field: Pull
+                                                 Pull Up / Down Config. Field: 47K Ohm Pull Up
+                                                 Hyst. Enable Field: Hysteresis Enabled */
+}
+
+static void USDHCClockConfiguration(void)
+{
+    /*configure system pll PFD2 fractional divider to 18*/
+    CLOCK_InitSysPfd(kCLOCK_Pfd0, 0x12U);
+    /* Configure USDHC clock source and divider */
+    CLOCK_SetDiv(kCLOCK_Usdhc1Div, 0U);
+    CLOCK_SetMux(kCLOCK_Usdhc1Mux, 1U);
 }
 
 status_t sdcard_init(void) {
     // invalidate the g_sd
+	// sdtest_main();
     g_sd.isHostReady = 0;
+	
 	_sdcard_pin_init();
-        /* attach main clock to SDIF */
-    CLOCK_AttachClk(BOARD_SDIF_CLK_ATTACH);
-
-    /* need call this function to clear the halt bit in clock divider register */
-    CLOCK_SetClkDiv(kCLOCK_DivSdioClk, 2U, true);
+	USDHCClockConfiguration();
 
 
     status_t error = kStatus_Success;
@@ -301,9 +234,10 @@ status_t sdcard_init(void) {
     NVIC_SetPriority(SD_HOST_IRQ, (USB_DEVICE_INTERRUPT_PRIORITY - 1U));
     g_sd.host.base = SD_HOST_BASEADDR;
     g_sd.host.sourceClock_Hz = SD_HOST_CLK_FREQ;
+	g_sd.usrParam.cd = &s_sdCardDetect;
 
     /* Init card. */
-    if (SD_Init(&g_sd))
+    if (SD_HostInit(&g_sd))
     {
         mp_print_str(MP_PYTHON_PRINTER, "\n SD card init failed \n");
         error = kStatus_Fail;
@@ -311,6 +245,24 @@ status_t sdcard_init(void) {
 		
     }
 
+	SD_PowerOnCard(g_sd.host.base, g_sd.usrParam.pwr);
+	/* wait card insert */
+	uint32_t t1 = HAL_GetTick();
+	while (!s_cardInserted)
+	{
+		if (HAL_GetTick() - t1 > 100)
+			break;
+	}
+
+	PRINTF("\r\nCard inserted.\r\n");
+	/* reset host once card re-plug in */
+	SD_HostReset(&(g_sd.host));
+	/* Init card. */
+	if (SD_CardInit(&g_sd))
+	{
+		PRINTF("\r\nSD card init failed.\r\n");
+		return -1;
+	}
     return error;
 }
 
@@ -329,7 +281,7 @@ void HAL_SD_MspDeInit(SD_HandleTypeDef *hsd) {
 }
 
 bool sdcard_is_present(void) {
-	if (CardInsertDetect(g_sd.host.base) == kStatus_Success && g_sd.isHostReady)
+	if (SD_IsCardPresent(&g_sd) && g_sd.isHostReady)
 		return 1;
 	return 0;}
 
@@ -359,7 +311,7 @@ uint32_t sdcard_get_lba_count(void)
 }
 
 uint64_t sdcard_get_capacity_in_bytes(void) {
-    if (g_sd.isHostReady == NULL) {
+    if (g_sd.isHostReady == 0) {
         return 0;
     }
 	return (uint64_t)g_sd.blockCount * g_sd.blockSize;
@@ -373,16 +325,16 @@ __STATIC_INLINE uint32_t MyNVIC_GetEnabledIRQ(IRQn_Type IRQn)
 mp_uint_t sdcard_read_blocks(uint8_t *dest, uint32_t block_num, uint32_t num_blocks) {
     // check that SD card is initialised
     status_t ret;
-    if (g_sd.isHostReady == NULL) {
+    if (g_sd.isHostReady == 0) {
         return kStatus_Fail;
     }
-	uint32_t usbIrqEn = MyNVIC_GetEnabledIRQ(USB0_IRQn);
+	uint32_t usbIrqEn = MyNVIC_GetEnabledIRQ(USB_OTG1_IRQn);
 	if (usbIrqEn)
-		NVIC_DisableIRQ(USB0_IRQn);
+		NVIC_DisableIRQ(USB_OTG1_IRQn);
 	
 	ret = SD_ReadBlocks(&g_sd, dest, block_num, num_blocks);
 	if (usbIrqEn)
-		NVIC_EnableIRQ(USB0_IRQn);
+		NVIC_EnableIRQ(USB_OTG1_IRQn);
     return ret;
 }
 
@@ -390,16 +342,16 @@ mp_uint_t sdcard_write_blocks(const uint8_t *src, uint32_t block_num, uint32_t n
     // check that SD card is initialised
     // check that SD card is initialised
     status_t ret;
-    if (g_sd.isHostReady == NULL) {
+    if (g_sd.isHostReady == 0) {
         return kStatus_Fail;
     }
-	uint32_t usbIrqEn = MyNVIC_GetEnabledIRQ(USB0_IRQn);
+	uint32_t usbIrqEn = MyNVIC_GetEnabledIRQ(USB_OTG1_IRQn);
 	if (usbIrqEn)
-		NVIC_DisableIRQ(USB0_IRQn);
+		NVIC_DisableIRQ(USB_OTG1_IRQn);
 	
 	ret = SD_WriteBlocks(&g_sd, src, block_num, num_blocks);
 	if (usbIrqEn)
-		NVIC_EnableIRQ(USB0_IRQn);
+		NVIC_EnableIRQ(USB_OTG1_IRQn);
     return ret;
 }
 
@@ -437,7 +389,7 @@ STATIC mp_obj_t sd_power(mp_obj_t self, mp_obj_t state) {
 STATIC MP_DEFINE_CONST_FUN_OBJ_2(sd_power_obj, sd_power);
 
 STATIC mp_obj_t sd_info(mp_obj_t self) {
-    if (g_sd.isHostReady == NULL || CardInsertDetect(g_sd.host.base) == NULL) {
+    if (g_sd.isHostReady == 0 || SD_IsCardPresent(&g_sd)) {
         return mp_const_none;
     }
     // cardinfo.SD_csd and cardinfo.SD_cid have lots of info but we don't use them

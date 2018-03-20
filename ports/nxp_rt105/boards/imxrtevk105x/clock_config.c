@@ -83,9 +83,9 @@ void BOARD_BootClockRUN(void)
 #ifndef SKIP_SYSCLK_INIT
     CLOCK_InitSysPll(&sysPllConfig); /* Configure SYS PLL to 528M */
 #endif
-#ifndef XIP_EXTERNAL_FLASH
-    CLOCK_InitUsb1Pll(&usb1PllConfig); /* Configure USB1 PLL to 480M */
-#endif
+
+	CLOCK_InitUsb1Pll(&usb1PllConfig); /* Configure USB1 PLL to 480M. Also used by FlexSPI */
+
     CLOCK_SetDiv(kCLOCK_ArmDiv, 0x1); /* Set ARM PODF to 0, divide by 2 */
     CLOCK_SetDiv(kCLOCK_AhbDiv, 0x0); /* Set AHB PODF to 0, divide by 1 */
     CLOCK_SetDiv(kCLOCK_IpgDiv, 0x3); /* Set IPG PODF to 3, divede by 4 */

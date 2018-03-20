@@ -98,13 +98,12 @@ void mp_hal_gpio_clock_enable(uint32_t portNum) {
 
 void mp_hal_pin_config(const pin_obj_t *p, const pin_af_obj_t *af, uint32_t alt, uint32_t padCfgVal ) {
 	uint32_t isInputPathForcedOn = 0;
-
+	padCfgVal &= ~(1UL<<31);	// clear MSb, as it is used to mark input/output for GPIO
 	CLOCK_EnableClock(kCLOCK_Iomuxc);
 	
 	if (alt == PIN_ALT_NC) 
 		alt = REG_READ32(p->afReg) & 7;
 	isInputPathForcedOn =  (alt != 5);	// Alt 5 is GPIO
-	isInputPathForcedOn = 1;
 	IOMUXC_SetPinMux(p->afReg, alt, af->inSelReg, af->inSelVal, p->cfgReg, isInputPathForcedOn);
 	IOMUXC_SetPinConfig(p->afReg,alt,af->inSelReg, af->inSelVal, p->cfgReg, padCfgVal);
 }

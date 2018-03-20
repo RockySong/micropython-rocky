@@ -5,15 +5,16 @@
 #include "board.h"
 #include "clock_config.h"
 #include "fsl_common.h"
+#include "flegftl_cfg.h"
 /*******************************************************************************
 * Definitions
 ******************************************************************************/
+
 #define FLASH_KB_SIZE (64*1024)  // size in KB !
 #define FLEXSPI_AMBA_BASE FlexSPI_AMBA_BASE
 #define FLASH_PAGE_SIZE 512
 #define SECTOR 16
 #define SECTOR_SIZE (256*1024)
-#define SECTOR_USE_SIZE (32*1024) // if sector size is too big, to save memory buffer, we only use part
 #define FLEXSPI_CLOCK kCLOCK_FlexSpi
 #define HYPERFLASH_CMD_LUT_SEQ_IDX_READDATA 0
 #define HYPERFLASH_CMD_LUT_SEQ_IDX_WRITEDATA 1
@@ -389,9 +390,7 @@ int flexspi_nor_init(void)
     status_t status;
 
     // Set flexspi root clock to 166MHZ.
-    const clock_usb_pll_config_t g_ccmConfigUsbPll = {.loopDivider = 0U};
-
-    CLOCK_InitUsb1Pll(&g_ccmConfigUsbPll);
+	// NOTE! we assuem PLL3 (USBPLL1) has been locked to 480MHz already
     CLOCK_InitUsb1Pfd(kCLOCK_Pfd0, 26);   /* Set PLL3 PFD0 clock 332MHZ. */
     CLOCK_SetMux(kCLOCK_FlexspiMux, 0x3); /* Choose PLL3 PFD0 clock as flexspi source clock. */
     CLOCK_SetDiv(kCLOCK_FlexspiDiv, 3);   /* flexspi clock 83M, DDR mode, internal clock 42M. */
@@ -426,6 +425,8 @@ int flexspi_nor_init(void)
         return status;
     }
 	return 0;
+
+	
     /* Erase sectors. */
     PRINTF("Erasing Serial NOR over FlexSPI...\r\n");
     status = flexspi_nor_flash_erase_sector(FLEXSPI, SECTOR * SECTOR_SIZE);
@@ -491,4 +492,51 @@ int flexspi_nor_init(void)
     {
     }
 }
+
+int HyperErase(int euNdx) {
+	flexspi_nor_flash_erase_sector(FLEXSPI, euNdx * 256 * 1024);
+	return 0;
+}
+
+
+int HyperRead(uint32_t byteOfs, void *pvBuf, uint32_t byteCnt) {
+	uint8_t *p = (uint8_t*)(FLEG_FLASH_OFFSET + byteOfs);
+	memcpy(pvBuf, p, byteCnt);
+	return 0;
+}
+
+typedef union {
+	uint8_t buf[512];
+	uint32_t buf32[512 / 4];
+}_PartialPgmBuf_t;
+int _HyperPagePartialProgram(uint32_t pageNdx, uint32_t pgOfs, uint32_t byteCnt, const void *pvBuf) {
+	_PartialPgmBuf_t buf;
+	HyperRead(pageNdx * 512 , buf.buf32, sizeof(buf));
+	memcpy(buf.buf + pgOfs, pvBuf, byteCnt);
+	flexspi_nor_flash_page_program(FLEXSPI, pageNdx * 512, buf.buf32);
+	return 0;
+}
+
+
+int HyperPageProgram(uint32_t pageNdx, uint32_t pgOfs, uint32_t byteCnt, const void *pvBuf){
+	
+	if (pgOfs != 0 || byteCnt != 512) {
+		_HyperPagePartialProgram(pageNdx, pgOfs, byteCnt, pvBuf);
+	} else {
+		flexspi_nor_flash_page_program(FLEXSPI, pageNdx * 512, pvBuf);
+	}
+	return 0;
+}
+
+int Hyper16bitProgram(uint32_t byteOfs, uint16_t u16Dat)
+{
+	uint32_t pageNdx = byteOfs >> 9, pageOfs = byteOfs & (512 - 1);
+	HyperPageProgram(pageNdx, pageOfs, 2, &u16Dat);
+	return 0;
+}
+
+int HyperFlush(void) {
+	return 0;
+}
+
 

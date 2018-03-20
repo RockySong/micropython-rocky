@@ -26,18 +26,14 @@
 
 #ifndef _FLASH_H_
 #define _FLASH_H_
-
-#define FLASH_BASE_ADDR			0x60000000
-#define FLASH_KB_SIZE (64*1024)  // size in KB !
+#include "flegftl.h"
+#define FLASH_BASE_ADDR			0x60300000
+#define FLASH_KB_SIZE 			(FLEG_CAPACITY / 1024)  // size in KB !
 
 #define FLASH_DISK_BASE_ADDR	0x60400000
 #define FLASH_PAGE_SIZE 		512
 #define FLASH_DISK_SECTOR_CNT	32
 #define SECTOR_SIZE 			(256*1024) // real sector size
-// if sector size is too big, to save memory buffer, we only use part of a sector
-// from the start of a real sector, this means remaining of the sector is wasted
-#define SECTOR_USE_SIZE 		(32*1024) 
-#define FLASH_DISK_SIZE			(SECTOR_USE_SIZE * FLASH_DISK_SECTOR_CNT)
 
 int flexspi_nor_init(void);
 int flexspi_nor_flash_erase_sector(FLEXSPI_Type *base, uint32_t address);
