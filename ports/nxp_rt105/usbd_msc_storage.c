@@ -133,7 +133,7 @@ void _ConfigLBA(usb_device_lba_information_struct_t *lbaInf)
 	lbaInf->logicalUnitNumberSupported = LOGICAL_UNIT_SUPPORTED;
 }
 
-usb_status_t USB_DeviceMscCallback(class_handle_t handle, uint32_t event, void *param)
+usb_status_t USB_DeviceMscCallback2(class_handle_t handle, uint32_t event, void *param)
 {
     usb_status_t error = kStatus_USB_Success;
     usb_device_lba_app_struct_t *lba;
@@ -191,8 +191,6 @@ usb_status_t USB_DeviceMscCallback(class_handle_t handle, uint32_t event, void *
                 error = kStatus_USB_Error;
             }
             break;
-
-            break;
         case kUSB_DeviceMscEventGetLbaInformation:
 			_ConfigLBA((usb_device_lba_information_struct_t *)param);
             break;
@@ -225,6 +223,140 @@ usb_status_t USB_DeviceMscCallback(class_handle_t handle, uint32_t event, void *
     }
     return error;
 }
+
+usb_status_t USB_DeviceMscCallback(class_handle_t handle, uint32_t event, void *param)
+{
+    usb_status_t error = kStatus_USB_Success;
+    status_t errorCode = kStatus_Success;
+    usb_device_lba_information_struct_t *lbaInformation;
+    usb_device_lba_app_struct_t *lba;
+    usb_device_ufi_app_struct_t *ufi;
+	mp_uint_t t1 = kStatus_Fail;
+#if (defined(USB_DEVICE_CONFIG_USE_TASK) && (USB_DEVICE_CONFIG_USE_TASK > 0)) && \
+    (defined(USB_DEVICE_MSC_USE_WRITE_TASK) && (USB_DEVICE_MSC_USE_WRITE_TASK > 0))
+    usb_msc_buffer_struct_t *tempbuffer;
+#endif
+    switch (event)
+    {
+        case kUSB_DeviceMscEventReadResponse:
+            lba = (usb_device_lba_app_struct_t *)param;
+            break;
+        case kUSB_DeviceMscEventWriteResponse:
+            lba = (usb_device_lba_app_struct_t *)param;
+#if (defined(USB_DEVICE_CONFIG_USE_TASK) && (USB_DEVICE_CONFIG_USE_TASK > 0)) && \
+    (defined(USB_DEVICE_MSC_USE_WRITE_TASK) && (USB_DEVICE_MSC_USE_WRITE_TASK > 0))
+            if (NULL != currentTrasfer)
+            {
+                currentTrasfer->offset = lba->offset;
+                currentTrasfer->size = lba->size;
+                if (0 == lba->size)
+                {
+                    USB_DeviceMscAddBufferToHead(currentTrasfer);
+                }
+                else
+                {
+                    USB_DeviceMscAddBufferToTail(currentTrasfer);
+                }
+            }
+#else
+            /*write the data to sd card*/
+            if (0 != lba->size)
+            {
+				if (s_isUseSDCard) {
+					if (sdcard_is_present())
+						t1 = sdcard_write_blocks(lba->buffer,lba->offset, lba->size >> USB_MSC_BLOCK_SIZE_LOG2);
+				} else {
+					t1 = storage_write_blocks(lba->buffer,lba->offset + storage_get_block_offset(), lba->size >> USB_MSC_BLOCK_SIZE_LOG2);
+				}
+				
+				if (0 != t1)
+                {
+                    g_deviceComposite->mscDisk.readWriteError = 1;
+                    usb_echo(
+                        "Write error, error = 0xx%x \t Please check write request buffer size(must be less than 128 "
+                        "sectors)\r\n",
+                        error);
+                    error = kStatus_USB_Error;
+                }
+            }	
+
+#endif
+            break;
+        case kUSB_DeviceMscEventWriteRequest:
+            lba = (usb_device_lba_app_struct_t *)param;
+/*get a buffer to store the data from host*/
+#if (defined(USB_DEVICE_CONFIG_USE_TASK) && (USB_DEVICE_CONFIG_USE_TASK > 0)) && \
+    (defined(USB_DEVICE_MSC_USE_WRITE_TASK) && (USB_DEVICE_MSC_USE_WRITE_TASK > 0))
+
+            USB_DeviceMscGetBufferFromHead(&tempbuffer);
+            while (NULL == tempbuffer)
+            {
+                usb_echo("No buffer available");
+                USB_DeviceMscWriteTask();
+                USB_DeviceMscGetBufferFromHead(&tempbuffer);
+            }
+            lba->buffer = tempbuffer->buffer;
+            currentTrasfer = tempbuffer;
+#else
+            lba->buffer = (uint8_t *)&g_mscWriteRequestBuffer[0];
+#endif
+            break;
+        case kUSB_DeviceMscEventReadRequest:
+            lba = (usb_device_lba_app_struct_t *)param;
+            lba->buffer = (uint8_t *)&g_mscReadRequestBuffer[0];
+
+			if (s_isUseSDCard) {
+				if (sdcard_is_present())
+					t1 = sdcard_read_blocks(lba->buffer,lba->offset, lba->size >> USB_MSC_BLOCK_SIZE_LOG2);
+			} else {
+				t1 = storage_read_blocks(lba->buffer,lba->offset + storage_get_block_offset(), lba->size >> USB_MSC_BLOCK_SIZE_LOG2);
+			}
+
+			if (0 != t1)
+            {
+                g_deviceComposite->mscDisk.readWriteError = 1;
+                usb_echo(
+                    "Read error, error = 0xx%x \t Please check read request buffer size(must be less than 128 "
+                    "sectors)\r\n",
+                    error);
+                error = kStatus_USB_Error;
+            }
+
+            break;
+        case kUSB_DeviceMscEventGetLbaInformation:
+            _ConfigLBA((usb_device_lba_information_struct_t *)param);
+            break;
+        case kUSB_DeviceMscEventTestUnitReady:
+            /*change the test unit ready command's sense data if need, be careful to modify*/
+            ufi = (usb_device_ufi_app_struct_t *)param;
+            break;
+        case kUSB_DeviceMscEventInquiry:
+            ufi = (usb_device_ufi_app_struct_t *)param;
+            ufi->size = sizeof(usb_device_inquiry_data_fromat_struct_t);
+            ufi->buffer = (uint8_t *)&g_InquiryInfo;
+            break;
+        case kUSB_DeviceMscEventModeSense:
+            ufi = (usb_device_ufi_app_struct_t *)param;
+            ufi->size = sizeof(usb_device_mode_parameters_header_struct_t);
+            ufi->buffer = (uint8_t *)&g_ModeParametersHeader;
+            break;
+        case kUSB_DeviceMscEventModeSelect:
+            break;
+        case kUSB_DeviceMscEventModeSelectResponse:
+            ufi = (usb_device_ufi_app_struct_t *)param;
+            break;
+        case kUSB_DeviceMscEventFormatComplete:
+            break;
+        case kUSB_DeviceMscEventRemovalRequest:
+            break;
+        default:
+            break;
+    }
+    return error;
+}
+
+
+
 /*!
  * @brief msc device set configuration function.
  *

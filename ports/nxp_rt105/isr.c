@@ -151,6 +151,20 @@ extern uint32_t _ram_start, _ram_end, _estack, _heap_end, _heap_start;
 #define _HEAP_END &_heap_end
 #endif
 
+uint16_t _Fault_UnalignedLDRH(const uint8_t* pAddr) {
+	uint32_t v1, v2;
+	v1 = *pAddr++;
+	v2 = *pAddr;
+	v1 |= v2 << 8;
+	return v1;
+}
+
+void _Fault_UnalignedLSTRH(uint8_t* pAddr, uint16_t val16) {
+	*pAddr++ = (uint8_t)(val16 & 0xFF);
+	*pAddr++ = (uint8_t)(val16 & 0xFF);
+}
+
+
 void HardFault_C_Handler(ExceptionRegisters_t *regs) {
     if (!pyb_hard_fault_debug) {
         NVIC_SystemReset();

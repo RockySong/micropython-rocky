@@ -1,9 +1,12 @@
 /*
+ * The Clear BSD License
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016 NXP
+ * Copyright 2016 - 2017 NXP
+ * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * are permitted (subject to the limitations in the disclaimer below) provided
+ * that the following conditions are met:
  *
  * o Redistributions of source code must retain the above copyright notice, this list
  *   of conditions and the following disclaimer.
@@ -16,6 +19,7 @@
  *   contributors may be used to endorse or promote products derived from this
  *   software without specific prior written permission.
  *
+ * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -100,7 +104,7 @@
 #define USB_DEVICE_CONFIG_SELF_POWER (1U)
 
 /*! @brief How many endpoints are supported in the stack. */
-#define USB_DEVICE_CONFIG_ENDPOINTS (5U)
+#define USB_DEVICE_CONFIG_ENDPOINTS (4U)
 
 /*! @brief Whether the device task is enabled. */
 #define USB_DEVICE_CONFIG_USE_TASK (0U)
@@ -111,19 +115,37 @@
 /*! @brief Whether test mode enabled. */
 #define USB_DEVICE_CONFIG_USB20_TEST_MODE (0U)
 
+/*! @brief Whether device CV test is enabled. */
+#define USB_DEVICE_CONFIG_CV_TEST (0U)
+
+/*! @brief Whether device compliance test is enabled. If the macro is enabled,
+    the test mode and CV test macroes will be set.*/
+#define USB_DEVICE_CONFIG_COMPLIANCE_TEST (0U)
+
+#if ((defined(USB_DEVICE_CONFIG_COMPLIANCE_TEST)) && (USB_DEVICE_CONFIG_COMPLIANCE_TEST > 0U))
+
+/*! @brief Undefine the marco USB_DEVICE_CONFIG_USB20_TEST_MODE. */
+#undef USB_DEVICE_CONFIG_USB20_TEST_MODE
+/*! @brief Undefine the marco USB_DEVICE_CONFIG_CV_TEST. */
+#undef USB_DEVICE_CONFIG_CV_TEST
+
+/*! @brief enable the test mode. */
+#define USB_DEVICE_CONFIG_USB20_TEST_MODE (1U)
+
+/*! @brief enable the CV test */
+#define USB_DEVICE_CONFIG_CV_TEST (1U)
+
+#endif
+
 #if ((defined(USB_DEVICE_CONFIG_KHCI)) && (USB_DEVICE_CONFIG_KHCI > 0U))
 
 /*! @brief The MAX buffer length for the KHCI DMA workaround.*/
 #define USB_DEVICE_CONFIG_KHCI_DMA_ALIGN_BUFFER_LENGTH (64U)
-/*! @brief Whether handle the USB KHCI bus error. */
-#define USB_DEVICE_CONFIG_KHCI_ERROR_HANDLING (0U)
 #endif
 
 #if ((defined(USB_DEVICE_CONFIG_EHCI)) && (USB_DEVICE_CONFIG_EHCI > 0U))
 /*! @brief How many the DTD are supported. */
 #define USB_DEVICE_CONFIG_EHCI_MAX_DTD (16U)
-/*! @brief Whether handle the USB EHCI bus error. */
-#define USB_DEVICE_CONFIG_EHCI_ERROR_HANDLING (0U)
 
 /*! @brief Whether the EHCI ID pin detect feature enabled. */
 #define USB_DEVICE_CONFIG_EHCI_ID_PIN_DETECT (0U)
@@ -133,10 +155,9 @@
 #define USB_DEVICE_CONFIG_KEEP_ALIVE_MODE (0U)
 
 /*! @brief Whether the transfer buffer is cache-enabled or not. */
-#define USB_DEVICE_CONFIG_BUFFER_PROPERTY_CACHEABLE (1U)
-#define FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL (1U)
-
-
+#ifndef USB_DEVICE_CONFIG_BUFFER_PROPERTY_CACHEABLE
+#define USB_DEVICE_CONFIG_BUFFER_PROPERTY_CACHEABLE (0U)
+#endif
 /*! @brief Whether the low power mode is enabled or not. */
 #define USB_DEVICE_CONFIG_LOW_POWER_MODE (0U)
 
@@ -153,6 +174,9 @@
 
 /*! @brief Whether the device detached feature is enabled or not. */
 #define USB_DEVICE_CONFIG_DETACH_ENABLE (0U)
+
+/*! @brief Whether handle the USB bus error. */
+#define USB_DEVICE_CONFIG_ERROR_HANDLING (0U)
 
 /* @} */
 

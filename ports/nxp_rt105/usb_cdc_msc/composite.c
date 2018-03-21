@@ -145,6 +145,12 @@ usb_status_t USB_DeviceCallback(usb_device_handle handle, uint32_t event, void *
                 USB_DeviceSetSpeed(handle, g_composite.speed);
             }
 #endif
+#if (defined(USB_DEVICE_CONFIG_USE_TASK) && (USB_DEVICE_CONFIG_USE_TASK > 0)) && \
+    (defined(USB_DEVICE_MSC_USE_WRITE_TASK) && (USB_DEVICE_MSC_USE_WRITE_TASK > 0))
+            /*re-init the queue every time device is reset*/
+            USB_DeviceMscInitQueue();
+            currentTrasfer = NULL;
+#endif
         }
         break;
         case kUSB_DeviceEventSetConfiguration:
@@ -204,6 +210,16 @@ usb_status_t USB_DeviceCallback(usb_device_handle handle, uint32_t event, void *
                                                              (usb_device_get_configuration_descriptor_struct_t *)param);
             }
             break;
+#if (defined(USB_DEVICE_CONFIG_CV_TEST) && (USB_DEVICE_CONFIG_CV_TEST > 0U))
+        case kUSB_DeviceEventGetDeviceQualifierDescriptor:
+            if (param)
+            {
+                /* Get device descriptor request */
+                error = USB_DeviceGetDeviceQualifierDescriptor(
+                    handle, (usb_device_get_device_qualifier_descriptor_struct_t *)param);
+            }
+            break;
+#endif
         case kUSB_DeviceEventGetStringDescriptor:
             if (param)
             {
@@ -216,6 +232,7 @@ usb_status_t USB_DeviceCallback(usb_device_handle handle, uint32_t event, void *
 
     return error;
 }
+
 
 /*!
  * @brief USB Interrupt service routine.

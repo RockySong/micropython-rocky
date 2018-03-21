@@ -324,6 +324,17 @@ __Vectors_Size  EQU     __Vectors_End - __Vectors
 
 ; Reset Handler
 
+UnalignTest		PROC
+				EXPORT UnalignTest
+				; >>> test unaligned access
+				PUSH {R4}
+				LDR		R4, = 0x202063F3
+				LDRH	R0, [R4], #02
+				; <<<	
+				POP {R4}
+				BX	LR
+				ENDP
+
 Reset_Handler   PROC
                 EXPORT  Reset_Handler             [WEAK]
                 IMPORT  SystemInit
@@ -335,8 +346,12 @@ Reset_Handler   PROC
                 STR     R1, [R0]
                 LDR     R2, [R1]
                 MSR     MSP, R2
+				BL		UnalignTest
                 LDR     R0, =SystemInit
                 BLX     R0
+				
+
+				
                 CPSIE   i               ; Unmask interrupts
                 LDR     R0, =__main
                 BX      R0

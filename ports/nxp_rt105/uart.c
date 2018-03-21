@@ -90,7 +90,6 @@ struct _pyb_uart_obj_t {
 	clock_ip_name_t clk_ip_name;
     IRQn_Type irqn;
     pyb_uart_t uart_id;
-	uint8_t muxAlt;
     bool is_enabled;
     byte char_width;                    // 0 for 7,8 bit chars, 1 for 9 bit chars
     uint16_t char_mask;                 // 0x7f for 7 bit, 0xff for 8 bit, 0x1ff for 9 bit
@@ -113,7 +112,7 @@ pyb_uart_obj_t *s_pUarts[10];
 
 #define UART_TXFIFO_FILL_CNT(p)  ((p->WATER >> 8) & 0Xff)
 #define UART_RXFIFO_FILL_CNT(p) 	((p->WATER >> 24) & 0Xff)
-#define UART_TXFIFO_IS_NOT_FULL(p) (UART_RXFIFO_FILL_CNT(p) != LPUART_FIFO_CAP)
+#define UART_TXFIFO_IS_NOT_FULL(p) (UART_RXFIFO_FILL_CNT(p) < LPUART_FIFO_CAP - 1)
 #define UART_RXFIFO_IS_NOT_EMPTY(p) (UART_RXFIFO_FILL_CNT(p) != 0)
 
 #define UART_RX_IRQ_EN(p) (p->CTRL |= (1 << 21))
@@ -219,7 +218,6 @@ case PYB_UART_##n: \
 	UARTx = LPUART##n; \
 	irqn = LPUART##n##_IRQn; \
 	clk_ip_name = kCLOCK_Lpuart##n; \
-	muxAlt = MICROPY_HW_UART##n##_ALT; \
 	pins[UART_PIN_TXD] = &MICROPY_HW_UART##n##_TX; \
 	pins[UART_PIN_RXD] = &MICROPY_HW_UART##n##_RX; \
 	break;
@@ -228,7 +226,6 @@ case PYB_UART_##n: \
 STATIC bool uart_init2(pyb_uart_obj_t *uart_obj) {
     LPUART_Type *UARTx;
     IRQn_Type irqn;
-	uint8_t muxAlt;
 	clock_ip_name_t clk_ip_name;
 	
     const pin_obj_t *pins[2]; // pins[0]: TX ; pins[1]: RX
@@ -276,9 +273,9 @@ STATIC bool uart_init2(pyb_uart_obj_t *uart_obj) {
             // UART does not exist or is not configured for this board
             return false;
     }
-	mp_hal_pin_config_alt(pins[UART_PIN_TXD], GPIO_MODE_OUTPUT_PP, muxAlt);
-	mp_hal_pin_config_alt(pins[UART_PIN_RXD], GPIO_MODE_INPUT_PUP_WEAK, muxAlt);
-    uart_obj->irqn = irqn , uart_obj->muxAlt = muxAlt , uart_obj->pDev = UARTx;
+	mp_hal_pin_config_alt(pins[UART_PIN_TXD], GPIO_MODE_OUTPUT_PP, AF_FN_LPUART);
+	mp_hal_pin_config_alt(pins[UART_PIN_RXD], GPIO_MODE_INPUT_PUP_WEAK, AF_FN_LPUART);
+    uart_obj->irqn = irqn , uart_obj->pDev = UARTx;
 	uart_obj->is_enabled = 1 , uart_obj->clk_ip_name = clk_ip_name , uart_obj->is_enabled = true;
     return true;
 }
@@ -423,7 +420,7 @@ STATIC size_t uart_tx_data(pyb_uart_obj_t *self, const void *src_in, size_t num_
     size_t num_tx = 0;
 
     while (num_tx < num_chars) {
-		while (!UART_TXFIFO_IS_NOT_FULL(self->pDev)) {}
+		while (!(self->pDev->STAT & (1<<23))) {}
         uint32_t data;
         if (self->char_width == CHAR_WIDTH_9BIT) {
             data = *((uint16_t*)src) & 0x1ff;

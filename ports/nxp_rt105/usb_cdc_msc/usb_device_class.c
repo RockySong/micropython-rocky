@@ -1,9 +1,12 @@
 /*
+ * The Clear BSD License
  * Copyright (c) 2015 - 2016, Freescale Semiconductor, Inc.
  * Copyright 2016 NXP
+ * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * are permitted (subject to the limitations in the disclaimer below) provided
+ * that the following conditions are met:
  *
  * o Redistributions of source code must retain the above copyright notice, this list
  *   of conditions and the following disclaimer.
@@ -16,6 +19,7 @@
  *   contributors may be used to endorse or promote products derived from this
  *   software without specific prior written permission.
  *
+ * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -134,7 +138,10 @@ static const usb_device_class_map_t s_UsbDeviceClassInterfaceMap[] = {
      (usb_device_class_type_t)0},
 };
 
-USB_GLOBAL static usb_device_common_class_struct_t s_UsbDeviceCommonClassStruct[USB_DEVICE_CONFIG_NUM];
+USB_GLOBAL USB_RAM_ADDRESS_ALIGNMENT(USB_DATA_ALIGN_SIZE) static usb_device_common_class_struct_t
+    s_UsbDeviceCommonClassStruct[USB_DEVICE_CONFIG_NUM];
+USB_GLOBAL USB_RAM_ADDRESS_ALIGNMENT(USB_DATA_ALIGN_SIZE) static uint8_t
+    s_UsbDeviceSetupBuffer[USB_DEVICE_CONFIG_NUM][USB_DATA_ALIGN_SIZE_MULTIPLE(USB_SETUP_PACKET_SIZE)];
 
 /*******************************************************************************
  * Code
@@ -175,6 +182,7 @@ static usb_status_t USB_DeviceClassAllocateHandle(uint8_t controllerId, usb_devi
         if (NULL == s_UsbDeviceCommonClassStruct[count].handle)
         {
             s_UsbDeviceCommonClassStruct[count].controllerId = controllerId;
+            s_UsbDeviceCommonClassStruct[count].setupBuffer = s_UsbDeviceSetupBuffer[count];
             *handle = &s_UsbDeviceCommonClassStruct[count];
             USB_OSA_EXIT_CRITICAL();
             return kStatus_USB_Success;
@@ -428,7 +436,7 @@ usb_status_t USB_DeviceClassCallback(usb_device_handle handle, uint32_t event, v
  *                           make simple device align with composite device. For composite device, there are many
  *                           kinds of class handle, but there is only one device handle. So the handle points to
  *                           a device instead of a class. And the class handle can be got from the
- *                           #usb_device_class_config_struct_t::classHandle after the the function successfully.
+ *                           #usb_device_class_config_struct_t::classHandle after the function successfully.
  *
  * @return A USB error code or kStatus_USB_Success.
  */

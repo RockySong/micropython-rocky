@@ -1,9 +1,12 @@
 /*
+ * The Clear BSD License
  * Copyright (c) 2015 - 2016, Freescale Semiconductor, Inc.
  * Copyright 2016 NXP
+ * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * are permitted (subject to the limitations in the disclaimer below) provided
+ * that the following conditions are met:
  *
  * o Redistributions of source code must retain the above copyright notice, this list
  *   of conditions and the following disclaimer.
@@ -16,6 +19,7 @@
  *   contributors may be used to endorse or promote products derived from this
  *   software without specific prior written permission.
  *
+ * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -442,7 +446,7 @@ static usb_status_t USB_DeviceCh9GetDescriptor(usb_device_common_class_struct_t 
                                         &commonDescriptor.hidPhysicalDescriptor);
     }
 #endif
-#if (defined(USB_DEVICE_CONFIG_USB20_TEST_MODE) && (USB_DEVICE_CONFIG_USB20_TEST_MODE > 0U))
+#if (defined(USB_DEVICE_CONFIG_CV_TEST) && (USB_DEVICE_CONFIG_CV_TEST > 0U))
     else if (USB_DESCRIPTOR_TYPE_DEVICE_QUALITIER == descriptorType)
     {
         /* Get the device descriptor */
@@ -578,8 +582,10 @@ static usb_status_t USB_DeviceCh9GetInterface(usb_device_common_class_struct_t *
     classHandle->standardTranscationBuffer = setup->wIndex & 0xFFU;
     /* The Bit[15~8] is used to save the interface index, and the alternate setting will be saved in Bit[7~0] by
      * application. */
-    return USB_DeviceClassCallback(classHandle->handle, kUSB_DeviceEventGetInterface,
+    error = USB_DeviceClassCallback(classHandle->handle, kUSB_DeviceEventGetInterface,
                                    &classHandle->standardTranscationBuffer);
+    classHandle->standardTranscationBuffer = USB_SHORT_TO_LITTLE_ENDIAN(classHandle->standardTranscationBuffer);
+    return error;
 }
 
 /*!
@@ -649,7 +655,7 @@ static usb_status_t USB_DeviceCh9SynchFrame(usb_device_common_class_struct_t *cl
         return error;
     }
 
-    classHandle->standardTranscationBuffer = setup->wIndex;
+    classHandle->standardTranscationBuffer = USB_SHORT_FROM_LITTLE_ENDIAN(setup->wIndex);
     /* Get the sync frame value */
     error =
         USB_DeviceGetStatus(classHandle->handle, kUSB_DeviceStatusSynchFrame, &classHandle->standardTranscationBuffer);
@@ -935,18 +941,18 @@ usb_status_t USB_DeviceControlCallback(usb_device_handle handle,
 usb_status_t USB_DeviceControlPipeInit(usb_device_handle handle, void *param)
 {
     usb_device_endpoint_init_struct_t epInitStruct;
-    usb_device_endpoint_callback_struct_t endpointCallback;
+    usb_device_endpoint_callback_struct_t epCallback;
     usb_status_t error;
 
-    endpointCallback.callbackFn = USB_DeviceControlCallback;
-    endpointCallback.callbackParam = param;
+    epCallback.callbackFn = USB_DeviceControlCallback;
+    epCallback.callbackParam = param;
 
     epInitStruct.zlt = 1U;
     epInitStruct.transferType = USB_ENDPOINT_CONTROL;
     epInitStruct.endpointAddress = USB_CONTROL_ENDPOINT | (USB_IN << USB_DESCRIPTOR_ENDPOINT_ADDRESS_DIRECTION_SHIFT);
     epInitStruct.maxPacketSize = USB_CONTROL_MAX_PACKET_SIZE;
     /* Initialize the control IN pipe */
-    error = USB_DeviceInitEndpoint(handle, &epInitStruct, &endpointCallback);
+    error = USB_DeviceInitEndpoint(handle, &epInitStruct, &epCallback);
 
     if (kStatus_USB_Success != error)
     {
@@ -954,7 +960,7 @@ usb_status_t USB_DeviceControlPipeInit(usb_device_handle handle, void *param)
     }
     epInitStruct.endpointAddress = USB_CONTROL_ENDPOINT | (USB_OUT << USB_DESCRIPTOR_ENDPOINT_ADDRESS_DIRECTION_SHIFT);
     /* Initialize the control OUT pipe */
-    error = USB_DeviceInitEndpoint(handle, &epInitStruct, &endpointCallback);
+    error = USB_DeviceInitEndpoint(handle, &epInitStruct, &epCallback);
 
     if (kStatus_USB_Success != error)
     {

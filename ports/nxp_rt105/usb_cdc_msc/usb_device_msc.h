@@ -1,9 +1,12 @@
 /*
+ * The Clear BSD License
  * Copyright (c) 2015 - 2016, Freescale Semiconductor, Inc.
- * Copyright 2016 NXP
+ * Copyright 2016 - 2017 NXP
+ * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * are permitted (subject to the limitations in the disclaimer below) provided
+ * that the following conditions are met:
  *
  * o Redistributions of source code must retain the above copyright notice, this list
  *   of conditions and the following disclaimer.
@@ -16,6 +19,7 @@
  *   contributors may be used to endorse or promote products derived from this
  *   software without specific prior written permission.
  *
+ * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -161,8 +165,10 @@ typedef enum
 {
     kUSB_DeviceMscEventReadResponse = 0x01U, /*!< host has already read the whole data from device */
     kUSB_DeviceMscEventWriteResponse,        /*!< devcie has already received the data from host. */
-    kUSB_DeviceMscEventWriteRequest,         /*!< Host want to write data to device through write command, devcie need prepare one buffer to store the data from host*/
-    kUSB_DeviceMscEventReadRequest,          /*!< Host want to read data from device through read command, device need prepare one buffer containing data pending for transfer*/
+    kUSB_DeviceMscEventWriteRequest, /*!< Host want to write data to device through write command, devcie need prepare
+                                        one buffer to store the data from host*/
+    kUSB_DeviceMscEventReadRequest,  /*!< Host want to read data from device through read command, device need prepare
+                                        one buffer containing data pending for transfer*/
     kUSB_DeviceMscEventGetLbaInformation,    /*!< Get device information */
     kUSB_DeviceMscEventFormatComplete,       /*!< Format complete */
     kUSB_DeviceMscEventTestUnitReady,        /*!<  Test Unit Ready command*/
@@ -179,16 +185,13 @@ typedef enum
 /*! @brief The MSC device UFI command status structure */
 typedef struct _usb_device_msc_ufi_struct
 {
-    usb_device_request_sense_data_struct_t requestSense;             /*!< Request Sense Standard Data*/
+    usb_device_request_sense_data_struct_t *requestSense;            /*!< Request Sense Standard Data*/
     usb_device_msc_thirteen_case_struct_t thirteenCase;              /*!< Thirteen possible cases*/
-    usb_device_read_capacity_struct_t readCapacity;                  /*!< READ CAPACITY Data*/
-    usb_device_read_capacity16_data_struct_t readCapacity16;         /*!< READ CAPACITY Data*/
-    usb_device_inquiry_data_fromat_struct_t InquiryInfo;             /*!< Standard INQUIRY Data*/
+    usb_device_read_capacity_struct_t *readCapacity;                 /*!< READ CAPACITY Data*/
+    usb_device_read_capacity16_data_struct_t *readCapacity16;        /*!< READ CAPACITY Data*/
     usb_device_mode_parameters_header_struct_t ModeParametersHeader; /*!< Mode Parameter Header*/
     uint8_t formattedDisk;                                           /*!< *Formatted or unformatted media*/
-    uint8_t formatCapacityData[sizeof(usb_device_capacity_list_header_struct_t) +
-                               sizeof(usb_device_current_max_capacity_descriptor_struct_t) +
-                               sizeof(usb_device_formattable_capacity_descriptor_struct_t) * 3];
+    uint8_t *formatCapacityData;
     /*!< Capacity List*/
 } usb_device_msc_ufi_struct_t;
 /*! @brief The MSC device structure */
@@ -204,9 +207,6 @@ typedef struct _usb_device_msc_struct
     uint32_t implementingDiskDrive;                        /*!< Disk drive*/
     uint32_t bulkInBufferSize;                             /*!< Bulk in buffer size*/
     uint32_t bulkOutBufferSize;                            /*!< Bulk out buffer size*/
-#if ((defined(USB_DEVICE_CONFIG_LPCIP3511FS)) && (USB_DEVICE_CONFIG_LPCIP3511FS > 0U))
-    uint8_t *ufiAlignBuffer;
-#endif
 
     usb_device_msc_cbw_t *mscCbw; /*!< CBW structure */
     usb_device_msc_csw_t *mscCsw; /*!< CSW structure */
@@ -237,6 +237,7 @@ typedef struct _usb_device_msc_struct
     uint8_t alternate;         /*!< Current alternate setting of the interface */
     uint8_t configuration;     /*!< Current configuration */
     uint8_t interfaceNumber;   /*!< The interface number of the class */
+    uint8_t inEndpointCswCancelFlag; /*!< the state when calcel function happens, and need send the csw after cancel*/
 } usb_device_msc_struct_t;
 
 /*!

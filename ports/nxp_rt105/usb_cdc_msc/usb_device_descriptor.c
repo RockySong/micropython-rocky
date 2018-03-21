@@ -342,15 +342,15 @@ uint8_t s_UsbDevCfgDescMscPart[] =
     /*Bulk IN Endpoint descriptor, ofs = 9 */
     USB_DESCRIPTOR_LENGTH_ENDPOINT, USB_DESCRIPTOR_TYPE_ENDPOINT, 
     0 | (USB_IN << 7U), // ofs = 11, fixed during desc linkage
-    USB_ENDPOINT_BULK, USB_SHORT_GET_LOW(FS_MSC_DISK_BULK_IN_PACKET_SIZE),
-    USB_SHORT_GET_HIGH(FS_MSC_DISK_BULK_IN_PACKET_SIZE), 
+    USB_ENDPOINT_BULK, USB_SHORT_GET_LOW(HS_MSC_DISK_BULK_IN_PACKET_SIZE),
+    USB_SHORT_GET_HIGH(HS_MSC_DISK_BULK_IN_PACKET_SIZE), 
     0x00, /* The polling interval value is every 0 Frames */
 
     /*Bulk OUT Endpoint descriptor ofs = 16 */
     USB_DESCRIPTOR_LENGTH_ENDPOINT, USB_DESCRIPTOR_TYPE_ENDPOINT, 
     0 | (USB_OUT << 7U),  // ofs = 18 fixed during desc linkage
-    USB_ENDPOINT_BULK, USB_SHORT_GET_LOW(FS_MSC_DISK_BULK_OUT_PACKET_SIZE),
-    USB_SHORT_GET_HIGH(FS_MSC_DISK_BULK_OUT_PACKET_SIZE), 
+    USB_ENDPOINT_BULK, USB_SHORT_GET_LOW(HS_MSC_DISK_BULK_OUT_PACKET_SIZE),
+    USB_SHORT_GET_HIGH(HS_MSC_DISK_BULK_OUT_PACKET_SIZE), 
     0x00 /* The polling interval value is every 0 Frames */
 };
 
@@ -479,7 +479,7 @@ const uint8_t cs_hidKeyboardReportDesc[] = {
 	HID_Usage(HID_USAGE_GENERIC_KEYBOARD),
 	HID_Collection(HID_Application),
 		HID_UsagePage(HID_USAGE_PAGE_KEYBOARD),
-		// 特殊控制键, LfCtl -> RtGUI
+		// 特殊控制�? LfCtl -> RtGUI
 		HID_UsageMin(HID_USAGE_KEYBOARD_LCTRL),
 		HID_UsageMax(HID_USAGE_KEYBOARD_RGUI),
 		HID_LogicalMin(0),
@@ -502,7 +502,7 @@ const uint8_t cs_hidKeyboardReportDesc[] = {
 		HID_ReportCount(1),
 		HID_ReportSize(3),
 		HID_Output(HID_Constant | HID_Variable | HID_Absolute),
-		// 已被按下的键的扫描码数组，支持6个键同时按下
+		// 已被按下的键的扫描码数组，支�?个键同时按下
 		HID_ReportCount(6),
 		HID_ReportSize(8),
 		HID_LogicalMin(0),
@@ -719,9 +719,9 @@ uint8_t g_UsbDeviceString2[] = {
 uint8_t g_UsbDeviceString3[] = {
 	0,
     USB_DESCRIPTOR_TYPE_STRING,
-    'f',0,'e',0,'e',0,'d',0, 
-    'f',0,'a',0,'c',0,'e',0,' ',0,
-    '8',0,'6',0,'8',0,'8',0,'8',0,
+    'F',0,'e',0,'e',0,'d',0, 
+    'F',0,'a',0,'c',0,'e',0,' ',0,
+    '8',0,'6',0,'8',0,'0',0,'8',0,
 
 };
 
@@ -1206,11 +1206,85 @@ usb_status_t USB_DeviceGetStringDescriptor(usb_device_handle handle,
  *
  * @return A USB error code or kStatus_USB_Success.
  */
+//usb_status_t USB_DeviceSetSpeed(usb_device_handle handle, uint8_t speed)
+//{
+//    usb_descriptor_union_t *descriptorHead;
+//    usb_descriptor_union_t *descriptorTail;
+
+//    descriptorHead = (usb_descriptor_union_t *)&g_UsbDeviceConfigurationDescriptor[0];
+//    descriptorTail =
+//        (usb_descriptor_union_t *)(&g_UsbDeviceConfigurationDescriptor[USB_DESCRIPTOR_LENGTH_CONFIGURATION_ALL - 1]);
+
+//    while (descriptorHead < descriptorTail)
+//    {
+//        if (descriptorHead->endpoint.bDescriptorType == USB_DESCRIPTOR_TYPE_ENDPOINT)
+//        {
+//            if (USB_SPEED_HIGH == speed)
+//            {
+//                if (descriptorHead->endpoint.bEndpointAddress & USB_DESCRIPTOR_ENDPOINT_ADDRESS_DIRECTION_MASK)
+//                {
+//                    descriptorHead->endpoint.wMaxPacketSize[0] = USB_SHORT_GET_LOW(HS_MSC_BULK_IN_PACKET_SIZE);
+//                    descriptorHead->endpoint.wMaxPacketSize[1] = USB_SHORT_GET_HIGH(HS_MSC_BULK_IN_PACKET_SIZE);
+//                }
+//                else
+//                {
+//                    descriptorHead->endpoint.wMaxPacketSize[0] = USB_SHORT_GET_LOW(HS_MSC_BULK_OUT_PACKET_SIZE);
+//                    descriptorHead->endpoint.wMaxPacketSize[1] = USB_SHORT_GET_HIGH(HS_MSC_BULK_OUT_PACKET_SIZE);
+//                }
+//            }
+//            else
+//            {
+//                if (descriptorHead->endpoint.bEndpointAddress & USB_DESCRIPTOR_ENDPOINT_ADDRESS_DIRECTION_MASK)
+//                {
+//                    descriptorHead->endpoint.wMaxPacketSize[0] = USB_SHORT_GET_LOW(FS_MSC_BULK_IN_PACKET_SIZE);
+//                    descriptorHead->endpoint.wMaxPacketSize[1] = USB_SHORT_GET_HIGH(FS_MSC_BULK_IN_PACKET_SIZE);
+//                }
+//                else
+//                {
+//                    descriptorHead->endpoint.wMaxPacketSize[0] = USB_SHORT_GET_LOW(FS_MSC_BULK_OUT_PACKET_SIZE);
+//                    descriptorHead->endpoint.wMaxPacketSize[1] = USB_SHORT_GET_HIGH(FS_MSC_BULK_OUT_PACKET_SIZE);
+//                }
+//            }
+//        }
+//        descriptorHead = (usb_descriptor_union_t *)((uint8_t *)descriptorHead + descriptorHead->common.bLength);
+//    }
+
+//    for (int i = 0; i < USB_MSC_ENDPOINT_COUNT; i++)
+//    {
+//        if (USB_SPEED_HIGH == speed)
+//        {
+//            if ((USB_IN << USB_DESCRIPTOR_ENDPOINT_ADDRESS_DIRECTION_SHIFT) ==
+//                (g_UsbDeviceMscEndpoints[i].endpointAddress & USB_DESCRIPTOR_ENDPOINT_ADDRESS_DIRECTION_MASK))
+//            {
+//                g_UsbDeviceMscEndpoints[i].maxPacketSize = HS_MSC_BULK_IN_PACKET_SIZE;
+//            }
+//            else
+//            {
+//                g_UsbDeviceMscEndpoints[i].maxPacketSize = HS_MSC_BULK_OUT_PACKET_SIZE;
+//            }
+//        }
+//        else
+//        {
+//            if ((USB_IN << USB_DESCRIPTOR_ENDPOINT_ADDRESS_DIRECTION_SHIFT) ==
+//                (g_UsbDeviceMscEndpoints[i].endpointAddress & USB_DESCRIPTOR_ENDPOINT_ADDRESS_DIRECTION_MASK))
+//            {
+//                g_UsbDeviceMscEndpoints[i].maxPacketSize = FS_MSC_BULK_IN_PACKET_SIZE;
+//            }
+//            else
+//            {
+//                g_UsbDeviceMscEndpoints[i].maxPacketSize = FS_MSC_BULK_OUT_PACKET_SIZE;
+//            }
+//        }
+//    }
+
+//    return kStatus_USB_Success;
+//}
+
 usb_status_t USB_DeviceSetSpeed(usb_device_handle handle, uint8_t speed)
 {
     usb_descriptor_union_t *ptr1;
     usb_descriptor_union_t *ptr2;
-
+	return 0;
     ptr1 = (usb_descriptor_union_t *)(&g_UsbDevCfgDesc[0]);
     ptr2 = (usb_descriptor_union_t *)(&g_UsbDevCfgDesc[g_cfgFix.cfgDescSize - 1]);
 
