@@ -47,7 +47,7 @@
 /*buffer size for sd card example. the larger the buffer size ,the faster the data transfer speed is ,*/
 /*the block size should be multiple of 512, the least value is 512*/
 #define USB_DEVICE_MSC_WRITE_BUFF_SIZE 	(4 * 512U)
-#define USB_DEVICE_MSC_READ_BUFF_SIZE 	(2 * 512U)
+#define USB_DEVICE_MSC_READ_BUFF_SIZE 	(4 * 512U)
 
 
 #define LOGICAL_UNIT_SUPPORTED (1)

@@ -138,7 +138,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGTARM</Key>
-          <Name>(1010=1316,1110,1766,1667,1)(6017=-1,-1,-1,-1,0)(1008=89,129,465,365,0)(6016=-1,-1,-1,-1,0)(1012=884,177,1361,492,0)</Name>
+          <Name>(1010=1316,1110,1766,1667,0)(6017=-1,-1,-1,-1,0)(1008=89,129,465,365,0)(6016=-1,-1,-1,-1,0)(1012=884,177,1361,492,0)</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -148,7 +148,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGUARM</Key>
-          <Name>?O.?Bw?O.</Name>
+          <Name>兰??Bw兰?</Name>
         </SetRegEntry>
       </TargetDriverDllRegistry>
       <Breakpoint/>

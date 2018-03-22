@@ -1284,7 +1284,6 @@ usb_status_t USB_DeviceSetSpeed(usb_device_handle handle, uint8_t speed)
 {
     usb_descriptor_union_t *ptr1;
     usb_descriptor_union_t *ptr2;
-	return 0;
     ptr1 = (usb_descriptor_union_t *)(&g_UsbDevCfgDesc[0]);
     ptr2 = (usb_descriptor_union_t *)(&g_UsbDevCfgDesc[g_cfgFix.cfgDescSize - 1]);
 
@@ -1294,14 +1293,15 @@ usb_status_t USB_DeviceSetSpeed(usb_device_handle handle, uint8_t speed)
         {
             if (USB_SPEED_HIGH == speed)
             {
-                if (USB_CDC_VCOM_CIC_INTERRUPT_IN_ENDPOINT ==
+				 
+                if (g_cfgFix.roCdcCicEpNdx ==
                     (ptr1->endpoint.bEndpointAddress & USB_ENDPOINT_NUMBER_MASK))
                 {
                     ptr1->endpoint.bInterval = HS_CDC_VCOM_INTERRUPT_IN_INTERVAL;
                     USB_SHORT_TO_LITTLE_ENDIAN_ADDRESS(HS_CDC_VCOM_INTERRUPT_IN_PACKET_SIZE,
                                                        ptr1->endpoint.wMaxPacketSize);
                 }
-                else if (USB_CDC_VCOM_DIC_BULK_IN_ENDPOINT ==
+                else if (g_cfgFix.roCdcDicEpInNdx ==
                          (ptr1->endpoint.bEndpointAddress & USB_ENDPOINT_NUMBER_MASK))
                 {
                     USB_SHORT_TO_LITTLE_ENDIAN_ADDRESS(HS_CDC_VCOM_BULK_IN_PACKET_SIZE, ptr1->endpoint.wMaxPacketSize);
@@ -1311,48 +1311,50 @@ usb_status_t USB_DeviceSetSpeed(usb_device_handle handle, uint8_t speed)
                 {
                     USB_SHORT_TO_LITTLE_ENDIAN_ADDRESS(HS_CDC_VCOM_BULK_OUT_PACKET_SIZE, ptr1->endpoint.wMaxPacketSize);
                 }
-                else if (USB_MSC_DISK_BULK_IN_ENDPOINT == (ptr1->endpoint.bEndpointAddress & USB_ENDPOINT_NUMBER_MASK))
+                else if (g_cfgFix.roMscEpInNdx == (ptr1->endpoint.bEndpointAddress & USB_ENDPOINT_NUMBER_MASK))
                 {
                     USB_SHORT_TO_LITTLE_ENDIAN_ADDRESS(HS_MSC_DISK_BULK_IN_PACKET_SIZE, ptr1->endpoint.wMaxPacketSize);
                 }
-                else if (USB_MSC_DISK_BULK_OUT_ENDPOINT == (ptr1->endpoint.bEndpointAddress & USB_ENDPOINT_NUMBER_MASK))
+                else if (g_cfgFix.roMscEpOutNdx == (ptr1->endpoint.bEndpointAddress & USB_ENDPOINT_NUMBER_MASK))
                 {
                     USB_SHORT_TO_LITTLE_ENDIAN_ADDRESS(HS_MSC_DISK_BULK_OUT_PACKET_SIZE, ptr1->endpoint.wMaxPacketSize);
                 }
                 else
                 {
                 }
+				// todo: if add more classes, need to adjust as above
             }
             else
             {
-                if (USB_CDC_VCOM_CIC_INTERRUPT_IN_ENDPOINT ==
+                if (g_cfgFix.roCdcCicEpNdx ==
                     (ptr1->endpoint.bEndpointAddress & USB_ENDPOINT_NUMBER_MASK))
                 {
                     ptr1->endpoint.bInterval = FS_CDC_VCOM_INTERRUPT_IN_INTERVAL;
                     USB_SHORT_TO_LITTLE_ENDIAN_ADDRESS(FS_CDC_VCOM_INTERRUPT_IN_PACKET_SIZE,
                                                        ptr1->endpoint.wMaxPacketSize);
                 }
-                else if (USB_CDC_VCOM_DIC_BULK_IN_ENDPOINT ==
+                else if (g_cfgFix.roCdcDicEpInNdx ==
                          (ptr1->endpoint.bEndpointAddress & USB_ENDPOINT_NUMBER_MASK))
                 {
                     USB_SHORT_TO_LITTLE_ENDIAN_ADDRESS(FS_CDC_VCOM_BULK_IN_PACKET_SIZE, ptr1->endpoint.wMaxPacketSize);
                 }
-                else if (USB_CDC_VCOM_DIC_BULK_OUT_ENDPOINT ==
+                else if (g_cfgFix.roCdcDicEpOutNdx ==
                          (ptr1->endpoint.bEndpointAddress & USB_ENDPOINT_NUMBER_MASK))
                 {
                     USB_SHORT_TO_LITTLE_ENDIAN_ADDRESS(FS_CDC_VCOM_BULK_OUT_PACKET_SIZE, ptr1->endpoint.wMaxPacketSize);
                 }
-                else if (USB_MSC_DISK_BULK_IN_ENDPOINT == (ptr1->endpoint.bEndpointAddress & USB_ENDPOINT_NUMBER_MASK))
+                else if (g_cfgFix.roMscEpInNdx == (ptr1->endpoint.bEndpointAddress & USB_ENDPOINT_NUMBER_MASK))
                 {
                     USB_SHORT_TO_LITTLE_ENDIAN_ADDRESS(FS_MSC_DISK_BULK_IN_PACKET_SIZE, ptr1->endpoint.wMaxPacketSize);
                 }
-                else if (USB_MSC_DISK_BULK_OUT_ENDPOINT == (ptr1->endpoint.bEndpointAddress & USB_ENDPOINT_NUMBER_MASK))
+                else if (g_cfgFix.roMscEpOutNdx == (ptr1->endpoint.bEndpointAddress & USB_ENDPOINT_NUMBER_MASK))
                 {
                     USB_SHORT_TO_LITTLE_ENDIAN_ADDRESS(FS_MSC_DISK_BULK_OUT_PACKET_SIZE, ptr1->endpoint.wMaxPacketSize);
                 }
                 else
                 {
                 }
+				// todo: if add more classes, need to adjust as above
             }
         }
         ptr1 = (usb_descriptor_union_t *)((uint8_t *)ptr1 + ptr1->common.bLength);
@@ -1393,7 +1395,7 @@ usb_status_t USB_DeviceSetSpeed(usb_device_handle handle, uint8_t speed)
             g_mscDiskEndpoints[i].maxPacketSize = FS_MSC_DISK_BULK_IN_PACKET_SIZE;
         }
     }
-
+	// todo: if add more classes, need to adjust as above
     return kStatus_USB_Success;
 }
 
