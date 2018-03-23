@@ -1,12 +1,12 @@
 [![Build Status](https://travis-ci.org/micropython/micropython.png?branch=master)](https://travis-ci.org/micropython/micropython) [![Coverage Status](https://coveralls.io/repos/micropython/micropython/badge.png?branch=master)](https://coveralls.io/r/micropython/micropython?branch=master)
 
-The MicroPython project
+The MicroPython for i.mx rt105x and LPC546xx project
 =======================
 <p align="center">
   <img src="https://raw.githubusercontent.com/micropython/micropython/master/logo/upython-with-micro.jpg" alt="MicroPython Logo"/>
 </p>
 
-This is the MicroPython project, which aims to put an implementation
+This is project is cloned from MicroPython project, which aims to put an implementation
 of Python 3.x on microcontrollers and small embedded systems.
 You can find the official website at [micropython.org](http://www.micropython.org).
 
@@ -35,10 +35,10 @@ Major components in this repository:
 - mpy-cross/ -- the MicroPython cross-compiler which is used to turn scripts
   into precompiled bytecode.
 - ports/unix/ -- a version of MicroPython that runs on Unix.
-- ports/stm32/ -- a version of MicroPython that runs on the PyBoard and similar
-  STM32 boards (using ST's Cube HAL drivers).
-- ports/minimal/ -- a minimal MicroPython port. Start with this if you want
-  to port MicroPython to another microcontroller.
+- ports/nxp_rt105/ -- a version of MicroPython that runs on the imxrtevk105x and similar
+  i.mx rt105x boards (using NXP's MCUXpresso SDK drivers).
+- ports/nxp_lpc546/ -- a version of MicroPython that runs on the LPCXPresso54608 board and similar
+  lpc54608 boards (using NXP's MCUXpresso SDK drivers).
 - tests/ -- test framework and test scripts.
 - docs/ -- user documentation in Sphinx reStructuredText format. Rendered
   HTML documentation is available at http://docs.micropython.org (be sure
@@ -136,10 +136,12 @@ For some ports, building required dependences is transparent, and happens
 automatically. They still need to be fetched with the git submodule command
 above.
 
-The STM32 version
+The i.mx RT105x and LPC54608 version
 -----------------
 
-The "stm32" port requires an ARM compiler, arm-none-eabi-gcc, and associated
+The "rt105" port supports GCC toolchain (as mpy official) and KEIL.
+To build under keil, just open KEIL project in "prj_keil_<MCU series>" folder.
+To build under GCC, requires an ARM compiler, arm-none-eabi-gcc, and associated
 bin-utils.  For those using Arch Linux, you need arm-none-eabi-binutils,
 arm-none-eabi-gcc and arm-none-eabi-newlib packages.  Otherwise, try here:
 https://launchpad.net/gcc-arm-embedded
@@ -147,21 +149,10 @@ https://launchpad.net/gcc-arm-embedded
 To build:
 
     $ git submodule update --init
-    $ cd ports/stm32
+    $ cd ports/nxp_rt105
     $ make
 
-You then need to get your board into DFU mode.  On the pyboard, connect the
-3V3 pin to the P1/DFU pin with a wire (on PYBv1.0 they are next to each other
-on the bottom left of the board, second row from the bottom).
 
-Then to flash the code via USB DFU to your device:
-
-    $ make deploy
-
-This will use the included `tools/pydfu.py` script.  If flashing the firmware
-does not work it may be because you don't have the correct permissions, and
-need to use `sudo make deploy`.
-See the README.md file in the ports/stm32/ directory for further details.
 
 Contributing
 ------------
