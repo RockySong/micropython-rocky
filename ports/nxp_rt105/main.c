@@ -418,15 +418,10 @@ STATIC uint update_reset_mode(uint reset_mode) {
 
 HAL_StatusTypeDef HAL_Init(void)
 {
-	UnalignTest();
     BOARD_ConfigMPU();
-	UnalignTest();
     BOARD_InitPins();
-	UnalignTest();
     BOARD_BootClockRUN();
-	UnalignTest();
     BOARD_InitDebugConsole();
-	UnalignTest();
 	/* Set Interrupt Group Priority */
 	NVIC_SetPriorityGrouping(3);
 	
@@ -460,7 +455,6 @@ int main(void) {
          - Set NVIC Group Priority to 4
          - Global MSP (MCU Support Package) initialization
        */
-	UnalignTest();
     HAL_Init();
 	
 
@@ -486,7 +480,6 @@ int main(void) {
     int first_soft_reset = true;
 
 soft_reset:
-	UnalignTest();
     // check if user switch held to select the reset mode
 #if defined(MICROPY_HW_LED2)
     led_state(1, 0);
@@ -541,7 +534,6 @@ soft_reset:
 #endif
     // Micro Python init
     mp_init();
-	UnalignTest();
     mp_obj_list_init(mp_sys_path, 0);
     mp_obj_list_append(mp_sys_path, MP_OBJ_NEW_QSTR(MP_QSTR_)); // current dir (or base dir of the script)
     mp_obj_list_init(mp_sys_argv, 0);
