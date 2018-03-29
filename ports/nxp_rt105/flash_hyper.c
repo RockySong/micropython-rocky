@@ -353,7 +353,7 @@ status_t flexspi_nor_hyperflash_cfi(FLEXSPI_Type *base)
         return status;
     }
 
-    PRINTF("Entering the ASO mode\r\n");
+    // PRINTF("Entering the ASO mode\r\n");
     // ID-CFI Read
     // Read Query Unique ASCII String
     status = flexspi_nor_hyperbus_read(base, 0x10, &buffer[0], sizeof(buffer));
@@ -366,7 +366,7 @@ status_t flexspi_nor_hyperflash_cfi(FLEXSPI_Type *base)
     if ((buffer[0] != 0x52005100) || (buffer[1] != 0x5900))
     {
         status = kStatus_Fail;
-        PRINTF("Can not found the HyperFlash!\r\n");
+        // PRINTF("Can not found the HyperFlash!\r\n");
         return status;
     }
     // ASO Exit
@@ -374,11 +374,11 @@ status_t flexspi_nor_hyperflash_cfi(FLEXSPI_Type *base)
     status = flexspi_nor_hyperbus_write(base, 0x0, data, 2);
     if (status != kStatus_Success)
     {
-        PRINTF("Can not exit the ASO\r\n");
+        // PRINTF("Can not exit the ASO\r\n");
         return status;
     }
 
-    PRINTF("Found the HyperFlash by CFI\r\n");
+    // PRINTF("Found the HyperFlash by CFI\r\n");
 
     return status;
 }
@@ -388,7 +388,9 @@ int flexspi_nor_init(void)
     uint32_t i = 0;
     flexspi_config_t config;
     status_t status;
-
+	#ifdef XIP_EXTERNAL_FLASH
+	return 0;
+	#endif
     // Set flexspi root clock to 166MHZ.
 	// NOTE! we assuem PLL3 (USBPLL1) has been locked to 480MHz already
     CLOCK_InitUsb1Pfd(kCLOCK_Pfd0, 26);   /* Set PLL3 PFD0 clock 332MHZ. */

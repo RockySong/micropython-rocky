@@ -341,12 +341,27 @@ Reset_Handler   PROC
                 IMPORT  __main
 
                 CPSID   I               ; Mask interrupts
+				; >>> do custom FlexRAM configuration
+				ldr		r0,	= 0x400AC038	; IOMUXC.GPR14
+				ldr		r1, = 7 | 10<<4		; config (max allowed) ITCM=64KB, DTCM=512KB
+				ldr		r2, [r0]
+				bfi		r2,	r1, #16, #8
+				str		r2,	[r0]
+				
+				ldr		r0, = 0x400AC044	; IOMUXC.GPR17
+				ldr		r1, = 0xFFAAAAAA	; 64kB ITCM, (512-64) KB DTCM, 0KB OCRAM
+				str		r1,	[r0]
+				
+				ldr		r0,	= 0x400AC040	; IOMUXC.GPR16
+				ldr		r2,	[r0]
+				orr		r2, #3	; enable ITCM, DTCM, apply IOMUXC's cfg instead of FUSE config
+				str		r2,	[r0]
+				; <<<
                 LDR     R0, =0xE000ED08
                 LDR     R1, =__Vectors
                 STR     R1, [R0]
                 LDR     R2, [R1]
                 MSR     MSP, R2
-				BL		UnalignTest
                 LDR     R0, =SystemInit
                 BLX     R0
 				
