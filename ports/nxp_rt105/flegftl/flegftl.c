@@ -181,6 +181,7 @@ int FLEG_PageRead(FlegDevice_t *pDev, uint32_t lpu, void *pvBuf) {
 	}
 	if (ppu >= pDev->ppuPerEU) {
 		memset(pvBuf, 0xFFFFFFFF, pDev->pageSize);
+		ret = 1;
 		goto Cleanup;
 	}
 	uint32_t byteOfs = peu * pDev->euSize + FLEG_EU_META_SIZE + ppu * pDev->pageSize;
@@ -591,12 +592,17 @@ NoOngoinLazyMove:
 int FLEG_DeviceScan(FlegDevice_t *pDev)
 {
 	uint32_t peuNdx = 0;
+	volatile uint32_t dbgIsFmt = 0;
 	FlegMeta_t meta;
 	pDev->lazyPEU = 0xFFFF, pDev->bkupPEU = 0xFFFF;
 	memset(&pDev->bmVrgn, 0, sizeof(pDev->bmVrgn));
 	memset(&pDev->bmGrbg, 0, sizeof(pDev->bmGrbg));
 	memset(pDev->leuMap, -1L, sizeof(pDev->leuMap));
-
+	if (dbgIsFmt) {
+		for (peuNdx = 0 ; peuNdx < pDev->euCnt; peuNdx++) {
+			pDev->ops.pfnErs(peuNdx);
+		}
+	}
 	for (peuNdx = 0 ; peuNdx < pDev->euCnt; peuNdx++) {
 		{
 			// scan meta items

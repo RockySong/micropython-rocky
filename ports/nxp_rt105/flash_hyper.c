@@ -259,7 +259,7 @@ status_t flexspi_nor_wait_bus_busy(FLEXSPI_Type *base)
     return status;
 }
 
-#define DIV_ERASE_PGM	3
+#define DIV_ERASE_PGM	4
 #define DIV_READ		0
 static void SetFlexSPIDiv(uint32_t div)
 {
@@ -496,13 +496,13 @@ int flexspi_nor_init(void)
 }
 
 int HyperErase(int euNdx) {
-	flexspi_nor_flash_erase_sector(FLEXSPI, euNdx * 256 * 1024);
+	flexspi_nor_flash_erase_sector(FLEXSPI, FLEG_FLASH_OFFSET + euNdx * 256 * 1024);
 	return 0;
 }
 
 
 int HyperRead(uint32_t byteOfs, void *pvBuf, uint32_t byteCnt) {
-	uint8_t *p = (uint8_t*)(FLEG_FLASH_OFFSET + byteOfs);
+	uint8_t *p = (uint8_t*)(0x60000000 + FLEG_FLASH_OFFSET + byteOfs);
 	memcpy(pvBuf, p, byteCnt);
 	return 0;
 }
@@ -515,7 +515,7 @@ int _HyperPagePartialProgram(uint32_t pageNdx, uint32_t pgOfs, uint32_t byteCnt,
 	_PartialPgmBuf_t buf;
 	HyperRead(pageNdx * 512 , buf.buf32, sizeof(buf));
 	memcpy(buf.buf + pgOfs, pvBuf, byteCnt);
-	flexspi_nor_flash_page_program(FLEXSPI, pageNdx * 512, buf.buf32);
+	flexspi_nor_flash_page_program(FLEXSPI, pageNdx * 512 + FLEG_FLASH_OFFSET, buf.buf32);
 	return 0;
 }
 
@@ -525,7 +525,7 @@ int HyperPageProgram(uint32_t pageNdx, uint32_t pgOfs, uint32_t byteCnt, const v
 	if (pgOfs != 0 || byteCnt != 512) {
 		_HyperPagePartialProgram(pageNdx, pgOfs, byteCnt, pvBuf);
 	} else {
-		flexspi_nor_flash_page_program(FLEXSPI, pageNdx * 512, pvBuf);
+		flexspi_nor_flash_page_program(FLEXSPI, pageNdx * 512 + FLEG_FLASH_OFFSET, pvBuf);
 	}
 	return 0;
 }

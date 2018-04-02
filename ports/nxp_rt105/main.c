@@ -90,8 +90,9 @@ void NORETURN __fatal_error(const char *msg) {
     led_state(4, 1);
     mp_hal_stdout_tx_strn("\nFATAL ERROR:\n", 14);
     mp_hal_stdout_tx_strn(msg, strlen(msg));
-    for (uint i = 0;;) {
-        led_toggle(((i++) & 3) + 1);
+    for (uint i = 0;i<1000;i++) {
+        // led_toggle(((i++) & 3) + 1);
+		led_toggle(0);
         for (volatile uint delay = 0; delay < 10000000; delay++) {
         }
         if (i >= 16) {
@@ -132,7 +133,7 @@ STATIC mp_obj_t pyb_main(mp_uint_t n_args, const mp_obj_t *pos_args, mp_map_t *k
 }
 MP_DEFINE_CONST_FUN_OBJ_KW(pyb_main_obj, 1, pyb_main);
 
-static const char fresh_boot_py[] =
+static const char fresh_boot_py[] __ALIGNED(4) =
 "# boot.py -- run on boot-up\r\n"
 "# can run arbitrary Python, but best to keep it minimal\r\n"
 "\r\n"
@@ -143,15 +144,16 @@ static const char fresh_boot_py[] =
 "#pyb.usb_mode('VCP+HID') # act as a serial device and a mouse\r\n"
 ;
 
-static const char fresh_main_py[] =
+
+static const char fresh_main_py[] __ALIGNED(4) =
 "# main.py -- put your code here!\r\n"
 ;
 
-static const char fresh_pybcdc_inf[] =
+static const char fresh_pybcdc_inf[] __ALIGNED(4) =
 #include "genhdr/pybcdc_inf.h"
 ;
 
-static const char fresh_readme_txt[] =
+static const char fresh_readme_txt[] __ALIGNED(4) =
 "This is a MicroPython board\r\n"
 "\r\n"
 "You can get started right away by writing your Python code in 'main.py'.\r\n"

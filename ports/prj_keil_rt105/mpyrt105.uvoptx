@@ -75,7 +75,7 @@
       <OPTFL>
         <tvExp>1</tvExp>
         <tvExpOptDlg>0</tvExpOptDlg>
-        <IsCurrentTarget>0</IsCurrentTarget>
+        <IsCurrentTarget>1</IsCurrentTarget>
       </OPTFL>
       <CpuCode>8</CpuCode>
       <DebugOpt>
@@ -118,6 +118,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGUARM</Key>
+          <Name>(?(P蹑w(?(</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -142,7 +143,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGTARM</Key>
-          <Name>(1010=1316,1110,1766,1667,0)(6017=-1,-1,-1,-1,0)(1008=89,129,465,365,0)(6016=152,175,410,828,0)(1012=884,177,1361,492,0)</Name>
+          <Name>(1010=1316,1110,1766,1667,0)(6017=-1,-1,-1,-1,0)(1008=89,129,465,365,0)(6016=799,262,1057,915,0)(1012=884,177,1361,492,0)</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -154,9 +155,9 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>169</LineNumber>
+          <LineNumber>241</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>-2147457518</Address>
+          <Address>-2147474116</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -165,7 +166,7 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>..\nxp_rt105\isr.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\mpyrt_sdram\../nxp_rt105/isr.c\169</Expression>
+          <Expression>\\mpyrt_sdram\../nxp_rt105/isr.c\241</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -239,12 +240,22 @@
           <WinNumber>1</WinNumber>
           <ItemText>args[3]</ItemText>
         </Ww>
+        <Ww>
+          <count>14</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>s_dev</ItemText>
+        </Ww>
+        <Ww>
+          <count>15</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>ctx</ItemText>
+        </Ww>
       </WatchWindow1>
       <MemoryWindow1>
         <Mm>
           <WinNumber>1</WinNumber>
           <SubType>2</SubType>
-          <ItemText>0x20001700</ItemText>
+          <ItemText>0x60CF0000</ItemText>
           <AccSizeX>0</AccSizeX>
         </Mm>
       </MemoryWindow1>
@@ -357,7 +368,7 @@
       <OPTFL>
         <tvExp>1</tvExp>
         <tvExpOptDlg>0</tvExpOptDlg>
-        <IsCurrentTarget>1</IsCurrentTarget>
+        <IsCurrentTarget>0</IsCurrentTarget>
       </OPTFL>
       <CpuCode>8</CpuCode>
       <DebugOpt>
@@ -405,7 +416,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>JL2CM3</Key>
-          <Name>-U36410082 -O78 -S8 -ZTIFSpeedSel50000 -A0 -C0 -JU1 -JI127.0.0.1 -JP0 -RST0 -N00("ARM CoreSight SW-DP") -D00(0BD11477) -L00(0) -TO18 -TC10000000 -TP21 -TDS8007 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -TB1 -TFE0 -FO7 -FD20000000 -FC1000 -FN1 -FF0MIMXRT105x_HYPER_256KB_SEC.FLM -FS060000000 -FL04000000 -FP0($$Device:MIMXRT1052$Flash\MIMXRT105x_HYPER_256KB_SEC.FLM)</Name>
+          <Name>-U36410082 -O78 -S8 -ZTIFSpeedSel50000 -A0 -C0 -JU1 -JI127.0.0.1 -JP0 -RST0 -N00("ARM CoreSight SW-DP") -D00(0BD11477) -L00(0) -TO18 -TC10000000 -TP21 -TDS8007 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -TB1 -TFE0 -FO7 -FD20000000 -FC8000 -FN2 -FF0MIMXRT105x_HYPER_256KB_SEC.FLM -FS080000000 -FL04000000 -FP0($$Device:MIMXRT1052$Flash\MIMXRT105x_HYPER_256KB_SEC.FLM) -FF1MIMXRT_IS26KS512S -FS160000000 -FL14000000</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -2487,7 +2498,7 @@
 
   <Group>
     <GroupName>lib_libm</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -4239,7 +4250,7 @@
 
   <Group>
     <GroupName>port</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -5411,7 +5422,7 @@
 
   <Group>
     <GroupName>Board</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -6631,7 +6642,7 @@
 
   <Group>
     <GroupName>fleg_ftl</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -6639,7 +6650,7 @@
       <GroupNumber>18</GroupNumber>
       <FileNumber>495</FileNumber>
       <FileType>1</FileType>
-      <tvExp>0</tvExp>
+      <tvExp>1</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\nxp_rt105\flegftl\flegftl.c</PathWithFileName>

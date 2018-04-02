@@ -120,8 +120,9 @@ uint32_t g_mscWriteRequestBuffer[USB_DEVICE_MSC_WRITE_BUFF_SIZE >> 2];
 uint8_t s_isUseSDCard;
 void _ConfigLBA(usb_device_lba_information_struct_t *lbaInf)
 {
-	if (sdcard_is_present()) {
-		s_isUseSDCard = 1;
+	if (sdcard_is_present()) 
+	{
+		s_isUseSDCard = 1; //1;
 		lbaInf->totalLbaNumberSupports = sdcard_get_lba_count();
 	}
 	else

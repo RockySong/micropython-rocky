@@ -51,9 +51,9 @@
 /*! @brief Reverse byte sequence for each half word in uint32_t */
 #define SWAP_HALF_WROD_BYTE_SEQUENCE(x) (__REV16(x))
 /*! @brief Maximum loop count to check the card operation voltage range */
-#define FSL_SDMMC_MAX_VOLTAGE_RETRIES (1000U)
+#define FSL_SDMMC_MAX_VOLTAGE_RETRIES 25 //(1000U)
 /*! @brief Maximum loop count to send the cmd */
-#define FSL_SDMMC_MAX_CMD_RETRIES (10U)
+#define FSL_SDMMC_MAX_CMD_RETRIES 3 //(10U)
 /*! @brief Default block size */
 #define FSL_SDMMC_DEFAULT_BLOCK_SIZE (512U)
 /*! @brief SDMMC global data buffer size, word unit*/

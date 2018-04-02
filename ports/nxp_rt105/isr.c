@@ -165,7 +165,7 @@ void _Fault_UnalignedLSTRH(uint8_t* pAddr, uint16_t val16) {
 }
 
 
-void HardFault_C_Handler(ExceptionRegisters_t *regs) {
+void HardFault_C_Handler(ExceptionRegisters_t *regs, uint32_t *pXtraRegs) {
     if (!pyb_hard_fault_debug) {
         NVIC_SystemReset();
     }
@@ -187,6 +187,16 @@ void HardFault_C_Handler(ExceptionRegisters_t *regs) {
     print_reg("LR    ", regs->lr);
     print_reg("PC    ", regs->pc);
     print_reg("XPSR  ", regs->xpsr);
+	
+	print_reg("R4    ", pXtraRegs[7]);
+	print_reg("R5    ", pXtraRegs[6]);
+	print_reg("R6    ", pXtraRegs[5]);
+	print_reg("R7    ", pXtraRegs[4]);
+	print_reg("R8    ", pXtraRegs[3]);
+	print_reg("R9    ", pXtraRegs[2]);
+	print_reg("R10   ", pXtraRegs[1]);
+	print_reg("R11   ", pXtraRegs[0]);
+
 
     uint32_t cfsr = SCB->CFSR;
 
@@ -212,9 +222,7 @@ void HardFault_C_Handler(ExceptionRegisters_t *regs) {
     }
 
     /* Go to infinite loop when Hard Fault exception occurs */
-    while (1) {
-        __fatal_error("HardFault");
-    }
+    __fatal_error("HardFault");
 }
 
 // Naked functions have no compiler generated gunk, so are the best thing to
@@ -229,12 +237,16 @@ __asm void HardFault_Handler(void) {
     // If CONTROL.SPSEL is 0, then the exception was stacked up using the
     // main stack pointer (aka MSP). If CONTROL.SPSEL is 1, then the exception
     // was stacked up using the process stack pointer (aka PSP).
-		 IMPORT HardFault_C_Handler
+     IMPORT HardFault_C_Handler
      tst lr, #4             // Test Bit 3 to see which stack pointer we should use.
      ite eq                 // Tell the assembler that the nest 2 instructions are if-then-else
      mrseq r0, msp          // Make R0 point to main stack pointer
      mrsne r0, psp          // Make R0 point to process stack pointer
+	 push	{r4-r11}
+	 mov	r1,	sp
      b HardFault_C_Handler  // Off to C land
+	 pop	{r4-r11}
+	 bx		lr
 }
 #else
 __attribute__((naked))
