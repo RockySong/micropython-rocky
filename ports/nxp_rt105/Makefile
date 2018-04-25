@@ -44,6 +44,8 @@ INC += -I./boards/$(BOARD)
 INC += -I$(TOP)
 INC += -I$(TOP)/py
 INC += -I$(TOP)/lib
+INC += -I$(TOP)/lib/oofatfs
+INC += -I$(TOP)/lib/mp-readline
 INC += -I$(BUILD)
 INC += -I$(TOP)/lib/cmsis/inc
 INC += -I$(HAL_DIR)
@@ -62,11 +64,14 @@ INC += -I$(USBDEV_DIR)/osa
 INC += -I$(HAL_DIR)/middleware/sdkusb/phy
 INC += -Iay_imu/core
 INC += -Iay_imu/math
+INC += -I./omv
+INC += -I./omv/py
+INC += -I./omv/img
 #INC += -I$(USBHOST_DIR)
 
 CFLAGS_CORTEX_M4 = -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -fsingle-precision-constant -Wdouble-promotion -mtune=cortex-m4 -mcpu=cortex-m4
-CFLAGS_CORTEX_M7 = -mthumb -DCPU_MIMXRT1052DVL6A -g -DMCU_SERIES_F7 -fno-common -ffunction-sections -fdata-sections -ffreestanding -fno-builtin -mfpu=fpv5-d16 -mfloat-abi=hard -fsingle-precision-constant -Wdouble-promotion -mtune=cortex-m7 -mcpu=cortex-m7
-CFLAGS = $(INC) -Wpointer-arith -Werror -std=gnu99 -g
+CFLAGS_CORTEX_M7 = -mthumb -DCPU_MIMXRT1052DVL6A -g -DARM_MATH_CM7 -DMCU_SERIES_F7 -fno-common -ffunction-sections -fdata-sections -ffreestanding -fno-builtin -mfpu=fpv5-d16 -mfloat-abi=hard -fsingle-precision-constant -Wdouble-promotion -mtune=cortex-m7 -mcpu=cortex-m7
+CFLAGS = $(INC) -Wpointer-arith -std=gnu99 -g
 CFLAGS += $(CFLAGS_CORTEX_M7) 
 CFLAGS += -Wno-int-conversion -Wno-incompatible-pointer-types
 CFLAGS += $(COPT) 
@@ -182,6 +187,30 @@ DRIVERS_SRC_C = $(addprefix drivers/,\
 	memory/spiflash.c \
 	)
 
+SRC_OMV = $(addprefix omv/,  \
+	mutex.c \
+	framebuffer.c \
+	xalloc.c \
+	cambus.c \
+	ov9650.c \
+	ov2640.c \
+	ov7725.c \
+	mt9v034.c \
+	sensor.c \
+	)
+
+SRC_PY = $(addprefix omv/py/, \
+	py_sensor.c \
+	py_time.c \
+	py_helper.c \
+	)
+
+SRC_IMG = $(addprefix omv/img/, \
+    imlib.c \
+	fmath.c \
+	)
+	
+	
 SRC_C = \
 	main.c \
 	./mcusdk/system_MIMXRT1052.c \
@@ -292,6 +321,10 @@ SRC_HAL = $(addprefix $(HAL_DIR)/drivers/, \
 	fsl_lpspi.c \
 	fsl_lpuart.c\
 	fsl_usdhc.c \
+	fsl_elcdif.c \
+	fsl_csi.c \
+	fsl_csi_camera_adapter.c \
+	fsl_lpi2c.c \
 	)
 	
 SRC_CDC_MSC = $(addprefix usb_cdc_msc/,\
@@ -316,7 +349,7 @@ SRC_SD = $(addprefix ./sdmmc/fsl_, \
 	sdmmc_common.c \
 	)
 
-SRC_PY = $(HAL_DIR)/middleware/sdkusb/phy/usb_phy.c
+SRC_PHY = $(HAL_DIR)/middleware/sdkusb/phy/usb_phy.c
 
 SRC_OSA = $(HAL_DIR)/middleware/sdkusb/osa/usb_osa_bm.c	
 
@@ -372,9 +405,13 @@ OBJ += $(addprefix $(BUILD)/, $(SRC_UTIL:.c=.o))
 OBJ += $(addprefix $(BUILD)/, $(SRC_HAL:.c=.o))
 OBJ += $(addprefix $(BUILD)/, $(SRC_CDC_MSC:.c=.o))
 OBJ += $(addprefix $(BUILD)/, $(SRC_USBD:.c=.o))
-OBJ += $(addprefix $(BUILD)/, $(SRC_PY:.c=.o))
+OBJ += $(addprefix $(BUILD)/, $(SRC_PHY:.c=.o))
 OBJ += $(addprefix $(BUILD)/, $(SRC_SD:.c=.o))
 OBJ += $(addprefix $(BUILD)/, $(SRC_OSA:.c=.o))
+
+OBJ += $(addprefix $(BUILD)/, $(SRC_OMV:.c=.o))
+OBJ += $(addprefix $(BUILD)/, $(SRC_PY:.c=.o))
+OBJ += $(addprefix $(BUILD)/, $(SRC_IMG:.c=.o))
 
 OBJ += $(addprefix $(BUILD)/, $(SRC_O))
 OBJ += $(addprefix $(BUILD)/, $(SRC_MOD:.c=.o))
@@ -470,6 +507,13 @@ SRC_QSTR += $(SRC_C) $(SRC_MOD) $(SRC_LIB)
 # Append any auto-generated sources that are needed by sources listed in
 # SRC_QSTR
 SRC_QSTR_AUTO_DEPS += $(GEN_CDCINF_HEADER)
+
+# Additional qstr definitions for OpenMV
+OMV_QSTR_DEFS = ./omv/py/qstrdefsomv.h
+
+# Append any auto-generated sources that are needed by sources listed in
+# SRC_QSTR
+QSTR_DEFS += $(OMV_QSTR_DEFS)
 
 # Making OBJ use an order-only depenedency on the generated pins.h file
 # has the side effect of making the pins.h file before we actually compile

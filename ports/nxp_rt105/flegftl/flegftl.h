@@ -1,7 +1,9 @@
 #pragma once
 #ifndef _FLEGFTL_H_
 #define _FLEGFTL_H_
-
+#ifdef __CC_ARM
+#pragma anon_unions
+#endif
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -178,7 +180,7 @@ typedef struct _FlegDevice_t
 	uint16_t pageSize;
 	uint16_t ppuPerEU;
 	uint16_t lpuPerEU;
-	uint16_t lpuCnt;
+	uint32_t lpuCnt;
 	// <<<
 	FlegStat_t stat;
 	uint32_t dbgIsToFlush;

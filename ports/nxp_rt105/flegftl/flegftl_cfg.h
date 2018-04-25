@@ -8,7 +8,7 @@
 #define FLEG_EU_SIZE			(256*1024) // (256*1024) size of Erase Unit (EU)
 #define FLEG_EU_CNT				220// 16
 
-#define FLEG_LPU_PER_EU			450 //465		// Logic Page Unit per Erase Unit, should hide some for better write access performance
+#define FLEG_LPU_PER_EU			450U //465		// Logic Page Unit per Erase Unit, should hide some for better write access performance
 #define FLEG_ADDR0				0
 #define FLEG_WB_THRESHOLD		100		// wear balance threshold
 #define FLEG_FLASH_OFFSET		0x00800000

@@ -106,6 +106,15 @@ mp_uint_t mp_hal_ticks_ms(void) {
     return uwTick;
 }
 
+
+void systick_sleep(volatile uint32_t ms)
+{
+    volatile uint32_t curr_ticks = HAL_GetTick();
+    while ((HAL_GetTick() - curr_ticks) < ms) {
+        __WFI();
+    }
+}
+
 // The SysTick timer counts down at 168 MHz, so we can use that knowledge
 // to grab a microsecond counter.
 //
@@ -136,4 +145,9 @@ mp_uint_t mp_hal_ticks_us(void) {
     // counter / ((load + 1) / 1000) scales from the systick clock to microseconds
     // and is the same thing as (counter * 1000) / (load + 1)
     return milliseconds * 1000 + (counter * 1000) / (load + 1);
+}
+
+uint32_t systick_current_millis()
+{
+    return HAL_GetTick();
 }

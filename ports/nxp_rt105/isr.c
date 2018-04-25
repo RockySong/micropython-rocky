@@ -164,7 +164,6 @@ void _Fault_UnalignedLSTRH(uint8_t* pAddr, uint16_t val16) {
 	*pAddr++ = (uint8_t)(val16 & 0xFF);
 }
 
-
 void HardFault_C_Handler(ExceptionRegisters_t *regs, uint32_t *pXtraRegs) {
     if (!pyb_hard_fault_debug) {
         NVIC_SystemReset();

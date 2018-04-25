@@ -67,7 +67,8 @@ MEMORY
   m_data2               (RW)  : ORIGIN = 0x20000000, LENGTH = 0x00020000
   m_data3               (RW)  : ORIGIN = 0x20200000, LENGTH = 0x00040000
 }
-
+/* could be buggy to place _fb_base like below */
+_fb_base = ORIGIN(m_data2);
 /* Define output sections */
 SECTIONS
 {

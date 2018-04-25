@@ -6,7 +6,7 @@
 #ifndef __IMLIB_H__
 #define __IMLIB_H__
 #undef __FPU_PRESENT      //no not know why do this
-#define __FPU_PRESENT 1U
+#define __FPU_PRESENT 1
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdlib.h>

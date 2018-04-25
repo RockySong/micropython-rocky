@@ -19,7 +19,9 @@ const float __atanf_lut[4] = {
     +0.1555786518463281f,    //p5
     +0.9997878412794807f     //p1
 };
+#ifdef __CC_ARM
 
+#endif
 float ALWAYS_INLINE fast_sqrtf(float x)
 {
     asm volatile (

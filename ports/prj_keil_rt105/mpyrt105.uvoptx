@@ -117,6 +117,11 @@
       <TargetDriverDllRegistry>
         <SetRegEntry>
           <Number>0</Number>
+          <Key>DLGUARM</Key>
+          <Name>鐿?P?w鐿?</Name>
+        </SetRegEntry>
+        <SetRegEntry>
+          <Number>0</Number>
           <Key>JL2CM3</Key>
           <Name>-U36410082 -O78 -S8 -ZTIFSpeedSel50000 -A0 -C0 -JU1 -JI127.0.0.1 -JP0 -RST0 -N00("ARM CoreSight SW-DP") -D00(0BD11477) -L00(0) -TO18 -TC10000000 -TP21 -TDS8007 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -TB1 -TFE0 -FO7 -FD20000000 -FC1000 -FN1 -FF0MIMXRT105x_HYPER_256KB_SEC.FLM -FS060000000 -FL04000000 -FP0($$Device:MIMXRT1052$Flash\MIMXRT105x_HYPER_256KB_SEC.FLM)</Name>
         </SetRegEntry>
@@ -138,7 +143,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGTARM</Key>
-          <Name>(1010=1316,1110,1766,1667,0)(6017=-1,-1,-1,-1,0)(1008=89,129,465,365,0)(6016=799,262,1057,915,0)(1012=884,177,1361,492,0)</Name>
+          <Name>(1010=1316,523,1766,1080,0)(6017=-1,-1,-1,-1,0)(1008=89,129,465,365,0)(6016=799,262,1057,915,0)(1012=884,177,1361,492,0)</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -150,9 +155,25 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>241</LineNumber>
+          <LineNumber>266</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>-2147474116</Address>
+          <Address>-2147440404</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>..\nxp_rt105\usb_cdc_msc\virtual_com.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\mpyrt_sdram\../nxp_rt105/usb_cdc_msc/virtual_com.c\266</Expression>
+        </Bp>
+        <Bp>
+          <Number>1</Number>
+          <Type>0</Type>
+          <LineNumber>243</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>-2147474120</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -161,23 +182,23 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>..\nxp_rt105\isr.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\mpyrt_sdram\../nxp_rt105/isr.c\241</Expression>
+          <Expression>\\mpyrt_sdram\../nxp_rt105/isr.c\243</Expression>
         </Bp>
         <Bp>
-          <Number>1</Number>
+          <Number>2</Number>
           <Type>0</Type>
-          <LineNumber>169</LineNumber>
+          <LineNumber>171</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>0</Address>
+          <Address>-2147459252</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>0</BreakIfRCount>
+          <BreakIfRCount>1</BreakIfRCount>
           <Filename>..\nxp_rt105\isr.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression></Expression>
+          <Expression>\\mpyrt_sdram\../nxp_rt105/isr.c\171</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -261,12 +282,17 @@
           <WinNumber>1</WinNumber>
           <ItemText>ctx</ItemText>
         </Ww>
+        <Ww>
+          <count>16</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>acmReqParam</ItemText>
+        </Ww>
       </WatchWindow1>
       <MemoryWindow1>
         <Mm>
           <WinNumber>1</WinNumber>
           <SubType>2</SubType>
-          <ItemText>0x60CF0000</ItemText>
+          <ItemText>0x20001670</ItemText>
           <AccSizeX>0</AccSizeX>
         </Mm>
       </MemoryWindow1>
@@ -471,6 +497,54 @@
           <Filename>..\nxp_rt105\isr.c</Filename>
           <ExecCommand></ExecCommand>
           <Expression>\\\../nxp_rt105/isr.c\169</Expression>
+        </Bp>
+        <Bp>
+          <Number>1</Number>
+          <Type>0</Type>
+          <LineNumber>171</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>0</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>0</BreakIfRCount>
+          <Filename>..\nxp_rt105\isr.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression></Expression>
+        </Bp>
+        <Bp>
+          <Number>2</Number>
+          <Type>0</Type>
+          <LineNumber>243</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>0</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>0</BreakIfRCount>
+          <Filename>..\nxp_rt105\isr.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression></Expression>
+        </Bp>
+        <Bp>
+          <Number>3</Number>
+          <Type>0</Type>
+          <LineNumber>266</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>0</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>0</BreakIfRCount>
+          <Filename>..\nxp_rt105\usb_cdc_msc\virtual_com.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression></Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -4222,7 +4296,7 @@
 
   <Group>
     <GroupName>build_lpx546</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -5542,7 +5616,7 @@
 
   <Group>
     <GroupName>sdk_usb</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -6859,6 +6933,26 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\nxp_rt105\omv\src\py\py_time.c</PathWithFileName>
       <FilenameWithoutPath>py_time.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+  </Group>
+
+  <Group>
+    <GroupName>lib_readline</GroupName>
+    <tvExp>1</tvExp>
+    <tvExpOptDlg>0</tvExpOptDlg>
+    <cbSel>0</cbSel>
+    <RteFlg>0</RteFlg>
+    <File>
+      <GroupNumber>20</GroupNumber>
+      <FileNumber>510</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\lib\mp-readline\readline.c</PathWithFileName>
+      <FilenameWithoutPath>readline.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

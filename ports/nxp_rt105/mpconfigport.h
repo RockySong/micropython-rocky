@@ -30,7 +30,9 @@
 #pragma once
 #ifndef __INCLUDED_MPCONFIGPORT_H
 #define __INCLUDED_MPCONFIGPORT_H
-
+#ifdef __CC_ARM
+#pragma anon_unions
+#endif
 // board specific definitions
 // #include "mpconfigboard.h"
 #include "fsl_common.h"
@@ -187,6 +189,8 @@ extern const struct _mp_obj_module_t mp_module_uos;
 extern const struct _mp_obj_module_t mp_module_utime;
 extern const struct _mp_obj_module_t mp_module_usocket;
 extern const struct _mp_obj_module_t mp_module_network;
+extern const struct _mp_obj_module_t sensor_module;
+extern const struct _mp_obj_module_t time_module;
 
 #if MICROPY_PY_USOCKET
 #define SOCKET_BUILTIN_MODULE               { MP_OBJ_NEW_QSTR(MP_QSTR_usocket), (mp_obj_t)&mp_module_usocket },
@@ -208,6 +212,8 @@ extern const struct _mp_obj_module_t mp_module_network;
     { MP_OBJ_NEW_QSTR(MP_QSTR_mcu), (mp_obj_t)&mcu_module }, \
     { MP_OBJ_NEW_QSTR(MP_QSTR_uos), (mp_obj_t)&mp_module_uos }, \
     { MP_OBJ_NEW_QSTR(MP_QSTR_utime), (mp_obj_t)&mp_module_utime }, \
+	{ MP_OBJ_NEW_QSTR(MP_QSTR_sensor),  (mp_obj_t)&sensor_module }, \
+	{ MP_OBJ_NEW_QSTR(MP_QSTR_time), (mp_obj_t)&time_module }, \
     SOCKET_BUILTIN_MODULE \
     NETWORK_BUILTIN_MODULE \
 

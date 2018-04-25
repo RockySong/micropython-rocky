@@ -9,6 +9,12 @@
 #ifndef __FMATH_H__
 #define __FMATH_H__
 #include <stdint.h>
+
+#ifdef __CC_ARM
+	#define fast_sqrtf __sqrtf
+__asm static inline 
+#endif
+
 float fast_sqrtf(float x);
 int fast_floorf(float x);
 int fast_ceilf(float x);

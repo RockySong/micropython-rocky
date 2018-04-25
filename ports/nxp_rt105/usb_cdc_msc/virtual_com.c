@@ -59,6 +59,13 @@
 ******************************************************************************/
 extern usb_device_endpoint_struct_t g_cdcVcomDicEndpoints[];
 
+static __IO uint8_t dev_is_connected = 0; // indicates if we are connected
+static __IO uint8_t debug_mode = 0; 
+static __IO uint32_t baudrate = 0;
+static uint32_t dbg_xfer_length=0;
+#define IDE_BAUDRATE_SLOW    (921600)
+#define IDE_BAUDRATE_FAST    (12000000)
+
 /* Line codinig of cdc device */
 static uint8_t s_lineCoding[LINE_CODING_SIZE] = {
     /* E.g. 0x00,0xC2,0x01,0x00 : 0x0001C200 is 115200 bits per second */
@@ -260,9 +267,20 @@ usb_status_t USB_DeviceCdcVcomCallback(class_handle_t handle, uint32_t event, vo
             error = kStatus_USB_Success;
             break;
         case kUSB_DeviceCdcEventSetLineCoding:
-        {
+        {   
+
             if (1 == acmReqParam->isSetup)
             {
+				baudrate = *((uint32_t*)acmReqParam->buffer);
+				// The slow baudrate can be used on OSs that don't support custom baudrates
+				if (baudrate == IDE_BAUDRATE_SLOW || baudrate == IDE_BAUDRATE_FAST) {
+					debug_mode = 1;
+					dbg_xfer_length=0;
+					// UserTxBufPtrIn = UserTxBufPtrOut = UserTxBufPtrOutShadow = 0;
+				} else {
+					debug_mode = 0;
+					// UserTxBufPtrIn = UserTxBufPtrOut = UserTxBufPtrOutShadow = 0;
+				}
                 *(acmReqParam->buffer) = s_lineCoding;
             }
             else
