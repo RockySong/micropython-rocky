@@ -84,7 +84,7 @@
 #endif
 
 /* Common definition for SDMMCHOST transfer complete timeout */
-#define SDMMCHOST_TRANSFER_COMPLETE_TIMEOUT (800)
+#define SDMMCHOST_TRANSFER_COMPLETE_TIMEOUT (1000)
 /* Common definition for card detect timeout */
 #define SDMMCHOST_CARD_DETECT_TIMEOUT (~0U)
 

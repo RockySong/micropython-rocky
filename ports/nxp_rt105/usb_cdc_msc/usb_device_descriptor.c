@@ -702,9 +702,9 @@ uint8_t g_UsbDeviceString0[4] = {0, USB_DESCRIPTOR_TYPE_STRING,
 uint8_t g_UsbDeviceString1[] = {
     0,
     USB_DESCRIPTOR_TYPE_STRING,
-    'N',0,'X',0,'P',0,' ',0, 
-    'S',0,'E',0,' ',0,
-    't',0,'e',0,'a',0,'m',0,
+    '2',0,'0',0,'1',0,'8',0, 
+    'X',0,'M',0,'B',0,
+    ' ',0,'A',0,'C',0,'E',0,
 
 };
 

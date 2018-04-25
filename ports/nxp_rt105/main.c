@@ -285,7 +285,7 @@ STATIC bool init_sdcard_fs(bool first_soft_reset) {
 
         if (res != FR_OK) {
             // couldn't mount
-			PRINTF("can't mount SD card FS! err=%d\r\n", res);
+			
             m_del_obj(fs_user_mount_t, vfs_fat);
             m_del_obj(mp_vfs_mount_t, vfs);
         } else {
@@ -590,7 +590,7 @@ soft_reset:
     if (sdcard_is_present()) {
         // if there is a file in the flash called "SKIPSD", then we don't mount the SD card
         if (!mounted_flash || f_stat(&fs_user_mount_flash.fatfs, "/SKIPSD", NULL) != FR_OK) {
-			int retry = 10;
+			int retry = 16;
 			while (retry--) {
 				mounted_sdcard = init_sdcard_fs(first_soft_reset);
 				if (mounted_sdcard)
@@ -598,8 +598,9 @@ soft_reset:
 				else
 				{
 					uint32_t t0;
+					PRINTF("can't mount SD card FS!\r\n");
 					t0 = HAL_GetTick();
-					while (HAL_GetTick() - t0 < 100) {}
+					while (HAL_GetTick() - t0 < 250) {}
 				}
 			}
         }

@@ -2,7 +2,7 @@
 
 #define STACK_SIZE 0x1800
 #define XIP_BASE	0x60002000
-#define IVT_BASE	0x60080000
+#define IVT_BASE	0x60000000
 #define ITCM_SIZE	64*1024
 #define DTCM_SIZE	(512-64)*1024
 #define OCRAM_SIZE	0

@@ -31,9 +31,9 @@
 
 // Windows needs a different PID to distinguish different device configurations
 // must use hex number directly to let python script that generate inf driver work normally
-#define USBD_VID         (0x1FC9)
+#define USBD_VID         0x1209 // (0x1FC9)
 // (0x1400 | USBD_MODE_CDC | USBD_MODE_MSC)
-#define USBD_PID_CDC_MSC (0x1403)
+#define USBD_PID_CDC_MSC 0xABD1 //(0x1403)
 // (0x1400 | USBD_MODE_CDC | USBD_MODE_HIDK | USBD_MODE_HIDM)
 #define USBD_PID_CDC_HID (0x140d)
 // (0x1400 | USBD_MODE_CDC)
