@@ -401,3 +401,8 @@ _si40_mpyLpc546/cache/parse/py_mpthread.h.sisc
 _si40_mpyLpc546/cache/parse/py_mpstate.h.sisc
 _si40_mpyLpc546/cache/parse/py_mpstate.c.sisc
 _si40_mpyLpc546/cache/parse/py_mpprint.h.sisc
+*.o
+*.d
+*.dep
+*.P
+*.qstr

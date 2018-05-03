@@ -58,22 +58,25 @@ void usbdbg_set_script_running(bool running)
 
 inline void usbdbg_set_irq_enabled(bool enabled)
 {
+	/*
     if (enabled) {
         HAL_NVIC_EnableIRQ(OTG_FS_IRQn);
     } else {
         HAL_NVIC_DisableIRQ(OTG_FS_IRQn);
     }
+    */
     __DSB(); __ISB();
 }
-
+#define logout(...) // printf
 void usbdbg_data_in(void *buffer, int length)
 {
+	logout("usbdbg_data_in: cmd=%x, buffer=0x%08x, bytes=%d\r\n", cmd, buffer, length);
     switch (cmd) {
         case USBDBG_FW_VERSION: {
             uint32_t *ver_buf = buffer;
             ver_buf[0] = FIRMWARE_VERSION_MAJOR;
-            ver_buf[1] = FIRMWARE_VERSION_MINOR;
-            ver_buf[2] = FIRMWARE_VERSION_PATCH;
+            ver_buf[1] = 7; // FIRMWARE_VERSION_MINOR;
+            ver_buf[2] = 0; //FIRMWARE_VERSION_PATCH;
             cmd = USBDBG_NONE;
             break;
         }
@@ -95,6 +98,7 @@ void usbdbg_data_in(void *buffer, int length)
         }
 
         case USBDBG_FRAME_SIZE:
+			logout("data_in: USBDBG_FRAME_SIZE\r\n");
             // Return 0 if FB is locked or not ready.
             ((uint32_t*)buffer)[0] = 0;
             // Try to lock FB. If header size == 0 frame is not ready
@@ -126,11 +130,19 @@ void usbdbg_data_in(void *buffer, int length)
             break;
 
         case USBDBG_ARCH_STR: {
+			#if 0
             snprintf((char *) buffer, 64, "%s [%s:%08X%08X%08X]",
                     OMV_ARCH_STR, OMV_BOARD_TYPE,
                     *((unsigned int *) (OMV_UNIQUE_ID_ADDR + 8)),
                     *((unsigned int *) (OMV_UNIQUE_ID_ADDR + 4)),
                     *((unsigned int *) (OMV_UNIQUE_ID_ADDR + 0)));
+			#else
+            snprintf((char *) buffer, 64, "%s [%s:%08X%08X%08X]",
+                    OMV_ARCH_STR, OMV_BOARD_TYPE,
+                    0x35383236,
+                    0x3436510f,
+                    0x0041001E);			
+			#endif
             cmd = USBDBG_NONE;
             break;
         }
@@ -193,7 +205,7 @@ void usbdbg_data_out(void *buffer, int length)
             rectangle_t *roi = (rectangle_t*)buffer;
             char *path = (char*)buffer+sizeof(rectangle_t);
 
-            imlib_save_image(&image, path, roi, 50);
+            // rocky ignore imlib_save_image(&image, path, roi, 50);
             // raise a flash IRQ to flush image
             //NVIC->STIR = FLASH_IRQn;
             break;
@@ -214,7 +226,7 @@ void usbdbg_data_out(void *buffer, int length)
             rectangle_t *roi = (rectangle_t*)buffer;
             char *path = (char*)buffer+sizeof(rectangle_t);
 
-            py_image_descriptor_from_roi(&image, path, roi);
+            // rocky ignore py_image_descriptor_from_roi(&image, path, roi);
             break;
         }
         default: /* error */
@@ -232,6 +244,7 @@ void usbdbg_control(void *buffer, uint8_t request, uint32_t length)
             break;
 
         case USBDBG_FRAME_SIZE:
+			logout("control: USBDBG_FRAME_SIZE, len=%d\r\n", length);
             xfer_bytes = 0;
             xfer_length = length;
             break;
@@ -255,6 +268,7 @@ void usbdbg_control(void *buffer, uint8_t request, uint32_t length)
         case USBDBG_SCRIPT_STOP:
             if (script_running) {
                 // Set script running flag
+                logout("stop running script\r\n");
                 script_running = false;
 
                 // Disable IDE IRQ (re-enabled by pyexec or main).
@@ -263,7 +277,9 @@ void usbdbg_control(void *buffer, uint8_t request, uint32_t length)
                 // interrupt running code by raising an exception
                 mp_obj_exception_clear_traceback(mp_const_ide_interrupt);
                 pendsv_nlr_jump_hard(mp_const_ide_interrupt);
-            }
+            } else {
+				logout("no script running!\r\n");
+			}
             cmd = USBDBG_NONE;
             break;
 
@@ -314,7 +330,9 @@ void usbdbg_control(void *buffer, uint8_t request, uint32_t length)
 
         case USBDBG_FB_ENABLE: {
             int16_t enable = *((int16_t*)buffer);
-            JPEG_FB()->enabled = enable;
+			logout("control: FB enable, enable=%d, jpeg_fb = 0x%08X\r\n", enable, (uint32_t)JPEG_FB());
+
+            // JPEG_FB()->enabled = enable;
             if (enable == 0) {
                 // When disabling framebuffer, the IDE might still be holding FB lock.
                 // If the IDE is not the current lock owner, this operation is ignored.

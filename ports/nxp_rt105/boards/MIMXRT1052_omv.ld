@@ -57,6 +57,10 @@ ENTRY(Reset_Handler)
 HEAP_SIZE  = DEFINED(__heap_size__)  ? __heap_size__  : 0x4000;
 STACK_SIZE = DEFINED(__stack_size__) ? __stack_size__ : 0x2000;
 
+ITCM_SIZE = 0x10000;
+DTCM_SIZE = 0x70000;
+OCRAM_SIZE = 0;
+
 /* Specify the memory areas */
 MEMORY
 {
@@ -64,11 +68,11 @@ MEMORY
   m_text                (RX)  : ORIGIN = 0x80000400, LENGTH = 0x01000000
   m_data                (RW)  : ORIGIN = 0x81000400, LENGTH = 0x00DFFC00
   m_ncache              (RW)  : ORIGIN = 0x81E00000, LENGTH = 0x00200000
-  m_dtcm                (RW)  : ORIGIN = 0x20000000, LENGTH = 0x00020000
-  m_ocram               (RW)  : ORIGIN = 0x20200000, LENGTH = 0x00040000
+  m_itcm                (RW)  : ORIGIN = 0x00000000, LENGTH = ITCM_SIZE
+  m_dtcm                (RW)  : ORIGIN = 0x20000000, LENGTH = DTCM_SIZE
+  m_ocram               (RW)  : ORIGIN = 0x20200000, LENGTH = OCRAM_SIZE
 }
-/* could be buggy to place _fb_base like below */
-//_fb_base = ORIGIN(m_dtcm);
+
 /* Define output sections */
 SECTIONS
 {
@@ -213,7 +217,18 @@ SECTIONS
 
   FB_SIZE  = 301*1024;
   JPEG_SIZE  = 48*1024;
-
+  .dtcm : 
+  {
+    . = ALIGN(8);
+    . += STACK_SIZE;
+    _stack = .;
+    _ld_main_fb = .;
+	. += FB_SIZE;
+	_ld_jpeg_buf = .;
+	. = ALIGN(4);
+  } > m_dtcm
+  PROVIDE(_jpeg_buf = _ld_jpeg_buf);
+  PROVIDE(_fb_base = _ld_main_fb);
   /* Uninitialized data section */
   .bss :
   {
@@ -226,16 +241,9 @@ SECTIONS
     *(.bss*)
     *(COMMON)
     . = ALIGN(4);
-    _ld_main_fb = .;
-	. += FB_SIZE;
-	_ld_jpeg_buf = .;
-	. = ALIGN(4);
-	. += JPEG_SIZE;
     __bss_end__ = .;
     __END_BSS = .;
-  } > m_data
-  PROVIDE(_jpeg_buf = _ld_jpeg_buf);
-  PROVIDE(_fb_base = _ld_main_fb);
+  } > m_dtcm
   PROVIDE(_sbss = __START_BSS);
   PROVIDE(_ebss = __END_BSS);
   .heap :
@@ -248,18 +256,11 @@ SECTIONS
     __HeapLimit = .;
     __heap_limit = .; /* Add for _sbrk */
     _heap = .;
-  } > m_data
-
-  .stack :
-  {
-    . = ALIGN(8);
-    . += STACK_SIZE;
-    _stack = .;
-  } > m_data
+  } > m_dtcm
 
   /* Initializes stack on the end of block */
-  __StackTop   = ORIGIN(m_data) + LENGTH(m_data);
-  __StackLimit = __StackTop - STACK_SIZE;
+  __StackLimit = ORIGIN(m_dtcm);
+  __StackTop   = __StackLimit + STACK_SIZE;
   PROVIDE(__stack = __StackTop);
   /* Define tho top end of the stack.  The stack is full descending so begins just
    above last byte of RAM.  Note that EABI requires the stack to be 8-byte
@@ -267,7 +268,7 @@ SECTIONS
   PROVIDE(_estack = __StackTop);
   .ARM.attributes 0 : { *(.ARM.attributes) }
 
-  ASSERT(__StackLimit >= __HeapLimit, "region m_data overflowed with stack and heap")
+  /* ASSERT(__StackLimit >= __HeapLimit, "region m_data overflowed with stack and heap") */
 }
 
 /* RAM extents for the garbage collector */

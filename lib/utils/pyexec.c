@@ -26,9 +26,11 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <stdint.h>
 #include <string.h>
 
+#include "py/nlr.h"
 #include "py/compile.h"
 #include "py/runtime.h"
 #include "py/repl.h"
@@ -50,9 +52,10 @@ STATIC bool repl_display_debugging_info = 0;
 #define EXEC_FLAG_PRINT_EOF (1)
 #define EXEC_FLAG_ALLOW_DEBUGGING (2)
 #define EXEC_FLAG_IS_REPL (4)
-#define EXEC_FLAG_SOURCE_IS_RAW_CODE (8)
-#define EXEC_FLAG_SOURCE_IS_VSTR (16)
-#define EXEC_FLAG_SOURCE_IS_FILENAME (32)
+#define EXEC_FLAG_RERAISE (8)
+#define EXEC_FLAG_SOURCE_IS_RAW_CODE (16)
+#define EXEC_FLAG_SOURCE_IS_VSTR (32)
+#define EXEC_FLAG_SOURCE_IS_FILENAME (64)
 
 // parses, compiles and executes the code in the lexer
 // frees the lexer before returning
@@ -99,7 +102,9 @@ STATIC int parse_compile_execute(const void *source, mp_parse_input_kind_t input
         mp_hal_set_interrupt_char(CHAR_CTRL_C); // allow ctrl-C to interrupt us
         start = mp_hal_ticks_ms();
         mp_call_function_0(module_fun);
-        mp_hal_set_interrupt_char(-1); // disable interrupt
+
+        // disable interrupt
+        mp_hal_set_interrupt_char(-1);
         nlr_pop();
         ret = 1;
         if (exec_flags & EXEC_FLAG_PRINT_EOF) {
@@ -109,6 +114,12 @@ STATIC int parse_compile_execute(const void *source, mp_parse_input_kind_t input
         // uncaught exception
         // FIXME it could be that an interrupt happens just before we disable it here
         mp_hal_set_interrupt_char(-1); // disable interrupt
+
+        // re-raise same exception
+        if (exec_flags & EXEC_FLAG_RERAISE) {
+            nlr_raise(nlr.ret_val);
+        }
+
         // print EOF after normal output
         if (exec_flags & EXEC_FLAG_PRINT_EOF) {
             mp_hal_stdout_tx_strn("\x04", 1);
@@ -496,7 +507,11 @@ friendly_repl_reset:
 #endif // MICROPY_ENABLE_COMPILER
 
 int pyexec_file(const char *filename) {
-    return parse_compile_execute(filename, MP_PARSE_FILE_INPUT, EXEC_FLAG_SOURCE_IS_FILENAME);
+    return parse_compile_execute(filename, MP_PARSE_FILE_INPUT, EXEC_FLAG_RERAISE | EXEC_FLAG_SOURCE_IS_FILENAME);
+}
+
+int pyexec_str(vstr_t *str) {
+    return parse_compile_execute(str, MP_PARSE_FILE_INPUT, EXEC_FLAG_RERAISE | EXEC_FLAG_SOURCE_IS_VSTR);
 }
 
 #if MICROPY_MODULE_FROZEN

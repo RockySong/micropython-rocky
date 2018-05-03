@@ -199,6 +199,9 @@ int32_t RingBlk_Init(ring_block_t *pRB, uint8_t *pBlksAry, uint32_t blkSize, uin
 
 {
 	uint32_t i;
+	if (blkCnt > RING_BLOCK_MAX_CNT) {
+		return -1L;
+	}
 	pRB->pBlks	 	= (uint8_t*)pBlksAry;
 	pRB->blkSize	= blkSize;
 	pRB->blkCnt 	= blkCnt;

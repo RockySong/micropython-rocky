@@ -85,11 +85,32 @@ NORETURN void nlr_jump(void *val);
 NORETURN void nlr_jump_fail(void *val);
 
 // use nlr_raise instead of nlr_jump so that debugging is easier
+extern void fb_alloc_free_till_mark();
 #ifndef MICROPY_DEBUG_NLR
-#define nlr_raise(val) nlr_jump(MP_OBJ_TO_PTR(val))
+#define nlr_raise(val) \
+    do { \
+        fb_alloc_free_till_mark(); \
+        nlr_jump(MP_OBJ_TO_PTR(val)); \
+    } while (0)
+// fb_alloc_mark() is the only allowed caller.
+#define nlr_raise_for_fb_alloc_mark(val) \
+    do { \
+        nlr_jump(MP_OBJ_TO_PTR(val)); \
+    } while (0)
 #else
 #include "mpstate.h"
 #define nlr_raise(val) \
+    do { \
+        fb_alloc_free_till_mark(); \
+        /*printf("nlr_raise: nlr_top=%p\n", MP_STATE_THREAD(nlr_top)); \
+        fflush(stdout);*/ \
+        void *_val = MP_OBJ_TO_PTR(val); \
+        assert(_val != NULL); \
+        assert(mp_obj_is_exception_instance(val)); \
+        nlr_jump(_val); \
+    } while (0)
+// fb_alloc_mark() is the only allowed caller.
+#define nlr_raise_for_fb_alloc_mark(val) \
     do { \
         /*printf("nlr_raise: nlr_top=%p\n", MP_STATE_THREAD(nlr_top)); \
         fflush(stdout);*/ \

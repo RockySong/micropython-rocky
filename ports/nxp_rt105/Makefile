@@ -76,8 +76,8 @@ CFLAGS += $(CFLAGS_CORTEX_M7)
 CFLAGS += -Wno-int-conversion -Wno-incompatible-pointer-types
 CFLAGS += $(COPT) 
 CFLAGS += -DUSB_STACK_BM
-#CFLAGS += -DUSB_DEVICE_CONFIG_BUFFER_PROPERTY_CACHEABLE=1
-#CFLAGS += -DFSL_SDK_ENABLE_DRIVER_CACHE_CONTROL=1
+CFLAGS += -DUSB_DEVICE_CONFIG_BUFFER_PROPERTY_CACHEABLE=1
+CFLAGS += -DFSL_SDK_ENABLE_DRIVER_CACHE_CONTROL=1
 
 LDFLAGS = -L $(LD_DIR) -T $(LD_FILE) -Xlinker -Map=$(@:.elf=.map) -Xlinker --cref
 LIBS = $(shell $(CC) $(CFLAGS) -print-libgcc-file-name)
@@ -197,6 +197,7 @@ SRC_OMV = $(addprefix omv/,  \
 	ov7725.c \
 	mt9v034.c \
 	sensor.c \
+	usbdbg.c \
 	)
 
 SRC_PY = $(addprefix omv/py/, \
@@ -206,7 +207,6 @@ SRC_PY = $(addprefix omv/py/, \
 	)
 
 SRC_IMG = $(addprefix omv/img/, \
-    imlib.c \
 	fmath.c \
 	)
 	

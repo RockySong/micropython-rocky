@@ -62,8 +62,34 @@ void pendsv_kbd_intr(void) {
         SCB->ICSR = SCB_ICSR_PENDSVSET_Msk;
     }
 }
+
+// Call this function to raise a pending exception during an interrupt.
+// It will first try to raise the exception "softly" by setting the
+// mp_pending_exception variable and hoping that the VM will notice it.
+// If this function is called a second time (ie with the mp_pending_exception
+// variable already set) then it will force the exception by using the hardware
+// PENDSV feature.  This will wait until all interrupts are finished then raise
+// the given exception object using nlr_jump in the context of the top-level thread.
+void pendsv_nlr_jump(void *o) {
+    if (MP_STATE_VM(mp_pending_exception) == MP_OBJ_NULL) {
+        MP_STATE_VM(mp_pending_exception) = o;
+    } else {
+        MP_STATE_VM(mp_pending_exception) = MP_OBJ_NULL;
+        pendsv_object = o;
+        SCB->ICSR = SCB_ICSR_PENDSVSET_Msk;
+    }
+}
+
+// This will always force the exception by using the hardware PENDSV 
+void pendsv_nlr_jump_hard(void *o) {
+    MP_STATE_VM(mp_pending_exception) = MP_OBJ_NULL;
+    pendsv_object = o;
+    SCB->ICSR = SCB_ICSR_PENDSVSET_Msk;
+}
+
+
 #if defined (__CC_ARM)
-__asm void pendsv_isr_handler(void) {
+__asm void PendSV_Handler(void) {
     // re-jig the stack so that when we return from this interrupt handler
     // it returns instead to nlr_jump with argument pendsv_object
     // note that stack has a different layout if DEBUG is enabled
@@ -92,14 +118,14 @@ __asm void pendsv_isr_handler(void) {
 		IMPORT	pendsv_object
 		IMPORT	nlr_jump
 #if MICROPY_PY_THREAD
-        ldr r1, =pendsv_object_ptr
+        ldr r1, =pendsv_object
         ldr r0, [r1]
         cmp r0, 0
         beq no_obj
         str r0, [sp, #0]            // store to r0 on stack
         mov r0, #0
         str r0, [r1]                // clear pendsv_object
-        ldr r0, =nlr_jump_ptr
+        ldr r0, =nlr_jump
         str r0, [sp, #24]           // store to pc on stack
         bx lr                       // return from interrupt; will return to nlr_jump
 
@@ -117,31 +143,22 @@ no_obj                    // pendsv_object==NULL
         vpop {s16-s31}
         pop {r4-r11, lr}
         bx lr                       // return from interrupt; will return to new thread
-        ALIGN 2
-pendsv_object_ptr 
-				DCD pendsv_object
-nlr_jump_ptr
-				DCD nlr_jump
+
 #else
-        ldr r0, =pendsv_object_ptr
+        ldr r0, =pendsv_object
         ldr r0, [r0]
 #if defined(PENDSV_DEBUG)
         str r0, [sp, #8]
 #else
         str r0, [sp, #0]
 #endif
-        ldr r0, =nlr_jump_ptr
+        ldr r0, =nlr_jump
 #if defined(PENDSV_DEBUG)
         str r0, [sp, #32]
 #else
         str r0, [sp, #24]
 #endif
         bx lr
-        ALIGN 2
-pendsv_object_ptr
-			  DCD 	pendsv_object
-nlr_jump_ptr
-				DCD		nlr_jump
 #endif
 
     /*

@@ -63,7 +63,7 @@
 // #include "dac.h"
 // #include "can.h"
 #include "modnetwork.h"
-#include "sensor.h"
+#include "virtual_com.h"
 void UnalignTest(void);
 void SystemClock_Config(void);
 
@@ -148,9 +148,95 @@ static const char fresh_boot_py[] __ALIGNED(4) =
 "#pyb.usb_mode('VCP+HID') # act as a serial device and a mouse\r\n"
 ;
 
+static const char fresh_selftest_py[] =
+"import sensor, time, pyb\n"
+"\n"
+"def test_int_adc():\n"
+"    adc  = pyb.ADCAll(12)\n"
+"    # Test VBAT\n"
+"    vbat = adc.read_core_vbat()\n"
+"    vbat_diff = abs(vbat-3.3)\n"
+"    if (vbat_diff > 0.1):\n"
+"        raise Exception('INTERNAL ADC TEST FAILED VBAT=%fv'%vbat)\n"
+"\n"
+"    # Test VREF\n"
+"    vref = adc.read_core_vref()\n"
+"    vref_diff = abs(vref-1.2)\n"
+"    if (vref_diff > 0.1):\n"
+"        raise Exception('INTERNAL ADC TEST FAILED VREF=%fv'%vref)\n"
+"    adc = None\n"
+"    print('INTERNAL ADC TEST PASSED...')\n"
+"\n"
+"def test_color_bars():\n"
+"    sensor.reset()\n"
+"    # Set sensor settings\n"
+"    sensor.set_brightness(0)\n"
+"    sensor.set_saturation(3)\n"
+"    sensor.set_gainceiling(8)\n"
+"    sensor.set_contrast(2)\n"
+"\n"
+"    # Set sensor pixel format\n"
+"    sensor.set_framesize(sensor.QVGA)\n"
+"    sensor.set_pixformat(sensor.RGB565)\n"
+"\n"
+"    # Enable colorbar test mode\n"
+"    sensor.set_colorbar(True)\n"
+"\n"
+"    # Skip a few frames to allow the sensor settle down\n"
+"    for i in range(0, 100):\n"
+"        image = sensor.snapshot()\n"
+"\n"
+"    #color bars thresholds\n"
+"    t = [lambda r, g, b: r < 70  and g < 70  and b < 70,   # Black\n"
+"         lambda r, g, b: r < 70  and g < 70  and b > 200,  # Blue\n"
+"         lambda r, g, b: r > 200 and g < 70  and b < 70,   # Red\n"
+"         lambda r, g, b: r > 200 and g < 70  and b > 200,  # Purple\n"
+"         lambda r, g, b: r < 70  and g > 200 and b < 70,   # Green\n"
+"         lambda r, g, b: r < 70  and g > 200 and b > 200,  # Aqua\n"
+"         lambda r, g, b: r > 200 and g > 200 and b < 70,   # Yellow\n"
+"         lambda r, g, b: r > 200 and g > 200 and b > 200]  # White\n"
+"\n"
+"    # color bars are inverted for OV7725\n"
+"    if (sensor.get_id() == sensor.OV7725):\n"
+"        t = t[::-1]\n"
+"\n"
+"    #320x240 image with 8 color bars each one is approx 40 pixels.\n"
+"    #we start from the center of the frame buffer, and average the\n"
+"    #values of 10 sample pixels from the center of each color bar.\n"
+"    for i in range(0, 8):\n"
+"        avg = (0, 0, 0)\n"
+"        idx = 40*i+20 #center of colorbars\n"
+"        for off in range(0, 10): #avg 10 pixels\n"
+"            rgb = image.get_pixel(idx+off, 120)\n"
+"            avg = tuple(map(sum, zip(avg, rgb)))\n"
+"\n"
+"        if not t[i](avg[0]/10, avg[1]/10, avg[2]/10):\n"
+"            raise Exception('COLOR BARS TEST FAILED.'\n"
+"            'BAR#(%d): RGB(%d,%d,%d)'%(i+1, avg[0]/10, avg[1]/10, avg[2]/10))\n"
+"\n"
+"    print('COLOR BARS TEST PASSED...')\n"
+"\n"
+"if __name__ == '__main__':\n"
+"    print('')\n"
+"    test_int_adc()\n"
+"    test_color_bars()\n"
+"\n"
+;
 
 static const char fresh_main_py[] __ALIGNED(4) =
-"# main.py -- put your code here!\r\n"
+"# main.py -- put your code here!\n"
+"import pyb, time\n"
+"led = pyb.LED(1)\n"
+"usb = pyb.USB_VCP()\n"
+"while (usb.isconnected()==False):\n"
+"   led.on()\n"
+"   time.sleep(150)\n"
+"   led.off()\n"
+"   time.sleep(100)\n"
+"   led.on()\n"
+"   time.sleep(150)\n"
+"   led.off()\n"
+"   time.sleep(600)\n"
 ;
 
 static const char fresh_pybcdc_inf[] __ALIGNED(4) =
@@ -170,6 +256,19 @@ static const char fresh_readme_txt[] __ALIGNED(4) =
 " - Linux: use the command: screen /dev/ttyACM0\r\n"
 "\r\n"
 "Please visit http://micropython.org/help/ for further help.\r\n"
+"Thank you for supporting the OpenMV project!\r\n"
+"\r\n"
+"To download the IDE, please visit:\r\n"
+"https://openmv.io/pages/download\r\n"
+"\r\n"
+"For tutorials and documentation, please visit:\r\n"
+"http://docs.openmv.io/\r\n"
+"\r\n"
+"For technical support and projects, please visit the forums:\r\n"
+"http://forums.openmv.io/\r\n"
+"\r\n"
+"Please use github to report bugs and issues:\r\n"
+"https://github.com/openmv/openmv\r\n"
 ;
 
 // avoid inlining to avoid stack usage within main()
@@ -218,6 +317,11 @@ MP_NOINLINE STATIC bool init_flash_fs(uint reset_mode) {
         f_open(&vfs_fat->fatfs, &fp, "/README.txt", FA_WRITE | FA_CREATE_ALWAYS);
         f_write(&fp, fresh_readme_txt, sizeof(fresh_readme_txt) - 1 /* don't count null terminator */, &n);
         f_close(&fp);
+
+	    // Create default selftest.py
+	    f_open(&vfs_fat->fatfs, &fp, "/selftest.py", FA_WRITE | FA_CREATE_ALWAYS);
+	    f_write(&fp, fresh_selftest_py, sizeof(fresh_selftest_py) - 1 /* don't count null terminator */, &n);
+	    f_close(&fp);
 
         // keep LED on for at least 200ms
         sys_tick_wait_at_least(start_tick, 200);
@@ -453,6 +557,50 @@ HAL_StatusTypeDef HAL_Init(void)
 extern uint32_t _ram_start, _ram_end, _estack, _heap_end, _heap_start;
 #endif
 
+void PYB_MainLoop(uint32_t reset_mode) {
+    // Run the main script from the current directory.
+    if ((reset_mode == 1 || reset_mode == 3) && pyexec_mode_kind == PYEXEC_MODE_FRIENDLY_REPL) {
+        const char *main_py;
+        if (MP_STATE_PORT(pyb_config_main) == MP_OBJ_NULL) {
+            main_py = "main.py";
+        } else {
+            main_py = mp_obj_str_get_str(MP_STATE_PORT(pyb_config_main));
+        }
+        mp_import_stat_t stat = mp_import_stat(main_py);
+        if (stat == MP_IMPORT_STAT_FILE) {
+            int ret = pyexec_file(main_py);
+            if (ret & PYEXEC_FORCED_EXIT) {
+                // goto soft_reset_exit;
+				return;
+            }
+            if (!ret) {
+                flash_error(3);
+            }
+        }
+    }
+
+    // Main script is finished, so now go into REPL mode.
+    // The REPL mode can change, or it can request a soft reset.
+    for (;;) {
+        if (pyexec_mode_kind == PYEXEC_MODE_RAW_REPL) {
+            if (pyexec_raw_repl() != 0) {
+                break;
+            }
+        } else {
+			VCOM_Open();
+            if (pyexec_friendly_repl() != 0) {
+                break;
+            }
+        }
+    }
+}
+
+__WEAK void sensor_init0() {}
+__WEAK void sensor_init() {}
+#include "usbdbg.h"
+
+extern int OpenMV_Main(uint32_t first_soft_reset);
+
 int main(void) {
     // TODO disable JTAG
 
@@ -463,7 +611,6 @@ int main(void) {
          - Global MSP (MCU Support Package) initialization
        */
     HAL_Init();
-	
 
     #if defined(MICROPY_BOARD_EARLY_INIT)
     MICROPY_BOARD_EARLY_INIT();
@@ -500,7 +647,6 @@ soft_reset:
     uint reset_mode = update_reset_mode(1);
 
     machine_init();
-
 #if MICROPY_HW_ENABLE_RTC
     if (first_soft_reset) {
         rtc_init_start(false);
@@ -550,10 +696,7 @@ soft_reset:
     // we can run Python scripts (eg boot.py), but anything that is configurable
     // by boot.py must be set after boot.py is run.
 
-	
-    sensor_init0();
-    sensor_init();	
-	
+    // sensor_init0();
     readline_init0();
     pin_init0();
     // rocky ignore: extint_init0();
@@ -583,7 +726,7 @@ soft_reset:
 #if MICROPY_HW_ENABLE_RNG
     rng_init0();
 #endif
-
+	usbdbg_init();	// must be after mpy's heap init, as it uses mpy's heap
 	// rocky ignore: i2c_init0();
 	// rocky ignore: spi_init0();
 	pyb_usb_init0();
@@ -613,7 +756,7 @@ soft_reset:
 			}
         }
     } else {
-		
+		 
 	}
 #endif
 
@@ -687,42 +830,11 @@ soft_reset:
     mod_network_init();
 #endif
 
+
     // At this point everything is fully configured and initialised.
 
-    // Run the main script from the current directory.
-    if ((reset_mode == 1 || reset_mode == 3) && pyexec_mode_kind == PYEXEC_MODE_FRIENDLY_REPL) {
-        const char *main_py;
-        if (MP_STATE_PORT(pyb_config_main) == MP_OBJ_NULL) {
-            main_py = "main.py";
-        } else {
-            main_py = mp_obj_str_get_str(MP_STATE_PORT(pyb_config_main));
-        }
-        mp_import_stat_t stat = mp_import_stat(main_py);
-        if (stat == MP_IMPORT_STAT_FILE) {
-            int ret = pyexec_file(main_py);
-            if (ret & PYEXEC_FORCED_EXIT) {
-                goto soft_reset_exit;
-            }
-            if (!ret) {
-                flash_error(3);
-            }
-        }
-    }
-
-    // Main script is finished, so now go into REPL mode.
-    // The REPL mode can change, or it can request a soft reset.
-    for (;;) {
-        if (pyexec_mode_kind == PYEXEC_MODE_RAW_REPL) {
-            if (pyexec_raw_repl() != 0) {
-                break;
-            }
-        } else {
-            if (pyexec_friendly_repl() != 0) {
-                break;
-            }
-        }
-    }
-
+ 	VCOM_Open();
+	OpenMV_Main(first_soft_reset);
 soft_reset_exit:
 
     // soft reset

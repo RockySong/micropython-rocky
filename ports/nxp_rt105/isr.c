@@ -243,7 +243,7 @@ __asm void HardFault_Handler(void) {
      mrsne r0, psp          // Make R0 point to process stack pointer
 	 push	{r4-r11}
 	 mov	r1,	sp
-     b HardFault_C_Handler  // Off to C land
+     bl HardFault_C_Handler  // Off to C land
 	 pop	{r4-r11}
 	 bx		lr
 }
@@ -333,9 +333,12 @@ void DebugMon_Handler(void) {
   * @param  None
   * @retval None
   */
+#ifndef __CC_ARM
+// for ARM CC, we use asm IRQ handler
 void PendSV_Handler(void) {
     pendsv_isr_handler();
 }
+#endif
 #include "storage.h"
 /**
   * @brief  This function handles SysTick Handler.

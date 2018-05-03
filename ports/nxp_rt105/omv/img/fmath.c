@@ -19,9 +19,7 @@ const float __atanf_lut[4] = {
     +0.1555786518463281f,    //p5
     +0.9997878412794807f     //p1
 };
-#ifdef __CC_ARM
-
-#endif
+#ifndef __CC_ARM
 float ALWAYS_INLINE fast_sqrtf(float x)
 {
     asm volatile (
@@ -61,7 +59,7 @@ int ALWAYS_INLINE fast_roundf(float x)
             : [x] "t"  (x));
     return i;
 }
-
+#endif
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 typedef union{
@@ -102,7 +100,7 @@ float fast_cbrtf(float x)
    v.ix = 0x2a511cd0 + v.ix;  // Initial guess.
    return v.x;
 }
-
+#ifndef __CC_ARM
 float ALWAYS_INLINE fast_fabsf(float x)
 {
     asm volatile (
@@ -111,7 +109,7 @@ float ALWAYS_INLINE fast_fabsf(float x)
             : [x] "t"  (x));
     return x;
 }
-
+#endif
 inline float fast_atanf(float xx)
 {
     float x, y, z;

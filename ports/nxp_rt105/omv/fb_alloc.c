@@ -10,7 +10,14 @@
 #include "fb_alloc.h"
 #include "framebuffer.h"
 
+
+#ifdef __CC_ARM
+extern  char Image$$OMV_FB_ALLOC$$Limit;
+#define _fballoc Image$$OMV_FB_ALLOC$$Limit
+#else
 extern char _fballoc;
+#endif
+
 static char *pointer = &_fballoc;
 
 NORETURN void fb_alloc_fail()

@@ -34,3 +34,8 @@ void pendsv_isr_handler(void);
 #else
 void pendsv_isr_handler(void) __attribute__((naked));
 #endif
+
+void pendsv_nlr_jump(void *o);
+void pendsv_nlr_jump_hard(void *o);
+
+

@@ -349,13 +349,29 @@ Reset_Handler   PROC
 				str		r2,	[r0]
 				
 				ldr		r0, = 0x400AC044	; IOMUXC.GPR17
-				ldr		r1, = 0xFFAAAAAA	; 64kB ITCM, (512-64) KB DTCM, 0KB OCRAM
+				ldr		r1, = 0xFAAAAAAA	; 64kB ITCM, (512-64) KB DTCM, 0KB OCRAM
 				str		r1,	[r0]
 				
 				ldr		r0,	= 0x400AC040	; IOMUXC.GPR16
 				ldr		r2,	[r0]
-				orr		r2, #3	; enable ITCM, DTCM, apply IOMUXC's cfg instead of FUSE config
+				orr		r2, #7	; enable ITCM, DTCM, apply IOMUXC's cfg instead of FUSE config
 				str		r2,	[r0]
+				
+				ldr		r0, =0x20000000
+				ldr		r1, =0x20070000
+				ldr		r2, =0
+10				
+				str		r2,	[r0], #4
+				cmp		r0,	r1
+				bne		%b10
+				
+				ldr		r0, =0x00000000
+				ldr		r1, =0x00010000
+				ldr		r2, =0
+10				
+				str		r2,	[r0], #4
+				cmp		r0,	r1
+				bne		%b10			
 				; <<<
                 LDR     R0, =0xE000ED08
                 LDR     R1, =__Vectors

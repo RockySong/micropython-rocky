@@ -77,7 +77,7 @@ void BOARD_ConfigMPU(void)
     SCB_DisableICache();
     SCB_DisableDCache();
     /* Disable MPU */ 
-    ARM_MPU_Disable();
+    ARM_MPU_Disable(); 
 
     /* Region 0 setting */    
     MPU->RBAR = ARM_MPU_RBAR(0, 0xC0000000U);

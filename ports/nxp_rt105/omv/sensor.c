@@ -77,9 +77,13 @@ volatile bool g_Transfer_Done = false;
 /*******************************************************************************
  * Variables
  ******************************************************************************/
+#ifdef __CC_ARM
+#define LCD_FB __attribute__((section(".lcd_fb")))
+/*static*/ LCD_FB uint16_t s_frameBuffer[APP_FRAME_BUFFER_COUNT][APP_CAMERA_HEIGHT][APP_CAMERA_WIDTH] ;
+#else
 AT_NONCACHEABLE_SECTION_ALIGN(static uint16_t s_frameBuffer[APP_FRAME_BUFFER_COUNT][APP_CAMERA_HEIGHT][APP_CAMERA_WIDTH],
                               FRAME_BUFFER_ALIGN);
-
+#endif
 typedef struct _ov7725_reg
 {
     uint8_t reg;
@@ -153,6 +157,7 @@ static const ov7725_reg_t ov7725InitRegs[] = {   //note that:we use our rt defau
     {0x8a, 0xc5},
     {0x8b, 0xd7},
     {0x8c, 0xe8},
+
 };
 
 static status_t cambus_writes(uint8_t slv_addr, const ov7725_reg_t regs[], uint32_t num)
@@ -321,10 +326,11 @@ static ov7725_resource_t ov7725Resource = {
     .pullPowerDownPin = BOARD_PullCameraPowerDownPin,
     .inputClockFreq_Hz = 24000000,
 };
+/*
 camera_device_handle_t cameraDevice = {
     .resource = &ov7725Resource, .ops = &ov7725_ops,
 };
-
+*/
 void sensor_init0()      //make a note that we do not have the function of the jpeg,so no need to init the jpeg buffer
 {
     // Init FB mutex
@@ -334,7 +340,7 @@ void sensor_init0()      //make a note that we do not have the function of the j
    // int fb_enabled = JPEG_FB()->enabled;
 
     // Clear framebuffers
-    memset(MAIN_FB(), 0, sizeof(*MAIN_FB()));
+    // memset(MAIN_FB(), 0, sizeof(*MAIN_FB()));
   //  memset(JPEG_FB(), 0, sizeof(*JPEG_FB()));
 
     // Set default quality
@@ -471,8 +477,14 @@ int sensor_init()
     return 0;
 }
 
+uint8_t s_isSensorInited;
 int sensor_reset()
 {
+	if (!s_isSensorInited) {
+		sensor_init0();
+		sensor_init();	
+	
+	}
     // Reset the sesnor state
     sensor.sde          = 0xFF;
     sensor.pixformat    = 0xFF;

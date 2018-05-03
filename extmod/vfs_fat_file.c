@@ -29,6 +29,7 @@
 
 #include <stdio.h>
 
+#include "py/nlr.h"
 #include "py/runtime.h"
 #include "py/stream.h"
 #include "py/mperrno.h"
@@ -64,6 +65,38 @@ const byte fresult_to_errno_table[20] = {
     [FR_TOO_MANY_OPEN_FILES] = MP_EMFILE,
     [FR_INVALID_PARAMETER] = MP_EINVAL,
 };
+
+const char *ffs_strerror(FRESULT res)
+{
+    static const char *ffs_errors[]={
+        "Succeeded",
+        "A hard error occurred in the low level disk I/O layer",
+        "Assertion failed",
+        "The physical drive cannot work",
+        "Could not find the file",
+        "Could not find the path",
+        "The path name format is invalid",
+        "Access denied due to prohibited access or directory full",
+        "Access denied due to prohibited access",
+        "The file/directory object is invalid",
+        "The physical drive is write protected",
+        "The logical drive number is invalid",
+        "The volume has no work area",
+        "There is no valid FAT volume",
+        "The f_mkfs() aborted due to any parameter error",
+        "Could not get a grant to access the volume within defined period",
+        "The operation is rejected according to the file sharing policy",
+        "LFN working buffer could not be allocated",
+        "Number of open files > _FS_SHARE",
+        "Given parameter is invalid",
+    };
+
+    if (res>sizeof(ffs_errors)/sizeof(ffs_errors[0])) {
+        return "unknown error";
+    } else {
+        return ffs_errors[res];
+    }
+}
 
 typedef struct _pyb_file_obj_t {
     mp_obj_base_t base;

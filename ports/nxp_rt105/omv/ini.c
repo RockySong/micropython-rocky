@@ -111,7 +111,7 @@ ini_atoi(string)
 
     for ( ; ; string += 1) {
         digit = *string - '0';
-        if ((digit < 0) || (digit > 9)) {
+        if (((int)digit < 0) || (digit > 9)) {
             if (!ini_isspace(*string)) {
                 result = 0;
             }

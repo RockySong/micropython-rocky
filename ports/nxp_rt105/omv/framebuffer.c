@@ -10,12 +10,24 @@
 #include "omv_boardconfig.h"
 #include "framebuffer.h"
 
+#ifdef __CC_ARM
+__WEAK bool jpeg_compress(image_t *src, image_t *dst, int quality, bool realloc) {return 1;}
+
+extern unsigned int Image$$OMV_MAIN_FB$$Base;
+extern unsigned int Image$$OMV_JPEG_FB$$Base;
+
+
+framebuffer_t *fb_framebuffer = (framebuffer_t*) &Image$$OMV_MAIN_FB$$Base;
+jpegbuffer_t *jpeg_fb_framebuffer = (jpegbuffer_t*) &Image$$OMV_JPEG_FB$$Base;
+#else
+
 extern char _fb_base;
 framebuffer_t *fb_framebuffer = (framebuffer_t *) &_fb_base;
 
-//extern  
-char _jpeg_buf;
+extern char _jpeg_buf;
 jpegbuffer_t *jpeg_fb_framebuffer = (jpegbuffer_t *) &_jpeg_buf;
+
+#endif
 
 uint32_t fb_buffer_size()
 {

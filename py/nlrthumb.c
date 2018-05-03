@@ -25,6 +25,7 @@
  */
 
 #include "py/mpstate.h"
+#include "py/nlr.h"
 
 #if (!defined(MICROPY_NLR_SETJMP) || !MICROPY_NLR_SETJMP) && (defined(__thumb2__) || defined(__thumb__) || defined(__arm__))
 

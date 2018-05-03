@@ -1,8 +1,8 @@
 #ifndef _MPCONFIGBOARD_H_
 #define _MPCONFIGBOARD_H_
 
-#define MICROPY_HW_BOARD_NAME       "LPX54608"
-#define MICROPY_HW_MCU_NAME         "LPC54608"
+#define MICROPY_HW_BOARD_NAME       "mimxrt1050-evk"
+#define MICROPY_HW_MCU_NAME         "i.MX RT105x"
 #define MICROPY_HW_UART_REPL    	(repl_uart_id)	// uart ID of REPL uart, must be the same as repl_uart_id in uart.h
 #define MICROPY_HW_HAS_SWITCH       (0)
 #define MICROPY_HW_HAS_FLASH        (1)

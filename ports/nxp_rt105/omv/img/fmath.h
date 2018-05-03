@@ -11,14 +11,21 @@
 #include <stdint.h>
 
 #ifdef __CC_ARM
-	#define fast_sqrtf __sqrtf
-__asm static inline 
-#endif
-
+#include <math.h>
+#define fast_sqrtf sqrtf
+#define fast_floorf(x) ((int)floorf(x))
+#define fast_ceilf(x) ((int)ceilf(x))
+#define fast_roundf(x) ((int)roundf(x))
+#define fast_fabsf fabsf
+#define isnanf __ARM_isnanf
+#else
 float fast_sqrtf(float x);
 int fast_floorf(float x);
 int fast_ceilf(float x);
 int fast_roundf(float x);
+#endif
+
+
 float fast_atanf(float x);
 float fast_atan2f(float y, float x);
 float fast_expf(float x);

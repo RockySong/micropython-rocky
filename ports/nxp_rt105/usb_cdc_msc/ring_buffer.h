@@ -140,7 +140,7 @@ int32_t RingBuf_GetFreeBytes(ring_buffer_t* pRB);
  */
 int32_t RingBuf_GetUsedBytes(ring_buffer_t* pRB);
 
-#define RING_BLOCK_MAX_CNT 8
+#define RING_BLOCK_MAX_CNT 16
 #define RING_BLOCK_MAX_SIZE	64
 
 typedef struct

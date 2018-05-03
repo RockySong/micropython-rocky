@@ -105,6 +105,9 @@ int VCOM_Write(const uint8_t *buf, uint32_t len);
 void VCOM_WriteAlways(const uint8_t *buf, uint32_t len);
 uint32_t VCOM_RxBufGetFilledBytes(void);
 int USBD_CDC_TxHalfEmpty(void);
+void VCOM_Open(void);
+void VCOM_Close(void);
+
 
 
 

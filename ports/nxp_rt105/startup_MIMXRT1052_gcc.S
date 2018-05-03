@@ -35,7 +35,7 @@
 /* DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE     */
 /* LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR       */
 /* CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF      */
-/* SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR           */
+/* SUBSTITUTE GOODS OR SERVICES// LOSS OF USE, DATA, OR PROFITS// OR           */
 /* BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,     */
 /* WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE      */
 /* OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN    */
@@ -324,6 +324,24 @@ __isr_vector:
 Reset_Handler:
     cpsid   i               /* Mask interrupts */
     .equ    VTOR, 0xE000ED08
+
+	// >>> do custom FlexRAM configuration
+	ldr		r0,	= 0x400AC038	// IOMUXC.GPR14
+	ldr		r1, = 7 | 10<<4		// config (max allowed) ITCM=64KB, DTCM=512KB
+	ldr		r2, [r0]
+	bfi		r2,	r1, #16, #8
+	str		r2,	[r0]
+	
+	ldr		r0, = 0x400AC044	// IOMUXC.GPR17
+	ldr		r1, = 0xFAAAAAAA	// 64kB ITCM, (512-64) KB DTCM, 0KB OCRAM
+	str		r1,	[r0]
+	
+	ldr		r0,	= 0x400AC040	// IOMUXC.GPR16
+	ldr		r2,	[r0]
+	orr		r2, #7	// enable ITCM, DTCM, apply IOMUXC's cfg instead of FUSE config
+	str		r2,	[r0]
+	// <<<
+
     ldr     r0, =VTOR
     ldr     r1, =__isr_vector
     str     r1, [r0]
