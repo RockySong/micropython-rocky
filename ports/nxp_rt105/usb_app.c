@@ -138,7 +138,13 @@ void pyb_usb_dev_deinit(void) {
     }
 }
 
+__WEAK bool IsVcpOccupiedByOpenMvIDE(void) {
+	return 0;
+}
+
 bool usb_vcp_is_enabled(void) {
+	if (IsVcpOccupiedByOpenMvIDE())
+		return 0;
     return (pyb_usb_flags & PYB_USB_FLAG_DEV_ENABLED) != 0;
 }
 

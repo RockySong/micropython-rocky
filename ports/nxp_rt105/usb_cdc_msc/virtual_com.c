@@ -179,6 +179,13 @@ void CheckOpenMVIDEConnect(void) {
 	}	
 }
 
+bool IsVcpOccupiedByOpenMvIDE(void)
+{
+	if (debug_mode)
+		return 1;
+	return 0;
+}
+
 /*!
  * @brief CDC class specific callback function.
  *

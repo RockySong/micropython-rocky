@@ -494,11 +494,13 @@ int sensor_reset()
 
 
     // Call sensor-specific reset function; in the moment,we use our init function and defaults regs
-    //sensor.reset(&sensor);
+    sensor.reset(&sensor);
+	/*
       // Reset all registers
     cambus_writeb(sensor.slv_addr, COM7, COM7_RESET);   
     OV7725_DelayMs(2);
     cambus_writes(sensor.slv_addr,ov7725InitRegs,ARRAY_SIZE(ov7725InitRegs));  
+	*/
     return 0;
 }
 
