@@ -12,7 +12,7 @@
  */
 
 #include <stdio.h>
-#include STM32_HAL_H
+#include "board.h"
 #include <arm_math.h>
 
 #include "xalloc.h"

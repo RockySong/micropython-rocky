@@ -406,3 +406,4 @@ _si40_mpyLpc546/cache/parse/py_mpprint.h.sisc
 *.dep
 *.P
 *.qstr
+*.__i

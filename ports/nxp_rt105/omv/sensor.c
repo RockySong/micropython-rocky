@@ -351,16 +351,13 @@ void sensor_init0()      //make a note that we do not have the function of the j
 }
 uint32_t activeFrameAddr;
 uint32_t inactiveFrameAddr;
-int sensor_init()
+
+void LCDMonitor_Init(void)
 {
-   
- //   uint8_t com10=0,com2=0,com3=0,clkrc=0;
-   
     // Initialize the camera bus.
     BOARD_InitLcdifPixClock();
    // BOARD_InitDebugConsole();
-    BOARD_InitLcd();
-    cambus_init();
+    BOARD_InitLcd();	
     elcdif_rgb_mode_config_t lcdConfig = {
         .panelWidth = APP_LCD_WIDTH,
         .panelHeight = APP_LCD_HEIGHT,
@@ -373,8 +370,23 @@ int sensor_init()
         .polarityFlags = APP_LCD_POL_FLAGS,
         .pixelFormat = kELCDIF_PixelFormatRGB565,
         .dataBus = APP_LCDIF_DATA_BUS,
-    };
+    };	
+	memset(s_frameBuffer, 0, sizeof(s_frameBuffer));
 
+    lcdConfig.bufferAddr = (uint32_t)activeFrameAddr;
+
+    ELCDIF_RgbModeInit(APP_ELCDIF, &lcdConfig);
+
+    ELCDIF_SetNextBufferAddr(APP_ELCDIF, inactiveFrameAddr);
+    ELCDIF_RgbModeStart(APP_ELCDIF);  	
+}
+
+int sensor_init()
+{
+   
+ //   uint8_t com10=0,com2=0,com3=0,clkrc=0;
+   
+    cambus_init();
     // Clear sensor chip ID.
     sensor.chip_id = 0;
     sensor.slv_addr = 0x21U; //?
@@ -414,7 +426,7 @@ int sensor_init()
         .controlFlags = APP_CAMERA_CONTROL_FLAGS,
         .framePerSec = 30,
     };
-    memset(s_frameBuffer, 0, sizeof(s_frameBuffer));
+    
   /*  for(uint8_t i=0;i<=0x3F;i++)     for the test:print the reg of the ov7725
 {
     cambus_readb(sensor.slv_addr,i,&temp);
@@ -463,16 +475,6 @@ int sensor_init()
     while (kStatus_Success != CAMERA_RECEIVER_GetFullBuffer(&cameraReceiver, &inactiveFrameAddr))
     {
     }
-
-    lcdConfig.bufferAddr = (uint32_t)activeFrameAddr;
-
-    ELCDIF_RgbModeInit(APP_ELCDIF, &lcdConfig);
-
-    ELCDIF_SetNextBufferAddr(APP_ELCDIF, inactiveFrameAddr);
-    ELCDIF_RgbModeStart(APP_ELCDIF);  
-
-
-
     /* All good! */
     return 0;
 }
@@ -829,6 +831,95 @@ static void sensor_check_bufsize()
 
 }
 
+void LCDMonitor_Update(void)
+{
+/*
+    // Wait for frame
+     ELCDIF_ClearInterruptStatus(APP_ELCDIF, kELCDIF_CurFrameDone);
+     while (!(kELCDIF_CurFrameDone & ELCDIF_GetInterruptStatus(APP_ELCDIF)))
+        {
+        }
+     while (kStatus_Success != CAMERA_RECEIVER_GetFullBuffer(&cameraReceiver, &activeADDR))   //warning:must write like this,if not,will not run the correct result,transfer only one time;the important thing is use two free buffer and submit one of the buffer to the csi queue
+    {
+    } 
+    ELCDIF_SetNextBufferAddr(APP_ELCDIF, activeADDR);
+    inactiveADDR = activeADDR;
+    CAMERA_RECEIVER_SubmitEmptyBuffer(&cameraReceiver, inactiveADDR);
+    *buf = (char*)activeADDR;*/
+     ELCDIF_ClearInterruptStatus(APP_ELCDIF, kELCDIF_CurFrameDone);
+        /* Wait the inactive buffer be active. */
+        while (!(kELCDIF_CurFrameDone & ELCDIF_GetInterruptStatus(APP_ELCDIF)))
+        {
+        }
+
+        CAMERA_RECEIVER_SubmitEmptyBuffer(&cameraReceiver, activeFrameAddr);
+		
+        activeFrameAddr = inactiveFrameAddr;
+
+		/* Wait to get the full frame buffer to show. */
+        while (kStatus_Success != CAMERA_RECEIVER_GetFullBuffer(&cameraReceiver, &inactiveFrameAddr))
+        {
+        }
+        ELCDIF_SetNextBufferAddr(APP_ELCDIF, inactiveFrameAddr);
+	
+}
+
+
+// This function is called back after each line transfer is complete,
+// with a pointer to the line buffer that was used. At this point the
+// DMA transfers the next line to the other half of the line buffer.
+// Note:  For JPEG this function is called once (and ignored) at the end of the transfer.
+
+void PreprocessOneLine(uint32_t addr, int line)
+{
+    uint8_t *src = (uint8_t*) addr;
+    uint8_t *dst = MAIN_FB()->pixels;
+
+    if (sensor.line_filter_func && sensor.line_filter_args) {
+        int bpp = ((sensor.pixformat == PIXFORMAT_GRAYSCALE) ? 1:2);
+        dst += line++ * MAIN_FB()->w * bpp;
+        // If there's an image filter installed call it.
+        // Note: BPP is the target BPP, not the line bpp (the line is always 2 bytes per pixel) if the target BPP is 1
+        // it means the image currently being read is going to be Grayscale, and the function needs to output w * 1BPP.
+        sensor.line_filter_func(src, MAIN_FB()->w * 2 , dst, MAIN_FB()->w * bpp, sensor.line_filter_args);
+    } else {
+        switch (sensor.pixformat) {
+            case PIXFORMAT_BAYER:
+                dst += line++ * MAIN_FB()->w;
+                for (int i=0; i<MAIN_FB()->w; i++) {
+                    dst[i] = src[i];
+                }
+                break;
+            case PIXFORMAT_GRAYSCALE:
+                dst += line++ * MAIN_FB()->w;
+                if (sensor.gs_bpp == 1) {
+                    // 1BPP GRAYSCALE.
+                    for (int i=0; i<MAIN_FB()->w; i++) {
+                        dst[i] = src[i];
+                    }
+                } else {
+                    // Extract Y channel from YUV.
+                    for (int i=0; i<MAIN_FB()->w; i++) {
+                        dst[i] = src[i<<1];
+                    }
+                }
+                break;
+            case PIXFORMAT_YUV422:
+            case PIXFORMAT_RGB565:
+                dst += line++ * MAIN_FB()->w * 2;
+                for (int i=0; i<MAIN_FB()->w * 2; i++) {
+                    dst[i] = src[i];
+                }
+                break;
+            case PIXFORMAT_JPEG:
+                break;
+            default:
+                break;
+        }
+    }
+}
+
+
 // The JPEG offset allows JPEG compression of the framebuffer without overwriting the pixels.
 // The offset size may need to be adjusted depending on the quality, otherwise JPEG data may
 // overwrite image pixels before they are compressed.
@@ -838,7 +929,42 @@ int sensor_snapshot(char** buf)//image_t *image)
   //  uint32_t inactiveADDR;
     MAIN_FB()->w = sensor.fb_w;
     MAIN_FB()->h = sensor.fb_h;
+	MAIN_FB()->bpp = 2;
+	static uint8_t n;
+	// >>> debug
+    {
+		uint32_t i;
+		uint16_t *p = (uint16_t*) fb_framebuffer->pixels;
+		
+		uint32_t j;
+		/*
+		for (i=0; i<sensor.fb_h; i++) {
+			for (j=0; j<sensor.fb_w; j++) {
+				if (i > j)
+					p[0] = (n & 0x1F) <<0;
+				else
+					p[0] = 0xFFFF;
+				p++;
+			}
+		}
+		*/
+		n++;
+		CAMERA_RECEIVER_SubmitEmptyBuffer(&cameraReceiver, (uint32_t)fb_framebuffer->pixels );
+		/*
+		for (i=0, p = (uint16_t*) fb_framebuffer->pixels; i<sensor.fb_h; i++) {
+			PreprocessOneLine((uint32_t)p, i);
+			p += sensor.fb_w;
+		}
+		*/
+		fb_update_jpeg_buffer();
+		return 0;
+    }
+	// <<<
 
+	// <<<
+	// memcpy(fb_framebuffer->pixels, (void*)activeFrameAddr, sensor.fb_h * sensor.fb_w * fb_framebuffer->bpp);
+	fb_update_jpeg_buffer();
+	return 0;
     // Make sure the raw frame fits FB. If it doesn't it will be cropped
     // for GS, or the sensor pixel format will be swicthed to bayer for RGB.
     sensor_check_bufsize();
@@ -880,34 +1006,9 @@ int sensor_snapshot(char** buf)//image_t *image)
         //no support this function
         return -1;
     } else {
-/*
-    // Wait for frame
-     ELCDIF_ClearInterruptStatus(APP_ELCDIF, kELCDIF_CurFrameDone);
-     while (!(kELCDIF_CurFrameDone & ELCDIF_GetInterruptStatus(APP_ELCDIF)))
-        {
-        }
-     while (kStatus_Success != CAMERA_RECEIVER_GetFullBuffer(&cameraReceiver, &activeADDR))   //warning:must write like this,if not,will not run the correct result,transfer only one time;the important thing is use two free buffer and submit one of the buffer to the csi queue
-    {
-    } 
-    ELCDIF_SetNextBufferAddr(APP_ELCDIF, activeADDR);
-    inactiveADDR = activeADDR;
-    CAMERA_RECEIVER_SubmitEmptyBuffer(&cameraReceiver, inactiveADDR);
-    *buf = (char*)activeADDR;*/
-     ELCDIF_ClearInterruptStatus(APP_ELCDIF, kELCDIF_CurFrameDone);
-        /* Wait the inactive buffer be active. */
-        while (!(kELCDIF_CurFrameDone & ELCDIF_GetInterruptStatus(APP_ELCDIF)))
-        {
-        }
-
+    	// LCDMonitor_Update();
         CAMERA_RECEIVER_SubmitEmptyBuffer(&cameraReceiver, activeFrameAddr);
-        activeFrameAddr = inactiveFrameAddr;
-
-        /* Wait to get the full frame buffer to show. */
-        while (kStatus_Success != CAMERA_RECEIVER_GetFullBuffer(&cameraReceiver, &inactiveFrameAddr))
-        {
-        }
-        ELCDIF_SetNextBufferAddr(APP_ELCDIF, inactiveFrameAddr);
-
+        activeFrameAddr = inactiveFrameAddr;    	
     }
     // Disable DMA IRQ
    // HAL_NVIC_DisableIRQ(DMA2_Stream1_IRQn);

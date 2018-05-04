@@ -332,7 +332,7 @@ void usbdbg_control(void *buffer, uint8_t request, uint32_t length)
             int16_t enable = *((int16_t*)buffer);
 			logout("control: FB enable, enable=%d, jpeg_fb = 0x%08X\r\n", enable, (uint32_t)JPEG_FB());
 
-            // JPEG_FB()->enabled = enable;
+            JPEG_FB()->enabled = enable;
             if (enable == 0) {
                 // When disabling framebuffer, the IDE might still be holding FB lock.
                 // If the IDE is not the current lock owner, this operation is ignored.

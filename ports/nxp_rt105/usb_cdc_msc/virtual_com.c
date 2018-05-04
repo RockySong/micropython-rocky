@@ -92,9 +92,9 @@ static uint8_t s_countryCode[COMM_FEATURE_DATA_SIZE] = {(COUNTRY_SETTING >> 0U) 
 USB_DATA_ALIGNMENT static usb_cdc_acm_info_t s_usbCdcAcmInfo = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, 0, 0, 0, 0, 0};
 /* Data buffer for receiving and sending*/
 
-#define VCP_RINGBLK_SIZE	32
+#define VCP_RINGBLK_SIZE	64
 #define VCP_OUTEPBUF_CNT 3
-#define VCP_INEPBUF_CNT 16
+#define VCP_INEPBUF_CNT 6
 
 #if VCP_RINGBLK_SIZE % 32 != 0
 #error "buffer size must be multiples of 32!"
@@ -171,7 +171,7 @@ void CheckOpenMVIDEConnect(void) {
 	if (baudrate == IDE_BAUDRATE_SLOW || baudrate == IDE_BAUDRATE_FAST) {
 		debug_mode = 1;
 		g_isUsbHostOpen = 1;
-		dbg_xfer_length=0;
+		dbg_xfer_length = 0;
 		// UserTxBufPtrIn = UserTxBufPtrOut = UserTxBufPtrOutShadow = 0;
 	} else {
 		debug_mode = 0;
@@ -197,6 +197,7 @@ bool IsVcpOccupiedByOpenMvIDE(void)
  *
  * @return A USB error code or kStatus_USB_Success.
  */
+ /*static*/ uint8_t s_omvSendIsToContinue;
 usb_status_t USB_DeviceCdcVcomCallback(class_handle_t handle, uint32_t event, void *param)
 {
     usb_status_t error = kStatus_USB_Error;
@@ -237,6 +238,12 @@ usb_status_t USB_DeviceCdcVcomCallback(class_handle_t handle, uint32_t event, vo
                 	s_isTxIdle = 1;	// all TX data is sent in this round
 				}
             }
+			// >>> openMV data resume
+			if (dbg_xfer_length && s_omvSendIsToContinue) { //request has a device-to-host data phase
+				send_packet(); //prime tx buffer
+			} else 
+				s_omvSendIsToContinue = 0;
+			// <<<
         }
         break;
         case kUSB_DeviceCdcEventRecvResponse:
@@ -280,6 +287,8 @@ usb_status_t USB_DeviceCdcVcomCallback(class_handle_t handle, uint32_t event, vo
 				            usbdbg_control(Buf+6, request, dbg_xfer_length);
 				            if (dbg_xfer_length && (request & 0x80)) { //request has a device-to-host data phase
 				                send_packet(); //prime tx buffer
+				                if (dbg_xfer_length)
+									s_omvSendIsToContinue = 1;
 				            }
 				        }						
 					}

@@ -277,12 +277,22 @@
           <WinNumber>1</WinNumber>
           <ItemText>g_isUsbHostOpen</ItemText>
         </Ww>
+        <Ww>
+          <count>25</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>jpeg_fb_framebuffer</ItemText>
+        </Ww>
+        <Ww>
+          <count>26</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>fb_framebuffer</ItemText>
+        </Ww>
       </WatchWindow1>
       <MemoryWindow1>
         <Mm>
           <WinNumber>1</WinNumber>
-          <SubType>2</SubType>
-          <ItemText>0x20001700</ItemText>
+          <SubType>258</SubType>
+          <ItemText>jpeg_fb_framebuffer</ItemText>
           <AccSizeX>0</AccSizeX>
         </Mm>
       </MemoryWindow1>
@@ -7457,18 +7467,6 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt105\omv\img\jpeg.c</PathWithFileName>
-      <FilenameWithoutPath>jpeg.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>22</GroupNumber>
-      <FileNumber>550</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
       <PathWithFileName>..\nxp_rt105\omv\img\kmeans.c</PathWithFileName>
       <FilenameWithoutPath>kmeans.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
@@ -7476,7 +7474,7 @@
     </File>
     <File>
       <GroupNumber>22</GroupNumber>
-      <FileNumber>551</FileNumber>
+      <FileNumber>550</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -7488,7 +7486,7 @@
     </File>
     <File>
       <GroupNumber>22</GroupNumber>
-      <FileNumber>552</FileNumber>
+      <FileNumber>551</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -7500,7 +7498,7 @@
     </File>
     <File>
       <GroupNumber>22</GroupNumber>
-      <FileNumber>553</FileNumber>
+      <FileNumber>552</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -7512,7 +7510,7 @@
     </File>
     <File>
       <GroupNumber>22</GroupNumber>
-      <FileNumber>554</FileNumber>
+      <FileNumber>553</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -7524,7 +7522,7 @@
     </File>
     <File>
       <GroupNumber>22</GroupNumber>
-      <FileNumber>555</FileNumber>
+      <FileNumber>554</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -7536,7 +7534,7 @@
     </File>
     <File>
       <GroupNumber>22</GroupNumber>
-      <FileNumber>556</FileNumber>
+      <FileNumber>555</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -7548,7 +7546,7 @@
     </File>
     <File>
       <GroupNumber>22</GroupNumber>
-      <FileNumber>557</FileNumber>
+      <FileNumber>556</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -7560,7 +7558,7 @@
     </File>
     <File>
       <GroupNumber>22</GroupNumber>
-      <FileNumber>558</FileNumber>
+      <FileNumber>557</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -7572,7 +7570,7 @@
     </File>
     <File>
       <GroupNumber>22</GroupNumber>
-      <FileNumber>559</FileNumber>
+      <FileNumber>558</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -7584,7 +7582,7 @@
     </File>
     <File>
       <GroupNumber>22</GroupNumber>
-      <FileNumber>560</FileNumber>
+      <FileNumber>559</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -7596,7 +7594,7 @@
     </File>
     <File>
       <GroupNumber>22</GroupNumber>
-      <FileNumber>561</FileNumber>
+      <FileNumber>560</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -7608,7 +7606,7 @@
     </File>
     <File>
       <GroupNumber>22</GroupNumber>
-      <FileNumber>562</FileNumber>
+      <FileNumber>561</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -7620,7 +7618,7 @@
     </File>
     <File>
       <GroupNumber>22</GroupNumber>
-      <FileNumber>563</FileNumber>
+      <FileNumber>562</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -7632,7 +7630,7 @@
     </File>
     <File>
       <GroupNumber>22</GroupNumber>
-      <FileNumber>564</FileNumber>
+      <FileNumber>563</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -7644,7 +7642,7 @@
     </File>
     <File>
       <GroupNumber>22</GroupNumber>
-      <FileNumber>565</FileNumber>
+      <FileNumber>564</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -7656,7 +7654,7 @@
     </File>
     <File>
       <GroupNumber>22</GroupNumber>
-      <FileNumber>566</FileNumber>
+      <FileNumber>565</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -7668,7 +7666,7 @@
     </File>
     <File>
       <GroupNumber>22</GroupNumber>
-      <FileNumber>567</FileNumber>
+      <FileNumber>566</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -7680,7 +7678,7 @@
     </File>
     <File>
       <GroupNumber>22</GroupNumber>
-      <FileNumber>568</FileNumber>
+      <FileNumber>567</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -7692,7 +7690,7 @@
     </File>
     <File>
       <GroupNumber>22</GroupNumber>
-      <FileNumber>569</FileNumber>
+      <FileNumber>568</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -7704,7 +7702,7 @@
     </File>
     <File>
       <GroupNumber>22</GroupNumber>
-      <FileNumber>570</FileNumber>
+      <FileNumber>569</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -7716,7 +7714,7 @@
     </File>
     <File>
       <GroupNumber>22</GroupNumber>
-      <FileNumber>571</FileNumber>
+      <FileNumber>570</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -7728,7 +7726,7 @@
     </File>
     <File>
       <GroupNumber>22</GroupNumber>
-      <FileNumber>572</FileNumber>
+      <FileNumber>571</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -7740,7 +7738,7 @@
     </File>
     <File>
       <GroupNumber>22</GroupNumber>
-      <FileNumber>573</FileNumber>
+      <FileNumber>572</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -7752,7 +7750,7 @@
     </File>
     <File>
       <GroupNumber>22</GroupNumber>
-      <FileNumber>574</FileNumber>
+      <FileNumber>573</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -7764,7 +7762,7 @@
     </File>
     <File>
       <GroupNumber>22</GroupNumber>
-      <FileNumber>575</FileNumber>
+      <FileNumber>574</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -7776,25 +7774,45 @@
     </File>
     <File>
       <GroupNumber>22</GroupNumber>
-      <FileNumber>576</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt105\omv\img\yuv_tab.c</PathWithFileName>
-      <FilenameWithoutPath>yuv_tab.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>22</GroupNumber>
-      <FileNumber>577</FileNumber>
+      <FileNumber>575</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\nxp_rt105\omv\img\zbar.c</PathWithFileName>
       <FilenameWithoutPath>zbar.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+  </Group>
+
+  <Group>
+    <GroupName>omv_img_en</GroupName>
+    <tvExp>1</tvExp>
+    <tvExpOptDlg>0</tvExpOptDlg>
+    <cbSel>0</cbSel>
+    <RteFlg>0</RteFlg>
+    <File>
+      <GroupNumber>23</GroupNumber>
+      <FileNumber>576</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\nxp_rt105\omv\img\jpeg.c</PathWithFileName>
+      <FilenameWithoutPath>jpeg.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>23</GroupNumber>
+      <FileNumber>577</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\nxp_rt105\omv\img\yuv_tab.c</PathWithFileName>
+      <FilenameWithoutPath>yuv_tab.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
