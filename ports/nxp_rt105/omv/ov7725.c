@@ -17,7 +17,7 @@
 
 static const uint8_t default_regs[][2] = {
     {COM2,          0x03},   
-    {COM3,          0x00},//if we set the varible COM3_SWAP_YUV,the picture will be a mass one 
+    {COM3,          0x10},//if we set the varible COM3_SWAP_YUV,the picture will be a mass one 
     {COM7,          COM7_RES_VGA | COM7_FMT_RGB565 | COM7_FMT_RGB},
 
     {COM4,          OMV_OV7725_PLL_CONFIG},

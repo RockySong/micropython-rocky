@@ -85,7 +85,13 @@ NORETURN void nlr_jump(void *val);
 NORETURN void nlr_jump_fail(void *val);
 
 // use nlr_raise instead of nlr_jump so that debugging is easier
+
+#ifdef CROSS_MPY
+#define fb_alloc_free_till_mark()
+#else
 extern void fb_alloc_free_till_mark();
+#endif
+
 #ifndef MICROPY_DEBUG_NLR
 #define nlr_raise(val) \
     do { \
