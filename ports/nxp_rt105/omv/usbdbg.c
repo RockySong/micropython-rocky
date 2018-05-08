@@ -24,7 +24,7 @@ static int xfer_length;
 static enum usbdbg_cmd cmd;
 
 static volatile bool script_ready;
-static volatile bool script_running;
+volatile bool script_running;
 static vstr_t script_buf;
 static mp_obj_t mp_const_ide_interrupt = MP_OBJ_NULL;
 
@@ -58,13 +58,13 @@ void usbdbg_set_script_running(bool running)
 
 inline void usbdbg_set_irq_enabled(bool enabled)
 {
-	/*
+	
     if (enabled) {
-        HAL_NVIC_EnableIRQ(OTG_FS_IRQn);
+		NVIC_EnableIRQ(USB_OTG1_IRQn);
     } else {
-        HAL_NVIC_DisableIRQ(OTG_FS_IRQn);
+		NVIC_DisableIRQ(USB_OTG1_IRQn);
     }
-    */
+    
     __DSB(); __ISB();
 }
 #define logout(...) // printf

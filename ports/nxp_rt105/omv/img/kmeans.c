@@ -14,6 +14,18 @@
 #include "array.h"
 #include "xalloc.h"
 
+
+__WEAK uint32_t rng_randint(uint32_t min, uint32_t max) {
+    uint32_t r=0;
+    if (min==max) {
+        return 0;
+    }
+	uint32_t seed = SysTick->VAL;
+    srand(seed);
+	r = rand();
+    return (r%(max-min))+min;
+}
+
 extern uint32_t rng_randint(uint32_t min, uint32_t max);
 
 static cluster_t *cluster_alloc(int cx, int cy)

@@ -117,9 +117,9 @@ void BOARD_ConfigMPU(void)
     MPU->RBAR = ARM_MPU_RBAR(7, 0x80000000U);
     MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_FULL, 0, 0, 1, 1, 0, ARM_MPU_REGION_SIZE_32MB);    
 
-    /* Region 8 setting, set last 2MB of SDRAM can't be accessed by cache, glocal variables which are not expected to be accessed by cache can be put here */
-    MPU->RBAR = ARM_MPU_RBAR(8, 0x81E00000U);
-    MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_FULL, 1, 0, 0, 0, 0, ARM_MPU_REGION_SIZE_2MB);   
+    /* Region 8 setting, set last 4MB of SDRAM can't be accessed by cache, glocal variables which are not expected to be accessed by cache can be put here */
+    MPU->RBAR = ARM_MPU_RBAR(8, 0x81C00000U);
+    MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_FULL, 1, 0, 0, 0, 0, ARM_MPU_REGION_SIZE_4MB);   
 
     /* Enable MPU */ 
     ARM_MPU_Enable(MPU_CTRL_PRIVDEFENA_Msk);

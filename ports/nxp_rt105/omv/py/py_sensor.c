@@ -292,19 +292,21 @@ static mp_obj_t py_sensor_set_lens_correction(mp_obj_t enable, mp_obj_t radi, mp
 static char a;
 static mp_obj_t py_sensor_snapshot()  //if we add a param like n,in the bracket,the programm will occur a error,no incompatible
 {
+   mp_obj_t image = py_image(0, 0, 0, 0);
    char* buf = &a;
 
-   sensor_snapshot(&buf);
-       for(int i=0;i<50;i++)
-{
+   sensor_snapshot((struct image*) py_image_cobj(image), &buf);
+    for(int i=0;i<20;i++)
+	{
         PRINTF("%d  ",buf[i]);
-if((i+1)%10==0)
-	PRINTF("\r\n");
-}
-        PRINTF("The 50 frameBuffer ahead!\r\n");
+		if((i+1)%10==0)
+			PRINTF("\r\n");
+	}
+    // PRINTF("The 50 frameBuffer ahead!\r\n");
 
-   return mp_const_true;
-  }
+   return image;
+}
+
 static mp_obj_t py_sensor_set_vsync_output(mp_obj_t pin_obj) {
   //  pin_obj_t *pin = pin_obj;
   //  sensor_set_vsync_output(pin->gpio, pin->pin_mask);

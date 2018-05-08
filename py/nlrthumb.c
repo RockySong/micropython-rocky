@@ -47,7 +47,6 @@ __asm unsigned int nlr_push(nlr_buf_t *nlr) {
     str    r5, [r0, #16]        // store r5 into nlr_buf
     str    r6, [r0, #20]        // store r6 into nlr_buf
     str    r7, [r0, #24]        // store r7 into nlr_buf
-
 #if defined(__ARM_ARCH_6M__)
     mov    r1, r8              
     str    r1, [r0, #28]        // store r8 into nlr_buf
@@ -69,7 +68,6 @@ __asm unsigned int nlr_push(nlr_buf_t *nlr) {
     str    r13, [r0, #44]       // store r13=sp into nlr_buf
     str    lr, [r0, #8]         // store lr into nlr_buf
 #endif
-	b		nlr_push_tail
 
 #if defined(__ARM_ARCH_6M__)
     ldr    r1, nlr_push_tail_var \n
@@ -78,6 +76,7 @@ __asm unsigned int nlr_push(nlr_buf_t *nlr) {
 nlr_push_tail_var 
 	DCW word nlr_push_tail
 #else
+
     b      nlr_push_tail       // do the rest in C
 #endif
 }

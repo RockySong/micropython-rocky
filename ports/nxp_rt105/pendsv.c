@@ -63,6 +63,7 @@ void pendsv_kbd_intr(void) {
     }
 }
 
+
 // Call this function to raise a pending exception during an interrupt.
 // It will first try to raise the exception "softly" by setting the
 // mp_pending_exception variable and hoping that the VM will notice it.
@@ -73,6 +74,11 @@ void pendsv_kbd_intr(void) {
 void pendsv_nlr_jump(void *o) {
     if (MP_STATE_VM(mp_pending_exception) == MP_OBJ_NULL) {
         MP_STATE_VM(mp_pending_exception) = o;
+	    #if MICROPY_ENABLE_SCHEDULER
+	    if (MP_STATE_VM(sched_state) == MP_SCHED_IDLE) {
+	        MP_STATE_VM(sched_state) = MP_SCHED_PENDING;
+	    }
+	    #endif		
     } else {
         MP_STATE_VM(mp_pending_exception) = MP_OBJ_NULL;
         pendsv_object = o;

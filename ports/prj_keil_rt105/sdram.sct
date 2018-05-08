@@ -3,10 +3,10 @@
 #define STACK_SIZE 0x1800
 #define IVT_BASE	0x80000000
 #define ITCM_SIZE	64*1024
-#define DTCM_SIZE	(1512-64)*1024
+#define DTCM_SIZE	(512-64)*1024
 #define OCRAM_SIZE	0
 
-#define OMV_MAIN_FB_SIZE	301*1024
+#define OMV_MAIN_FB_SIZE	301*1024 //301*1024
 #define OMV_JPEG_FB_SIZE    24*1024
 #define OMV_FB_ALLOC_SIZE	83*1024
 
@@ -42,6 +42,7 @@ LR_XIP_FLASH IVT_BASE + 0x2000 {
 		vm.o obj.o objarray.o objfloat.o objlist.o objobject.o  (+RO)
 		nlrthumb.o objfun.o  nativeglue.o malloc.o (+RO)	
 		objdict.o  modmath.o modarray.o modbuiltins.o modmicropython.o map.o (+RO)
+		jpeg.o (+RO)
 		* (.ram_code)
 	}
 	
@@ -72,6 +73,7 @@ LR_XIP_FLASH IVT_BASE + 0x2000 {
 	; >>> SDRAM >>>
 	ER_LCD_FB 0x81E00000 UNINIT 1024*1024  {
 		* (.lcd_fb)
+		yuv_tab.o (+RO)
 	}
 
 	;RW_SDRAM 0xA0100000 EMPTY UNINIT (32-1)*1024*1024  {

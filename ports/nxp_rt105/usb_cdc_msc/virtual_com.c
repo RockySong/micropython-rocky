@@ -93,8 +93,8 @@ USB_DATA_ALIGNMENT static usb_cdc_acm_info_t s_usbCdcAcmInfo = {{0, 0, 0, 0, 0, 
 /* Data buffer for receiving and sending*/
 
 #define VCP_RINGBLK_SIZE	64
-#define VCP_OUTEPBUF_CNT 3
-#define VCP_INEPBUF_CNT 6
+#define VCP_OUTEPBUF_CNT 	3
+#define VCP_INEPBUF_CNT 	4
 
 #if VCP_RINGBLK_SIZE % 32 != 0
 #error "buffer size must be multiples of 32!"

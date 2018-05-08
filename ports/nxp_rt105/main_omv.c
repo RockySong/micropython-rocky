@@ -233,9 +233,24 @@ int OpenMV_Main(uint32_t first_soft_reset)
  
     // Run boot script(s)
     if (first_soft_reset) {
-        exec_boot_script("/selftest.py", true, false);
-        apply_settings("/openmv.config");
-        exec_boot_script("/main.py", false, true);
+        exec_boot_script("/sd/selftest.py", true, false);
+        apply_settings("/sd/openmv.config");
+		usbdbg_set_irq_enabled(true);
+		// rocky: pyb's main uses different method to access file system from omv
+        mp_import_stat_t stat = mp_import_stat("main.py");
+        if (stat == MP_IMPORT_STAT_FILE) {
+			nlr_buf_t nlr;
+			if (nlr_push(&nlr) == 0) {
+				int ret = pyexec_file("main.py");
+				if (ret & PYEXEC_FORCED_EXIT) {
+				}
+				if (!ret) {
+					flash_error(3);
+				}
+				nlr_pop();
+			}
+        }
+        // exec_boot_script("/sd/main.py", false, true);
     }
 
     // If there's no script ready, just re-exec REPL

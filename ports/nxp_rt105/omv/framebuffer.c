@@ -76,7 +76,7 @@ void fb_update_jpeg_buffer()
             image_t dst = {.w=MAIN_FB()->w, .h=MAIN_FB()->h, .bpp=(OMV_JPEG_BUF_SIZE-64),  .pixels=JPEG_FB()->pixels};
 
             // Note: lower quality saves USB bandwidth and results in a faster IDE FPS.
-            bool overflow = jpeg_compress(&src, &dst, JPEG_FB()->quality, false);
+            bool overflow = jpeg_compress(&src, &dst, 10/*JPEG_FB()->quality*/, false);
             if (overflow == true) {
                 // JPEG buffer overflowed, reduce JPEG quality for the next frame
                 // and skip the current frame. The IDE doesn't receive this frame.

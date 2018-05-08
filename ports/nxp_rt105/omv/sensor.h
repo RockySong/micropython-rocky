@@ -233,5 +233,6 @@ int sensor_set_special_effect(sde_t sde);
 int sensor_set_lens_correction(int enable, int radi, int coef);
 
 // Capture a Snapshot.
-int sensor_snapshot(char** buf);//image_t *image);
+int sensor_snapshot(image_t *pImg, char** buf);
+
 #endif /* __SENSOR_H__ */

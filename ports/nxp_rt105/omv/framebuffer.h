@@ -12,9 +12,13 @@
 #include "mutex.h"
 
 typedef struct framebuffer {
-    int w,h;
-    int bpp;     //像素深度
-    uint8_t pixels[];
+	union {
+		struct {			
+			uint16_t w, h, bpp, res;
+		};
+		uint64_t u64AlignForIMxRT;	// in i.MX RT, this address must be aligned to 8 bytes!
+	};
+    uint8_t pixels[];	
 } framebuffer_t;
 
 

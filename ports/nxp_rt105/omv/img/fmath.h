@@ -18,6 +18,7 @@
 #define fast_roundf(x) ((int)roundf(x))
 #define fast_fabsf fabsf
 #define isnanf __ARM_isnanf
+#define isinff __ARM_isinff
 #else
 float fast_sqrtf(float x);
 int fast_floorf(float x);

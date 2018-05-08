@@ -923,20 +923,43 @@ void PreprocessOneLine(uint32_t addr, int line)
 // The JPEG offset allows JPEG compression of the framebuffer without overwriting the pixels.
 // The offset size may need to be adjusted depending on the quality, otherwise JPEG data may
 // overwrite image pixels before they are compressed.
-int sensor_snapshot(char** buf)//image_t *image)
+int sensor_snapshot(image_t *pImg, char** buf)//image_t *image)
 {
  //   uint32_t activeADDR;//, length;
   //  uint32_t inactiveADDR;
+    sensor_check_bufsize();
     MAIN_FB()->w = sensor.fb_w;
     MAIN_FB()->h = sensor.fb_h;
-	MAIN_FB()->bpp = 2;
+
+    switch (sensor.pixformat) {
+        case PIXFORMAT_GRAYSCALE:
+            MAIN_FB()->bpp = 1;
+            break;
+        case PIXFORMAT_YUV422:
+        case PIXFORMAT_RGB565:
+            MAIN_FB()->bpp = 2;
+            break;
+        case PIXFORMAT_BAYER:
+            MAIN_FB()->bpp = 3;
+            break;
+        case PIXFORMAT_JPEG:
+            // Read the number of data items transferred
+            // MAIN_FB()->bpp = (MAX_XFER_SIZE - __HAL_DMA_GET_COUNTER(&DMAHandle))*4;
+            break;
+    }
+
 	static uint8_t n;
-	// >>> debug
     {
 		uint32_t i;
 		uint16_t *p = (uint16_t*) fb_framebuffer->pixels;
 		
 		uint32_t j;
+		uint32_t t1, t2;
+		t1 = HAL_GetTick();
+		fb_update_jpeg_buffer();
+		t2 = HAL_GetTick() - t1;
+		t2 = 1000 / t2;
+		// PRINTF("JPEG FPS=%d\r\n", t2);
 		/*
 		for (i=0; i<sensor.fb_h; i++) {
 			for (j=0; j<sensor.fb_w; j++) {
@@ -948,6 +971,7 @@ int sensor_snapshot(char** buf)//image_t *image)
 			}
 		}
 		*/
+		
 		n++;
 		CAMERA_RECEIVER_SubmitEmptyBuffer(&cameraReceiver, (uint32_t)fb_framebuffer->pixels );
 		/*
@@ -956,72 +980,8 @@ int sensor_snapshot(char** buf)//image_t *image)
 			p += sensor.fb_w;
 		}
 		*/
-		fb_update_jpeg_buffer();
-		return 0;
     }
-	// <<<
-
-	// <<<
-	// memcpy(fb_framebuffer->pixels, (void*)activeFrameAddr, sensor.fb_h * sensor.fb_w * fb_framebuffer->bpp);
-	fb_update_jpeg_buffer();
-	return 0;
-    // Make sure the raw frame fits FB. If it doesn't it will be cropped
-    // for GS, or the sensor pixel format will be swicthed to bayer for RGB.
-    sensor_check_bufsize();
-
-    // Setup the size and address of the transfer
-    switch (sensor.pixformat) {
-        case PIXFORMAT_RGB565:
-        case PIXFORMAT_YUV422:
-            // RGB/YUV read 2 bytes per pixel.
-          //  length = (MAIN_FB()->w * MAIN_FB()->h * 2)/4;               //put the data in the dma region,how we do the same thing in our RT
-             MAIN_FB()->bpp = 2;
-            //addr = (uint32_t) &_line_buf;
-            break;
-        case PIXFORMAT_BAYER:
-            // BAYER/RAW: 1 byte per pixel
-           // length = (MAIN_FB()->w * MAIN_FB()->h * 1)/4;
-	    MAIN_FB()->bpp = 3;
-           // addr = (uint32_t) &_line_buf;
-            break;
-        case PIXFORMAT_GRAYSCALE:
-            // 1/2BPP Grayscale.
-           // length = (MAIN_FB()->w * MAIN_FB()->h * sensor.gs_bpp)/4;
-	    MAIN_FB()->bpp = 1;
-          //  addr = (uint32_t) &_line_buf;
-            break;
-        case PIXFORMAT_JPEG:
-            // Sensor has hardware JPEG set max frame size.
-              return -1;
-          //  addr = (uint32_t) (MAIN_FB()->pixels);
-            break;
-        default:
-            return -1;
-    }
-
-    // Enable DMA IRQ
-
-    if (sensor.pixformat == PIXFORMAT_JPEG) {
-        // Start a regular transfer
-        //no support this function
-        return -1;
-    } else {
-    	// LCDMonitor_Update();
-        CAMERA_RECEIVER_SubmitEmptyBuffer(&cameraReceiver, activeFrameAddr);
-        activeFrameAddr = inactiveFrameAddr;    	
-    }
-    // Disable DMA IRQ
-   // HAL_NVIC_DisableIRQ(DMA2_Stream1_IRQn);
-
-
-    
-    // Set the user image.
-   /* if (image != NULL) {
-        image->w = MAIN_FB()->w;
-        image->h = MAIN_FB()->h;
-        image->bpp = MAIN_FB()->bpp;
-        image->pixels = MAIN_FB()->pixels;
-    }*/
-
+	pImg->w = MAIN_FB()->w , pImg->h = MAIN_FB()->h , pImg->bpp = MAIN_FB()->bpp;
+	pImg->pixels = (uint8_t*) MAIN_FB()->pixels;
     return 0;
 }
