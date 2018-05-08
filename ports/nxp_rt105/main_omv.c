@@ -195,7 +195,7 @@ FRESULT exec_boot_script(const char *path, bool selftest, bool interruptible)
 
         // Set flag for SWD debugger.
         // Note: main.py does not use the frame buffer.
-        MAIN_FB()->bpp = 0xDEADBEEF;
+        MAIN_FB()->bpp = 0xDEAD;
     }
 
     return f_res;

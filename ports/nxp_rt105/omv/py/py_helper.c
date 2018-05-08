@@ -36,6 +36,66 @@ __WEAK void rectangle_intersected(rectangle_t *dst, rectangle_t *src)
 
 #endif
 
+int py_helper_keyword_int(uint n_args, const mp_obj_t *args, uint arg_index,
+                          mp_map_t *kw_args, mp_obj_t kw, int default_val)
+{
+    mp_map_elem_t *kw_arg = mp_map_lookup(kw_args, kw, MP_MAP_LOOKUP);
+
+    if (kw_arg) {
+        default_val = mp_obj_get_int(kw_arg->value);
+    } else if (n_args > arg_index) {
+        default_val = mp_obj_get_int(args[arg_index]);
+    }
+
+    return default_val;
+}
+
+float py_helper_keyword_float(uint n_args, const mp_obj_t *args, uint arg_index,
+                              mp_map_t *kw_args, mp_obj_t kw, float default_val)
+{
+    mp_map_elem_t *kw_arg = mp_map_lookup(kw_args, kw, MP_MAP_LOOKUP);
+
+    if (kw_arg) {
+        default_val = mp_obj_get_float(kw_arg->value);
+    } else if (n_args > arg_index) {
+        default_val = mp_obj_get_float(args[arg_index]);
+    }
+
+    return default_val;
+}
+
+void py_helper_keyword_int_array(uint n_args, const mp_obj_t *args, uint arg_index,
+                                 mp_map_t *kw_args, mp_obj_t kw, int *x, int size)
+{
+    mp_map_elem_t *kw_arg = mp_map_lookup(kw_args, kw, MP_MAP_LOOKUP);
+
+    if (kw_arg) {
+        mp_obj_t *arg_array;
+        mp_obj_get_array_fixed_n(kw_arg->value, size, &arg_array);
+        for (int i = 0; i < size; i++) x[i] = mp_obj_get_int(arg_array[i]);
+    } else if (n_args > arg_index) {
+        mp_obj_t *arg_array;
+        mp_obj_get_array_fixed_n(args[arg_index], size, &arg_array);
+        for (int i = 0; i < size; i++) x[i] = mp_obj_get_int(arg_array[i]);
+    }
+}
+
+void py_helper_keyword_float_array(uint n_args, const mp_obj_t *args, uint arg_index,
+                                   mp_map_t *kw_args, mp_obj_t kw, float *x, int size)
+{
+    mp_map_elem_t *kw_arg = mp_map_lookup(kw_args, kw, MP_MAP_LOOKUP);
+
+    if (kw_arg) {
+        mp_obj_t *arg_array;
+        mp_obj_get_array_fixed_n(kw_arg->value, size, &arg_array);
+        for (int i = 0; i < size; i++) x[i] = mp_obj_get_float(arg_array[i]);
+    } else if (n_args > arg_index) {
+        mp_obj_t *arg_array;
+        mp_obj_get_array_fixed_n(args[arg_index], size, &arg_array);
+        for (int i = 0; i < size; i++) x[i] = mp_obj_get_float(arg_array[i]);
+    }
+}
+
 int py_helper_lookup_int(mp_map_t *kw_args, mp_obj_t kw, int default_val)
 {
     mp_map_elem_t *kw_arg = mp_map_lookup(kw_args, kw, MP_MAP_LOOKUP);

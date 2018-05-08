@@ -293,9 +293,13 @@ void list_pop_front(list_t *ptr, void *data)
     if (data) {
         memcpy(data, tmp->data, ptr->data_len);
     }
-
-    tmp->next_ptr->prev_ptr = NULL;
-    ptr->head_ptr = tmp->next_ptr;
+	if (tmp->next_ptr) {
+    	tmp->next_ptr->prev_ptr = NULL;	// rocky: sometimes tmp->next_ptr is NULL pointer, seems buggy, this corrupts ITCM code.
+	} else {
+		volatile int i = 3;
+		i = i;
+	}
+	ptr->head_ptr = tmp->next_ptr;
     ptr->size -= 1;
     xfree(tmp);
 }

@@ -232,7 +232,9 @@ int sensor_set_special_effect(sde_t sde);
 // Set lens shading correction
 int sensor_set_lens_correction(int enable, int radi, int coef);
 
+int sensor_set_line_filter(line_filter_t line_filter_func, void *line_filter_args);
+
 // Capture a Snapshot.
-int sensor_snapshot(image_t *pImg, char** buf);
+int sensor_snapshot(image_t *pImg, void *pv1, void *pv2);
 
 #endif /* __SENSOR_H__ */

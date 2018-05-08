@@ -511,6 +511,13 @@ int sensor_get_id()
     return sensor.chip_id;
 }
 
+int sensor_set_vsync_output(void *gpio, uint32_t pin)
+{
+    // sensor.vsync_pin  = pin;
+    // sensor.vsync_gpio = gpio;
+    return 0;
+}
+
 int sensor_sleep(int enable)
 {
     if (sensor.sleep == NULL
@@ -791,6 +798,15 @@ int sensor_set_special_effect(sde_t sde)
     return 0;
 }
 
+int sensor_set_line_filter(line_filter_t line_filter_func, void *line_filter_args)
+{
+    // Set line pre-processing function and args
+    sensor.line_filter_func = line_filter_func;
+    sensor.line_filter_args = line_filter_args;
+    return 0;
+}
+
+
 int sensor_set_lens_correction(int enable, int radi, int coef)
 {
     /* call the sensor specific function */
@@ -923,10 +939,11 @@ void PreprocessOneLine(uint32_t addr, int line)
 // The JPEG offset allows JPEG compression of the framebuffer without overwriting the pixels.
 // The offset size may need to be adjusted depending on the quality, otherwise JPEG data may
 // overwrite image pixels before they are compressed.
-int sensor_snapshot(image_t *pImg, char** buf)//image_t *image)
+int sensor_snapshot(image_t *pImg, void *pv1, void *pv2)
 {
  //   uint32_t activeADDR;//, length;
   //  uint32_t inactiveADDR;
+  	pv1 = pv1 , pv2 = pv2;	// keep compatible with original openMV
     sensor_check_bufsize();
     MAIN_FB()->w = sensor.fb_w;
     MAIN_FB()->h = sensor.fb_h;
@@ -959,7 +976,7 @@ int sensor_snapshot(image_t *pImg, char** buf)//image_t *image)
 		fb_update_jpeg_buffer();
 		t2 = HAL_GetTick() - t1;
 		t2 = 1000 / t2;
-		// PRINTF("JPEG FPS=%d\r\n", t2);
+		PRINTF("JPEG FPS=%d\r\n", t2);
 		/*
 		for (i=0; i<sensor.fb_h; i++) {
 			for (j=0; j<sensor.fb_w; j++) {
@@ -981,7 +998,9 @@ int sensor_snapshot(image_t *pImg, char** buf)//image_t *image)
 		}
 		*/
     }
-	pImg->w = MAIN_FB()->w , pImg->h = MAIN_FB()->h , pImg->bpp = MAIN_FB()->bpp;
-	pImg->pixels = (uint8_t*) MAIN_FB()->pixels;
+	if (pImg) {
+		pImg->w = MAIN_FB()->w , pImg->h = MAIN_FB()->h , pImg->bpp = MAIN_FB()->bpp;
+		pImg->pixels = (uint8_t*) MAIN_FB()->pixels;		
+	}
     return 0;
 }

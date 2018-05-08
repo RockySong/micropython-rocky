@@ -164,7 +164,7 @@ void _Fault_UnalignedLSTRH(uint8_t* pAddr, uint16_t val16) {
 	*pAddr++ = (uint8_t)(val16 & 0xFF);
 }
 
-void HardFault_C_Handler(ExceptionRegisters_t *regs, uint32_t *pXtraRegs) {
+void HardFault_C_Handler(ExceptionRegisters_t *regs, uint32_t *pXtraRegs, uint32_t strType) {
     if (!pyb_hard_fault_debug) {
         NVIC_SystemReset();
     }
@@ -221,7 +221,16 @@ void HardFault_C_Handler(ExceptionRegisters_t *regs, uint32_t *pXtraRegs) {
     }
 
     /* Go to infinite loop when Hard Fault exception occurs */
-    __fatal_error("HardFault");
+	switch (strType) 
+	{
+	case 1:
+		__fatal_error("MemManage fault");
+		break;
+	default:
+		__fatal_error("HardFault");
+		break;
+	}
+    
 }
 
 // Naked functions have no compiler generated gunk, so are the best thing to
@@ -281,13 +290,51 @@ void NMI_Handler(void) {
   * @param  None
   * @retval None
   */
-void MemManage_Handler(void) {
-    /* Go to infinite loop when Memory Manage exception occurs */
-    while (1) {
-        __fatal_error("MemManage");
-    }
-}
+#ifdef __CC_ARM
+__asm void MemManage_Handler(void) {
 
+    // From the ARMv7M Architecture Reference Manual, section B.1.5.6
+    // on entry to the Exception, the LR register contains, amongst other
+    // things, the value of CONTROL.SPSEL. This can be found in bit 3.
+    //
+    // If CONTROL.SPSEL is 0, then the exception was stacked up using the
+    // main stack pointer (aka MSP). If CONTROL.SPSEL is 1, then the exception
+    // was stacked up using the process stack pointer (aka PSP).
+     IMPORT HardFault_C_Handler
+     tst lr, #4             // Test Bit 3 to see which stack pointer we should use.
+     ite eq                 // Tell the assembler that the nest 2 instructions are if-then-else
+     mrseq r0, msp          // Make R0 point to main stack pointer
+     mrsne r0, psp          // Make R0 point to process stack pointer
+	 push	{r4-r11}
+	 mov	r1,	sp
+	 mov	r2,	#1
+     bl HardFault_C_Handler  // Off to C land
+	 pop	{r4-r11}
+	 bx		lr
+}
+#else
+__attribute__((naked))
+void MemManage_Handler(void) {
+
+    // From the ARMv7M Architecture Reference Manual, section B.1.5.6
+    // on entry to the Exception, the LR register contains, amongst other
+    // things, the value of CONTROL.SPSEL. This can be found in bit 3.
+    //
+    // If CONTROL.SPSEL is 0, then the exception was stacked up using the
+    // main stack pointer (aka MSP). If CONTROL.SPSEL is 1, then the exception
+    // was stacked up using the process stack pointer (aka PSP).
+
+    __asm volatile(
+    " tst lr, #4    \n"         // Test Bit 3 to see which stack pointer we should use.
+    " ite eq        \n"         // Tell the assembler that the nest 2 instructions are if-then-else
+    " mrseq r0, msp \n"         // Make R0 point to main stack pointer
+    " mrsne r0, psp \n"         // Make R0 point to process stack pointer
+    " mov r1, sp \n" 
+	" mov r2, #1 \n" 
+	" b HardFault_C_Handler \n" // Off to C land
+    );
+}
+#endif
 /**
   * @brief  This function handles Bus Fault exception.
   * @param  None

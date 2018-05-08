@@ -407,3 +407,12 @@ _si40_mpyLpc546/cache/parse/py_mpprint.h.sisc
 *.P
 *.qstr
 *.__i
+mpy-cross/build/
+ports/nxp_rt105/omv/img3/
+ports/nxp_rt105/omv/py3/
+ports/nxp_rt105/build-imxrtevk105x/genhdr/qstr.i.last
+ports/nxp_rt105/build-imxrtevk105x/genhdr/qstr.split
+ports/nxp_rt105/build-imxrtevk105x/genhdr/qstrdefs.collected.h
+ports/nxp_rt105/build-imxrtevk105x/genhdr/qstrdefs.collected.h.hash
+ports/nxp_rt105/build-imxrtevk105x/genhdr/qstrdefs.preprocessed.h
+py_unkwnVer/
