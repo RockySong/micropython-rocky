@@ -34,6 +34,10 @@
 #include "usb_device_class.h"
 #include "usb_device_descriptor.h"
 
+#define VCP_RINGBLK_SIZE	64
+#define VCP_OUTEPBUF_CNT 	3
+#define VCP_INEPBUF_CNT 	4
+
 /*******************************************************************************
 * Definitions
 ******************************************************************************/
@@ -107,6 +111,11 @@ uint32_t VCOM_RxBufGetFilledBytes(void);
 int USBD_CDC_TxHalfEmpty(void);
 void VCOM_Open(void);
 void VCOM_Close(void);
+
+bool VCOM_OmvIsIdeConnected(void);
+uint32_t VCOM_OmvGetLogTxLen(void);
+int VCOM_OmvReadLogTxBlk(uint8_t *pBuf, uint32_t bufSize);
+void VCOM_OmvWriteAlways(const uint8_t *buf, uint32_t len);
 
 
 

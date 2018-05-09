@@ -143,8 +143,8 @@ __WEAK bool IsVcpOccupiedByOpenMvIDE(void) {
 }
 
 bool usb_vcp_is_enabled(void) {
-	if (IsVcpOccupiedByOpenMvIDE())
-		return 0;
+	// if (IsVcpOccupiedByOpenMvIDE())
+	//	return 0;
     return (pyb_usb_flags & PYB_USB_FLAG_DEV_ENABLED) != 0;
 }
 
@@ -154,20 +154,34 @@ int usb_vcp_recv_byte(uint8_t *c) {
 
 void usb_vcp_send_strn(const char *str, int len) {
 #ifdef USE_DEVICE_MODE
+	bool omvUsbDbg = VCOM_OmvIsIdeConnected();
     if (pyb_usb_flags & PYB_USB_FLAG_DEV_ENABLED) {
-        VCOM_WriteAlways((const uint8_t*)str, len);
+		if (omvUsbDbg) {
+        	VCOM_WriteAlways((const uint8_t*)str, len);
+		} else {
+			VCOM_OmvWriteAlways((const uint8_t*)str, len);
+		} 		
     }
 #endif
 }
 
 void usb_vcp_send_strn_cooked(const char *str, int len) {
 #ifdef USE_DEVICE_MODE
+	bool omvUsbDbg = VCOM_OmvIsIdeConnected();
     if (pyb_usb_flags & PYB_USB_FLAG_DEV_ENABLED) {
         for (const char *top = str + len; str < top; str++) {
             if (*str == '\n') {
-                VCOM_WriteAlways((const uint8_t*)"\r\n", 2);
+				if (!omvUsbDbg) {
+                	VCOM_WriteAlways((const uint8_t*)"\r\n", 2);
+				} else {
+					VCOM_OmvWriteAlways((const uint8_t*)"\r\n", 2);
+				}
             } else {
-                VCOM_WriteAlways((const uint8_t*)str, 1);
+				if (!omvUsbDbg) {
+                	VCOM_WriteAlways((const uint8_t*)str, 1);
+				} else {
+					VCOM_OmvWriteAlways((const uint8_t*)str, 1);
+				}            
             }
         }
     }

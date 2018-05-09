@@ -241,14 +241,12 @@ int32_t RingBlk_GetFreeBytes(ring_block_t* pRB) {
 	return pRB->blkCnt * pRB->blkSize - pRB->cbTotUsed;
 }
 
-
 int32_t RingBlk_ReadLimitedBlks(ring_block_t* pRB, uint8_t* pBuf, uint32_t dataBytes, uint32_t maxBlks, uint8_t isUpdt)
 {
 	uint32_t cb, dataBytes0;
 	uint32_t blkNdx, usedCnt, byteNdx, cbBlkFill0;
 	INIT_CRITICAL_RBK();
-	ENTER_CRITICAL_RBK();
-	
+	ENTER_CRITICAL_RBK();	
 	blkNdx = pRB->rNdx , byteNdx = pRB->blkRNdx;
 	cbBlkFill0 = pRB->cbBlkFillTos[blkNdx];
 	// if dataBytes is 0, then we read exactly one block
@@ -261,6 +259,8 @@ int32_t RingBlk_ReadLimitedBlks(ring_block_t* pRB, uint8_t* pBuf, uint32_t dataB
 	while (dataBytes && usedCnt) {
 		
 		cb = cbBlkFill0 - byteNdx;
+		if (0 == cb)
+			break;	// no more to read
 		if (cb > dataBytes)
 			cb = dataBytes;
 		if (pBuf) {	// if pBuf is NULL, we simply free blocks
@@ -277,20 +277,30 @@ int32_t RingBlk_ReadLimitedBlks(ring_block_t* pRB, uint8_t* pBuf, uint32_t dataB
 			// pRB->cbBlkFillTos[blkNdx] -= cb;	// fillTos is the watermark of even max filled
 		}		
 		if (byteNdx == cbBlkFill0) {
-			// a block is totally read, switch to next block
+			// one block is totally read, go ahead to next block, even if the block is not fully filled
 			byteNdx = 0 , usedCnt--;
-			if (isUpdt)
+			if (isUpdt) {
 				pRB->cbBlkFillTos[blkNdx] = 0;
+				if (pRB->wNdx == blkNdx) {
+					// current block is not yet fully filled, still go to next block to ensure alignment
+					if (++pRB->wNdx == pRB->blkCnt)
+						pRB->wNdx = 0;
+					
+					pRB->blkWNdx = 0;
+				}
+			}
 			if (++blkNdx >= pRB->blkCnt)
 				blkNdx = 0;
 			cbBlkFill0 = pRB->cbBlkFillTos[blkNdx];	// reload block fill bytes of next block
 			if (--maxBlks)
-				break;	// if we've read max allowed blocks then break. if maxBlks = 0 then treat as no limit			
+				break;	// if we've read max allowed blocks then break. if maxBlks = 0 then treat as no limit					
+
 		}
 	}
 	if (isUpdt)
 		pRB->rNdx = blkNdx , pRB->usedCnt = usedCnt , pRB->blkRNdx = byteNdx;
 Cleanup:
+	/ todo: debug the write stuck issue
 	LEAVE_CRITICAL_RBK();
 	return dataBytes0 - dataBytes;	// returns read bytes
 }
@@ -342,7 +352,8 @@ int32_t RingBlk_WriteLimitedBlks(ring_block_t* pRB, const uint8_t* pBuf, uint32_
 		goto Cleanup;	// block ring is full
 	
 	cbBlkFill0 = pRB->cbBlkFillTos[blkNdx];
-
+	if (pRB->wNdx == pRB->rNdx && pRB->usedCnt == 2 && pRB->cbTotUsed == 0x80)
+		pRB = pRB;
 	/* Calculate the maximum amount we can copy */
 	while (dataBytes && cbFree) {
 		cb = pRB->blkSize - cbBlkFill0;
@@ -369,6 +380,8 @@ int32_t RingBlk_WriteLimitedBlks(ring_block_t* pRB, const uint8_t* pBuf, uint32_
 		}
 	}
 	pRB->wNdx = blkNdx , pRB->blkWNdx = byteNdx;
+	if (pRB->wNdx == pRB->rNdx && pRB->usedCnt == 2 && pRB->cbTotUsed == 0x80)
+		pRB = pRB;
 Cleanup:
 	LEAVE_CRITICAL_RBK();
 	return dataBytes0 - dataBytes;	// returns written bytes

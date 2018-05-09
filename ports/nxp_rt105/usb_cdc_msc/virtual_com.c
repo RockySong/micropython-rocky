@@ -60,15 +60,7 @@
 extern usb_device_endpoint_struct_t g_cdcVcomDicEndpoints[];
 uint8_t g_isVcpOpen;
 volatile uint8_t g_isUsbHostOpen;
-// >>> openMV IDE related 
-#include "usbdbg.h"
-/*static*/ __IO uint8_t dev_is_connected = 0; // indicates if we are connected
-/*static*/ __IO uint8_t debug_mode = 0; 
-/*static*/ __IO uint32_t baudrate = 0;
-/*static*/ uint32_t dbg_xfer_length=0;
-#define IDE_BAUDRATE_SLOW    (921600)
-#define IDE_BAUDRATE_FAST    (12000000)
-// <<<
+
 /* Line codinig of cdc device */
 uint8_t s_lineCoding[LINE_CODING_SIZE] = {
     /* E.g. 0x00,0xC2,0x01,0x00 : 0x0001C200 is 115200 bits per second */
@@ -92,10 +84,6 @@ static uint8_t s_countryCode[COMM_FEATURE_DATA_SIZE] = {(COUNTRY_SETTING >> 0U) 
 USB_DATA_ALIGNMENT static usb_cdc_acm_info_t s_usbCdcAcmInfo = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, 0, 0, 0, 0, 0};
 /* Data buffer for receiving and sending*/
 
-#define VCP_RINGBLK_SIZE	64
-#define VCP_OUTEPBUF_CNT 	3
-#define VCP_INEPBUF_CNT 	4
-
 #if VCP_RINGBLK_SIZE % 32 != 0
 #error "buffer size must be multiples of 32!"
 #endif
@@ -110,6 +98,23 @@ ring_block_t s_txRB, s_rxRB;
 uint8_t *s_pCurTxBuf, *s_pCurRxBuf;
 uint8_t s_isTxIdle;
 volatile static usb_device_composite_struct_t *g_deviceComposite;
+
+// >>> openMV IDE related 
+#include "usbdbg.h"
+/*static*/ __IO uint8_t dev_is_connected = 0; // indicates if we are connected
+/*static*/ __IO uint8_t debug_mode = 0; 
+/*static*/ __IO uint32_t baudrate = 0;
+/*static*/ uint32_t dbg_xfer_length=0;
+
+#define ALIGN32 __ALIGNED(32)
+
+ring_block_t s_omvRB;
+USB_DMA_NONINIT_DATA_ALIGN(USB_DATA_ALIGN_SIZE) static uint8_t s_omvTxBuf[VCP_OUTEPBUF_CNT][VCP_RINGBLK_SIZE];
+
+#define IDE_BAUDRATE_SLOW    (921600)
+#define IDE_BAUDRATE_FAST    (12000000)
+// <<<
+
 
 /*******************************************************************************
 * Code
@@ -137,7 +142,7 @@ usb_status_t _Start_USB_VCOM_Write(class_handle_t handle)
 
 static uint32_t last_packet = 0;
 
-#define DBG_MAX_PACKET  (64)
+#define DBG_MAX_PACKET  (VCP_RINGBLK_SIZE)
 static uint8_t dbg_xfer_buffer[DBG_MAX_PACKET] ;
 
 
@@ -155,6 +160,7 @@ static void send_packet(void) {
 	VCOM_Write(dbg_xfer_buffer, bytes);
 }
 
+
 uint32_t usbd_cdc_tx_buf_len(void) {
 	return 0;
 	// return RingBlk_GetFreeBytes(&s_txRB);
@@ -170,6 +176,7 @@ void CheckOpenMVIDEConnect(void) {
 	// The slow baudrate can be used on OSs that don't support custom baudrates
 	if (baudrate == IDE_BAUDRATE_SLOW || baudrate == IDE_BAUDRATE_FAST) {
 		debug_mode = 1;
+		RingBlk_Init(&s_omvRB, s_omvTxBuf[0], VCP_RINGBLK_SIZE, VCP_OUTEPBUF_CNT);
 		g_isUsbHostOpen = 1;
 		dbg_xfer_length = 0;
 		// UserTxBufPtrIn = UserTxBufPtrOut = UserTxBufPtrOutShadow = 0;
@@ -177,13 +184,6 @@ void CheckOpenMVIDEConnect(void) {
 		debug_mode = 0;
 		// UserTxBufPtrIn = UserTxBufPtrOut = UserTxBufPtrOutShadow = 0;
 	}	
-}
-
-bool IsVcpOccupiedByOpenMvIDE(void)
-{
-	if (debug_mode)
-		return 1;
-	return 0;
 }
 
 /*!
@@ -522,6 +522,7 @@ usb_status_t USB_DeviceCdcVcomInit(usb_device_composite_struct_t *deviceComposit
     g_deviceComposite = deviceComposite;
 	RingBlk_Init(&s_txRB, s_SendBuf[0], VCP_RINGBLK_SIZE, VCP_OUTEPBUF_CNT);
 	RingBlk_Init(&s_rxRB, s_RecvBuf[0], VCP_RINGBLK_SIZE, VCP_INEPBUF_CNT);
+
 	s_isTxIdle = 1;
     return kStatus_USB_Success;
 }
@@ -586,7 +587,7 @@ void VCOM_WriteAlways(const uint8_t *buf, uint32_t len) {
 				goto cleanup;
 			}
 		}
-		i += RingBlk_Write(&s_txRB, buf, len - i);
+		i += RingBlk_Write(&s_txRB, buf + i, len - i);
     }
 cleanup:
 	if (s_isTxIdle && g_deviceComposite->cdcVcom.attach) {
@@ -606,5 +607,36 @@ cleanup:
 	return ret;
 }
 
+bool VCOM_OmvIsIdeConnected(void)
+{
+	if (debug_mode)
+		return 1;
+	return 0;
+}
 
+void VCOM_OmvWriteAlways(const uint8_t *buf, uint32_t len) {
+	int i;
+	int retry = 0;
+    for (i = 0; i < len; ) {
+		while (RingBlk_GetFreeBytes(&s_omvRB) == 0) {
+			__WFI();
+			if (retry++ >= 100) {
+				goto cleanup;
+			}
+		}
+		i += RingBlk_Write(&s_omvRB, buf + i, len - i);
+    }
+cleanup:
+	return;
+}
+
+
+uint32_t VCOM_OmvGetLogTxLen(void)
+{
+	return RingBlk_GetUsedBytes(&s_omvRB);
+}
+int VCOM_OmvReadLogTxBlk(uint8_t *pBuf, uint32_t bufSize) {
+	int ret = RingBlk_Read(&s_omvRB, pBuf, bufSize);
+	return ret;
+}
 

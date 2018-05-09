@@ -72,6 +72,8 @@ void mp_hal_stdout_tx_strn_cooked(const char *str, size_t len) {
 		// otherwise, a buffer on windows will finally overrun, and host 
 		// will no longer accept data from us!		
         usb_vcp_send_strn_cooked(str, len);
+    } else {
+
     }
 
 }

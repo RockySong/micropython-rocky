@@ -204,7 +204,7 @@ FRESULT exec_boot_script(const char *path, bool selftest, bool interruptible)
 
 int OpenMV_Main(uint32_t first_soft_reset)
 {
-
+	int ret = 0;
     led_state(LED_IR, 0);
     led_state(LED_RED, 1);
     led_state(LED_GREEN, 1);
@@ -243,6 +243,7 @@ int OpenMV_Main(uint32_t first_soft_reset)
 			if (nlr_push(&nlr) == 0) {
 				int ret = pyexec_file("main.py");
 				if (ret & PYEXEC_FORCED_EXIT) {
+					ret = 1;
 				}
 				if (!ret) {
 					flash_error(3);
@@ -268,6 +269,7 @@ int OpenMV_Main(uint32_t first_soft_reset)
                 }
             } else {
                 if (pyexec_friendly_repl() != 0) {
+					ret = 1;
                     break;
                 }
             }
@@ -300,5 +302,5 @@ int OpenMV_Main(uint32_t first_soft_reset)
 //    timer_deinit();
 //    uart_deinit();
 //    can_deinit();
-	return 0;
+	return ret;
 }

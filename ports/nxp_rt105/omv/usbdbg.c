@@ -18,7 +18,7 @@
 #include "compile.h"
 #include "runtime.h"
 #include "omv_boardconfig.h"
-
+#include "virtual_com.h"
 static int xfer_bytes;
 static int xfer_length;
 static enum usbdbg_cmd cmd;
@@ -82,18 +82,24 @@ void usbdbg_data_in(void *buffer, int length)
         }
 
         case USBDBG_TX_BUF_LEN: {
-            uint32_t tx_buf_len = usbd_cdc_tx_buf_len();
-            memcpy(buffer, &tx_buf_len, sizeof(tx_buf_len));
+			uint32_t *p = (uint32_t*)buffer;
+            p[0] = VCOM_OmvGetLogTxLen();
             cmd = USBDBG_NONE;
             break;
         }
 
         case USBDBG_TX_BUF: {
-            uint8_t *tx_buf = usbd_cdc_tx_buf(length);
-            memcpy(buffer, tx_buf, length);
-            if (xfer_bytes == xfer_length) {
-                cmd = USBDBG_NONE;
-            }
+			int n = VCOM_OmvReadLogTxBlk(buffer, length);
+			if (n < 0) {
+				cmd = USBDBG_NONE;
+			} else if (n == 0) {
+				cmd = USBDBG_NONE;
+			} else {
+				xfer_bytes += n;
+				if (xfer_bytes == xfer_length) {
+					cmd = USBDBG_NONE;
+				}
+			}
             break;
         }
 
@@ -290,7 +296,7 @@ void usbdbg_control(void *buffer, uint8_t request, uint32_t length)
 
         case USBDBG_SCRIPT_RUNNING:
             xfer_bytes = 0;
-            xfer_length =length;
+            xfer_length = length;
             break;
 
         case USBDBG_TEMPLATE_SAVE:

@@ -602,6 +602,7 @@ __WEAK void sensor_init() {}
 extern int OpenMV_Main(uint32_t first_soft_reset);
 
 int main(void) {
+	int retCode = 0;
     // TODO disable JTAG
 
     /* STM32F4xx HAL library initialization:
@@ -631,8 +632,8 @@ int main(void) {
     pyb_usb_storage_medium = PYB_USB_STORAGE_MEDIUM_FLASH;
 #endif
 
-    int first_soft_reset = true;
-
+    bool first_soft_reset = true;
+	retCode = true;
 soft_reset:
     // check if user switch held to select the reset mode
 #if defined(MICROPY_HW_LED2)
@@ -834,7 +835,7 @@ soft_reset:
     // At this point everything is fully configured and initialised.
 
  	VCOM_Open();
-	OpenMV_Main(first_soft_reset);
+	retCode = OpenMV_Main(retCode);
 soft_reset_exit:
 
     // soft reset
