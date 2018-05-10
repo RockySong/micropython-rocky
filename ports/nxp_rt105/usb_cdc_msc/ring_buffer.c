@@ -241,17 +241,22 @@ int32_t RingBlk_GetFreeBytes(ring_block_t* pRB) {
 	return pRB->blkCnt * pRB->blkSize - pRB->cbTotUsed;
 }
 
+
 int32_t RingBlk_ReadLimitedBlks(ring_block_t* pRB, uint8_t* pBuf, uint32_t dataBytes, uint32_t maxBlks, uint8_t isUpdt)
 {
 	uint32_t cb, dataBytes0;
 	uint32_t blkNdx, usedCnt, byteNdx, cbBlkFill0;
 	INIT_CRITICAL_RBK();
 	ENTER_CRITICAL_RBK();	
+#ifdef RB_DEBUG
+	ring_block_t rbBkup = *pRB;
+beginwork:	
+#endif
 	blkNdx = pRB->rNdx , byteNdx = pRB->blkRNdx;
 	cbBlkFill0 = pRB->cbBlkFillTos[blkNdx];
 	// if dataBytes is 0, then we read exactly one block
 	if (dataBytes == 0)
-		dataBytes = pRB->blkSize - cbBlkFill0;
+		dataBytes = cbBlkFill0 - pRB->blkRNdx; // pRB->blkSize - cbBlkFill0;
 	dataBytes0 = dataBytes;
 	if (0 == (usedCnt = pRB->usedCnt))
 		goto Cleanup;	
@@ -281,8 +286,10 @@ int32_t RingBlk_ReadLimitedBlks(ring_block_t* pRB, uint8_t* pBuf, uint32_t dataB
 			byteNdx = 0 , usedCnt--;
 			if (isUpdt) {
 				pRB->cbBlkFillTos[blkNdx] = 0;
-				if (pRB->wNdx == blkNdx) {
+				if (pRB->wNdx == blkNdx && pRB->blkWNdx != 0) {
 					// current block is not yet fully filled, still go to next block to ensure alignment
+					// bugfix note: judgement of pRB->blkWNdx != 0 is critical, otherwise in a corner case
+					// when the RB is full that wNdx==rNdx, code will wrongly adjust wNdx
 					if (++pRB->wNdx == pRB->blkCnt)
 						pRB->wNdx = 0;
 					
@@ -300,7 +307,12 @@ int32_t RingBlk_ReadLimitedBlks(ring_block_t* pRB, uint8_t* pBuf, uint32_t dataB
 	if (isUpdt)
 		pRB->rNdx = blkNdx , pRB->usedCnt = usedCnt , pRB->blkRNdx = byteNdx;
 Cleanup:
-	/ todo: debug the write stuck issue
+#ifdef RB_DEBUG	
+	if (pRB->cbTotUsed == 0x80 && pRB->rNdx == pRB->wNdx) {
+		*pRB = rbBkup;
+		goto beginwork;
+	}
+#endif
 	LEAVE_CRITICAL_RBK();
 	return dataBytes0 - dataBytes;	// returns read bytes
 }
