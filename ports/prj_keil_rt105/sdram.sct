@@ -80,7 +80,7 @@ LR_XIP_FLASH IVT_BASE + 0x2000 {
 	; >>> SDRAM >>>
 	ER_LCD_FB 0x81E00000 UNINIT 1024*1024  {
 		* (.lcd_fb)
-		yuv_tab.o (+RO)
+		
 	}
 
 	;RW_SDRAM 0xA0100000 EMPTY UNINIT (32-1)*1024*1024  {

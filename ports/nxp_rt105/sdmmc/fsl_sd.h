@@ -72,22 +72,24 @@ typedef struct _sd_card
 {
     SDMMCHOST_CONFIG host; /*!< Host information */
 
-    sdcard_usr_param_t usrParam;                /*!< user parameter */
-    bool isHostReady;                           /*!< use this flag to indicate if need host re-init or not*/
-    uint32_t busClock_Hz;                       /*!< SD bus clock frequency united in Hz */
-    uint32_t relativeAddress;                   /*!< Relative address of the card */
-    uint32_t version;                           /*!< Card version */
-    uint32_t flags;                             /*!< Flags in _sd_card_flag */
-    uint32_t rawCid[4U];                        /*!< Raw CID content */
-    uint32_t rawCsd[4U];                        /*!< Raw CSD content */
-    uint32_t rawScr[2U];                        /*!< Raw CSD content */
-    uint32_t ocr;                               /*!< Raw OCR content */
-    sd_cid_t cid;                               /*!< CID */
-    sd_csd_t csd;                               /*!< CSD */
-    sd_scr_t scr;                               /*!< SCR */
-    uint32_t blockCount;                        /*!< Card total block number */
-    uint32_t blockSize;                         /*!< Card block size */
-    sd_timing_mode_t currentTiming;             /*!< current timing mode */
+    sdcard_usr_param_t usrParam;    /*!< user parameter */
+    bool isHostReady;               /*!< use this flag to indicate if need host re-init or not*/
+    bool noInteralAlign;            /*!< use this flag to disable sdmmc align. If disable, sdmmc will not make sure the
+                                    data buffer address is word align, otherwise all the transfer are align to low level driver */
+    uint32_t busClock_Hz;           /*!< SD bus clock frequency united in Hz */
+    uint32_t relativeAddress;       /*!< Relative address of the card */
+    uint32_t version;               /*!< Card version */
+    uint32_t flags;                 /*!< Flags in _sd_card_flag */
+    uint32_t rawCid[4U];            /*!< Raw CID content */
+    uint32_t rawCsd[4U];            /*!< Raw CSD content */
+    uint32_t rawScr[2U];            /*!< Raw CSD content */
+    uint32_t ocr;                   /*!< Raw OCR content */
+    sd_cid_t cid;                   /*!< CID */
+    sd_csd_t csd;                   /*!< CSD */
+    sd_scr_t scr;                   /*!< SCR */
+    uint32_t blockCount;            /*!< Card total block number */
+    uint32_t blockSize;             /*!< Card block size */
+    sd_timing_mode_t currentTiming; /*!< current timing mode */
     sd_driver_strength_t driverStrength;        /*!< driver strength */
     sd_max_current_t maxCurrent;                /*!< card current limit */
     sdmmc_operation_voltage_t operationVoltage; /*!< card operation voltage */

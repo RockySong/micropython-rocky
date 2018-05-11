@@ -68,6 +68,14 @@ inline void usbdbg_set_irq_enabled(bool enabled)
     __DSB(); __ISB();
 }
 #define logout(...) // printf
+// #define DUMP_RAW
+
+#ifdef DUMP_RAW
+#define DUMP_FB	MAIN_FB
+#else
+#define DUMP_FB JPEG_FB
+#endif
+
 void usbdbg_data_in(void *buffer, int length)
 {
 	logout("usbdbg_data_in: cmd=%x, buffer=0x%08x, bytes=%d\r\n", cmd, buffer, length);
@@ -105,8 +113,13 @@ void usbdbg_data_in(void *buffer, int length)
 
         case USBDBG_FRAME_SIZE:
 			logout("data_in: USBDBG_FRAME_SIZE\r\n");
-            // Return 0 if FB is locked or not ready.
-            ((uint32_t*)buffer)[0] = 0;
+		#ifdef DUMP_RAW
+            ((uint32_t*)buffer)[0] = MAIN_FB()->w;
+            ((uint32_t*)buffer)[1] = MAIN_FB()->h;
+            ((uint32_t*)buffer)[2] = MAIN_FB()->bpp; // MAIN_FB()->w * MAIN_FB()->h * MAIN_FB()->bpp;		
+		#else
+			// Return 0 if FB is locked or not ready.
+			((uint32_t*)buffer)[0] = 0;
             // Try to lock FB. If header size == 0 frame is not ready
             if (mutex_try_lock(&JPEG_FB()->lock, MUTEX_TID_IDE)) {
                 // If header size == 0 frame is not ready
@@ -120,11 +133,19 @@ void usbdbg_data_in(void *buffer, int length)
                     ((uint32_t*)buffer)[2] = JPEG_FB()->size;
                 }
             }
+		#endif
             cmd = USBDBG_NONE;
             break;
 
         case USBDBG_FRAME_DUMP:
             if (xfer_bytes < xfer_length) {
+			#ifdef DUMP_RAW
+                memcpy(buffer, MAIN_FB()->pixels+xfer_bytes, length);
+                xfer_bytes += length;
+                if (xfer_bytes == xfer_length) {
+                    cmd = USBDBG_NONE;
+                }			
+			#else
                 memcpy(buffer, JPEG_FB()->pixels+xfer_bytes, length);
                 xfer_bytes += length;
                 if (xfer_bytes == xfer_length) {
@@ -132,6 +153,7 @@ void usbdbg_data_in(void *buffer, int length)
                     JPEG_FB()->w = 0; JPEG_FB()->h = 0; JPEG_FB()->size = 0;
                     mutex_unlock(&JPEG_FB()->lock, MUTEX_TID_IDE);
                 }
+			#endif
             }
             break;
 

@@ -653,7 +653,7 @@ static status_t SD_SelectFunction(sd_card_t *card, uint32_t group, uint32_t func
     memset(g_sdmmc, 0, sizeof(g_sdmmc));
 
     /* check if card support CMD6 */
-    if ((card->version < kSD_SpecificationVersion1_0) || (!(card->csd.cardCommandClass & kSDMMC_CommandClassSwitch)))
+    if ((card->version <= kSD_SpecificationVersion1_0) || (!(card->csd.cardCommandClass & kSDMMC_CommandClassSwitch)))
     {
         return kStatus_SDMMC_NotSupportYet;
     }
@@ -1106,8 +1106,8 @@ static status_t SD_SelectBusTiming(sd_card_t *card)
                 {
                     card->currentTiming = kSD_TimingDDR50Mode;
                     card->busClock_Hz =
-                        SDMMCHOST_SET_CARD_CLOCK(card->host.base, card->host.sourceClock_Hz, SD_CLOCK_100MHZ);
-                    SDMMCHOST_ENABLE_DDR_MODE(card->host.base, true);
+                        SDMMCHOST_SET_CARD_CLOCK(card->host.base, card->host.sourceClock_Hz, SD_CLOCK_50MHZ);
+                    SDMMCHOST_ENABLE_DDR_MODE(card->host.base, true, 0U);
                 }
                 break;
             case kSD_TimingSDR50Mode:
@@ -1193,7 +1193,6 @@ static status_t SD_Read(sd_card_t *card, uint8_t *buffer, uint32_t startBlock, u
     assert(card);
     assert(buffer);
     assert(blockCount);
-    assert(blockSize);
     assert(blockSize == FSL_SDMMC_DEFAULT_BLOCK_SIZE);
 
     SDMMCHOST_TRANSFER content = {0};
@@ -1216,6 +1215,7 @@ static status_t SD_Read(sd_card_t *card, uint8_t *buffer, uint32_t startBlock, u
     data.blockSize = blockSize;
     data.blockCount = blockCount;
     data.rxData = (uint32_t *)buffer;
+    data.enableAutoCommand12 = true;
 
     command.index = kSDMMC_ReadMultipleBlock;
     if (data.blockCount == 1U)
@@ -1257,7 +1257,6 @@ static status_t SD_Write(
     assert(card);
     assert(buffer);
     assert(blockCount);
-    assert(blockSize);
     assert(blockSize == FSL_SDMMC_DEFAULT_BLOCK_SIZE);
 
     SDMMCHOST_TRANSFER content = {0};
@@ -1285,6 +1284,7 @@ static status_t SD_Write(
     data.blockSize = blockSize;
     data.blockCount = blockCount;
     data.txData = (const uint32_t *)buffer;
+    data.enableAutoCommand12 = true;
 
     command.index = kSDMMC_WriteMultipleBlock;
     if (data.blockCount == 1U)
@@ -1403,41 +1403,52 @@ status_t SD_ReadBlocks(sd_card_t *card, uint8_t *buffer, uint32_t startBlock, ui
     assert(card);
     assert(buffer);
     assert(blockCount);
+    assert((blockCount + startBlock) <= card->blockCount);
 
     uint32_t blockCountOneTime;
     uint32_t blockLeft;
-    uint32_t blockDone;
-    uint8_t *nextBuffer;
-    status_t error;
-
-    if ((blockCount + startBlock) > card->blockCount)
-    {
-        return kStatus_InvalidArgument;
-    }
+    uint32_t blockDone = 0U;
+    uint8_t *nextBuffer = buffer;
+    bool dataAddrAlign = true;
 
     blockLeft = blockCount;
-    blockDone = 0U;
+
     while (blockLeft)
     {
-        if (blockLeft > card->host.capability.maxBlockCount)
+        nextBuffer = (buffer + blockDone * FSL_SDMMC_DEFAULT_BLOCK_SIZE);
+        if (!card->noInteralAlign && (!dataAddrAlign || (((uint32_t)nextBuffer) & (sizeof(uint32_t) - 1U))))
         {
-            blockLeft = (blockLeft - card->host.capability.maxBlockCount);
-            blockCountOneTime = card->host.capability.maxBlockCount;
+            blockLeft--;
+            blockCountOneTime = 1U;
+            memset(g_sdmmc, 0U, FSL_SDMMC_DEFAULT_BLOCK_SIZE);
+            dataAddrAlign = false;
         }
         else
         {
-            blockCountOneTime = blockLeft;
-            blockLeft = 0U;
+            if (blockLeft > card->host.capability.maxBlockCount)
+            {
+                blockLeft = (blockLeft - card->host.capability.maxBlockCount);
+                blockCountOneTime = card->host.capability.maxBlockCount;
+            }
+            else
+            {
+                blockCountOneTime = blockLeft;
+                blockLeft = 0U;
+            }
         }
 
-        nextBuffer = (buffer + blockDone * FSL_SDMMC_DEFAULT_BLOCK_SIZE);
-        error = SD_Read(card, nextBuffer, (startBlock + blockDone), FSL_SDMMC_DEFAULT_BLOCK_SIZE, blockCountOneTime);
-        if (error != kStatus_Success)
+        if (kStatus_Success != SD_Read(card, dataAddrAlign ? nextBuffer : (uint8_t *)g_sdmmc, (startBlock + blockDone),
+                                       FSL_SDMMC_DEFAULT_BLOCK_SIZE, blockCountOneTime))
         {
-            return error;
+            return kStatus_SDMMC_TransferFailed;
         }
 
         blockDone += blockCountOneTime;
+
+        if (!card->noInteralAlign && (!dataAddrAlign))
+        {
+            memcpy(nextBuffer, (uint8_t *)&g_sdmmc, FSL_SDMMC_DEFAULT_BLOCK_SIZE);
+        }
     }
 
     return kStatus_Success;
@@ -1448,40 +1459,50 @@ status_t SD_WriteBlocks(sd_card_t *card, const uint8_t *buffer, uint32_t startBl
     assert(card);
     assert(buffer);
     assert(blockCount);
+    assert((blockCount + startBlock) <= card->blockCount);
 
     uint32_t blockCountOneTime; /* The block count can be wrote in one time sending WRITE_BLOCKS command. */
     uint32_t blockLeft;         /* Left block count to be wrote. */
     uint32_t blockDone = 0U;    /* The block count has been wrote. */
     const uint8_t *nextBuffer;
-    status_t error;
-
-    if ((blockCount + startBlock) > card->blockCount)
-    {
-        return kStatus_InvalidArgument;
-    }
+    bool dataAddrAlign = true;
 
     blockLeft = blockCount;
     while (blockLeft)
     {
-        if (blockLeft > card->host.capability.maxBlockCount)
+        nextBuffer = (buffer + blockDone * FSL_SDMMC_DEFAULT_BLOCK_SIZE);
+        if (!card->noInteralAlign && (!dataAddrAlign || (((uint32_t)nextBuffer) & (sizeof(uint32_t) - 1U))))
         {
-            blockLeft = (blockLeft - card->host.capability.maxBlockCount);
-            blockCountOneTime = card->host.capability.maxBlockCount;
+            blockLeft--;
+            blockCountOneTime = 1U;
+            memcpy((uint8_t *)&g_sdmmc, nextBuffer, FSL_SDMMC_DEFAULT_BLOCK_SIZE);
+            dataAddrAlign = false;
         }
         else
         {
-            blockCountOneTime = blockLeft;
-            blockLeft = 0U;
+            if (blockLeft > card->host.capability.maxBlockCount)
+            {
+                blockLeft = (blockLeft - card->host.capability.maxBlockCount);
+                blockCountOneTime = card->host.capability.maxBlockCount;
+            }
+            else
+            {
+                blockCountOneTime = blockLeft;
+                blockLeft = 0U;
+            }
         }
 
-        nextBuffer = (buffer + blockDone * FSL_SDMMC_DEFAULT_BLOCK_SIZE);
-        error = SD_Write(card, nextBuffer, (startBlock + blockDone), FSL_SDMMC_DEFAULT_BLOCK_SIZE, blockCountOneTime);
-        if (error != kStatus_Success)
+        if (kStatus_Success != SD_Write(card, dataAddrAlign ? nextBuffer : (uint8_t *)g_sdmmc, (startBlock + blockDone),
+                                        FSL_SDMMC_DEFAULT_BLOCK_SIZE, blockCountOneTime))
         {
-            return error;
+            return kStatus_SDMMC_TransferFailed;
         }
 
         blockDone += blockCountOneTime;
+        if ((!card->noInteralAlign) && !dataAddrAlign)
+        {
+            memset(g_sdmmc, 0U, FSL_SDMMC_DEFAULT_BLOCK_SIZE);
+        }
     }
 
     return kStatus_Success;
@@ -1491,16 +1512,12 @@ status_t SD_EraseBlocks(sd_card_t *card, uint32_t startBlock, uint32_t blockCoun
 {
     assert(card);
     assert(blockCount);
+    assert((blockCount + startBlock) <= card->blockCount);
 
     uint32_t blockCountOneTime; /* The block count can be erased in one time sending ERASE_BLOCKS command. */
     uint32_t blockDone = 0U;    /* The block count has been erased. */
     uint32_t blockLeft;         /* Left block count to be erase. */
     status_t error;
-
-    if ((blockCount + startBlock) > card->blockCount)
-    {
-        return kStatus_InvalidArgument;
-    }
 
     blockLeft = blockCount;
     while (blockLeft)

@@ -55,7 +55,7 @@
 /*! @brief MMC card bus frequency 2 in high-speed mode */
 #define MMC_CLOCK_52MHZ (52000000U)
 /*! @brief MMC card bus frequency  in high-speed DDR52 mode */
-#define MMC_CLOCK_DDR52 (104000000U)
+#define MMC_CLOCK_DDR52 (52000000U)
 /*! @brief MMC card bus frequency  in high-speed HS200 mode */
 #define MMC_CLOCK_HS200 (200000000U)
 /*! @brief MMC card bus frequency  in high-speed HS400 mode */

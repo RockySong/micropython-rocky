@@ -547,7 +547,7 @@ static status_t MMC_WaitWriteComplete(mmc_card_t *card)
     {
         content.command = &command;
         content.data = 0U;
-        if (kStatus_Success != MMC_Transfer(card, &content, 0U))
+        if (kStatus_Success != MMC_Transfer(card, &content, 2U))
         {
             return kStatus_SDMMC_TransferFailed;
         }
@@ -667,7 +667,6 @@ static status_t MMC_SendOperationCondition(mmc_card_t *card, uint32_t arg)
         if ((arg == 0U) && (command.response[0U] != 0U))
         {
             error = kStatus_Success;
-            card->ocr = command.response[0U];
         }
         /* Repeat CMD1 until the busy bit is cleared. */
         else if (!(command.response[0U] & MMC_OCR_BUSY_MASK))
@@ -677,6 +676,11 @@ static status_t MMC_SendOperationCondition(mmc_card_t *card, uint32_t arg)
         else
         {
             error = kStatus_Success;
+            card->ocr = command.response[0U];
+            if (((card->ocr & MMC_OCR_ACCESS_MODE_MASK) >> MMC_OCR_ACCESS_MODE_SHIFT) == kMMC_AccessModeSector)
+            {
+                card->flags |= kMMC_SupportHighCapacityFlag;
+            }
         }
     } while ((i--) && (error != kStatus_Success));
 
@@ -792,10 +796,7 @@ static void MMC_DecodeCsd(mmc_card_t *card, uint32_t *rawCsd)
         multiplier = (2U << (card->csd.deviceSizeMultiplier + 2U - 1U));
         card->userPartitionBlocks = (((card->csd.deviceSize + 1U) * multiplier) / FSL_SDMMC_DEFAULT_BLOCK_SIZE);
     }
-    else
-    {
-        card->flags |= kMMC_SupportHighCapacityFlag;
-    }
+
     card->blockSize = FSL_SDMMC_DEFAULT_BLOCK_SIZE;
 }
 
@@ -1468,7 +1469,7 @@ static status_t MMC_SwitchToHighSpeed(mmc_card_t *card)
     if ((card->busWidth == kMMC_DataBusWidth4bitDDR) || (card->busWidth == kMMC_DataBusWidth8bitDDR))
     {
         freq = MMC_CLOCK_DDR52;
-        SDMMCHOST_ENABLE_DDR_MODE(card->host.base, true);
+        SDMMCHOST_ENABLE_DDR_MODE(card->host.base, true, 0U);
     }
     else if (card->flags & kMMC_SupportHighSpeed52MHZFlag)
     {
@@ -1614,7 +1615,7 @@ static status_t MMC_SwitchToHS400(mmc_card_t *card)
     /* enable HS400 mode */
     SDMMCHOST_ENABLE_HS400_MODE(card->host.base, true);
     /* enable DDR mode */
-    SDMMCHOST_ENABLE_DDR_MODE(card->host.base, true);
+    SDMMCHOST_ENABLE_DDR_MODE(card->host.base, true, 0U);
     /* config strobe DLL */
     SDMMCHOST_CONFIG_STROBE_DLL(card->host.base, SDMMCHOST_STROBE_DLL_DELAY_TARGET,
                                 SDMMCHOST_STROBE_DLL_DELAY_UPDATE_INTERVAL);
@@ -1940,7 +1941,7 @@ static status_t MMC_Write(
     {
     }
 
-    /* Wait for the card write process complete because of that card read process and write process use one buffer. */
+    /* Wait for the card write process complete */
     if (kStatus_Success != MMC_WaitWriteComplete(card))
     {
         return kStatus_SDMMC_WaitWriteCompleteFailed;
@@ -2224,7 +2225,7 @@ status_t MMC_ReadBlocks(mmc_card_t *card, uint8_t *buffer, uint32_t startBlock, 
     uint32_t blockDone;         /* The blocks has been read. */
     uint32_t blockLeft;         /* Left blocks to be read. */
     uint8_t *nextBuffer;
-    status_t error = kStatus_Success;
+    bool dataAddrAlign = true;
 
     blockLeft = blockCount;
     blockDone = 0U;
@@ -2235,28 +2236,43 @@ status_t MMC_ReadBlocks(mmc_card_t *card, uint8_t *buffer, uint32_t startBlock, 
 
     while (blockLeft)
     {
-        if (blockLeft > card->host.capability.maxBlockCount)
+        nextBuffer = (buffer + blockDone * FSL_SDMMC_DEFAULT_BLOCK_SIZE);
+        if (!card->noInteralAlign && (!dataAddrAlign || (((uint32_t)nextBuffer) & (sizeof(uint32_t) - 1U))))
         {
-            blockLeft = blockLeft - card->host.capability.maxBlockCount;
-            blockCountOneTime = card->host.capability.maxBlockCount;
+            blockLeft--;
+            blockCountOneTime = 1U;
+            memset(g_sdmmc, 0U, FSL_SDMMC_DEFAULT_BLOCK_SIZE);
+            dataAddrAlign = false;
         }
         else
         {
-            blockCountOneTime = blockLeft;
-            blockLeft = 0U;
+            if (blockLeft > card->host.capability.maxBlockCount)
+            {
+                blockLeft = (blockLeft - card->host.capability.maxBlockCount);
+                blockCountOneTime = card->host.capability.maxBlockCount;
+            }
+            else
+            {
+                blockCountOneTime = blockLeft;
+                blockLeft = 0U;
+            }
         }
 
-        nextBuffer = (buffer + blockDone * FSL_SDMMC_DEFAULT_BLOCK_SIZE);
-        error = MMC_Read(card, nextBuffer, (startBlock + blockDone), FSL_SDMMC_DEFAULT_BLOCK_SIZE, blockCount);
-        if (error != kStatus_Success)
+        if (kStatus_Success != MMC_Read(card, dataAddrAlign ? nextBuffer : (uint8_t *)g_sdmmc, (startBlock + blockDone),
+                                        FSL_SDMMC_DEFAULT_BLOCK_SIZE, blockCountOneTime))
         {
-            return error;
+            return kStatus_SDMMC_TransferFailed;
         }
 
         blockDone += blockCountOneTime;
+
+        if (!card->noInteralAlign && (!dataAddrAlign))
+        {
+            memcpy(nextBuffer, (uint8_t *)&g_sdmmc, FSL_SDMMC_DEFAULT_BLOCK_SIZE);
+        }
     }
 
-    return error;
+    return kStatus_Success;
 }
 
 status_t MMC_WriteBlocks(mmc_card_t *card, const uint8_t *buffer, uint32_t startBlock, uint32_t blockCount)
@@ -2269,10 +2285,11 @@ status_t MMC_WriteBlocks(mmc_card_t *card, const uint8_t *buffer, uint32_t start
     uint32_t blockLeft;
     uint32_t blockDone;
     const uint8_t *nextBuffer;
-    status_t error = kStatus_Success;
+    bool dataAddrAlign = true;
 
     blockLeft = blockCount;
     blockDone = 0U;
+
     if (kStatus_Success != MMC_CheckBlockRange(card, startBlock, blockCount))
     {
         return kStatus_InvalidArgument;
@@ -2280,28 +2297,42 @@ status_t MMC_WriteBlocks(mmc_card_t *card, const uint8_t *buffer, uint32_t start
 
     while (blockLeft)
     {
-        if (blockLeft > card->host.capability.maxBlockCount)
+        nextBuffer = (buffer + blockDone * FSL_SDMMC_DEFAULT_BLOCK_SIZE);
+        if (!card->noInteralAlign && (!dataAddrAlign || (((uint32_t)nextBuffer) & (sizeof(uint32_t) - 1U))))
         {
-            blockLeft = blockLeft - card->host.capability.maxBlockCount;
-            blockCountOneTime = card->host.capability.maxBlockCount;
+            blockLeft--;
+            blockCountOneTime = 1U;
+            memcpy((uint8_t *)&g_sdmmc, nextBuffer, FSL_SDMMC_DEFAULT_BLOCK_SIZE);
+            dataAddrAlign = false;
         }
         else
         {
-            blockCountOneTime = blockLeft;
-            blockLeft = 0U;
+            if (blockLeft > card->host.capability.maxBlockCount)
+            {
+                blockLeft = (blockLeft - card->host.capability.maxBlockCount);
+                blockCountOneTime = card->host.capability.maxBlockCount;
+            }
+            else
+            {
+                blockCountOneTime = blockLeft;
+                blockLeft = 0U;
+            }
         }
 
-        nextBuffer = (buffer + blockDone * FSL_SDMMC_DEFAULT_BLOCK_SIZE);
-        error = MMC_Write(card, nextBuffer, (startBlock + blockDone), FSL_SDMMC_DEFAULT_BLOCK_SIZE, blockCount);
-        if (error != kStatus_Success)
+        if (kStatus_Success != MMC_Write(card, dataAddrAlign ? nextBuffer : (uint8_t *)g_sdmmc,
+                                         (startBlock + blockDone), FSL_SDMMC_DEFAULT_BLOCK_SIZE, blockCountOneTime))
         {
-            return error;
+            return kStatus_SDMMC_TransferFailed;
         }
 
         blockDone += blockCountOneTime;
+        if (!card->noInteralAlign)
+        {
+            memset(g_sdmmc, 0U, FSL_SDMMC_DEFAULT_BLOCK_SIZE);
+        }
     }
 
-    return error;
+    return kStatus_Success;
 }
 
 status_t MMC_EraseGroups(mmc_card_t *card, uint32_t startGroup, uint32_t endGroup)
@@ -2322,6 +2353,11 @@ status_t MMC_EraseGroups(mmc_card_t *card, uint32_t startGroup, uint32_t endGrou
     /* Wait for the card's buffer to be not full to write to improve the write performance. */
     while ((GET_SDMMCHOST_STATUS(card->host.base) & CARD_DATA0_STATUS_MASK) != CARD_DATA0_NOT_BUSY)
     {
+    }
+
+    if (kStatus_Success != MMC_WaitWriteComplete(card))
+    {
+        return kStatus_SDMMC_WaitWriteCompleteFailed;
     }
 
     /* Calculate the start group address and end group address */
@@ -2546,7 +2582,7 @@ status_t MMC_StartBoot(mmc_card_t *card,
     if (mmcConfig->bootTimingMode == kMMC_BootModeDDRTiming)
     {
         /* enable DDR mode */
-        SDMMCHOST_ENABLE_DDR_MODE(card->host.base, true);
+        SDMMCHOST_ENABLE_DDR_MODE(card->host.base, true, 0U);
     }
 
     /* data bus remapping */

@@ -44,20 +44,20 @@
  * Definitions
  ******************************************************************************/
 /*! @brief Middleware version. */
-#define FSL_SDMMC_DRIVER_VERSION (MAKE_VERSION(2U, 2U, 2U)) /*2.2.2*/
+#define FSL_SDMMC_DRIVER_VERSION (MAKE_VERSION(2U, 2U, 4U)) /*2.2.4*/
 
 /*! @brief Reverse byte sequence in uint32_t */
 #define SWAP_WORD_BYTE_SEQUENCE(x) (__REV(x))
 /*! @brief Reverse byte sequence for each half word in uint32_t */
 #define SWAP_HALF_WROD_BYTE_SEQUENCE(x) (__REV16(x))
 /*! @brief Maximum loop count to check the card operation voltage range */
-#define FSL_SDMMC_MAX_VOLTAGE_RETRIES 3 //(1000U)
+#define FSL_SDMMC_MAX_VOLTAGE_RETRIES (1000U)
 /*! @brief Maximum loop count to send the cmd */
-#define FSL_SDMMC_MAX_CMD_RETRIES 10 //(10U)
+#define FSL_SDMMC_MAX_CMD_RETRIES (10U)
 /*! @brief Default block size */
 #define FSL_SDMMC_DEFAULT_BLOCK_SIZE (512U)
 /*! @brief SDMMC global data buffer size, word unit*/
-#define SDMMC_GLOBAL_BUFFER_SIZE (64U)
+#define SDMMC_GLOBAL_BUFFER_SIZE (128U)
 
 /* Common definition for cache line size align */
 #if defined(FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL) && FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL

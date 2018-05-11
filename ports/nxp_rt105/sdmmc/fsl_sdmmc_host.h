@@ -84,7 +84,7 @@
 #endif
 
 /* Common definition for SDMMCHOST transfer complete timeout */
-#define SDMMCHOST_TRANSFER_COMPLETE_TIMEOUT (1000)
+#define SDMMCHOST_TRANSFER_COMPLETE_TIMEOUT (1000U)
 /* Common definition for card detect timeout */
 #define SDMMCHOST_CARD_DETECT_TIMEOUT (~0U)
 
@@ -164,7 +164,7 @@
 #define SDMMCHOST_EXECUTE_STANDARD_TUNING_RESULT(base) (1U)
 #define SDMMCHOST_CONFIG_SD_IO(speed, strength)
 #define SDMMCHOST_CONFIG_MMC_IO(speed, strength)
-#define SDMMCHOST_ENABLE_DDR_MODE(base, flag)
+#define SDMMCHOST_ENABLE_DDR_MODE(base, flag, nibblePos)
 #define SDMMCHOST_FORCE_SDCLOCK_ON(base, enable)
 #define SDMMCHOST_EXECUTE_MANUAL_TUNING_ENABLE(base, flag)
 #define SDMMCHOST_ADJUST_MANUAL_TUNING_DELAY(base, delay)
@@ -323,7 +323,7 @@ enum _host_capability
 #define SDMMCHOST_EXECUTE_STANDARD_TUNING_RESULT(base) (1U)
 #define SDMMCHOST_CONFIG_SD_IO(speed, strength)
 #define SDMMCHOST_CONFIG_MMC_IO(speed, strength)
-#define SDMMCHOST_ENABLE_DDR_MODE(base, flag)
+#define SDMMCHOST_ENABLE_DDR_MODE(base, flag, nibblePos)
 #define SDMMCHOST_FORCE_SDCLOCK_ON(base, enable)
 #define SDMMCHOST_EXECUTE_MANUAL_TUNING_ENABLE(base, flag)
 #define SDMMCHOST_ADJUST_MANUAL_TUNING_DELAY(base, delay)
@@ -500,7 +500,7 @@ enum _host_capability
         (USDHC_Reset(base, kUSDHC_ResetTuning | kUSDHC_ResetData | kUSDHC_ResetCommand, timeout)); \
     }
 
-#define SDMMCHOST_ENABLE_DDR_MODE(base, flag) (USDHC_EnableDDRMode(base, flag, 1U))
+#define SDMMCHOST_ENABLE_DDR_MODE(base, flag, nibblePos) (USDHC_EnableDDRMode(base, flag, nibblePos))
 
 #if FSL_FEATURE_USDHC_HAS_HS400_MODE
 #define SDMMCHOST_ENABLE_HS400_MODE(base, flag) (USDHC_EnableHS400Mode(base, flag))
@@ -718,6 +718,12 @@ status_t SDMMCHOST_Init(SDMMCHOST_CONFIG *host, void *userData);
  * @param host base address.
  */
 void SDMMCHOST_Reset(SDMMCHOST_TYPE *base);
+
+/*!
+ * @brief host controller error recovery.
+ * @param host base address.
+ */
+void SDMMCHOST_ErrorRecovery(SDMMCHOST_TYPE *base);
 
 /*!
  * @brief Deinit host controller.

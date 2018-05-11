@@ -72,13 +72,15 @@ typedef struct _mmc_card
 {
     SDMMCHOST_CONFIG host; /*!< Host information */
 
-    bool isHostReady;                                     /*!< Use this flag to indicate if need host re-init or not*/
-    uint32_t busClock_Hz;                                 /*!< MMC bus clock united in Hz */
-    uint32_t relativeAddress;                             /*!< Relative address of the card */
-    bool enablePreDefinedBlockCount;                      /*!< Enable PRE-DEFINED block count when read/write */
-    uint32_t flags;                                       /*!< Capability flag in _mmc_card_flag */
-    uint32_t rawCid[4U];                                  /*!< Raw CID content */
-    uint32_t rawCsd[4U];                                  /*!< Raw CSD content */
+    bool isHostReady;                /*!< Use this flag to indicate if need host re-init or not*/
+    bool noInteralAlign;             /*!< use this flag to disable sdmmc align. If disable, sdmmc will not make sure the
+                           data buffer address is word align, otherwise all the transfer are align to low level driver */
+    uint32_t busClock_Hz;            /*!< MMC bus clock united in Hz */
+    uint32_t relativeAddress;        /*!< Relative address of the card */
+    bool enablePreDefinedBlockCount; /*!< Enable PRE-DEFINED block count when read/write */
+    uint32_t flags;                  /*!< Capability flag in _mmc_card_flag */
+    uint32_t rawCid[4U];             /*!< Raw CID content */
+    uint32_t rawCsd[4U];             /*!< Raw CSD content */
     uint32_t rawExtendedCsd[MMC_EXTENDED_CSD_BYTES / 4U]; /*!< Raw MMC Extended CSD content */
     uint32_t ocr;                                         /*!< Raw OCR content */
     mmc_cid_t cid;                                        /*!< CID */

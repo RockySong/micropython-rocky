@@ -93,12 +93,6 @@ static void SDMMCHOST_TransferCompleteCallback(SDMMCHOST_TYPE *base,
 static void SDMMCHOST_ReTuningCallback(SDMMCHOST_TYPE *base, void *userData);
 
 /*!
- * @brief host controller error recovery.
- * @param host base address.
- */
-static void SDMMCHOST_ErrorRecovery(SDMMCHOST_TYPE *base);
-
-/*!
  * @brief card detect deinit function.
  */
 static void SDMMCHOST_CardDetectDeinit(void);
@@ -109,16 +103,18 @@ static void SDMMCHOST_CardDetectDeinit(void);
  * @param host detect card configuration.
  */
 static status_t SDMMCHOST_CardDetectInit(SDMMCHOST_TYPE *base, const sdmmchost_detect_card_t *cd);
+
 /*******************************************************************************
  * Variables
  ******************************************************************************/
 /* DMA descriptor should allocate at non-cached memory */
 AT_NONCACHEABLE_SECTION_ALIGN(uint32_t g_usdhcAdma2Table[USDHC_ADMA_TABLE_WORDS], USDHC_ADMA2_ADDR_ALIGN);
 
-static usdhc_handle_t s_usdhcHandle;
-static volatile bool s_usdhcTransferSuccessFlag = true;
+usdhc_handle_t g_usdhcHandle;
+volatile bool g_usdhcTransferSuccessFlag = true;
 static volatile bool s_sdInsertedFlag = false;
-static volatile status_t s_reTuningFlag = false;
+volatile status_t g_reTuningFlag = false;
+
 /*******************************************************************************
  * Code
  ******************************************************************************/
@@ -163,6 +159,17 @@ static void SDMMCHOST_DetectCardRemoveByHost(SDMMCHOST_TYPE *base, void *userDat
     }
 }
 
+void SDMMCHOST_CARD_DETECT_GPIO_INTERRUPT_HANDLER(void)
+{
+    if (SDMMCHOST_CARD_DETECT_GPIO_INTERRUPT_STATUS() & (1U << BOARD_USDHC_CD_GPIO_PIN))
+    {
+        SDMMCHOST_DetectCardByGpio((sdmmchost_detect_card_t *)g_usdhcHandle.userData);
+    }
+    /* Clear interrupt flag.*/
+    SDMMCHOST_CARD_DETECT_GPIO_INTERRUPT_STATUS_CLEAR(~0U);
+    SDMMCEVENT_Notify(kSDMMCEVENT_CardDetect);
+}
+
 static void SDMMCHOST_TransferCompleteCallback(SDMMCHOST_TYPE *base,
                                                usdhc_handle_t *handle,
                                                status_t status,
@@ -171,11 +178,11 @@ static void SDMMCHOST_TransferCompleteCallback(SDMMCHOST_TYPE *base,
     /* wait the target status and then notify the transfer complete */
     if (status == kStatus_Success)
     {
-        s_usdhcTransferSuccessFlag = true;
+        g_usdhcTransferSuccessFlag = true;
     }
     else
     {
-        s_usdhcTransferSuccessFlag = false;
+        g_usdhcTransferSuccessFlag = false;
     }
 
     SDMMCEVENT_Notify(kSDMMCEVENT_TransferComplete);
@@ -183,7 +190,7 @@ static void SDMMCHOST_TransferCompleteCallback(SDMMCHOST_TYPE *base,
 
 static void SDMMCHOST_ReTuningCallback(SDMMCHOST_TYPE *base, void *userData)
 {
-    s_reTuningFlag = true;
+    g_reTuningFlag = true;
     SDMMCEVENT_Notify(kSDMMCEVENT_TransferComplete);
 }
 
@@ -205,18 +212,18 @@ static status_t SDMMCHOST_TransferFunction(SDMMCHOST_TYPE *base, SDMMCHOST_TRANS
 
     do
     {
-        error = USDHC_TransferNonBlocking(base, &s_usdhcHandle, &dmaConfig, content);
+        error = USDHC_TransferNonBlocking(base, &g_usdhcHandle, &dmaConfig, content);
     } while (error == kStatus_USDHC_BusyTransferring);
 
     if ((error != kStatus_Success) ||
         (false == SDMMCEVENT_Wait(kSDMMCEVENT_TransferComplete, SDMMCHOST_TRANSFER_COMPLETE_TIMEOUT)) ||
-        (s_reTuningFlag) || (!s_usdhcTransferSuccessFlag))
+        (g_reTuningFlag) || (!g_usdhcTransferSuccessFlag))
     {
-        if (s_reTuningFlag || (error == kStatus_USDHC_ReTuningRequest))
+        if (g_reTuningFlag || (error == kStatus_USDHC_ReTuningRequest))
         {
-            if (s_reTuningFlag)
+            if (g_reTuningFlag)
             {
-                s_reTuningFlag = false;
+                g_reTuningFlag = false;
                 error = kStatus_USDHC_TuningError;
             }
         }
@@ -228,10 +235,12 @@ static status_t SDMMCHOST_TransferFunction(SDMMCHOST_TYPE *base, SDMMCHOST_TRANS
         }
     }
 
+    SDMMCEVENT_Delete(kSDMMCEVENT_TransferComplete);
+
     return error;
 }
 
-static void SDMMCHOST_ErrorRecovery(SDMMCHOST_TYPE *base)
+void SDMMCHOST_ErrorRecovery(SDMMCHOST_TYPE *base)
 {
     uint32_t status = 0U;
     /* get host present status */
@@ -267,16 +276,9 @@ static status_t SDMMCHOST_CardDetectInit(SDMMCHOST_TYPE *base, const sdmmchost_d
     if (cdType == kSDMMCHOST_DetectCardByGpioCD)
     {
         SDMMCHOST_CARD_DETECT_GPIO_INIT();
-
-/* set IRQ priority */
-#if defined(__CORTEX_M)
-        SDMMCHOST_SET_IRQ_PRIORITY(SDMMCHOST_CARD_DETECT_GPIO_IRQ, 6U);
-#else
-        SDMMCHOST_SET_IRQ_PRIORITY(SDMMCHOST_CARD_DETECT_GPIO_IRQ, 26U);
-#endif
         /* Open card detection pin NVIC. */
         SDMMCHOST_ENABLE_IRQ(SDMMCHOST_CARD_DETECT_GPIO_IRQ);
-        /* detect card status */
+        /* check card insert or not */
         SDMMCHOST_DetectCardByGpio(cd);
     }
     else
@@ -288,9 +290,8 @@ static status_t SDMMCHOST_CardDetectInit(SDMMCHOST_TYPE *base, const sdmmchost_d
         }
         /* enable card detect interrupt */
         SDMMCHOST_CARD_DETECT_INSERT_ENABLE(base);
-        SDMMCHOST_CARD_DETECT_REMOVE_ENABLE(base);
         SDMMCHOST_CARD_DETECT_INSERT_INTERRUPT_ENABLE(base);
-        SDMMCHOST_CARD_DETECT_REMOVE_INTERRUPT_ENABLE(base);
+
         /* check if card is inserted */
         if (SDMMCHOST_CARD_DETECT_INSERT_STATUS(base))
         {
@@ -310,17 +311,6 @@ static void SDMMCHOST_CardDetectDeinit(void)
 void SDMMCHOST_Delay(uint32_t milliseconds)
 {
     SDMMCEVENT_Delay(milliseconds);
-}
-
-void SDMMCHOST_CARD_DETECT_GPIO_INTERRUPT_HANDLER(void)
-{
-    if (SDMMCHOST_CARD_DETECT_GPIO_INTERRUPT_STATUS() & (1U << BOARD_USDHC_CD_GPIO_PIN))
-    {
-        SDMMCHOST_DetectCardByGpio((sdmmchost_detect_card_t *)s_usdhcHandle.userData);
-    }
-    /* Clear interrupt flag.*/
-    SDMMCHOST_CARD_DETECT_GPIO_INTERRUPT_STATUS_CLEAR(~0U);
-    SDMMCEVENT_Notify(kSDMMCEVENT_CardDetect);
 }
 
 status_t SDMMCHOST_WaitCardDetectStatus(SDMMCHOST_TYPE *base, const sdmmchost_detect_card_t *cd, bool waitCardStatus)
@@ -413,7 +403,9 @@ status_t SDMMCHOST_Init(SDMMCHOST_CONFIG *host, void *userData)
     /* disable the card insert/remove interrupt, due to use GPIO interrupt detect card */
     USDHC_DisableInterruptSignal(usdhcHost->base, kUSDHC_CardRemovalFlag | kUSDHC_CardInsertionFlag);
     /* create interrupt handler */
-    USDHC_TransferCreateHandle(usdhcHost->base, &s_usdhcHandle, &callback, userData);
+    USDHC_TransferCreateHandle(usdhcHost->base, &g_usdhcHandle, &callback, userData);
+    /* Create transfer complete event. */
+    SDMMCEVENT_InitTimer();
 
     if (false == SDMMCEVENT_Create(kSDMMCEVENT_TransferComplete))
     {
@@ -433,7 +425,7 @@ void SDMMCHOST_Reset(SDMMCHOST_TYPE *base)
     /* voltage switch to normal but not 1.8V */
     SDMMCHOST_SWITCH_VOLTAGE180V(base, false);
     /* Disable DDR mode */
-    SDMMCHOST_ENABLE_DDR_MODE(base, false);
+    SDMMCHOST_ENABLE_DDR_MODE(base, false, 0U);
     /* disable tuning */
     SDMMCHOST_EXECUTE_STANDARD_TUNING_ENABLE(base, false);
     /* Disable HS400 mode */
@@ -447,6 +439,5 @@ void SDMMCHOST_Deinit(void *host)
     usdhc_host_t *usdhcHost = (usdhc_host_t *)host;
     SDMMCHOST_Reset(usdhcHost->base);
     USDHC_Deinit(usdhcHost->base);
-    SDMMCEVENT_Delete(kSDMMCEVENT_TransferComplete);
     SDMMCHOST_CardDetectDeinit();
 }
