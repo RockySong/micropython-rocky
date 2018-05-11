@@ -422,3 +422,4 @@ ports/prj_keil_rt105/mpyrt.bin
 ports/prj_keil_rt105/Objects/
 ports/prj_keil_rt105/Listings/
 ports/nxp_rt105/build-imxrtevk105x/firmware.map
+ports/prj_keil_rt105/Objects_SDRAM/

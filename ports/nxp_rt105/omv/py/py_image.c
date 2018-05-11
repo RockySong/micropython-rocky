@@ -5010,6 +5010,7 @@ STATIC MP_DEFINE_CONST_FUN_OBJ_KW(py_image_load_descriptor_obj, 1, py_image_load
 STATIC MP_DEFINE_CONST_FUN_OBJ_KW(py_image_save_descriptor_obj, 2, py_image_save_descriptor);
 STATIC MP_DEFINE_CONST_FUN_OBJ_KW(py_image_match_descriptor_obj, 2, py_image_match_descriptor);
 static const mp_map_elem_t globals_dict_table[] = {
+#if 0 // #ifndef MEM_PROFILING	
     {MP_OBJ_NEW_QSTR(MP_QSTR___name__),            MP_OBJ_NEW_QSTR(MP_QSTR_image)},
     {MP_OBJ_NEW_QSTR(MP_QSTR_SEARCH_EX),           MP_OBJ_NEW_SMALL_INT(SEARCH_EX)},
     {MP_OBJ_NEW_QSTR(MP_QSTR_SEARCH_DS),           MP_OBJ_NEW_SMALL_INT(SEARCH_DS)},
@@ -5043,6 +5044,7 @@ static const mp_map_elem_t globals_dict_table[] = {
     {MP_OBJ_NEW_QSTR(MP_QSTR_CODE93),              MP_OBJ_NEW_SMALL_INT(BARCODE_CODE93)},
     {MP_OBJ_NEW_QSTR(MP_QSTR_CODE128),             MP_OBJ_NEW_SMALL_INT(BARCODE_CODE128)},
 #endif
+
     {MP_OBJ_NEW_QSTR(MP_QSTR_ImageWriter),         (mp_obj_t)&py_image_imagewriter_obj},
     {MP_OBJ_NEW_QSTR(MP_QSTR_ImageReader),         (mp_obj_t)&py_image_imagereader_obj},
     /* Color space functions */
@@ -5056,6 +5058,7 @@ static const mp_map_elem_t globals_dict_table[] = {
     {MP_OBJ_NEW_QSTR(MP_QSTR_load_descriptor),     (mp_obj_t)&py_image_load_descriptor_obj},
     {MP_OBJ_NEW_QSTR(MP_QSTR_save_descriptor),     (mp_obj_t)&py_image_save_descriptor_obj},
     {MP_OBJ_NEW_QSTR(MP_QSTR_match_descriptor),    (mp_obj_t)&py_image_match_descriptor_obj},
+#endif
 };
 STATIC MP_DEFINE_CONST_DICT(globals_dict, globals_dict_table);
 

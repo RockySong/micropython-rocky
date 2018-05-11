@@ -13,7 +13,7 @@
 
 typedef struct framebuffer {
 	union {
-		struct {			
+		struct {
 			uint16_t w, h, bpp, res;
 		};
 		uint64_t u64AlignForIMxRT;	// in i.MX RT, this address must be aligned to 8 bytes!

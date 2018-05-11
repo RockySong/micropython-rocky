@@ -87,8 +87,22 @@ uint32_t SystemCoreClock = DEFAULT_SYSTEM_CLOCK;
 /* ----------------------------------------------------------------------------
    -- SystemInit()
    ---------------------------------------------------------------------------- */
+extern const uint32_t __Vectors;
+void RelocateVTOR(void) {
+	uint32_t *pSrc = (uint32_t) &__Vectors;
+	SCB->VTOR = (uint32_t) pSrc;
+	if ((uint32_t)pSrc >= 0x60000000 && (uint32_t)pSrc < 0x80000000) {
+		// in FlexSPI, move VTOR to ITCM
+		uint32_t *p = (uint32_t*) 0, i;
+		for (i=0; i<256; i++) {
+			p[i] = pSrc[i];
+		}
+		SCB->VTOR = 0;
+	}
+}
 
 void SystemInit (void) {
+	RelocateVTOR();
 #if ((__FPU_PRESENT == 1) && (__FPU_USED == 1))
   SCB->CPACR |= ((3UL << 10*2) | (3UL << 11*2));    /* set CP10, CP11 Full Access */
 #endif /* ((__FPU_PRESENT == 1) && (__FPU_USED == 1)) */

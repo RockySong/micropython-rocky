@@ -150,6 +150,7 @@ static mp_obj_t py_sensor_get_id() {
 
 static mp_obj_t py_sensor_alloc_extra_fb(mp_obj_t w_obj, mp_obj_t h_obj, mp_obj_t type_obj)
 {
+	#ifndef MEM_PROFILING
     int w = mp_obj_get_int(w_obj);
     PY_ASSERT_TRUE_MSG(w > 0, "Width must be > 0");
 
@@ -189,6 +190,9 @@ static mp_obj_t py_sensor_alloc_extra_fb(mp_obj_t w_obj, mp_obj_t h_obj, mp_obj_
     fb_alloc_mark();
     img.pixels = fb_alloc0(image_size(&img));
     return py_image_from_struct(&img);
+	#else
+	return mp_const_none;
+	#endif
 }
 
 static mp_obj_t py_sensor_dealloc_extra_fb()
@@ -560,6 +564,7 @@ STATIC const mp_map_elem_t globals_dict_table[] = {
     { MP_OBJ_NEW_QSTR(MP_QSTR_set_vsync_output),    (mp_obj_t)&py_sensor_set_vsync_output_obj },
     { MP_OBJ_NEW_QSTR(MP_QSTR___write_reg),         (mp_obj_t)&py_sensor_write_reg_obj },
     { MP_OBJ_NEW_QSTR(MP_QSTR___read_reg),          (mp_obj_t)&py_sensor_read_reg_obj },
+
 };
 
 STATIC MP_DEFINE_CONST_DICT(globals_dict, globals_dict_table);

@@ -39,11 +39,16 @@ LR_XIP_FLASH IVT_BASE + 0x2000 {
 	}
 
 	ER_ITCM 0x00000000 ITCM_SIZE { ; Stack region growing down
-		vm.o obj.o objarray.o objfloat.o objlist.o objobject.o  (+RO)
-		nlrthumb.o objfun.o  nativeglue.o malloc.o (+RO)	
-		objdict.o  modmath.o modarray.o modbuiltins.o modmicropython.o map.o (+RO)
-		jpeg.o (+RO)
+		vm.o nlrthumb.o pendsv.o objfun.o (+RO)
+		// obj.o objarray.o objfloat.o objlist.o objobject.o  (+RO)
+		// objfun.o  nativeglue.o malloc.o (+RO)	
+		// objdict.o  modmath.o modarray.o modbuiltins.o modmicropython.o map.o (+RO)
+		acos*.o asin*.o atan*.o ceil*.o cos*.o erf*.o expf*.o expm*.o floor*.o fmod*.o (+RO)
+		frexp*.o ldex*.o lgamma*.o log*.o modff.o nanf.o nearbyintf.o powf.o roundf.o (+RO)
+		sin*.o sqrt*.o tan*.o tgammaf*.o trunc*.o dunder.o funder.o (+RO)
+		// jpeg.o (+RO)
 		* (.ram_code)
+		blob.o (+RO)
 	}
 	
 	OMV_JPEG_FB +0 EMPTY OMV_JPEG_FB_SIZE {}
@@ -55,7 +60,7 @@ LR_XIP_FLASH IVT_BASE + 0x2000 {
 		xyz_tab.o (+RO)
 		lab_tab.o (+RO)
 	}
-	VECTOR_RAM +0 EMPTY 0x200 { ; RAM vector region (in RAMX)
+	VECTOR_RAM +0 EMPTY 0x10 { ; RAM vector region (in RAMX)
 	}
 
 	OMV_MAIN_FB +0 EMPTY OMV_MAIN_FB_SIZE {}

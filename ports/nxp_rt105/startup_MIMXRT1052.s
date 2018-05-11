@@ -335,15 +335,10 @@ UnalignTest		PROC
 				BX	LR
 				ENDP
 
-Reset_Handler   PROC
-                EXPORT  Reset_Handler             [WEAK]
-                IMPORT  SystemInit
-                IMPORT  __main
-
-                CPSID   I               ; Mask interrupts
+ConfigFlexRAM	PROC
 				; >>> do custom FlexRAM configuration
 				ldr		r0,	= 0x400AC038	; IOMUXC.GPR14
-				ldr		r1, = 7 | 10<<4		; config (max allowed) ITCM=64KB, DTCM=512KB
+				ldr		r1, = 10 | 10<<4	; config (max allowed) ITCM=512KB, DTCM=512KB
 				ldr		r2, [r0]
 				bfi		r2,	r1, #16, #8
 				str		r2,	[r0]
@@ -354,36 +349,48 @@ Reset_Handler   PROC
 				
 				ldr		r0,	= 0x400AC040	; IOMUXC.GPR16
 				ldr		r2,	[r0]
-				orr		r2, #7	; enable ITCM, DTCM, apply IOMUXC's cfg instead of FUSE config
+				orr		r2, #7				; enable ITCM, DTCM, apply IOMUXC's cfg instead of FUSE config
 				str		r2,	[r0]
 				
 				ldr		r0, =0x20000000
 				ldr		r1, =0x20070000
 				ldr		r2, =0
-10				
+zero_dtcm				
 				str		r2,	[r0], #4
 				cmp		r0,	r1
-				bne		%b10
+				bne		zero_dtcm
 				
 				ldr		r0, =0x00000000
 				ldr		r1, =0x00010000
 				ldr		r2, =0
-10				
+zero_itcm				
 				str		r2,	[r0], #4
 				cmp		r0,	r1
-				bne		%b10			
-				; <<<
-                LDR     R0, =0xE000ED08
-                LDR     R1, =__Vectors
-                STR     R1, [R0]
-                LDR     R2, [R1]
-                MSR     MSP, R2
+				bne		zero_itcm
+				bx		lr
+				; <<<	
+				ENDP
+
+RelocateVTOR
+
+Reset_Handler   PROC
+                EXPORT  Reset_Handler             [WEAK]
+                IMPORT  SystemInit
+                IMPORT  __main
+
+                  CPSID   I               ; Mask interrupts
+				; check if our code runs from 0x60000000
+				MOV		R0,  PC
+				MOV		R1,	 #0x60000000
+				SUB		R0,	 R0, R1
+				MOV		R2,	 #0x20000000
+				CMP		R0,	R2
+				BLE		.
+				BL		ConfigFlexRAM
                 LDR     R0, =SystemInit
                 BLX     R0
-				
 
-				
-                CPSIE   i               ; Unmask interrupts
+				CPSIE   i               ; Unmask interrupts
                 LDR     R0, =__main
                 BX      R0
                 ENDP

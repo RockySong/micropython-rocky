@@ -49,7 +49,9 @@
     .section .isr_vector, "a"
     .align 2
     .globl __isr_vector
+	.globl __Vectors
 __isr_vector:
+__Vectors
     .long   __StackTop                                      /* Top of Stack */
     .long   Reset_Handler                                   /* Reset Handler */
     .long   NMI_Handler                                     /* NMI Handler*/

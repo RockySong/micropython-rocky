@@ -543,16 +543,22 @@ HAL_StatusTypeDef HAL_Init(void)
 	return HAL_OK;
 }
 
+#ifdef MEM_PROFILING
+#define DTCM_END	0x20070000
+#else
+#define DTCM_END	0x20070000
+#endif
+
 #if defined(__CC_ARM)
 	#define STACK_SIZE	(0x1800)
-	uint32_t  _ram_start = 0x20000000, _ram_end = 0x20070000, _estack = 0x20000000 + STACK_SIZE, _heap_end = 0x20070000;
+	uint32_t  _ram_start = 0x20000000, _ram_end = DTCM_END, _estack = 0x20000000 + STACK_SIZE, _heap_end = DTCM_END;
 	extern unsigned int Image$$MPY_HEAP_START$$Base;
 	uint32_t _heap_start = (uint32_t) &Image$$MPY_HEAP_START$$Base;
 #elif defined(__ICCARM__)
 	extern unsigned int CHEAP$$Limit[], lg_c1Stack[];
 	uint32_t _heap_start = (uint32_t)CHEAP$$Limit;	// we put HEAP at the last of DATA region, so we can assume mpy heap start here
 	
-	uint32_t  _ram_start = 0x20000000, _ram_end = (uint32_t)CHEAP$$Limit, _estack = 0x20000000 + (uint32_t)lg_c1Stack, _heap_end = 0x20070000;
+	uint32_t  _ram_start = 0x20000000, _ram_end = (uint32_t)CHEAP$$Limit, _estack = 0x20000000 + (uint32_t)lg_c1Stack, _heap_end = DTCM_END;
 #elif defined(__GNUC__)
 extern uint32_t _ram_start, _ram_end, _estack, _heap_end, _heap_start;
 #endif
@@ -863,7 +869,7 @@ void _exit(int x) {
 	printf("main() exit!\r\n");
 	while (1) {}
 }
-
+#if 0
 // own impl of alloca, has risk that later alloca overlap with earlier alloca
 // larger ALLOCA_BUF_SIZE reduces the risk, make sure you make sufficient test!
 #define ALLOCA_BUF_SIZE	2048
@@ -878,3 +884,4 @@ void* rollback_alloca(uint32_t cb)
 	s_allocaNdx += (cb + 3) >> 2;
 	return pRet;
 }
+#endif

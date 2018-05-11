@@ -10,6 +10,13 @@
 * Definitions
 ******************************************************************************/
 
+#ifdef XIP_EXTERNAL_FLASH
+#define RAM_CODE __attribute__((section(".ram_code")))
+#else
+#define RAM_CODE
+#endif
+
+
 #define FLASH_KB_SIZE (64*1024)  // size in KB !
 #define FLEXSPI_AMBA_BASE FlexSPI_AMBA_BASE
 #define FLASH_PAGE_SIZE 512
@@ -59,7 +66,7 @@ flexspi_device_config_t deviceconfig = {
     .AHBWriteWaitInterval = 20,
 };
 
-const uint32_t customLUT[CUSTOM_LUT_LENGTH] = {
+const RAM_CODE uint32_t customLUT[CUSTOM_LUT_LENGTH] = {
         /* Read Data */
         [4 * HYPERFLASH_CMD_LUT_SEQ_IDX_READDATA] =
             FLEXSPI_LUT_SEQ(kFLEXSPI_Command_DDR, kFLEXSPI_8PAD, 0xA0, kFLEXSPI_Command_RADDR_DDR, kFLEXSPI_8PAD, 0x18),
@@ -388,6 +395,7 @@ int flexspi_nor_init(void)
     uint32_t i = 0;
     flexspi_config_t config;
     status_t status;
+	
 	#ifdef XIP_EXTERNAL_FLASH
 	return 0;
 	#endif
