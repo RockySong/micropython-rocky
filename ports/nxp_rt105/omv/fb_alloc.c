@@ -12,8 +12,8 @@
 
 
 #ifdef __CC_ARM
-extern  char Image$$OMV_FB_ALLOC$$Limit;
-#define _fballoc Image$$OMV_FB_ALLOC$$Limit
+extern  char Image$$OMV_FB_END$$Base;
+#define _fballoc Image$$OMV_FB_END$$Base
 #else
 extern char _fballoc;
 #endif
@@ -22,7 +22,7 @@ static char *pointer = &_fballoc;
 
 NORETURN void fb_alloc_fail()
 {
-    nlr_raise(mp_obj_new_exception_msg(&mp_type_MemoryError, "FB Alloc Collision!!!"));
+    nlr_raise(mp_obj_new_exception_msg(&mp_type_MemoryError, "FB Alloc failed!!!"));
 }
 
 void fb_alloc_init0()
@@ -69,11 +69,12 @@ void *fb_alloc(uint32_t size)
         return NULL;
     }
 
-    size=((size+sizeof(uint32_t)-1)/sizeof(uint32_t))*sizeof(uint32_t);// Round Up
+    size = ((size+sizeof(uint32_t)-1)/sizeof(uint32_t))*sizeof(uint32_t);// Round Up
     char *result = pointer - size;
     char *new_pointer = result - sizeof(uint32_t);
 
     // Check if allocation overwrites the framebuffer pixels
+    // rocky: this means extra buffer must be immediately after pixels.
     if (new_pointer < (char *) MAIN_FB_PIXELS()) {
         fb_alloc_fail();
     }

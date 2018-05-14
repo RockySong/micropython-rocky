@@ -109,7 +109,7 @@ volatile static usb_device_composite_struct_t *g_deviceComposite;
 #define ALIGN32 __ALIGNED(32)
 
 ring_block_t s_omvRB;
-USB_DMA_NONINIT_DATA_ALIGN(USB_DATA_ALIGN_SIZE) static uint8_t s_omvTxBuf[VCP_OUTEPBUF_CNT][VCP_RINGBLK_SIZE];
+USB_DMA_NONINIT_DATA_ALIGN(USB_DATA_ALIGN_SIZE) static uint8_t s_omvTxBuf[8][VCP_RINGBLK_SIZE];
 
 #define IDE_BAUDRATE_SLOW    (921600)
 #define IDE_BAUDRATE_FAST    (12000000)
@@ -176,7 +176,7 @@ void CheckOpenMVIDEConnect(void) {
 	// The slow baudrate can be used on OSs that don't support custom baudrates
 	if (baudrate == IDE_BAUDRATE_SLOW || baudrate == IDE_BAUDRATE_FAST) {
 		debug_mode = 1;
-		RingBlk_Init(&s_omvRB, s_omvTxBuf[0], VCP_RINGBLK_SIZE, VCP_OUTEPBUF_CNT);
+		RingBlk_Init(&s_omvRB, s_omvTxBuf[0], VCP_RINGBLK_SIZE, sizeof(s_omvTxBuf) / VCP_RINGBLK_SIZE);
 		g_isUsbHostOpen = 1;
 		dbg_xfer_length = 0;
 		// UserTxBufPtrIn = UserTxBufPtrOut = UserTxBufPtrOutShadow = 0;

@@ -362,10 +362,13 @@ int32_t RingBlk_WriteLimitedBlks(ring_block_t* pRB, const uint8_t* pBuf, uint32_
 	
 	if (0 == (cbFree = RingBlk_GetFreeBytes(pRB)))
 		goto Cleanup;	// block ring is full
+	if (pRB->rNdx == pRB->wNdx && pRB->cbTotUsed > (pRB->blkCnt - 1) * pRB->blkSize) {
+		// this is a corner case when RB is from full to just one read. though there are free spaces
+		// still can't write into
+		goto Cleanup;
+	}
 	
 	cbBlkFill0 = pRB->cbBlkFillTos[blkNdx];
-	if (pRB->wNdx == pRB->rNdx && pRB->usedCnt == 2 && pRB->cbTotUsed == 0x80)
-		pRB = pRB;
 	/* Calculate the maximum amount we can copy */
 	while (dataBytes && cbFree) {
 		cb = pRB->blkSize - cbBlkFill0;
@@ -392,8 +395,6 @@ int32_t RingBlk_WriteLimitedBlks(ring_block_t* pRB, const uint8_t* pBuf, uint32_
 		}
 	}
 	pRB->wNdx = blkNdx , pRB->blkWNdx = byteNdx;
-	if (pRB->wNdx == pRB->rNdx && pRB->usedCnt == 2 && pRB->cbTotUsed == 0x80)
-		pRB = pRB;
 Cleanup:
 	LEAVE_CRITICAL_RBK();
 	return dataBytes0 - dataBytes;	// returns written bytes

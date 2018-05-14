@@ -975,8 +975,7 @@ int sensor_snapshot(image_t *pImg, void *pv1, void *pv2)
 		t1 = HAL_GetTick();
 		fb_update_jpeg_buffer();
 		t2 = HAL_GetTick() - t1;
-		t2 = 1000 / t2;
-		PRINTF("JPEG FPS=%d\r\n", t2);
+		// PRINTF("JPEG %dms\r\n", t2);
 		/*
 		for (i=0; i<sensor.fb_h; i++) {
 			for (j=0; j<sensor.fb_w; j++) {

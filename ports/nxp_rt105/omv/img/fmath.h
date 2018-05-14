@@ -9,10 +9,49 @@
 #ifndef __FMATH_H__
 #define __FMATH_H__
 #include <stdint.h>
-
+#include "common.h"
 #ifdef __CC_ARM
 #include <math.h>
-#define fast_sqrtf sqrtf
+// #define fast_sqrtf sqrtf
+static float ALWAYS_INLINE fast_sqrtf(float x)
+{
+	float ret;
+	__asm {
+		VSQRT.F32	ret,	x
+	}
+    return ret;
+}
+
+static int ALWAYS_INLINE fast_floorf(float x)
+{
+    float i;
+    __asm{
+		vcvt.s32.f32 i, x
+    }
+    return (int)i;
+}
+
+static int ALWAYS_INLINE fast_ceilf(float x)
+{
+    float i;
+    x += 0.9999f;
+    __asm{
+		vcvt.s32.f32 i, x
+    }
+    return (int)i;
+}
+
+int ALWAYS_INLINE fast_roundf(float x)
+{
+    float i;
+    __asm{
+		vcvtr.s32.f32 i, x
+    }
+
+    return (int)i;
+}
+
+
 #define fast_floorf(x) ((int)floorf(x))
 #define fast_ceilf(x) ((int)ceilf(x))
 #define fast_roundf(x) ((int)roundf(x))
