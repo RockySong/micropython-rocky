@@ -69,7 +69,7 @@ inline void usbdbg_set_irq_enabled(bool enabled)
 }
 #define logout(...) // printf
 // #define DUMP_RAW
-
+#define DUMP_RAW
 #ifdef DUMP_RAW
 #define DUMP_FB	MAIN_FB
 #else
@@ -358,6 +358,9 @@ void usbdbg_control(void *buffer, uint8_t request, uint32_t length)
 
         case USBDBG_FB_ENABLE: {
             int16_t enable = *((int16_t*)buffer);
+			#ifdef DUMP_RAW
+			enable = 0;
+			#endif
 			logout("control: FB enable, enable=%d, jpeg_fb = 0x%08X\r\n", enable, (uint32_t)JPEG_FB());
 
             JPEG_FB()->enabled = enable;

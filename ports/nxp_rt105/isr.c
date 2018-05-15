@@ -252,7 +252,7 @@ __asm void HardFault_Handler(void) {
      mrsne r0, psp          // Make R0 point to process stack pointer
 	 push	{r4-r11}
 	 mov	r1,	sp
-     bl HardFault_C_Handler  // Off to C land
+     b HardFault_C_Handler  // Off to C land
 	 pop	{r4-r11}
 	 bx		lr
 }
@@ -435,6 +435,7 @@ void SysTick_Handler(void) {
         }
     }
     #endif
+	__DSB();
 }
 
 // Handle a flash (erase/program) interrupt.
@@ -450,6 +451,7 @@ void Reserved168_IRQHandler(void) {
     // This call the storage IRQ handler, to check if the flash cache needs flushing
     storage_irq_handler();
     IRQ_EXIT(Reserved168_IRQn);
+	__DSB();
 }
 
 

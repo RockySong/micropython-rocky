@@ -447,6 +447,11 @@ void CSI_DisableInterrupts(CSI_Type *base, uint32_t mask)
     base->CSICR18 &= ~((mask & CSI_CSICR18_INT_EN_MASK) >> 6U);
 }
 
+#define OPENMV_SENSOR
+#ifdef OPENMV_SENSOR
+void CSI_OmvTransferHandleIRQ(CSI_Type *base, csi_handle_t *handle);
+#endif
+
 status_t CSI_TransferCreateHandle(CSI_Type *base,
                                   csi_handle_t *handle,
                                   csi_transfer_callback_t callback,
@@ -468,6 +473,9 @@ status_t CSI_TransferCreateHandle(CSI_Type *base,
     s_csiHandle[instance] = handle;
 
     s_csiIsr = CSI_TransferHandleIRQ;
+	#ifdef OPENMV_SENSOR
+	s_csiIsr = CSI_OmvTransferHandleIRQ;
+	#endif
 
     /* Enable interrupt. */
     EnableIRQ(s_csiIRQ[instance]);
@@ -491,9 +499,13 @@ status_t CSI_TransferStart(CSI_Type *base, csi_handle_t *handle)
     handle->nextBufferIdx = 0U;
     handle->activeBufferNum = 0U;
 
-    /* Write to memory from second completed frame. */
+	#ifdef OPENMV_SENSOR
+	/* Write to memory from first completed frame. */
+	base->CSICR18 = (base->CSICR18 & ~CSI_CSICR18_MASK_OPTION_MASK) | CSI_CSICR18_MASK_OPTION(0);
+	#else
+	/* Write to memory from second completed frame. */
     base->CSICR18 = (base->CSICR18 & ~CSI_CSICR18_MASK_OPTION_MASK) | CSI_CSICR18_MASK_OPTION(2);
-
+	#endif
     /* Load the frame buffer to CSI register, there are at least two empty buffers. */
     CSI_TransferLoadBufferToDevice(base, handle);
     CSI_TransferLoadBufferToDevice(base, handle);
@@ -505,6 +517,9 @@ status_t CSI_TransferStart(CSI_Type *base, csi_handle_t *handle)
     handle->transferOnGoing = true;
 
     CSI_EnableInterrupts(base, kCSI_RxBuffer1DmaDoneInterruptEnable | kCSI_RxBuffer0DmaDoneInterruptEnable);
+	#ifdef OPENMV_SENSOR
+	CSI_EnableInterrupts(base, kCSI_EndOfFrameInterruptEnable);
+	#endif
 
     CSI_Start(base);
 
@@ -516,7 +531,10 @@ status_t CSI_TransferStop(CSI_Type *base, csi_handle_t *handle)
     assert(handle);
 
     CSI_Stop(base);
-    CSI_DisableInterrupts(base, kCSI_RxBuffer1DmaDoneInterruptEnable | kCSI_RxBuffer0DmaDoneInterruptEnable);
+    CSI_DisableInterrupts(base, kCSI_EndOfFrameInterruptEnable | kCSI_RxBuffer1DmaDoneInterruptEnable | kCSI_RxBuffer0DmaDoneInterruptEnable);
+	#ifdef OPENMV_SENSOR
+	CSI_DisableInterrupts(base, kCSI_EndOfFrameInterruptEnable);
+	#endif
 
     handle->transferStarted = false;
     handle->transferOnGoing = false;
@@ -594,6 +612,7 @@ status_t CSI_TransferGetFullBuffer(CSI_Type *base, csi_handle_t *handle, uint32_
     return kStatus_Success;
 }
 
+
 void CSI_TransferHandleIRQ(CSI_Type *base, csi_handle_t *handle)
 {
     uint32_t queueDrvWriteIdx;
@@ -636,7 +655,6 @@ void CSI_TransferHandleIRQ(CSI_Type *base, csi_handle_t *handle)
     else if (csisr & (CSI_CSISR_DMA_TSF_DONE_FB2_MASK | CSI_CSISR_DMA_TSF_DONE_FB1_MASK))
     {
         handle->queueDrvWriteIdx = CSI_TransferIncreaseQueueIdx(handle->queueDrvWriteIdx);
-
         handle->activeBufferNum--;
 
         if (handle->callback)
@@ -686,3 +704,4 @@ void CSI0_DriverIRQHandler(void)
 #endif
 }
 #endif
+

@@ -636,7 +636,14 @@ uint32_t VCOM_OmvGetLogTxLen(void)
 	return RingBlk_GetUsedBytes(&s_omvRB);
 }
 int VCOM_OmvReadLogTxBlk(uint8_t *pBuf, uint32_t bufSize) {
-	int ret = RingBlk_Read(&s_omvRB, pBuf, bufSize);
+	int ret;
+	ring_block_t rbBkup = s_omvRB;
+tryread:
+	ret = RingBlk_Read(&s_omvRB, pBuf, bufSize);
+	if (ret < bufSize && rbBkup.cbTotUsed > ret) {
+		s_omvRB = rbBkup;
+		goto tryread;
+	}
 	return ret;
 }
 

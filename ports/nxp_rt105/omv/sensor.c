@@ -67,6 +67,10 @@
 #define APP_FRAME_BUFFER_COUNT 4
 #define FRAME_BUFFER_ALIGN 64
 sensor_t sensor;
+
+/*static*/ volatile uint8_t s_isOmvSensorSnapshotReady;
+
+
 //This moment ,for the easy use, we do not take the DMA function to our project.
                                    //we will add it later.
 #define DMA DMA0
@@ -381,6 +385,18 @@ void LCDMonitor_Init(void)
     ELCDIF_RgbModeStart(APP_ELCDIF);  	
 }
 
+#define CAMERA_TAKE_SNAPSHOT() do { \
+CAMERA_RECEIVER_SubmitEmptyBuffer(&cameraReceiver, (uint32_t)fb_framebuffer->pixels); \
+/* fool the driver to make it think we have 2 FBs, otherwise it refuses to work */ \
+CAMERA_RECEIVER_SubmitEmptyBuffer(&cameraReceiver, (uint32_t)fb_framebuffer->pixels); \
+CAMERA_RECEIVER_Start(&cameraReceiver);  \
+} while(0)
+
+#define CAMERA_WAIT_FOR_SNAPSHOT() do { \
+	while (0 == s_isOmvSensorSnapshotReady) {} \
+	s_isOmvSensorSnapshotReady = 0; \
+	}while(0)
+
 int sensor_init()
 {
    
@@ -433,6 +449,7 @@ int sensor_init()
     PRINTF("%x \r\n",temp);
 }*/
     CAMERA_RECEIVER_Init(&cameraReceiver, &cameraConfig, NULL, NULL);
+	
     systick_sleep(10);
     BOARD_PullCameraPowerDownPin(true);
 
@@ -454,11 +471,13 @@ int sensor_init()
     /* Delay 1ms. */
     OV7725_DelayMs(3);
           /* Submit the empty frame buffers to buffer queue. */
+	/*
     for (uint32_t i = 0; i < APP_FRAME_BUFFER_COUNT; i++)
     {
         CAMERA_RECEIVER_SubmitEmptyBuffer(&cameraReceiver, (uint32_t)(s_frameBuffer[i]));
     }
     CAMERA_RECEIVER_Start(&cameraReceiver);
+    */
    /*  PRINTF("Regs in CSI!\r\n");
        for(uint32_t i=0x402BC000;i<=0x402BC018;i+=4)
       PRINTF("%x \r\n",*(uint32_t*)i);
@@ -466,15 +485,18 @@ int sensor_init()
       PRINTF("%x \r\n",*(uint32_t*)i);
     for(uint32_t i=0x402BC048;i<=0x402BC04c;i+=4)
       PRINTF("%x \r\n",*(uint32_t*)i);*/    
- 
+ 	/*
      while (kStatus_Success != CAMERA_RECEIVER_GetFullBuffer(&cameraReceiver, &activeFrameAddr))
     {
     }
 
-    /* Wait to get the full frame buffer to show. */
+    // Wait to get the full frame buffer to show
     while (kStatus_Success != CAMERA_RECEIVER_GetFullBuffer(&cameraReceiver, &inactiveFrameAddr))
     {
     }
+    */
+	CAMERA_TAKE_SNAPSHOT();	
+	CAMERA_WAIT_FOR_SNAPSHOT();
     /* All good! */
     return 0;
 }
@@ -971,10 +993,14 @@ int sensor_snapshot(image_t *pImg, void *pv1, void *pv2)
 		uint16_t *p = (uint16_t*) fb_framebuffer->pixels;
 		
 		uint32_t j;
-		uint32_t t1, t2;
-		t1 = HAL_GetTick();
-		fb_update_jpeg_buffer();
-		t2 = HAL_GetTick() - t1;
+		if (JPEG_FB()->enabled) {
+			uint32_t t1, t2;
+			t1 = HAL_GetTick();
+			fb_update_jpeg_buffer();
+			t2 = HAL_GetTick() - t1;
+		}		
+		CAMERA_TAKE_SNAPSHOT();
+		CAMERA_WAIT_FOR_SNAPSHOT();
 		// PRINTF("JPEG %dms\r\n", t2);
 		/*
 		for (i=0; i<sensor.fb_h; i++) {
@@ -989,7 +1015,7 @@ int sensor_snapshot(image_t *pImg, void *pv1, void *pv2)
 		*/
 		
 		n++;
-		CAMERA_RECEIVER_SubmitEmptyBuffer(&cameraReceiver, (uint32_t)fb_framebuffer->pixels );
+
 		/*
 		for (i=0, p = (uint16_t*) fb_framebuffer->pixels; i<sensor.fb_h; i++) {
 			PreprocessOneLine((uint32_t)p, i);
@@ -1003,3 +1029,30 @@ int sensor_snapshot(image_t *pImg, void *pv1, void *pv2)
 	}
     return 0;
 }
+
+void CSI_OmvTransferHandleIRQ(CSI_Type *base, csi_handle_t *handle)
+{
+    uint32_t queueDrvWriteIdx;
+    uint32_t csisr = base->CSISR;
+
+    /* Clear the error flags. */
+    base->CSISR = csisr;
+	CSI_Stop(base);
+	handle->transferOnGoing = false;
+    if (handle->callback)
+    {
+        handle->callback(base, handle, kStatus_CSI_FrameDone, handle->userData);
+    }
+	handle->queueDrvWriteIdx = 0;
+	handle->queueDrvReadIdx = 0;
+	handle->queueUserReadIdx = 0;
+	handle->queueUserWriteIdx = 0;
+	handle->activeBufferNum = 0;
+	s_isOmvSensorSnapshotReady = 1;	
+/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
+  exception return operation might vector to incorrect interrupt */
+#if defined __CORTEX_M && (__CORTEX_M >= 4U)
+	__DSB();
+#endif
+}
+

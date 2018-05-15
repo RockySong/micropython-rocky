@@ -35,8 +35,8 @@
 #include "usb_device_descriptor.h"
 
 #define VCP_RINGBLK_SIZE	64
-#define VCP_OUTEPBUF_CNT 	3
-#define VCP_INEPBUF_CNT 	4
+#define VCP_OUTEPBUF_CNT 	5
+#define VCP_INEPBUF_CNT 	5
 
 /*******************************************************************************
 * Definitions
