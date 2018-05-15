@@ -69,7 +69,7 @@ inline void usbdbg_set_irq_enabled(bool enabled)
 }
 #define logout(...) // printf
 // #define DUMP_RAW
-#define DUMP_RAW
+// #define DUMP_RAW
 #ifdef DUMP_RAW
 #define DUMP_FB	MAIN_FB
 #else

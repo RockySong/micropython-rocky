@@ -241,7 +241,7 @@ int32_t RingBlk_GetFreeBytes(ring_block_t* pRB) {
 	return pRB->blkCnt * pRB->blkSize - pRB->cbTotUsed;
 }
 
-#define RB_DEBUG
+// #define RB_DEBUG
 int32_t RingBlk_ReadLimitedBlks(ring_block_t* pRB, uint8_t* pBuf, uint32_t dataBytes, uint32_t maxBlks, uint8_t isUpdt)
 {
 	uint32_t cb, dataBytes0;
@@ -391,7 +391,7 @@ beginwork:
 	}
 	if (0 == cbFree)
 		goto Cleanup;	// block ring is full
-	if (pRB->rNdx == pRB->wNdx && pRB->cbBlkFillTos[pRB->rNdx] != 0) {
+	if (pRB->rNdx == pRB->wNdx && pRB->cbBlkFillTos[pRB->rNdx] != 0 && pRB->blkWNdx == 0) {
 		// this is a corner case when RB is from full to just one read. though there are free spaces
 		// still can't write into
 		goto Cleanup;
@@ -415,10 +415,12 @@ beginwork:
 			pRB->usedCnt++;
 		pRB->cbTotUsed += cb;
 		pRB->cbBlkFillTos[blkNdx] += cb;
+#ifdef RB_DEBUG			
 		if (pRB->cbBlkFillTos[blkNdx] > pRB->blkSize) {
 			*pRB = rbBkup;
 			goto beginwork;
 		}
+#endif
 		if (byteNdx == pRB->blkSize) {
 			// a block is totally written, switch to next block
 			byteNdx = 0;

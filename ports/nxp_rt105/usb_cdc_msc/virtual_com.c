@@ -620,7 +620,7 @@ void VCOM_OmvWriteAlways(const uint8_t *buf, uint32_t len) {
     for (i = 0; i < len; ) {
 		while (RingBlk_GetFreeBytes(&s_omvRB) == 0) {
 			__WFI();
-			if (retry++ >= 100) {
+			if (retry++ >= 1) {
 				goto cleanup;
 			}
 		}
