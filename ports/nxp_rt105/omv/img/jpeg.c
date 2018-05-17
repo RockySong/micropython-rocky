@@ -575,11 +575,10 @@ void bayer_blk_to_rgb565(image_t *img, int w, int h, int xoffs, int yoffs, uint1
     }
 }
 
-
+#include "overlay_manager.h"
 bool jpeg_compress(image_t *src, image_t *dst, int quality, bool realloc)
 {
     int DCY=0, DCU=0, DCV=0;
-
     #if (TIME_JPEG==1)
     uint32_t start = HAL_GetTick();
     #endif

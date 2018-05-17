@@ -9,15 +9,16 @@
 #include "imlib.h"
 #include "omv_boardconfig.h"
 #include "framebuffer.h"
-
 #ifdef __CC_ARM
 __WEAK bool jpeg_compress(image_t *src, image_t *dst, int quality, bool realloc) {return 1;}
 
 extern unsigned int Image$$OMV_MAIN_FB$$Base;
-extern unsigned int Image$$OMV_JPEG_FB$$Base;
+
+#define JPEG_BUF	__attribute__((section(".jpeg_buf")))
+JPEG_BUF uint8_t s_jpegBuf[OMV_JPEG_BUF_SIZE];
 
 framebuffer_t *fb_framebuffer = (framebuffer_t*) &Image$$OMV_MAIN_FB$$Base;
-jpegbuffer_t *jpeg_fb_framebuffer = (jpegbuffer_t*) &Image$$OMV_JPEG_FB$$Base;
+jpegbuffer_t *jpeg_fb_framebuffer = (jpegbuffer_t*) &s_jpegBuf;
 #else
 
 extern char _fb_base;
@@ -73,7 +74,7 @@ void fb_update_jpeg_buffer()
             // Set JPEG src and dst images.
             image_t src = {.w=MAIN_FB()->w, .h=MAIN_FB()->h, .bpp=MAIN_FB()->bpp,     .pixels=MAIN_FB()->pixels};
             image_t dst = {.w=MAIN_FB()->w, .h=MAIN_FB()->h, .bpp=(OMV_JPEG_BUF_SIZE-64),  .pixels=JPEG_FB()->pixels};
-
+			OverlaySwitch(OVLY_YUV_TAB);
             // Note: lower quality saves USB bandwidth and results in a faster IDE FPS.
             bool overflow = jpeg_compress(&src, &dst, JPEG_FB()->quality, false);
             if (overflow == true) {

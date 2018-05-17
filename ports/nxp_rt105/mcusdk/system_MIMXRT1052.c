@@ -91,7 +91,8 @@ extern const uint32_t __Vectors;
 void RelocateVTOR(void) {
 	uint32_t *pSrc = (uint32_t) &__Vectors;
 	SCB->VTOR = (uint32_t) pSrc;
-	if ((uint32_t)pSrc >= 0x60000000 && (uint32_t)pSrc < 0x80000000) {
+	// if ((uint32_t)pSrc >= 0x60000000 && (uint32_t)pSrc < 0x80000000) 
+	{
 		// in FlexSPI, move VTOR to ITCM
 		uint32_t *p = (uint32_t*) 0, i;
 		for (i=0; i<256; i++) {

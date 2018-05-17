@@ -68,7 +68,7 @@
 #include "framebuffer.h"
 
 #include "ini.h"
-
+#include "overlay_manager.h"
 void NORETURN __fatal_error(const char *msg);
 void flash_error(int n);
 
@@ -201,6 +201,8 @@ FRESULT exec_boot_script(const char *path, bool selftest, bool interruptible)
     return f_res;
 }
 
+__WEAK int OverlaySwitch(uint8_t ovlyNdx) {return 0;}
+__WEAK int OverlaySetToDefault(void) {return 0;}
 
 int OpenMV_Main(uint32_t first_soft_reset)
 {
@@ -209,7 +211,8 @@ int OpenMV_Main(uint32_t first_soft_reset)
     led_state(LED_RED, 1);
     led_state(LED_GREEN, 1);
     led_state(LED_BLUE, 1);
-
+	
+	OverlaySwitch(OVLY_YUV_TAB);
 
 /*    
 	extint_init0();

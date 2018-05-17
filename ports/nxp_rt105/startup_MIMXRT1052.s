@@ -344,7 +344,7 @@ ConfigFlexRAM	PROC
 				str		r2,	[r0]
 				
 				ldr		r0, = 0x400AC044	; IOMUXC.GPR17
-				ldr		r1, = 0xFAAAAAAA	; 64kB ITCM, (512-64) KB DTCM, 0KB OCRAM
+				ldr		r1, = 0xEAAAAAAA	; 32kB ITCM, (512-32) KB DTCM, 0KB OCRAM
 				str		r1,	[r0]
 				
 				ldr		r0,	= 0x400AC040	; IOMUXC.GPR16
@@ -353,7 +353,7 @@ ConfigFlexRAM	PROC
 				str		r2,	[r0]
 				
 				ldr		r0, =0x20000000
-				ldr		r1, =0x20070000
+				ldr		r1, =0x20078000
 				ldr		r2, =0
 zero_dtcm				
 				str		r2,	[r0], #4
@@ -361,7 +361,7 @@ zero_dtcm
 				bne		zero_dtcm
 				
 				ldr		r0, =0x00000000
-				ldr		r1, =0x00010000
+				ldr		r1, =0x00008000
 				ldr		r2, =0
 zero_itcm				
 				str		r2,	[r0], #4

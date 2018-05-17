@@ -58,7 +58,7 @@ void usbdbg_set_script_running(bool running)
 
 inline void usbdbg_set_irq_enabled(bool enabled)
 {
-	
+	return 0;
     if (enabled) {
 		NVIC_EnableIRQ(USB_OTG1_IRQn);
     } else {
@@ -68,7 +68,6 @@ inline void usbdbg_set_irq_enabled(bool enabled)
     __DSB(); __ISB();
 }
 #define logout(...) // printf
-// #define DUMP_RAW
 // #define DUMP_RAW
 #ifdef DUMP_RAW
 #define DUMP_FB	MAIN_FB

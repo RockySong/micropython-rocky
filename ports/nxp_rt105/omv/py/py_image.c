@@ -2618,6 +2618,7 @@ static mp_obj_t py_image_find_blobs(uint n_args, const mp_obj_t *args, mp_map_t 
     PY_ASSERT_TRUE_MSG(IM_IS_MUTABLE(arg_img), "Image format is not supported.");
 
     rectangle_t roi;
+	OverlaySwitch(OVLY_LAB_TAB);
     py_helper_lookup_rectangle(kw_args, arg_img, &roi);
 
     mp_uint_t arg_thresholds_len;
@@ -2698,6 +2699,9 @@ static mp_obj_t py_image_find_blobs(uint n_args, const mp_obj_t *args, mp_map_t 
 
         objects_list->items[i] = o;
     }
+	#ifdef __CC_ARM
+	
+	#endif
 
     return objects_list;
 }
@@ -5010,7 +5014,7 @@ STATIC MP_DEFINE_CONST_FUN_OBJ_KW(py_image_load_descriptor_obj, 1, py_image_load
 STATIC MP_DEFINE_CONST_FUN_OBJ_KW(py_image_save_descriptor_obj, 2, py_image_save_descriptor);
 STATIC MP_DEFINE_CONST_FUN_OBJ_KW(py_image_match_descriptor_obj, 2, py_image_match_descriptor);
 static const mp_map_elem_t globals_dict_table[] = {
-#if 0 // #ifndef MEM_PROFILING	
+#ifndef MEM_PROFILING	
     {MP_OBJ_NEW_QSTR(MP_QSTR___name__),            MP_OBJ_NEW_QSTR(MP_QSTR_image)},
     {MP_OBJ_NEW_QSTR(MP_QSTR_SEARCH_EX),           MP_OBJ_NEW_SMALL_INT(SEARCH_EX)},
     {MP_OBJ_NEW_QSTR(MP_QSTR_SEARCH_DS),           MP_OBJ_NEW_SMALL_INT(SEARCH_DS)},

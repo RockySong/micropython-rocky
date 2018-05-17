@@ -541,9 +541,9 @@ HAL_StatusTypeDef HAL_Init(void)
 
 	#if XIP_EXTERNAL_FLASH
 	uint32_t wait;
-	for (wait = HAL_GetTick(); wait < 5000; wait = HAL_GetTick()) {
+	for (wait = HAL_GetTick(); wait < 3001; wait = HAL_GetTick()) {
 		if (wait % 250 == 0) {
-			PRINTF("%d\r\n", (5000 - wait) / 250);
+			PRINTF("%d\r\n", (3001 - wait) / 250);
 		}
 		__WFI();
 	}
@@ -553,9 +553,9 @@ HAL_StatusTypeDef HAL_Init(void)
 }
 
 #ifdef MEM_PROFILING
-#define DTCM_END	0x20070000
+#define DTCM_END	0x20078000
 #else
-#define DTCM_END	0x20070000
+#define DTCM_END	0x20078000
 #endif
 
 #if defined(__CC_ARM)
@@ -749,7 +749,12 @@ soft_reset:
 
     // Initialise the local flash filesystem.
     // Create it if needed, mount in on /flash, and set it as current dir.
-    bool mounted_flash = init_flash_fs(reset_mode);
+	bool mounted_flash;
+	#ifndef XIP_EXTERNAL_FLASH
+    mounted_flash = init_flash_fs(reset_mode);
+	#else
+	mounted_flash = 0;
+	#endif
 
     bool mounted_sdcard = false;
 #if MICROPY_HW_HAS_SDCARD

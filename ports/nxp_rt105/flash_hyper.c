@@ -434,6 +434,8 @@ int flexspi_nor_init(void)
     {
         return status;
     }
+	SCB_EnableDCache();
+	SetFlexSPIDiv(DIV_READ);
 	return 0;
 
 	

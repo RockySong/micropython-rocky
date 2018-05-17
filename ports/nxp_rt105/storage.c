@@ -112,11 +112,13 @@
 void storage_init(void) {
     if (!flash_is_initialised) {
         #if USE_INTERNAL
-        flash_flags = 0;
-        flash_cache_lba_id = 0;
-        flash_tick_counter_last_write = 0;
-		flexspi_nor_init();
-		FLEG_Init(&s_dev, 0, HyperErase, HyperPageProgram, Hyper16bitProgram, HyperRead, HyperFlush);
+	        flash_flags = 0;
+	        flash_cache_lba_id = 0;
+	        flash_tick_counter_last_write = 0;
+			flexspi_nor_init();
+			#ifndef XIP_EXTERNAL_FLASH
+				FLEG_Init(&s_dev, 0, HyperErase, HyperPageProgram, Hyper16bitProgram, HyperRead, HyperFlush);
+			#endif
         #else
         mp_spiflash_init((mp_spiflash_t*)&spiflash);
         #endif

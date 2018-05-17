@@ -8,7 +8,7 @@
  */
 #ifndef __OMV_BOARDCONFIG_H__
 #define __OMV_BOARDCONFIG_H__
-
+#include "overlay_manager.h"
 // Architecture info
 #define OMV_ARCH_STR            "OMV3 F7 512" // 33 chars max
 #define OMV_BOARD_TYPE          "M7"
@@ -86,8 +86,6 @@
 #define OMV_BOOTLDR_LED_PIN     (GPIO_PIN_1)
 #define OMV_BOOTLDR_LED_PORT    (GPIOC)
 
-// RAW buffer size
-#define OMV_RAW_BUF_SIZE        (307200)
 
 // If buffer size is bigger than this threshold, the quality is reduced.
 // This is only used for JPEG images sent to the IDE not normal compression.
@@ -100,16 +98,24 @@
 #define OMV_MAIN_MEMORY     CCM     // data, bss, stack and heap
 #define OMV_DMA_MEMORY      CCM     // Misc DMA buffers
 
-#define OMV_FB_SIZE         (301K)  // FB memory: header + VGA/GS image
-#define OMV_FB_ALLOC_SIZE   (83K)   // minimum fb alloc size
-#define OMV_STACK_SIZE      (4K)
-#define OMV_HEAP_SIZE       (55K)
+#define OMV_FB_SIZE         (160 * 1024)  // FB memory: header + VGA/GS image
+#define OMV_FB_ALLOC_SIZE   (13 * 1024)   // minimum fb alloc size
+#define OMV_STACK_SIZE      (6 * 1024)
 
+// RAW buffer size
+#define OMV_RAW_BUF_SIZE        (320*240*2)
+
+
+#ifndef __CC_ARM
+#define OMV_HEAP_SIZE       (55K)
+#endif
+#define OMV_JPEG_BUF_SIZE   (23 * 1024) // IDE JPEG buffer (header + data).
+
+#ifndef MCU_SERIES_RT105
 #define OMV_LINE_BUF_SIZE   (3K)    // Image line buffer round(640 * 2BPP * 2 buffers).
 #define OMV_MSC_BUF_SIZE    (2K)    // USB MSC bot data
 #define OMV_VFS_BUF_SIZE    (1K)    // VFS sturct + FATFS file buffer (624 bytes)
 #define OMV_FFS_BUF_SIZE    (32K)   // Flash filesystem cache
-#define OMV_JPEG_BUF_SIZE   (23 * 1024) // IDE JPEG buffer (header + data).
 
 #define OMV_BOOT_ORIGIN     0x08000000
 #define OMV_BOOT_LENGTH     32K
@@ -138,7 +144,7 @@
 #define DCMI_TIM_AF             (GPIO_AF1_TIM1)
 #define DCMI_TIM_CHANNEL        (TIM_CHANNEL_1)
 #define DCMI_TIM_CLK_ENABLE()   __TIM1_CLK_ENABLE()
-#define DCMI_TIM_CLK_DISABLE()  __TIM1_CLK_DISABLE()
+#define DCMI_TIM_CLK_DISABLE()  __TIM1_CLK_DISABLE()4
 #define DCMI_TIM_PCLK_FREQ()    HAL_RCC_GetPCLK2Freq()
 
 #define DCMI_RESET_PIN          (GPIO_PIN_10)
@@ -199,5 +205,6 @@
 
 #define DCMI_VSYNC_IRQN         EXTI9_5_IRQn
 #define DCMI_VSYNC_IRQ_LINE     (7)
+#endif
 
 #endif //__OMV_BOARDCONFIG_H__
