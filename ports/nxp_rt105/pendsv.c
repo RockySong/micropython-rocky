@@ -153,6 +153,7 @@ no_obj                    // pendsv_object==NULL
 #else
         ldr r0, =pendsv_object
         ldr r0, [r0]
+		
 #if defined(PENDSV_DEBUG)
         str r0, [sp, #8]
 #else
@@ -164,6 +165,14 @@ no_obj                    // pendsv_object==NULL
 #else
         str r0, [sp, #24]
 #endif
+
+		ldr	r3,	[sp, #28]
+		mov	r1,	#1<<24
+		ands	r3, r3,	r1
+		cmp		r3,	r1
+		beq		%f10
+		b		.
+10
         bx lr
 #endif
 

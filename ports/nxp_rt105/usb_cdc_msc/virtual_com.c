@@ -91,8 +91,11 @@ USB_DATA_ALIGNMENT static usb_cdc_acm_info_t s_usbCdcAcmInfo = {{0, 0, 0, 0, 0, 
 #if USB_DATA_ALIGN_SIZE < 32
 #error "wrong USB align size"
 #endif
-USB_DMA_NONINIT_DATA_ALIGN(USB_DATA_ALIGN_SIZE) static uint8_t s_RecvBuf[VCP_INEPBUF_CNT][VCP_RINGBLK_SIZE];
-USB_DMA_NONINIT_DATA_ALIGN(USB_DATA_ALIGN_SIZE) static uint8_t s_SendBuf[VCP_OUTEPBUF_CNT][VCP_RINGBLK_SIZE];
+
+#define USB_ALIGN	USB_DMA_NONINIT_DATA_ALIGN(USB_DATA_ALIGN_SIZE)
+
+USB_ALIGN static uint8_t s_RecvBuf[VCP_INEPBUF_CNT][VCP_RINGBLK_SIZE];
+USB_ALIGN static uint8_t s_SendBuf[VCP_OUTEPBUF_CNT][VCP_RINGBLK_SIZE];
 
 ring_block_t s_txRB, s_rxRB;
 uint8_t *s_pCurTxBuf, *s_pCurRxBuf;
@@ -198,6 +201,11 @@ void CheckOpenMVIDEConnect(void) {
  * @return A USB error code or kStatus_USB_Success.
  */
  /*static*/ uint8_t s_omvSendIsToContinue;
+// #define HSRX
+#ifdef HSRX
+
+USB_ALIGN static uint8_t s_hsRx[VCP_RINGBLK_SIZE];
+#endif
 usb_status_t USB_DeviceCdcVcomCallback(class_handle_t handle, uint32_t event, void *param)
 {
     usb_status_t error = kStatus_USB_Error;
@@ -239,10 +247,13 @@ usb_status_t USB_DeviceCdcVcomCallback(class_handle_t handle, uint32_t event, vo
 				}
             }
 			// >>> openMV data resume
-			if (dbg_xfer_length && s_omvSendIsToContinue) { //request has a device-to-host data phase
-				send_packet(); //prime tx buffer
-			} else 
-				s_omvSendIsToContinue = 0;
+			if (s_omvSendIsToContinue) {
+				if (dbg_xfer_length) {
+					send_packet(); //prime tx buffer
+				} else {
+					s_omvSendIsToContinue = 0;
+				}
+			}
 			// <<<
         }
         break;
@@ -269,15 +280,23 @@ usb_status_t USB_DeviceCdcVcomCallback(class_handle_t handle, uint32_t event, vo
 							}
 						}						
 					} else {
+						uint8_t Buf[VCP_RINGBLK_SIZE];
+						uint32_t bytes;
+					
+					#ifdef HSRX
+						bytes = epCbParam->length;
+						memcpy(Buf, s_hsRx, bytes);
+						
+					#else
 						// vcom conected to openMV IDE
 						RingBlk_FixBlkFillCnt(&s_rxRB, epCbParam->length, &s_pCurRxBuf);
 						// check if there is keyboard IRQ
 						// provide USBD IP to receive next buffer
-						if (s_pCurRxBuf)
-							error = USB_DeviceCdcAcmRecv(handle, g_cfgFix.roCdcDicEpOutNdx, s_pCurRxBuf, VCP_RINGBLK_SIZE);
-						uint8_t Buf[64];
-						uint32_t bytes;
 						bytes = RingBlk_Read1Blk(&s_rxRB, Buf, sizeof(Buf));
+					#endif
+					
+						if (0 == bytes)
+							printf("no data read!\r\n");
 				        if (dbg_xfer_length) {
 				            usbdbg_data_out(Buf, bytes);
 				            dbg_xfer_length -= bytes;
@@ -290,7 +309,14 @@ usb_status_t USB_DeviceCdcVcomCallback(class_handle_t handle, uint32_t event, vo
 				                if (dbg_xfer_length)
 									s_omvSendIsToContinue = 1;
 				            }
-				        }						
+				        }
+						
+					#ifdef HSRX
+						error = USB_DeviceCdcAcmRecv(handle, g_cfgFix.roCdcDicEpOutNdx, s_hsRx, VCP_RINGBLK_SIZE);	
+					#else 
+						if (s_pCurRxBuf)
+							error = USB_DeviceCdcAcmRecv(handle, g_cfgFix.roCdcDicEpOutNdx, s_pCurRxBuf, VCP_RINGBLK_SIZE);		
+					#endif	
 					}
 
 				}
@@ -490,11 +516,15 @@ usb_status_t USB_DeviceCdcVcomSetConfigure(class_handle_t handle, uint8_t config
     if (USB_COMPOSITE_CONFIGURE_INDEX == configure)
     {
         g_deviceComposite->cdcVcom.attach = 1;	
+		#ifdef HSRX
+		USB_DeviceCdcAcmRecv(g_deviceComposite->cdcVcom.cdcAcmHandle, g_cfgFix.roCdcDicEpOutNdx, s_hsRx, 64);
+		#else
 		/* Schedule buffer to receive */
 		s_pCurRxBuf = RingBlk_GetTakenBlk(&s_rxRB);
 		if (0 == s_pCurRxBuf)
 			s_pCurRxBuf = RingBlk_TakeNextFreeBlk(&s_rxRB);
 		USB_DeviceCdcAcmRecv(g_deviceComposite->cdcVcom.cdcAcmHandle, g_cfgFix.roCdcDicEpOutNdx, s_pCurRxBuf, VCP_RINGBLK_SIZE);
+		#endif
 		/* Schedule buffer to send */
 //		if (s_isTxIdle) {
 //		uint32_t cbFill;
@@ -607,6 +637,10 @@ cleanup:
 	return ret;
 }
 
+bool VCOM_IsTxIdle(void) {
+	return s_isTxIdle ? 1 : 0;
+}
+
 bool VCOM_OmvIsIdeConnected(void)
 {
 	if (debug_mode)
@@ -620,7 +654,7 @@ void VCOM_OmvWriteAlways(const uint8_t *buf, uint32_t len) {
     for (i = 0; i < len; ) {
 		while (RingBlk_GetFreeBytes(&s_omvRB) == 0) {
 			__WFI();
-			if (retry++ >= 1) {
+			if (retry++ >= 100) {
 				goto cleanup;
 			}
 		}

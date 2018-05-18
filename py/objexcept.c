@@ -479,7 +479,13 @@ void mp_obj_exception_clear_traceback(mp_obj_t self_in) {
     GET_NATIVE_EXCEPTION(self, self_in);
     // just set the traceback to the null object
     // we don't want to call any memory management functions here
-    self->traceback_data = NULL;
+	if (self < 0x8000) {
+		volatile uint32_t i = 0;
+		i = i;
+	}
+	else {
+		self->traceback_data = NULL;
+	}
 }
 
 void mp_obj_exception_add_traceback(mp_obj_t self_in, qstr file, size_t line, qstr block) {

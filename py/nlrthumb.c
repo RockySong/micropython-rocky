@@ -76,8 +76,9 @@ __asm unsigned int nlr_push(nlr_buf_t *nlr) {
 nlr_push_tail_var 
 	DCW word nlr_push_tail
 #else
-
-    b      nlr_push_tail       // do the rest in C
+	push	{lr}
+    bl      nlr_push_tail       // do the rest in C
+	pop		{pc}
 #endif
 }
 

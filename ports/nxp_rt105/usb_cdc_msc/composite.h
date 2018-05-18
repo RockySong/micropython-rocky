@@ -58,7 +58,7 @@ typedef enum _class_ndx_enum
 #define CONTROLLER_ID kUSB_ControllerLpcIp3511Hs0
 #endif
 
-#define USB_DEVICE_INTERRUPT_PRIORITY (3U)
+#define USB_DEVICE_INTERRUPT_PRIORITY (14U)
 #include "usbd_msc_storage.h"
 
 

@@ -998,21 +998,21 @@ int sensor_snapshot(image_t *pImg, void *pv1, void *pv2)
 			t1 = HAL_GetTick();
 			fb_update_jpeg_buffer();
 			t2 = HAL_GetTick() - t1;
-		}		
+		}
+		#if 1
 		CAMERA_TAKE_SNAPSHOT();
 		CAMERA_WAIT_FOR_SNAPSHOT();
-		// PRINTF("JPEG %dms\r\n", t2);
-		/*
+		#else
 		for (i=0; i<sensor.fb_h; i++) {
 			for (j=0; j<sensor.fb_w; j++) {
-				if (i > j)
-					p[0] = (n & 0x1F) <<0;
+				if (i > 120)
+					p[0] = 0xBeef; //(n & 0x1F) <<0;
 				else
-					p[0] = 0xFFFF;
+					p[0] = 0xDead;
 				p++;
 			}
 		}
-		*/
+		#endif
 		
 		n++;
 

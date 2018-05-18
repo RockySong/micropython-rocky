@@ -266,6 +266,8 @@ extern const struct _mp_obj_module_t image_module;
     \
     mp_obj_t pyb_config_main; \
     \
+    mp_obj_t omv_ide_irq; \
+	\
     mp_obj_t pyb_switch_callback; \
     \
     mp_obj_t pin_class_mapper; \

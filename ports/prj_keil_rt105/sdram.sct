@@ -1,6 +1,6 @@
 #! armcc -E
 
-#define STACK_SIZE 0x1800
+#define STACK_SIZE 0x2000
 #define IVT_BASE	0x80000000
 #define ITCM_SIZE	32*1024
 #define DTCM_SIZE	(512-32)*1024
@@ -41,16 +41,12 @@ LR_XIP_FLASH IVT_BASE + 0x2000 {
 	VECTOR_RAM 0 EMPTY 1*1024 { ; RAM vector region (in RAMX)
 	}
 
-	OVERLAY_CODE_JPEG +0 OVERLAY 8*1024 {
-		jpeg.o (+RO)
-	}
-	
-	OVERLAY_CODE_BLOB +0 OVERLAY 8*1024 {
-		blob.o (+RO)
-	}
+
 
 	ER_ITCM 9*1024 ITCM_SIZE - 8*1024 - 1*1024 { ; Stack region growing down
-		vm.o nlrthumb.o pendsv.o objfun.o (+RO)
+		vm.o pendsv.o objfun.o (+RO)
+		// nlrthumb.o (+RO)
+		collections.o (+RO)
 		// obj.o objarray.o objfloat.o objlist.o objobject.o  (+RO)
 		// objfun.o  nativeglue.o malloc.o (+RO)	
 		// objdict.o  modmath.o modarray.o modbuiltins.o modmicropython.o map.o (+RO)
@@ -80,11 +76,18 @@ LR_XIP_FLASH IVT_BASE + 0x2000 {
 	OMV_MAIN_FB +0 EMPTY OMV_MAIN_FB_SIZE  + OMV_FB_ALLOC_SIZE {}
 //	OMV_FB_ALLOC +0 EMPTY OMV_FB_ALLOC_SIZE {}
 	OMV_FB_END +0 EMPTY 4 {}
-
+	
+	OVERLAY_CODE_JPEG +0 OVERLAY 8*1024 {
+		jpeg.o (+RO)
+	}
+	
+	OVERLAY_CODE_BLOB +0 OVERLAY 8*1024 {
+		blob.o (+RO)
+	}
 	ARM_LIB_HEAP +0 EMPTY 0x100 ; Heap region growing up
 	{}
 	
-	MPY_HEAP_START +0 EMPTY 4 {
+	MPY_HEAP_START 0x20074000 EMPTY 4 {
 	}	
 
 	RW_m_data 0x20200000 OCRAM_SIZE { ; RW data

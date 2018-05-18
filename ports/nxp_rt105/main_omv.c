@@ -233,9 +233,10 @@ int OpenMV_Main(uint32_t first_soft_reset)
     // far InfraRed sensor py_fir_init0();
 //    servo_init();
 
- 
+ MainLoop:
     // Run boot script(s)
     if (first_soft_reset) {
+		first_soft_reset = 0;
         exec_boot_script("/sd/selftest.py", true, false);
         apply_settings("/sd/openmv.config");
 		usbdbg_set_irq_enabled(true);
@@ -295,7 +296,6 @@ int OpenMV_Main(uint32_t first_soft_reset)
             mp_obj_print_exception(&mp_plat_print, (mp_obj_t)nlr.ret_val);
         }
     }
-
     // Disable all other IRQs except Systick and Flash IRQs
     // Note: FS IRQ is disable, since we're going for a soft-reset.
     // __set_BASEPRI(IRQ_PRI_FLASH + 1);

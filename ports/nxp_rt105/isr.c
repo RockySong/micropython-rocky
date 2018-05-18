@@ -165,7 +165,13 @@ void _Fault_UnalignedLSTRH(uint8_t* pAddr, uint16_t val16) {
 }
 
 void HardFault_C_Handler(ExceptionRegisters_t *regs, uint32_t *pXtraRegs, uint32_t strType) {
-    if (!pyb_hard_fault_debug) {
+    if ((regs->xpsr & 0xC000) && SCB->CFSR == 0x20000) {
+		// INVSTATE with wrong xPSR (EPSR) values
+		regs->xpsr &= ~0x0000C000;
+		SCB->CFSR = SCB->CFSR;
+		return;
+	}
+	if (!pyb_hard_fault_debug) {
         NVIC_SystemReset();
     }
 
@@ -250,11 +256,11 @@ __asm void HardFault_Handler(void) {
      ite eq                 // Tell the assembler that the nest 2 instructions are if-then-else
      mrseq r0, msp          // Make R0 point to main stack pointer
      mrsne r0, psp          // Make R0 point to process stack pointer
-	 push	{r4-r11}
+	 push	{r4-r11, lr}
 	 mov	r1,	sp
-     b HardFault_C_Handler  // Off to C land
-	 pop	{r4-r11}
-	 bx		lr
+     bl HardFault_C_Handler  // Off to C land
+	 pop	{r4-r11, lr}
+	 bx		lr	// give a chance to see LR's value
 }
 #else
 __attribute__((naked))
@@ -394,7 +400,12 @@ void PendSV_Handler(void) {
   */
 extern void dma_idle_handler(uint32_t tick);
 extern void SDMMC_Tick_Handler(void);
-void SysTick_Handler(void) {
+
+ExceptionRegisters_t s_traces[256];
+uint32_t s_traceNdx;
+uint32_t s_prescale;
+
+void SysTick_C_Handler(ExceptionRegisters_t *regs) {
     // Instead of calling HAL_IncTick we do the increment here of the counter.
     // This is purely for efficiency, since SysTick is called 1000 times per
     // second at the highest interrupt priority.
@@ -402,6 +413,12 @@ void SysTick_Handler(void) {
     // the only place where it can be modified, and the code is more efficient
     // without the volatile specifier.
     extern uint32_t uwTick;
+	s_traces[s_traceNdx++] = *regs;
+	if (s_traceNdx >= 256)
+		s_traceNdx = 0;
+	if (++s_prescale < SYSTICK_PRESCALE)
+		return;
+	s_prescale = 0;
     uwTick += 1;
 	SDMMC_Tick_Handler();
     // Read the systick control regster. This has the side effect of clearing
@@ -437,6 +454,19 @@ void SysTick_Handler(void) {
     #endif
 	__DSB();
 }
+
+__asm void SysTick_Handler(void) {
+	IMPORT	SysTick_C_Handler
+	PRESERVE8
+	mrseq r0, msp		   // Make R0 point to main stack pointer
+	mrsne r0, psp		   // Make R0 point to process stack pointer
+	push   {lr}
+	bl SysTick_C_Handler  // Off to C land
+	pop    {lr}
+	bx	   lr
+
+}
+
 
 // Handle a flash (erase/program) interrupt.
 void Reserved168_IRQHandler(void) {

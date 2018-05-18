@@ -19,14 +19,17 @@
 #include "runtime.h"
 #include "omv_boardconfig.h"
 #include "virtual_com.h"
+#include "fsl_debug_console.h"
 static int xfer_bytes;
 static int xfer_length;
 static enum usbdbg_cmd cmd;
 
 static volatile bool script_ready;
 volatile bool script_running;
-static vstr_t script_buf;
-static mp_obj_t mp_const_ide_interrupt = MP_OBJ_NULL;
+vstr_t script_buf;
+
+#define mp_const_ide_interrupt (MP_STATE_PORT(omv_ide_irq))
+// /*static*/ mp_obj_t mp_const_ide_interrupt = MP_OBJ_NULL;
 
 extern void usbd_cdc_tx_buf_flush();
 extern uint32_t usbd_cdc_tx_buf_len();
@@ -35,10 +38,11 @@ extern const char *ffs_strerror(FRESULT res);
 
 void usbdbg_init()
 {
-    script_ready=false;
+    script_ready = false;
     script_running=false;
     vstr_init(&script_buf, 32);
-    mp_const_ide_interrupt = mp_obj_new_exception_msg(&mp_type_Exception, "IDE interrupt");
+	if (mp_const_ide_interrupt == 0)
+		mp_const_ide_interrupt = mp_obj_new_exception_msg(&mp_type_Exception, "IDE interrupt");
 }
 
 bool usbdbg_script_ready()
@@ -58,7 +62,6 @@ void usbdbg_set_script_running(bool running)
 
 inline void usbdbg_set_irq_enabled(bool enabled)
 {
-	return 0;
     if (enabled) {
 		NVIC_EnableIRQ(USB_OTG1_IRQn);
     } else {
@@ -67,7 +70,11 @@ inline void usbdbg_set_irq_enabled(bool enabled)
     
     __DSB(); __ISB();
 }
-#define logout(...) // printf
+#if 1
+#define logout(...)
+#else
+#define logout printf
+#endif
 // #define DUMP_RAW
 #ifdef DUMP_RAW
 #define DUMP_FB	MAIN_FB
@@ -206,15 +213,23 @@ void usbdbg_data_out(void *buffer, int length)
 
                     // Disable IDE IRQ (re-enabled by pyexec or main).
                     usbdbg_set_irq_enabled(false);
-
+					#if 1
                     // Clear interrupt traceback
                     mp_obj_exception_clear_traceback(mp_const_ide_interrupt);
                     // Interrupt running REPL
                     // Note: setting pendsv explicitly here because the VM is probably
                     // waiting in REPL and the soft interrupt flag will not be checked.
                     pendsv_nlr_jump_hard(mp_const_ide_interrupt);
+					#else
+					
+					#endif
                 }
             }
+			else {
+				if (gc_is_locked()) {
+					printf("GC locked!\r\n");
+				}
+			}
             break;
 
         case USBDBG_TEMPLATE_SAVE: {
@@ -297,11 +312,13 @@ void usbdbg_control(void *buffer, uint8_t request, uint32_t length)
                 // Set script running flag
                 logout("stop running script\r\n");
                 script_running = false;
+				script_ready = false;
 
                 // Disable IDE IRQ (re-enabled by pyexec or main).
                 usbdbg_set_irq_enabled(false);
 
                 // interrupt running code by raising an exception
+                // pendsv_kbd_intr();
                 mp_obj_exception_clear_traceback(mp_const_ide_interrupt);
                 pendsv_nlr_jump_hard(mp_const_ide_interrupt);
             } else {

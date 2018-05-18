@@ -85,7 +85,7 @@ void BOARD_ConfigMPU(void)
     /* Region 1 setting */
 	// itcm RO region, catch wild pointers that will corrupt firmware code, region number must be larger to enable nest
     MPU->RBAR = ARM_MPU_RBAR(1, 0x00000000U);	
-    MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_RO, 1, 0, 0, 0, 0, ARM_MPU_REGION_SIZE_1KB);
+    MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_RO, 1, 0, 0, 0, 0, ARM_MPU_REGION_SIZE_32KB);
 
     /* Region 2 setting */
     MPU->RBAR = ARM_MPU_RBAR(2, 0x20000000U);	// dtcm, max 512kB
@@ -101,7 +101,7 @@ void BOARD_ConfigMPU(void)
 
 	/* Region 5 setting, set whole SDRAM can be accessed by cache */
     MPU->RBAR = ARM_MPU_RBAR(5, 0x80000000U);
-    MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_FULL, 0, 0, 1, 1, 0, ARM_MPU_REGION_SIZE_32MB);    
+    MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_RO, 0, 0, 1, 1, 0, ARM_MPU_REGION_SIZE_2MB);    
 
     /* Region 6 setting, set last 4MB of SDRAM can't be accessed by cache, glocal variables which are not expected to be accessed by cache can be put here */
     MPU->RBAR = ARM_MPU_RBAR(6, 0x81C00000U);
