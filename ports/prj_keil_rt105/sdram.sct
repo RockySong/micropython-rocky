@@ -87,7 +87,7 @@ LR_XIP_FLASH IVT_BASE + 0x2000 {
 	ARM_LIB_HEAP +0 EMPTY 0x100 ; Heap region growing up
 	{}
 	
-	MPY_HEAP_START 0x20074000 EMPTY 4 {
+	MPY_HEAP_START +0 EMPTY 4 {
 	}	
 
 	RW_m_data 0x20200000 OCRAM_SIZE { ; RW data

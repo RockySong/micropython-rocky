@@ -392,6 +392,8 @@ typedef enum {
 	csiirq_wantDma2,
 }enum_csiIrqSt;
 
+uint64_t s_dmaBulkbufs[2][640*2 / 8];	// max supported line length
+
 typedef struct _CSIIrq_t
 {
 	enum_csiIrqSt st;
@@ -408,14 +410,48 @@ typedef struct _CSIIrq_t
 	uint32_t datBytePerFrag;
 	uint32_t datFragNdx;
 
-	uint32_t nextDmaBase;
+	uint32_t datCurBase;
+
 	uint32_t fragCnt;
 	// in color mode, dmaFragNdx should == datLineNdx
-	// in gray mode, to save memory, move backword nextDmaBase every 4 lines
+	// in gray mode, to save memory, move backword nextDmaBulk every 4 lines
 	
 }CSIIrq_t;
 CSIIrq_t s_irq;
 
+typedef union {
+	uint8_t u8Ary[4][2];
+	struct {
+		uint8_t y0, u0, y1, v0, y2, u2, y3, v2;
+	};
+	
+}YUV64bit_t;
+#define ARMCC_ASM_FUNC	__asm
+ARMCC_ASM_FUNC uint32_t ExtractYFromYuv(uint32_t dmaBase, uint32_t datBase, uint32_t _128bitUnitCnt) {
+	push	{r4-r7}
+10
+	LDMIA	R0!, {r3-r6}
+	bfi		r7, r3, #0, #8	// Y0
+	lsr		r3,	r3,	#16
+	bfi		r7, r3, #8, #8	// Y1
+	bfi		r7, r4, #16, #8 // Y2
+	lsr		r4,	r4,	#16
+	bfi		r7, r4, #24, #8 // Y3
+
+	bfi		ip, r5, #0, #8	// Y4
+	lsr		r5,	r5,	#16
+	bfi		ip, r5, #8, #8  // Y5
+	bfi		ip, r6, #16, #8 // Y6
+	lsr		r6,	r6,	#16
+	bfi		ip, r6, #24, #8	// Y7
+	
+	STRD	r7, ip, [R1], #8
+	subs	r2,	#1
+	bne		%b10
+	pop		{r4-r7}
+	mov		r0,	r1
+	bx		lr
+}
 
 void CsiFragModeHandler(void) {
     uint32_t csisr = s_pCSI->CSISR;
@@ -432,7 +468,16 @@ void CsiFragModeHandler(void) {
 		s_pCSI->CSICR3 = 2<<4          | 1<<12         | 1<<14     |1<<15;
 	} else if (csisr & (3<<19))
 	{
-
+		uint32_t dmaBase = 0;
+		if (s_irq.isGray) {
+			if (s_irq.dmaFragNdx & 1)
+				dmaBase = s_pCSI->CSIDMASA_FB2;
+			else
+				dmaBase = s_pCSI->CSIDMASA_FB1;
+			
+			s_irq.datCurBase = ExtractYFromYuv(dmaBase, s_irq.datCurBase, s_irq.datBytePerFrag / 8);
+		}
+		
 		if (++s_irq.dmaFragNdx == s_irq.fragCnt || (csisr & (3<<19)) == 3<<19 )
 		{
 			CSI_Stop(CSI);
@@ -444,15 +489,16 @@ void CsiFragModeHandler(void) {
 		}
 		
 		if (csisr & (1<<19) ) {
-			s_pCSI->CSIDMASA_FB1 = s_irq.nextDmaBase;
+			if (!s_irq.isGray)
+				s_pCSI->CSIDMASA_FB1 += 2 * s_irq.dmaBytePerFrag;
 		} else {
-			s_pCSI->CSIDMASA_FB2 = s_irq.nextDmaBase;
+			if (!s_irq.isGray)
+				s_pCSI->CSIDMASA_FB2 += 2 * s_irq.dmaBytePerFrag;
 			s_pCSI->CSICR3 |= CSI_CSICR3_DMA_REFLASH_RFF_MASK;	// reflash DMA
 		}
-		s_irq.nextDmaBase += s_irq.dmaBytePerFrag;
-
 	}
 Cleanup:
+	return;
 }
 
 void CsiFragModeInit(void) {
@@ -517,9 +563,14 @@ void CsiFragModeCalc(void) {
 
 void CsiFragModeStartNewFrame(void) {
 	s_irq.dmaFragNdx = 0;
-	s_pCSI->CSIDMASA_FB1 = s_irq.base0;
-	s_pCSI->CSIDMASA_FB2 = s_irq.base0 + s_irq.dmaBytePerFrag;
-	s_irq.nextDmaBase = s_irq.base0 + s_irq.dmaBytePerFrag * 2;		
+	if (s_irq.isGray) {
+		s_pCSI->CSIDMASA_FB1 = (uint32_t) s_dmaBulkbufs[0];
+		s_pCSI->CSIDMASA_FB2 = (uint32_t) s_dmaBulkbufs[1];
+	} else {
+		s_pCSI->CSIDMASA_FB1 = s_irq.base0;
+		s_pCSI->CSIDMASA_FB2 = s_irq.base0 + s_irq.dmaBytePerFrag;
+	}
+	s_irq.datCurBase = s_irq.base0;
 	s_pCSI->CSICR1 = CSICR1_INIT_VAL | 1<<16;	// enable SOF iRQ
 	s_pCSI->CSIIMAG_PARA = 1U | s_irq.dmaBytePerFrag << 16;	// set xfer cnt
 	__set_PRIMASK(1);
@@ -1150,21 +1201,22 @@ int sensor_snapshot(image_t *pImg, void *pv1, void *pv2)
 
 	static uint8_t n;
     {
-		uint32_t i;
-		uint16_t *p = (uint16_t*) fb_framebuffer->pixels;
-		
-		uint32_t j;
 		if (JPEG_FB()->enabled) {
 			uint32_t t1, t2;
 			t1 = HAL_GetTick();
 			fb_update_jpeg_buffer();
 			t2 = HAL_GetTick() - t1;
+			t2 = t2;
 		}
 		#if 1
 		CAMERA_TAKE_SNAPSHOT();
 		CAMERA_WAIT_FOR_SNAPSHOT();
 		#else
 		/*
+		uint32_t i;
+		uint16_t *p = (uint16_t*) fb_framebuffer->pixels;
+		
+		uint32_t j;		
 		for (i=0; i<sensor.fb_h; i++) {
 			for (j=0; j<sensor.fb_w; j++) {
 				if (i > 120)
@@ -1176,7 +1228,7 @@ int sensor_snapshot(image_t *pImg, void *pv1, void *pv2)
 		}
 		*/
 		s_irq.st = csiirq_wantVSync;
-		s_irq.nextDmaBase = s_irq.base0;
+		s_irq.nextDmaBulk = 0;
 		s_pCSI->CSICR18 |= CSI_CSICR18_CSI_ENABLE_MASK;
 		#endif
 		
@@ -1199,7 +1251,6 @@ int sensor_snapshot(image_t *pImg, void *pv1, void *pv2)
 
 void CSI_OmvTransferHandleIRQ(CSI_Type *base, csi_handle_t *handle)
 {
-    uint32_t queueDrvWriteIdx;
     uint32_t csisr = base->CSISR;
 
     /* Clear the error flags. */

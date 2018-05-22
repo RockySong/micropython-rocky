@@ -118,6 +118,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGUARM</Key>
+          <Name>〝?P跹w〝?</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -142,7 +143,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGTARM</Key>
-          <Name>(1010=2326,660,2776,1217,1)(6017=-1,-1,-1,-1,0)(1008=89,129,465,365,0)(6016=1868,396,2126,1049,1)(1012=519,210,996,525,0)</Name>
+          <Name>(1010=2954,902,3404,1459,0)(6017=143,234,332,570,0)(1008=89,129,465,365,0)(6016=1767,511,2025,1164,0)(1012=519,210,996,525,0)</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -156,7 +157,7 @@
           <Type>0</Type>
           <LineNumber>58</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>-2147077794</Address>
+          <Address>-2147076978</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -188,7 +189,7 @@
           <Type>0</Type>
           <LineNumber>484</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>-2147103014</Address>
+          <Address>-2147102198</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -214,38 +215,6 @@
           <Filename></Filename>
           <ExecCommand></ExecCommand>
           <Expression>0x20074270</Expression>
-        </Bp>
-        <Bp>
-          <Number>4</Number>
-          <Type>0</Type>
-          <LineNumber>259</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>-2147474034</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\nxp_rt105\isr.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\mpyrt_sdram\../nxp_rt105/isr.c\259</Expression>
-        </Bp>
-        <Bp>
-          <Number>5</Number>
-          <Type>0</Type>
-          <LineNumber>623</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>-2147395692</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\nxp_rt105\usb_cdc_msc\virtual_com.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\mpyrt_sdram\../nxp_rt105/usb_cdc_msc/virtual_com.c\623</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -334,12 +303,17 @@
           <WinNumber>1</WinNumber>
           <ItemText>mp_state_ctx.vm</ItemText>
         </Ww>
+        <Ww>
+          <count>17</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>s_irq</ItemText>
+        </Ww>
       </WatchWindow1>
       <MemoryWindow1>
         <Mm>
           <WinNumber>1</WinNumber>
-          <SubType>8</SubType>
-          <ItemText>mp_state_ctx.vm.omv_ide_irq - 0x20</ItemText>
+          <SubType>2</SubType>
+          <ItemText>s_dmaBulkbufs</ItemText>
           <AccSizeX>0</AccSizeX>
         </Mm>
       </MemoryWindow1>
@@ -347,7 +321,7 @@
         <Mm>
           <WinNumber>2</WinNumber>
           <SubType>2</SubType>
-          <ItemText>SP</ItemText>
+          <ItemText>R1</ItemText>
           <AccSizeX>0</AccSizeX>
         </Mm>
       </MemoryWindow2>
@@ -2723,7 +2697,7 @@
 
   <Group>
     <GroupName>lib_libm</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -3091,7 +3065,7 @@
 
   <Group>
     <GroupName>lib_misc</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -7267,7 +7241,7 @@
       <GroupNumber>22</GroupNumber>
       <FileNumber>525</FileNumber>
       <FileType>1</FileType>
-      <tvExp>0</tvExp>
+      <tvExp>1</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\nxp_rt105\omv\img\fmath.c</PathWithFileName>
