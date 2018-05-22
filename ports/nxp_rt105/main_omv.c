@@ -204,10 +204,16 @@ FRESULT exec_boot_script(const char *path, bool selftest, bool interruptible)
 __WEAK int OverlaySwitch(uint8_t ovlyNdx) {return 0;}
 __WEAK int OverlaySetToDefault(void) {return 0;}
 
+#define SCnSCB_ACTLR_DISDEFWBUF_Pos         1U                                         /*!< ACTLR: DISDEFWBUF Position */
+#define SCnSCB_ACTLR_DISDEFWBUF_Msk        (1UL << SCnSCB_ACTLR_DISDEFWBUF_Pos)        /*!< ACTLR: DISDEFWBUF Mask */
 int OpenMV_Main(uint32_t first_soft_reset)
 {
 	int ret = 0;
-    led_state(LED_IR, 0);
+
+	// SCnSCB->ACTLR |= SCnSCB_ACTLR_DISDEFWBUF_Msk;
+
+
+	led_state(LED_IR, 0);
     led_state(LED_RED, 1);
     led_state(LED_GREEN, 1);
     led_state(LED_BLUE, 1);
@@ -284,13 +290,15 @@ int OpenMV_Main(uint32_t first_soft_reset)
 
     if (usbdbg_script_ready()) {
         nlr_buf_t nlr;
-
+		
         // execute the script
         if (nlr_push(&nlr) == 0) {
+			// __set_BASEPRI_MAX(((1 << __NVIC_PRIO_BITS) - 1) << (8 - __NVIC_PRIO_BITS));	// disable pendSV
+			vstr_t *buf = usbdbg_get_script();
+			mp_obj_t code = pyexec_compile_str(buf);	
             // enable IDE interrupt
             usbdbg_set_irq_enabled(true);
-
-            pyexec_str(usbdbg_get_script());
+            pyexec_exec_code(code);
             nlr_pop();
         } else {
             mp_obj_print_exception(&mp_plat_print, (mp_obj_t)nlr.ret_val);

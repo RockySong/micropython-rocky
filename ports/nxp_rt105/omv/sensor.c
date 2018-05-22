@@ -20,6 +20,7 @@
 #include "sensor.h"
 #include "systick.h"
 #include "framebuffer.h"
+#include "fsl_clock.h"
 #include "fsl_csi.h"
 #include "fsl_debug_console.h"
 #include "fsl_csi_camera_adapter.h"
@@ -299,14 +300,6 @@ static void OV7725_DelayMs(uint32_t ms)
     }
 }
 
-
-extern void CSI_DriverIRQHandler(void);    //warning:if no define this,will appera the situation that goto the default IRQ function!
-
-void CSI_IRQHandler(void)
-{
-    CSI_DriverIRQHandler();
-}
-
 static void BOARD_PullCameraResetPin(bool pullUp)
 {
     /* Reset pin is connected to DCDC_3V3. */
@@ -385,12 +378,166 @@ void LCDMonitor_Init(void)
     ELCDIF_RgbModeStart(APP_ELCDIF);  	
 }
 
+#define CSI_FRAG_MODE
+#ifdef CSI_FRAG_MODE
+CSI_Type *s_pCSI = CSI;
+
+//				 			8bit | PixRisEdge | gatedClk  | SyncClrFifo| HSyncActHigh|SofOnVsyncRis|ExtVSync
+#define CSICR1_INIT_VAL 	0<<0 | 1<<1	      | 1<<4	  | 1<<8	   | 1<<11		 | 1<<17	   |1<<30   
+
+
+typedef enum {
+	csiirq_wantVSync,
+	csiirq_wantDma1,
+	csiirq_wantDma2,
+}enum_csiIrqSt;
+
+typedef struct _CSIIrq_t
+{
+	enum_csiIrqSt st;
+	uint8_t isStarted;
+	uint8_t isGray;
+	uint32_t base0;
+	uint32_t linePerFrag;
+	
+	uint32_t dmaBytePerLine;
+	uint32_t dmaBytePerFrag;
+	uint32_t dmaFragNdx;
+
+	uint32_t datBytePerLine;
+	uint32_t datBytePerFrag;
+	uint32_t datFragNdx;
+
+	uint32_t nextDmaBase;
+	uint32_t fragCnt;
+	// in color mode, dmaFragNdx should == datLineNdx
+	// in gray mode, to save memory, move backword nextDmaBase every 4 lines
+	
+}CSIIrq_t;
+CSIIrq_t s_irq;
+
+
+void CsiFragModeHandler(void) {
+    uint32_t csisr = s_pCSI->CSISR;
+
+    /* Clear the error flags. */
+    s_pCSI->CSISR = csisr;
+
+	if (csisr & (1<<16)) {
+		// VSync
+		s_irq.st = csiirq_wantDma1;
+		//               SOF    | FB1    | FB2    irqEn
+		s_pCSI->CSICR1 = 1U<<16 | 1U<<19 | 1U<<20 | CSICR1_INIT_VAL;
+		//				 16 doubleWords| RxFifoDmaReqEn| ReflashRFF|ResetFrmCnt
+		s_pCSI->CSICR3 = 2<<4          | 1<<12         | 1<<14     |1<<15;
+	} else if (csisr & (3<<19))
+	{
+
+		if (++s_irq.dmaFragNdx == s_irq.fragCnt || (csisr & (3<<19)) == 3<<19 )
+		{
+			CSI_Stop(CSI);
+			//				 16 doubleWords| ReflashRFF
+			s_pCSI->CSICR3 = 2<<4		   | 1<<14;
+			NVIC_DisableIRQ(CSI_IRQn);
+			s_isOmvSensorSnapshotReady = 1;	
+			goto Cleanup;
+		}
+		
+		if (csisr & (1<<19) ) {
+			s_pCSI->CSIDMASA_FB1 = s_irq.nextDmaBase;
+		} else {
+			s_pCSI->CSIDMASA_FB2 = s_irq.nextDmaBase;
+			s_pCSI->CSICR3 |= CSI_CSICR3_DMA_REFLASH_RFF_MASK;	// reflash DMA
+		}
+		s_irq.nextDmaBase += s_irq.dmaBytePerFrag;
+
+	}
+Cleanup:
+}
+
+void CsiFragModeInit(void) {
+
+	CLOCK_EnableClock(kCLOCK_Csi);
+	CSI_Reset(CSI);
+	
+	s_pCSI->CSICR1 = CSICR1_INIT_VAL;
+	s_pCSI->CSICR2 = 3U << 30;	// INCR16 for RxFIFO DMA
+	s_pCSI->CSICR3 = 2U << 4;	// 16 double words to trigger DMA request
+	s_pCSI->CSIFBUF_PARA = 0;	// no stride
+
+
+	s_pCSI->CSICR18 = 13<<12 | 1<<18;	// HProt AHB bus protocol, write to memory when CSI_ENABLE is 1
+
+	s_irq.st = csiirq_wantVSync;
+}
+
+void CsiFragModeCalc(void) {
+
+	s_irq.datBytePerLine = s_irq.dmaBytePerLine = sensor.fb_w * 2;
+	if (sensor.pixformat == PIXFORMAT_GRAYSCALE) {
+		s_irq.datBytePerLine /= 2;	// only contain Y
+		s_irq.isGray = 1;
+	} else {
+		s_irq.isGray = 0;
+	}
+
+	// >>> calculate how many lines per fragment (DMA xfer unit)
+	uint32_t burstBytes;
+    if (!(s_irq.dmaBytePerLine % (8 * 16)))
+    {
+		burstBytes = 128;
+        s_pCSI->CSICR2 = CSI_CSICR2_DMA_BURST_TYPE_RFF(3U);
+        s_pCSI->CSICR3 = (CSI->CSICR3 & ~CSI_CSICR3_RxFF_LEVEL_MASK) | ((2U << CSI_CSICR3_RxFF_LEVEL_SHIFT));
+    }
+    else if (!(s_irq.dmaBytePerLine % (8 * 8)))
+    {
+		burstBytes = 64;
+        s_pCSI->CSICR2 = CSI_CSICR2_DMA_BURST_TYPE_RFF(2U);
+        s_pCSI->CSICR3 = (CSI->CSICR3 & ~CSI_CSICR3_RxFF_LEVEL_MASK) | ((1U << CSI_CSICR3_RxFF_LEVEL_SHIFT));
+    }
+    else
+    {
+		burstBytes = 32;
+        s_pCSI->CSICR2 = CSI_CSICR2_DMA_BURST_TYPE_RFF(1U);
+        s_pCSI->CSICR3 = (CSI->CSICR3 & ~CSI_CSICR3_RxFF_LEVEL_MASK) | ((0U << CSI_CSICR3_RxFF_LEVEL_SHIFT));
+    }
+
+	
+	for (s_irq.linePerFrag = 1; s_irq.linePerFrag < sensor.fb_h; s_irq.linePerFrag++) {
+		if (0 == s_irq.linePerFrag * s_irq.dmaBytePerLine % burstBytes )
+			break;
+	}
+	s_irq.fragCnt = sensor.fb_h / s_irq.linePerFrag;
+	// <<<
+	
+	s_irq.dmaBytePerFrag = s_irq.dmaBytePerLine * s_irq.linePerFrag;
+	s_irq.datBytePerFrag = s_irq.datBytePerLine * s_irq.linePerFrag;
+
+}
+
+void CsiFragModeStartNewFrame(void) {
+	s_irq.dmaFragNdx = 0;
+	s_pCSI->CSIDMASA_FB1 = s_irq.base0;
+	s_pCSI->CSIDMASA_FB2 = s_irq.base0 + s_irq.dmaBytePerFrag;
+	s_irq.nextDmaBase = s_irq.base0 + s_irq.dmaBytePerFrag * 2;		
+	s_pCSI->CSICR1 = CSICR1_INIT_VAL | 1<<16;	// enable SOF iRQ
+	s_pCSI->CSIIMAG_PARA = 1U | s_irq.dmaBytePerFrag << 16;	// set xfer cnt
+	__set_PRIMASK(1);
+	s_pCSI->CSISR = s_pCSI->CSISR;
+	s_pCSI->CSICR18 |= 1U<<31;	// start CSI
+	NVIC_EnableIRQ(CSI_IRQn);
+	__set_PRIMASK(0);	
+}
+#define CAMERA_TAKE_SNAPSHOT() CsiFragModeStartNewFrame()
+#else
 #define CAMERA_TAKE_SNAPSHOT() do { \
 CAMERA_RECEIVER_SubmitEmptyBuffer(&cameraReceiver, (uint32_t)fb_framebuffer->pixels); \
 /* fool the driver to make it think we have 2 FBs, otherwise it refuses to work */ \
 CAMERA_RECEIVER_SubmitEmptyBuffer(&cameraReceiver, (uint32_t)fb_framebuffer->pixels); \
 CAMERA_RECEIVER_Start(&cameraReceiver);  \
 } while(0)
+
+#endif
 
 #define CAMERA_WAIT_FOR_SNAPSHOT() do { \
 	while (0 == s_isOmvSensorSnapshotReady) {} \
@@ -399,7 +546,7 @@ CAMERA_RECEIVER_Start(&cameraReceiver);  \
 
 int sensor_init()
 {
-   
+	s_irq.base0 = (uint32_t)(MAIN_FB()->pixels);
  //   uint8_t com10=0,com2=0,com3=0,clkrc=0;
    
     cambus_init();
@@ -433,22 +580,12 @@ int sensor_init()
    // JPEG_FB()->enabled = 0;
    // dcmi_config(); replace this func by the below sentences
     
-    const camera_config_t cameraConfig = {
-        .pixelFormat = kVIDEO_PixelFormatRGB565,
-        .bytesPerPixel = APP_BPP,
-        .resolution = FSL_VIDEO_RESOLUTION(APP_CAMERA_WIDTH, APP_CAMERA_HEIGHT),
-        .frameBufferLinePitch_Bytes = APP_CAMERA_WIDTH * APP_BPP,
-        .interface = kCAMERA_InterfaceGatedClock,
-        .controlFlags = APP_CAMERA_CONTROL_FLAGS,
-        .framePerSec = 30,
-    };
     
   /*  for(uint8_t i=0;i<=0x3F;i++)     for the test:print the reg of the ov7725
 {
     cambus_readb(sensor.slv_addr,i,&temp);
     PRINTF("%x \r\n",temp);
 }*/
-    CAMERA_RECEIVER_Init(&cameraReceiver, &cameraConfig, NULL, NULL);
 	
     systick_sleep(10);
     BOARD_PullCameraPowerDownPin(true);
@@ -470,7 +607,24 @@ int sensor_init()
 
     /* Delay 1ms. */
     OV7725_DelayMs(3);
-          /* Submit the empty frame buffers to buffer queue. */
+
+	#ifdef CSI_FRAG_MODE
+	sensor_set_pixformat(PIXFORMAT_RGB565);
+	sensor_set_framesize(FRAMESIZE_QVGA);	
+	CsiFragModeInit();
+	#else
+
+    const camera_config_t cameraConfig = {
+        .pixelFormat = kVIDEO_PixelFormatRGB565,
+        .bytesPerPixel = APP_BPP,
+        .resolution = FSL_VIDEO_RESOLUTION(APP_CAMERA_WIDTH, APP_CAMERA_HEIGHT),
+        .frameBufferLinePitch_Bytes = APP_CAMERA_WIDTH * APP_BPP,
+        .interface = kCAMERA_InterfaceGatedClock,
+        .controlFlags = APP_CAMERA_CONTROL_FLAGS,
+        .framePerSec = 30,
+    };
+
+	/* Submit the empty frame buffers to buffer queue. */
 	/*
     for (uint32_t i = 0; i < APP_FRAME_BUFFER_COUNT; i++)
     {
@@ -495,9 +649,15 @@ int sensor_init()
     {
     }
     */
+    CAMERA_RECEIVER_Init(&cameraReceiver, &cameraConfig, NULL, NULL);
+	#endif
 	CAMERA_TAKE_SNAPSHOT();	
 	CAMERA_WAIT_FOR_SNAPSHOT();
     /* All good! */
+#ifdef CSI_LINE_MODE
+
+#endif
+	
     return 0;
 }
 
@@ -592,7 +752,7 @@ int sensor_set_pixformat(pixformat_t pixformat)
 
     // Skip the first frame.
     MAIN_FB()->bpp = 0;
-
+	CsiFragModeCalc();
     return 0;
 }
 
@@ -618,6 +778,7 @@ int sensor_set_framesize(framesize_t framesize)
     MAIN_FB()->w = sensor.fb_w = resolution[framesize][0];
     MAIN_FB()->h = sensor.fb_h = resolution[framesize][1];
 
+	CsiFragModeCalc();
     return 0;
 }
 
@@ -1003,6 +1164,7 @@ int sensor_snapshot(image_t *pImg, void *pv1, void *pv2)
 		CAMERA_TAKE_SNAPSHOT();
 		CAMERA_WAIT_FOR_SNAPSHOT();
 		#else
+		/*
 		for (i=0; i<sensor.fb_h; i++) {
 			for (j=0; j<sensor.fb_w; j++) {
 				if (i > 120)
@@ -1012,6 +1174,10 @@ int sensor_snapshot(image_t *pImg, void *pv1, void *pv2)
 				p++;
 			}
 		}
+		*/
+		s_irq.st = csiirq_wantVSync;
+		s_irq.nextDmaBase = s_irq.base0;
+		s_pCSI->CSICR18 |= CSI_CSICR18_CSI_ENABLE_MASK;
 		#endif
 		
 		n++;
@@ -1029,6 +1195,7 @@ int sensor_snapshot(image_t *pImg, void *pv1, void *pv2)
 	}
     return 0;
 }
+
 
 void CSI_OmvTransferHandleIRQ(CSI_Type *base, csi_handle_t *handle)
 {
@@ -1055,4 +1222,16 @@ void CSI_OmvTransferHandleIRQ(CSI_Type *base, csi_handle_t *handle)
 	__DSB();
 #endif
 }
+
+extern void CSI_DriverIRQHandler(void);    //warning:if no define this,will appera the situation that goto the default IRQ function!
+
+void CSI_IRQHandler(void)
+{
+	#ifdef CSI_FRAG_MODE
+	CsiFragModeHandler();
+	#else
+    CSI_DriverIRQHandler();
+	#endif
+}
+
 

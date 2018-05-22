@@ -171,6 +171,10 @@ void HardFault_C_Handler(ExceptionRegisters_t *regs, uint32_t *pXtraRegs, uint32
 		SCB->CFSR = SCB->CFSR;
 		return;
 	}
+	
+	__asm {
+		bkpt	#0
+	}
 	if (!pyb_hard_fault_debug) {
         NVIC_SystemReset();
     }
@@ -401,10 +405,11 @@ void PendSV_Handler(void) {
 extern void dma_idle_handler(uint32_t tick);
 extern void SDMMC_Tick_Handler(void);
 
+#if SYSTICK_PRESCALE > 1
 ExceptionRegisters_t s_traces[256];
 uint32_t s_traceNdx;
 uint32_t s_prescale;
-
+#endif
 void SysTick_C_Handler(ExceptionRegisters_t *regs) {
     // Instead of calling HAL_IncTick we do the increment here of the counter.
     // This is purely for efficiency, since SysTick is called 1000 times per
@@ -413,12 +418,15 @@ void SysTick_C_Handler(ExceptionRegisters_t *regs) {
     // the only place where it can be modified, and the code is more efficient
     // without the volatile specifier.
     extern uint32_t uwTick;
+	#if SYSTICK_PRESCALE > 1
 	s_traces[s_traceNdx++] = *regs;
 	if (s_traceNdx >= 256)
 		s_traceNdx = 0;
 	if (++s_prescale < SYSTICK_PRESCALE)
 		return;
 	s_prescale = 0;
+	#endif
+	
     uwTick += 1;
 	SDMMC_Tick_Handler();
     // Read the systick control regster. This has the side effect of clearing

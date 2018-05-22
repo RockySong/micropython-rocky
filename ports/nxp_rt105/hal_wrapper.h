@@ -9,7 +9,7 @@ typedef enum
   HAL_TIMEOUT  = 0x03U
 } HAL_StatusTypeDef;
 
-#define SYSTICK_PRESCALE	100
+#define SYSTICK_PRESCALE	1
 
 #define HAL_MAX_DELAY      0xFFFFFFFFU
 

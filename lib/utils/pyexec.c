@@ -161,6 +161,66 @@ STATIC int parse_compile_execute(const void *source, mp_parse_input_kind_t input
     return ret;
 }
 
+// parses, compiles the code
+// EXEC_FLAG_PRINT_EOF prints 2 EOF chars: 1 after normal output, 1 after exception output
+// EXEC_FLAG_ALLOW_DEBUGGING allows debugging info to be printed after executing the code
+// EXEC_FLAG_IS_REPL is used for REPL inputs (flag passed on to mp_compile)
+STATIC mp_obj_t parse_compile(const void *source, mp_parse_input_kind_t input_kind, int exec_flags) {
+    mp_obj_t module_fun;
+    #if MICROPY_MODULE_FROZEN_MPY
+    if (exec_flags & EXEC_FLAG_SOURCE_IS_RAW_CODE) {
+        // source is a raw_code object, create the function
+        module_fun = mp_make_function_from_raw_code(source, MP_OBJ_NULL, MP_OBJ_NULL);
+    } else
+    #endif
+    {
+        #if MICROPY_ENABLE_COMPILER
+        mp_lexer_t *lex;
+        if (exec_flags & EXEC_FLAG_SOURCE_IS_VSTR) {
+            const vstr_t *vstr = source;
+            lex = mp_lexer_new_from_str_len(MP_QSTR__lt_stdin_gt_, vstr->buf, vstr->len, 0);
+        } else if (exec_flags & EXEC_FLAG_SOURCE_IS_FILENAME) {
+            lex = mp_lexer_new_from_file(source);
+        } else {
+            lex = (mp_lexer_t*)source;
+        }
+        // source is a lexer, parse and compile the script
+        qstr source_name = lex->source_name;
+        mp_parse_tree_t parse_tree = mp_parse(lex, input_kind);
+        module_fun = mp_compile(&parse_tree, source_name, MP_EMIT_OPT_NONE, exec_flags & EXEC_FLAG_IS_REPL);
+        #else
+        mp_raise_msg(&mp_type_RuntimeError, "script compilation not supported");
+        #endif
+    }
+
+    return module_fun;
+}
+
+int pyexec_exec_code(mp_obj_t module_fun) {
+    int ret = 0;
+
+    nlr_buf_t nlr;
+    if (nlr_push(&nlr) == 0) {
+        // execute code
+        mp_hal_set_interrupt_char(CHAR_CTRL_C); // allow ctrl-C to interrupt us
+        mp_call_function_0(module_fun);
+
+        // disable interrupt
+        mp_hal_set_interrupt_char(-1);
+        nlr_pop();
+
+        ret = 1;
+    } else {
+        // uncaught exception
+        // FIXME it could be that an interrupt happens just before we disable it here
+        mp_hal_set_interrupt_char(-1); // disable interrupt
+        // Re-raise exception
+        nlr_raise(nlr.ret_val);
+    }
+
+    return ret;
+}
+
 #if MICROPY_ENABLE_COMPILER
 #if MICROPY_REPL_EVENT_DRIVEN
 
@@ -512,6 +572,14 @@ int pyexec_file(const char *filename) {
 
 int pyexec_str(vstr_t *str) {
     return parse_compile_execute(str, MP_PARSE_FILE_INPUT, EXEC_FLAG_RERAISE | EXEC_FLAG_SOURCE_IS_VSTR);
+}
+
+mp_obj_t pyexec_compile_file(const char *filename) {
+    return parse_compile(filename, MP_PARSE_FILE_INPUT, EXEC_FLAG_RERAISE | EXEC_FLAG_SOURCE_IS_FILENAME);
+}
+
+mp_obj_t pyexec_compile_str(vstr_t *str) {
+    return parse_compile(str, MP_PARSE_FILE_INPUT, EXEC_FLAG_RERAISE | EXEC_FLAG_SOURCE_IS_VSTR);
 }
 
 #if MICROPY_MODULE_FROZEN
