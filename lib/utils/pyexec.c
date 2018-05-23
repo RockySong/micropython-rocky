@@ -57,6 +57,7 @@ STATIC bool repl_display_debugging_info = 0;
 #define EXEC_FLAG_SOURCE_IS_VSTR (32)
 #define EXEC_FLAG_SOURCE_IS_FILENAME (64)
 
+extern void usbdbg_set_irq_enabled(bool isEnable);
 // parses, compiles and executes the code in the lexer
 // frees the lexer before returning
 // EXEC_FLAG_PRINT_EOF prints 2 EOF chars: 1 after normal output, 1 after exception output
@@ -97,6 +98,10 @@ STATIC int parse_compile_execute(const void *source, mp_parse_input_kind_t input
             mp_raise_msg(&mp_type_RuntimeError, "script compilation not supported");
             #endif
         }
+
+		// modify for openMV
+		usbdbg_set_irq_enabled(1);
+		// <<<
 
         // execute code
         mp_hal_set_interrupt_char(CHAR_CTRL_C); // allow ctrl-C to interrupt us

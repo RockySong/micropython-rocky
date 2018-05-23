@@ -426,8 +426,11 @@ typedef union {
 	};
 	
 }YUV64bit_t;
+
+#define RAM_CODE __attribute__((section(".ram_code")))
+
 #define ARMCC_ASM_FUNC	__asm
-ARMCC_ASM_FUNC uint32_t ExtractYFromYuv(uint32_t dmaBase, uint32_t datBase, uint32_t _128bitUnitCnt) {
+ARMCC_ASM_FUNC RAM_CODE uint32_t ExtractYFromYuv(uint32_t dmaBase, uint32_t datBase, uint32_t _128bitUnitCnt) {
 	push	{r4-r7}
 10
 	LDMIA	R0!, {r3-r6}
@@ -453,7 +456,7 @@ ARMCC_ASM_FUNC uint32_t ExtractYFromYuv(uint32_t dmaBase, uint32_t datBase, uint
 	bx		lr
 }
 
-void CsiFragModeHandler(void) {
+RAM_CODE void CsiFragModeHandler(void) {
     uint32_t csisr = s_pCSI->CSISR;
 
     /* Clear the error flags. */
@@ -468,7 +471,7 @@ void CsiFragModeHandler(void) {
 		s_pCSI->CSICR3 = 2<<4          | 1<<12         | 1<<14     |1<<15;
 	} else if (csisr & (3<<19))
 	{
-		uint32_t dmaBase = 0;
+		uint32_t dmaBase;
 		if (s_irq.isGray) {
 			if (s_irq.dmaFragNdx & 1)
 				dmaBase = s_pCSI->CSIDMASA_FB2;
@@ -527,31 +530,39 @@ void CsiFragModeCalc(void) {
 		s_irq.isGray = 0;
 	}
 
-	// >>> calculate how many lines per fragment (DMA xfer unit)
-	uint32_t burstBytes;
-    if (!(s_irq.dmaBytePerLine % (8 * 16)))
-    {
-		burstBytes = 128;
-        s_pCSI->CSICR2 = CSI_CSICR2_DMA_BURST_TYPE_RFF(3U);
-        s_pCSI->CSICR3 = (CSI->CSICR3 & ~CSI_CSICR3_RxFF_LEVEL_MASK) | ((2U << CSI_CSICR3_RxFF_LEVEL_SHIFT));
-    }
-    else if (!(s_irq.dmaBytePerLine % (8 * 8)))
-    {
-		burstBytes = 64;
-        s_pCSI->CSICR2 = CSI_CSICR2_DMA_BURST_TYPE_RFF(2U);
-        s_pCSI->CSICR3 = (CSI->CSICR3 & ~CSI_CSICR3_RxFF_LEVEL_MASK) | ((1U << CSI_CSICR3_RxFF_LEVEL_SHIFT));
-    }
-    else
-    {
-		burstBytes = 32;
-        s_pCSI->CSICR2 = CSI_CSICR2_DMA_BURST_TYPE_RFF(1U);
-        s_pCSI->CSICR3 = (CSI->CSICR3 & ~CSI_CSICR3_RxFF_LEVEL_MASK) | ((0U << CSI_CSICR3_RxFF_LEVEL_SHIFT));
-    }
+	if (s_irq.isGray)
+	{
+		// >>> calculate how many lines per fragment (DMA xfer unit)
+		uint32_t burstBytes;
+	    if (!(s_irq.dmaBytePerLine % (8 * 16)))
+	    {
+			burstBytes = 128;
+	        s_pCSI->CSICR2 = CSI_CSICR2_DMA_BURST_TYPE_RFF(3U);
+	        s_pCSI->CSICR3 = (CSI->CSICR3 & ~CSI_CSICR3_RxFF_LEVEL_MASK) | ((2U << CSI_CSICR3_RxFF_LEVEL_SHIFT));
+	    }
+	    else if (!(s_irq.dmaBytePerLine % (8 * 8)))
+	    {
+			burstBytes = 64;
+	        s_pCSI->CSICR2 = CSI_CSICR2_DMA_BURST_TYPE_RFF(2U);
+	        s_pCSI->CSICR3 = (CSI->CSICR3 & ~CSI_CSICR3_RxFF_LEVEL_MASK) | ((1U << CSI_CSICR3_RxFF_LEVEL_SHIFT));
+	    }
+	    else
+	    {
+			burstBytes = 32;
+	        s_pCSI->CSICR2 = CSI_CSICR2_DMA_BURST_TYPE_RFF(1U);
+	        s_pCSI->CSICR3 = (CSI->CSICR3 & ~CSI_CSICR3_RxFF_LEVEL_MASK) | ((0U << CSI_CSICR3_RxFF_LEVEL_SHIFT));
+	    }
 
-	
-	for (s_irq.linePerFrag = 1; s_irq.linePerFrag < sensor.fb_h; s_irq.linePerFrag++) {
-		if (0 == s_irq.linePerFrag * s_irq.dmaBytePerLine % burstBytes )
-			break;
+		
+		for (s_irq.linePerFrag = 1; s_irq.linePerFrag < sensor.fb_h; s_irq.linePerFrag++) {
+			if (0 == s_irq.linePerFrag * s_irq.dmaBytePerLine % burstBytes )
+				break;
+		}
+	}else {
+		// we do not use bulking in color mode
+		s_pCSI->CSICR2 = CSI_CSICR2_DMA_BURST_TYPE_RFF(3U);
+		s_pCSI->CSICR3 = (CSI->CSICR3 & ~CSI_CSICR3_RxFF_LEVEL_MASK) | ((2U << CSI_CSICR3_RxFF_LEVEL_SHIFT));
+		s_irq.linePerFrag = sensor.fb_h;
 	}
 	s_irq.fragCnt = sensor.fb_h / s_irq.linePerFrag;
 	// <<<
@@ -572,7 +583,13 @@ void CsiFragModeStartNewFrame(void) {
 	}
 	s_irq.datCurBase = s_irq.base0;
 	s_pCSI->CSICR1 = CSICR1_INIT_VAL | 1<<16;	// enable SOF iRQ
-	s_pCSI->CSIIMAG_PARA = 1U | s_irq.dmaBytePerFrag << 16;	// set xfer cnt
+	if (s_irq.dmaBytePerFrag & 0xFFFF0000) {
+		
+		uint32_t h16 = s_irq.linePerFrag << 16U , l16 = s_irq.dmaBytePerLine;
+		s_pCSI->CSIIMAG_PARA = l16 | h16;
+	} else {
+		s_pCSI->CSIIMAG_PARA = 1U | s_irq.dmaBytePerFrag << 16;	// set xfer cnt
+	}
 	__set_PRIMASK(1);
 	s_pCSI->CSISR = s_pCSI->CSISR;
 	s_pCSI->CSICR18 |= 1U<<31;	// start CSI
@@ -1276,7 +1293,7 @@ void CSI_OmvTransferHandleIRQ(CSI_Type *base, csi_handle_t *handle)
 
 extern void CSI_DriverIRQHandler(void);    //warning:if no define this,will appera the situation that goto the default IRQ function!
 
-void CSI_IRQHandler(void)
+RAM_CODE void CSI_IRQHandler(void)
 {
 	#ifdef CSI_FRAG_MODE
 	CsiFragModeHandler();

@@ -41,9 +41,7 @@ LR_XIP_FLASH IVT_BASE + 0x2000 {
 	VECTOR_RAM 0 EMPTY 1*1024 { ; RAM vector region (in RAMX)
 	}
 
-
-
-	ER_ITCM 9*1024 ITCM_SIZE - 8*1024 - 1*1024 { ; Stack region growing down
+	ER_ITCM +0 ITCM_SIZE - 8*1024 - 1*1024 { ; Stack region growing down
 		vm.o pendsv.o objfun.o (+RO)
 		// nlrthumb.o (+RO)
 		collections.o (+RO)
@@ -56,6 +54,14 @@ LR_XIP_FLASH IVT_BASE + 0x2000 {
 		* (.ram_code)
 	}
 
+
+	OVERLAY_CODE_JPEG 0x6000 OVERLAY 8*1024 {
+		jpeg.o (+RO)
+	}
+	
+	OVERLAY_CODE_BLOB 0x6000 OVERLAY 8*1024 {
+		blob.o (+RO)
+	}
 	ARM_LIB_STACK 0x20000000 EMPTY STACK_SIZE {}
 	
 	OVERLAY_YUV_TAB +0 OVERLAY 196*1024 {
@@ -65,7 +71,8 @@ LR_XIP_FLASH IVT_BASE + 0x2000 {
 	OVERLAY_LAB_TAB +0  OVERLAY 196*1024 {
 		lab_tab.o (+RO)
 		xyz_tab.o (+RO)
-	}	
+	}
+	
 	ER_DTCM +0 DTCM_SIZE-STACK_SIZE-196*1024 {
 		.ANY (+RW, +ZI)
 		* (.jpeg_buf)
@@ -77,13 +84,6 @@ LR_XIP_FLASH IVT_BASE + 0x2000 {
 //	OMV_FB_ALLOC +0 EMPTY OMV_FB_ALLOC_SIZE {}
 	OMV_FB_END +0 EMPTY 4 {}
 	
-	OVERLAY_CODE_JPEG +0 OVERLAY 8*1024 {
-		jpeg.o (+RO)
-	}
-	
-	OVERLAY_CODE_BLOB +0 OVERLAY 8*1024 {
-		blob.o (+RO)
-	}
 	ARM_LIB_HEAP +0 EMPTY 0x100 ; Heap region growing up
 	{}
 	
