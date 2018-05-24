@@ -430,30 +430,43 @@ typedef union {
 #define RAM_CODE __attribute__((section(".ram_code")))
 
 #define ARMCC_ASM_FUNC	__asm
-ARMCC_ASM_FUNC RAM_CODE uint32_t ExtractYFromYuv(uint32_t dmaBase, uint32_t datBase, uint32_t _128bitUnitCnt) {
-	push	{r4-r7}
+ARMCC_ASM_FUNC RAM_CODE uint32_t ExtractYFromYuv(uint32_t dmaBase, uint32_t datBase, uint32_t _256bitUnitCnt) {
+	push	{r4-r11, lr}
 10
-	LDMIA	R0!, {r3-r6}
+	LDMIA	R0!, {r3-r6, r8-r11}
+	// schedule code carefully to allow dual-issue on Cortex-M7
 	bfi		r7, r3, #0, #8	// Y0
-	lsr		r3,	r3,	#16
-	bfi		r7, r3, #8, #8	// Y1
-	bfi		r7, r4, #16, #8 // Y2
-	lsr		r4,	r4,	#16
-	bfi		r7, r4, #24, #8 // Y3
-
 	bfi		ip, r5, #0, #8	// Y4
+	lsr		r3,	r3,	#16
 	lsr		r5,	r5,	#16
+	bfi		r7, r3, #8, #8	// Y1
 	bfi		ip, r5, #8, #8  // Y5
+	bfi		r7, r4, #16, #8 // Y2
 	bfi		ip, r6, #16, #8 // Y6
+	lsr		r4,	r4,	#16
 	lsr		r6,	r6,	#16
+	bfi		r7, r4, #24, #8 // Y3
 	bfi		ip, r6, #24, #8	// Y7
-	
 	STRD	r7, ip, [R1], #8
+	
+	bfi		r7, r8, #0, #8	// Y0
+	bfi		ip, r10, #0, #8	// Y4
+	lsr		r8,	r8,	#16
+	lsr		r10,	r10,	#16
+	bfi		r7, r8, #8, #8	// Y1
+	bfi		ip, r10, #8, #8  // Y5
+	bfi		r7, r9, #16, #8 // Y2
+	bfi		ip, r11, #16, #8 // Y6
+	lsr		r9,	r9,	#16
+	lsr		r11,	r11,	#16
+	bfi		r7, r9, #24, #8 // Y3
+	bfi		ip, r11, #24, #8	// Y7
+	STRD	r7, ip, [R1], #8	
+	
 	subs	r2,	#1
 	bne		%b10
-	pop		{r4-r7}
 	mov		r0,	r1
-	bx		lr
+	pop		{r4-r11, pc}
 }
 
 RAM_CODE void CsiFragModeHandler(void) {
@@ -478,7 +491,7 @@ RAM_CODE void CsiFragModeHandler(void) {
 			else
 				dmaBase = s_pCSI->CSIDMASA_FB1;
 			
-			s_irq.datCurBase = ExtractYFromYuv(dmaBase, s_irq.datCurBase, s_irq.datBytePerFrag / 8);
+			s_irq.datCurBase = ExtractYFromYuv(dmaBase, s_irq.datCurBase, s_irq.datBytePerFrag >> 4);
 		}
 		
 		if (++s_irq.dmaFragNdx == s_irq.fragCnt || (csisr & (3<<19)) == 3<<19 )
