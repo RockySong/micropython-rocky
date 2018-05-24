@@ -294,11 +294,15 @@ int OpenMV_Main(uint32_t first_soft_reset)
         // execute the script
         if (nlr_push(&nlr) == 0) {
 			// __set_BASEPRI_MAX(((1 << __NVIC_PRIO_BITS) - 1) << (8 - __NVIC_PRIO_BITS));	// disable pendSV
+#if 0
 			vstr_t *buf = usbdbg_get_script();
 			mp_obj_t code = pyexec_compile_str(buf);	
             // enable IDE interrupt
             usbdbg_set_irq_enabled(true);
             pyexec_exec_code(code);
+#else
+			pyexec_str(usbdbg_get_script());
+#endif
             nlr_pop();
         } else {
             mp_obj_print_exception(&mp_plat_print, (mp_obj_t)nlr.ret_val);

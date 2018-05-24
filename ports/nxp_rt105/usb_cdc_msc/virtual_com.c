@@ -460,13 +460,16 @@ usb_status_t USB_DeviceCdcVcomCallback(class_handle_t handle, uint32_t event, vo
             }
 
             /* Update status */
+			volatile uint32_t abc;
             if (acmInfo->dteStatus & USB_DEVICE_CDC_CONTROL_SIG_BITMAP_CARRIER_ACTIVATION)
             {
                 /*  To do: CARRIER_ACTIVATED */
+				usbdbg_disconnect();
             }
             else
             {
                 /* To do: CARRIER_DEACTIVATED */
+				abc = 0;
             }
 
 			g_deviceComposite->cdcVcom.startTransactions = g_deviceComposite->cdcVcom.attach;

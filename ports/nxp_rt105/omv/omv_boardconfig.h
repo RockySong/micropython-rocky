@@ -100,10 +100,10 @@
 
 #define OMV_FB_SIZE         (160 * 1024)  // FB memory: header + VGA/GS image
 #define OMV_FB_ALLOC_SIZE   (13 * 1024)   // minimum fb alloc size
-#define OMV_STACK_SIZE      (6 * 1024)
+#define OMV_STACK_SIZE      (8 * 1024)
 
 // RAW buffer size
-#define OMV_RAW_BUF_SIZE        (320*240*2)
+#define OMV_RAW_BUF_SIZE        (OMV_FB_SIZE)
 
 
 #ifndef __CC_ARM

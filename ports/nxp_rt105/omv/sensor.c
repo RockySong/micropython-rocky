@@ -40,8 +40,8 @@
 /* LCD definition. */
 #define APP_ELCDIF LCDIF
 
-#define APP_LCD_HEIGHT 240
-#define APP_LCD_WIDTH 320
+#define APP_LCD_HEIGHT 272
+#define APP_LCD_WIDTH 480
 #define APP_HSW 41
 #define APP_HFP 4
 #define APP_HBP 8
@@ -84,7 +84,7 @@ volatile bool g_Transfer_Done = false;
  ******************************************************************************/
 #ifdef __CC_ARM
 #define LCD_FB __attribute__((section(".lcd_fb")))
-/*static*/ LCD_FB uint16_t s_frameBuffer[APP_FRAME_BUFFER_COUNT][APP_CAMERA_HEIGHT][APP_CAMERA_WIDTH] ;
+/*static*/ LCD_FB uint16_t s_frameBuffer[2][272][480] ;
 #else
 AT_NONCACHEABLE_SECTION_ALIGN(static uint16_t s_frameBuffer[APP_FRAME_BUFFER_COUNT][APP_CAMERA_HEIGHT][APP_CAMERA_WIDTH],
                               FRAME_BUFFER_ALIGN);
@@ -204,7 +204,7 @@ const int resolution[][2] = {
     {128,  64  },    /* 128x64    */
     {128,  128 },    /* 128x64    */
     // Other
-    {128,  160 },    /* LCD       */
+    {480,  272 },    /* LCD       */
     {128,  160 },    /* QQVGA2    */
     {800,  600 },    /* SVGA      */
     {1280, 1024},    /* SXGA      */
@@ -349,6 +349,21 @@ void sensor_init0()      //make a note that we do not have the function of the j
 uint32_t activeFrameAddr;
 uint32_t inactiveFrameAddr;
 
+void LCDMonitor_InitFB(void)
+{
+	int i, x,y;
+	for (i=0; i<2; i++) {
+		for (x=0;x<480;x++) {
+			for (y=0;y<272;y++) {
+				if (x % 10 < 8 && y % 10 < 8)
+					s_frameBuffer[i][y][x] = (4 | 8<<6 | 4<<11);
+				else
+					s_frameBuffer[i][y][x] = 0;
+			}
+		}
+	}
+}
+
 void LCDMonitor_Init(void)
 {
     // Initialize the camera bus.
@@ -368,14 +383,15 @@ void LCDMonitor_Init(void)
         .pixelFormat = kELCDIF_PixelFormatRGB565,
         .dataBus = APP_LCDIF_DATA_BUS,
     };	
-	memset(s_frameBuffer, 0, sizeof(s_frameBuffer));
+	LCDMonitor_InitFB();
 
     lcdConfig.bufferAddr = (uint32_t)activeFrameAddr;
 
     ELCDIF_RgbModeInit(APP_ELCDIF, &lcdConfig);
 
-    ELCDIF_SetNextBufferAddr(APP_ELCDIF, inactiveFrameAddr);
+    ELCDIF_SetNextBufferAddr(APP_ELCDIF, (uint32_t)s_frameBuffer);
     ELCDIF_RgbModeStart(APP_ELCDIF);  	
+
 }
 
 #define CSI_FRAG_MODE
@@ -543,7 +559,7 @@ void CsiFragModeCalc(void) {
 		s_irq.isGray = 0;
 	}
 
-	if (s_irq.isGray)
+	if (1) // (s_irq.isGray)
 	{
 		// >>> calculate how many lines per fragment (DMA xfer unit)
 		uint32_t burstBytes;
@@ -582,6 +598,7 @@ void CsiFragModeCalc(void) {
 	
 	s_irq.dmaBytePerFrag = s_irq.dmaBytePerLine * s_irq.linePerFrag;
 	s_irq.datBytePerFrag = s_irq.datBytePerLine * s_irq.linePerFrag;
+	LCDMonitor_InitFB();
 
 }
 
@@ -732,6 +749,7 @@ int sensor_init()
     */
     CAMERA_RECEIVER_Init(&cameraReceiver, &cameraConfig, NULL, NULL);
 	#endif
+	// LCDMonitor_Init();
 	CAMERA_TAKE_SNAPSHOT();	
 	CAMERA_WAIT_FOR_SNAPSHOT();
     /* All good! */
@@ -1111,37 +1129,94 @@ static void sensor_check_bufsize()
 
 }
 
-void LCDMonitor_Update(void)
-{
-/*
-    // Wait for frame
-     ELCDIF_ClearInterruptStatus(APP_ELCDIF, kELCDIF_CurFrameDone);
-     while (!(kELCDIF_CurFrameDone & ELCDIF_GetInterruptStatus(APP_ELCDIF)))
-        {
-        }
-     while (kStatus_Success != CAMERA_RECEIVER_GetFullBuffer(&cameraReceiver, &activeADDR))   //warning:must write like this,if not,will not run the correct result,transfer only one time;the important thing is use two free buffer and submit one of the buffer to the csi queue
-    {
-    } 
-    ELCDIF_SetNextBufferAddr(APP_ELCDIF, activeADDR);
-    inactiveADDR = activeADDR;
-    CAMERA_RECEIVER_SubmitEmptyBuffer(&cameraReceiver, inactiveADDR);
-    *buf = (char*)activeADDR;*/
-     ELCDIF_ClearInterruptStatus(APP_ELCDIF, kELCDIF_CurFrameDone);
-        /* Wait the inactive buffer be active. */
-        while (!(kELCDIF_CurFrameDone & ELCDIF_GetInterruptStatus(APP_ELCDIF)))
-        {
-        }
-
-        CAMERA_RECEIVER_SubmitEmptyBuffer(&cameraReceiver, activeFrameAddr);
-		
-        activeFrameAddr = inactiveFrameAddr;
-
-		/* Wait to get the full frame buffer to show. */
-        while (kStatus_Success != CAMERA_RECEIVER_GetFullBuffer(&cameraReceiver, &inactiveFrameAddr))
-        {
-        }
-        ELCDIF_SetNextBufferAddr(APP_ELCDIF, inactiveFrameAddr);
+__asm uint16_t* LCDMonitor_UpdateLineGray(uint16_t *pLcdFB, uint16_t *pCamFB, uint32_t quadPixCnt) {
+	push	{r4-r6, lr}
+	mov		r5,	#0
+	mov		r6,	#0
+10
+	subs	r2,	r2,	#1
 	
+	ldr		r3, [r1], #4
+	ldr		ip,	=0xFCFCFCFC
+	and		r3,	r3,	ip
+	lsr		r3,	r3,	#2
+	lsr		r4,	r3,	#16
+	bfi		r5,	r3,	#5,	#6
+	bfi		r6,	r4, #5, #6
+	rev16	r3,	r3
+	rev16	r4,	r4
+	bfi		r5,	r3,	#21, #6
+	bfi		r6,	r4,	#21, #6
+	
+	rev16	r3,	r3
+	rev16	r4,	r4
+	ldr		ip,	=0xFEFE
+	and		r3,	r3,	ip
+	and		r4,	r4,	ip
+	lsr		r3,	r3,	#1
+	lsr		r4,	r4,	#1
+	
+	bfi		r5,	r3,	#0,	#5
+	bfi		r6,	r4,	#0,	#5
+	rev16	r3,	r3
+	rev16	r4,	r4	
+	bfi		r5,	r3,	#16,	#5
+	bfi		r6,	r4,	#16,	#5
+	rev16	r3,	r3
+	rev16	r4,	r4
+	bfi		r5,	r3,	#11,	#5
+	bfi		r6,	r4,	#11,	#5
+	rev16	r3,	r3
+	rev16	r4,	r4	
+	bfi		r5,	r3,	#27,	#5
+	bfi		r6,	r4,	#27,	#5	
+	
+	strd	r5,	r6,	[r0], #8
+	bne		%b10
+	pop		{r4-r6, pc}
+}
+
+__asm uint16_t* LCDMonitor_UpdateLineRGB565(uint16_t *pLcdFB, uint16_t *pCamFB, uint32_t u64Cnt) {
+10
+	subs	r2,	r2,	#1
+	ldrd	r3, ip, [r1], #8
+	rev16	r3,	r3
+	rev16	ip,	ip
+	strd	r3,	ip,	[r0], #8
+	bne		%b10
+	bx		lr
+}
+
+void LCDMonitor_Update(uint32_t fbNdx)
+{
+	uint32_t y, t1;
+	uint16_t *p0 = (uint16_t*) MAIN_FB()->pixels;
+	uint8_t *p0Gray = (uint8_t*) MAIN_FB()->pixels;
+	uint16_t *p1 = (uint16_t*) (s_frameBuffer[fbNdx & 1]);
+	uint16_t *p1Bkup;
+	uint32_t h = sensor.fb_h > 272 ? 272 : sensor.fb_h;
+	p1Bkup = p1;
+	p1 += (480 - sensor.fb_w) >> 1;
+	p1 += ((272 - h) >> 1) * 480;
+	
+	t1 = s_irq.dmaBytePerLine / 8;
+	if (s_irq.isGray) {
+		p0Gray += (h - 1) * MAIN_FB()->w;
+		for (y=0; y< h; y++, p0Gray -= MAIN_FB()->w) {
+			LCDMonitor_UpdateLineGray(p1, p0Gray, t1);
+			p1 += 480;
+		}
+		ELCDIF_SetNextBufferAddr(LCDIF, (uint32_t) p1Bkup);		
+	}
+	else {
+		p0 += (h - 1) * MAIN_FB()->w;
+		for (y=0; y< h; y++, p0 -= MAIN_FB()->w) {
+			LCDMonitor_UpdateLineRGB565(p1, p0, t1);
+			p1 += 480;
+		}		
+	}
+
+	ELCDIF_SetNextBufferAddr(LCDIF, (uint32_t) p1Bkup);
 }
 
 
@@ -1231,13 +1306,15 @@ int sensor_snapshot(image_t *pImg, void *pv1, void *pv2)
 
 	static uint8_t n;
     {
+		uint32_t t1, t2;
 		if (JPEG_FB()->enabled) {
-			uint32_t t1, t2;
+			
 			t1 = HAL_GetTick();
 			fb_update_jpeg_buffer();
 			t2 = HAL_GetTick() - t1;
 			t2 = t2;
 		}
+		// LCDMonitor_Update(n);
 		#if 1
 		CAMERA_TAKE_SNAPSHOT();
 		CAMERA_WAIT_FOR_SNAPSHOT();

@@ -320,7 +320,7 @@ void usbdbg_control(void *buffer, uint8_t request, uint32_t length)
                 // interrupt running code by raising an exception
                 // pendsv_kbd_intr();
                 mp_obj_exception_clear_traceback(mp_const_ide_interrupt);
-                pendsv_nlr_jump_hard(mp_const_ide_interrupt);
+                pendsv_nlr_jump(mp_const_ide_interrupt);
             } else {
 				logout("no script running!\r\n");
 			}
@@ -401,4 +401,9 @@ void usbdbg_control(void *buffer, uint8_t request, uint32_t length)
     }
 }
 
+void usbdbg_disconnect(void)
+{
+	JPEG_FB()->enabled = 0;
+	mutex_unlock(&JPEG_FB()->lock, MUTEX_TID_IDE);
+}
 

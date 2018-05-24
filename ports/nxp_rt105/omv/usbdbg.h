@@ -54,4 +54,5 @@ vstr_t *usbdbg_get_script();
 bool usbdbg_get_irq_enabled();
 void usbdbg_set_irq_enabled(bool enabled);
 void usbdbg_set_script_running(bool running);
+void usbdbg_disconnect(void);
 #endif /* __USBDBG_H__ */

@@ -4019,7 +4019,7 @@ static mp_obj_t py_image_find_features(uint n_args, const mp_obj_t *args, mp_map
     image_t *arg_img = py_image_cobj(args[0]);
     PY_ASSERT_TRUE_MSG(IM_IS_GS(arg_img),
             "This function is only supported on GRAYSCALE images");
-
+	OverlaySwitch(OVLY_HAAR);
     cascade_t *cascade = py_cascade_cobj(args[1]);
     cascade->threshold = py_helper_lookup_float(kw_args, MP_OBJ_NEW_QSTR(MP_QSTR_threshold), 0.5f);
     cascade->scale_factor = py_helper_lookup_float(kw_args, MP_OBJ_NEW_QSTR(MP_QSTR_scale_factor), 1.5f);
@@ -4766,7 +4766,7 @@ mp_obj_t py_image_load_cascade(uint n_args, const mp_obj_t *args, mp_map_t *kw_a
 {
     cascade_t cascade;
     const char *path = mp_obj_str_get_str(args[0]);
-
+	OverlaySwitch(OVLY_CODE_HAAR);	
     // Load cascade from file or flash
     int res = imlib_load_cascade(&cascade, path);
     if (res != FR_OK) {
