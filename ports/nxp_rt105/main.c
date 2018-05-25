@@ -533,17 +533,18 @@ HAL_StatusTypeDef HAL_Init(void)
     BOARD_InitPins();
     BOARD_BootClockRUN();
     BOARD_InitDebugConsole();
+	PRINTF("Debug console inited!\r\n");
 	/* Set Interrupt Group Priority */
 	NVIC_SetPriorityGrouping(3);
 	
 	/* Use systick as time base source and configure 1ms tick (default clock after Reset is HSI) */
 	HAL_InitTick(1);
 
-	#if XIP_EXTERNAL_FLASH
+	#ifdef XIP_EXTERNAL_FLASH
 	uint32_t wait;
-	for (wait = HAL_GetTick(); wait < 3001; wait = HAL_GetTick()) {
+	for (wait = HAL_GetTick(); wait < 1501; wait = HAL_GetTick()) {
 		if (wait % 250 == 0) {
-			PRINTF("%d\r\n", (3001 - wait) / 250);
+			PRINTF("%d\r\n", (1501 - wait) / 250);
 		}
 		__WFI();
 	}

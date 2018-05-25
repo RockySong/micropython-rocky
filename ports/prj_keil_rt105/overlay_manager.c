@@ -13,6 +13,10 @@ extern uint32_t Load$$OVERLAY_HAAR$$Base;
 extern uint32_t Load$$OVERLAY_HAAR$$Length;
 extern uint32_t Image$$OVERLAY_HAAR$$Base;
 
+extern uint32_t Load$$OVERLAY_FLASHPGM$$Base;
+extern uint32_t Load$$OVERLAY_FLASHPGM$$Length;
+extern uint32_t Image$$OVERLAY_FLASHPGM$$Base;
+
 extern uint32_t Load$$OVERLAY_CODE_JPEG$$Base;
 extern uint32_t Load$$OVERLAY_CODE_JPEG$$Length;
 extern uint32_t Image$$OVERLAY_CODE_JPEG$$Base;
@@ -20,7 +24,6 @@ extern uint32_t Image$$OVERLAY_CODE_JPEG$$Base;
 extern uint32_t Load$$OVERLAY_CODE_BLOB$$Base;
 extern uint32_t Load$$OVERLAY_CODE_BLOB$$Length;
 extern uint32_t Image$$OVERLAY_CODE_BLOB$$Base;
-
 
 #else
 #error "not supported toolchain!"
@@ -87,6 +90,7 @@ int OverlaySwitch(uint8_t ovlyNdx) {
 		OVERLAY_CASE(YUV_TAB)
 		OVERLAY_CASE(LAB_TAB)
 		OVERLAY_CASE(HAAR)
+		OVERLAY_CASE(FLASHPGM)
 	default:
 		return -1L;
 	}
@@ -97,7 +101,6 @@ int OverlaySwitch(uint8_t ovlyNdx) {
 	switch (ovlyNdx) {
 		OVERLAY_CASE(CODE_JPEG)
 		OVERLAY_CASE(CODE_BLOB)
-	
 	default:
 		return -1L;
 	}	

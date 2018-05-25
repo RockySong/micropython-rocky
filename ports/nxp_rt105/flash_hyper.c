@@ -6,6 +6,8 @@
 #include "clock_config.h"
 #include "fsl_common.h"
 #include "flegftl_cfg.h"
+#include "overlay_manager.h"
+
 /*******************************************************************************
 * Definitions
 ******************************************************************************/
@@ -38,7 +40,13 @@
 /*******************************************************************************
  * Variables
  ******************************************************************************/
-
+#ifdef XIP_EXTERNAL_FLASH
+#define OVERLAY_SWITCH()	int oldOvly = OverlaySwitch(OVLY_FLASHPGM)
+#define OVERLAY_RESTORE()	OverlaySwitch(oldOvly)
+#else
+#define OVERLAY_SWITCH()
+#define OVERLAY_RESTORE()
+#endif
 extern flexspi_device_config_t deviceconfig;
 extern const uint32_t customLUT[CUSTOM_LUT_LENGTH];
 static uint8_t s_hyperflash_program_buffer[FLASH_PAGE_SIZE];
@@ -270,11 +278,13 @@ status_t flexspi_nor_wait_bus_busy(FLEXSPI_Type *base)
 #define DIV_READ		0
 static void SetFlexSPIDiv(uint32_t div)
 {
+	FLEXSPI_Type *base = FLEXSPI;
     FLEXSPI_Enable(FLEXSPI, false);
     CLOCK_DisableClock(FLEXSPI_CLOCK);
     CLOCK_SetDiv(kCLOCK_FlexspiDiv, div); /* flexspi clock 332M, DDR mode, internal clock 166M. */
     CLOCK_EnableClock(FLEXSPI_CLOCK);
     FLEXSPI_Enable(FLEXSPI, true);	
+	base->MCR0 &= ~FLEXSPI_MCR0_MDIS_MASK;
 	FLEXSPI_SoftwareReset(FLEXSPI); // not sure why this is needed, but SDK example does it.
 }
 
@@ -345,7 +355,7 @@ int flexspi_nor_flash_page_program(FLEXSPI_Type *base, uint32_t address, const u
     return 0;
 }
 
-status_t flexspi_nor_hyperflash_cfi(FLEXSPI_Type *base)
+static status_t flexspi_nor_hyperflash_cfi(FLEXSPI_Type *base)
 {
     /*
      * Read ID-CFI Parameters
@@ -396,9 +406,6 @@ int flexspi_nor_init(void)
     flexspi_config_t config;
     status_t status;
 	
-	#ifdef XIP_EXTERNAL_FLASH
-	return 0;
-	#endif
     // Set flexspi root clock to 166MHZ.
 	// NOTE! we assuem PLL3 (USBPLL1) has been locked to 480MHz already
     CLOCK_InitUsb1Pfd(kCLOCK_Pfd0, 26);   /* Set PLL3 PFD0 clock 332MHZ. */
@@ -436,118 +443,6 @@ int flexspi_nor_init(void)
     }
 	SCB_EnableDCache();
 	SetFlexSPIDiv(DIV_READ);
-	return 0;
-
-	
-    /* Erase sectors. */
-    PRINTF("Erasing Serial NOR over FlexSPI...\r\n");
-    status = flexspi_nor_flash_erase_sector(FLEXSPI, SECTOR * SECTOR_SIZE);
-    if (status != kStatus_Success)
-    {
-        PRINTF("Erase sector failure !\r\n");
-        return -1;
-    }
-
-    /* Do software reset. */
-    FLEXSPI_SoftwareReset(FLEXSPI);
-    memset(s_hyperflash_program_buffer, 0xFF, sizeof(s_hyperflash_program_buffer));
-    memcpy(s_hyperflash_read_buffer, (void *)(FlexSPI_AMBA_BASE + SECTOR * SECTOR_SIZE),
-           sizeof(s_hyperflash_read_buffer));
-
-    if (memcmp(s_hyperflash_program_buffer, s_hyperflash_read_buffer, sizeof(s_hyperflash_program_buffer)))
-    {
-        PRINTF("Erase data -  read out data value incorrect !\r\n ");
-        return -1;
-    }
-    else
-    {
-        PRINTF("Erase data - successfully. \r\n");
-    }
-
-    for (i = 0; i < sizeof(s_hyperflash_program_buffer); i++)
-    {
-        s_hyperflash_program_buffer[i] = i & 0xFFU;
-    }
-
-    status = flexspi_nor_flash_page_program(FLEXSPI, SECTOR * SECTOR_SIZE,
-                                            (void *)s_hyperflash_program_buffer);
-    if (status != kStatus_Success)
-    {
-        PRINTF("Page program failure !\r\n");
-        return -1;
-    }
-
-    /* Program finished, speed the clock to 166M. */
-    FLEXSPI_Enable(FLEXSPI, false);
-    CLOCK_DisableClock(FLEXSPI_CLOCK);
-    CLOCK_SetDiv(kCLOCK_FlexspiDiv, 0); /* flexspi clock 332M, DDR mode, internal clock 166M. */
-    CLOCK_EnableClock(FLEXSPI_CLOCK);
-    FLEXSPI_Enable(FLEXSPI, true);
-
-    /* Do software reset to reset AHB buffer. */
-    FLEXSPI_SoftwareReset(FLEXSPI);
-
-    memcpy(s_hyperflash_read_buffer, (void *)(FlexSPI_AMBA_BASE + SECTOR * SECTOR_SIZE),
-           sizeof(s_hyperflash_read_buffer));
-
-    if (memcmp(s_hyperflash_read_buffer, s_hyperflash_program_buffer, sizeof(s_hyperflash_program_buffer)) != 0)
-    {
-        PRINTF("Program data -  read out data value incorrect !\r\n ");
-        return -1;
-    }
-    else
-    {
-        PRINTF("Program data - successfully. \r\n");
-    }
-
-    while (1)
-    {
-    }
-}
-
-int HyperErase(int euNdx) {
-	flexspi_nor_flash_erase_sector(FLEXSPI, FLEG_FLASH_OFFSET + euNdx * 256 * 1024);
-	return 0;
-}
-
-
-int HyperRead(uint32_t byteOfs, void *pvBuf, uint32_t byteCnt) {
-	uint8_t *p = (uint8_t*)(0x60000000 + FLEG_FLASH_OFFSET + byteOfs);
-	memcpy(pvBuf, p, byteCnt);
-	return 0;
-}
-
-typedef union {
-	uint8_t buf[512];
-	uint32_t buf32[512 / 4];
-}_PartialPgmBuf_t;
-int _HyperPagePartialProgram(uint32_t pageNdx, uint32_t pgOfs, uint32_t byteCnt, const void *pvBuf) {
-	_PartialPgmBuf_t buf;
-	HyperRead(pageNdx * 512 , buf.buf32, sizeof(buf));
-	memcpy(buf.buf + pgOfs, pvBuf, byteCnt);
-	flexspi_nor_flash_page_program(FLEXSPI, pageNdx * 512 + FLEG_FLASH_OFFSET, buf.buf32);
-	return 0;
-}
-
-
-int HyperPageProgram(uint32_t pageNdx, uint32_t pgOfs, uint32_t byteCnt, const void *pvBuf){
-	
-	if (pgOfs != 0 || byteCnt != 512) {
-		_HyperPagePartialProgram(pageNdx, pgOfs, byteCnt, pvBuf);
-	} else {
-		flexspi_nor_flash_page_program(FLEXSPI, pageNdx * 512 + FLEG_FLASH_OFFSET, pvBuf);
-	}
-	return 0;
-}
-
-int Hyper16bitProgram(uint32_t byteOfs, uint16_t u16Dat)
-{
-	uint32_t pageNdx = byteOfs >> 9, pageOfs = byteOfs & (512 - 1);
-	HyperPageProgram(pageNdx, pageOfs, 2, &u16Dat);
-	return 0;
-}
-
-int HyperFlush(void) {
 	return 0;
 }
 

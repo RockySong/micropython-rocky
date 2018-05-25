@@ -36,7 +36,7 @@
 #include "hal_wrapper.h"
 #include "systick.h"
 #include "flegftl.h"
-#include "flash_hyper.h"
+#include "flash_pgm.h"
 #include "led.h"
 #include "storage.h"
 
@@ -114,8 +114,8 @@ void storage_init(void) {
         #if USE_INTERNAL
 	        flash_flags = 0;
 	        flash_cache_lba_id = 0;
-	        flash_tick_counter_last_write = 0;
-			flexspi_nor_init();
+	        flash_tick_counter_last_write = 0;			
+			FlashPgmInit();
 			#ifndef XIP_EXTERNAL_FLASH
 				FLEG_Init(&s_dev, 0, HyperErase, HyperPageProgram, Hyper16bitProgram, HyperRead, HyperFlush);
 			#endif

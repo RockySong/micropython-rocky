@@ -366,6 +366,10 @@ void LCDMonitor_InitFB(void)
 
 void LCDMonitor_Init(void)
 {
+	static uint8_t isInited;
+	if (isInited)
+		return;
+	isInited = 1;
     // Initialize the camera bus.
     BOARD_InitLcdifPixClock();
    // BOARD_InitDebugConsole();
@@ -749,7 +753,7 @@ int sensor_init()
     */
     CAMERA_RECEIVER_Init(&cameraReceiver, &cameraConfig, NULL, NULL);
 	#endif
-	// LCDMonitor_Init();
+	LCDMonitor_Init();
 	CAMERA_TAKE_SNAPSHOT();	
 	CAMERA_WAIT_FOR_SNAPSHOT();
     /* All good! */
@@ -1314,7 +1318,7 @@ int sensor_snapshot(image_t *pImg, void *pv1, void *pv2)
 			t2 = HAL_GetTick() - t1;
 			t2 = t2;
 		}
-		// LCDMonitor_Update(n);
+		LCDMonitor_Update(n);
 		#if 1
 		CAMERA_TAKE_SNAPSHOT();
 		CAMERA_WAIT_FOR_SNAPSHOT();
