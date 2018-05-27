@@ -343,6 +343,21 @@ IOMUXC_SetPinMux(
   IOMUXC_SetPinMux(
       IOMUXC_GPIO_B1_15_GPIO2_IO31,           /* GPIO_B1_15 is configured as GPIO2_IO31 */
       0U);   
+  IOMUXC_SetPinMux(
+      IOMUXC_GPIO_AD_B0_10_JTAG_TDO,          /* GPIO_AD_B0_10 is configured as JTAG_TDO */
+      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
+  IOMUXC_SetPinConfig(
+      
+	  IOMUXC_GPIO_AD_B0_10_JTAG_TDO,          /* GPIO_AD_B0_10 PAD functional properties : */
+      0xD0B1u);                               /* Slew Rate Field: Fast Slew Rate
+                                                 Drive Strength Field: R0/6
+                                                 Speed Field: medium(100MHz)
+                                                 Open Drain Enable Field: Open Drain Disabled
+                                                 Pull / Keep Enable Field: Pull/Keeper Enabled
+                                                 Pull / Keep Select Field: Keeper
+                                                 Pull Up / Down Config. Field: 22K Ohm Pull Up
+                                                 Hyst. Enable Field: Hysteresis Disabled */
+	  
 }
 /*******************************************************************************
  * EOF

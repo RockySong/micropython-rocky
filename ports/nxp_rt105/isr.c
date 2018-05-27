@@ -405,11 +405,49 @@ void PendSV_Handler(void) {
 extern void dma_idle_handler(uint32_t tick);
 extern void SDMMC_Tick_Handler(void);
 
+#define PROFILING	1
+#ifdef PROFILING
+#define PROF_GUNITY	128
+#define PROF_MASK (~(PROF_GUNITY - 1))
+#define PROF_CNT	20
+#include "sensor.h"
+uint32_t s_ignrList[] = {
+	(uint32_t)sensor_snapshot ,
+};
+
+typedef struct {
+	uint32_t baseAddr;
+	uint32_t hitCnt;
+	uint32_t hitRatio;	// 1/1024
+	uint32_t rsvd;
+} ProfUnit_t;
+
+typedef struct {
+	uint8_t decayNdx;
+	uint32_t profCnt;
+	ProfUnit_t items[PROF_CNT];
+}Prof_t;
+Prof_t s_prof;
+#endif
 #if SYSTICK_PRESCALE > 1
 ExceptionRegisters_t s_traces[256];
 uint32_t s_traceNdx;
 uint32_t s_prescale;
 #endif
+
+void _ProfOnHit(ProfUnit_t *pItem, uint32_t pc) {
+	ProfUnit_t tmpItem;	
+	s_prof.profCnt+= 0x02;
+	pItem->baseAddr = pc & PROF_MASK;
+	pItem->hitCnt += 0x02;
+	pItem->hitRatio = (uint32_t)(((uint64_t)(pItem->hitCnt) << 10) / s_prof.profCnt);
+	if (1 == pItem->hitCnt)
+		return;
+	for (;pItem != s_prof.items && pItem[0].hitCnt > pItem[-1].hitCnt; pItem--) {
+		tmpItem = pItem[0]; pItem[0] = pItem[-1] ; pItem[-1] = tmpItem;
+	}
+}
+
 void SysTick_C_Handler(ExceptionRegisters_t *regs) {
     // Instead of calling HAL_IncTick we do the increment here of the counter.
     // This is purely for efficiency, since SysTick is called 1000 times per
@@ -418,6 +456,7 @@ void SysTick_C_Handler(ExceptionRegisters_t *regs) {
     // the only place where it can be modified, and the code is more efficient
     // without the volatile specifier.
     extern uint32_t uwTick;
+	
 	#if SYSTICK_PRESCALE > 1
 	s_traces[s_traceNdx++] = *regs;
 	if (s_traceNdx >= 256)
@@ -427,6 +466,44 @@ void SysTick_C_Handler(ExceptionRegisters_t *regs) {
 	s_prescale = 0;
 	#endif
 	
+	#ifdef PROFILING
+	{
+		uint32_t i, pc = regs->pc;
+		ProfUnit_t *pItem = &s_prof.items[0];
+		for (i=0; i<ARRAY_SIZE(s_ignrList); i++) {
+			if (pc - s_ignrList[i] < PROF_GUNITY)
+				goto AfterProf;
+		}
+		if (s_prof.items[s_prof.decayNdx].hitCnt != 0) {
+			s_prof.items[s_prof.decayNdx].hitCnt--;
+			s_prof.profCnt--;
+		}
+		if (++s_prof.decayNdx == PROF_CNT)
+			s_prof.decayNdx = 0;
+		for (i=0, pItem = s_prof.items; i<PROF_CNT; i++, pItem++) {
+			if (pItem->baseAddr == (pc & PROF_MASK)) {
+				_ProfOnHit(pItem, pc);
+				break;
+			}
+		}
+		if (i == PROF_CNT) {
+			// does not find, allocate for new
+			for (i=0, pItem = s_prof.items; i<PROF_CNT - 1; i++, pItem++ ) {
+				if (pItem->hitCnt == 0) {
+					_ProfOnHit(pItem, pc);
+					break;
+				}
+			}
+			if (i == PROF_CNT - 1) {
+				pItem++;
+				s_prof.profCnt -= pItem->hitCnt;
+				pItem->hitCnt = 0;
+				_ProfOnHit(pItem, pc);
+			}
+		}
+	}
+	#endif	
+AfterProf:
     uwTick += 1;
 	SDMMC_Tick_Handler();
     // Read the systick control regster. This has the side effect of clearing
@@ -466,6 +543,7 @@ void SysTick_C_Handler(ExceptionRegisters_t *regs) {
 __asm void SysTick_Handler(void) {
 	IMPORT	SysTick_C_Handler
 	PRESERVE8
+	tst lr, #4 
 	mrseq r0, msp		   // Make R0 point to main stack pointer
 	mrsne r0, psp		   // Make R0 point to process stack pointer
 	push   {lr}

@@ -540,7 +540,7 @@ HAL_StatusTypeDef HAL_Init(void)
 	/* Use systick as time base source and configure 1ms tick (default clock after Reset is HSI) */
 	HAL_InitTick(1);
 
-	#ifdef XIP_EXTERNAL_FLASH
+	#if 0 // #ifdef XIP_EXTERNAL_FLASH
 	uint32_t wait;
 	for (wait = HAL_GetTick(); wait < 1501; wait = HAL_GetTick()) {
 		if (wait % 250 == 0) {

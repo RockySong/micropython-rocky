@@ -46,9 +46,11 @@ LR_XIP_FLASH ROM_BASE + 0x2000 {
 	}
 	
 	ER_ITCM +0 ITCM_SIZE - 8*1024 - 1*1024 { ; Stack region growing down
-		vm.o pendsv.o objfun.o (+RO)
+		// vm.o pendsv.o objfun.o (+RO)
 		// nlrthumb.o (+RO)
-		collections.o (+RO)
+		// framebuffer.o fb_alloc.o (+RO)
+		gc.o rt_mem*.o (+RO)
+		collections.o array.o xalloc.o (+RO)
 		// obj.o objarray.o objfloat.o objlist.o objobject.o  (+RO)
 		// objfun.o  nativeglue.o malloc.o (+RO)	
 		// objdict.o  modmath.o modarray.o modbuiltins.o modmicropython.o map.o (+RO)
@@ -80,7 +82,7 @@ LR_XIP_FLASH ROM_BASE + 0x2000 {
 	}	
 			
 	OVERLAY_HAAR +0 OVERLAY 196*1024 {
-		haar.o  (+RO)
+		haar.o integral_mw (+RO)
 	}	
 	
 	OVERLAY_FLASHPGM +0 OVERLAY 8*1024 {
