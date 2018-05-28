@@ -448,12 +448,12 @@ typedef union {
 }YUV64bit_t;
 
 #define RAM_CODE __attribute__((section(".ram_code")))
-
+#ifdef __CC_ARM
 #define ARMCC_ASM_FUNC	__asm
-ARMCC_ASM_FUNC RAM_CODE uint32_t ExtractYFromYuv(uint32_t dmaBase, uint32_t datBase, uint32_t _256bitUnitCnt) {
-	push	{r4-r11, lr}
+ARMCC_ASM_FUNC RAM_CODE uint32_t ExtractYFromYuv(uint32_t dmaBase, uint32_t datBase, uint32_t _128bitUnitCnt) {
+	push	{r4-r7, lr}
 10
-	LDMIA	R0!, {r3-r6, r8-r11}
+	LDMIA	R0!, {r3-r6}
 	// schedule code carefully to allow dual-issue on Cortex-M7
 	bfi		r7, r3, #0, #8	// Y0
 	bfi		ip, r5, #0, #8	// Y4
@@ -467,28 +467,41 @@ ARMCC_ASM_FUNC RAM_CODE uint32_t ExtractYFromYuv(uint32_t dmaBase, uint32_t datB
 	lsr		r6,	r6,	#16
 	bfi		r7, r4, #24, #8 // Y3
 	bfi		ip, r6, #24, #8	// Y7
-	STRD	r7, ip, [R1], #8
-	
-	bfi		r7, r8, #0, #8	// Y0
-	bfi		ip, r10, #0, #8	// Y4
-	lsr		r8,	r8,	#16
-	lsr		r10,	r10,	#16
-	bfi		r7, r8, #8, #8	// Y1
-	bfi		ip, r10, #8, #8  // Y5
-	bfi		r7, r9, #16, #8 // Y2
-	bfi		ip, r11, #16, #8 // Y6
-	lsr		r9,	r9,	#16
-	lsr		r11,	r11,	#16
-	bfi		r7, r9, #24, #8 // Y3
-	bfi		ip, r11, #24, #8	// Y7
-	STRD	r7, ip, [R1], #8	
+	STMIA	r1!, {r7, ip}
 	
 	subs	r2,	#1
 	bne		%b10
 	mov		r0,	r1
-	pop		{r4-r11, pc}
+	pop		{r4-r7, pc}
+}
+#else
+RAM_CODE uint32_t ExtractYFromYuv(uint32_t dmaBase, uint32_t datBase, uint32_t _128bitUnitCnt) {
+	__asm volatile (
+		"	push	{r4-r7, lr}  \n "
+		"10:  \n "
+		"	ldmia	r0!, {r3-r6}  \n "
+			// schedule code carefully to allow dual-issue on Cortex-M7
+		"	bfi		r7, r3, #0, #8  \n "	// Y0
+		"	bfi		ip, r5, #0, #8  \n "	// Y4
+		"	lsr		r3,	r3,	#16  \n "
+		"	lsr		r5,	r5,	#16  \n "
+		"	bfi		r7, r3, #8, #8  \n "	// Y1
+		"	bfi		ip, r5, #8, #8  \n "  // Y5
+		"	bfi		r7, r4, #16, #8  \n " // Y2
+		"	bfi		ip, r6, #16, #8  \n " // Y6
+		"	lsr		r4,	r4,	#16  \n "
+		"	lsr		r6,	r6,	#16  \n "
+		"	bfi		r7, r4, #24, #8  \n " // Y3
+		"	bfi		ip, r6, #24, #8  \n "	// Y7
+		"	stmia	r1!, {r7, ip}  \n "	
+		"	subs	r2,	#1  \n "
+		"	bne		10b  \n "
+		"	mov		r0,	r1  \n "
+		"	pop		{r4-r7, pc}  \n "		
+	);
 }
 
+#endif
 RAM_CODE void CsiFragModeHandler(void) {
     uint32_t csisr = s_pCSI->CSISR;
 
@@ -505,13 +518,19 @@ RAM_CODE void CsiFragModeHandler(void) {
 	} else if (csisr & (3<<19))
 	{
 		uint32_t dmaBase;
-		if (s_irq.isGray) {
-			if (s_irq.dmaFragNdx & 1)
-				dmaBase = s_pCSI->CSIDMASA_FB2;
-			else
-				dmaBase = s_pCSI->CSIDMASA_FB1;
-			
-			s_irq.datCurBase = ExtractYFromYuv(dmaBase, s_irq.datCurBase, s_irq.datBytePerFrag >> 4);
+		if (s_irq.dmaFragNdx >= sensor.wndY && s_irq.dmaFragNdx - sensor.wndY <= sensor.wndH) {
+			if (s_irq.isGray || sensor.isWwindowing) {
+				if (s_irq.dmaFragNdx & 1)
+					dmaBase = s_pCSI->CSIDMASA_FB2;
+				else
+					dmaBase = s_pCSI->CSIDMASA_FB1;
+				dmaBase += sensor.wndX * 2;
+				if (s_irq.isGray)
+					s_irq.datCurBase = ExtractYFromYuv(dmaBase, s_irq.datCurBase, sensor.wndW >> 3);
+				else {
+					memcpy((void*)s_irq.datCurBase, (void*)dmaBase, sensor.wndW << 1);
+				}
+			}
 		}
 		
 		if (++s_irq.dmaFragNdx == s_irq.fragCnt || (csisr & (3<<19)) == 3<<19 )
@@ -559,8 +578,10 @@ void CsiFragModeCalc(void) {
 	if (sensor.pixformat == PIXFORMAT_GRAYSCALE) {
 		s_irq.datBytePerLine /= 2;	// only contain Y
 		s_irq.isGray = 1;
+		sensor.gs_bpp = 1;
 	} else {
 		s_irq.isGray = 0;
+		sensor.gs_bpp = 2;
 	}
 
 	if (1) // (s_irq.isGray)
@@ -608,14 +629,20 @@ void CsiFragModeCalc(void) {
 
 void CsiFragModeStartNewFrame(void) {
 	s_irq.dmaFragNdx = 0;
-	if (s_irq.isGray) {
+	if (s_irq.linePerFrag != 1) {
+		sensor.isWwindowing = 0;
+		sensor.wndH = sensor.fb_h;
+		sensor.wndW = sensor.fb_w;
+		sensor.wndX = sensor.wndY = 0;
+	}
+	if (s_irq.isGray || sensor.isWwindowing) {
 		s_pCSI->CSIDMASA_FB1 = (uint32_t) s_dmaBulkbufs[0];
 		s_pCSI->CSIDMASA_FB2 = (uint32_t) s_dmaBulkbufs[1];
 	} else {
 		s_pCSI->CSIDMASA_FB1 = s_irq.base0;
 		s_pCSI->CSIDMASA_FB2 = s_irq.base0 + s_irq.dmaBytePerFrag;
 	}
-	s_irq.datCurBase = s_irq.base0;
+	s_irq.datCurBase = s_irq.base0 + sensor.wndY * s_irq.datBytePerLine + sensor.wndX * sensor.gs_bpp;
 	s_pCSI->CSICR1 = CSICR1_INIT_VAL | 1<<16;	// enable SOF iRQ
 	if (s_irq.dmaBytePerFrag & 0xFFFF0000) {
 		
@@ -648,6 +675,7 @@ CAMERA_RECEIVER_Start(&cameraReceiver);  \
 
 int sensor_init()
 {
+	memset(&sensor, 0, sizeof(sensor));
 	s_irq.base0 = (uint32_t)(MAIN_FB()->pixels);
  //   uint8_t com10=0,com2=0,com3=0,clkrc=0;
    
@@ -880,7 +908,7 @@ int sensor_set_framesize(framesize_t framesize)
     MAIN_FB()->bpp = 0;
     MAIN_FB()->w = sensor.fb_w = resolution[framesize][0];
     MAIN_FB()->h = sensor.fb_h = resolution[framesize][1];
-
+	sensor.wndX = 0; sensor.wndY = 0 ; sensor.wndW = sensor.fb_w ; sensor.wndH = sensor.fb_h;
 	CsiFragModeCalc();
     return 0;
 }
@@ -907,8 +935,19 @@ int sensor_set_framerate(framerate_t framerate)
 
 int sensor_set_windowing(int x, int y, int w, int h)      //may no this function in our RT csi,be used to set the output window,draw a rect in the picture
 {
-    MAIN_FB()->w = sensor.fb_w = w;
-    MAIN_FB()->h = sensor.fb_h = h;
+	w = (w + 7) & ~7 , x = (x + 7) & ~7;
+	if (x >= sensor.fb_w - 8)
+		x = sensor.fb_w - 8;
+	if (y >= sensor.fb_h - 1)
+		y = sensor.fb_h - 1;
+	if (x + w > sensor.fb_w)
+		w = sensor.fb_w - x;
+	if (y + h > sensor.fb_h)
+		h = sensor.fb_h - y;
+	sensor.isWwindowing = 1;
+	sensor.wndX = x ; sensor.wndY = y ; sensor.wndW = w ; sensor.wndH = h;
+    MAIN_FB()->w = w;
+    MAIN_FB()->h = h;
    // HAL_DCMI_ConfigCROP(&DCMIHandle, x*2, y, w*2-1, h-1);
    // HAL_DCMI_EnableCROP(&DCMIHandle);
     return 0;
@@ -1132,7 +1171,7 @@ static void sensor_check_bufsize()
     }
 
 }
-
+#ifdef __CC_ARM
 __asm uint16_t* LCDMonitor_UpdateLineGray(uint16_t *pLcdFB, uint16_t *pCamFB, uint32_t quadPixCnt) {
 	push	{r4-r6, lr}
 	mov		r5,	#0
@@ -1190,6 +1229,70 @@ __asm uint16_t* LCDMonitor_UpdateLineRGB565(uint16_t *pLcdFB, uint16_t *pCamFB, 
 	bne		%b10
 	bx		lr
 }
+#else
+uint16_t* LCDMonitor_UpdateLineGray(uint16_t *pLcdFB, uint16_t *pCamFB, uint32_t quadPixCnt) {
+	__asm volatile(
+		"	push	{r4-r6, lr}    \n "
+		"	mov 	r5, #0	  \n "
+		"	mov 	r6, #0	  \n "
+		"10:	\n "
+		"	subs	r2, r2, #1	  \n "
+		"	ldr 	r3, [r1], #4	\n "
+		"	ldr 	ip, =0xFCFCFCFC    \n "
+		"	and 	r3, r3, ip	  \n "
+		"	lsr 	r3, r3, #2	  \n "
+		"	lsr 	r4, r3, #16    \n "
+		"	bfi 	r5, r3, #5, #6	  \n "
+		"	bfi 	r6, r4, #5, #6	  \n "
+		"	rev16	r3, r3	  \n "
+		"	rev16	r4, r4	  \n "
+		"	bfi 	r5, r3, #21, #6    \n "
+		"	bfi 	r6, r4, #21, #6    \n "
+		"	rev16	r3, r3	  \n "
+		"	rev16	r4, r4	  \n "
+		"	ldr 	ip, =0xFEFE    \n "
+		"	and 	r3, r3, ip	  \n "
+		"	and 	r4, r4, ip	  \n "
+		"	lsr 	r3, r3, #1	  \n "
+		"	lsr 	r4, r4, #1	  \n "	
+		"	bfi 	r5, r3, #0, #5	  \n "
+		"	bfi 	r6, r4, #0, #5	  \n "
+		"	rev16	r3, r3	  \n "
+		"	rev16	r4, r4		\n "
+		"	bfi 	r5, r3, #16,	#5	  \n "
+		"	bfi 	r6, r4, #16,	#5	  \n "
+		"	rev16	r3, r3	  \n "
+		"	rev16	r4, r4	  \n "
+		"	bfi 	r5, r3, #11,	#5	  \n "
+		"	bfi 	r6, r4, #11,	#5	  \n "
+		"	rev16	r3, r3	  \n "
+		"	rev16	r4, r4	  \n "	
+		"	bfi 	r5, r3, #27,	#5	  \n "
+		"	bfi 	r6, r4, #27,	#5	  \n "	
+		"	strd	r5, r6, [r0], #8	\n "
+		"	bne 	10b    \n "
+		"	pop 	{r4-r6, pc}    \n "
+
+	);
+}
+
+uint16_t* LCDMonitor_UpdateLineRGB565(uint16_t *pLcdFB, uint16_t *pCamFB, uint32_t u64Cnt) {
+	__asm volatile(
+	"10:  \n"
+	"	subs	r2, r2, #1 \n "
+	"	ldrd	r3, ip, [r1], #8  \n"
+	"	rev16	r3, r3  \n"
+	"	rev16	ip, ip  \n"
+	"	strd	r3, ip, [r0], #8  \n"
+	"	bne 	10b  \n"
+	"	bx		lr  \n"
+
+	);
+
+}
+
+
+#endif
 
 void LCDMonitor_Update(uint32_t fbNdx)
 {
@@ -1288,8 +1391,6 @@ int sensor_snapshot(image_t *pImg, void *pv1, void *pv2)
   //  uint32_t inactiveADDR;
   	pv1 = pv1 , pv2 = pv2;	// keep compatible with original openMV
     sensor_check_bufsize();
-    MAIN_FB()->w = sensor.fb_w;
-    MAIN_FB()->h = sensor.fb_h;
 
     switch (sensor.pixformat) {
         case PIXFORMAT_GRAYSCALE:

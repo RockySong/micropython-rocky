@@ -70,15 +70,15 @@ INC += -I./omv/img
 #INC += -I$(USBHOST_DIR)
 
 CFLAGS_CORTEX_M4 = -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -fsingle-precision-constant -Wdouble-promotion -mtune=cortex-m4 -mcpu=cortex-m4
-CFLAGS_CORTEX_M7 = -mthumb -DCPU_MIMXRT1052DVL6A -g -DARM_MATH_CM7 -DMCU_SERIES_F7 -fno-common -ffunction-sections -fdata-sections -ffreestanding -fno-builtin -mfpu=fpv5-d16 -mfloat-abi=hard -fsingle-precision-constant -Wdouble-promotion -mtune=cortex-m7 -mcpu=cortex-m7
+CFLAGS_CORTEX_M7 = -mthumb -DCPU_MIMXRT1052DVL6A -g -DARM_MATH_CM7 -DMCU_SERIES_RT105 -fno-common -ffunction-sections -fdata-sections -ffreestanding -fno-builtin -mfpu=fpv5-d16 -mfloat-abi=hard -fsingle-precision-constant -Wdouble-promotion -mtune=cortex-m7 -mcpu=cortex-m7
 CFLAGS = $(INC) -Wpointer-arith -std=gnu99 -g
 CFLAGS += $(CFLAGS_CORTEX_M7) 
-CFLAGS += -Wno-int-conversion -Wno-incompatible-pointer-types
+CFLAGS += -Wno-int-conversion -Wno-incompatible-pointer-types -Wno-error
 CFLAGS += $(COPT) 
 CFLAGS += -DUSB_STACK_BM
 CFLAGS += -DUSB_DEVICE_CONFIG_BUFFER_PROPERTY_CACHEABLE=1
 CFLAGS += -DFSL_SDK_ENABLE_DRIVER_CACHE_CONTROL=1
-
+CFLAGS += -D__FPU_PRESENT=1
 LDFLAGS = -L $(LD_DIR) -T $(LD_FILE) -Xlinker -Map=$(@:.elf=.map) -Xlinker --cref
 LIBS = $(shell $(CC) $(CFLAGS) -print-libgcc-file-name)
 
@@ -187,32 +187,102 @@ DRIVERS_SRC_C = $(addprefix drivers/,\
 	memory/spiflash.c \
 	)
 
+SRC_fleg_ftl = $(addprefix flegftl/, \
+	flegftl.c \
+	)
+	
 SRC_OMV = $(addprefix omv/,  \
-	mutex.c \
-	framebuffer.c \
-	xalloc.c \
 	cambus.c \
+	mt9v034.c \
+	mutex.c \
+	xalloc.c \
 	ov9650.c \
 	ov2640.c \
 	ov7725.c \
-	mt9v034.c \
 	sensor.c \
-	usbdbg.c \
+	xalloc.c  \
+	usbdbg.c  \
+	framebuffer.c \
+	array.c  \
+	fb_alloc.c  \
+	ff_wrapper.c  \
+	ini.c  \
+	umm_malloc.c  \
 	)
+
+#	mathop.c                
+#   draw.c  
+#	line.c                  
+#	cifar10.c               
+#	cifar10_model.c         
+SRC_IMG = $(addprefix omv/img/,   \
+	blob.c                  \
+	qrcode.c                \
+	apriltag.c              \
+	dmtx.c                  \
+	zbar.c                  \
+	fmath.c                 \
+	fsort.c                 \
+	fft.c                   \
+	haar.c                  \
+	imlib.c                 \
+	collections.c           \
+	stats.c                 \
+	morph.c                 \
+	integral.c              \
+	integral_mw.c           \
+	kmeans.c                \
+	lab_tab.c               \
+	xyz_tab.c               \
+	yuv_tab.c               \
+	rainbow_tab.c           \
+	rgb2rgb_tab.c           \
+	invariant_tab.c         \
+	midpoint.c              \
+	mean.c                  \
+	mode.c                  \
+	median.c                \
+	pool.c                  \
+	point.c                 \
+	rectangle.c             \
+	bmp.c                   \
+	ppm.c                   \
+	gif.c                   \
+	mjpeg.c                 \
+	fast.c                  \
+	agast.c                 \
+	orb.c                   \
+	template.c              \
+	phasecorrelation.c      \
+	shadow_removal.c        \
+	font.c                  \
+	jpeg.c                  \
+	lbp.c                   \
+	eye.c                   \
+	hough.c                 \
+	lsd.c                   \
+	sincos_tab.c            \
+	edge.c                  \
+	hog.c                   \
+	lenet.c                 \
+	lenet_model_num.c       \
+   )
 
 SRC_PY = $(addprefix omv/py/, \
-	py_sensor.c \
-	py_time.c \
-	py_helper.c \
-	)
-
-SRC_IMG = $(addprefix omv/img/, \
-	fmath.c \
-	)
-	
-	
+	py_helper.c             \
+	py_sensor.c             \
+	py_image.c              \
+	py_time.c               \
+	py_gif.c                \
+	py_mjpeg.c              \
+   )
+#	py_cpufreq.c            
+#	py_fir.c                
+#	py_lcd.c                
+#	py_winc.c           
 SRC_C = \
 	main.c \
+	main_omv.c  \
 	./mcusdk/system_MIMXRT1052.c \
 	irq.c \
 	pendsv.c \
@@ -248,6 +318,8 @@ SRC_C = \
 	./sdmmc/port_usdhc_irq/fsl_sdmmc_host.c \
 	./nxp_swim/py_swim.c \
 	./flegftl/flegftl.c \
+	overlay_manager.c \
+	flash_pgm.c  \
 	$(wildcard boards/$(BOARD)/*.c)
 
 SRC_C_BKUP = \

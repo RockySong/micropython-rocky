@@ -107,6 +107,8 @@ typedef struct _sensor {
     uint32_t hw_flags;          // Hardware flags (clock polarities/hw capabilities)
     uint32_t vsync_pin;
     int fb_w, fb_h;             // Backup for MAIN_FB().
+    uint16_t wndX, wndY, wndW, wndH;
+	uint8_t isWwindowing;
 
     // Line pre-processing function and args
     void *line_filter_args;

@@ -51,7 +51,7 @@
     .globl __isr_vector
 	.globl __Vectors
 __isr_vector:
-__Vectors
+__Vectors:
     .long   __StackTop                                      /* Top of Stack */
     .long   Reset_Handler                                   /* Reset Handler */
     .long   NMI_Handler                                     /* NMI Handler*/
@@ -316,7 +316,44 @@ __Vectors
     .text
     .thumb
 
-/* Reset Handler */
+	.thumb_func
+	.align 2
+
+
+ConfigFlexRAM:
+				// >>> do custom FlexRAM configuration
+				ldr		r0,	= 0x400AC038	// IOMUXC.GPR14
+				ldr		r1, = 10 | 10<<4	// config (max allowed) ITCM=512KB, DTCM=512KB
+				ldr		r2, [r0]
+				bfi		r2,	r1, #16, #8
+				str		r2,	[r0]
+				
+				ldr		r0, = 0x400AC044	// IOMUXC.GPR17
+				ldr		r1, = 0xEAAAAAAA	// 32kB ITCM, (512-32) KB DTCM, 0KB OCRAM
+				str		r1,	[r0]
+				
+				ldr		r0,	= 0x400AC040	// IOMUXC.GPR16
+				ldr		r2,	[r0]
+				orr		r2, #7				// enable ITCM, DTCM, apply IOMUXC's cfg instead of FUSE config
+				str		r2,	[r0]
+				
+				ldr		r0, =0x20000000
+				ldr		r1, =0x20078000
+				ldr		r2, =0
+zero_dtcm:				
+				str		r2,	[r0], #4
+				cmp		r0,	r1
+				bne		zero_dtcm
+				
+				ldr		r0, =0x00000000
+				ldr		r1, =0x00008000
+				ldr		r2, =0
+zero_itcm:				
+				str		r2,	[r0], #4
+				cmp		r0,	r1
+				bne		zero_itcm
+				bx		lr
+	
 
     .thumb_func
     .align 2
@@ -326,24 +363,7 @@ __Vectors
 Reset_Handler:
     cpsid   i               /* Mask interrupts */
     .equ    VTOR, 0xE000ED08
-
-	// >>> do custom FlexRAM configuration
-	ldr		r0,	= 0x400AC038	// IOMUXC.GPR14
-	ldr		r1, = 7 | 10<<4		// config (max allowed) ITCM=64KB, DTCM=512KB
-	ldr		r2, [r0]
-	bfi		r2,	r1, #16, #8
-	str		r2,	[r0]
-	
-	ldr		r0, = 0x400AC044	// IOMUXC.GPR17
-	ldr		r1, = 0xFAAAAAAA	// 64kB ITCM, (512-64) KB DTCM, 0KB OCRAM
-	str		r1,	[r0]
-	
-	ldr		r0,	= 0x400AC040	// IOMUXC.GPR16
-	ldr		r2,	[r0]
-	orr		r2, #7	// enable ITCM, DTCM, apply IOMUXC's cfg instead of FUSE config
-	str		r2,	[r0]
-	// <<<
-
+	bl		ConfigFlexRAM
     ldr     r0, =VTOR
     ldr     r1, =__isr_vector
     str     r1, [r0]

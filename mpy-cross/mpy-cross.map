@@ -1665,7 +1665,7 @@ Discarded input sections
  .text.unlikely.mp_obj_exception_clear_traceback
                 0x0000000000000000        0x0 build/py/objexcept.o
  .text.mp_obj_exception_clear_traceback
-                0x0000000000000000       0x46 build/py/objexcept.o
+                0x0000000000000000       0x69 build/py/objexcept.o
  .text.unlikely.mp_obj_exception_add_traceback
                 0x0000000000000000        0x0 build/py/objexcept.o
  .text.unlikely.mp_obj_exception_get_traceback
@@ -7294,10 +7294,10 @@ LOAD /usr/lib/gcc/x86_64-linux-gnu/5/../../../x86_64-linux-gnu/crtn.o
                 0x000000000041d500       0x74 build/py/objexcept.o
                                          0x78 (size before relaxing)
  *fill*         0x000000000041d574        0xc 
- .rodata.__PRETTY_FUNCTION__.4639
+ .rodata.__PRETTY_FUNCTION__.4640
                 0x000000000041d580       0x1f build/py/objexcept.o
  *fill*         0x000000000041d59f        0x1 
- .rodata.__PRETTY_FUNCTION__.4630
+ .rodata.__PRETTY_FUNCTION__.4631
                 0x000000000041d5a0       0x1f build/py/objexcept.o
  *fill*         0x000000000041d5bf        0x1 
  .rodata.__PRETTY_FUNCTION__.4599

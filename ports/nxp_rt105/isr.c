@@ -171,10 +171,13 @@ void HardFault_C_Handler(ExceptionRegisters_t *regs, uint32_t *pXtraRegs, uint32
 		SCB->CFSR = SCB->CFSR;
 		return;
 	}
-	
+	#ifdef __CC_ARM
 	__asm {
 		bkpt	#0
 	}
+	#else
+	__asm volatile ("bkpt #0");
+	#endif
 	if (!pyb_hard_fault_debug) {
         NVIC_SystemReset();
     }
@@ -283,7 +286,11 @@ void HardFault_Handler(void) {
     " ite eq        \n"         // Tell the assembler that the nest 2 instructions are if-then-else
     " mrseq r0, msp \n"         // Make R0 point to main stack pointer
     " mrsne r0, psp \n"         // Make R0 point to process stack pointer
-    " b HardFault_C_Handler \n" // Off to C land
+    " push  {r4-r11, lr} \n"
+    " mov   r1, sp  \n"
+    " bl HardFault_C_Handler \n" // Off to C land
+    " pop  {r4-r11, lr}  \n"
+    " bx   lr  \n"
     );
 }
 #endif
@@ -323,7 +330,6 @@ __asm void MemManage_Handler(void) {
 	 bx		lr
 }
 #else
-__attribute__((naked))
 void MemManage_Handler(void) {
 
     // From the ARMv7M Architecture Reference Manual, section B.1.5.6
@@ -335,13 +341,16 @@ void MemManage_Handler(void) {
     // was stacked up using the process stack pointer (aka PSP).
 
     __asm volatile(
-    " tst lr, #4    \n"         // Test Bit 3 to see which stack pointer we should use.
-    " ite eq        \n"         // Tell the assembler that the nest 2 instructions are if-then-else
-    " mrseq r0, msp \n"         // Make R0 point to main stack pointer
-    " mrsne r0, psp \n"         // Make R0 point to process stack pointer
-    " mov r1, sp \n" 
-	" mov r2, #1 \n" 
-	" b HardFault_C_Handler \n" // Off to C land
+	    " tst lr, #4    \n"         // Test Bit 3 to see which stack pointer we should use.
+	    " ite eq        \n"         // Tell the assembler that the nest 2 instructions are if-then-else
+	    " mrseq r0, msp \n"         // Make R0 point to main stack pointer
+	    " mrsne r0, psp \n"         // Make R0 point to process stack pointer
+	    " push  {r4-r11, lr} \n"
+	    " mov   r1, sp  \n"
+	    " mov   r2, #1  \n"
+	    " bl HardFault_C_Handler \n" // Off to C land
+	    " pop  {r4-r11, lr}  \n"
+	    " bx   lr  \n"
     );
 }
 #endif
@@ -540,6 +549,7 @@ AfterProf:
 	__DSB();
 }
 
+#ifdef __CC_ARM
 __asm void SysTick_Handler(void) {
 	IMPORT	SysTick_C_Handler
 	PRESERVE8
@@ -552,7 +562,22 @@ __asm void SysTick_Handler(void) {
 	bx	   lr
 
 }
+#else
+void SysTick_Handler(void) {
+	__asm volatile (
+		" tst lr, #4	\n" 		// Test Bit 3 to see which stack pointer we should use.
+		" ite eq		\n" 		// Tell the assembler that the nest 2 instructions are if-then-else
+		" mrseq r0, msp \n" 		// Make R0 point to main stack pointer
+		" mrsne r0, psp \n" 		// Make R0 point to process stack pointer
+		" push	{r4-r11, lr} \n"
+		" mov	r1, sp	\n"
+		" bl SysTick_C_Handler \n" // Off to C land
+		" pop  {r4-r11, lr}  \n"
+		" bx   lr  \n"
+	);
 
+}
+#endif
 
 // Handle a flash (erase/program) interrupt.
 void Reserved168_IRQHandler(void) {
