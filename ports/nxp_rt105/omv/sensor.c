@@ -82,13 +82,10 @@ volatile bool g_Transfer_Done = false;
 /*******************************************************************************
  * Variables
  ******************************************************************************/
-#ifdef __CC_ARM
+
 #define LCD_FB __attribute__((section(".lcd_fb")))
 /*static*/ LCD_FB uint16_t s_frameBuffer[2][272][480] ;
-#else
-AT_NONCACHEABLE_SECTION_ALIGN(static uint16_t s_frameBuffer[APP_FRAME_BUFFER_COUNT][APP_CAMERA_HEIGHT][APP_CAMERA_WIDTH],
-                              FRAME_BUFFER_ALIGN);
-#endif
+
 typedef struct _ov7725_reg
 {
     uint8_t reg;
@@ -623,8 +620,9 @@ void CsiFragModeCalc(void) {
 	
 	s_irq.dmaBytePerFrag = s_irq.dmaBytePerLine * s_irq.linePerFrag;
 	s_irq.datBytePerFrag = s_irq.datBytePerLine * s_irq.linePerFrag;
+	#ifdef __CC_ARM
 	LCDMonitor_InitFB();
-
+	#endif
 }
 
 void CsiFragModeStartNewFrame(void) {
@@ -781,7 +779,9 @@ int sensor_init()
     */
     CAMERA_RECEIVER_Init(&cameraReceiver, &cameraConfig, NULL, NULL);
 	#endif
+	#ifdef __CC_ARM
 	LCDMonitor_Init();
+	#endif
 	CAMERA_TAKE_SNAPSHOT();	
 	CAMERA_WAIT_FOR_SNAPSHOT();
     /* All good! */
@@ -1280,10 +1280,9 @@ uint16_t* LCDMonitor_UpdateLineRGB565(uint16_t *pLcdFB, uint16_t *pCamFB, uint32
 	__asm volatile(
 	"10:  \n"
 	"	subs	r2, r2, #1 \n "
-	"	ldrd	r3, ip, [r1], #8  \n"
+	"	ldr		r3, [r1], #4  \n"
 	"	rev16	r3, r3  \n"
-	"	rev16	ip, ip  \n"
-	"	strd	r3, ip, [r0], #8  \n"
+	"	strd	r3, [r0], #4  \n"
 	"	bne 	10b  \n"
 	"	bx		lr  \n"
 
@@ -1419,8 +1418,11 @@ int sensor_snapshot(image_t *pImg, void *pv1, void *pv2)
 			t2 = HAL_GetTick() - t1;
 			t2 = t2;
 		}
+		#ifdef __CC_ARM
 		LCDMonitor_Update(n);
+		#endif
 		#if 1
+		PRINTF("snapshot %d\r\n", n);
 		CAMERA_TAKE_SNAPSHOT();
 		CAMERA_WAIT_FOR_SNAPSHOT();
 		#else

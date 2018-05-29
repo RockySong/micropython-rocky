@@ -54,21 +54,22 @@
 /* Entry Point */
 ENTRY(Reset_Handler)
 
-HEAP_SIZE  = DEFINED(__heap_size__)  ? __heap_size__  : 0x4000;
+HEAP_SIZE  = DEFINED(__heap_size__)  ? __heap_size__  : 0x1000;
 STACK_SIZE = DEFINED(__stack_size__) ? __stack_size__ : 0x2000;
 
-ITCM_SIZE = 0x10000;
-DTCM_SIZE = 0x70000;
+ITCM_SIZE = 0x8000;
+DTCM_SIZE = 0x78000;
 OCRAM_SIZE = 0;
-
+LOAD_BASE = 0x80000000;
+IVT_BASE = LOAD_BASE + 0x1000;
 /* Specify the memory areas */
 MEMORY
 {
-  m_interrupts          (RX)  : ORIGIN = 0x80000000, LENGTH = 0x00000400
+  m_vectors             (RX)  : ORIGIN = 0x80000000, LENGTH = 1K
   m_text                (RX)  : ORIGIN = 0x80000400, LENGTH = 0x01000000
-  m_data                (RW)  : ORIGIN = 0x81000400, LENGTH = 0x00DFFC00
-  m_ncache              (RW)  : ORIGIN = 0x81E00000, LENGTH = 0x00200000
-  m_itcm                (RW)  : ORIGIN = 0x00000000, LENGTH = ITCM_SIZE
+  m_ncache              (RW)  : ORIGIN = 0x81C00000, LENGTH = 0x00200000
+  m_itcm_vectors        (RW)  : ORIGIN = 0x00000000, LENGTH = 1K	
+  m_itcm                (RW)  : ORIGIN = 0x00000400, LENGTH = ITCM_SIZE - 1K
   m_dtcm                (RW)  : ORIGIN = 0x20000000, LENGTH = DTCM_SIZE
   m_ocram               (RW)  : ORIGIN = 0x20200000, LENGTH = OCRAM_SIZE
 }
@@ -83,7 +84,7 @@ SECTIONS
     . = ALIGN(4);
     KEEP(*(.isr_vector))     /* Startup code */
     . = ALIGN(4);
-  } > m_interrupts
+  } > m_vectors
 
   __VECTOR_RAM = __VECTOR_TABLE;
   __RAM_VECTOR_TABLE_SIZE_BYTES = 0x0;
@@ -174,61 +175,61 @@ SECTIONS
     PROVIDE_HIDDEN (__fini_array_end = .);
   } > m_text
 
-  __etext = .;    /* define a global symbol at end of code */
-  __DATA_ROM = .; /* Symbol is used by startup for data initialization */
-  PROVIDE(_etext = __etext);
+  __etext = .;
+  __DATA_ROM = .;
+
+  PROVIDE(_etext = __DATA_ROM);
   PROVIDE(_sidata = __DATA_ROM);
 
+  .stack :
+  {
+    . = ALIGN(8);
+    . += STACK_SIZE;
+  } > m_dtcm
+
+  /* Initializes stack on the end of block */
+  __StackTop   = .;
+  _stack_top = .;
+  _stack_size = STACK_SIZE;
+  __StackLimit = __StackTop - STACK_SIZE;
+  PROVIDE(__stack = __StackTop);  
+  
   .data : AT(__DATA_ROM)
   {
-    . = ALIGN(4);
     __DATA_RAM = .;
     __data_start__ = .;      /* create a global symbol at data start */
     *(m_usb_dma_init_data)
     *(.data)                 /* .data sections */
     *(.data*)                /* .data* sections */
+	*(.jpeg_tab)
+	*(.lab_tab)
     KEEP(*(.jcr*))
     . = ALIGN(4);
     __data_end__ = .;        /* define a global symbol at data end */
-  } > m_data
+  } > m_dtcm  
 
   PROVIDE(_sdata = __data_start__);
   PROVIDE(_edata = __data_end__);
-
-  __NDATA_ROM = __DATA_ROM + (__data_end__ - __data_start__);
-  .ncache.init : AT(__NDATA_ROM)
-  {
-    __noncachedata_start__ = .;   /* create a global symbol at ncache data start */
-    *(NonCacheable.init)
-    . = ALIGN(4);
-    __noncachedata_init_end__ = .;   /* create a global symbol at initialized ncache data end */
-  } > m_ncache
-  . = __noncachedata_init_end__;
-  .ncache :
-  {
-    *(NonCacheable)
-    . = ALIGN(4);
-    __noncachedata_end__ = .;     /* define a global symbol at ncache data end */
-  } > m_ncache
-
-  __DATA_END = __NDATA_ROM + (__noncachedata_init_end__ - __noncachedata_start__);
+  
   text_end = ORIGIN(m_text) + LENGTH(m_text);
-  ASSERT(__DATA_END <= text_end, "region m_text overflowed with text and data")
 
-  FB_SIZE  = 301*1024;
-  JPEG_SIZE  = 48*1024;
-  .dtcm : 
+  FB_SIZE  = 160*1024;
+  FB_ALLOC_SIZE = 13*1024;
+  JPEG_SIZE  = 23*1024;  
+  .dtcm_fbs : 
   {
     . = ALIGN(8);
-    . += STACK_SIZE;
-    _stack = .;
     _ld_main_fb = .;
-	. += FB_SIZE;
+	. += FB_SIZE + FB_ALLOC_SIZE;
+	/* fb_alloc is at the end of FB (with margin) */
+	_ld_fballoc = .;
 	_ld_jpeg_buf = .;
+	. += JPEG_SIZE;
 	. = ALIGN(4);
   } > m_dtcm
   PROVIDE(_jpeg_buf = _ld_jpeg_buf);
   PROVIDE(_fb_base = _ld_main_fb);
+  PROVIDE(_fballoc = _ld_fballoc);
   /* Uninitialized data section */
   .bss :
   {
@@ -258,21 +259,20 @@ SECTIONS
     _heap = .;
   } > m_dtcm
 
-  /* Initializes stack on the end of block */
-  __StackLimit = ORIGIN(m_dtcm);
-  __StackTop   = __StackLimit + STACK_SIZE;
-  PROVIDE(__stack = __StackTop);
-  /* Define tho top end of the stack.  The stack is full descending so begins just
-   above last byte of RAM.  Note that EABI requires the stack to be 8-byte
-   aligned for a call. */
-  PROVIDE(_estack = __StackTop);
+  PROVIDE(_estack = _stack_top);
   .ARM.attributes 0 : { *(.ARM.attributes) }
-
-  /* ASSERT(__StackLimit >= __HeapLimit, "region m_data overflowed with stack and heap") */
+  
+  .ncache : 
+  {
+	*.o (.lcd_fb)
+  } > m_ncache
 }
 
+__StackTop = _estack;
+
 /* RAM extents for the garbage collector */
-_ram_start = ORIGIN(m_data);
-_ram_end = ORIGIN(m_data) + LENGTH(m_data);
+_ram_start = ORIGIN(m_dtcm);
+_sidata = _ram_start;
+_ram_end = ORIGIN(m_dtcm) + LENGTH(m_dtcm);
 _heap_start = _ebss; /* heap starts just after statically allocated memory */
-_heap_end = _heap_start + HEAP_SIZE; /* tunable */
+_heap_end = _ram_end;

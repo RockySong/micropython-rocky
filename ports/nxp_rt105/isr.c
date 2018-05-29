@@ -177,6 +177,7 @@ void HardFault_C_Handler(ExceptionRegisters_t *regs, uint32_t *pXtraRegs, uint32
 	}
 	#else
 	__asm volatile ("bkpt #0");
+	return;
 	#endif
 	if (!pyb_hard_fault_debug) {
         NVIC_SystemReset();
@@ -232,6 +233,11 @@ void HardFault_C_Handler(ExceptionRegisters_t *regs, uint32_t *pXtraRegs, uint32
             print_hex_hex("  ", (uint32_t)sp, *sp);
         }
     }
+
+	#ifndef __CC_ARM
+	__asm volatile ("bkpt #0");
+	return;
+	#endif
 
     /* Go to infinite loop when Hard Fault exception occurs */
 	switch (strType) 

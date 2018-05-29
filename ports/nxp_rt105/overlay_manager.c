@@ -33,8 +33,8 @@ extern uint32_t Image$$OVERLAY_CODE_BLOB$$Base;
 		break; \
 
 #else
-extern uint32_t _data_overlay_image;	// 0x20002000
-extern uint32_t _code_overlay_image;	// 0x6000
+extern uint32_t _overlay_dtcm_base;	// 0x20002000
+extern uint32_t _overlay_itcm_base;	// 0x6000
 extern uint32_t __load_start_OVERLAY_YUV_TAB;
 extern uint32_t __load_stop_OVERLAY_YUV_TAB;
 
@@ -133,6 +133,8 @@ int OverlaySwitch(uint8_t ovlyNdx) {
 	return ovlyNdxBkup;
 }
 #else
+int OverlaySwitch(uint8_t ovlyNdx) {return 0;}
+#if 0
 int OverlaySwitch(uint8_t ovlyNdx) {
 	if (s_curOvly == ovlyNdx)
 		return ovlyNdx;
@@ -151,7 +153,7 @@ int OverlaySwitch(uint8_t ovlyNdx) {
 	default:
 		return -1L;
 	}
-	pDst = &_data_overlay_image;
+	pDst = &_overlay_dtcm_base;
 	s_curOvly = ovlyNdx;
 	memcpy(pDst, pSrc, cb);		
 	// >>> copy code
@@ -162,12 +164,13 @@ int OverlaySwitch(uint8_t ovlyNdx) {
 		return -1L;
 	}
 	
-	pDst = &_code_overlay_image;
+	pDst = &_overlay_dtcm_base;
 	memcpy(pDst, pSrc, cb);	
 	// <<<
 	
 	return ovlyNdxBkup;
 }
+#endif
 #endif
 int OverlaySetToDefault(void) {
 	return OverlaySwitch(OVLY_YUV_TAB);

@@ -314,8 +314,6 @@ __Vectors:
     .size    __isr_vector, . - __isr_vector
 
     .text
-    .thumb
-
 	.thumb_func
 	.align 2
 

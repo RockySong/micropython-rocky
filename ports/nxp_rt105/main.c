@@ -571,6 +571,7 @@ HAL_StatusTypeDef HAL_Init(void)
 	uint32_t  _ram_start = 0x20000000, _ram_end = (uint32_t)CHEAP$$Limit, _estack = 0x20000000 + (uint32_t)lg_c1Stack, _heap_end = DTCM_END;
 #elif defined(__GNUC__)
 extern uint32_t _ram_start, _ram_end, _estack, _heap_end, _heap_start;
+extern uint32_t _stack_size;
 #endif
 
 void PYB_MainLoop(uint32_t reset_mode) {
@@ -691,17 +692,17 @@ soft_reset:
     // Note: stack control relies on main thread being initialised above
     mp_stack_set_top((void*) _estack);
     mp_stack_set_limit(STACK_SIZE);
-	MP_STATE_PORT(omv_ide_irq) = 0;
     gc_init((void*) _heap_start, (void*) _heap_end);
 #elif defined(__GNUC__)
     // Stack limit should be less than real stack size, so we have a chance
     // to recover from limit hit.  (Limit is measured in bytes.)
     // Note: stack control relies on main thread being initialised above
     mp_stack_set_top(&_estack);
-    mp_stack_set_limit((char*)&_estack - (char*)&_heap_end - 1024);
-	
+    mp_stack_set_limit(&_stack_size);
     gc_init(&_heap_start, &_heap_end);	
 #endif
+	MP_STATE_PORT(omv_ide_irq) = 0;
+
     // Micro Python init
     mp_init();
     mp_obj_list_init(mp_sys_path, 0);
@@ -802,6 +803,14 @@ soft_reset:
         const char *boot_py = "boot.py";
         mp_import_stat_t stat = mp_import_stat(boot_py);
         if (stat == MP_IMPORT_STAT_FILE) {
+			#ifndef __CC_ARM
+			{
+				volatile uint32_t t1, t2;
+				t1 = HAL_GetTick();
+				t2 = t1 + 4000;
+				while (HAL_GetTick() < t2) {__WFI();}
+			}
+			#endif
             int ret = pyexec_file(boot_py);
             if (ret & PYEXEC_FORCED_EXIT) {
                 goto soft_reset_exit;
