@@ -481,7 +481,7 @@ ARMCC_ASM_FUNC RAM_CODE uint32_t ExtractYFromYuv(uint32_t dmaBase, uint32_t datB
 __attribute__((naked))
 RAM_CODE uint32_t ExtractYFromYuv(uint32_t dmaBase, uint32_t datBase, uint32_t _128bitUnitCnt) {
 	__asm volatile (
-		"	push	{r4-r7, lr}  \n "
+		"	push	{r1-r7, ip, lr}  \n "
 		"10:  \n "
 		"	ldmia	r0!, {r3-r6}  \n "
 			// schedule code carefully to allow dual-issue on Cortex-M7
@@ -501,7 +501,7 @@ RAM_CODE uint32_t ExtractYFromYuv(uint32_t dmaBase, uint32_t datBase, uint32_t _
 		"	subs	r2,	#1  \n "
 		"	bne		10b  \n "
 		"	mov		r0,	r1  \n "
-		"	pop		{r4-r7, pc}  \n "		
+		"	pop		{r1-r7, ip, pc}  \n "		
 	);
 }
 
@@ -1240,7 +1240,7 @@ __asm uint16_t* LCDMonitor_UpdateLineRGB565(uint16_t *pLcdFB, uint16_t *pCamFB, 
 __attribute__((naked))
 uint16_t* LCDMonitor_UpdateLineGray(uint16_t *pLcdFB, uint16_t *pCamFB, uint32_t quadPixCnt) {
 	__asm volatile(
-		"	push	{r4-r6, lr}    \n "
+		"   push   {r0-r6, ip, lr} \n"  // we found GCC caller does not save these for naked callee!
 		"	mov 	r5, #0	  \n "
 		"	mov 	r6, #0	  \n "
 		"10:	\n "
@@ -1279,7 +1279,7 @@ uint16_t* LCDMonitor_UpdateLineGray(uint16_t *pLcdFB, uint16_t *pCamFB, uint32_t
 		"	bfi 	r6, r4, #27,	#5	  \n "	
 		"	strd	r5, r6, [r0], #8	\n "
 		"	bne 	10b    \n "
-		"	pop 	{r4-r6, pc}    \n "
+		"	pop 	{r0-r6, ip, pc}    \n "
 
 	);
 }
@@ -1287,6 +1287,7 @@ uint16_t* LCDMonitor_UpdateLineGray(uint16_t *pLcdFB, uint16_t *pCamFB, uint32_t
 __attribute__((naked))
 uint16_t* LCDMonitor_UpdateLineRGB565(uint16_t *pLcdFB, uint16_t *pCamFB, uint32_t u64Cnt) {
 	__asm volatile(
+	"   push   {r0-r3, ip} \n"  // we found GCC caller does not save these for naked callee!
 	"10:  \n"
 	"	subs	r2, r2, #1 \n "
 	"	ldrd	r3, ip, [r1], #8  \n"
@@ -1294,6 +1295,7 @@ uint16_t* LCDMonitor_UpdateLineRGB565(uint16_t *pLcdFB, uint16_t *pCamFB, uint32
 	"	rev16	ip, ip  \n"	
 	"	strd    r3, ip, [r0], #8  \n"
 	"	bne 	10b  \n"
+	"   pop     {r0-r3, ip} \n"
 	"	bx		lr  \n"
 
 	);
