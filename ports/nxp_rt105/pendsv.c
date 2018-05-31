@@ -187,7 +187,7 @@ no_obj                    // pendsv_object==NULL
 #elif defined (__ICCARM__)
 	// implemented in pendsv_iar.S
 #else
-void pendsv_isr_handler(void) {
+__attribute__((naked)) void PendSV_Handler(void) {
     // re-jig the stack so that when we return from this interrupt handler
     // it returns instead to nlr_jump with argument pendsv_object
     // note that stack has a different layout if DEBUG is enabled

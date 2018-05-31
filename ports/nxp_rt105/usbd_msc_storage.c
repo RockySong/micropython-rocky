@@ -319,7 +319,7 @@ usb_status_t USB_DeviceMscCallback(class_handle_t handle, uint32_t event, void *
                 usb_echo(
                     "Read error, error = 0xx%x \t Please check read request buffer size(must be less than 128 "
                     "sectors)\r\n",
-                    error);
+                    t1);
                 error = kStatus_USB_Error;
             }
 

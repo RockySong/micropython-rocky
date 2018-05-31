@@ -87,8 +87,11 @@ extern usb_status_t USB_DeviceNotificationTrigger(void *handle, void *msg);
  ******************************************************************************/
 
 /* Apply for QH buffer, 2048-byte alignment */
-USB_RAM_ADDRESS_ALIGNMENT(2048)
-USB_CONTROLLER_DATA static uint8_t qh_buffer[(USB_DEVICE_CONFIG_EHCI - 1) * 2048 +
+// rocky: as qh_buffer's alignment is too big, linkers are likely to fill large RAM
+// block to satisfy, waste up to 2KB-1 bytes! So layout it to a dedicated section,
+// and in linker script /scatter file, should layout it carefully to avoid waste.
+#define QH_BUFFER_LAYOUT  __attribute__((section(".qh_buffer_2kalign"))) __ALIGNED(2048)
+QH_BUFFER_LAYOUT uint8_t qh_buffer[(USB_DEVICE_CONFIG_EHCI - 1) * 2048 +
                                              USB_DEVICE_CONFIG_ENDPOINTS * 2 * sizeof(usb_device_ehci_qh_struct_t)];
 
 /* Apply for DTD buffer, 32-byte alignment */

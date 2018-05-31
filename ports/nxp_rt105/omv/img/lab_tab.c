@@ -1,6 +1,11 @@
 #include <stdint.h>
 #include "board.h"
-const __ALIGNED(32)  __attribute__((section(".lab_tab"))) int8_t lab_table[196608] = {
+#ifdef __CC_ARM
+#define LAB_TAB	__attribute__((section(".lab_tab")))
+#else
+#define LAB_TAB
+#endif
+const __ALIGNED(32)  LAB_TAB int8_t lab_table[196608] = {
        0,    0,    0,        9,  -19,   14,       23,  -32,   31,       35,  -42,   41,
       47,  -52,   50,       58,  -61,   59,       68,  -70,   68,       79,  -79,   76,
        0,    2,    1,       10,  -16,   14,       23,  -31,   31,       35,  -42,   41,

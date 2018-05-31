@@ -675,6 +675,14 @@ soft_reset:
 #if MICROPY_HW_HAS_SDCARD
     if (first_soft_reset) {
         sdcard_init();
+		#ifndef __CC_ARM
+		{
+			volatile uint32_t t1, t2;
+			t1 = HAL_GetTick();
+			t2 = t1 + 2000;
+			while (HAL_GetTick() < t2) {__WFI();}
+		}
+		#endif
     }
 #endif
     if (first_soft_reset) {
@@ -797,20 +805,14 @@ soft_reset:
     // reset config variables; they should be set by boot.py
     MP_STATE_PORT(pyb_config_main) = MP_OBJ_NULL;
 
+	#if 1 //#ifdef __CC_ARM
     // run boot.py, if it exists
     // TODO perhaps have pyb.reboot([bootpy]) function to soft-reboot and execute custom boot.py
     if (reset_mode == 1 || reset_mode == 3) {
         const char *boot_py = "boot.py";
         mp_import_stat_t stat = mp_import_stat(boot_py);
         if (stat == MP_IMPORT_STAT_FILE) {
-			#ifndef __CC_ARM
-			{
-				volatile uint32_t t1, t2;
-				t1 = HAL_GetTick();
-				t2 = t1 + 4000;
-				while (HAL_GetTick() < t2) {__WFI();}
-			}
-			#endif
+			PRINTF("Executing boot.py\r\n");
             int ret = pyexec_file(boot_py);
             if (ret & PYEXEC_FORCED_EXIT) {
                 goto soft_reset_exit;
@@ -820,6 +822,7 @@ soft_reset:
             }
         }
     }
+	#endif
 
     // turn boot-up LEDs off
 #if !defined(MICROPY_HW_LED2)

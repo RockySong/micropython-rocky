@@ -119,6 +119,7 @@ __attribute__((naked)) unsigned int nlr_push(nlr_buf_t *nlr) {
     ".align 2                   \n"
     "nlr_push_tail_var: .word nlr_push_tail \n"
 #else
+	"mov	r1,  lr		\n"
     "b      nlr_push_tail       \n" // do the rest in C
 #endif
     );
@@ -135,7 +136,7 @@ unsigned int nlr_push_tail(nlr_buf_t *nlr) {
     return 0; // normal return
 }
 #else
-__attribute__((used)) unsigned int nlr_push_tail(nlr_buf_t *nlr) {
+__attribute__((used)) unsigned int nlr_push_tail(nlr_buf_t *nlr, uint32_t adrFrom) {
     nlr_buf_t **top = &MP_STATE_THREAD(nlr_top);
     nlr->prev = *top;
     *top = nlr;
@@ -149,7 +150,6 @@ void nlr_pop(void) {
 }
 
 #ifdef __CC_ARM
-
 __asm unsigned int nlr_jump_asm(nlr_buf_t *nlr)
 {
     ldr    r4, [r0, #12]        // load r4 from nlr_buf
@@ -181,33 +181,10 @@ __asm unsigned int nlr_jump_asm(nlr_buf_t *nlr)
     movs   r0, #1               // return 1, non-local return
     bx     lr                   // return	
 }
-
-NORETURN void nlr_jump(void *val) {
-    nlr_buf_t **top_ptr = &MP_STATE_THREAD(nlr_top);
-    nlr_buf_t *top = *top_ptr;
-    if (top == NULL) {
-        nlr_jump_fail(val);
-    }
-
-    top->ret_val = val;
-    *top_ptr = top->prev;
-	nlr_jump_asm(top);
-	for (;;); // needed to silence compiler warning
-}
-
 #else
-NORETURN __attribute__((naked)) void nlr_jump(void *val) {
-    nlr_buf_t **top_ptr = &MP_STATE_THREAD(nlr_top);
-    nlr_buf_t *top = *top_ptr;
-    if (top == NULL) {
-        nlr_jump_fail(val);
-    }
-
-    top->ret_val = val;
-    *top_ptr = top->prev;
-
+__attribute__((naked)) unsigned int nlr_jump_asm(nlr_buf_t *nlr)
+{
     __asm volatile (
-    "mov    r0, %0              \n" // r0 points to nlr_buf
     "ldr    r4, [r0, #12]       \n" // load r4 from nlr_buf
     "ldr    r5, [r0, #16]       \n" // load r5 from nlr_buf
     "ldr    r6, [r0, #20]       \n" // load r6 from nlr_buf
@@ -235,14 +212,21 @@ NORETURN __attribute__((naked)) void nlr_jump(void *val) {
     "ldr    lr, [r0, #8]        \n" // load lr from nlr_buf
 #endif
     "movs   r0, #1              \n" // return 1, non-local return
-    "bx     lr                  \n" // return
-    :                               // output operands
-    : "r"(top)                      // input operands
-    :                               // clobbered registers
-    );
-
-    for (;;); // needed to silence compiler warning
+    "bx     lr                  \n" // return                 // return	
+	);
 }
-#endif	// ifdef __CC_ARM
+
+#endif
+NORETURN void nlr_jump(void *val) {
+    nlr_buf_t **top_ptr = &MP_STATE_THREAD(nlr_top);
+    nlr_buf_t *top = *top_ptr;
+    if (top == NULL) {
+        nlr_jump_fail(val);
+    }
+    top->ret_val = val;
+    *top_ptr = top->prev;
+	nlr_jump_asm(top);
+	for (;;); // needed to silence compiler warning
+}
 
 #endif // (!defined(MICROPY_NLR_SETJMP) || !MICROPY_NLR_SETJMP) && (defined(__thumb2__) || defined(__thumb__) || defined(__arm__))

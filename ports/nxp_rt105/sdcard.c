@@ -250,7 +250,7 @@ status_t sdcard_init(void) {
 	uint32_t t1 = HAL_GetTick();
 	while (!s_cardInserted)
 	{
-		if (HAL_GetTick() - t1 > 100)
+		if (HAL_GetTick() - t1 > 200)
 			break;
 	}
 

@@ -90,7 +90,7 @@ ifeq ($(DEBUG), 1)
 CFLAGS += -g -DPENDSV_DEBUG
 COPT = -O0
 else
-COPT += -Os -DNDEBUG
+COPT += -O0 -DNDEBUG
 endif
 
 SRC_LIB = $(addprefix lib/,\

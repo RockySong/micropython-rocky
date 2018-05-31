@@ -66,6 +66,7 @@
 #include "py_fir.h"
 
 #include "framebuffer.h"
+#include "fsl_debug_console.h"
 
 #include "ini.h"
 #include "overlay_manager.h"
@@ -209,7 +210,7 @@ __WEAK int OverlaySetToDefault(void) {return 0;}
 int OpenMV_Main(uint32_t first_soft_reset)
 {
 	int ret = 0;
-
+	PRINTF("Enter OpenMV main\r\n");
 	// SCnSCB->ACTLR |= SCnSCB_ACTLR_DISDEFWBUF_Msk;
 
 
@@ -290,7 +291,7 @@ int OpenMV_Main(uint32_t first_soft_reset)
 
     if (usbdbg_script_ready()) {
         nlr_buf_t nlr;
-		
+		PRINTF("script ready!\r\n");
         // execute the script
         if (nlr_push(&nlr) == 0) {
 			// __set_BASEPRI_MAX(((1 << __NVIC_PRIO_BITS) - 1) << (8 - __NVIC_PRIO_BITS));	// disable pendSV

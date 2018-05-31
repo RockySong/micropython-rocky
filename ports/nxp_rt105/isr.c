@@ -288,7 +288,7 @@ void HardFault_Handler(void) {
     // was stacked up using the process stack pointer (aka PSP).
 
     __asm volatile(
-    " tst lr, #4    \n"         // Test Bit 3 to see which stack pointer we should use.
+	" tst lr, #4    \n"         // Test Bit 3 to see which stack pointer we should use.
     " ite eq        \n"         // Tell the assembler that the nest 2 instructions are if-then-else
     " mrseq r0, msp \n"         // Make R0 point to main stack pointer
     " mrsne r0, psp \n"         // Make R0 point to process stack pointer
@@ -336,6 +336,7 @@ __asm void MemManage_Handler(void) {
 	 bx		lr
 }
 #else
+__attribute__((naked))
 void MemManage_Handler(void) {
 
     // From the ARMv7M Architecture Reference Manual, section B.1.5.6
@@ -400,17 +401,7 @@ void SVC_Handler(void) {
 void DebugMon_Handler(void) {
 }
 
-/**
-  * @brief  This function handles PendSVC exception.
-  * @param  None
-  * @retval None
-  */
-#ifndef __CC_ARM
-// for ARM CC, we use asm IRQ handler
-void PendSV_Handler(void) {
-    pendsv_isr_handler();
-}
-#endif
+
 #include "storage.h"
 /**
   * @brief  This function handles SysTick Handler.
@@ -569,6 +560,7 @@ __asm void SysTick_Handler(void) {
 
 }
 #else
+__attribute__((naked))
 void SysTick_Handler(void) {
 	__asm volatile (
 		" tst lr, #4	\n" 		// Test Bit 3 to see which stack pointer we should use.

@@ -54,7 +54,7 @@
 /* Entry Point */
 ENTRY(Reset_Handler)
 
-HEAP_SIZE  = DEFINED(__heap_size__)  ? __heap_size__  : 0x1000;
+HEAP_SIZE  = DEFINED(__heap_size__)  ? __heap_size__  : 0x0400;
 STACK_SIZE = DEFINED(__stack_size__) ? __stack_size__ : 0x2000;
 
 ITCM_SIZE = 0x8000;
@@ -67,11 +67,11 @@ MEMORY
 {
   m_vectors             (RX)  : ORIGIN = 0x80000000, LENGTH = 1K
   m_text                (RX)  : ORIGIN = 0x80000400, LENGTH = 0x01000000
-  m_ncache              (RW)  : ORIGIN = 0x81C00000, LENGTH = 0x00200000
+  m_dramncache           (RW)  : ORIGIN = 0x81D00000, LENGTH = 0x00200000
   m_itcm_vectors        (RW)  : ORIGIN = 0x00000000, LENGTH = 1K	
-  m_itcm                (RW)  : ORIGIN = 0x00000400, LENGTH = ITCM_SIZE - 1K
-  m_dtcm                (RW)  : ORIGIN = 0x20000000, LENGTH = DTCM_SIZE
-  m_ocram               (RW)  : ORIGIN = 0x20200000, LENGTH = OCRAM_SIZE
+  m_itcm                (XRW) : ORIGIN = 0x00000400, LENGTH = ITCM_SIZE - 1K
+  m_dtcm                (XRW) : ORIGIN = 0x20000000, LENGTH = DTCM_SIZE
+  m_ocram               (XRW) : ORIGIN = 0x20200000, LENGTH = OCRAM_SIZE
 }
 
 /* Define output sections */
@@ -194,6 +194,14 @@ SECTIONS
   __StackLimit = __StackTop - STACK_SIZE;
   PROVIDE(__stack = __StackTop);  
   
+  .qh_buffer_layout :
+  {
+	  . = ALIGN(2048);
+    *(.qh_buffer_2kalign)
+    . = ALIGN(4);
+    __noncachedata_end__ = .;     /* define a global symbol at ncache data end */
+  } > m_dtcm  
+  
   .data : AT(__DATA_ROM)
   {
     __DATA_RAM = .;
@@ -201,15 +209,29 @@ SECTIONS
     *(m_usb_dma_init_data)
     *(.data)                 /* .data sections */
     *(.data*)                /* .data* sections */
-	*(.jpeg_tab)
-	*(.lab_tab)
+
     KEEP(*(.jcr*))
     . = ALIGN(4);
     __data_end__ = .;        /* define a global symbol at data end */
-  } > m_dtcm  
+  } > m_dtcm 
 
   PROVIDE(_sdata = __data_start__);
   PROVIDE(_edata = __data_end__);
+  __NDATA_ROM = __DATA_ROM + (__data_end__ - __data_start__);
+  .ncache.init : AT(__NDATA_ROM)
+  {
+    __noncachedata_start__ = .;   /* create a global symbol at ncache data start */
+    *(NonCacheable.init)
+    . = ALIGN(4);
+    __noncachedata_init_end__ = .;   /* create a global symbol at initialized ncache data end */
+  } > m_dtcm
+  . = __noncachedata_init_end__;
+  .ncache :
+  {
+    *(NonCacheable)
+    . = ALIGN(4);
+    __noncachedata_end__ = .;     /* define a global symbol at ncache data end */
+  } > m_dtcm
   
   text_end = ORIGIN(m_text) + LENGTH(m_text);
 
@@ -230,23 +252,7 @@ SECTIONS
   PROVIDE(_jpeg_buf = _ld_jpeg_buf);
   PROVIDE(_fb_base = _ld_main_fb);
   PROVIDE(_fballoc = _ld_fballoc);
-  /* Uninitialized data section */
-  .bss :
-  {
-    /* This is used by the startup in order to initialize the .bss section */
-    . = ALIGN(4);
-    __START_BSS = .;
-    __bss_start__ = .;
-    *(m_usb_dma_noninit_data)
-    *(.bss)
-    *(.bss*)
-    *(COMMON)
-    . = ALIGN(4);
-    __bss_end__ = .;
-    __END_BSS = .;
-  } > m_dtcm
-  PROVIDE(_sbss = __START_BSS);
-  PROVIDE(_ebss = __END_BSS);
+  
   .heap :
   {
     . = ALIGN(8);
@@ -258,14 +264,32 @@ SECTIONS
     __heap_limit = .; /* Add for _sbrk */
     _heap = .;
   } > m_dtcm
+    
+  /* Uninitialized data section */
+  .bss :
+  {
+    /* This is used by the startup in order to initialize the .bss section */
+    . = ALIGN(4);
+    __START_BSS = .;
+    __bss_start__ = .;
+    *(m_usb_dma_noninit_data)
+    *(.bss)
+    *(.bss*)
+    *(COMMON)
+    . = ALIGN(16);
+    __bss_end__ = .;
+    __END_BSS = .;
+  } > m_dtcm
+  PROVIDE(_sbss = __START_BSS);
+  PROVIDE(_ebss = __END_BSS);
 
   PROVIDE(_estack = _stack_top);
   .ARM.attributes 0 : { *(.ARM.attributes) }
   
-  .ncache : 
+  .dramncache : 
   {
 	*.o (.lcd_fb)
-  } > m_ncache
+  } > m_dramncache
 }
 
 __StackTop = _estack;
@@ -274,5 +298,5 @@ __StackTop = _estack;
 _ram_start = ORIGIN(m_dtcm);
 _sidata = _ram_start;
 _ram_end = ORIGIN(m_dtcm) + LENGTH(m_dtcm);
-_heap_start = _ebss; /* heap starts just after statically allocated memory */
+_heap_start = _ebss > _ram_end - 64K ? _ebss : _ram_end - 64K; /* heap starts just after statically allocated memory */
 _heap_end = _ram_end;

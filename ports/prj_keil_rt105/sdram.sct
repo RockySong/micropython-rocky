@@ -72,6 +72,10 @@ LR_XIP_FLASH ROM_BASE + 0x2000 {
 	
 	ARM_LIB_STACK 0x20000000 EMPTY STACK_SIZE {}
 	
+	QH_BUFFER_LAYOUT +0 {
+		* (.qh_buffer_2kalign)
+	}
+	
 	OVERLAY_YUV_TAB +0 OVERLAY 196*1024 {
 		yuv_tab.o  (+RO)
 		* (.jpeg_tab)

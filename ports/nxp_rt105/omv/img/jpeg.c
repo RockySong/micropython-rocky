@@ -44,7 +44,11 @@ static uint8_t YTable[64], UVTable[64];
 
 // RGB565 to YUV table
 extern const int8_t yuv_table[196608];
+#ifdef __CC_ARM
 #define JPEG_TAB	__attribute__((section(".jpeg_tab")))
+#else
+#define JPEG_TAB
+#endif
 static const JPEG_TAB uint8_t s_jpeg_ZigZag[] = {
     0,  1,   5,  6, 14, 15, 27, 28,
     2,  4,   7, 13, 16, 26, 29, 42,
