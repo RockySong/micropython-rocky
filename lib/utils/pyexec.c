@@ -99,10 +99,6 @@ STATIC int parse_compile_execute(const void *source, mp_parse_input_kind_t input
             #endif
         }
 
-		// modify for openMV
-		usbdbg_set_irq_enabled(1);
-		// <<<
-
         // execute code
         mp_hal_set_interrupt_char(CHAR_CTRL_C); // allow ctrl-C to interrupt us
         start = mp_hal_ticks_ms();

@@ -175,6 +175,7 @@ void HardFault_C_Handler(ExceptionRegisters_t *regs, uint32_t *pXtraRegs, uint32
 	__asm {
 		bkpt	#0
 	}
+	return;
 	#else
 	__asm volatile ("bkpt #0");
 	return;
@@ -413,12 +414,12 @@ extern void SDMMC_Tick_Handler(void);
 
 #define PROFILING	1
 #ifdef PROFILING
-#define PROF_GUNITY	128
+#define PROF_GUNITY	32
 #define PROF_MASK (~(PROF_GUNITY - 1))
 #define PROF_CNT	20
 #include "sensor.h"
 uint32_t s_ignrList[] = {
-	(uint32_t)sensor_snapshot ,
+	(uint32_t)sensor_snapshot + 0x40 ,
 };
 
 typedef struct {

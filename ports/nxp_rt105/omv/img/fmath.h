@@ -13,48 +13,61 @@
 #ifdef __CC_ARM
 #include <math.h>
 // #define fast_sqrtf sqrtf
-static float ALWAYS_INLINE fast_sqrtf(float x)
+static inline float fast_sqrtf(float x)
 {
-	float ret;
 	__asm {
-		VSQRT.F32	ret,	x
+		VSQRT.F32	x,	x
 	}
-    return ret;
+    return x;
 }
 
-static int ALWAYS_INLINE fast_floorf(float x)
+typedef union 
 {
-    float i;
-    __asm{
-		vcvt.s32.f32 i, x
-    }
-    return (int)i;
+	float f32;
+	int s32;
+}U32Combo;
+
+typedef union 
+{
+	double f64;
+	long long s64;
+}U64Combo;
+
+__asm static int fast_roundf(float x)
+{
+	vcvtr.s32.f32	s0, s0
+	vmov	r0, s0
+	bx		lr
+	ALIGN
 }
 
-static int ALWAYS_INLINE fast_ceilf(float x)
+
+__asm static int  fast_floorf(float x)
 {
+	vcvt.s32.f32	s0, s0
+	vmov	r0, s0
+	bx		lr
+	ALIGN
+}
+
+__asm static int fast_ceilf(float x)
+{	
+	vldr.f32	s1,=0.99999
+	vadd.f32	s0,	s0,	s1
+	vcvt.s32.f32	s0, s0
+	vmov	r0, s0
+	bx		lr
+	ALIGN
+	/*
     float i;
     x += 0.9999f;
     __asm{
 		vcvt.s32.f32 i, x
     }
     return (int)i;
+    */
 }
 
-int ALWAYS_INLINE fast_roundf(float x)
-{
-    float i;
-    __asm{
-		vcvtr.s32.f32 i, x
-    }
-
-    return (int)i;
-}
-
-
-#define fast_floorf(x) ((int)floorf(x))
-#define fast_ceilf(x) ((int)ceilf(x))
-#define fast_roundf(x) ((int)roundf(x))
 #define fast_fabsf fabsf
 #define isnanf __ARM_isnanf
 #define isinff __ARM_isinff
@@ -62,8 +75,9 @@ int ALWAYS_INLINE fast_roundf(float x)
 float fast_sqrtf(float x);
 int fast_floorf(float x);
 int fast_ceilf(float x);
-int fast_roundf(float x);
+
 #endif
+int fast_roundf(float x);
 
 
 float fast_atanf(float x);

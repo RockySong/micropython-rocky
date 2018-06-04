@@ -59,37 +59,39 @@ LR_XIP_FLASH ROM_BASE + 0x2000 {
 		sin*.o sqrt*.o tan*.o tgammaf*.o trunc*.o dunder.o funder.o (+RO)
 		* (.ram_code)
 	}
-
+	
 	OVERLAY_CODE_Start 0x6000 EMPTY 0 {}
-
-	OVERLAY_CODE_JPEG +0 OVERLAY 8*1024 {
-		jpeg.o (+RO)
-	}
 	
 	OVERLAY_CODE_BLOB +0 OVERLAY 8*1024 {
 		blob.o (+RO)
 	}
-	
+	/*
+	OVERLAY_CODE_JPEG +0 OVERLAY 8*1024 {
+		jpeg.o (+RO)
+	}	
+	*/
 	ARM_LIB_STACK 0x20000000 EMPTY STACK_SIZE {}
 	
 	QH_BUFFER_LAYOUT +0 {
 		* (.qh_buffer_2kalign)
 	}
 	
+	OVERLAY_HAAR +0 OVERLAY {
+		haar.o integral_mw.o (+RO)
+	}
+	
+	
+	OVERLAY_LAB_TAB +0  OVERLAY {
+		lab_tab.o (+RO)
+		xyz_tab.o (+RO)
+	}	
+	/*
 	OVERLAY_YUV_TAB +0 OVERLAY 196*1024 {
 		yuv_tab.o  (+RO)
 		* (.jpeg_tab)
-	}
-	OVERLAY_LAB_TAB +0  OVERLAY 196*1024 {
-		lab_tab.o (+RO)
-		xyz_tab.o (+RO)
-	}
-	
-	OVERLAY_HAAR +0 OVERLAY 196*1024 {
-		haar.o integral_mw.o (+RO)
 	}	
-	
-	ER_DTCM +0 DTCM_SIZE-STACK_SIZE-196*1024 {
+	*/
+	ER_DTCM +0 {
 		.ANY (+RW, +ZI)
 		* (.jpeg_buf)
 		sincos_tab.o (+RO)
@@ -101,13 +103,10 @@ LR_XIP_FLASH ROM_BASE + 0x2000 {
 	
 	OMV_MAIN_FB +0 EMPTY OMV_MAIN_FB_SIZE  + OMV_FB_ALLOC_SIZE {}
 //	OMV_FB_ALLOC +0 EMPTY OMV_FB_ALLOC_SIZE {}
-	OMV_FB_END +0 EMPTY 4 {}	
+	OMV_FB_END +0 EMPTY 16 {}	
 	
 	MPY_HEAP_START +0 EMPTY 4 {
 	}	
-
-	RW_m_data 0x20200000 OCRAM_SIZE { ; RW data
-	}
 
 	; <<<
 

@@ -156,7 +156,7 @@ __WEAK void usbdbg_control(void *buffer, uint8_t request, uint32_t length){}
 
 
 static void send_packet(void) {
-    int bytes = MIN(dbg_xfer_length, 64/*CDC_DATA_FS_MAX_PACKET_SIZE*/);
+    int bytes = MIN(dbg_xfer_length, VCP_RINGBLK_SIZE);
     last_packet = bytes;
     usbdbg_data_in(dbg_xfer_buffer, bytes);
     dbg_xfer_length -= bytes;

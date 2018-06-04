@@ -60,6 +60,7 @@ int ALWAYS_INLINE fast_roundf(float x)
     return i;
 }
 #else
+
 #endif
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wstrict-aliasing"

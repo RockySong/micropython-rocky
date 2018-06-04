@@ -1,9 +1,15 @@
 #include "overlay_manager.h"
 
 #ifdef __CC_ARM
+
+
 extern uint32_t Load$$OVERLAY_YUV_TAB$$Base;
 extern uint32_t Load$$OVERLAY_YUV_TAB$$Length;
 extern uint32_t Image$$OVERLAY_YUV_TAB$$Base;
+extern uint32_t Load$$OVERLAY_CODE_JPEG$$Base;
+extern uint32_t Load$$OVERLAY_CODE_JPEG$$Length;
+extern uint32_t Image$$OVERLAY_CODE_JPEG$$Base;
+
 
 extern uint32_t Load$$OVERLAY_LAB_TAB$$Base;
 extern uint32_t Load$$OVERLAY_LAB_TAB$$Length;
@@ -17,9 +23,6 @@ extern uint32_t Load$$OVERLAY_FLASHPGM$$Base;
 extern uint32_t Load$$OVERLAY_FLASHPGM$$Length;
 extern uint32_t Image$$OVERLAY_FLASHPGM$$Base;
 
-extern uint32_t Load$$OVERLAY_CODE_JPEG$$Base;
-extern uint32_t Load$$OVERLAY_CODE_JPEG$$Length;
-extern uint32_t Image$$OVERLAY_CODE_JPEG$$Base;
 
 extern uint32_t Load$$OVERLAY_CODE_BLOB$$Base;
 extern uint32_t Load$$OVERLAY_CODE_BLOB$$Length;
@@ -83,11 +86,9 @@ __asm void OverlayMemCpy(void *pvDst, const void*pvSrc, uint32_t cb) {
 	bics	r2,	r2,	#31
 	beq		%f40
 30
-	subs	r2,	r2, #16
-	ldm		r1!, {r3,r4}
-	ldm		r1!, {r5,r6}
-	stm		r0!, {r3,r4}
-	stm		r0!, {r5,r6}
+	ldrd	r3, r4, [r1], #8
+	subs	r2,	r2, #8
+	strd	r3, r4, [r0], #8
 	// str		r3,	[r0], #4
 	//ldm		r1!, {r3-r6}
 	//stm		r0!, {r3-r6}
@@ -98,7 +99,9 @@ __asm void OverlayMemCpy(void *pvDst, const void*pvSrc, uint32_t cb) {
 	pop		{r4-r10, pc}
 	
 }
-
+#if 0
+int OverlaySwitch(uint8_t ovlyNdx) {return 0;}
+#else
 int OverlaySwitch(uint8_t ovlyNdx) {
 	if (s_curOvly == ovlyNdx)
 		return ovlyNdx;
@@ -132,8 +135,10 @@ int OverlaySwitch(uint8_t ovlyNdx) {
 	
 	return ovlyNdxBkup;
 }
+#endif
 #else
-int OverlaySwitch(uint8_t ovlyNdx) {return 0;}
+int OverlaySwitch(uint8_t ovlyNdx) {return 0;}
+
 #if 0
 int OverlaySwitch(uint8_t ovlyNdx) {
 	if (s_curOvly == ovlyNdx)

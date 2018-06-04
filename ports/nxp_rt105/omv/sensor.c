@@ -37,6 +37,7 @@
 #define ON_CHIP_ID      (0x00)
 #define MAX_XFER_SIZE (0xFFFC)
 #define OV7725_I2C LPI2C1
+// #define LCD_MONITOR
 /* LCD definition. */
 #define APP_ELCDIF LCDIF
 
@@ -627,7 +628,7 @@ void CsiFragModeCalc(void) {
 	
 	s_irq.dmaBytePerFrag = s_irq.dmaBytePerLine * s_irq.linePerFrag;
 	s_irq.datBytePerFrag = s_irq.datBytePerLine * s_irq.linePerFrag;
-	#if 1 // #ifdef __CC_ARM
+	#ifdef LCD_MONITOR // #ifdef __CC_ARM
 	LCDMonitor_InitFB();
 	#endif
 }
@@ -786,7 +787,7 @@ int sensor_init()
     */
     CAMERA_RECEIVER_Init(&cameraReceiver, &cameraConfig, NULL, NULL);
 	#endif
-	#if 1 // #ifdef __CC_ARM
+	#ifdef LCD_MONITOR // #ifdef __CC_ARM
 	LCDMonitor_Init();
 	#endif
 	CAMERA_TAKE_SNAPSHOT();	
@@ -1430,7 +1431,7 @@ int sensor_snapshot(image_t *pImg, void *pv1, void *pv2)
 			t2 = HAL_GetTick() - t1;
 			t2 = t2;
 		}
-		#if 1 // #ifdef __CC_ARM
+		#ifdef LCD_MONITOR // #ifdef __CC_ARM
 		LCDMonitor_Update(n);
 		#endif
 		#if 1

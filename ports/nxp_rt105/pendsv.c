@@ -55,7 +55,12 @@ void pendsv_init(void) {
 // thread.
 void pendsv_kbd_intr(void) {
     if (MP_STATE_VM(mp_pending_exception) == MP_OBJ_NULL) {
-        mp_keyboard_interrupt();
+		MP_STATE_VM(mp_pending_exception) = MP_OBJ_FROM_PTR(&MP_STATE_VM(mp_kbd_exception));
+		#if MICROPY_ENABLE_SCHEDULER
+		if (MP_STATE_VM(sched_state) == MP_SCHED_IDLE) {
+			MP_STATE_VM(sched_state) = MP_SCHED_PENDING;
+		}
+		#endif
     } else {
         MP_STATE_VM(mp_pending_exception) = MP_OBJ_NULL;
         pendsv_object = &MP_STATE_VM(mp_kbd_exception);
@@ -63,6 +68,20 @@ void pendsv_kbd_intr(void) {
     }
 }
 
+void pendsv_intr(void *pException) {
+    if (MP_STATE_VM(mp_pending_exception) == MP_OBJ_NULL) {
+		MP_STATE_VM(mp_pending_exception) = MP_OBJ_FROM_PTR(&pException);
+		#if MICROPY_ENABLE_SCHEDULER
+		if (MP_STATE_VM(sched_state) == MP_SCHED_IDLE) {
+			MP_STATE_VM(sched_state) = MP_SCHED_PENDING;
+		}
+		#endif
+    } else {
+        MP_STATE_VM(mp_pending_exception) = MP_OBJ_NULL;
+        pendsv_object = &MP_STATE_VM(mp_kbd_exception);
+        SCB->ICSR = SCB_ICSR_PENDSVSET_Msk;
+    }
+}
 
 // Call this function to raise a pending exception during an interrupt.
 // It will first try to raise the exception "softly" by setting the
