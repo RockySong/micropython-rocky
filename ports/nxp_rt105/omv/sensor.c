@@ -37,7 +37,7 @@
 #define ON_CHIP_ID      (0x00)
 #define MAX_XFER_SIZE (0xFFFC)
 #define OV7725_I2C LPI2C1
-// #define LCD_MONITOR
+#define LCD_MONITOR
 /* LCD definition. */
 #define APP_ELCDIF LCDIF
 
