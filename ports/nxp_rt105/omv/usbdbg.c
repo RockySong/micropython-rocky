@@ -401,9 +401,15 @@ void usbdbg_control(void *buffer, uint8_t request, uint32_t length)
     }
 }
 
-void usbdbg_disconnect(void)
+void usbdbg_connect(void)
 {
+	// slow down the sensor to avoid tearing effect, when executing from FlexSPI
+	// sensor_set_framerate(2<<9 | 2<<11);
+}
+void usbdbg_disconnect(void) {
 	JPEG_FB()->enabled = 0;
 	mutex_unlock(&JPEG_FB()->lock, MUTEX_TID_IDE);
+	// sensor_set_framerate(2<<9 | 1<<11);
 }
+
 

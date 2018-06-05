@@ -30,7 +30,37 @@
 #if MICROPY_PY_BUILTINS_FLOAT && MICROPY_PY_MATH
 
 #include <math.h>
-
+// >>> can be used with openMV
+#include "fmath.h"
+#define sqrt(x) fast_sqrtf(x)
+#define sqrtf(x) fast_sqrtf(x)
+#define floor(x) fast_floorf(x)
+#define floorf(x) fast_floorf(x)
+#define ceil(x) fast_ceilf(x)
+#define ceilf(x) fast_ceilf(x)
+#define round(x) fast_roundf(x)
+#define roundf(x) fast_roundf(x)
+#define atan(x) fast_atanf(x)
+#define atanf(x) fast_atanf(x)
+#define atan2(y, x) fast_atan2f((y), (x))
+#define atan2f(y, x) fast_atan2f((y), (x))
+#define exp(x) fast_expf(x)
+#define expf(x) fast_expf(x)
+#define cbrt(x) fast_cbrtf(x)
+#define cbrtf(x) fast_cbrtf(x)
+#define fabs(x) fast_fabsf(x)
+#define fabsf(x) fast_fabsf(x)
+#define log(x) fast_log(x)
+#define logf(x) fast_log(x)
+#undef log2
+#define log2(x) fast_log2(x)
+#undef log2f
+#define log2f(x) fast_log2(x)
+#define cos(x) cosf(x)
+#define sin(x) sinf(x)
+#define acos(x) acosf(x)
+#define asin(x) asinf(x)
+// <<<
 // M_PI is not part of the math.h standard and may not be defined
 // And by defining our own we can ensure it uses the correct const format.
 #define MP_PI MICROPY_FLOAT_CONST(3.14159265358979323846)

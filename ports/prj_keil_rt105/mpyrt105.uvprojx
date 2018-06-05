@@ -5918,30 +5918,6 @@
               <FileType>1</FileType>
               <FilePath>..\nxp_rt105\omv\py\py_sensor.c</FilePath>
             </File>
-            <File>
-              <FileName>fmath_gcc.o</FileName>
-              <FileType>3</FileType>
-              <FilePath>..\nxp_rt105\omv\img\fmath_gcc.o</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>0</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds/>
-              </FileOption>
-            </File>
           </Files>
         </Group>
         <Group>
@@ -6580,7 +6556,7 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls>--diag_suppress=1,39,61,66,68,111,546,188,1035,144,1211,1295,1296 --no_inline</MiscControls>
-              <Define>XIP_EXTERNAL_FLASH,USB_DEVICE_CONFIG_BUFFER_PROPERTY_CACHEABLE=1,ARM_MATH_CM7,N_THUMB,NDEBUG,CPU_MIMXRT1052DVL6A,MCU_SERIES_RT105,USB_STACK_BM,__BYTE_ORDER__=__ORDER_LITTLE_ENDIAN__,MICROPY_QSTR_EXTRA_POOL=mp_qstr_frozen_const_pool,MICROPY_MODULE_FROZEN_MPY,FFCONF_H='\"oofatfs/ffconf.h\"',HARD_FP,FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL=1</Define>
+              <Define>XIP_EXTERNAL_FLASH,ARM_MATH_CM7,N_THUMB,NDEBUG,CPU_MIMXRT1052DVL6A,MCU_SERIES_RT105,USB_STACK_BM,__BYTE_ORDER__=__ORDER_LITTLE_ENDIAN__,MICROPY_QSTR_EXTRA_POOL=mp_qstr_frozen_const_pool,MICROPY_MODULE_FROZEN_MPY,FFCONF_H='\"oofatfs/ffconf.h\"',HARD_FP,FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL=1</Define>
               <Undefine></Undefine>
               <IncludePath>..\..\;..\..\py;..\..\extmod;..\..\lib;..\..\lib\cmsis\inc;..\nxp_rt105;..\nxp_rt105\boards\imxrtevk105x;..\nxp_rt105\mcusdk\;..\nxp_rt105\mcusdk\drivers;..\nxp_rt105\mcusdk\utilities;..\nxp_rt105\cmsis;..\nxp_rt105\build-imxrtevk105x;..\nxp_rt105\usb_cdc_msc;..\nxp_rt105\mcusdk\middleware\sdkusb\include;..\nxp_rt105\mcusdk\middleware\sdkusb\osa;..\nxp_rt105\mcusdk\middleware\sdkusb\device;..\nxp_rt105\mcusdk\middleware\sdkusb\phy;..\nxp_rt105\sdmmc;..\nxp_rt105\omv;..\nxp_rt105\omv\py;..\nxp_rt105\omv\img;..\..\lib\oofatfs;..\..\lib\mp-readline</IncludePath>
             </VariousControls>
@@ -12163,11 +12139,6 @@
               <FileName>py_sensor.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\nxp_rt105\omv\py\py_sensor.c</FilePath>
-            </File>
-            <File>
-              <FileName>fmath_gcc.o</FileName>
-              <FileType>3</FileType>
-              <FilePath>..\nxp_rt105\omv\img\fmath_gcc.o</FilePath>
             </File>
           </Files>
         </Group>

@@ -59,6 +59,7 @@ typedef enum {
     FRAMERATE_15FPS=0x83,
     FRAMERATE_30FPS=0x81,
     FRAMERATE_60FPS=0x80,
+	FRAMERATE_HWREG = 0x80000000,
 } framerate_t;
 
 typedef enum {
@@ -108,7 +109,7 @@ typedef struct _sensor {
     uint32_t vsync_pin;
     int fb_w, fb_h;             // Backup for MAIN_FB().
     uint16_t wndX, wndY, wndW, wndH;
-	uint8_t isWwindowing;
+	uint8_t isWindowing;
 
     // Line pre-processing function and args
     void *line_filter_args;

@@ -34,7 +34,7 @@
 #include "py/runtime.h"
 #include "py/mphal.h"
 #include "py/misc.h"
-
+#include "irq.h"
 #include "usb_device_config.h"
 #include "usb.h"
 #include "usb_device.h"
@@ -290,9 +290,9 @@ void USB_DeviceIsrEnable(void)
 #endif
 /* Install isr, set priority, and enable IRQ. */
 #if defined(__GIC_PRIO_BITS)
-    GIC_SetPriority((IRQn_Type)irqNumber, USB_DEVICE_INTERRUPT_PRIORITY);
+    GIC_SetPriority((IRQn_Type)irqNumber, IRQ_PRI_USB_OTG1);
 #else
-    NVIC_SetPriority((IRQn_Type)irqNumber, USB_DEVICE_INTERRUPT_PRIORITY);
+    NVIC_SetPriority((IRQn_Type)irqNumber, IRQ_PRI_USB_OTG1);
 #endif
     EnableIRQ((IRQn_Type)irqNumber);
 }

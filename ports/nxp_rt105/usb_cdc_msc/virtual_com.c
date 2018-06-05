@@ -182,6 +182,7 @@ void CheckOpenMVIDEConnect(void) {
 		RingBlk_Init(&s_omvRB, s_omvTxBuf[0], VCP_RINGBLK_SIZE, sizeof(s_omvTxBuf) / VCP_RINGBLK_SIZE);
 		g_isUsbHostOpen = 1;
 		dbg_xfer_length = 0;
+		usbdbg_connect();
 		// UserTxBufPtrIn = UserTxBufPtrOut = UserTxBufPtrOutShadow = 0;
 	} else {
 		debug_mode = 0;
@@ -206,6 +207,7 @@ void CheckOpenMVIDEConnect(void) {
 
 USB_ALIGN static uint8_t s_hsRx[VCP_RINGBLK_SIZE];
 #endif
+
 usb_status_t USB_DeviceCdcVcomCallback(class_handle_t handle, uint32_t event, void *param)
 {
     usb_status_t error = kStatus_USB_Error;
@@ -465,6 +467,8 @@ usb_status_t USB_DeviceCdcVcomCallback(class_handle_t handle, uint32_t event, vo
             {
                 /*  To do: CARRIER_ACTIVATED */
 				usbdbg_disconnect();
+				g_isUsbHostOpen = 0;
+				debug_mode = 0;
             }
             else
             {

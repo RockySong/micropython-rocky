@@ -229,13 +229,8 @@ loop:   SWAPINIT(a, es);
 #define DBL_MAX FLT_MAX
 #define sqrt(x) fast_sqrtf(x)
 #define sqrtf(x) fast_sqrtf(x)
-
-#ifndef __CC_ARM
 #define floorf(x) fast_floorf(x)
 #define roundf(x) fast_roundf(x)
-
-#endif
-
 #define floor(x) fast_floorf(x)
 #define ceil(x) fast_ceilf(x)
 #define ceilf(x) fast_ceilf(x)

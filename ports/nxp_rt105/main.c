@@ -526,7 +526,7 @@ STATIC uint update_reset_mode(uint reset_mode) {
 #endif
     return reset_mode;
 }
-
+#include "irq.h"
 HAL_StatusTypeDef HAL_Init(void)
 {
     BOARD_ConfigMPU();
@@ -538,7 +538,7 @@ HAL_StatusTypeDef HAL_Init(void)
 	NVIC_SetPriorityGrouping(3);
 	
 	/* Use systick as time base source and configure 1ms tick (default clock after Reset is HSI) */
-	HAL_InitTick(1);
+	HAL_InitTick(IRQ_PRI_SYSTICK);
 
 	#if 0 // #ifdef XIP_EXTERNAL_FLASH
 	uint32_t wait;

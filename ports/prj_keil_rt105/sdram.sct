@@ -54,9 +54,11 @@ LR_XIP_FLASH ROM_BASE + 0x2000 {
 		// obj.o objarray.o objfloat.o objlist.o objobject.o  (+RO)
 		// objfun.o  nativeglue.o malloc.o (+RO)	
 		// objdict.o  modmath.o modarray.o modbuiltins.o modmicropython.o map.o (+RO)
+		/*
 		acos*.o asin*.o atan*.o ceil*.o cos*.o erf*.o expf*.o expm*.o floor*.o fmod*.o (+RO)
 		frexp*.o ldex*.o lgamma*.o log*.o modff.o nanf.o nearbyintf.o powf.o roundf.o (+RO)
 		sin*.o sqrt*.o tan*.o tgammaf*.o trunc*.o dunder.o funder.o (+RO)
+		*/
 		* (.ram_code)
 	}
 	

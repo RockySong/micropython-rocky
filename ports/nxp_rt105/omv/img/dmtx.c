@@ -36,9 +36,7 @@
 #define ceil(x) fast_ceilf(x)
 #define ceilf(x) fast_ceilf(x)
 #define round(x) fast_roundf(x)
-#ifndef __CC_ARM
 #define roundf(x) fast_roundf(x)
-#endif
 #define atan(x) fast_atanf(x)
 #define atanf(x) fast_atanf(x)
 #define atan2(y, x) fast_atan2f((y), (x))

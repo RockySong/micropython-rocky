@@ -178,6 +178,8 @@ __asm unsigned int nlr_jump_asm(nlr_buf_t *nlr)
     ldr    r13, [r0, #44]       // load r13=sp from nlr_buf
     ldr    lr, [r0, #8]         // load lr from nlr_buf
 #endif
+	mov	   r0,	#0x01000000
+	msr	   xpsr, r0
     movs   r0, #1               // return 1, non-local return
     bx     lr                   // return	
 }
@@ -211,6 +213,8 @@ __attribute__((naked)) unsigned int nlr_jump_asm(nlr_buf_t *nlr)
     "ldr    r13, [r0, #44]      \n" // load r13=sp from nlr_buf
     "ldr    lr, [r0, #8]        \n" // load lr from nlr_buf
 #endif
+	"mov	r0, #0x01000000		\n"
+	"msr	xpsr, r0			\n"
     "movs   r0, #1              \n" // return 1, non-local return
     "bx     lr                  \n" // return                 // return	
 	);

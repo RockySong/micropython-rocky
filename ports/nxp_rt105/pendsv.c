@@ -142,9 +142,13 @@ __asm void PendSV_Handler(void) {
     //   sp[0]: ?
 		IMPORT	pendsv_object
 		IMPORT	nlr_jump
+
+		mov	r2,	#0x01000000
+		str r2, [sp, #28]    // reset XPSR, as pendSV may interrupt LDM/STM instructions who saves progress to XPSR
+
 #if MICROPY_PY_THREAD
-        ldr r1, =pendsv_object
-        ldr r0, [r1]
+        ldr r0, =pendsv_object
+        ldr r0, [r0]
         cmp r0, 0
         beq no_obj
         str r0, [sp, #0]            // store to r0 on stack
@@ -184,14 +188,6 @@ no_obj                    // pendsv_object==NULL
 #else
         str r0, [sp, #24]
 #endif
-
-		ldr	r3,	[sp, #28]
-		mov	r1,	#1<<24
-		ands	r3, r3,	r1
-		cmp		r3,	r1
-		beq		%f10
-		b		.
-10
         bx lr
 #endif
 
@@ -235,6 +231,8 @@ __attribute__((naked)) void PendSV_Handler(void) {
 
 #if MICROPY_PY_THREAD
     __asm volatile (
+		"mov r2,	#0x01000000 \n"
+		"str r2, [sp, #28]      \n"    // modify stacked XPSR to make sure possible LDM/STM progress is cleared
         "ldr r1, pendsv_object_ptr\n"
         "ldr r0, [r1]\n"
         "cmp r0, 0\n"

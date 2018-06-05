@@ -31,10 +31,12 @@
 
 #include "ring_buffer.h"
 #include "fsl_common.h"
+#include "py/obj.h"
+#include "irq.h"
 #ifdef RINGBUF_IRQ_SAFE
-#define INIT_CRITICAL_RBF() uint32_t priMask = __get_PRIMASK()
-#define ENTER_CRITICAL_RBF() __set_PRIMASK(1)
-#define LEAVE_CRITICAL_RBF() __set_PRIMASK(priMask)
+#define INIT_CRITICAL_RBF() uint32_t basePri = __get_BASEPRI()
+#define ENTER_CRITICAL_RBF() __set_BASEPRI(IRQ_PRI_CSI + 1)
+#define LEAVE_CRITICAL_RBF() __set_BASEPRI(basePri)
 #else
 #define INIT_CRITICAL_RBF()
 #define ENTER_CRITICAL_RBF()

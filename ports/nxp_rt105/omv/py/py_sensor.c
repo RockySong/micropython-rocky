@@ -228,7 +228,8 @@ static mp_obj_t py_sensor_set_framerate(mp_obj_t framerate) {
             fr = FRAMERATE_60FPS;
             break;
         default:
-            nlr_raise(mp_obj_new_exception_msg(&mp_type_ValueError, "Invalid framerate"));
+			fr = mp_obj_get_int(framerate) | 0x80000000;	// encoding of CCM->CSCDR3 register
+//            nlr_raise(mp_obj_new_exception_msg(&mp_type_ValueError, "Invalid framerate"));
             break;
     }
 

@@ -231,7 +231,7 @@ status_t sdcard_init(void) {
 
     status_t error = kStatus_Success;
 
-    NVIC_SetPriority(SD_HOST_IRQ, (USB_DEVICE_INTERRUPT_PRIORITY - 1U));
+    NVIC_SetPriority(SD_HOST_IRQ, IRQ_PRI_SDIO);
     g_sd.host.base = SD_HOST_BASEADDR;
     g_sd.host.sourceClock_Hz = SD_HOST_CLK_FREQ;
 	g_sd.usrParam.cd = &s_sdCardDetect;
