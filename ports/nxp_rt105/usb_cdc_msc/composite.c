@@ -248,7 +248,7 @@ void USB_OTG1_IRQHandler(void)
     USB_DeviceEhciIsrFunction(g_composite.deviceHandle);
     /* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
     exception return operation might vector to incorrect interrupt */
-    __DSB();
+    // __DSB();
 }
 #endif
 #if (defined(USB_DEVICE_CONFIG_EHCI) && (USB_DEVICE_CONFIG_EHCI > 0U))
@@ -257,7 +257,7 @@ void USB_OTG2_IRQHandler(void)
     USB_DeviceEhciIsrFunction(g_composite.deviceHandle);
     /* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
     exception return operation might vector to incorrect interrupt */
-    __DSB();
+    // __DSB();
 }
 #endif
 

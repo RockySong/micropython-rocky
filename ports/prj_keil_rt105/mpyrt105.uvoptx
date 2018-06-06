@@ -75,7 +75,7 @@
       <OPTFL>
         <tvExp>1</tvExp>
         <tvExpOptDlg>0</tvExpOptDlg>
-        <IsCurrentTarget>1</IsCurrentTarget>
+        <IsCurrentTarget>0</IsCurrentTarget>
       </OPTFL>
       <CpuCode>8</CpuCode>
       <DebugOpt>
@@ -118,7 +118,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGUARM</Key>
-          <Name>l龅</Name>
+          <Name>舔|</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -143,7 +143,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGTARM</Key>
-          <Name>(1010=1802,327,2252,884,1)(6017=143,234,332,570,0)(1008=798,238,1174,474,0)(6016=1354,453,1612,1106,0)(1012=1501,0,1978,315,0)</Name>
+          <Name>(1010=1802,327,2252,884,0)(6017=143,234,332,570,0)(1008=798,238,1174,474,0)(6016=1354,453,1612,1106,0)(1012=1501,0,1978,315,0)</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -281,7 +281,7 @@
         <Mm>
           <WinNumber>2</WinNumber>
           <SubType>2</SubType>
-          <ItemText>SP</ItemText>
+          <ItemText>s_prof.items</ItemText>
           <AccSizeX>0</AccSizeX>
         </Mm>
       </MemoryWindow2>
@@ -386,7 +386,7 @@
       <OPTFL>
         <tvExp>1</tvExp>
         <tvExpOptDlg>0</tvExpOptDlg>
-        <IsCurrentTarget>0</IsCurrentTarget>
+        <IsCurrentTarget>1</IsCurrentTarget>
       </OPTFL>
       <CpuCode>8</CpuCode>
       <DebugOpt>
@@ -454,7 +454,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGTARM</Key>
-          <Name>(1010=934,185,1384,742,1)(6017=105,137,294,473,0)(1008=89,129,465,365,0)(6016=1078,313,1336,966,0)(1012=1960,0,2437,315,1)</Name>
+          <Name>(1010=934,185,1384,742,0)(6017=105,137,294,473,0)(1008=89,129,465,365,0)(6016=1078,313,1336,966,0)(1012=1960,0,2437,315,0)</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -5717,7 +5717,7 @@
       <GroupNumber>12</GroupNumber>
       <FileNumber>418</FileNumber>
       <FileType>1</FileType>
-      <tvExp>0</tvExp>
+      <tvExp>1</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\nxp_rt105\usb_cdc_msc\virtual_com.c</PathWithFileName>

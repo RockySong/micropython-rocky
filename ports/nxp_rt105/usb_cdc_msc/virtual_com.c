@@ -218,6 +218,10 @@ usb_status_t USB_DeviceCdcVcomCallback(class_handle_t handle, uint32_t event, vo
     usb_device_endpoint_callback_message_struct_t *epCbParam;
     acmReqParam = (usb_device_cdc_acm_request_param_struct_t *)param;
     epCbParam = (usb_device_endpoint_callback_message_struct_t *)param;
+	/* test irq latency impact to other IRQs, shows it has no effect to higher priority irqs
+	volatile uint32_t delay;
+	for (delay=0; delay<10000; delay++) {}
+	*/
     switch (event)
     {
         case kUSB_DeviceCdcEventSendResponse:
