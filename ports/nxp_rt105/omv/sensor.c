@@ -705,9 +705,12 @@ CAMERA_RECEIVER_Start(&cameraReceiver);  \
 	while (0 == s_isOmvSensorSnapshotReady) {} \
 	s_isOmvSensorSnapshotReady = 0; \
 	}while(0)
-
+volatile uint8_t s_isEnUsbIrqForSnapshot;
 int sensor_init()
 {   
+	#ifndef XIP_EXTERNAL_FLASH
+	s_isEnUsbIrqForSnapshot = 1;
+	#endif
     cambus_init();
 	memset(&sensor, 0, sizeof(sensor));
 	s_irq.base0 = (uint32_t)(MAIN_FB()->pixels);
@@ -1437,7 +1440,7 @@ void PreprocessOneLine(uint32_t addr, int line)
 // The JPEG offset allows JPEG compression of the framebuffer without overwriting the pixels.
 // The offset size may need to be adjusted depending on the quality, otherwise JPEG data may
 // overwrite image pixels before they are compressed.
-volatile uint8_t s_isEnUsbIrqForSnapshot;
+
 int sensor_snapshot(image_t *pImg, void *pv1, void *pv2)
 {
  //   uint32_t activeADDR;//, length;

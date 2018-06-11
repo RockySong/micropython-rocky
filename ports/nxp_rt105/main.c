@@ -561,7 +561,7 @@ HAL_StatusTypeDef HAL_Init(void)
 
 #if defined(__CC_ARM)
 	#define STACK_SIZE	(0x2000)
-	uint32_t  _ram_start = 0x20000000, _ram_end = DTCM_END, _estack = 0x20000000 + STACK_SIZE, _heap_end = DTCM_END;
+	uint32_t  _ram_start = 0x20000000, _ram_end = DTCM_END, _estack = 0x4000 + STACK_SIZE, _heap_end = DTCM_END;
 	extern unsigned int Image$$MPY_HEAP_START$$Base;
 	uint32_t _heap_start = (uint32_t) &Image$$MPY_HEAP_START$$Base;
 #elif defined(__ICCARM__)
@@ -621,7 +621,6 @@ extern int OpenMV_Main(uint32_t first_soft_reset);
 int main(void) {
 	int retCode = 0;
     // TODO disable JTAG
-
     /* STM32F4xx HAL library initialization:
          - Configure the Flash prefetch, instruction and Data caches
          - Configure the Systick to generate an interrupt each 1 msec

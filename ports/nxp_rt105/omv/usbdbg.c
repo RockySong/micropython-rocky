@@ -193,7 +193,7 @@ void usbdbg_data_in(void *buffer, int length)
 }
 
 extern int py_image_descriptor_from_roi(image_t *image, const char *path, rectangle_t *roi);
-
+extern void ProfReset(void);
 void usbdbg_data_out(void *buffer, int length)
 {
     switch (cmd) {
@@ -219,6 +219,8 @@ void usbdbg_data_out(void *buffer, int length)
                     // Interrupt running REPL
                     // Note: setting pendsv explicitly here because the VM is probably
                     // waiting in REPL and the soft interrupt flag will not be checked.
+                    PRINTF("nlr jumping to execute script\r\n");
+					ProfReset();
                     pendsv_nlr_jump_hard(mp_const_ide_interrupt);
 					#else
 					

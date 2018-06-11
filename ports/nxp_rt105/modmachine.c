@@ -78,8 +78,10 @@ void machine_init(void) {
 
 // machine.info([dump_alloc_table])
 // Print out lots of information about the board.
+extern void ProfUpdateRate(float res);
 STATIC mp_obj_t machine_info(mp_uint_t n_args, const mp_obj_t *args) {
     // get and print unique id; 96 bits
+    ProfUpdateRate(1000);
     {
         byte *id = (byte*)0x1234;;
         printf("ID=%02x%02x%02x%02x:%02x%02x%02x%02x:%02x%02x%02x%02x\n", id[0], id[1], id[2], id[3], id[4], id[5], id[6], id[7], id[8], id[9], id[10], id[11]);

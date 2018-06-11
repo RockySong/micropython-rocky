@@ -5245,8 +5245,8 @@
             <GroupArmAds>
               <Cads>
                 <interw>2</interw>
-                <Optim>4</Optim>
-                <oTime>1</oTime>
+                <Optim>3</Optim>
+                <oTime>2</oTime>
                 <SplitLS>2</SplitLS>
                 <OneElfS>2</OneElfS>
                 <Strict>2</Strict>
@@ -5526,8 +5526,8 @@
             <GroupArmAds>
               <Cads>
                 <interw>2</interw>
-                <Optim>4</Optim>
-                <oTime>1</oTime>
+                <Optim>3</Optim>
+                <oTime>2</oTime>
                 <SplitLS>2</SplitLS>
                 <OneElfS>2</OneElfS>
                 <Strict>2</Strict>

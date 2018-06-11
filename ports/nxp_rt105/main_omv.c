@@ -201,7 +201,7 @@ FRESULT exec_boot_script(const char *path, bool selftest, bool interruptible)
 
     return f_res;
 }
-
+extern void ProfReset(void);
 __WEAK int OverlaySwitch(uint8_t ovlyNdx) {return 0;}
 __WEAK int OverlaySetToDefault(void) {return 0;}
 
@@ -320,5 +320,6 @@ int OpenMV_Main(uint32_t first_soft_reset)
 //    timer_deinit();
 //    uart_deinit();
 //    can_deinit();
+	ProfReset();
 	return ret;
 }

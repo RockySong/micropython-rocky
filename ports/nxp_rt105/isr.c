@@ -423,9 +423,9 @@ uint32_t s_prescale;
 #ifdef PROFILING
 
 #define PROF_CNT		20
-#define PROF_ERR		64
+#define PROF_ERR		16
 #define PROF_MASK 		(~(PROF_ERR - 1))
-#define PROF_HITCNT_INC	20
+#define PROF_HITCNT_INC	100
 // whether hitCnt should decay, faster decay makes most time consuming functions
 // seems to have even more hit count
 #define PROF_DECAY	
@@ -506,16 +506,18 @@ void Profiling(uint32_t pc)
 			freeNdx = i;
 		}
 	}
-	if (i == PROF_CNT && freeNdx < PROF_CNT) {
-		// does not find, allocate for new
-		_ProfOnHit(s_prof.items + freeNdx, pc);
-	} else {
-	  // replace the last one. We must give new samples chance to compete to
-	  // get into the list.
-	  freeNdx = PROF_CNT - 1;
-	  s_prof.profCnt -= s_prof.items[freeNdx].hitCnt;
-	  s_prof.items[freeNdx].hitCnt = 0;
-	  _ProfOnHit(s_prof.items + freeNdx, pc);
+	if (i == PROF_CNT) {
+		if (freeNdx < PROF_CNT) {
+			// does not find, allocate for new
+			_ProfOnHit(s_prof.items + freeNdx, pc);
+		} else {
+		  // replace the last one. We must give new samples chance to compete to
+		  // get into the list.
+		  freeNdx = PROF_CNT - 1;
+		  s_prof.profCnt -= s_prof.items[freeNdx].hitCnt;
+		  s_prof.items[freeNdx].hitCnt = 0;
+		  _ProfOnHit(s_prof.items + freeNdx, pc);
+		}
 	}
 }
 #endif
