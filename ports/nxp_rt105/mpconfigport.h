@@ -192,6 +192,7 @@ extern const struct _mp_obj_module_t mp_module_network;
 extern const struct _mp_obj_module_t time_module;
 extern const struct _mp_obj_module_t sensor_module;
 extern const struct _mp_obj_module_t image_module;
+extern const struct _mp_obj_module_t mjpeg_module;
 #if MICROPY_PY_USOCKET
 #define SOCKET_BUILTIN_MODULE               { MP_OBJ_NEW_QSTR(MP_QSTR_usocket), (mp_obj_t)&mp_module_usocket },
 #define SOCKET_BUILTIN_MODULE_WEAK_LINKS    { MP_OBJ_NEW_QSTR(MP_QSTR_socket), (mp_obj_t)&mp_module_usocket },
@@ -224,6 +225,7 @@ extern const struct _mp_obj_module_t image_module;
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_time), (mp_obj_t)&time_module }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_sensor),  (mp_obj_t)&sensor_module }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_image),  (mp_obj_t)&image_module }, \
+	{ MP_OBJ_NEW_QSTR(MP_QSTR_mjpeg),  (mp_obj_t)&mjpeg_module }, \
 	SOCKET_BUILTIN_MODULE \
 	NETWORK_BUILTIN_MODULE
 #endif

@@ -1437,6 +1437,7 @@ void PreprocessOneLine(uint32_t addr, int line)
 // The JPEG offset allows JPEG compression of the framebuffer without overwriting the pixels.
 // The offset size may need to be adjusted depending on the quality, otherwise JPEG data may
 // overwrite image pixels before they are compressed.
+volatile uint8_t s_isEnUsbIrqForSnapshot;
 int sensor_snapshot(image_t *pImg, void *pv1, void *pv2)
 {
  //   uint32_t activeADDR;//, length;
@@ -1475,10 +1476,13 @@ int sensor_snapshot(image_t *pImg, void *pv1, void *pv2)
 		LCDMonitor_Update(n);
 		#endif
 		#if 1
+		
 		CAMERA_TAKE_SNAPSHOT();
-		NVIC_DisableIRQ(USB_OTG1_IRQn);
+		if (!s_isEnUsbIrqForSnapshot)
+			NVIC_DisableIRQ(USB_OTG1_IRQn);
 		CAMERA_WAIT_FOR_SNAPSHOT();
-		NVIC_EnableIRQ(USB_OTG1_IRQn);
+		if (!s_isEnUsbIrqForSnapshot)
+			NVIC_EnableIRQ(USB_OTG1_IRQn);
 		#else
 		/*
 		uint32_t i;
