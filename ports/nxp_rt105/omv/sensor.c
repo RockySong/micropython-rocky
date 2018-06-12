@@ -403,18 +403,10 @@ CSI_Type *s_pCSI = CSI;
 //				 			8bit | PixRisEdge | gatedClk  | SyncClrFifo| HSyncActHigh|SofOnVsyncRis|ExtVSync
 #define CSICR1_INIT_VAL 	0<<0 | 1<<1	      | 1<<4	  | 1<<8	   | 1<<11		 | 1<<17	   |1<<30   
 
-
-typedef enum {
-	csiirq_wantVSync,
-	csiirq_wantDma1,
-	csiirq_wantDma2,
-}enum_csiIrqSt;
-
 uint64_t s_dmaFragBufs[2][640 * 2 / 8];	// max supported line length
 
 typedef struct _CSIIrq_t
 {
-	enum_csiIrqSt st;
 	uint8_t isStarted;
 	uint8_t isGray;
 	uint32_t base0;
@@ -516,7 +508,6 @@ RAM_CODE void CSI_IRQHandler(void) {
 
 	if (csisr & (1<<16)) {
 		// VSync
-		s_irq.st = csiirq_wantDma1;
 		//               SOF    | FB1    | FB2    irqEn
 		s_pCSI->CSICR1 = 1U<<16 | 1U<<19 | 1U<<20 | CSICR1_INIT_VAL;
 		//				 16 doubleWords| RxFifoDmaReqEn| ReflashRFF|ResetFrmCnt
@@ -584,7 +575,6 @@ void CsiFragModeInit(void) {
 
 	s_pCSI->CSICR18 = 13<<12 | 1<<18;	// HProt AHB bus protocol, write to memory when CSI_ENABLE is 1
 
-	s_irq.st = csiirq_wantVSync;
 	NVIC_SetPriority(CSI_IRQn, IRQ_PRI_CSI);
 }
 
@@ -660,14 +650,7 @@ void CsiFragModeCalc(void) {
 void CsiFragModeStartNewFrame(void) {
 	CsiFragModeCalc();
 	s_irq.dmaFragNdx = 0;
-	/*
-	if (s_irq.linePerFrag != 1) {
-		sensor.isWindowing = 0;
-		sensor.wndH = sensor.fb_h;
-		sensor.wndW = sensor.fb_w;
-		sensor.wndX = sensor.wndY = 0;
-	}
-	*/
+
 	if (s_irq.isGray || sensor.isWindowing) {
 		s_pCSI->CSIDMASA_FB1 = (uint32_t) s_dmaFragBufs[0];
 		s_pCSI->CSIDMASA_FB2 = (uint32_t) s_dmaFragBufs[1];
@@ -1502,7 +1485,6 @@ int sensor_snapshot(image_t *pImg, void *pv1, void *pv2)
 			}
 		}
 		*/
-		s_irq.st = csiirq_wantVSync;
 		s_irq.nextDmaBulk = 0;
 		s_pCSI->CSICR18 |= CSI_CSICR18_CSI_ENABLE_MASK;
 		#endif
