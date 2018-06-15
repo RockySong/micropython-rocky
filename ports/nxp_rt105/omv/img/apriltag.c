@@ -7,6 +7,7 @@
 #include <stdarg.h>
 #include "imlib.h"
 
+#ifdef IMLIB_ENABLE_APRILTAGS
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-variable"
 
@@ -41,180 +42,6 @@ The views and conclusions contained in the software and documentation are those
 of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of the Regents of The University of Michigan.
 */
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// https://github.com/01org/linux-sgx/blob/master/sdk/tlibc/stdlib/qsort.c
-
-/*-
- * Copyright (c) 1992, 1993
- *      The Regents of the University of California.  All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- * 3. Neither the name of the University nor the names of its contributors
- *    may be used to endorse or promote products derived from this software
- *    without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
- * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
- * SUCH DAMAGE.
- */
-
-static __inline char    *med3(char *, char *, char *, int (*)(const void *, const void *));
-static __inline void     swapfunc(char *, char *, size_t, int);
-
-#define min(a, b)       (a) < (b) ? a : b
-
-/*
- * Qsort routine from Bentley & McIlroy's "Engineering a Sort Function".
- */
-#define swapcode(TYPE, parmi, parmj, n) {               \
-        size_t i = (n) / sizeof (TYPE);                 \
-        TYPE *pi = (TYPE *) (parmi);                    \
-        TYPE *pj = (TYPE *) (parmj);                    \
-        do {                                            \
-                TYPE    t = *pi;                        \
-                *pi++ = *pj;                            \
-                *pj++ = t;                              \
-        } while (--i > 0);                              \
-}
-
-#define SWAPINIT(a, es) swaptype = ((char *)a - (char *)0) % sizeof(long) || \
-        es % sizeof(long) ? 2 : es == sizeof(long)? 0 : 1;
-
-static __inline void
-swapfunc(char *a, char *b, size_t n, int swaptype)
-{
-        if (swaptype <= 1)
-                swapcode(long, a, b, n)
-        else
-                swapcode(char, a, b, n)
-}
-
-#define swap(a, b)                                      \
-        if (swaptype == 0) {                            \
-                long t = *(long *)(a);                  \
-                *(long *)(a) = *(long *)(b);            \
-                *(long *)(b) = t;                       \
-        } else                                          \
-                swapfunc(a, b, es, swaptype)
-
-#define vecswap(a, b, n)        if ((n) > 0) swapfunc(a, b, n, swaptype)
-
-static __inline char *
-med3(char *a, char *b, char *c, int (*cmp)(const void *, const void *))
-{
-        return cmp(a, b) < 0 ?
-               (cmp(b, c) < 0 ? b : (cmp(a, c) < 0 ? c : a ))
-              :(cmp(b, c) > 0 ? b : (cmp(a, c) < 0 ? a : c ));
-}
-
-/* Disable warnings */
-
-void
-qsort(void *aa, size_t n, size_t es, int (*cmp)(const void *, const void *))
-{
-        char *pa, *pb, *pc, *pd, *pl, *pm, *pn;
-        int cmp_result, swaptype, swap_cnt;
-        size_t d, r;
-        char *a = (char *)aa;
-
-loop:   SWAPINIT(a, es);
-        swap_cnt = 0;
-        if (n < 7) {
-                for (pm = (char *)a + es; pm < (char *) a + n * es; pm += es)
-                        for (pl = pm; pl > (char *) a && cmp(pl - es, pl) > 0;
-                             pl -= es)
-                                swap(pl, pl - es);
-                return;
-        }
-        pm = (char *)a + (n / 2) * es;
-        if (n > 7) {
-                pl = (char *)a;
-                pn = (char *)a + (n - 1) * es;
-                if (n > 40) {
-                        d = (n / 8) * es;
-                        pl = med3(pl, pl + d, pl + 2 * d, cmp);
-                        pm = med3(pm - d, pm, pm + d, cmp);
-                        pn = med3(pn - 2 * d, pn - d, pn, cmp);
-                }
-                pm = med3(pl, pm, pn, cmp);
-        }
-        swap(a, pm);
-        pa = pb = (char *)a + es;
-
-        pc = pd = (char *)a + (n - 1) * es;
-        for (;;) {
-                while (pb <= pc && (cmp_result = cmp(pb, a)) <= 0) {
-                        if (cmp_result == 0) {
-                                swap_cnt = 1;
-                                swap(pa, pb);
-                                pa += es;
-                        }
-                        pb += es;
-                }
-                while (pb <= pc && (cmp_result = cmp(pc, a)) >= 0) {
-                        if (cmp_result == 0) {
-                                swap_cnt = 1;
-                                swap(pc, pd);
-                                pd -= es;
-                        }
-                        pc -= es;
-                }
-                if (pb > pc)
-                        break;
-                swap(pb, pc);
-                swap_cnt = 1;
-                pb += es;
-                pc -= es;
-        }
-        if (swap_cnt == 0) {  /* Switch to insertion sort */
-                for (pm = (char *) a + es; pm < (char *) a + n * es; pm += es)
-                        for (pl = pm; pl > (char *) a && cmp(pl - es, pl) > 0;
-                             pl -= es)
-                                swap(pl, pl - es);
-                return;
-        }
-
-        pn = (char *)a + n * es;
-        r = min(pa - (char *)a, pb - pa);
-        vecswap(a, pb - r, r);
-        r = min(pd - pc, pn - pd - es);
-        vecswap(pb, pn - r, r);
-        if ((r = pb - pa) > es)
-                qsort(a, r / es, es, cmp);
-        if ((r = pd - pc) > es) {
-                /* Iterate rather than recurse to save stack space */
-                a = pn - r;
-                n = r / es;
-                goto loop;
-        }
-/*              qsort(pn - r, r / es, es, cmp);*/
-}
-
-#undef min
-#undef swapcode
-#undef SWAPINIT
-#undef swap
-#undef vecswap
-
 #define printf(format, ...)
 #define fprintf(format, ...)
 #define free(ptr) ({ umm_free(ptr); })
@@ -229,12 +56,12 @@ loop:   SWAPINIT(a, es);
 #define DBL_MAX FLT_MAX
 #define sqrt(x) fast_sqrtf(x)
 #define sqrtf(x) fast_sqrtf(x)
-#define floorf(x) fast_floorf(x)
-#define roundf(x) fast_roundf(x)
 #define floor(x) fast_floorf(x)
+#define floorf(x) fast_floorf(x)
 #define ceil(x) fast_ceilf(x)
 #define ceilf(x) fast_ceilf(x)
 #define round(x) fast_roundf(x)
+#define roundf(x) fast_roundf(x)
 #define atan(x) fast_atanf(x)
 #define atanf(x) fast_atanf(x)
 #define atan2(y, x) fast_atan2f((y), (x))
@@ -1978,7 +1805,7 @@ double matd_det_general(const matd_t *a)
     // The determinant of a can be calculated as
     //     epsilon*det(L)*det(U),
     // where epsilon is just the sign of the corresponding permutation
-    // (which is +1 for an even number of permutations and is âˆ’1
+    // (which is +1 for an even number of permutations and is âˆ?
     // for an uneven number of permutations).
     double det = mlu->pivsign * detL * detU;
 
@@ -11956,8 +11783,8 @@ void imlib_find_apriltags(list_t *out, image_t *ptr, rectangle_t *roi, apriltag_
     fb_free(); // umm_init_x();
 }
 
-void imlib_find_rects(list_t *out, image_t *ptr, rectangle_t *roi,
-                      uint32_t threshold)
+#ifdef IMLIB_ENABLE_FIND_RECTS
+void imlib_find_rects(list_t *out, image_t *ptr, rectangle_t *roi, uint32_t threshold)
 {
     // Frame Buffer Memory Usage...
     // -> GRAYSCALE Input Image = w*h*1
@@ -12179,7 +12006,9 @@ void imlib_find_rects(list_t *out, image_t *ptr, rectangle_t *roi,
     apriltag_detector_destroy(td);
     fb_free(); // umm_init_x();
 }
+#endif //IMLIB_ENABLE_FIND_RECTS
 
+#ifdef IMLIB_ENABLE_ROTATION_CORR
 // http://jepsonsblog.blogspot.com/2012/11/rotation-in-3d-using-opencvs.html
 void imlib_rotation_corr(image_t *img, float x_rotation, float y_rotation, float z_rotation,
                          float x_translation, float y_translation,
@@ -12327,5 +12156,6 @@ void imlib_rotation_corr(image_t *img, float x_rotation, float y_rotation, float
 
     fb_free(); // umm_init_x();
 }
-
+#endif //IMLIB_ENABLE_ROTATION_CORR
 #pragma GCC diagnostic pop
+#endif //IMLIB_ENABLE_APRILTAGS

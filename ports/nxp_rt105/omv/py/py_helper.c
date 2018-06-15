@@ -7,7 +7,7 @@
  *
  */
 #include "py_helper.h"
-
+#include "py_assert.h"
 #ifdef __CC_ARM
 __WEAK bool rectangle_overlap(rectangle_t *ptr0, rectangle_t *ptr1)
 {
@@ -18,7 +18,7 @@ __WEAK bool rectangle_overlap(rectangle_t *ptr0, rectangle_t *ptr1)
     int x1 = ptr1->x;
     int y1 = ptr1->y;
     int w1 = ptr1->w;
-    int h1 = ptr1->h;
+    int h1 = ptr1->h;;
     return (x0 < (x1 + w1)) && (y0 < (y1 + h1)) && (x1 < (x0 + w0)) && (y1 < (y0 + h0));
 }
 
@@ -35,6 +35,105 @@ __WEAK void rectangle_intersected(rectangle_t *dst, rectangle_t *src)
 }
 
 #endif
+extern void *py_image_cobj(mp_obj_t img_obj);
+
+mp_obj_t py_func_unavailable(uint n_args, const mp_obj_t *args, mp_map_t *kw_args)
+{
+    PY_ASSERT_TRUE_MSG(false, "This function is unavailable on your OpenMV Cam.");
+    return args[0];
+}
+MP_DEFINE_CONST_FUN_OBJ_KW(py_func_unavailable_obj, 1, py_func_unavailable);
+
+image_t *py_helper_arg_to_image_mutable(const mp_obj_t arg)
+{
+    image_t *arg_img = py_image_cobj(arg);
+    PY_ASSERT_TRUE_MSG(IMAGE_IS_MUTABLE(arg_img), "Image format is not supported!");
+    return arg_img;
+}
+
+image_t *py_helper_arg_to_image_mutable_bayer(const mp_obj_t arg)
+{
+    image_t *arg_img = py_image_cobj(arg);
+    PY_ASSERT_TRUE_MSG(IMAGE_IS_MUTABLE_BAYER(arg_img), "Image format is not supported!");
+    return arg_img;
+}
+
+image_t *py_helper_arg_to_image_grayscale(const mp_obj_t arg)
+{
+    image_t *arg_img = py_image_cobj(arg);
+    PY_ASSERT_TRUE_MSG(arg_img->bpp == IMAGE_BPP_GRAYSCALE, "Image format is not supported!");
+    return arg_img;
+}
+
+image_t *py_helper_arg_to_image_color(const mp_obj_t arg)
+{
+    image_t *arg_img = py_image_cobj(arg);
+    PY_ASSERT_TRUE_MSG(arg_img->bpp == IMAGE_BPP_RGB565, "Image format is not supported!");
+    return arg_img;
+}
+
+image_t *py_helper_keyword_to_image_mutable(uint n_args, const mp_obj_t *args, uint arg_index,
+                                            mp_map_t *kw_args, mp_obj_t kw, image_t *default_val)
+{
+    mp_map_elem_t *kw_arg = mp_map_lookup(kw_args, kw, MP_MAP_LOOKUP);
+
+    if (kw_arg) {
+        default_val = py_helper_arg_to_image_mutable(kw_arg->value);
+    } else if (n_args > arg_index) {
+        default_val = py_helper_arg_to_image_mutable(args[arg_index]);
+    }
+
+    return default_val;
+}
+
+image_t *py_helper_keyword_to_image_mutable_mask(uint n_args, const mp_obj_t *args, uint arg_index,
+                                                 mp_map_t *kw_args)
+{
+    return py_helper_keyword_to_image_mutable(n_args, args, arg_index, kw_args, MP_OBJ_NEW_QSTR(MP_QSTR_mask), NULL);
+}
+
+void py_helper_keyword_rectangle(image_t *img, uint n_args, const mp_obj_t *args, uint arg_index,
+                                 mp_map_t *kw_args, mp_obj_t kw, rectangle_t *r)
+{
+    mp_map_elem_t *kw_arg = mp_map_lookup(kw_args, kw, MP_MAP_LOOKUP);
+
+    if (kw_arg) {
+        mp_obj_t *arg_rectangle;
+        mp_obj_get_array_fixed_n(kw_arg->value, 4, &arg_rectangle);
+        r->x = mp_obj_get_int(arg_rectangle[0]);
+        r->y = mp_obj_get_int(arg_rectangle[1]);
+        r->w = mp_obj_get_int(arg_rectangle[2]);
+        r->h = mp_obj_get_int(arg_rectangle[3]);
+    } else if (n_args > arg_index) {
+        mp_obj_t *arg_rectangle;
+        mp_obj_get_array_fixed_n(args[arg_index], 4, &arg_rectangle);
+        r->x = mp_obj_get_int(arg_rectangle[0]);
+        r->y = mp_obj_get_int(arg_rectangle[1]);
+        r->w = mp_obj_get_int(arg_rectangle[2]);
+        r->h = mp_obj_get_int(arg_rectangle[3]);
+    } else {
+        r->x = 0;
+        r->y = 0;
+        r->w = img->w;
+        r->h = img->h;
+    }
+
+    PY_ASSERT_TRUE_MSG((r->w >= 1) && (r->h >= 1), "Invalid ROI dimensions!");
+    rectangle_t temp;
+    temp.x = 0;
+    temp.y = 0;
+    temp.w = img->w;
+    temp.h = img->h;
+
+    PY_ASSERT_TRUE_MSG(rectangle_overlap(r, &temp), "ROI does not overlap on the image!");
+    rectangle_intersected(r, &temp);
+}
+
+void py_helper_keyword_rectangle_roi(image_t *img, uint n_args, const mp_obj_t *args, uint arg_index,
+                                     mp_map_t *kw_args, rectangle_t *r)
+{
+    py_helper_keyword_rectangle(img, n_args, args, arg_index, kw_args, MP_OBJ_NEW_QSTR(MP_QSTR_roi), r);
+}
 
 int py_helper_keyword_int(uint n_args, const mp_obj_t *args, uint arg_index,
                           mp_map_t *kw_args, mp_obj_t kw, int default_val)

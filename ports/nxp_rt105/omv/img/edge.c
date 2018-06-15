@@ -19,11 +19,16 @@ typedef struct gvec {
 
 void imlib_edge_simple(image_t *src, rectangle_t *roi, int low_thresh, int high_thresh)
 {
-    imlib_morph(src, 1, kernel_high_pass_3, 1.0f, 0.0f);
-    simple_color_t lt = {.G=low_thresh};
-    simple_color_t ht = {.G=high_thresh};
-    imlib_binary(src, 1, &lt, &ht, false);
-    imlib_erode(src, 1, 2);
+    imlib_morph(src, 1, kernel_high_pass_3, 1.0f, 0.0f, false, 0, false, NULL);
+    list_t thresholds;
+    list_init(&thresholds, sizeof(color_thresholds_list_lnk_data_t));
+    color_thresholds_list_lnk_data_t lnk_data;
+    lnk_data.LMin=low_thresh;
+    lnk_data.LMax=high_thresh;
+    list_push_back(&thresholds, &lnk_data);
+    imlib_binary(src, src, &thresholds, false, false, NULL);
+    list_free(&thresholds);
+    imlib_erode(src, 1, 2, NULL);
 }
 
 void imlib_edge_canny(image_t *src, rectangle_t *roi, int low_thresh, int high_thresh)
