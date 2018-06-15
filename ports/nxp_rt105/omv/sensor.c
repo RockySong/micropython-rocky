@@ -981,8 +981,6 @@ int sensor_set_windowing(int x, int y, int w, int h)      //may no this function
 	sensor.wndX = x ; sensor.wndY = y ; sensor.wndW = w ; sensor.wndH = h;
     MAIN_FB()->w = w;
     MAIN_FB()->h = h;
-   // HAL_DCMI_ConfigCROP(&DCMIHandle, x*2, y, w*2-1, h-1);
-   // HAL_DCMI_EnableCROP(&DCMIHandle);
     return 0;
 }
 
@@ -1323,11 +1321,8 @@ uint16_t* LCDMonitor_UpdateLineRGB565(uint16_t *pLcdFB, uint16_t *pCamFB, uint32
 	"	bne 	10b  \n"
 	"   pop     {r0-r3, ip} \n"
 	"	bx		lr  \n"
-
 	);
-
 }
-
 
 #endif
 
@@ -1419,11 +1414,9 @@ void PreprocessOneLine(uint32_t addr, int line)
     }
 }
 
-
 // The JPEG offset allows JPEG compression of the framebuffer without overwriting the pixels.
 // The offset size may need to be adjusted depending on the quality, otherwise JPEG data may
 // overwrite image pixels before they are compressed.
-
 int sensor_snapshot(image_t *pImg, void *pv1, void *pv2)
 {
  //   uint32_t activeADDR;//, length;
