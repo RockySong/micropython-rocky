@@ -6,7 +6,7 @@
  * Sensor abstraction layer.
  *
  */
-// vivid omv
+// vivid omv, by vividsun
 #include <stdlib.h>
 #include <string.h>
 #include "mp.h"
