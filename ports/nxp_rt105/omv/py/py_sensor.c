@@ -65,7 +65,7 @@ static mp_obj_t py_sensor_snapshot(uint n_args, const mp_obj_t *args, mp_map_t *
     // Sanity checks
     PY_ASSERT_TRUE_MSG((sensor.pixformat != PIXFORMAT_JPEG), "Operation not supported on JPEG");
 
-    if (sensor.snapshot(&sensor, (image_t*) py_image_cobj(image))==-1) {
+    if (sensor_snapshot((image_t*) py_image_cobj(image), 0, 0)==-1) {
         nlr_raise(mp_obj_new_exception_msg(&mp_type_RuntimeError, "Sensor Timeout!!"));
         return mp_const_false;
 	}
@@ -419,7 +419,7 @@ static mp_obj_t py_sensor_set_lens_correction(mp_obj_t enable, mp_obj_t radi, mp
 
 static mp_obj_t py_sensor_set_vsync_output(mp_obj_t pin_obj) {
     pin_obj_t *pin = pin_obj;
-    sensor_set_vsync_output(pin->gpio, pin->pin_mask);
+    // rocky ignore: no function: sensor_set_vsync_output(pin->gpio, pin->pin_mask);
     return mp_const_true;
 }
 

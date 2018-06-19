@@ -128,7 +128,6 @@ enum {
     MP_QSTR_trans,
     MP_QSTR_scroll,
     MP_QSTR_s,
-    MP_QSTR_fill,
     MP_QSTR_calib,
     MP_QSTR_irq,
     MP_QSTR_win,
@@ -172,8 +171,8 @@ extern const qstr_pool_t mp_qstr_const_pool;
 const qstr_pool_t mp_qstr_frozen_const_pool = {
     (qstr_pool_t*)&mp_qstr_const_pool, // previous pool
     MP_QSTRnumber_of, // previous pool size
-    135, // allocated entries
-    135, // used entries
+    134, // allocated entries
+    134, // used entries
     {
         (const byte*)"\xcf\xa5\x0b" "lcd160cr.py",
         (const byte*)"\xf2\xcd\x08" "PORTRAIT",
@@ -272,7 +271,6 @@ const qstr_pool_t mp_qstr_frozen_const_pool = {
         (const byte*)"\x5f\x45\x05" "trans",
         (const byte*)"\x28\x5a\x06" "scroll",
         (const byte*)"\xd6\xb5\x01" "s",
-        (const byte*)"\xca\x34\x04" "fill",
         (const byte*)"\xc0\xed\x05" "calib",
         (const byte*)"\x8f\x56\x03" "irq",
         (const byte*)"\xb5\x7f\x03" "win",
