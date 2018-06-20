@@ -3808,6 +3808,7 @@ static mp_obj_t py_image_find_blobs(uint n_args, const mp_obj_t *args, mp_map_t 
     bool invert = py_helper_keyword_int(n_args, args, 2, kw_args, MP_OBJ_NEW_QSTR(MP_QSTR_invert), false);
 
     rectangle_t roi;
+	OverlaySwitch(OVLY_LAB_TAB);
     py_helper_keyword_rectangle_roi(arg_img, n_args, args, 3, kw_args, &roi);
 
     unsigned int x_stride = py_helper_keyword_int(n_args, args, 4, kw_args, MP_OBJ_NEW_QSTR(MP_QSTR_x_stride), 2);
@@ -5050,7 +5051,7 @@ static mp_obj_t py_image_find_features(uint n_args, const mp_obj_t *args, mp_map
 
     rectangle_t roi;
     py_helper_keyword_rectangle_roi(arg_img, n_args, args, 4, kw_args, &roi);
-
+	OverlaySwitch(OVLY_HAAR);
     // Make sure ROI is bigger than feature size
     PY_ASSERT_TRUE_MSG((roi.w > cascade->window.w && roi.h > cascade->window.h),
             "Region of interest is smaller than detector window!");
@@ -5744,7 +5745,7 @@ mp_obj_t py_image_load_cascade(uint n_args, const mp_obj_t *args, mp_map_t *kw_a
 {
     cascade_t cascade;
     const char *path = mp_obj_str_get_str(args[0]);
-
+	OverlaySwitch(OVLY_HAAR);
     // Load cascade from file or flash
     int res = imlib_load_cascade(&cascade, path);
     if (res != FR_OK) {
