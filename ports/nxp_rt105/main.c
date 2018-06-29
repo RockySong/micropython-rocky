@@ -400,8 +400,10 @@ STATIC bool init_sdcard_fs(bool first_soft_reset) {
             // mounted via FatFs, now mount the SD partition in the VFS
             if (first_part) {
                 // the first available partition is traditionally called "sd" for simplicity
-                vfs->str = "/sd";
-                vfs->len = 3;
+                vfs->str = "/";
+                vfs->len = 1;
+				// for openMV's root dir, set to SD card
+				MP_STATE_PORT(vfs_cur) = vfs;
             } else {
                 // subsequent partitions are numbered by their index in the partition table
                 if (part_num == 2) {
@@ -699,6 +701,10 @@ soft_reset:
     // Note: stack control relies on main thread being initialised above
     mp_stack_set_top((void*) _estack);
     mp_stack_set_limit(STACK_SIZE);
+	if (_heap_start >= 0x80000000) {
+		// heap is in SDRAM region, we assume there is at least 1MB heap!
+		_heap_end = _heap_start + 1024 * 1024;
+	}
     gc_init((void*) _heap_start, (void*) _heap_end);
 #elif defined(__GNUC__)
     // Stack limit should be less than real stack size, so we have a chance
