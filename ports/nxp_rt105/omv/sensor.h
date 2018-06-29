@@ -14,6 +14,7 @@
 #define OV2640_ID       (0x26)
 #define OV7725_ID       (0x77)
 #define MT9V034_ID      (0x13)
+#define LEPTON_ID       (0x54)
 
 typedef enum {
     PIXFORMAT_BAYER,     // 1BPP/RAW
@@ -48,6 +49,8 @@ typedef enum {
     // Other
     FRAMESIZE_LCD,      // 128x160
     FRAMESIZE_QQVGA2,   // 128x160
+    FRAMESIZE_WVGA,     // 720x480
+    FRAMESIZE_WVGA2,    // 752x480
     FRAMESIZE_SVGA,     // 800x600
     FRAMESIZE_SXGA,     // 1280x1024
     FRAMESIZE_UXGA,     // 1600x1200

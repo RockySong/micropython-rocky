@@ -22,7 +22,7 @@ static char *pointer = &_fballoc;
 
 NORETURN void fb_alloc_fail()
 {
-    nlr_raise(mp_obj_new_exception_msg(&mp_type_MemoryError, "FB Alloc failed!!!"));
+    nlr_raise(mp_obj_new_exception_msg(&mp_type_MemoryError, "FB Alloc Collision!!!"));
 }
 
 void fb_alloc_init0()

@@ -27,10 +27,8 @@ static mp_obj_t py_sensor_reset() {
 }
 
 static mp_obj_t py_sensor_sleep(mp_obj_t enable) {
-    if (sensor_sleep(mp_obj_is_true(enable)) != 0) {
-        return mp_const_false;
-    }
-    return mp_const_true;
+    PY_ASSERT_FALSE_MSG(sensor_sleep(mp_obj_is_true(enable)) != 0, "Sleep Failed");
+    return mp_const_none;
 }
 
 static mp_obj_t py_sensor_flush() {
@@ -64,21 +62,10 @@ static mp_obj_t py_sensor_snapshot(uint n_args, const mp_obj_t *args, mp_map_t *
     // Snapshot image
    mp_obj_t image = py_image(0, 0, 0, 0);
 
-    // Line pre-processing function and args
-    mp_obj_t line_filter_args = NULL;
-    line_filter_t line_filter_func = NULL;
-
     // Sanity checks
     PY_ASSERT_TRUE_MSG((sensor.pixformat != PIXFORMAT_JPEG), "Operation not supported on JPEG");
 
-    // Lookup filter function
-    mp_map_elem_t *kw_arg = mp_map_lookup(kw_args, MP_OBJ_NEW_QSTR(MP_QSTR_line_filter), MP_MAP_LOOKUP);
-    if (kw_arg != NULL) {
-       line_filter_args = kw_arg->value;
-       line_filter_func = py_line_filter;
-    }
-
-    if (sensor_snapshot((struct image*) py_image_cobj(image), line_filter_func, line_filter_args)==-1) {
+    if (sensor_snapshot((image_t*) py_image_cobj(image), 0, 0)==-1) {
         nlr_raise(mp_obj_new_exception_msg(&mp_type_RuntimeError, "Sensor Timeout!!"));
         return mp_const_false;
 	}
@@ -432,7 +419,7 @@ static mp_obj_t py_sensor_set_lens_correction(mp_obj_t enable, mp_obj_t radi, mp
 
 static mp_obj_t py_sensor_set_vsync_output(mp_obj_t pin_obj) {
     pin_obj_t *pin = pin_obj;
-    sensor_set_vsync_output(pin->gpio, pin->pin_mask);
+    // rocky ignore: no function: sensor_set_vsync_output(pin->gpio, pin->pin_mask);
     return mp_const_true;
 }
 

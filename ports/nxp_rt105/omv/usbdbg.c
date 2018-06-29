@@ -249,7 +249,7 @@ void usbdbg_data_out(void *buffer, int length)
             rectangle_t *roi = (rectangle_t*)buffer;
             char *path = (char*)buffer+sizeof(rectangle_t);
 
-            // rocky ignore imlib_save_image(&image, path, roi, 50);
+            imlib_save_image(&image, path, roi, 50);
             // raise a flash IRQ to flush image
             //NVIC->STIR = FLASH_IRQn;
             break;
@@ -270,7 +270,7 @@ void usbdbg_data_out(void *buffer, int length)
             rectangle_t *roi = (rectangle_t*)buffer;
             char *path = (char*)buffer+sizeof(rectangle_t);
 
-            // rocky ignore py_image_descriptor_from_roi(&image, path, roi);
+            py_image_descriptor_from_roi(&image, path, roi);
             break;
         }
         default: /* error */

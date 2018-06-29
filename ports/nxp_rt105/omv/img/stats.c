@@ -5,13 +5,14 @@
 
 #include "imlib.h"
 
+#ifdef IMLIB_ENABLE_GET_SIMILARITY
 typedef struct imlib_similatiry_line_op_state {
     int *sumBucketsOfX, *sumBucketsOfY, *sum2BucketsOfX, *sum2BucketsOfY, *sum2Buckets;
     float similarity_sum, similarity_sum_2, similarity_min, similarity_max;
     int lines_processed;
 } imlib_similatiry_line_op_state_t;
 
-void imlib_similarity_line_op(image_t *img, int line, uint8_t *other, void *data, bool vflipped)
+void imlib_similarity_line_op(image_t *img, int line, void *other, void *data, bool vflipped)
 {
     imlib_similatiry_line_op_state_t *state = (imlib_similatiry_line_op_state_t *) data; vflipped = vflipped;
     float c1 = 0, c2 = 0;
@@ -107,7 +108,7 @@ void imlib_similarity_line_op(image_t *img, int line, uint8_t *other, void *data
     state->lines_processed += 1;
 }
 
-void imlib_get_similarity(image_t *img, const char *path, image_t *other, float *avg, float *std, float *min, float *max)
+void imlib_get_similarity(image_t *img, const char *path, image_t *other, int scalar, float *avg, float *std, float *min, float *max)
 {
     int h_blocks = (img->w + 7) / 8;
     int v_blocks = (img->h + 7) / 8;
@@ -126,7 +127,7 @@ void imlib_get_similarity(image_t *img, const char *path, image_t *other, float 
     state.similarity_max = FLT_MIN;
     state.lines_processed = 0;
 
-    imlib_image_operation(img, path, other, imlib_similarity_line_op, (void *) &state);
+    imlib_image_operation(img, path, other, scalar, imlib_similarity_line_op, &state);
     *avg = state.similarity_sum / blocks;
     *std = fast_sqrtf((state.similarity_sum_2 / blocks) - ((*avg) * (*avg)));
     *min = state.similarity_min;
@@ -138,8 +139,9 @@ void imlib_get_similarity(image_t *img, const char *path, image_t *other, float 
     fb_free();
     fb_free();
 }
+#endif //IMLIB_ENABLE_GET_SIMILARITY
 
-void imlib_get_histogram(histogram_t *out, image_t *ptr, rectangle_t *roi)
+void imlib_get_histogram(histogram_t *out, image_t *ptr, rectangle_t *roi, list_t *thresholds, bool invert)
 {
     switch(ptr->bpp) {
         case IMAGE_BPP_BINARY: {
@@ -147,11 +149,29 @@ void imlib_get_histogram(histogram_t *out, image_t *ptr, rectangle_t *roi)
 
             float mult = (out->LBinCount - 1) / ((float) (COLOR_BINARY_MAX - COLOR_BINARY_MIN));
 
+            if ((!thresholds) || (!list_size(thresholds))) {
+                // Fast histogram code when no color thresholds list...
             for (int y = roi->y, yy = roi->y + roi->h; y < yy; y++) {
                 uint32_t *row_ptr = IMAGE_COMPUTE_BINARY_PIXEL_ROW_PTR(ptr, y);
                 for (int x = roi->x, xx = roi->x + roi->w; x < xx; x++) {
                     int pixel = IMAGE_GET_BINARY_PIXEL_FAST(row_ptr, x);
                     ((uint32_t *) out->LBins)[fast_roundf((pixel - COLOR_BINARY_MIN) * mult)]++;
+                }
+            }
+            } else {
+                for (list_lnk_t *it = iterator_start_from_head(thresholds); it; it = iterator_next(it)) {
+                    color_thresholds_list_lnk_data_t lnk_data;
+                    iterator_get(thresholds, it, &lnk_data);
+
+                    for (int y = roi->y, yy = roi->y + roi->h; y < yy; y++) {
+                        uint32_t *row_ptr = IMAGE_COMPUTE_BINARY_PIXEL_ROW_PTR(ptr, y);
+                        for (int x = roi->x, xx = roi->x + roi->w; x < xx; x++) {
+                            int pixel = IMAGE_GET_BINARY_PIXEL_FAST(row_ptr, x);
+                            if (COLOR_THRESHOLD_BINARY(pixel, &lnk_data, invert)) {
+                                ((uint32_t *) out->LBins)[fast_roundf((pixel - COLOR_BINARY_MIN) * mult)]++;
+                            }
+                        }
+                    }
                 }
             }
 
@@ -168,11 +188,29 @@ void imlib_get_histogram(histogram_t *out, image_t *ptr, rectangle_t *roi)
 
             float mult = (out->LBinCount - 1) / ((float) (COLOR_GRAYSCALE_MAX - COLOR_GRAYSCALE_MIN));
 
+            if ((!thresholds) || (!list_size(thresholds))) {
+                // Fast histogram code when no color thresholds list...
             for (int y = roi->y, yy = roi->y + roi->h; y < yy; y++) {
                 uint8_t *row_ptr = IMAGE_COMPUTE_GRAYSCALE_PIXEL_ROW_PTR(ptr, y);
                 for (int x = roi->x, xx = roi->x + roi->w; x < xx; x++) {
                     int pixel = IMAGE_GET_GRAYSCALE_PIXEL_FAST(row_ptr, x);
                     ((uint32_t *) out->LBins)[fast_roundf((pixel - COLOR_GRAYSCALE_MIN) * mult)]++;
+                }
+            }
+            } else {
+                for (list_lnk_t *it = iterator_start_from_head(thresholds); it; it = iterator_next(it)) {
+                    color_thresholds_list_lnk_data_t lnk_data;
+                    iterator_get(thresholds, it, &lnk_data);
+
+                    for (int y = roi->y, yy = roi->y + roi->h; y < yy; y++) {
+                        uint8_t *row_ptr = IMAGE_COMPUTE_GRAYSCALE_PIXEL_ROW_PTR(ptr, y);
+                        for (int x = roi->x, xx = roi->x + roi->w; x < xx; x++) {
+                            int pixel = IMAGE_GET_GRAYSCALE_PIXEL_FAST(row_ptr, x);
+                            if (COLOR_THRESHOLD_GRAYSCALE(pixel, &lnk_data, invert)) {
+                                ((uint32_t *) out->LBins)[fast_roundf((pixel - COLOR_GRAYSCALE_MIN) * mult)]++;
+                            }
+                        }
+                    }
                 }
             }
 
@@ -193,13 +231,33 @@ void imlib_get_histogram(histogram_t *out, image_t *ptr, rectangle_t *roi)
             float a_mult = (out->ABinCount - 1) / ((float) (COLOR_A_MAX - COLOR_A_MIN));
             float b_mult = (out->BBinCount - 1) / ((float) (COLOR_B_MAX - COLOR_B_MIN));
 
+            if ((!thresholds) || (!list_size(thresholds))) {
+                // Fast histogram code when no color thresholds list...
+                for (int y = roi->y, yy = roi->y + roi->h; y < yy; y++) {
+                    uint16_t *row_ptr = IMAGE_COMPUTE_RGB565_PIXEL_ROW_PTR(ptr, y);
+                    for (int x = roi->x, xx = roi->x + roi->w; x < xx; x++) {
+                        int pixel = IMAGE_GET_RGB565_PIXEL_FAST(row_ptr, x);
+                        ((uint32_t *) out->LBins)[fast_roundf((COLOR_RGB565_TO_L(pixel) - COLOR_L_MIN) * l_mult)]++;
+                        ((uint32_t *) out->ABins)[fast_roundf((COLOR_RGB565_TO_A(pixel) - COLOR_A_MIN) * a_mult)]++;
+                        ((uint32_t *) out->BBins)[fast_roundf((COLOR_RGB565_TO_B(pixel) - COLOR_B_MIN) * b_mult)]++;
+                    }
+                }
+            } else {
+                for (list_lnk_t *it = iterator_start_from_head(thresholds); it; it = iterator_next(it)) {
+                    color_thresholds_list_lnk_data_t lnk_data;
+                    iterator_get(thresholds, it, &lnk_data);
+
             for (int y = roi->y, yy = roi->y + roi->h; y < yy; y++) {
                 uint16_t *row_ptr = IMAGE_COMPUTE_RGB565_PIXEL_ROW_PTR(ptr, y);
                 for (int x = roi->x, xx = roi->x + roi->w; x < xx; x++) {
                     int pixel = IMAGE_GET_RGB565_PIXEL_FAST(row_ptr, x);
+                            if (COLOR_THRESHOLD_RGB565(pixel, &lnk_data, invert)) {
                     ((uint32_t *) out->LBins)[fast_roundf((COLOR_RGB565_TO_L(pixel) - COLOR_L_MIN) * l_mult)]++;
                     ((uint32_t *) out->ABins)[fast_roundf((COLOR_RGB565_TO_A(pixel) - COLOR_A_MIN) * a_mult)]++;
                     ((uint32_t *) out->BBins)[fast_roundf((COLOR_RGB565_TO_B(pixel) - COLOR_B_MIN) * b_mult)]++;
+                }
+            }
+                    }
                 }
             }
 
@@ -290,13 +348,71 @@ void imlib_get_percentile(percentile_t *out, image_bpp_t bpp, histogram_t *ptr, 
 
                 for (int i = 0, j = ptr->BBinCount; i < j; i++) {
                     if ((median_count < percentile) && (percentile <= (median_count + ptr->BBins[i]))) {
-                        out->BValue = fast_roundf((i * mult) + COLOR_A_MIN);
+                        out->BValue = fast_roundf((i * mult) + COLOR_B_MIN);
                         break;
                     }
 
                     median_count += ptr->BBins[i];
                 }
             }
+            break;
+        }
+        default: {
+            break;
+        }
+    }
+}
+
+static int ostu(int bincount, float *bins)
+{
+    float cdf[bincount]; memset(cdf, 0, bincount * sizeof(float));
+    float weighted_cdf[bincount]; memset(weighted_cdf, 0, bincount * sizeof(float));
+
+    cdf[0] = bins[0];
+    weighted_cdf[0] = 0 * bins[0];
+
+    for (int i = 1; i < bincount; i++) {
+        cdf[i] = cdf[i - 1] + bins[i];
+        weighted_cdf[i] = weighted_cdf[i - 1] + (i * bins[i]);
+    }
+
+    float variance[bincount]; memset(variance, 0, bincount * sizeof(float));
+    float max_variance = 0.0f;
+    int threshold = 0;
+
+    for (int i = 0, ii = bincount - 1; i < ii; i++) {
+
+        if ((cdf[i] != 0.0f) && (cdf[i] != 1.0f)) {
+            variance[i] = powf((cdf[i] * weighted_cdf[bincount - 1]) - weighted_cdf[i], 2.0f) / (cdf[i] * (1.0f - cdf[i]));
+        } else {
+            variance[i] = 0.0f;
+        }
+
+        if (variance[i] > max_variance) {
+            max_variance = variance[i];
+            threshold = i;
+        }
+    }
+
+    return threshold;
+}
+
+void imlib_get_threshold(threshold_t *out, image_bpp_t bpp, histogram_t *ptr)
+{
+    memset(out, 0, sizeof(threshold_t));
+    switch(bpp) {
+        case IMAGE_BPP_BINARY: {
+            out->LValue = (ostu(ptr->LBinCount, ptr->LBins) * (COLOR_BINARY_MAX - COLOR_BINARY_MIN)) / (ptr->LBinCount - 1);
+            break;
+        }
+        case IMAGE_BPP_GRAYSCALE: {
+            out->LValue = (ostu(ptr->LBinCount, ptr->LBins) * (COLOR_GRAYSCALE_MAX - COLOR_GRAYSCALE_MIN)) / (ptr->LBinCount - 1);
+            break;
+        }
+        case IMAGE_BPP_RGB565: {
+            out->LValue = (ostu(ptr->LBinCount, ptr->LBins) * (COLOR_L_MAX - COLOR_L_MIN)) / (ptr->LBinCount - 1);
+            out->AValue = (ostu(ptr->ABinCount, ptr->ABins) * (COLOR_A_MAX - COLOR_A_MIN)) / (ptr->ABinCount - 1);
+            out->BValue = (ostu(ptr->BBinCount, ptr->BBins) * (COLOR_B_MAX - COLOR_B_MIN)) / (ptr->BBinCount - 1);
             break;
         }
         default: {

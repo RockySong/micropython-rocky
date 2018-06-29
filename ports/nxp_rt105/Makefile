@@ -67,6 +67,7 @@ INC += -Iay_imu/math
 INC += -I./omv
 INC += -I./omv/py
 INC += -I./omv/img
+INC += -I./omv/nn
 #INC += -I$(USBHOST_DIR)
 
 CFLAGS_CORTEX_M4 = -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -fsingle-precision-constant -Wdouble-promotion -mtune=cortex-m4 -mcpu=cortex-m4
@@ -193,11 +194,8 @@ SRC_fleg_ftl = $(addprefix flegftl/, \
 	
 SRC_OMV = $(addprefix omv/,  \
 	cambus.c \
-	mt9v034.c \
 	mutex.c \
 	xalloc.c \
-	ov9650.c \
-	ov2640.c \
 	ov7725.c \
 	sensor.c \
 	xalloc.c  \
@@ -209,7 +207,9 @@ SRC_OMV = $(addprefix omv/,  \
 	ini.c  \
 	umm_malloc.c  \
 	)
-
+#	mt9v034.c \
+#   ov9650.c \
+#   ov2640.c \
 #	mathop.c                
 #   draw.c  
 #	line.c                  
@@ -218,6 +218,13 @@ SRC_OMV = $(addprefix omv/,  \
 SRC_IMG = $(addprefix omv/img/,   \
 	blob.c                  \
 	qrcode.c                \
+	binary.c                \
+	clahe.c                \
+	qsort.c                \
+	filter.c                \
+	mathop.c                \
+	shadow_removal.c        \
+	line.c                  \
 	apriltag.c              \
 	dmtx.c                  \
 	zbar.c                  \
@@ -238,10 +245,6 @@ SRC_IMG = $(addprefix omv/img/,   \
 	rainbow_tab.c           \
 	rgb2rgb_tab.c           \
 	invariant_tab.c         \
-	midpoint.c              \
-	mean.c                  \
-	mode.c                  \
-	median.c                \
 	pool.c                  \
 	point.c                 \
 	rectangle.c             \
@@ -268,13 +271,19 @@ SRC_IMG = $(addprefix omv/img/,   \
 	lenet_model_num.c       \
    )
 
+SRCS_NN = $(addprefix omv/nn/,    \
+	nn.c                    \
+   )
+
 SRC_PY = $(addprefix omv/py/, \
 	py_helper.c             \
+	py_omv.c                \
 	py_sensor.c             \
 	py_image.c              \
 	py_time.c               \
 	py_gif.c                \
 	py_mjpeg.c              \
+	py_nn.c                 \
    )
 #	py_cpufreq.c            
 #	py_fir.c                
@@ -483,6 +492,7 @@ OBJ += $(addprefix $(BUILD)/, $(SRC_OSA:.c=.o))
 
 OBJ += $(addprefix $(BUILD)/, $(SRC_OMV:.c=.o))
 OBJ += $(addprefix $(BUILD)/, $(SRC_PY:.c=.o))
+OBJ += $(addprefix $(BUILD)/, $(SRC_NN:.c=.o))
 OBJ += $(addprefix $(BUILD)/, $(SRC_IMG:.c=.o))
 
 OBJ += $(addprefix $(BUILD)/, $(SRC_O))
@@ -575,7 +585,7 @@ GEN_CDCINF_FILE = $(HEADER_BUILD)/pybcdc.inf
 GEN_CDCINF_HEADER = $(HEADER_BUILD)/pybcdc_inf.h
 
 # List of sources for qstr extraction
-SRC_QSTR += $(SRC_C) $(SRC_MOD) $(SRC_LIB)
+SRC_QSTR += $(SRC_PY) $(SRC_C) $(SRC_MOD) $(SRC_LIB)
 # Append any auto-generated sources that are needed by sources listed in
 # SRC_QSTR
 SRC_QSTR_AUTO_DEPS += $(GEN_CDCINF_HEADER)

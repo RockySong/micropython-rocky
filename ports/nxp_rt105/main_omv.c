@@ -244,8 +244,8 @@ int OpenMV_Main(uint32_t first_soft_reset)
     // Run boot script(s)
     if (first_soft_reset) {
 		first_soft_reset = 0;
-        exec_boot_script("/sd/selftest.py", true, false);
-        apply_settings("/sd/openmv.config");
+        exec_boot_script("/selftest.py", true, false);
+        apply_settings("/openmv.config");
 		usbdbg_set_irq_enabled(true);
 		// rocky: pyb's main uses different method to access file system from omv
         mp_import_stat_t stat = mp_import_stat("main.py");

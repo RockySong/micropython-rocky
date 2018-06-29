@@ -13,6 +13,7 @@
 #include "fb_alloc.h"
 #include "xalloc.h"
 
+#ifdef IMLIB_ENABLE_HOG
 #define N_BINS      (9)
 typedef struct bin {
     int d;
@@ -117,7 +118,7 @@ void imlib_find_hog(image_t *src, rectangle_t *roi, int cell_size)
                         bin_t *bin = array_at(gds, i);
                         int x2 = l * cos_table[bin->d];
                         int y2 = l * sin_table[bin->d];
-                        imlib_draw_line(src, (x1 - x2), (y1 + y2), (x1 + x2), (y1 - y2), bin->m);
+                        imlib_draw_line(src, (x1 - x2), (y1 + y2), (x1 + x2), (y1 - y2), bin->m, 1);
                     }
 
                     hog_index += N_BINS;
@@ -129,3 +130,4 @@ void imlib_find_hog(image_t *src, rectangle_t *roi, int cell_size)
     xfree(gds);
     fb_free();
 }
+#endif // IMLIB_ENABLE_HOG

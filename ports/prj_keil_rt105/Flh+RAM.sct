@@ -50,6 +50,7 @@ LR_XIP_FLASH ROM_BASE + 0x2000 {
 		// framebuffer.o fb_alloc.o (+RO)
 		gc.o rt_mem*.o (+RO)
 		collections.o array.o xalloc.o (+RO)
+		arm_nn_mat*.o (+RO)
 		// obj.o objarray.o objfloat.o objlist.o objobject.o  (+RO)
 		// objfun.o  nativeglue.o malloc.o (+RO)	
 		// objdict.o  modmath.o modarray.o modbuiltins.o modmicropython.o map.o (+RO)
