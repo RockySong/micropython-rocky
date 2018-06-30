@@ -6964,7 +6964,7 @@
             <ScatterFile>.\Flh+RAM.sct</ScatterFile>
             <IncludeLibs></IncludeLibs>
             <IncludeLibsPath></IncludeLibsPath>
-            <Misc>--any_placement=next_fit --keep=*.o(.boot*) --emit_debug_overlay_relocs --emit_debug_overlay_section</Misc>
+            <Misc>--any_placement=next_fit --keep=*.o(.boot*) --emit_debug_overlay_relocs --emit_debug_overlay_section --no_debug</Misc>
             <LinkerInputFile></LinkerInputFile>
             <DisabledWarnings></DisabledWarnings>
           </LDads>
@@ -6994,7 +6994,7 @@
               <Cads>
                 <interw>2</interw>
                 <Optim>4</Optim>
-                <oTime>2</oTime>
+                <oTime>1</oTime>
                 <SplitLS>2</SplitLS>
                 <OneElfS>2</OneElfS>
                 <Strict>2</Strict>
