@@ -559,8 +559,8 @@ HAL_StatusTypeDef HAL_Init(void)
 #define RAM_START 0x20200000
 #define RAM_END	0x20278000
 #else
-#define RAM_START 0x20200000
-#define RAM_END	0x20278000
+#define RAM_START 	0x20200000
+#define RAM_END		0x20280000
 #endif
 
 #if defined(__CC_ARM)
@@ -665,7 +665,10 @@ soft_reset:
 	led_state(3, 1);
     led_state(3, 0);
 	#endif
-
+	#if defined(MICROPY_HW_LED4)
+	led_state(4, 0);
+    led_state(4, 1);
+	#endif
     uint reset_mode = update_reset_mode(1);
 
     machine_init();

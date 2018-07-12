@@ -28,7 +28,10 @@
 #define _UART_H_
 #define LPUART_FIFO_CAP		4
 
+#ifndef BOARD_OMVRT1
 #define MICROPY_HW_UART_REPL_NAME   "repl"
+#endif
+
 #define MICROPY_HW_UART1_RX     (pin_AD_B0_13)	// CMSIS-DAP
 #define MICROPY_HW_UART1_TX     (pin_AD_B0_12)	// CMSIS-DAP
 #define MICROPY_HW_UART1_ALT	2

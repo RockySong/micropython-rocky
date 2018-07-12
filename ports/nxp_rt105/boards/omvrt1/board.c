@@ -78,39 +78,40 @@ void BOARD_ConfigMPU(void)
     SCB_DisableDCache();
     /* Disable MPU */ 
     ARM_MPU_Disable(); 
-    /* Region 0 setting */
+    /* Region 0 setting : ITCM */
     MPU->RBAR = ARM_MPU_RBAR(0, 0x00000000U);	// itcm, max 512kB
     MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_FULL, 1, 0, 0, 0, 0, ARM_MPU_REGION_SIZE_512KB);
 
-    /* Region 1 setting */
+    /* Region 1 setting : ITCM RO zone*/
 	// itcm RO region, catch wild pointers that will corrupt firmware code, region number must be larger to enable nest
     MPU->RBAR = ARM_MPU_RBAR(1, 0x00000000U);	
     MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_RO, 1, 0, 0, 0, 0, ARM_MPU_REGION_SIZE_8KB);
 
-    /* Region 2 setting */
+    /* Region 2 setting : DTCM */
     MPU->RBAR = ARM_MPU_RBAR(2, 0x20000000U);	// dtcm, max 512kB
     MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_FULL, 1, 0, 0, 0, 0, ARM_MPU_REGION_SIZE_512KB);   
     
-	/* Region 3 setting */
+	/* Region 3 setting : OCRAM, non-cachable part*/
     MPU->RBAR = ARM_MPU_RBAR(3, 0x20200000U);	// ocram
+	MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_FULL, 1, 0, 0, 0, 0, ARM_MPU_REGION_SIZE_16KB);
+	
+	/* Region 4 setting : OCRAM, cachable part*/
 	// rocky: Must NOT set to device or strong ordered types, otherwise, unaligned access leads to fault
-    MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_FULL, 1, 0, 0, 0, 0, ARM_MPU_REGION_SIZE_512KB);    
-	// MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_FULL, 0, 0, 1, 1, 0, ARM_MPU_REGION_SIZE_512KB);    
+	MPU->RBAR = ARM_MPU_RBAR(4, 0x20200000U);	// ocram
+	MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_FULL, 0, 0, 1, 1, 0, ARM_MPU_REGION_SIZE_512KB);    
 
-    MPU->RBAR = ARM_MPU_RBAR(4, 0x60000000U);
+	/* Region 5 setting, flexspi region */
+    MPU->RBAR = ARM_MPU_RBAR(5, 0x60000000U);
     MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_FULL, 0, 0, 1, 1, 0, ARM_MPU_REGION_SIZE_512MB); 
 
-	/* Region 5 setting, set whole SDRAM can be accessed by cache */
-    MPU->RBAR = ARM_MPU_RBAR(5, 0x80000000U);
-    MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_FULL, 0, 0, 1, 1, 0, ARM_MPU_REGION_SIZE_32MB);    
+//	/* Region 6 setting, set whole SDRAM can be accessed by cache */
+//    MPU->RBAR = ARM_MPU_RBAR(6, 0x80000000U);
+//    MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_FULL, 0, 0, 1, 1, 0, ARM_MPU_REGION_SIZE_32MB);    
 
-    /* Region 6 setting, set last 4MB of SDRAM can't be accessed by cache, glocal variables which are not expected to be accessed by cache can be put here */
-    MPU->RBAR = ARM_MPU_RBAR(6, 0x81C00000U);
-    MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_FULL, 1, 0, 0, 0, 0, ARM_MPU_REGION_SIZE_4MB);   
-  
-
-    // MPU->RBAR = ARM_MPU_RBAR(7, 0xC0000000U);
-    // MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_FULL, 2, 0, 0, 0, 0, ARM_MPU_REGION_SIZE_512MB);
+//    /* Region 7 setting, set last 4MB of SDRAM can't be accessed by cache, glocal variables which are not expected to be accessed by cache can be put here */
+//    MPU->RBAR = ARM_MPU_RBAR(7, 0x81C00000U);
+//    MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_FULL, 1, 0, 0, 0, 0, ARM_MPU_REGION_SIZE_4MB);   
+ 
 
     /* Enable MPU, enable background region for priviliged access */ 
     ARM_MPU_Enable(MPU_CTRL_PRIVDEFENA_Msk);

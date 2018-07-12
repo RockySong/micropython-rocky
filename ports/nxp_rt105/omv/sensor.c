@@ -38,12 +38,12 @@
 #define MAX_XFER_SIZE (0xFFFC)
 
 #ifdef BOARD_OMVRT1
-#define OV7725_I2C LPI2C4
-#ifndef NO_LCD_MONITOR
-	#define NO_LCD_MONITOR
-#endif
+	#define OV7725_I2C LPI2C4
+	#ifndef NO_LCD_MONITOR
+		#define NO_LCD_MONITOR
+	#endif
 #else
-#define OV7725_I2C LPI2C1
+	#define OV7725_I2C LPI2C1
 #endif
 
 /* LCD definition. */
@@ -307,9 +307,42 @@ static void OV7725_DelayMs(uint32_t ms)
     }
 }
 
+#ifdef BOARD_OMVRT1
+
+#define SENSOR_RSTB_GPIO		GPIO1
+#define SENSOR_RSTB_GPIO_PIN 	17
+
+#define SENSOR_PWDN_GPIO		GPIO1
+#define SENSOR_PWDN_GPIO_PIN 	18
+
+#else
+#define SENSOR_PWDN_GPIO		GPIO1
+#define SENSOR_PWDN_GPIO_PIN 	4
+
+#endif
+
+void sensor_gpio_init(void)
+{
+    gpio_pin_config_t config = {
+        kGPIO_DigitalOutput, 0,
+    };
+
+    /* Reset the LCD. */
+	#ifdef BOARD_OMVRT1
+    GPIO_PinInit(SENSOR_RSTB_GPIO, SENSOR_RSTB_GPIO_PIN, &config);
+	#endif
+	
+	GPIO_PinInit(SENSOR_PWDN_GPIO, SENSOR_PWDN_GPIO_PIN, &config);	
+}
+
+
 static void BOARD_PullCameraResetPin(bool pullUp)
 {
-    /* Reset pin is connected to DCDC_3V3. */
+	#ifdef BOARD_OMVRT1
+	GPIO_PinWrite(SENSOR_RSTB_GPIO, SENSOR_RSTB_GPIO_PIN, 1);
+	#else
+	/* Reset pin is connected to DCDC_3V3. */
+	#endif
     return;
 }
 
@@ -317,11 +350,11 @@ static void BOARD_PullCameraPowerDownPin(bool pullUp)
 {
     if (pullUp)
     {
-        GPIO_PinWrite(GPIO1, 4, 1);
+        GPIO_PinWrite(SENSOR_PWDN_GPIO, SENSOR_PWDN_GPIO_PIN, 1);
     }
     else
     {
-        GPIO_PinWrite(GPIO1, 4, 0);
+        GPIO_PinWrite(SENSOR_PWDN_GPIO, SENSOR_PWDN_GPIO_PIN, 0);
     }
 }
 static ov7725_resource_t ov7725Resource = {
@@ -704,11 +737,13 @@ CAMERA_RECEIVER_Start(&cameraReceiver);  \
 	s_isOmvSensorSnapshotReady = 0; \
 	}while(0)
 volatile uint8_t s_isEnUsbIrqForSnapshot;
+
 int sensor_init()
 {   
 	#ifndef XIP_EXTERNAL_FLASH
 	s_isEnUsbIrqForSnapshot = 1;
 	#endif
+	sensor_gpio_init();
     cambus_init();
 	memset(&sensor, 0, sizeof(sensor));
 	s_irq.base0 = (uint32_t)(MAIN_FB()->pixels);
