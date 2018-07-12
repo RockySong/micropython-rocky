@@ -42,6 +42,33 @@
 #pragma location=".boot_hdr.conf"
 #endif
 
+#ifdef BOARD_OMVRT1
+const flexspi_nor_config_t Qspiflash_config =
+{
+    .memConfig =
+    {
+        .tag = FLEXSPI_CFG_BLK_TAG,
+        .version = FLEXSPI_CFG_BLK_VERSION,
+        .readSampleClkSrc = kFlexSPIReadSampleClk_LoopbackFromDqsPad,//kFlexSPIReadSampleClk_LoopbackInternally,//
+        .csHoldTime = 3u,
+        .csSetupTime = 3u,
+        .deviceType = kFlexSpiDeviceType_SerialNOR,
+        .sflashPadType = kSerialFlash_4Pads,
+        .serialClkFreq = kFlexSpiSerialClk_100MHz,
+        .sflashA1Size = 4u * 1024u * 1024u,//4MBytes
+        .dataValidTime = {16u, 16u},
+        .lookupTable =
+		    {
+		      //Quad Input/output read sequence
+		      [0]   = FLEXSPI_LUT_SEQ(CMD_SDR, FLEXSPI_1PAD, 0xEB, RADDR_SDR, FLEXSPI_4PAD, 0x18),
+		      [1]   = FLEXSPI_LUT_SEQ(DUMMY_SDR, FLEXSPI_4PAD, 0x06, READ_SDR, FLEXSPI_4PAD, 0x04),
+		      [2]   = FLEXSPI_LUT_SEQ(0, 0, 0, 0, 0, 0),
+		    },
+    },
+    .pageSize = 256u,
+    .sectorSize = 4u * 1024u,
+}; 
+#else
 const flexspi_nor_config_t hyperflash_config =
 {
     .memConfig =
@@ -74,3 +101,4 @@ const flexspi_nor_config_t hyperflash_config =
     .blockSize = 256u * 1024u,
     .isUniformBlockSize = true,
 };
+#endif

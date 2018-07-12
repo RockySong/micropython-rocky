@@ -555,22 +555,24 @@ HAL_StatusTypeDef HAL_Init(void)
 	return HAL_OK;
 }
 
-#ifdef MEM_PROFILING
-#define DTCM_END	0x20078000
+#ifdef USE_OCRAM
+#define RAM_START 0x20200000
+#define RAM_END	0x20278000
 #else
-#define DTCM_END	0x20078000
+#define RAM_START 0x20200000
+#define RAM_END	0x20278000
 #endif
 
 #if defined(__CC_ARM)
 	#define STACK_SIZE	(0x2000)
-	uint32_t  _ram_start = 0x20000000, _ram_end = DTCM_END, _estack = 0x6000, _heap_end = DTCM_END;
+	uint32_t  _ram_start = RAM_START, ram_end = RAM_END, _estack = 0x6000, _heap_end = RAM_END;
 	extern unsigned int Image$$MPY_HEAP_START$$Base;
 	uint32_t _heap_start = (uint32_t) &Image$$MPY_HEAP_START$$Base;
 #elif defined(__ICCARM__)
 	extern unsigned int CHEAP$$Limit[], lg_c1Stack[];
 	uint32_t _heap_start = (uint32_t)CHEAP$$Limit;	// we put HEAP at the last of DATA region, so we can assume mpy heap start here
 	
-	uint32_t  _ram_start = 0x20000000, _ram_end = (uint32_t)CHEAP$$Limit, _estack = 0x20000000 + (uint32_t)lg_c1Stack, _heap_end = DTCM_END;
+	uint32_t  _ram_start = RAM_START, _ram_end = (uint32_t)CHEAP$$Limit, _estack = 0x6000 + (uint32_t)lg_c1Stack, _heap_end = RAM_END;
 #elif defined(__GNUC__)
 extern uint32_t _ram_start, _ram_end, _estack, _heap_end, _heap_start;
 extern uint32_t _stack_size;
@@ -654,15 +656,16 @@ int main(void) {
 	retCode = true;
 soft_reset:
     // check if user switch held to select the reset mode
-#if defined(MICROPY_HW_LED2)
-    led_state(1, 0);
-    led_state(2, 1);
-#else
     led_state(1, 1);
-    led_state(1, 0);
-#endif
+	#if defined(MICROPY_HW_LED2)
+	led_state(2, 1);
+	led_state(2, 0);
+	#endif
+	#if defined(MICROPY_HW_LED3)
+	led_state(3, 1);
     led_state(3, 0);
-    led_state(4, 0);
+	#endif
+
     uint reset_mode = update_reset_mode(1);
 
     machine_init();
@@ -687,7 +690,10 @@ soft_reset:
     }
 #endif
     if (first_soft_reset) {
+		// rocky: OMVRT1 uses GD32 flash, not yet supported internal file system
+        #ifndef BOARD_OMVRT1
         storage_init();
+		#endif
     }
 
     // Python threading init
@@ -829,13 +835,7 @@ soft_reset:
     }
 	#endif
 
-    // turn boot-up LEDs off
-#if !defined(MICROPY_HW_LED2)
-    // If there is only one LED on the board then it's used to signal boot-up
-    // and so we turn it off here.  Otherwise LED(1) is used to indicate dirty
-    // flash cache and so we shouldn't change its state.
     led_state(1, 0);
-#endif
     led_state(2, 0);
     led_state(3, 0);
     led_state(4, 0);

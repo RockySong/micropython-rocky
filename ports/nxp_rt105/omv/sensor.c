@@ -36,8 +36,16 @@
 #define OV_CHIP_ID      (0x0A)
 #define ON_CHIP_ID      (0x00)
 #define MAX_XFER_SIZE (0xFFFC)
+
+#ifdef BOARD_OMVRT1
+#define OV7725_I2C LPI2C4
+#ifndef NO_LCD_MONITOR
+	#define NO_LCD_MONITOR
+#endif
+#else
 #define OV7725_I2C LPI2C1
-#define LCD_MONITOR
+#endif
+
 /* LCD definition. */
 #define APP_ELCDIF LCDIF
 
@@ -83,9 +91,10 @@ volatile bool g_Transfer_Done = false;
 /*******************************************************************************
  * Variables
  ******************************************************************************/
-
+#ifndef NO_LCD_MONITOR
 #define LCD_FB __attribute__((section(".lcd_fb")))
 /*static*/ LCD_FB uint16_t s_frameBuffer[2][272][480] ;
+#endif
 
 typedef struct _ov7725_reg
 {
@@ -347,6 +356,7 @@ void sensor_init0()      //make a note that we do not have the function of the j
 uint32_t activeFrameAddr;
 uint32_t inactiveFrameAddr;
 
+#ifndef NO_LCD_MONITOR
 void LCDMonitor_InitFB(void)
 {
 	int i, x,y;
@@ -395,6 +405,7 @@ void LCDMonitor_Init(void)
     ELCDIF_RgbModeStart(APP_ELCDIF);  	
 
 }
+#endif
 
 #define CSI_FRAG_MODE
 #ifdef CSI_FRAG_MODE
@@ -515,17 +526,21 @@ RAM_CODE void CSI_IRQHandler(void) {
 	} else if (csisr & (3<<19))
 	{
 		uint32_t dmaBase, lineNdx = s_irq.dmaFragNdx * s_irq.linePerFrag;
-		if (s_irq.isGray || 
-			(sensor.isWindowing &&  lineNdx >= sensor.wndY && lineNdx - sensor.wndY <= sensor.wndH) )
-		{
 			if (s_irq.dmaFragNdx & 1)
 				dmaBase = s_pCSI->CSIDMASA_FB2;
 			else
 				dmaBase = s_pCSI->CSIDMASA_FB1;
+		if (dmaBase >= 0x20200000)
+			DCACHE_InvalidateByRange(dmaBase, s_irq.dmaBytePerFrag);
+		if (s_irq.isGray || 
+			(sensor.isWindowing &&  lineNdx >= sensor.wndY && lineNdx - sensor.wndY <= sensor.wndH) )
+		{
+
 			dmaBase += sensor.wndX * 2 * s_irq.linePerFrag;	// apply line window offset
-			if (s_irq.isGray)
+			if (s_irq.isGray) {
+				
 				s_irq.datCurBase = ExtractYFromYuv(dmaBase, s_irq.datCurBase, (sensor.wndW * s_irq.linePerFrag) >> 3);
-			else {
+			} else {
 				uint32_t byteToCopy = (sensor.wndW * s_irq.linePerFrag) << 1;
 				memcpy((void*)s_irq.datCurBase, (void*)dmaBase, byteToCopy);
 				s_irq.datCurBase += byteToCopy;
@@ -799,7 +814,7 @@ int sensor_init()
     */
     CAMERA_RECEIVER_Init(&cameraReceiver, &cameraConfig, NULL, NULL);
 	#endif
-	#ifdef LCD_MONITOR // #ifdef __CC_ARM
+	#ifndef NO_LCD_MONITOR // #ifdef __CC_ARM
 	LCDMonitor_Init();
 	#endif
 	// CAMERA_TAKE_SNAPSHOT();	
@@ -820,7 +835,7 @@ int sensor_reset()
 		sensor_init();	
 	
 	}	
-	#ifdef LCD_MONITOR
+	#ifndef NO_LCD_MONITOR
 	LCDMonitor_InitFB();
 	#endif
 	sensor.isWindowing = 0;
@@ -1326,6 +1341,7 @@ uint16_t* LCDMonitor_UpdateLineRGB565(uint16_t *pLcdFB, uint16_t *pCamFB, uint32
 
 #endif
 
+#ifndef NO_LCD_MONITOR
 void LCDMonitor_Update(uint32_t fbNdx)
 {
 	uint32_t y, t1;
@@ -1358,7 +1374,7 @@ void LCDMonitor_Update(uint32_t fbNdx)
 
 	ELCDIF_SetNextBufferAddr(LCDIF, (uint32_t) pLcdBkup);
 }
-
+#endif
 
 // This function is called back after each line transfer is complete,
 // with a pointer to the line buffer that was used. At this point the
@@ -1451,7 +1467,7 @@ int sensor_snapshot(image_t *pImg, void *pv1, void *pv2)
 			t2 = HAL_GetTick() - t1;
 			t2 = t2;
 		}
-		#ifdef LCD_MONITOR // #ifdef __CC_ARM
+		#ifndef NO_LCD_MONITOR // #ifdef __CC_ARM
 		LCDMonitor_Update(n);
 		#endif
 		#if 1

@@ -338,7 +338,7 @@ UnalignTest		PROC
 ConfigFlexRAM	PROC
 				; >>> do custom FlexRAM configuration
 				ldr		r0,	= 0x400AC038	; IOMUXC.GPR14
-				ldr		r1, = 10 | 10<<4	; config (max allowed) ITCM=512KB, DTCM=512KB
+				ldr		r1, = 10 :OR: 10<<4	; config (max allowed) ITCM=512KB, DTCM=512KB
 				ldr		r2, [r0]
 				bfi		r2,	r1, #16, #8
 				str		r2,	[r0]
@@ -371,6 +371,43 @@ zero_itcm
 				; <<<	
 				ENDP
 
+ConfigFlexRAM_OCRAM	PROC
+				; >>> do custom FlexRAM configuration
+				ldr		r0,	= 0x400AC038	; IOMUXC.GPR14
+				ldr		r1, = 10 :OR: 10<<4	; config (max allowed) ITCM=512KB, DTCM=512KB
+				ldr		r2, [r0]
+				bfi		r2,	r1, #16, #8
+				str		r2,	[r0]
+				
+				ldr		r0, = 0x400AC044	; IOMUXC.GPR17
+				ldr		r1, = 0xD5555555	; 32kB ITCM, 0KB DTCM, (512-32) kB OCRAM
+				str		r1,	[r0]
+				
+				ldr		r0,	= 0x400AC040	; IOMUXC.GPR16
+				ldr		r2,	[r0]
+				orr		r2, #7				; enable ITCM, DTCM, apply IOMUXC's cfg instead of FUSE config
+				str		r2,	[r0]
+				
+				ldr		r0, =0x20200000
+				ldr		r1, =0x20278000
+				ldr		r2, =0
+zero_dtcm2				
+				str		r2,	[r0], #4
+				cmp		r0,	r1
+				bne		zero_dtcm
+				
+				ldr		r0, =0x00000000
+				ldr		r1, =0x00008000
+				ldr		r2, =0
+zero_itcm2				
+				str		r2,	[r0], #4
+				cmp		r0,	r1
+				bne		zero_itcm
+				bx		lr
+				; <<<	
+				ENDP
+
+
 RelocateVTOR
 
 Reset_Handler   PROC
@@ -386,7 +423,11 @@ Reset_Handler   PROC
 				MOV		R2,	 #0x20000000
 				CMP		R0,	R2
 				; BLE		.
+				IF :DEF:USE_OCRAM
+				BL		ConfigFlexRAM_OCRAM
+				ELSE
 				BL		ConfigFlexRAM
+				ENDIF
                 LDR     R0, =SystemInit
                 BLX     R0
 
