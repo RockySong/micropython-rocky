@@ -82,10 +82,10 @@ void BOARD_ConfigMPU(void)
     MPU->RBAR = ARM_MPU_RBAR(0, 0x00000000U);	// itcm, max 512kB
     MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_FULL, 1, 0, 0, 0, 0, ARM_MPU_REGION_SIZE_512KB);
 
-    /* Region 1 setting : ITCM RO zone*/
-	// itcm RO region, catch wild pointers that will corrupt firmware code, region number must be larger to enable nest
-    MPU->RBAR = ARM_MPU_RBAR(1, 0x00000000U);	
-    MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_RO, 1, 0, 0, 0, 0, ARM_MPU_REGION_SIZE_8KB);
+//    /* Region 1 setting : ITCM RO zone*/
+//	// itcm RO region, catch wild pointers that will corrupt firmware code, region number must be larger to enable nest
+//    MPU->RBAR = ARM_MPU_RBAR(1, 0x00000000U);	
+//    MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_RO, 1, 0, 0, 0, 0, ARM_MPU_REGION_SIZE_8KB);
 
     /* Region 2 setting : DTCM */
     MPU->RBAR = ARM_MPU_RBAR(2, 0x20000000U);	// dtcm, max 512kB

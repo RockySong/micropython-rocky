@@ -157,9 +157,9 @@ void usb_vcp_send_strn(const char *str, int len) {
 	bool omvUsbDbg = VCOM_OmvIsIdeConnected();
     if (pyb_usb_flags & PYB_USB_FLAG_DEV_ENABLED) {
 		if (omvUsbDbg) {
-        	VCOM_WriteAlways((const uint8_t*)str, len);
-		} else {
 			VCOM_OmvWriteAlways((const uint8_t*)str, len);
+		} else {
+			VCOM_WriteAlways((const uint8_t*)str, len);
 		} 		
     }
 #endif

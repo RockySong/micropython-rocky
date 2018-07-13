@@ -28,10 +28,6 @@
 #define _UART_H_
 #define LPUART_FIFO_CAP		4
 
-#ifndef BOARD_OMVRT1
-#define MICROPY_HW_UART_REPL_NAME   "repl"
-#endif
-
 #define MICROPY_HW_UART1_RX     (pin_AD_B0_13)	// CMSIS-DAP
 #define MICROPY_HW_UART1_TX     (pin_AD_B0_12)	// CMSIS-DAP
 #define MICROPY_HW_UART1_ALT	2
@@ -74,7 +70,13 @@ typedef enum {
     PYB_UART_9 = 9,
     PYB_UART_NONE = 31, 
 } pyb_uart_t;
+
+
+#ifndef BOARD_OMVRT1
+#define MICROPY_HW_UART_REPL_NAME   "repl"
 #define repl_uart_id	PYB_UART_1
+#endif
+
 typedef struct _pyb_uart_obj_t pyb_uart_obj_t;
 extern const mp_obj_type_t pyb_uart_type;
 

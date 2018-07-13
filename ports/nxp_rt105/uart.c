@@ -479,10 +479,12 @@ void uart_irq_handler(void *base, void* pCtx) {
 		kLPUART_RxOverrunFlag | kLPUART_NoiseErrorFlag | kLPUART_FramingErrorFlag | kLPUART_ParityErrorFlag);
 	while (rxCnt--) {
 		data = LPUART_ReadByte(pDev);
+		#ifdef repl_uart_id
 		if (self->uart_id == repl_uart_id && mp_interrupt_char != -1 && data == mp_interrupt_char) {
 			pendsv_kbd_intr();
 			// return;
 		}
+		#endif
 		if (self->read_buf_len != 0) {
 			uint16_t next_head = (self->read_buf_head + 1) % self->read_buf_len;
 			if (next_head != self->read_buf_tail) {

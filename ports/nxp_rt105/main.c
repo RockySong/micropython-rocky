@@ -559,8 +559,8 @@ HAL_StatusTypeDef HAL_Init(void)
 #define RAM_START 0x20200000
 #define RAM_END	0x20278000
 #else
-#define RAM_START 	0x20200000
-#define RAM_END		0x20280000
+#define RAM_START 	0x20000000
+#define RAM_END		0x20078000
 #endif
 
 #if defined(__CC_ARM)
@@ -655,7 +655,22 @@ int main(void) {
     bool first_soft_reset = true;
 	retCode = true;
 soft_reset:
-    // check if user switch held to select the reset mode
+
+	#ifdef BOARD_OMVRT1
+	{
+		uint32_t wait;
+		uint32_t i = 0;
+		for (wait = HAL_GetTick(); wait < 2001; wait = HAL_GetTick()) {
+			if (wait % 250 == 0) {
+				PRINTF("%d\r\n", (1501 - wait) / 250);
+				led_state(1, (++i) & 1);
+			}
+			// __WFI();
+		}
+		led_state(1, 0);
+	}
+	#endif
+	
     led_state(1, 1);
 	#if defined(MICROPY_HW_LED2)
 	led_state(2, 1);
