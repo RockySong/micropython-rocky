@@ -310,10 +310,10 @@ static void OV7725_DelayMs(uint32_t ms)
 #ifdef BOARD_OMVRT1
 
 #define SENSOR_RSTB_GPIO		GPIO1
-#define SENSOR_RSTB_GPIO_PIN 	17
+#define SENSOR_RSTB_GPIO_PIN 	18
 
 #define SENSOR_PWDN_GPIO		GPIO1
-#define SENSOR_PWDN_GPIO_PIN 	18
+#define SENSOR_PWDN_GPIO_PIN 	19
 
 #else
 #define SENSOR_PWDN_GPIO		GPIO1

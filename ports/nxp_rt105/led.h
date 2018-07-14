@@ -57,10 +57,10 @@ typedef enum {
     PYB_LED_B = 3,
     PYB_LED_O = 4,
     //OpenMV
-    LED_RED=0,
-    LED_GREEN=1,
-    LED_BLUE=2,
-    LED_IR=3,    
+    LED_RED=1,
+    LED_GREEN=2,
+    LED_BLUE=3,
+    LED_IR=4,    
 } pyb_led_t;
 
 void led_init(void);

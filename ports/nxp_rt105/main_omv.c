@@ -213,9 +213,6 @@ int OpenMV_Main(uint32_t first_soft_reset)
 	PRINTF("Enter OpenMV main\r\n");
 	// SCnSCB->ACTLR |= SCnSCB_ACTLR_DISDEFWBUF_Msk;
 
-
-	led_state(LED_IR, 1);
-	
 	OverlaySwitch(OVLY_YUV_TAB);
 
 /*    

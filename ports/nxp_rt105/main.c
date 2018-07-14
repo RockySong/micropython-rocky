@@ -554,10 +554,10 @@ HAL_StatusTypeDef HAL_Init(void)
 	
 	return HAL_OK;
 }
-
+#define OCRAM_END 0x20280000
 #ifdef USE_OCRAM
 #define RAM_START 0x20200000
-#define RAM_END	0x20278000
+#define RAM_END	  OCRAM_END
 #else
 #define RAM_START 	0x20000000
 #define RAM_END		0x20078000
@@ -728,6 +728,9 @@ soft_reset:
 	if (_heap_start >= 0x80000000) {
 		// heap is in SDRAM region, we assume there is at least 1MB heap!
 		_heap_end = _heap_start + 1024 * 1024;
+	} else if (_heap_start >= 0x20200000)
+	{
+		_heap_end = OCRAM_END;
 	}
     gc_init((void*) _heap_start, (void*) _heap_end);
 #elif defined(__GNUC__)
