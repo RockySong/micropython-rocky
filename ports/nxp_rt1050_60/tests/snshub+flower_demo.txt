@@ -1,0 +1,24 @@
+Hardware requirements:
+         LPC54608Xpresso board
+         MAO board (OLED)
+                   Remark: if you don¡¯t have this board, you just can¡¯t see OLED display, can still use REPL (interactive command prompt through LPC-Link II VCOM, 115200, n, 8, 1) to type python command and see result.
+         Sensor board: FRDM-FXS-MULTI2-B board
+                   Remark: If you don¡¯t have this board, you just can¡¯t see sensor hub values, can still use python
+         SD card (formatted as FAT32) : python script is saved in this SD card.
+         Stack the MAO and sensor board on the LPX54608 board¡¯s Ardunio socket, make sure MAO board is on top so OLED screen can be seen.
+Software requirements:
+         Download code repository from https://bitbucket.org/RockySong/mpy_lpx546/downloads/ , or clone from  https://RockySong@bitbucket.org/RockySong/mpy_lpx546.git , you can visit the repo from https://bitbucket.org/RockySong/mpy_lpx546
+         Build the keil project in <clone dir>\mpy191_port\prj_keil_lpc546\mpylpc546.uvprojx, download firmware to board.
+         Run the firmware by reset the board, SD card is enumerated as a USB disk.
+         Navigate into ¡°<clone dir>\mpy191_port\nxp_lpc546\tests\¡±, Copy ¡°sensors.py¡± and ¡°main.py¡± to root directory of SD card emulated USB disk
+                   Remark: If you don¡¯t have sensor board, you can comment out ¡°SensorHubDbg(1)¡± in line 247 of main.py and no need to copy sensors.py.
+                   Note: all functions in main.py can be called directly from REPL, you can try ¡°BreatheLED()¡±, ¡°draw_clock(SwimDbg())¡± from REPL.
+         Reset board, this will automatically run a ¡°SensorHubDbg()¡± function, that shows sensors, sensor fusion of A, G, M, P, T, as well as an animated rotating flower on OLED128128 screen.
+
+Dive into:
+         connect USB to on-board LPC-Link2 USB port, open terminal emulator (115200, n, 8, 1)
+	Press ¡°SW4¡± key, to switch overlay animation flower: no overlay; small overlay; full screen animated flower.
+         press ¡°ctrl-C¡± to terminate script, and return to command prompt (REPL)
+         in REPL, you can type in single-line or multi-line python commands/scripts. E.g., you can scan all I2C devices by ¡°pyb.I2C(2, baudrate=400000).scan()¡±
+                   Note: you can use ¡°tab¡± to see available methods.
+         Edit the ¡°main.py¡± with any text editor you like, edit the main.py, save the file, then press ¡°ctrl-D¡± to soft reset the board, new script will take effect.
