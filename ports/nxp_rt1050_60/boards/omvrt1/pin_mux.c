@@ -161,7 +161,7 @@ void BOARD_InitPins(void) {
                                                  Pull / Keep Enable Field: Pull/Keeper Enabled
                                                  Pull / Keep Select Field: Pull
                                                  Pull Up / Down Config. Field: 47K Ohm Pull Up
-                                                 Hyst. Enable Field: Hysteresis Enabled */                            /* Software Input On Field: Input Path is determined by functionality */
+                                                 Hyst. Enable Field: Hysteresis Enabled */
 //  IOMUXC_SetPinConfig(
 //      IOMUXC_GPIO_AD_B0_05_GPIO1_IO05,        /* GPIO_AD_B0_05 PAD functional properties : */
 //      0x10B0u);                               /* Slew Rate Field: Slow Slew Rate

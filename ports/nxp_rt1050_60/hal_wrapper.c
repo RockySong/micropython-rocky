@@ -17,6 +17,14 @@ __weak HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
   return HAL_OK;
 }
 
+void HAL_WFI(void)
+{
+	#ifndef BOARD_OMVRT1
+	__WFI();
+	#else
+	#endif
+}
+
 __weak void HAL_IncTick(void)
 {
   uwTick++;

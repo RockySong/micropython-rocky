@@ -94,7 +94,7 @@ void _sdcard_pin_init(void)
   IOMUXC_SetPinMux(
       IOMUXC_GPIO_AD_B0_05_GPIO1_IO05,        /* GPIO_AD_B0_05 is configured as GPIO1_IO05 */
       0U);                                    /* Software Input On Field: Input Path is determined by functionality */                              /* Software Input On Field: Input Path is determined by functionality */
-  IOMUXC_SetPinMux(
+  IOMUXC_SetPinMux(  // SD_CD
       IOMUXC_GPIO_B1_12_GPIO2_IO28,           /* GPIO_B1_12 is configured as GPIO2_IO28 */
       0U);                                    /* Software Input On Field: Input Path is determined by functionality */
   IOMUXC_SetPinMux(
@@ -159,9 +159,10 @@ void _sdcard_pin_init(void)
                                                  Pull / Keep Select Field: Pull
                                                  Pull Up / Down Config. Field: 47K Ohm Pull Up
                                                  Hyst. Enable Field: Hysteresis Enabled */
+  uint32_t padDrv = 1<<0 | 3<<6 | 5<<3;
   IOMUXC_SetPinConfig(
       IOMUXC_GPIO_SD_B0_01_USDHC1_CLK,        /* GPIO_SD_B0_01 PAD functional properties : */
-      0x014089u);                             /* Slew Rate Field: Fast Slew Rate
+      0x014000u | padDrv);                             /* Slew Rate Field: Fast Slew Rate
                                                  Drive Strength Field: R0(260 Ohm @ 3.3V, 150 Ohm@1.8V, 240 Ohm for DDR)
                                                  Speed Field: medium(100MHz)
                                                  Open Drain Enable Field: Open Drain Disabled
@@ -171,7 +172,7 @@ void _sdcard_pin_init(void)
                                                  Hyst. Enable Field: Hysteresis Enabled */
   IOMUXC_SetPinConfig(
       IOMUXC_GPIO_SD_B0_02_USDHC1_DATA0,      /* GPIO_SD_B0_02 PAD functional properties : */
-      0x017089u);                             /* Slew Rate Field: Fast Slew Rate
+      0x017000u | padDrv);                             /* Slew Rate Field: Fast Slew Rate
                                                  Drive Strength Field: R0(260 Ohm @ 3.3V, 150 Ohm@1.8V, 240 Ohm for DDR)
                                                  Speed Field: medium(100MHz)
                                                  Open Drain Enable Field: Open Drain Disabled
@@ -181,7 +182,7 @@ void _sdcard_pin_init(void)
                                                  Hyst. Enable Field: Hysteresis Enabled */
   IOMUXC_SetPinConfig(
       IOMUXC_GPIO_SD_B0_03_USDHC1_DATA1,      /* GPIO_SD_B0_03 PAD functional properties : */
-      0x017089u);                             /* Slew Rate Field: Fast Slew Rate
+      0x017000u | padDrv);                             /* Slew Rate Field: Fast Slew Rate
                                                  Drive Strength Field: R0(260 Ohm @ 3.3V, 150 Ohm@1.8V, 240 Ohm for DDR)
                                                  Speed Field: medium(100MHz)
                                                  Open Drain Enable Field: Open Drain Disabled
@@ -191,7 +192,7 @@ void _sdcard_pin_init(void)
                                                  Hyst. Enable Field: Hysteresis Enabled */
   IOMUXC_SetPinConfig(
       IOMUXC_GPIO_SD_B0_04_USDHC1_DATA2,      /* GPIO_SD_B0_04 PAD functional properties : */
-      0x017089u);                             /* Slew Rate Field: Fast Slew Rate
+      0x017000u | padDrv);                             /* Slew Rate Field: Fast Slew Rate
                                                  Drive Strength Field: R0(260 Ohm @ 3.3V, 150 Ohm@1.8V, 240 Ohm for DDR)
                                                  Speed Field: medium(100MHz)
                                                  Open Drain Enable Field: Open Drain Disabled
@@ -201,7 +202,7 @@ void _sdcard_pin_init(void)
                                                  Hyst. Enable Field: Hysteresis Enabled */
   IOMUXC_SetPinConfig(
       IOMUXC_GPIO_SD_B0_05_USDHC1_DATA3,      /* GPIO_SD_B0_05 PAD functional properties : */
-      0x017089u);                             /* Slew Rate Field: Fast Slew Rate
+      0x017000u | padDrv);                             /* Slew Rate Field: Fast Slew Rate
                                                  Drive Strength Field: R0(260 Ohm @ 3.3V, 150 Ohm@1.8V, 240 Ohm for DDR)
                                                  Speed Field: medium(100MHz)
                                                  Open Drain Enable Field: Open Drain Disabled

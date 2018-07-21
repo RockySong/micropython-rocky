@@ -5559,7 +5559,7 @@ mp_obj_t py_imagereader_next_frame(uint n_args, const mp_obj_t *args, mp_map_t *
     for (ms = systick_current_millis();
          ((ms - ((py_imagewriter_obj_t *) args[0])->ms) < ms_tmp);
          ms = systick_current_millis()) {
-        __WFI();
+        HAL_WFI();
     }
 
     ((py_imagewriter_obj_t *) args[0])->ms = ms;

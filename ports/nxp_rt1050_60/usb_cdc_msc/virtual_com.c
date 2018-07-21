@@ -30,7 +30,7 @@
 #include "fsl_device_registers.h"
 #include "clock_config.h"
 #include "board.h"
-
+#include "hal_wrapper.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -606,7 +606,7 @@ int VCOM_Read(uint8_t *buf, uint32_t len, uint32_t timeout)
                 // IRQs disabled so buffer will never be filled; return immediately
                 return cbRead;
             }
-            __WFI(); // enter sleep mode, waiting for interrupt
+			HAL_WFI();
         }
 
         // Copy byte from device to user buffer
@@ -622,7 +622,7 @@ void VCOM_WriteAlways(const uint8_t *buf, uint32_t len) {
 		return;
     for (i = 0; i < len; ) {
 		while (RingBlk_GetFreeBytes(&s_txRB) == 0) {
-			__WFI();
+			HAL_WFI();
 			if (retry++ >= 100) {
 				s_isTxIdle = 1; // it seems some bug prevent from restoring s_isTxIdle
 				goto cleanup;
@@ -664,7 +664,7 @@ void VCOM_OmvWriteAlways(const uint8_t *buf, uint32_t len) {
 	int retry = 0;
     for (i = 0; i < len; ) {
 		while (RingBlk_GetFreeBytes(&s_omvRB) == 0) {
-			__WFI();
+			HAL_WFI();
 			if (retry++ >= 1/*100*/) {
 				goto cleanup;
 			}

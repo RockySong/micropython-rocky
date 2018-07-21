@@ -555,7 +555,7 @@ HAL_StatusTypeDef HAL_Init(void)
 	return HAL_OK;
 }
 
-#define DTCM_END  0x20078000
+#define DTCM_END  0x20074000  // leave 16kB, letnet can makes openmv access out of range.
 #define OCRAM_END 0x20280000
 #ifdef USE_OCRAM
 #define RAM_START 0x20200000

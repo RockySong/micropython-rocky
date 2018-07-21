@@ -197,6 +197,12 @@ typedef enum _sd_command
     kSD_SendTuningBlock = 19U,       /*!< Send Tuning Block */
 } sd_command_t;
 
+/*! @brief SDSPI individual commands */
+typedef enum _sdspi_command
+{
+    kSDSPI_CommandCrc = 59U, /*!< Command crc protection on/off */
+} sdspi_command_t;
+
 /*! @brief SD card individual application commands */
 typedef enum _sd_application_command
 {

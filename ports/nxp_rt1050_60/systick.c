@@ -41,7 +41,7 @@ void HAL_Delay(uint32_t Delay) {
         // Wraparound of tick is taken care of by 2's complement arithmetic.
         while (uwTick - start < Delay) {
             // Enter sleep mode, waiting for (at least) the SysTick interrupt.
-            __WFI();
+			HAL_WFI();
         }
     } else {
         // IRQs disabled, use mp_hal_delay_ms routine.
@@ -98,7 +98,7 @@ bool sys_tick_has_passed(uint32_t start_tick, uint32_t delay_ms) {
 // HAL_GetTick() some time before calling this function.
 void sys_tick_wait_at_least(uint32_t start_tick, uint32_t delay_ms) {
     while (!sys_tick_has_passed(start_tick, delay_ms)) {
-        __WFI(); // enter sleep mode, waiting for interrupt
+        HAL_WFI(); // enter sleep mode, waiting for interrupt
     }
 }
 
@@ -111,7 +111,8 @@ void systick_sleep(volatile uint32_t ms)
 {
     volatile uint32_t curr_ticks = HAL_GetTick();
     while ((HAL_GetTick() - curr_ticks) < ms) {
-        __WFI();
+        // rocky: it shouldn't be, but WFI makes J-Link debug session broken on OMVRT1 board
+		HAL_WFI();
     }
 }
 

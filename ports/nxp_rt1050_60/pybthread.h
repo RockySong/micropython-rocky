@@ -26,7 +26,7 @@
 
 #ifndef MICROPY_INCLUDED_STMHAL_PYBTHREAD_H
 #define MICROPY_INCLUDED_STMHAL_PYBTHREAD_H
-
+#include "hal_wrapper.h"
 typedef struct _pyb_thread_t {
     void *sp;
     uint32_t local_state;
@@ -65,7 +65,7 @@ static inline void *pyb_thread_get_local(void) {
 
 static inline void pyb_thread_yield(void) {
     if (pyb_thread_cur->run_next == pyb_thread_cur) {
-        __WFI();
+        HAL_WFI();
     } else {
         SCB->ICSR = SCB_ICSR_PENDSVSET_Msk;
     }
