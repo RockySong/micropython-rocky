@@ -522,6 +522,22 @@ int32_t RingBlk_FixBlkFillCnt(ring_block_t *pRB, uint32_t cbFill, uint8_t **ppNe
 	return 0;
 }
 
+int32_t RingBlk_ReuseTakenBlk(ring_block_t *pRB, uint8_t **ppBlk) {
+	if (pRB->takenBlkNdx == 0xFF)
+		return -1L;	// must first take one block, then fix its filled count
+	INIT_CRITICAL_RBK();
+	ENTER_CRITICAL_RBK();
+	if (!(pRB->wNdx == pRB->takenBlkNdx))
+	{
+		while(1) {}
+	}
+	if (ppBlk) {
+		ppBlk[0] = pRB->pBlks + pRB->blkSize * pRB->wNdx;
+		pRB->cbBlkFillTos[pRB->wNdx] = 0;
+	}
+	LEAVE_CRITICAL_RBK();
+	return 0;
+}
 
 // Get the previous taken block by 
 uint8_t* RingBlk_GetTakenBlk(ring_block_t *pRB)

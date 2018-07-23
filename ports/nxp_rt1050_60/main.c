@@ -100,7 +100,7 @@ void NORETURN __fatal_error(const char *msg) {
         }
         if (i >= 16) {
             // to conserve power
-            __WFI();
+            HAL_WFI();
         }
     }
 	while(1) {}
@@ -548,7 +548,7 @@ HAL_StatusTypeDef HAL_Init(void)
 		if (wait % 250 == 0) {
 			PRINTF("%d\r\n", (1501 - wait) / 250);
 		}
-		__WFI();
+		HAL_WFI();
 	}
 	#endif
 	
@@ -704,7 +704,7 @@ soft_reset:
 			volatile uint32_t t1, t2;
 			t1 = HAL_GetTick();
 			t2 = t1 + 2000;
-			while (HAL_GetTick() < t2) {__WFI();}
+			while (HAL_GetTick() < t2) {HAL_WFI();}
 		}
 		#endif
     }

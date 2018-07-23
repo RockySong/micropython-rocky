@@ -343,15 +343,16 @@ static inline mp_uint_t disable_irq(void) {
             pyb_thread_yield(); \
             MP_THREAD_GIL_ENTER(); \
         } else { \
-            __WFI(); \
+            HAL_WFI(); \
         } \
     } while (0);
 #else
+extern void HAL_WFI(void);
 #define MICROPY_EVENT_POLL_HOOK \
     do { \
         extern void mp_handle_pending(void); \
         mp_handle_pending(); \
-        __WFI(); \
+        HAL_WFI(); \
     } while (0);
 #endif
 

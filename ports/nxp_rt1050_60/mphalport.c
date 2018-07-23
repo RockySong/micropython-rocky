@@ -34,7 +34,7 @@ int mp_hal_stdin_rx_chr(void) {
 		}
 	#endif
         if (usb_vcp_recv_byte((uint8_t*)&c) != 0) {
-            return c;
+            return (uint8_t)(c & 0xFF);
         } else if (MP_STATE_PORT(pyb_stdio_uart) != NULL && uart_rx_any(MP_STATE_PORT(pyb_stdio_uart))) {
             return uart_rx_char(MP_STATE_PORT(pyb_stdio_uart));
         }

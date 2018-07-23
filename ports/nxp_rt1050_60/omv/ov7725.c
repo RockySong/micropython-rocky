@@ -21,8 +21,7 @@ static const uint8_t default_regs[][2] = {
     {COM7,          COM7_RES_VGA | COM7_FMT_RGB565 | COM7_FMT_RGB},
 
     {COM4,          OMV_OV7725_PLL_CONFIG},
-    {CLKRC,         0x01}, /* Res/Bypass pre-scalar */  //extern clock means directly use the clock from RT,rt sdk set bit[6] 0,means the forward clockmeans based the clock but pre-scale it;,but stm set this bits 1,directly use no pre-scale
- 
+    {CLKRC,         0xc0}, // 
     // VGA Window Size
     {HSTART,        0x23},
     {HSIZE,         0xA0},

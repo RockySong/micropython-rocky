@@ -131,9 +131,9 @@ enum {
 };
 
 enum {
-  PIN_ADC1  = (1 << 0),
-  PIN_ADC2  = (1 << 1),
-  PIN_ADC3  = (1 << 2),
+  PIN_ADC1  = (1 << 1),
+  PIN_ADC2  = (1 << 2),
+  PIN_ADC3  = (1 << 3),
 };
 
 

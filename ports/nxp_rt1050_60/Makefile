@@ -235,7 +235,6 @@ SRC_IMG = $(addprefix omv/img/,   \
 	imlib.c                 \
 	collections.c           \
 	stats.c                 \
-	morph.c                 \
 	integral.c              \
 	integral_mw.c           \
 	kmeans.c                \
@@ -300,6 +299,7 @@ SRC_C = \
 	isr.c \
 	hal_wrapper.c \
 	pybthread.c \
+	adc.c \
 	led.c \
 	pin_named_pins.c \
 	pin_defs_mcu.c \
@@ -395,7 +395,8 @@ SRC_UTIL = 	$(addprefix $(HAL_DIR)/utilities/, \
 	fsl_debug_console.c \
 	)
 SRC_HAL = $(addprefix $(HAL_DIR)/drivers/, \
-    fsl_clock.c \
+	fsl_adc.c \
+	fsl_clock.c \
 	fsl_cache.c \
 	fsl_flexspi.c \
 	fsl_gpio.c \

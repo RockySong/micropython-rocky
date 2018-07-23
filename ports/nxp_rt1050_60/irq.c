@@ -40,7 +40,7 @@ uint32_t irq_stats[FPU_IRQn + 1] = {0};
 /// This executies a `wfi` instruction which reduces power consumption
 /// of the MCU until an interrupt occurs, at which point execution continues.
 STATIC mp_obj_t pyb_wfi(void) {
-    __WFI();
+    HAL_WFI();
     return mp_const_none;
 }
 MP_DEFINE_CONST_FUN_OBJ_0(pyb_wfi_obj, pyb_wfi);

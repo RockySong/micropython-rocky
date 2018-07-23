@@ -183,6 +183,9 @@ uint8_t* RingBlk_TakeNextFreeBlk(ring_block_t *pRB);
 // if ppNextFreeBlk is not NULL, then automatically take next free block as if RingBlk_TakeNextFreeBlk is called
 // otherwise, MUST first call RingBlk_Take1Blk, then after the taken block is filled call this API to fix the filled count
 int32_t RingBlk_FixBlkFillCnt(ring_block_t *pRB, uint32_t cbFill, uint8_t **ppNextFreeBlk);
+// reuse the previous taken block, used in USB VCOM RX handler, if received info is to be discarded, such as some control, e.g., CTRL-C
+int32_t RingBlk_ReuseTakenBlk(ring_block_t *pRB, uint8_t **ppBlk);
+
 // Get the block that is taken with RingBlk_TakeNextFreeBlk or RingBlk_FixBlkFillCnt
 uint8_t* RingBlk_GetTakenBlk(ring_block_t *pRB);
 

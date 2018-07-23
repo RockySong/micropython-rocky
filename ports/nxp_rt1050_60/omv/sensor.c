@@ -102,75 +102,75 @@ typedef struct _ov7725_reg
     uint8_t val;
 } ov7725_reg_t;
 
-static const ov7725_reg_t ov7725InitRegs[] = {   //note that:we use our rt defaults reg to replace the openmv's,beacause some diffetents will cause the program fail,the rate of the  lcd flushing is very high,do not know which one have an effect on this
-    {COM3,          0x00},//if we set the varible COM3_SWAP_YUV,the picture will be a mass one 
-    {COM7,          COM7_RES_VGA | COM7_FMT_RGB565 | COM7_FMT_RGB},
-    {0x3d, 0x03},
-    {0x42, 0x7f},
-    {0x4d, 0x09},
+//static const ov7725_reg_t ov7725InitRegs[] = {   //note that:we use our rt defaults reg to replace the openmv's,beacause some diffetents will cause the program fail,the rate of the  lcd flushing is very high,do not know which one have an effect on this
+//    {COM3,          0x00},//if we set the varible COM3_SWAP_YUV,the picture will be a mass one 
+//    {COM7,          COM7_RES_VGA | COM7_FMT_RGB565 | COM7_FMT_RGB},
+//    {0x3d, 0x03},
+//    {0x42, 0x7f},
+//    {0x4d, 0x09},
 
-    /* DSP */
-    {0x64, 0xff},
-    {0x65, 0x20},
-    {0x66, 0x00},
-    {0x67, 0x48},
-    {0x0f, 0xc5},
-    {0x13, 0xff},
+//    /* DSP */
+//    {0x64, 0xff},
+//    {0x65, 0x20},
+//    {0x66, 0x00},
+//    {0x67, 0x48},
+//    {0x0f, 0xc5},
+//    {0x13, 0xff},
 
-    /* AEC/AGC/AWB */
-    {0x63, 0xe0},
-    {0x14, 0x11},
-    {0x22, 0x3f},
-    {0x23, 0x07},
-    {0x24, 0x40},
-    {0x25, 0x30},
-    {0x26, 0xa1},
-    {0x2b, 0x00},
-    {0x6b, 0xaa},
-    {0x0d, 0x41},
+//    /* AEC/AGC/AWB */
+//    {0x63, 0xe0},
+//    {0x14, 0x11},
+//    {0x22, 0x3f},
+//    {0x23, 0x07},
+//    {0x24, 0x40},
+//    {0x25, 0x30},
+//    {0x26, 0xa1},
+//    {0x2b, 0x00},
+//    {0x6b, 0xaa},
+//    {0x0d, 0x41},
 
-    /* Sharpness. */
-    {0x90, 0x05},
-    {0x91, 0x01},
-    {0x92, 0x03},
-    {0x93, 0x00},
+//    /* Sharpness. */
+//    {0x90, 0x05},
+//    {0x91, 0x01},
+//    {0x92, 0x03},
+//    {0x93, 0x00},
 
-    /* Matrix. */
-    {0x94, 0x90},
-    {0x95, 0x8a},
-    {0x96, 0x06},
-    {0x97, 0x0b},
-    {0x98, 0x95},
-    {0x99, 0xa0},
-    {0x9a, 0x1e},
+//    /* Matrix. */
+//    {0x94, 0x90},
+//    {0x95, 0x8a},
+//    {0x96, 0x06},
+//    {0x97, 0x0b},
+//    {0x98, 0x95},
+//    {0x99, 0xa0},
+//    {0x9a, 0x1e},
 
-    /* Brightness. */
-    {0x9b, 0x08},
-    /* Contrast. */
-    {0x9c, 0x20},
-    /* UV */
-    {0x9e, 0x81},
-    /* DSE */
-    {0xa6, 0x04},
+//    /* Brightness. */
+//    {0x9b, 0x08},
+//    /* Contrast. */
+//    {0x9c, 0x20},
+//    /* UV */
+//    {0x9e, 0x81},
+//    /* DSE */
+//    {0xa6, 0x04},
 
-    /* Gamma. */
-    {0x7e, 0x0c},
-    {0x7f, 0x16},
-    {0x80, 0x2a},
-    {0x81, 0x4e},
-    {0x82, 0x61},
-    {0x83, 0x6f},
-    {0x84, 0x7b},
-    {0x85, 0x86},
-    {0x86, 0x8e},
-    {0x87, 0x97},
-    {0x88, 0xa4},
-    {0x89, 0xaf},
-    {0x8a, 0xc5},
-    {0x8b, 0xd7},
-    {0x8c, 0xe8},
+//    /* Gamma. */
+//    {0x7e, 0x0c},
+//    {0x7f, 0x16},
+//    {0x80, 0x2a},
+//    {0x81, 0x4e},
+//    {0x82, 0x61},
+//    {0x83, 0x6f},
+//    {0x84, 0x7b},
+//    {0x85, 0x86},
+//    {0x86, 0x8e},
+//    {0x87, 0x97},
+//    {0x88, 0xa4},
+//    {0x89, 0xaf},
+//    {0x8a, 0xc5},
+//    {0x8b, 0xd7},
+//    {0x8c, 0xe8},
 
-};
+//};
 
 static status_t cambus_writes(uint8_t slv_addr, const ov7725_reg_t regs[], uint32_t num)
 {
@@ -645,7 +645,7 @@ void CsiFragModeCalc(void) {
 	dmaByteTotal = sensor.fb_w * sensor.fb_h * 2;	
 	if (sensor.wndX == 0 && sensor.wndY == 0) // (s_irq.isGray)
 	{
-
+		dmaBytePerFrag = s_irq.dmaBytePerLine;  // set a minial default value
 		for (byteStep = s_irq.dmaBytePerLine; byteStep < maxBytePerLine; byteStep += s_irq.dmaBytePerLine) {
 			if (0 == byteStep % 32 )
 			{
@@ -878,7 +878,8 @@ int sensor_reset()
 	sensor.wndW = sensor.fb_w;
 	sensor.wndX = sensor.wndY = 0;	
 
-	sensor_set_framerate(0x80000000 | (1<<9|(4-1)<<11));
+	// CSI clk src: 480MHz USBPLL, CSI MCLK = 480 / 4 / 8 = 15MHz
+	sensor_set_framerate(0x80000000 | (2<<9|(8-1)<<11));
 	
     // Reset the sesnor state
     sensor.sde          = 0xFF;
