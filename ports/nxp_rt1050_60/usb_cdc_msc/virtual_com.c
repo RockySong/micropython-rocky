@@ -177,7 +177,7 @@ uint8_t *usbd_cdc_tx_buf(uint32_t bytes)
 }
 
 
-void CheckOpenMVIDEConnect(void) {
+void CheckVCOMConnect(void) {
 	baudrate = *((uint32_t*)s_lineCoding);
 	// The slow baudrate can be used on OSs that don't support custom baudrates
 	if (baudrate == IDE_BAUDRATE_SLOW || baudrate == IDE_BAUDRATE_FAST) {
@@ -269,7 +269,7 @@ usb_status_t USB_DeviceCdcVcomCallback(class_handle_t handle, uint32_t event, vo
         case kUSB_DeviceCdcEventRecvResponse:
         {
             if ((1 == g_deviceComposite->cdcVcom.attach) && (1 == g_deviceComposite->cdcVcom.startTransactions))
-            {
+            {	g_isUsbHostOpen = 1;
 				if (epCbParam->length != (uint32_t)-1L) {
 					if (debug_mode == 0) 
 					{
@@ -394,18 +394,19 @@ usb_status_t USB_DeviceCdcVcomCallback(class_handle_t handle, uint32_t event, vo
         case kUSB_DeviceCdcEventClearCommFeature:
             break;
         case kUSB_DeviceCdcEventGetLineCoding:
+			g_isUsbHostOpen = 1;
             *(acmReqParam->buffer) = s_lineCoding;
             *(acmReqParam->length) = LINE_CODING_SIZE;
-			CheckOpenMVIDEConnect();	
+			CheckVCOMConnect();	
             error = kStatus_USB_Success;
             break;
         case kUSB_DeviceCdcEventSetLineCoding:
         {   
-
+			g_isUsbHostOpen = 1;
             if (1 == acmReqParam->isSetup)
             {
                 *(acmReqParam->buffer) = s_lineCoding;
-				CheckOpenMVIDEConnect();			
+				CheckVCOMConnect();			
             }
             else
             {
@@ -416,6 +417,7 @@ usb_status_t USB_DeviceCdcVcomCallback(class_handle_t handle, uint32_t event, vo
             break;
         case kUSB_DeviceCdcEventSetControlLineState:
         {
+			g_isUsbHostOpen = 0;
             s_usbCdcAcmInfo.dteStatus = acmReqParam->setupValue;
             /* activate/deactivate Tx carrier */
             if (acmInfo->dteStatus & USB_DEVICE_CDC_CONTROL_SIG_BITMAP_CARRIER_ACTIVATION)
