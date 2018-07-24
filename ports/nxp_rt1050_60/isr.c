@@ -430,7 +430,7 @@ uint32_t s_prescale;
 // seems to have even more hit count
 #define PROF_DECAY	
 uint32_t s_ignrList[] = {
-	(uint32_t)sensor_snapshot + 0x40 ,
+	// (uint32_t)sensor_snapshot + 0x40 ,
 };
 
 typedef struct {

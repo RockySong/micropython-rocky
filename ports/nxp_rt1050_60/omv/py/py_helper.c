@@ -206,6 +206,7 @@ uint py_helper_consume_array(uint n_args, const mp_obj_t *args, uint arg_index, 
 int py_helper_keyword_color(image_t *img, uint n_args, const mp_obj_t *args, uint arg_index,
                             mp_map_t *kw_args, int default_val)
 {
+	#ifndef OMV_MPY_ONLY
     mp_map_elem_t *kw_arg = kw_args ? mp_map_lookup(kw_args, MP_OBJ_NEW_QSTR(MP_QSTR_color), MP_MAP_LOOKUP) : NULL;
 
     if (kw_arg) {
@@ -255,7 +256,7 @@ int py_helper_keyword_color(image_t *img, uint n_args, const mp_obj_t *args, uin
             }
         }
     }
-
+	#endif
     return default_val;
 }
 

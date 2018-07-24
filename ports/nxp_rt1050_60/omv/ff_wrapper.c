@@ -236,6 +236,7 @@ uint32_t file_size_w_buf(FIL *fp)
 
 void file_buffer_on(FIL *fp)
 {
+	#ifndef OMV_MPY_ONLY
     file_buffer_offset = f_tell(fp) % 4;
     file_buffer_pointer = fb_alloc_all(&file_buffer_size) + file_buffer_offset;
     if (!file_buffer_size) {
@@ -251,6 +252,7 @@ void file_buffer_on(FIL *fp)
         if (res != FR_OK) ff_fail(fp, res);
         if (bytes != can_do) ff_read_fail(fp);
     }
+	#endif
 }
 
 void file_buffer_off(FIL *fp)

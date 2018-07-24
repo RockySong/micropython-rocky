@@ -118,49 +118,58 @@ void usbdbg_data_in(void *buffer, int length)
         }
 
         case USBDBG_FRAME_SIZE:
-			logout("data_in: USBDBG_FRAME_SIZE\r\n");
-		#ifdef DUMP_RAW
-            ((uint32_t*)buffer)[0] = MAIN_FB()->w;
-            ((uint32_t*)buffer)[1] = MAIN_FB()->h;
-            ((uint32_t*)buffer)[2] = MAIN_FB()->bpp; // MAIN_FB()->w * MAIN_FB()->h * MAIN_FB()->bpp;		
-		#else
-			// Return 0 if FB is locked or not ready.
+		#ifdef OMV_MPY_ONLY
 			((uint32_t*)buffer)[0] = 0;
-            // Try to lock FB. If header size == 0 frame is not ready
-            if (mutex_try_lock(&JPEG_FB()->lock, MUTEX_TID_IDE)) {
-                // If header size == 0 frame is not ready
-                if (JPEG_FB()->size == 0) {
-                    // unlock FB
-                    mutex_unlock(&JPEG_FB()->lock, MUTEX_TID_IDE);
-                } else {
-                    // Return header w, h and size/bpp
-                    ((uint32_t*)buffer)[0] = JPEG_FB()->w;
-                    ((uint32_t*)buffer)[1] = JPEG_FB()->h;
-                    ((uint32_t*)buffer)[2] = JPEG_FB()->size;
-                }
-            }
+			((uint32_t*)buffer)[1] = 0;
+			((uint32_t*)buffer)[2] = 0; // MAIN_FB()->w * MAIN_FB()->h * MAIN_FB()->bpp;			
+		#else
+			#ifdef DUMP_RAW
+				((uint32_t*)buffer)[0] = MAIN_FB()->w;
+				((uint32_t*)buffer)[1] = MAIN_FB()->h;
+				((uint32_t*)buffer)[2] = MAIN_FB()->bpp; // MAIN_FB()->w * MAIN_FB()->h * MAIN_FB()->bpp;		
+			#else
+				// Return 0 if FB is locked or not ready.
+				((uint32_t*)buffer)[0] = 0;
+				// Try to lock FB. If header size == 0 frame is not ready
+				if (mutex_try_lock(&JPEG_FB()->lock, MUTEX_TID_IDE)) {
+					// If header size == 0 frame is not ready
+					if (JPEG_FB()->size == 0) {
+						// unlock FB
+						mutex_unlock(&JPEG_FB()->lock, MUTEX_TID_IDE);
+					} else {
+						// Return header w, h and size/bpp
+						((uint32_t*)buffer)[0] = JPEG_FB()->w;
+						((uint32_t*)buffer)[1] = JPEG_FB()->h;
+						((uint32_t*)buffer)[2] = JPEG_FB()->size;
+					}
+				}
+			#endif
 		#endif
             cmd = USBDBG_NONE;
             break;
 
         case USBDBG_FRAME_DUMP:
-            if (xfer_bytes < xfer_length) {
-			#ifdef DUMP_RAW
-                memcpy(buffer, MAIN_FB()->pixels+xfer_bytes, length);
-                xfer_bytes += length;
-                if (xfer_bytes == xfer_length) {
-                    cmd = USBDBG_NONE;
-                }			
+			#ifdef OMV_MPY_ONLY
+				cmd = USBDBG_NONE;
 			#else
-                memcpy(buffer, JPEG_FB()->pixels+xfer_bytes, length);
-                xfer_bytes += length;
-                if (xfer_bytes == xfer_length) {
-                    cmd = USBDBG_NONE;
-                    JPEG_FB()->w = 0; JPEG_FB()->h = 0; JPEG_FB()->size = 0;
-                    mutex_unlock(&JPEG_FB()->lock, MUTEX_TID_IDE);
-                }
-			#endif
+				if (xfer_bytes < xfer_length) {
+				#ifdef DUMP_RAW
+					memcpy(buffer, MAIN_FB()->pixels+xfer_bytes, length);
+					xfer_bytes += length;
+					if (xfer_bytes == xfer_length) {
+						cmd = USBDBG_NONE;
+					}			
+				#else
+					memcpy(buffer, JPEG_FB()->pixels+xfer_bytes, length);
+					xfer_bytes += length;
+					if (xfer_bytes == xfer_length) {
+						cmd = USBDBG_NONE;
+						JPEG_FB()->w = 0; JPEG_FB()->h = 0; JPEG_FB()->size = 0;
+						mutex_unlock(&JPEG_FB()->lock, MUTEX_TID_IDE);
+					}
+				#endif
             }
+			#endif
             break;
 
         case USBDBG_ARCH_STR: {
@@ -235,6 +244,7 @@ void usbdbg_data_out(void *buffer, int length)
             break;
 
         case USBDBG_TEMPLATE_SAVE: {
+			#ifndef OMV_MPY_ONLY
             image_t image ={
                 .w = MAIN_FB()->w,
                 .h = MAIN_FB()->h,
@@ -252,10 +262,12 @@ void usbdbg_data_out(void *buffer, int length)
             imlib_save_image(&image, path, roi, 50);
             // raise a flash IRQ to flush image
             //NVIC->STIR = FLASH_IRQn;
+			#endif
             break;
         }
 
         case USBDBG_DESCRIPTOR_SAVE: {
+			#ifndef OMV_MPY_ONLY
             image_t image ={
                 .w = MAIN_FB()->w,
                 .h = MAIN_FB()->h,
@@ -271,6 +283,7 @@ void usbdbg_data_out(void *buffer, int length)
             char *path = (char*)buffer+sizeof(rectangle_t);
 
             py_image_descriptor_from_roi(&image, path, roi);
+			#endif
             break;
         }
         default: /* error */
@@ -350,6 +363,7 @@ void usbdbg_control(void *buffer, uint8_t request, uint32_t length)
             /* write sensor attribute */
             int16_t attr= *((int16_t*)buffer);
             int16_t val = *((int16_t*)buffer+1);
+			#ifndef OMV_MPY_ONLY
             switch (attr) {
                 case ATTR_CONTRAST:
                     sensor_set_contrast(val);
@@ -366,6 +380,7 @@ void usbdbg_control(void *buffer, uint8_t request, uint32_t length)
                 default:
                     break;
             }
+			#endif
             cmd = USBDBG_NONE;
             break;
         }
@@ -375,18 +390,22 @@ void usbdbg_control(void *buffer, uint8_t request, uint32_t length)
             break;
 
         case USBDBG_FB_ENABLE: {
-            int16_t enable = *((int16_t*)buffer);
-			#ifdef DUMP_RAW
-			enable = 0;
-			#endif
-			logout("control: FB enable, enable=%d, jpeg_fb = 0x%08X\r\n", enable, (uint32_t)JPEG_FB());
+			#ifdef OMV_MPY_ONLY
 
-            JPEG_FB()->enabled = enable;
-            if (enable == 0) {
-                // When disabling framebuffer, the IDE might still be holding FB lock.
-                // If the IDE is not the current lock owner, this operation is ignored.
-                mutex_unlock(&JPEG_FB()->lock, MUTEX_TID_IDE);
-            }
+			#else
+				int16_t enable = *((int16_t*)buffer);
+				#ifdef DUMP_RAW
+				enable = 0;
+				#endif
+				logout("control: FB enable, enable=%d, jpeg_fb = 0x%08X\r\n", enable, (uint32_t)JPEG_FB());
+
+				JPEG_FB()->enabled = enable;
+				if (enable == 0) {
+					// When disabling framebuffer, the IDE might still be holding FB lock.
+					// If the IDE is not the current lock owner, this operation is ignored.
+					mutex_unlock(&JPEG_FB()->lock, MUTEX_TID_IDE);
+				}
+			#endif
             cmd = USBDBG_NONE;
             break;
         }
@@ -409,8 +428,10 @@ void usbdbg_connect(void)
 	// sensor_set_framerate(2<<9 | 2<<11);
 }
 void usbdbg_disconnect(void) {
+	#ifndef OMV_MPY_ONLY
 	JPEG_FB()->enabled = 0;
 	mutex_unlock(&JPEG_FB()->lock, MUTEX_TID_IDE);
+	#endif
 	// sensor_set_framerate(2<<9 | 1<<11);
 }
 

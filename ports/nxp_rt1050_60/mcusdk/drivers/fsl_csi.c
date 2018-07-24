@@ -473,9 +473,6 @@ status_t CSI_TransferCreateHandle(CSI_Type *base,
     s_csiHandle[instance] = handle;
 
     s_csiIsr = CSI_TransferHandleIRQ;
-	#ifdef OPENMV_SENSOR
-	s_csiIsr = CSI_OmvTransferHandleIRQ;
-	#endif
 
     /* Enable interrupt. */
     EnableIRQ(s_csiIRQ[instance]);

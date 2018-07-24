@@ -198,7 +198,7 @@ class Pin(object):
     def adc_num_str(self):
         str = ''
         for adc_num in range(1,4):
-            if self.adc_num & (1 << (adc_num - 1)):
+            if self.adc_num & (1 << (adc_num)):
                 if len(str) > 0:
                     str += ' | '
                 str += 'PIN_ADC'
@@ -485,7 +485,7 @@ def main():
     )
     
     if len(sys.argv) < 2:
-        sys.argv = ['./make-pins.py', '--board', './imxrtevk105x/pins.csv', '--af', './mimxrt105x_af.csv', '--pinmap', './mimxrt105x_pinmap.csv', '--prefix', './mimxrt105x_prefix.c', '--hdr', '../build-imxrtevk105x/genhdr/pins.h', '--qstr', '../build-imxrtevk105x/pins_qstr.h', '--af-const', '../build-imxrtevk105x/genhdr/pins_af_const.h', '--af-py', '../build-imxrtevk105x/pins_af.py']
+        sys.argv = ['./make-pins.py', '--board', './omvrt1/pins.csv', '--af', './mimxrt105x_af.csv', '--pinmap', './mimxrt105x_pinmap.csv', '--prefix', './mimxrt105x_prefix.c', '--hdr', '../build-omvrt1/genhdr/pins.h', '--qstr', '../build-omvrt1/pins_qstr.h', '--af-const', '../build-omvrt1/genhdr/pins_af_const.h', '--af-py', '../build-omvrt1/pins_af.py']
     args = parser.parse_args(sys.argv[1:])
     print("// args=", sys.argv)
     pins = Pins()

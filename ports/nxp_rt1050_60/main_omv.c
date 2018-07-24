@@ -77,6 +77,15 @@ int errno;
 long long _vfs_buf[1024 / 8];
 static fs_user_mount_t *vfs_fat = (fs_user_mount_t *) _vfs_buf;
 
+#ifdef OMV_MPY_ONLY
+void fb_alloc_free_till_mark() {}
+void fb_free(void) {}
+void *fb_alloc(uint32_t size) {return 0;}
+void fb_alloc_fail(void) {}
+void list_push_back(list_t *ptr, void *data) {}
+void* py_image_cobj(mp_obj_t img_obj) {}
+#endif
+
 #ifndef NDEBUG
 void __attribute__((weak))
     __assert_func(const char *file, int line, const char *func, const char *expr) {
@@ -196,7 +205,9 @@ FRESULT exec_boot_script(const char *path, bool selftest, bool interruptible)
 
         // Set flag for SWD debugger.
         // Note: main.py does not use the frame buffer.
+		#ifndef OMV_MPY_ONLY
         MAIN_FB()->bpp = 0xDEAD;
+		#endif
     }
 
     return f_res;
@@ -228,7 +239,9 @@ int OpenMV_Main(uint32_t first_soft_reset)
     pyb_usb_init0();
     sensor_init0();
 */
+	#ifndef OMV_MPY_ONLY
     fb_alloc_init0();
+	#endif
     file_buffer_init0();
     // py_lcd_init0();
     // far InfraRed sensor py_fir_init0();
