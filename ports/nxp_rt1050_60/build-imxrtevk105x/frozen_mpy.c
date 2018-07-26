@@ -154,7 +154,6 @@ enum {
     MP_QSTR__percent_6_dot_3fV,
     MP_QSTR__percent_5_dot_1f_Acirc__deg_C,
     MP_QSTR_adc,
-    MP_QSTR_ADCAll,
     MP_QSTR_RTC,
     MP_QSTR_FrameBuffer,
     MP_QSTR_fill_rect,
@@ -171,8 +170,8 @@ extern const qstr_pool_t mp_qstr_const_pool;
 const qstr_pool_t mp_qstr_frozen_const_pool = {
     (qstr_pool_t*)&mp_qstr_const_pool, // previous pool
     MP_QSTRnumber_of, // previous pool size
-    134, // allocated entries
-    134, // used entries
+    133, // allocated entries
+    133, // used entries
     {
         (const byte*)"\xcf\xa5\x0b" "lcd160cr.py",
         (const byte*)"\xf2\xcd\x08" "PORTRAIT",
@@ -297,7 +296,6 @@ const qstr_pool_t mp_qstr_frozen_const_pool = {
         (const byte*)"\x1b\x2a\x06" "%6.3fV",
         (const byte*)"\x7d\x03\x08" "\x25\x35\x2e\x31\x66\xc2\xb0\x43",
         (const byte*)"\x43\x32\x03" "adc",
-        (const byte*)"\x02\x28\x06" "ADCAll",
         (const byte*)"\xa0\x04\x03" "RTC",
         (const byte*)"\xd8\xbe\x0b" "FrameBuffer",
         (const byte*)"\x35\xed\x09" "fill_rect",

@@ -948,10 +948,15 @@ static void threshold(struct quirc *q)
     if (threshold_s < THRESHOLD_S_MIN)
         threshold_s = THRESHOLD_S_MIN;
 
+	#ifdef __CC_ARM
+	int *row_average = alloca(q->w * sizeof(int));
+	#endif	
+	
     for (y = 0; y < q->h; y++) {
+		#ifndef __CC_ARM
         int row_average[q->w];
-
-        memset(row_average, 0, sizeof(row_average));
+		#endif
+        memset(row_average, 0, q->w * sizeof(int));
 
         for (x = 0; x < q->w; x++) {
             int w, u;

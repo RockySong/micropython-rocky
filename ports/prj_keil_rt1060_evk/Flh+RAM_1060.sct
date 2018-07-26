@@ -4,12 +4,12 @@
 #define ROM_BASE	0x60000000
 #define IVT_BASE	0x60001000
 #define ITCM_SIZE	32*1024
-#define DTCM_SIZE	0
-#define OCRAM_SIZE	(512-32)*1024
+#define DTCM_SIZE	(512-32)*1024
+#define OCRAM_SIZE	512*1024
 
-#define OMV_MAIN_FB_SIZE	160*1024 //301*1024
-#define OMV_FB_ALLOC_SIZE	13*1024 //83*1024
-#define OMV_JPEG_FB_SIZE    23*1024
+#define OMV_MAIN_FB_SIZE	365*1024 //301*1024
+#define OMV_FB_ALLOC_SIZE	144*1024 //83*1024
+#define OMV_JPEG_FB_SIZE    40*1024
 
 ; must use "VECTOR_RAM", "RW_m_data", "VECTOR_ROM" as names to work with "InstallIRQHandler()" API
 
@@ -51,6 +51,7 @@ LR_XIP_FLASH ROM_BASE + 0x2000 {
 		gc.o rt_mem*.o (+RO)
 		collections.o array.o xalloc.o (+RO)
 		arm_nn_mat*.o (+RO)
+
 		// obj.o objarray.o objfloat.o objlist.o objobject.o  (+RO)
 		// objfun.o  nativeglue.o malloc.o (+RO)	
 		// objdict.o  modmath.o modarray.o modbuiltins.o modmicropython.o map.o (+RO)
@@ -73,7 +74,11 @@ LR_XIP_FLASH ROM_BASE + 0x2000 {
 		jpeg.o (+RO)
 	}
 	
-    RAM_START_PLACEHOLDER 0x20200000 EMPTY 0 {}
+    DTCM_START_PLACEHOLDER 0x20000000 EMPTY 0 {}
+	
+	QH_BUFFER_LAYOUT +0 {
+		* (.qh_buffer_2kalign)
+	}
 	
 	OVERLAY_HAAR +0 OVERLAY {
 		haar.o integral_mw.o (+RO)
@@ -95,48 +100,24 @@ LR_XIP_FLASH ROM_BASE + 0x2000 {
 		fsl_flexspi.o flash_hyper.o (+RO)
 	}	
 	
-	ER_RAM +0 {
+	ER_DTCM +0 {
 		.ANY (+RW, +ZI)
 		* (.jpeg_buf)
 		sincos_tab.o (+RO)
 		* (.ram_const)
 	}
 	
-	ARM_LIB_HEAP +0 EMPTY 0x100 ; Heap region growing up
-	{}
+	ARM_LIB_HEAP +0 EMPTY 0x100 {} ; Heap region growing up
+	MPY_HEAP_START +0 EMPTY 4 {}
 	
+	DTCM_END 0x20078000 EMPTY 4 {}
+	
+	OCRAM_START_PLACEHOLDER 0x20200000 EMPTY 0 {}
 	OMV_MAIN_FB +0 EMPTY OMV_MAIN_FB_SIZE  + OMV_FB_ALLOC_SIZE {}
 //	OMV_FB_ALLOC +0 EMPTY OMV_FB_ALLOC_SIZE {}
 	OMV_FB_END +0 EMPTY 16 {}	
-
-	MPY_HEAP_START 0X80400000 EMPTY 4 {
-	}	
-
-	; <<<
-
-	; >>> SDRAM >>>
-	ER_LCD_FB 0x81C00000 UNINIT 2048*1024  {
-		* (.lcd_fb)
-	}
-	QH_BUFFER_LAYOUT 0x81C80000 {
-		* (.qh_buffer_2kalign)
-	}
-	NC_BUFS +0 {
-		fsl_usd*.o (+RW, +ZI)
-		fsl_sd*.o (+RW, +ZI)
-		usb*.o (+RW, +ZI)
-		//virtual_com.o (+RW, +ZI)
-	}
-		
-
-	;RW_SDRAM 0xA0100000 EMPTY UNINIT (32-1)*1024*1024  {
-	;}
+	
+	OCRAM_END 0x20280000 EMPTY 4 {}
 	; <<<
 }
 
-LR_TABs IVT_BASE+0x160000
-{
-	ER_TABS +0 {
-		rgb2rgb*.o (+RO)
-	}
-}

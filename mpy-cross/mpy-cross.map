@@ -37,7 +37,7 @@ Discarded input sections
  .text          0x0000000000000000        0x0 build/py/nlrx86.o
  .data          0x0000000000000000        0x0 build/py/nlrx86.o
  .bss           0x0000000000000000        0x0 build/py/nlrx86.o
- .comment       0x0000000000000000       0x35 build/py/nlrx86.o
+ .comment       0x0000000000000000       0x36 build/py/nlrx86.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/nlrx86.o
  .text          0x0000000000000000        0x0 build/py/nlrx64.o
@@ -56,19 +56,19 @@ Discarded input sections
  .text          0x0000000000000000        0x0 build/py/nlrthumb.o
  .data          0x0000000000000000        0x0 build/py/nlrthumb.o
  .bss           0x0000000000000000        0x0 build/py/nlrthumb.o
- .comment       0x0000000000000000       0x35 build/py/nlrthumb.o
+ .comment       0x0000000000000000       0x36 build/py/nlrthumb.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/nlrthumb.o
  .text          0x0000000000000000        0x0 build/py/nlrxtensa.o
  .data          0x0000000000000000        0x0 build/py/nlrxtensa.o
  .bss           0x0000000000000000        0x0 build/py/nlrxtensa.o
- .comment       0x0000000000000000       0x35 build/py/nlrxtensa.o
+ .comment       0x0000000000000000       0x36 build/py/nlrxtensa.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/nlrxtensa.o
  .text          0x0000000000000000        0x0 build/py/nlrsetjmp.o
  .data          0x0000000000000000        0x0 build/py/nlrsetjmp.o
  .bss           0x0000000000000000        0x0 build/py/nlrsetjmp.o
- .comment       0x0000000000000000       0x35 build/py/nlrsetjmp.o
+ .comment       0x0000000000000000       0x36 build/py/nlrsetjmp.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/nlrsetjmp.o
  .text          0x0000000000000000        0x0 build/py/malloc.o
@@ -882,79 +882,79 @@ Discarded input sections
  .text          0x0000000000000000        0x0 build/py/asmbase.o
  .data          0x0000000000000000        0x0 build/py/asmbase.o
  .bss           0x0000000000000000        0x0 build/py/asmbase.o
- .comment       0x0000000000000000       0x35 build/py/asmbase.o
+ .comment       0x0000000000000000       0x36 build/py/asmbase.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/asmbase.o
  .text          0x0000000000000000        0x0 build/py/asmx64.o
  .data          0x0000000000000000        0x0 build/py/asmx64.o
  .bss           0x0000000000000000        0x0 build/py/asmx64.o
- .comment       0x0000000000000000       0x35 build/py/asmx64.o
+ .comment       0x0000000000000000       0x36 build/py/asmx64.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/asmx64.o
  .text          0x0000000000000000        0x0 build/py/emitnx64.o
  .data          0x0000000000000000        0x0 build/py/emitnx64.o
  .bss           0x0000000000000000        0x0 build/py/emitnx64.o
- .comment       0x0000000000000000       0x35 build/py/emitnx64.o
+ .comment       0x0000000000000000       0x36 build/py/emitnx64.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/emitnx64.o
  .text          0x0000000000000000        0x0 build/py/asmx86.o
  .data          0x0000000000000000        0x0 build/py/asmx86.o
  .bss           0x0000000000000000        0x0 build/py/asmx86.o
- .comment       0x0000000000000000       0x35 build/py/asmx86.o
+ .comment       0x0000000000000000       0x36 build/py/asmx86.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/asmx86.o
  .text          0x0000000000000000        0x0 build/py/emitnx86.o
  .data          0x0000000000000000        0x0 build/py/emitnx86.o
  .bss           0x0000000000000000        0x0 build/py/emitnx86.o
- .comment       0x0000000000000000       0x35 build/py/emitnx86.o
+ .comment       0x0000000000000000       0x36 build/py/emitnx86.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/emitnx86.o
  .text          0x0000000000000000        0x0 build/py/asmthumb.o
  .data          0x0000000000000000        0x0 build/py/asmthumb.o
  .bss           0x0000000000000000        0x0 build/py/asmthumb.o
- .comment       0x0000000000000000       0x35 build/py/asmthumb.o
+ .comment       0x0000000000000000       0x36 build/py/asmthumb.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/asmthumb.o
  .text          0x0000000000000000        0x0 build/py/emitnthumb.o
  .data          0x0000000000000000        0x0 build/py/emitnthumb.o
  .bss           0x0000000000000000        0x0 build/py/emitnthumb.o
- .comment       0x0000000000000000       0x35 build/py/emitnthumb.o
+ .comment       0x0000000000000000       0x36 build/py/emitnthumb.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/emitnthumb.o
  .text          0x0000000000000000        0x0 build/py/emitinlinethumb.o
  .data          0x0000000000000000        0x0 build/py/emitinlinethumb.o
  .bss           0x0000000000000000        0x0 build/py/emitinlinethumb.o
- .comment       0x0000000000000000       0x35 build/py/emitinlinethumb.o
+ .comment       0x0000000000000000       0x36 build/py/emitinlinethumb.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/emitinlinethumb.o
  .text          0x0000000000000000        0x0 build/py/asmarm.o
  .data          0x0000000000000000        0x0 build/py/asmarm.o
  .bss           0x0000000000000000        0x0 build/py/asmarm.o
- .comment       0x0000000000000000       0x35 build/py/asmarm.o
+ .comment       0x0000000000000000       0x36 build/py/asmarm.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/asmarm.o
  .text          0x0000000000000000        0x0 build/py/emitnarm.o
  .data          0x0000000000000000        0x0 build/py/emitnarm.o
  .bss           0x0000000000000000        0x0 build/py/emitnarm.o
- .comment       0x0000000000000000       0x35 build/py/emitnarm.o
+ .comment       0x0000000000000000       0x36 build/py/emitnarm.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/emitnarm.o
  .text          0x0000000000000000        0x0 build/py/asmxtensa.o
  .data          0x0000000000000000        0x0 build/py/asmxtensa.o
  .bss           0x0000000000000000        0x0 build/py/asmxtensa.o
- .comment       0x0000000000000000       0x35 build/py/asmxtensa.o
+ .comment       0x0000000000000000       0x36 build/py/asmxtensa.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/asmxtensa.o
  .text          0x0000000000000000        0x0 build/py/emitnxtensa.o
  .data          0x0000000000000000        0x0 build/py/emitnxtensa.o
  .bss           0x0000000000000000        0x0 build/py/emitnxtensa.o
- .comment       0x0000000000000000       0x35 build/py/emitnxtensa.o
+ .comment       0x0000000000000000       0x36 build/py/emitnxtensa.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/emitnxtensa.o
  .text          0x0000000000000000        0x0 build/py/emitinlinextensa.o
  .data          0x0000000000000000        0x0 build/py/emitinlinextensa.o
  .bss           0x0000000000000000        0x0 build/py/emitinlinextensa.o
- .comment       0x0000000000000000       0x35 build/py/emitinlinextensa.o
+ .comment       0x0000000000000000       0x36 build/py/emitinlinextensa.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/emitinlinextensa.o
  .text          0x0000000000000000        0x0 build/py/formatfloat.o
@@ -1166,7 +1166,7 @@ Discarded input sections
                 0x0000000000000000        0x0 build/py/runtime_utils.o
  .text.mp_call_function_2_protected
                 0x0000000000000000       0x71 build/py/runtime_utils.o
- .comment       0x0000000000000000       0x35 build/py/runtime_utils.o
+ .comment       0x0000000000000000       0x36 build/py/runtime_utils.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/runtime_utils.o
  .text          0x0000000000000000        0x0 build/py/scheduler.o
@@ -1176,13 +1176,13 @@ Discarded input sections
                 0x0000000000000000        0x0 build/py/scheduler.o
  .text.mp_handle_pending
                 0x0000000000000000       0x25 build/py/scheduler.o
- .comment       0x0000000000000000       0x35 build/py/scheduler.o
+ .comment       0x0000000000000000       0x36 build/py/scheduler.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/scheduler.o
  .text          0x0000000000000000        0x0 build/py/nativeglue.o
  .data          0x0000000000000000        0x0 build/py/nativeglue.o
  .bss           0x0000000000000000        0x0 build/py/nativeglue.o
- .comment       0x0000000000000000       0x35 build/py/nativeglue.o
+ .comment       0x0000000000000000       0x36 build/py/nativeglue.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/nativeglue.o
  .text          0x0000000000000000        0x0 build/py/stackctrl.o
@@ -1236,7 +1236,7 @@ Discarded input sections
                 0x0000000000000000        0x0 build/py/warning.o
  .text.mp_emitter_warning
                 0x0000000000000000       0x15 build/py/warning.o
- .comment       0x0000000000000000       0x35 build/py/warning.o
+ .comment       0x0000000000000000       0x36 build/py/warning.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/warning.o
  .text          0x0000000000000000        0x0 build/py/map.o
@@ -1424,13 +1424,13 @@ Discarded input sections
                 0x0000000000000000       0x10 build/py/objarray.o
  .rodata.array_append_obj
                 0x0000000000000000       0x10 build/py/objarray.o
- .comment       0x0000000000000000       0x35 build/py/objarray.o
+ .comment       0x0000000000000000       0x36 build/py/objarray.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/objarray.o
  .text          0x0000000000000000        0x0 build/py/objattrtuple.o
  .data          0x0000000000000000        0x0 build/py/objattrtuple.o
  .bss           0x0000000000000000        0x0 build/py/objattrtuple.o
- .comment       0x0000000000000000       0x35 build/py/objattrtuple.o
+ .comment       0x0000000000000000       0x36 build/py/objattrtuple.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/objattrtuple.o
  .text          0x0000000000000000        0x0 build/py/objbool.o
@@ -1492,7 +1492,7 @@ Discarded input sections
                 0x0000000000000000       0x1b build/py/objcell.o
  .rodata.mp_type_cell
                 0x0000000000000000       0x78 build/py/objcell.o
- .comment       0x0000000000000000       0x35 build/py/objcell.o
+ .comment       0x0000000000000000       0x36 build/py/objcell.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/objcell.o
  .text          0x0000000000000000        0x0 build/py/objclosure.o
@@ -1514,7 +1514,7 @@ Discarded input sections
                 0x0000000000000000       0x47 build/py/objclosure.o
  .rodata.closure_type
                 0x0000000000000000       0x78 build/py/objclosure.o
- .comment       0x0000000000000000       0x35 build/py/objclosure.o
+ .comment       0x0000000000000000       0x36 build/py/objclosure.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/objclosure.o
  .text          0x0000000000000000        0x0 build/py/objcomplex.o
@@ -1628,7 +1628,7 @@ Discarded input sections
                 0x0000000000000000       0x13 build/py/objenumerate.o
  .rodata.mp_type_enumerate
                 0x0000000000000000       0x78 build/py/objenumerate.o
- .comment       0x0000000000000000       0x35 build/py/objenumerate.o
+ .comment       0x0000000000000000       0x36 build/py/objenumerate.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/objenumerate.o
  .text          0x0000000000000000        0x0 build/py/objexcept.o
@@ -1707,7 +1707,7 @@ Discarded input sections
                 0x0000000000000000       0x51 build/py/objfilter.o
  .rodata.mp_type_filter
                 0x0000000000000000       0x78 build/py/objfilter.o
- .comment       0x0000000000000000       0x35 build/py/objfilter.o
+ .comment       0x0000000000000000       0x36 build/py/objfilter.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/objfilter.o
  .text          0x0000000000000000        0x0 build/py/objfloat.o
@@ -1835,7 +1835,7 @@ Discarded input sections
                 0x0000000000000000       0x10 build/py/objgenerator.o
  .rodata.mp_type_gen_wrap
                 0x0000000000000000       0x78 build/py/objgenerator.o
- .comment       0x0000000000000000       0x35 build/py/objgenerator.o
+ .comment       0x0000000000000000       0x36 build/py/objgenerator.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/objgenerator.o
  .text          0x0000000000000000        0x0 build/py/objgetitemiter.o
@@ -1871,7 +1871,7 @@ Discarded input sections
  .text          0x0000000000000000        0x0 build/py/objint_longlong.o
  .data          0x0000000000000000        0x0 build/py/objint_longlong.o
  .bss           0x0000000000000000        0x0 build/py/objint_longlong.o
- .comment       0x0000000000000000       0x35 build/py/objint_longlong.o
+ .comment       0x0000000000000000       0x36 build/py/objint_longlong.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/objint_longlong.o
  .text          0x0000000000000000        0x0 build/py/objint_mpz.o
@@ -1981,7 +1981,7 @@ Discarded input sections
                 0x0000000000000000       0x78 build/py/objmap.o
  .rodata.mp_type_map
                 0x0000000000000000       0x78 build/py/objmap.o
- .comment       0x0000000000000000       0x35 build/py/objmap.o
+ .comment       0x0000000000000000       0x36 build/py/objmap.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/objmap.o
  .text          0x0000000000000000        0x0 build/py/objmodule.o
@@ -2021,7 +2021,7 @@ Discarded input sections
                 0x0000000000000000       0x40 build/py/objmodule.o
  .rodata.mp_type_module
                 0x0000000000000000       0x78 build/py/objmodule.o
- .comment       0x0000000000000000       0x35 build/py/objmodule.o
+ .comment       0x0000000000000000       0x36 build/py/objmodule.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/objmodule.o
  .text          0x0000000000000000        0x0 build/py/objobject.o
@@ -2067,7 +2067,7 @@ Discarded input sections
  .text          0x0000000000000000        0x0 build/py/objnamedtuple.o
  .data          0x0000000000000000        0x0 build/py/objnamedtuple.o
  .bss           0x0000000000000000        0x0 build/py/objnamedtuple.o
- .comment       0x0000000000000000       0x35 build/py/objnamedtuple.o
+ .comment       0x0000000000000000       0x36 build/py/objnamedtuple.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/objnamedtuple.o
  .text          0x0000000000000000        0x0 build/py/objrange.o
@@ -2111,7 +2111,7 @@ Discarded input sections
                 0x0000000000000000       0x78 build/py/objrange.o
  .rodata.range_it_type
                 0x0000000000000000       0x78 build/py/objrange.o
- .comment       0x0000000000000000       0x35 build/py/objrange.o
+ .comment       0x0000000000000000       0x36 build/py/objrange.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/objrange.o
  .text          0x0000000000000000        0x0 build/py/objreversed.o
@@ -2127,7 +2127,7 @@ Discarded input sections
                 0x0000000000000000       0xaf build/py/objreversed.o
  .rodata.mp_type_reversed
                 0x0000000000000000       0x78 build/py/objreversed.o
- .comment       0x0000000000000000       0x35 build/py/objreversed.o
+ .comment       0x0000000000000000       0x36 build/py/objreversed.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/objreversed.o
  .text          0x0000000000000000        0x0 build/py/objset.o
@@ -2295,7 +2295,7 @@ Discarded input sections
                 0x0000000000000000       0x10 build/py/objset.o
  .rodata.set_add_obj
                 0x0000000000000000       0x10 build/py/objset.o
- .comment       0x0000000000000000       0x35 build/py/objset.o
+ .comment       0x0000000000000000       0x36 build/py/objset.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/objset.o
  .text          0x0000000000000000        0x0 build/py/objsingleton.o
@@ -2451,7 +2451,7 @@ Discarded input sections
  .text          0x0000000000000000        0x0 build/py/objstringio.o
  .data          0x0000000000000000        0x0 build/py/objstringio.o
  .bss           0x0000000000000000        0x0 build/py/objstringio.o
- .comment       0x0000000000000000       0x35 build/py/objstringio.o
+ .comment       0x0000000000000000       0x36 build/py/objstringio.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/objstringio.o
  .text          0x0000000000000000        0x0 build/py/objtuple.o
@@ -2583,7 +2583,7 @@ Discarded input sections
                 0x0000000000000000       0x65 build/py/objzip.o
  .rodata.mp_type_zip
                 0x0000000000000000       0x78 build/py/objzip.o
- .comment       0x0000000000000000       0x35 build/py/objzip.o
+ .comment       0x0000000000000000       0x36 build/py/objzip.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/objzip.o
  .text          0x0000000000000000        0x0 build/py/opmethods.o
@@ -2721,7 +2721,7 @@ Discarded input sections
                 0x0000000000000000       0x18 build/py/stream.o
  .rodata.mp_stream_read_obj
                 0x0000000000000000       0x18 build/py/stream.o
- .comment       0x0000000000000000       0x35 build/py/stream.o
+ .comment       0x0000000000000000       0x36 build/py/stream.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/stream.o
  .text          0x0000000000000000        0x0 build/py/binary.o
@@ -2791,7 +2791,7 @@ Discarded input sections
                 0x0000000000000000       0x16 build/py/builtinimport.o
  .rodata.mp_builtin___import___obj
                 0x0000000000000000       0x18 build/py/builtinimport.o
- .comment       0x0000000000000000       0x35 build/py/builtinimport.o
+ .comment       0x0000000000000000       0x36 build/py/builtinimport.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/builtinimport.o
  .text          0x0000000000000000        0x0 build/py/builtinevex.o
@@ -2813,19 +2813,19 @@ Discarded input sections
                 0x0000000000000000       0x18 build/py/builtinevex.o
  .rodata.mp_builtin_eval_obj
                 0x0000000000000000       0x18 build/py/builtinevex.o
- .comment       0x0000000000000000       0x35 build/py/builtinevex.o
+ .comment       0x0000000000000000       0x36 build/py/builtinevex.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/builtinevex.o
  .text          0x0000000000000000        0x0 build/py/builtinhelp.o
  .data          0x0000000000000000        0x0 build/py/builtinhelp.o
  .bss           0x0000000000000000        0x0 build/py/builtinhelp.o
- .comment       0x0000000000000000       0x35 build/py/builtinhelp.o
+ .comment       0x0000000000000000       0x36 build/py/builtinhelp.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/builtinhelp.o
  .text          0x0000000000000000        0x0 build/py/modarray.o
  .data          0x0000000000000000        0x0 build/py/modarray.o
  .bss           0x0000000000000000        0x0 build/py/modarray.o
- .comment       0x0000000000000000       0x35 build/py/modarray.o
+ .comment       0x0000000000000000       0x36 build/py/modarray.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/modarray.o
  .text          0x0000000000000000        0x0 build/py/modbuiltins.o
@@ -3031,31 +3031,31 @@ Discarded input sections
  .text          0x0000000000000000        0x0 build/py/modcollections.o
  .data          0x0000000000000000        0x0 build/py/modcollections.o
  .bss           0x0000000000000000        0x0 build/py/modcollections.o
- .comment       0x0000000000000000       0x35 build/py/modcollections.o
+ .comment       0x0000000000000000       0x36 build/py/modcollections.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/modcollections.o
  .text          0x0000000000000000        0x0 build/py/modgc.o
  .data          0x0000000000000000        0x0 build/py/modgc.o
  .bss           0x0000000000000000        0x0 build/py/modgc.o
- .comment       0x0000000000000000       0x35 build/py/modgc.o
+ .comment       0x0000000000000000       0x36 build/py/modgc.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/modgc.o
  .text          0x0000000000000000        0x0 build/py/modio.o
  .data          0x0000000000000000        0x0 build/py/modio.o
  .bss           0x0000000000000000        0x0 build/py/modio.o
- .comment       0x0000000000000000       0x35 build/py/modio.o
+ .comment       0x0000000000000000       0x36 build/py/modio.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/modio.o
  .text          0x0000000000000000        0x0 build/py/modmath.o
  .data          0x0000000000000000        0x0 build/py/modmath.o
  .bss           0x0000000000000000        0x0 build/py/modmath.o
- .comment       0x0000000000000000       0x35 build/py/modmath.o
+ .comment       0x0000000000000000       0x36 build/py/modmath.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/modmath.o
  .text          0x0000000000000000        0x0 build/py/modcmath.o
  .data          0x0000000000000000        0x0 build/py/modcmath.o
  .bss           0x0000000000000000        0x0 build/py/modcmath.o
- .comment       0x0000000000000000       0x35 build/py/modcmath.o
+ .comment       0x0000000000000000       0x36 build/py/modcmath.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/modcmath.o
  .text          0x0000000000000000        0x0 build/py/modmicropython.o
@@ -3085,7 +3085,7 @@ Discarded input sections
                 0x0000000000000000       0x10 build/py/modmicropython.o
  .rodata.mp_micropython_opt_level_obj
                 0x0000000000000000       0x18 build/py/modmicropython.o
- .comment       0x0000000000000000       0x35 build/py/modmicropython.o
+ .comment       0x0000000000000000       0x36 build/py/modmicropython.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/modmicropython.o
  .text          0x0000000000000000        0x0 build/py/modstruct.o
@@ -3139,25 +3139,25 @@ Discarded input sections
                 0x0000000000000000       0x18 build/py/modstruct.o
  .rodata.struct_calcsize_obj
                 0x0000000000000000       0x10 build/py/modstruct.o
- .comment       0x0000000000000000       0x35 build/py/modstruct.o
+ .comment       0x0000000000000000       0x36 build/py/modstruct.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/modstruct.o
  .text          0x0000000000000000        0x0 build/py/modsys.o
  .data          0x0000000000000000        0x0 build/py/modsys.o
  .bss           0x0000000000000000        0x0 build/py/modsys.o
- .comment       0x0000000000000000       0x35 build/py/modsys.o
+ .comment       0x0000000000000000       0x36 build/py/modsys.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/modsys.o
  .text          0x0000000000000000        0x0 build/py/moduerrno.o
  .data          0x0000000000000000        0x0 build/py/moduerrno.o
  .bss           0x0000000000000000        0x0 build/py/moduerrno.o
- .comment       0x0000000000000000       0x35 build/py/moduerrno.o
+ .comment       0x0000000000000000       0x36 build/py/moduerrno.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/moduerrno.o
  .text          0x0000000000000000        0x0 build/py/modthread.o
  .data          0x0000000000000000        0x0 build/py/modthread.o
  .bss           0x0000000000000000        0x0 build/py/modthread.o
- .comment       0x0000000000000000       0x35 build/py/modthread.o
+ .comment       0x0000000000000000       0x36 build/py/modthread.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/modthread.o
  .text          0x0000000000000000        0x0 build/py/vm.o
@@ -3175,7 +3175,7 @@ Discarded input sections
                 0x0000000000000000      0x2d8 build/py/vm.o
  .rodata.__PRETTY_FUNCTION__.4813
                 0x0000000000000000       0x14 build/py/vm.o
- .comment       0x0000000000000000       0x35 build/py/vm.o
+ .comment       0x0000000000000000       0x36 build/py/vm.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/vm.o
  .text          0x0000000000000000        0x0 build/py/bc.o
@@ -3206,13 +3206,13 @@ Discarded input sections
  .text          0x0000000000000000        0x0 build/py/showbc.o
  .data          0x0000000000000000        0x0 build/py/showbc.o
  .bss           0x0000000000000000        0x0 build/py/showbc.o
- .comment       0x0000000000000000       0x35 build/py/showbc.o
+ .comment       0x0000000000000000       0x36 build/py/showbc.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/showbc.o
  .text          0x0000000000000000        0x0 build/py/repl.o
  .data          0x0000000000000000        0x0 build/py/repl.o
  .bss           0x0000000000000000        0x0 build/py/repl.o
- .comment       0x0000000000000000       0x35 build/py/repl.o
+ .comment       0x0000000000000000       0x36 build/py/repl.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/repl.o
  .text          0x0000000000000000        0x0 build/py/smallint.o
@@ -3229,49 +3229,49 @@ Discarded input sections
  .text          0x0000000000000000        0x0 build/py/frozenmod.o
  .data          0x0000000000000000        0x0 build/py/frozenmod.o
  .bss           0x0000000000000000        0x0 build/py/frozenmod.o
- .comment       0x0000000000000000       0x35 build/py/frozenmod.o
+ .comment       0x0000000000000000       0x36 build/py/frozenmod.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/frozenmod.o
  .text          0x0000000000000000        0x0 build/py/../extmod/moductypes.o
  .data          0x0000000000000000        0x0 build/py/../extmod/moductypes.o
  .bss           0x0000000000000000        0x0 build/py/../extmod/moductypes.o
- .comment       0x0000000000000000       0x35 build/py/../extmod/moductypes.o
+ .comment       0x0000000000000000       0x36 build/py/../extmod/moductypes.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/../extmod/moductypes.o
  .text          0x0000000000000000        0x0 build/py/../extmod/modujson.o
  .data          0x0000000000000000        0x0 build/py/../extmod/modujson.o
  .bss           0x0000000000000000        0x0 build/py/../extmod/modujson.o
- .comment       0x0000000000000000       0x35 build/py/../extmod/modujson.o
+ .comment       0x0000000000000000       0x36 build/py/../extmod/modujson.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/../extmod/modujson.o
  .text          0x0000000000000000        0x0 build/py/../extmod/modure.o
  .data          0x0000000000000000        0x0 build/py/../extmod/modure.o
  .bss           0x0000000000000000        0x0 build/py/../extmod/modure.o
- .comment       0x0000000000000000       0x35 build/py/../extmod/modure.o
+ .comment       0x0000000000000000       0x36 build/py/../extmod/modure.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/../extmod/modure.o
  .text          0x0000000000000000        0x0 build/py/../extmod/moduzlib.o
  .data          0x0000000000000000        0x0 build/py/../extmod/moduzlib.o
  .bss           0x0000000000000000        0x0 build/py/../extmod/moduzlib.o
- .comment       0x0000000000000000       0x35 build/py/../extmod/moduzlib.o
+ .comment       0x0000000000000000       0x36 build/py/../extmod/moduzlib.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/../extmod/moduzlib.o
  .text          0x0000000000000000        0x0 build/py/../extmod/moduheapq.o
  .data          0x0000000000000000        0x0 build/py/../extmod/moduheapq.o
  .bss           0x0000000000000000        0x0 build/py/../extmod/moduheapq.o
- .comment       0x0000000000000000       0x35 build/py/../extmod/moduheapq.o
+ .comment       0x0000000000000000       0x36 build/py/../extmod/moduheapq.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/../extmod/moduheapq.o
  .text          0x0000000000000000        0x0 build/py/../extmod/modutimeq.o
  .data          0x0000000000000000        0x0 build/py/../extmod/modutimeq.o
  .bss           0x0000000000000000        0x0 build/py/../extmod/modutimeq.o
- .comment       0x0000000000000000       0x35 build/py/../extmod/modutimeq.o
+ .comment       0x0000000000000000       0x36 build/py/../extmod/modutimeq.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/../extmod/modutimeq.o
  .text          0x0000000000000000        0x0 build/py/../extmod/moduhashlib.o
  .data          0x0000000000000000        0x0 build/py/../extmod/moduhashlib.o
  .bss           0x0000000000000000        0x0 build/py/../extmod/moduhashlib.o
- .comment       0x0000000000000000       0x35 build/py/../extmod/moduhashlib.o
+ .comment       0x0000000000000000       0x36 build/py/../extmod/moduhashlib.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/../extmod/moduhashlib.o
  .text          0x0000000000000000        0x0 build/py/../extmod/modubinascii.o
@@ -3303,7 +3303,7 @@ Discarded input sections
                 0x0000000000000000       0x10 build/py/../extmod/modubinascii.o
  .rodata.mod_binascii_hexlify_obj
                 0x0000000000000000       0x18 build/py/../extmod/modubinascii.o
- .comment       0x0000000000000000       0x35 build/py/../extmod/modubinascii.o
+ .comment       0x0000000000000000       0x36 build/py/../extmod/modubinascii.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/../extmod/modubinascii.o
  .text          0x0000000000000000        0x0 build/py/../extmod/virtpin.o
@@ -3317,133 +3317,133 @@ Discarded input sections
                 0x0000000000000000        0x0 build/py/../extmod/virtpin.o
  .text.mp_virtual_pin_write
                 0x0000000000000000       0x16 build/py/../extmod/virtpin.o
- .comment       0x0000000000000000       0x35 build/py/../extmod/virtpin.o
+ .comment       0x0000000000000000       0x36 build/py/../extmod/virtpin.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/../extmod/virtpin.o
  .text          0x0000000000000000        0x0 build/py/../extmod/machine_mem.o
  .data          0x0000000000000000        0x0 build/py/../extmod/machine_mem.o
  .bss           0x0000000000000000        0x0 build/py/../extmod/machine_mem.o
- .comment       0x0000000000000000       0x35 build/py/../extmod/machine_mem.o
+ .comment       0x0000000000000000       0x36 build/py/../extmod/machine_mem.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/../extmod/machine_mem.o
  .text          0x0000000000000000        0x0 build/py/../extmod/machine_pinbase.o
  .data          0x0000000000000000        0x0 build/py/../extmod/machine_pinbase.o
  .bss           0x0000000000000000        0x0 build/py/../extmod/machine_pinbase.o
- .comment       0x0000000000000000       0x35 build/py/../extmod/machine_pinbase.o
+ .comment       0x0000000000000000       0x36 build/py/../extmod/machine_pinbase.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/../extmod/machine_pinbase.o
  .text          0x0000000000000000        0x0 build/py/../extmod/machine_signal.o
  .data          0x0000000000000000        0x0 build/py/../extmod/machine_signal.o
  .bss           0x0000000000000000        0x0 build/py/../extmod/machine_signal.o
- .comment       0x0000000000000000       0x35 build/py/../extmod/machine_signal.o
+ .comment       0x0000000000000000       0x36 build/py/../extmod/machine_signal.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/../extmod/machine_signal.o
  .text          0x0000000000000000        0x0 build/py/../extmod/machine_pulse.o
  .data          0x0000000000000000        0x0 build/py/../extmod/machine_pulse.o
  .bss           0x0000000000000000        0x0 build/py/../extmod/machine_pulse.o
- .comment       0x0000000000000000       0x35 build/py/../extmod/machine_pulse.o
+ .comment       0x0000000000000000       0x36 build/py/../extmod/machine_pulse.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/../extmod/machine_pulse.o
  .text          0x0000000000000000        0x0 build/py/../extmod/machine_i2c.o
  .data          0x0000000000000000        0x0 build/py/../extmod/machine_i2c.o
  .bss           0x0000000000000000        0x0 build/py/../extmod/machine_i2c.o
- .comment       0x0000000000000000       0x35 build/py/../extmod/machine_i2c.o
+ .comment       0x0000000000000000       0x36 build/py/../extmod/machine_i2c.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/../extmod/machine_i2c.o
  .text          0x0000000000000000        0x0 build/py/../extmod/machine_spi.o
  .data          0x0000000000000000        0x0 build/py/../extmod/machine_spi.o
  .bss           0x0000000000000000        0x0 build/py/../extmod/machine_spi.o
- .comment       0x0000000000000000       0x35 build/py/../extmod/machine_spi.o
+ .comment       0x0000000000000000       0x36 build/py/../extmod/machine_spi.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/../extmod/machine_spi.o
  .text          0x0000000000000000        0x0 build/py/../extmod/modussl_axtls.o
  .data          0x0000000000000000        0x0 build/py/../extmod/modussl_axtls.o
  .bss           0x0000000000000000        0x0 build/py/../extmod/modussl_axtls.o
- .comment       0x0000000000000000       0x35 build/py/../extmod/modussl_axtls.o
+ .comment       0x0000000000000000       0x36 build/py/../extmod/modussl_axtls.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/../extmod/modussl_axtls.o
  .text          0x0000000000000000        0x0 build/py/../extmod/modussl_mbedtls.o
  .data          0x0000000000000000        0x0 build/py/../extmod/modussl_mbedtls.o
  .bss           0x0000000000000000        0x0 build/py/../extmod/modussl_mbedtls.o
- .comment       0x0000000000000000       0x35 build/py/../extmod/modussl_mbedtls.o
+ .comment       0x0000000000000000       0x36 build/py/../extmod/modussl_mbedtls.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/../extmod/modussl_mbedtls.o
  .text          0x0000000000000000        0x0 build/py/../extmod/modurandom.o
  .data          0x0000000000000000        0x0 build/py/../extmod/modurandom.o
  .bss           0x0000000000000000        0x0 build/py/../extmod/modurandom.o
- .comment       0x0000000000000000       0x35 build/py/../extmod/modurandom.o
+ .comment       0x0000000000000000       0x36 build/py/../extmod/modurandom.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/../extmod/modurandom.o
  .text          0x0000000000000000        0x0 build/py/../extmod/moduselect.o
  .data          0x0000000000000000        0x0 build/py/../extmod/moduselect.o
  .bss           0x0000000000000000        0x0 build/py/../extmod/moduselect.o
- .comment       0x0000000000000000       0x35 build/py/../extmod/moduselect.o
+ .comment       0x0000000000000000       0x36 build/py/../extmod/moduselect.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/../extmod/moduselect.o
  .text          0x0000000000000000        0x0 build/py/../extmod/modwebsocket.o
  .data          0x0000000000000000        0x0 build/py/../extmod/modwebsocket.o
  .bss           0x0000000000000000        0x0 build/py/../extmod/modwebsocket.o
- .comment       0x0000000000000000       0x35 build/py/../extmod/modwebsocket.o
+ .comment       0x0000000000000000       0x36 build/py/../extmod/modwebsocket.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/../extmod/modwebsocket.o
  .text          0x0000000000000000        0x0 build/py/../extmod/modwebrepl.o
  .data          0x0000000000000000        0x0 build/py/../extmod/modwebrepl.o
  .bss           0x0000000000000000        0x0 build/py/../extmod/modwebrepl.o
- .comment       0x0000000000000000       0x35 build/py/../extmod/modwebrepl.o
+ .comment       0x0000000000000000       0x36 build/py/../extmod/modwebrepl.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/../extmod/modwebrepl.o
  .text          0x0000000000000000        0x0 build/py/../extmod/modframebuf.o
  .data          0x0000000000000000        0x0 build/py/../extmod/modframebuf.o
  .bss           0x0000000000000000        0x0 build/py/../extmod/modframebuf.o
- .comment       0x0000000000000000       0x35 build/py/../extmod/modframebuf.o
+ .comment       0x0000000000000000       0x36 build/py/../extmod/modframebuf.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/../extmod/modframebuf.o
  .text          0x0000000000000000        0x0 build/py/../extmod/vfs.o
  .data          0x0000000000000000        0x0 build/py/../extmod/vfs.o
  .bss           0x0000000000000000        0x0 build/py/../extmod/vfs.o
- .comment       0x0000000000000000       0x35 build/py/../extmod/vfs.o
+ .comment       0x0000000000000000       0x36 build/py/../extmod/vfs.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/../extmod/vfs.o
  .text          0x0000000000000000        0x0 build/py/../extmod/vfs_reader.o
  .data          0x0000000000000000        0x0 build/py/../extmod/vfs_reader.o
  .bss           0x0000000000000000        0x0 build/py/../extmod/vfs_reader.o
- .comment       0x0000000000000000       0x35 build/py/../extmod/vfs_reader.o
+ .comment       0x0000000000000000       0x36 build/py/../extmod/vfs_reader.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/../extmod/vfs_reader.o
  .text          0x0000000000000000        0x0 build/py/../extmod/vfs_fat.o
  .data          0x0000000000000000        0x0 build/py/../extmod/vfs_fat.o
  .bss           0x0000000000000000        0x0 build/py/../extmod/vfs_fat.o
- .comment       0x0000000000000000       0x35 build/py/../extmod/vfs_fat.o
+ .comment       0x0000000000000000       0x36 build/py/../extmod/vfs_fat.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/../extmod/vfs_fat.o
  .text          0x0000000000000000        0x0 build/py/../extmod/vfs_fat_diskio.o
  .data          0x0000000000000000        0x0 build/py/../extmod/vfs_fat_diskio.o
  .bss           0x0000000000000000        0x0 build/py/../extmod/vfs_fat_diskio.o
- .comment       0x0000000000000000       0x35 build/py/../extmod/vfs_fat_diskio.o
+ .comment       0x0000000000000000       0x36 build/py/../extmod/vfs_fat_diskio.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/../extmod/vfs_fat_diskio.o
  .text          0x0000000000000000        0x0 build/py/../extmod/vfs_fat_file.o
  .data          0x0000000000000000        0x0 build/py/../extmod/vfs_fat_file.o
  .bss           0x0000000000000000        0x0 build/py/../extmod/vfs_fat_file.o
- .comment       0x0000000000000000       0x35 build/py/../extmod/vfs_fat_file.o
+ .comment       0x0000000000000000       0x36 build/py/../extmod/vfs_fat_file.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/../extmod/vfs_fat_file.o
  .text          0x0000000000000000        0x0 build/py/../extmod/vfs_fat_misc.o
  .data          0x0000000000000000        0x0 build/py/../extmod/vfs_fat_misc.o
  .bss           0x0000000000000000        0x0 build/py/../extmod/vfs_fat_misc.o
- .comment       0x0000000000000000       0x35 build/py/../extmod/vfs_fat_misc.o
+ .comment       0x0000000000000000       0x36 build/py/../extmod/vfs_fat_misc.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/../extmod/vfs_fat_misc.o
  .text          0x0000000000000000        0x0 build/py/../extmod/utime_mphal.o
  .data          0x0000000000000000        0x0 build/py/../extmod/utime_mphal.o
  .bss           0x0000000000000000        0x0 build/py/../extmod/utime_mphal.o
- .comment       0x0000000000000000       0x35 build/py/../extmod/utime_mphal.o
+ .comment       0x0000000000000000       0x36 build/py/../extmod/utime_mphal.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/../extmod/utime_mphal.o
  .text          0x0000000000000000        0x0 build/py/../extmod/uos_dupterm.o
  .data          0x0000000000000000        0x0 build/py/../extmod/uos_dupterm.o
  .bss           0x0000000000000000        0x0 build/py/../extmod/uos_dupterm.o
- .comment       0x0000000000000000       0x35 build/py/../extmod/uos_dupterm.o
+ .comment       0x0000000000000000       0x36 build/py/../extmod/uos_dupterm.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/../extmod/uos_dupterm.o
  .text          0x0000000000000000        0x0 build/py/../lib/embed/abort_.o
@@ -3454,13 +3454,13 @@ Discarded input sections
  .text.unlikely.abort_
                 0x0000000000000000        0x0 build/py/../lib/embed/abort_.o
  .text.abort_   0x0000000000000000       0x10 build/py/../lib/embed/abort_.o
- .comment       0x0000000000000000       0x35 build/py/../lib/embed/abort_.o
+ .comment       0x0000000000000000       0x36 build/py/../lib/embed/abort_.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/../lib/embed/abort_.o
  .text          0x0000000000000000        0x0 build/py/../lib/utils/printf.o
  .data          0x0000000000000000        0x0 build/py/../lib/utils/printf.o
  .bss           0x0000000000000000        0x0 build/py/../lib/utils/printf.o
- .comment       0x0000000000000000       0x35 build/py/../lib/utils/printf.o
+ .comment       0x0000000000000000       0x36 build/py/../lib/utils/printf.o
  .note.GNU-stack
                 0x0000000000000000        0x0 build/py/../lib/utils/printf.o
  .text          0x0000000000000000        0x0 build/main.o
@@ -8002,66 +8002,66 @@ LOAD /usr/lib/gcc/x86_64-linux-gnu/5/../../../x86_64-linux-gnu/crtn.o
 .stab.indexstr
  *(.stab.indexstr)
 
-.comment        0x0000000000000000       0x34
+.comment        0x0000000000000000       0x35
  *(.comment)
- .comment       0x0000000000000000       0x34 /usr/lib/gcc/x86_64-linux-gnu/5/crtbegin.o
-                                         0x35 (size before relaxing)
- .comment       0x0000000000000034       0x35 build/py/mpstate.o
- .comment       0x0000000000000034       0x35 build/py/nlrx64.o
- .comment       0x0000000000000034       0x35 build/py/malloc.o
- .comment       0x0000000000000034       0x35 build/py/gc.o
- .comment       0x0000000000000034       0x35 build/py/qstr.o
- .comment       0x0000000000000034       0x35 build/py/vstr.o
- .comment       0x0000000000000034       0x35 build/py/mpprint.o
- .comment       0x0000000000000034       0x35 build/py/unicode.o
- .comment       0x0000000000000034       0x35 build/py/mpz.o
- .comment       0x0000000000000034       0x35 build/py/reader.o
- .comment       0x0000000000000034       0x35 build/py/lexer.o
- .comment       0x0000000000000034       0x35 build/py/parse.o
- .comment       0x0000000000000034       0x35 build/py/scope.o
- .comment       0x0000000000000034       0x35 build/py/compile.o
- .comment       0x0000000000000034       0x35 build/py/emitcommon.o
- .comment       0x0000000000000034       0x35 build/py/emitbc.o
- .comment       0x0000000000000034       0x35 build/py/formatfloat.o
- .comment       0x0000000000000034       0x35 build/py/parsenumbase.o
- .comment       0x0000000000000034       0x35 build/py/parsenum.o
- .comment       0x0000000000000034       0x35 build/py/emitglue.o
- .comment       0x0000000000000034       0x35 build/py/persistentcode.o
- .comment       0x0000000000000034       0x35 build/py/runtime.o
- .comment       0x0000000000000034       0x35 build/py/stackctrl.o
- .comment       0x0000000000000034       0x35 build/py/argcheck.o
- .comment       0x0000000000000034       0x35 build/py/map.o
- .comment       0x0000000000000034       0x35 build/py/obj.o
- .comment       0x0000000000000034       0x35 build/py/objbool.o
- .comment       0x0000000000000034       0x35 build/py/objboundmeth.o
- .comment       0x0000000000000034       0x35 build/py/objcomplex.o
- .comment       0x0000000000000034       0x35 build/py/objdict.o
- .comment       0x0000000000000034       0x35 build/py/objexcept.o
- .comment       0x0000000000000034       0x35 build/py/objfloat.o
- .comment       0x0000000000000034       0x35 build/py/objfun.o
- .comment       0x0000000000000034       0x35 build/py/objgetitemiter.o
- .comment       0x0000000000000034       0x35 build/py/objint.o
- .comment       0x0000000000000034       0x35 build/py/objint_mpz.o
- .comment       0x0000000000000034       0x35 build/py/objlist.o
- .comment       0x0000000000000034       0x35 build/py/objobject.o
- .comment       0x0000000000000034       0x35 build/py/objpolyiter.o
- .comment       0x0000000000000034       0x35 build/py/objproperty.o
- .comment       0x0000000000000034       0x35 build/py/objnone.o
- .comment       0x0000000000000034       0x35 build/py/objsingleton.o
- .comment       0x0000000000000034       0x35 build/py/objslice.o
- .comment       0x0000000000000034       0x35 build/py/objstr.o
- .comment       0x0000000000000034       0x35 build/py/objstrunicode.o
- .comment       0x0000000000000034       0x35 build/py/objtuple.o
- .comment       0x0000000000000034       0x35 build/py/objtype.o
- .comment       0x0000000000000034       0x35 build/py/opmethods.o
- .comment       0x0000000000000034       0x35 build/py/sequence.o
- .comment       0x0000000000000034       0x35 build/py/binary.o
- .comment       0x0000000000000034       0x35 build/py/modbuiltins.o
- .comment       0x0000000000000034       0x35 build/py/bc.o
- .comment       0x0000000000000034       0x35 build/py/smallint.o
- .comment       0x0000000000000034       0x35 build/main.o
- .comment       0x0000000000000034       0x35 build/gccollect.o
- .comment       0x0000000000000034       0x35 /usr/lib/gcc/x86_64-linux-gnu/5/crtend.o
+ .comment       0x0000000000000000       0x35 /usr/lib/gcc/x86_64-linux-gnu/5/crtbegin.o
+                                         0x36 (size before relaxing)
+ .comment       0x0000000000000035       0x36 build/py/mpstate.o
+ .comment       0x0000000000000035       0x36 build/py/nlrx64.o
+ .comment       0x0000000000000035       0x36 build/py/malloc.o
+ .comment       0x0000000000000035       0x36 build/py/gc.o
+ .comment       0x0000000000000035       0x36 build/py/qstr.o
+ .comment       0x0000000000000035       0x36 build/py/vstr.o
+ .comment       0x0000000000000035       0x36 build/py/mpprint.o
+ .comment       0x0000000000000035       0x36 build/py/unicode.o
+ .comment       0x0000000000000035       0x36 build/py/mpz.o
+ .comment       0x0000000000000035       0x36 build/py/reader.o
+ .comment       0x0000000000000035       0x36 build/py/lexer.o
+ .comment       0x0000000000000035       0x36 build/py/parse.o
+ .comment       0x0000000000000035       0x36 build/py/scope.o
+ .comment       0x0000000000000035       0x36 build/py/compile.o
+ .comment       0x0000000000000035       0x36 build/py/emitcommon.o
+ .comment       0x0000000000000035       0x36 build/py/emitbc.o
+ .comment       0x0000000000000035       0x36 build/py/formatfloat.o
+ .comment       0x0000000000000035       0x36 build/py/parsenumbase.o
+ .comment       0x0000000000000035       0x36 build/py/parsenum.o
+ .comment       0x0000000000000035       0x36 build/py/emitglue.o
+ .comment       0x0000000000000035       0x36 build/py/persistentcode.o
+ .comment       0x0000000000000035       0x36 build/py/runtime.o
+ .comment       0x0000000000000035       0x36 build/py/stackctrl.o
+ .comment       0x0000000000000035       0x36 build/py/argcheck.o
+ .comment       0x0000000000000035       0x36 build/py/map.o
+ .comment       0x0000000000000035       0x36 build/py/obj.o
+ .comment       0x0000000000000035       0x36 build/py/objbool.o
+ .comment       0x0000000000000035       0x36 build/py/objboundmeth.o
+ .comment       0x0000000000000035       0x36 build/py/objcomplex.o
+ .comment       0x0000000000000035       0x36 build/py/objdict.o
+ .comment       0x0000000000000035       0x36 build/py/objexcept.o
+ .comment       0x0000000000000035       0x36 build/py/objfloat.o
+ .comment       0x0000000000000035       0x36 build/py/objfun.o
+ .comment       0x0000000000000035       0x36 build/py/objgetitemiter.o
+ .comment       0x0000000000000035       0x36 build/py/objint.o
+ .comment       0x0000000000000035       0x36 build/py/objint_mpz.o
+ .comment       0x0000000000000035       0x36 build/py/objlist.o
+ .comment       0x0000000000000035       0x36 build/py/objobject.o
+ .comment       0x0000000000000035       0x36 build/py/objpolyiter.o
+ .comment       0x0000000000000035       0x36 build/py/objproperty.o
+ .comment       0x0000000000000035       0x36 build/py/objnone.o
+ .comment       0x0000000000000035       0x36 build/py/objsingleton.o
+ .comment       0x0000000000000035       0x36 build/py/objslice.o
+ .comment       0x0000000000000035       0x36 build/py/objstr.o
+ .comment       0x0000000000000035       0x36 build/py/objstrunicode.o
+ .comment       0x0000000000000035       0x36 build/py/objtuple.o
+ .comment       0x0000000000000035       0x36 build/py/objtype.o
+ .comment       0x0000000000000035       0x36 build/py/opmethods.o
+ .comment       0x0000000000000035       0x36 build/py/sequence.o
+ .comment       0x0000000000000035       0x36 build/py/binary.o
+ .comment       0x0000000000000035       0x36 build/py/modbuiltins.o
+ .comment       0x0000000000000035       0x36 build/py/bc.o
+ .comment       0x0000000000000035       0x36 build/py/smallint.o
+ .comment       0x0000000000000035       0x36 build/main.o
+ .comment       0x0000000000000035       0x36 build/gccollect.o
+ .comment       0x0000000000000035       0x36 /usr/lib/gcc/x86_64-linux-gnu/5/crtend.o
 
 .debug
  *(.debug)
