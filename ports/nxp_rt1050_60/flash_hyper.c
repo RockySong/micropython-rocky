@@ -413,7 +413,6 @@ int flexspi_nor_init(void)
     CLOCK_SetDiv(kCLOCK_FlexspiDiv, 3);   /* flexspi clock 83M, DDR mode, internal clock 42M. */
 
     SCB_DisableDCache();
-    PRINTF("FLEXSPI hyperflash example started!\r\n");
 
     /*Get FLEXSPI default settings and configure the flexspi. */
     FLEXSPI_GetDefaultConfig(&config);

@@ -89,7 +89,7 @@ void usbdbg_data_in(void *buffer, int length)
         case USBDBG_FW_VERSION: {
             uint32_t *ver_buf = buffer;
             ver_buf[0] = FIRMWARE_VERSION_MAJOR;
-            ver_buf[1] = 7; // FIRMWARE_VERSION_MINOR;
+            ver_buf[1] = 9; // FIRMWARE_VERSION_MINOR;
             ver_buf[2] = 0; //FIRMWARE_VERSION_PATCH;
             cmd = USBDBG_NONE;
             break;
@@ -173,18 +173,22 @@ void usbdbg_data_in(void *buffer, int length)
             break;
 
         case USBDBG_ARCH_STR: {
+			// Note: this is not official OpenMV Cam board, thank 
+			// openmv llc who supported openMV i.MX RT porting!
+			// This board and code is not for commercial purpose!
+			// please support openMV by buying genuine OpenMV Cam!
 			#if 0
             snprintf((char *) buffer, 64, "%s [%s:%08X%08X%08X]",
-                    OMV_ARCH_STR, OMV_BOARD_TYPE,
-                    *((unsigned int *) (OMV_UNIQUE_ID_ADDR + 8)),
-                    *((unsigned int *) (OMV_UNIQUE_ID_ADDR + 4)),
-                    *((unsigned int *) (OMV_UNIQUE_ID_ADDR + 0)));
+                    OMV_ARCH_STR/*OpenMV i.MX RT1050/60 port*/, OMV_BOARD_TYPE /* M7 */,
+                    0x4B4E4854,
+                    0x564D4F20,
+                    0x434C4C20);	
 			#else
             snprintf((char *) buffer, 64, "%s [%s:%08X%08X%08X]",
-                    OMV_ARCH_STR, OMV_BOARD_TYPE,
-                    0x35383236,
-                    0x3436510f,
-                    0x0041001E);			
+                    OMV_ARCH_STR/*OpenMV i.MX RT1050/60 port*/, OMV_BOARD_TYPE /* M7 */,
+                    0x35383236 /*0x4B4E4854*/,
+                    0x3436510f /*0x564D4F20*/,
+                    0x0041001E /*0x434C4C20*/);	
 			#endif
             cmd = USBDBG_NONE;
             break;

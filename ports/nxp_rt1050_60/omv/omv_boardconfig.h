@@ -10,7 +10,7 @@
 #define __OMV_BOARDCONFIG_H__
 #include "overlay_manager.h"
 // Architecture info
-#define OMV_ARCH_STR            "OMV3 F7 512" // 33 chars max
+#define OMV_ARCH_STR            "OpenMV i.MX RT1050/60 port" // 33 chars max
 #define OMV_BOARD_TYPE          "M7"
 #define OMV_UNIQUE_ID_ADDR      0x1FF0F420
 
