@@ -44,6 +44,10 @@
 #define MICROPY_HW_UART3_TX     (pin_AD_B1_07)	// D1/TXD
 #define MICROPY_HW_UART3_ALT	2
 
+#define MICROPY_HW_UART4_NAME   "uart4"	//ALT2
+#define MICROPY_HW_UART4_RX     (pin_EMC_20)	// D0/RXD
+#define MICROPY_HW_UART4_TX     (pin_EMC_19)	// D1/TXD
+#define MICROPY_HW_UART4_ALT	2
 
 #define MICROPY_HW_UART6_NAME   "uart6"	//ALT2
 #define MICROPY_HW_UART6_RX    (pin_AD_B0_03)		// D8

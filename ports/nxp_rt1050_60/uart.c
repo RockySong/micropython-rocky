@@ -381,6 +381,7 @@ STATIC bool uart_wait_flag_set(pyb_uart_obj_t *self, uint32_t flag, uint32_t tim
 static bool uart_wait_for_idle(pyb_uart_obj_t *self, uint32_t timeout)
 {
 	uint32_t start = HAL_GetTick();
+	//self->pDev->FIFO &= 1<14;
 	while (1) {
 		if (UART_RXFIFO_FILL_CNT(self->pDev) == 0)	// bug warning: this only guarantee FIFO is empty, but shiftreg may stil working!
 			return true;
