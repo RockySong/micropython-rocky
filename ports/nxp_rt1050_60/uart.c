@@ -432,7 +432,6 @@ STATIC size_t uart_tx_data(pyb_uart_obj_t *self, const void *src_in, size_t num_
 		self->pDev->DATA = data;
         ++num_tx;
     }
-
     // wait for the UART frame to complete
     if (!uart_wait_for_idle(self,timeout)) {
         *errcode = MP_ETIMEDOUT;
@@ -594,7 +593,7 @@ STATIC mp_obj_t pyb_uart_init_helper(pyb_uart_obj_t *self, mp_uint_t n_args, con
     // baudrate
     LPUART_GetDefaultConfig(init);
     init->baudRate_Bps = args.baudrate.u_int;
-	init->enableRx = init->enableTx = true;
+	  init->enableRx = init->enableTx = true;
 
     // parity
     mp_int_t bits = args.bits.u_int;
@@ -680,7 +679,7 @@ STATIC mp_obj_t pyb_uart_init_helper(pyb_uart_obj_t *self, mp_uint_t n_args, con
 			nlr_raise(mp_obj_new_exception_msg_varg(&mp_type_ValueError, "set baudrate %d is not possible", args.baudrate.u_int));
 		}
         HAL_NVIC_SetPriority(self->irqn, IRQ_PRI_UART, IRQ_SUBPRI_UART); 
-		UART_RX_IRQ_EN(self->pDev);
+		    UART_RX_IRQ_EN(self->pDev);
         NVIC_EnableIRQ(self->irqn);
     }
 
@@ -945,7 +944,6 @@ STATIC mp_uint_t pyb_uart_write(mp_obj_t self_in, const void *buf_in, mp_uint_t 
 
     // write the data
     size_t num_tx = uart_tx_data(self, buf, size >> self->char_width, errcode);
-
     if (*errcode == 0 || *errcode == MP_ETIMEDOUT) {
         // return number of bytes written, even if there was a timeout
         return num_tx << self->char_width;
