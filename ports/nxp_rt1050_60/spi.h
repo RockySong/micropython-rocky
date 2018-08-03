@@ -29,12 +29,12 @@
 
 #include "dma.h"
 
-#define MICROPY_HW_SPI6_NAME "spi6"
-#define MICROPY_HW_SPI6_NSS  (pin_21) // use GPIO
-#define MICROPY_HW_SPI6_SCK  (pin_41) // J9_14
-#define MICROPY_HW_SPI6_MISO (pin_43) // J9_12
-#define MICROPY_HW_SPI6_MOSI (pin_42) // J9_10
-
+#define MICROPY_HW_SPI1_NAME "spi1"
+#define MICROPY_HW_SPI1_NSS  (pin_EMC_30)
+#define MICROPY_HW_SPI1_SCK  (pin_EMC_27) // 
+#define MICROPY_HW_SPI1_MISO (pin_EMC_28) // 
+#define MICROPY_HW_SPI1_MOSI (pin_EMC_29) // 
+/*for our new use, we have only one interface of spi in our new board, so we write only one defination of the spi pin above for the easy use
 #define MICROPY_HW_SPI7_NAME "spi7"
 #define MICROPY_HW_SPI7_NSS  (pin_122) // use GPIO
 #define MICROPY_HW_SPI7_SCK  (pin_218) // J9_16
@@ -47,7 +47,7 @@
 #define MICROPY_HW_SPI9_SCK  (pin_320) // J9_9
 #define MICROPY_HW_SPI9_MISO (pin_322) // J9_11
 #define MICROPY_HW_SPI9_MOSI (pin_321) // J9_13
-
+*/
 typedef enum {
 	PYB_SPI_0 = 0,
     PYB_SPI_1 = 1,
@@ -73,6 +73,7 @@ typedef struct _pyb_spi_obj_t {
     pyb_spi_t ndx;
 	clock_name_t myClock;
 	clock_mux_t clockSel;
+	clock_div_t clockDiv;
     IRQn_Type irqn;
 	uint32_t mstBaudrate;
 	uint32_t flags;

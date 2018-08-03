@@ -191,7 +191,7 @@ STATIC const mp_rom_map_elem_t pyb_module_globals_table[] = {
     { MP_ROM_QSTR(MP_QSTR_LED), MP_ROM_PTR(&pyb_led_type) },
 #endif
     // rocky ignore { MP_ROM_QSTR(MP_QSTR_I2C), MP_ROM_PTR(&pyb_i2c_type) },
-    // rocky ignore { MP_ROM_QSTR(MP_QSTR_SPI), MP_ROM_PTR(&pyb_spi_type) },
+    { MP_ROM_QSTR(MP_QSTR_SPI), MP_ROM_PTR(&pyb_spi_type) },
     { MP_ROM_QSTR(MP_QSTR_UART), MP_ROM_PTR(&pyb_uart_type) },
     // rocky ignore { MP_ROM_QSTR(MP_QSTR_SWIM), MP_ROM_PTR(&pyb_swim_type) },	
 	// rocky ignore { MP_ROM_QSTR(MP_QSTR_IMU), MP_ROM_PTR(&pyb_imu_type) },	

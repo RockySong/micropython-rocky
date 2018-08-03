@@ -28,4 +28,10 @@ PINS_AF = (
   ('KEY', (5, 'GPIO5_PIN0'), ),
   ('DBG_RXD', (0, 'LPI2C4_SDA'), (1, 'GPT1_CLK'), (2, 'LPUART1_RX'), (5, 'GPIO1_PIN13'), ),
   ('DBG_TXD', (0, 'LPI2C4_SCL'), (2, 'LPUART1_TX'), (5, 'GPIO1_PIN12'), ),
+  ('UART4_TXD', (2, 'LPUART4_TX'), (5, 'GPIO4_PIN19'), ),
+  ('UART4_RXD', (2, 'LPUART4_RX'), (5, 'GPIO4_PIN20'), ),
+  ('SDO', (2, 'LPUART5_CTS_B'), (3, 'LPSPI1_SDO'), (5, 'GPIO4_PIN28'), ),
+  ('SDI', (2, 'LPUART6_RTS_B'), (3, 'LPSPI1_SDI'), (5, 'GPIO4_PIN29'), ),
+  ('SCK', (2, 'LPUART5_RTS_B'), (3, 'LPSPI1_SCK'), (5, 'GPIO4_PIN27'), ),
+  ('PCSO', (2, 'LPUART6_CTS_B'), (3, 'LPSPI1_PCS0'), (5, 'GPIO4_PIN30'), ),
 )

@@ -23,9 +23,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-#define _SPI_C_
+//#define _SPI_C_
 #include <stdio.h>
 #include <string.h>
+
+#include "fsl_common.h"
+#include "fsl_debug_console.h"
+#include "fsl_clock.h"
 
 #include "py/nlr.h"
 #include "py/runtime.h"
@@ -74,29 +78,25 @@
 // SPI5_RX: DMA2_Stream3.CHANNEL_2 or DMA2_Stream5.CHANNEL_7
 // SPI6_TX: DMA2_Stream5.CHANNEL_1
 // SPI6_RX: DMA2_Stream6.CHANNEL_1
+//SPI param setting
+#define LPSPI_CLOCK_SOURCE_SELECT  (1U)
+#define LPSPI_CLOCK_SOURCE_DIVIDER (7U)
 
+#define LPSPI_CLOCK_FREQ (CLOCK_GetFreq(kCLOCK_Usb1PllPfd0Clk) / (LPSPI_CLOCK_SOURCE_DIVIDER + 1U))
+#define LPSPI_MASTER_CLOCK_FREQ LPSPI_CLOCK_FREQ
+#define LPSPI_SLAVE_CLOCK_FREQ LPSPI_CLOCK_FREQ
 
-pyb_spi_obj_t pyb_spi_obj[10] = {
-    {{&pyb_spi_type}, SPI0, PYB_SPI_0, kCLOCK_Flexcomm0, kFRO12M_to_FLEXCOMM0, kFC0_RST_SHIFT_RSTn, FLEXCOMM0_IRQn, 1000000, 
-		0, 1, 1, 0, 0, 0, 0, {0}, {0}, {0}},
-    {{&pyb_spi_type}, SPI1, PYB_SPI_1, kCLOCK_Flexcomm1, kFRO12M_to_FLEXCOMM1, kFC1_RST_SHIFT_RSTn, FLEXCOMM1_IRQn, 1000000, 
-		0, 1, 1, 0, 0, 0, 0, {0}, {0}, {0}},
-    {{&pyb_spi_type}, SPI2, PYB_SPI_2, kCLOCK_Flexcomm2, kFRO12M_to_FLEXCOMM2, kFC2_RST_SHIFT_RSTn, FLEXCOMM2_IRQn, 1000000,
-		0, 1, 1, 0, 0, 0, 0, {0}, {0}, {0}},
-    {{&pyb_spi_type}, SPI3, PYB_SPI_3, kCLOCK_Flexcomm3, kFRO12M_to_FLEXCOMM3, kFC3_RST_SHIFT_RSTn, FLEXCOMM3_IRQn, 1000000, 
-		0, 1, 1, 0, 0, 0, 0, {0}, {0}, {0}},
-    {{&pyb_spi_type}, SPI4, PYB_SPI_4, kCLOCK_Flexcomm4, kFRO12M_to_FLEXCOMM4, kFC4_RST_SHIFT_RSTn, FLEXCOMM4_IRQn, 1000000, 
-		0, 1, 1, 0, 0, 0, 0, {0}, {0}, {0}},
-    {{&pyb_spi_type}, SPI5, PYB_SPI_5, kCLOCK_Flexcomm5, kFRO12M_to_FLEXCOMM5, kFC5_RST_SHIFT_RSTn, FLEXCOMM5_IRQn, 1000000, 
-		0, 1, 1, 0, 0, 0, 0, {0}, {0}, {0}},
-    {{&pyb_spi_type}, SPI6, PYB_SPI_6, kCLOCK_Flexcomm6, kFRO12M_to_FLEXCOMM6, kFC6_RST_SHIFT_RSTn, FLEXCOMM6_IRQn, 1000000, 
-		0, 1, 1, 0, 0, 0, 0, {0}, {0}, {0}},
-    {{&pyb_spi_type}, SPI7, PYB_SPI_7, kCLOCK_Flexcomm7, kFRO12M_to_FLEXCOMM7, kFC7_RST_SHIFT_RSTn, FLEXCOMM7_IRQn, 1000000, 
-		0, 1, 1, 0, 0, 0, 0, {0}, {0}, {0}},
-    {{&pyb_spi_type}, SPI8, PYB_SPI_8, kCLOCK_Flexcomm8, kFRO12M_to_FLEXCOMM8, kFC8_RST_SHIFT_RSTn, FLEXCOMM8_IRQn, 1000000, 
-		0, 1, 1, 0, 0, 0, 0, {0}, {0}, {0}},
-    {{&pyb_spi_type}, SPI9, PYB_SPI_9, kCLOCK_Flexcomm9, kFRO12M_to_FLEXCOMM9, kFC9_RST_SHIFT_RSTn, FLEXCOMM9_IRQn, 1000000, 
-		0, 1, 1, 0, 0, 0, 0, {0}, {0}, {0}},
+pyb_spi_obj_t pyb_spi_obj[5] = {
+    {{&pyb_spi_type}, 0, PYB_SPI_0, 0, 0 , 0, 1000000, 
+		0, 1, 1, 0, 0, 0, 0, {0}, {0}},
+    {{&pyb_spi_type}, LPSPI1, PYB_SPI_1, kCLOCK_Usb1PllPfd0Clk, kCLOCK_LpspiMux ,kCLOCK_LpspiDiv, LPSPI1_IRQn, 1000000, 
+		0, 1, 1, 0, 0, 0, 0, {0}, {0}},
+    {{&pyb_spi_type}, LPSPI2, PYB_SPI_2, kCLOCK_Usb1PllPfd0Clk, kCLOCK_LpspiMux , kCLOCK_LpspiDiv,LPSPI1_IRQn, 1000000,
+		0, 1, 1, 0, 0, 0, 0, {0}, {0}},
+    {{&pyb_spi_type}, LPSPI3, PYB_SPI_3, kCLOCK_Usb1PllPfd0Clk, kCLOCK_LpspiMux , kCLOCK_LpspiDiv,LPSPI1_IRQn, 1000000, 
+		0, 1, 1, 0, 0, 0, 0, {0}, {0}},
+    {{&pyb_spi_type}, LPSPI4, PYB_SPI_4, kCLOCK_Usb1PllPfd0Clk, kCLOCK_LpspiMux , kCLOCK_LpspiDiv,LPSPI1_IRQn, 1000000, 
+		0, 1, 1, 0, 0, 0, 0, {0}, {0}},
 };
 
 #define SPI_INIT_PINS(n) \
@@ -106,12 +106,6 @@ pyb_spi_obj_t pyb_spi_obj[10] = {
 	pyb_spi_obj[n].pMISO = &MICROPY_HW_SPI##n##_MISO; 
 
 void spi_init0(void) {
-	#if !defined(MICROPY_HW_SPI0_NAME)
-	pyb_spi_obj[0].pSPI = 0;
-	#else
-	SPI_INIT_PINS(0);
-	#endif
-
 	#if !defined(MICROPY_HW_SPI1_NAME)
 	pyb_spi_obj[1].pSPI = 0;
 	#else
@@ -136,40 +130,6 @@ void spi_init0(void) {
 	#else
 	SPI_INIT_PINS(4);
 	#endif
-
-	#if !defined(MICROPY_HW_SPI5_NAME)
-	pyb_spi_obj[5].pSPI = 0;
-	#else
-	SPI_INIT_PINS(5);
-	#endif
-
-
-	#if !defined(MICROPY_HW_SPI6_NAME)
-	pyb_spi_obj[6].pSPI = 0;
-	#else
-	SPI_INIT_PINS(6);
-	#endif
-
-	#if !defined(MICROPY_HW_SPI7_NAME)
-	pyb_spi_obj[7].pSPI = 0;
-	#else
-	SPI_INIT_PINS(7);
-	#endif
-
-	
-	#if !defined(MICROPY_HW_SPI8_NAME)
-	pyb_spi_obj[8].pSPI = 0;
-	#else
-	SPI_INIT_PINS(8);
-	#endif
-
-
-	#if !defined(MICROPY_HW_SPI9_NAME)
-	pyb_spi_obj[9].pSPI = 0;
-	#else
-	SPI_INIT_PINS(9);
-	#endif
-
 
 }
 
@@ -199,29 +159,9 @@ STATIC pyb_spi_t spi_find(mp_obj_t id) {
         } else if (strcmp(port, MICROPY_HW_SPI4_NAME) == 0) {
             return PYB_SPI_4;
         #endif
-        #ifdef MICROPY_HW_SPI5_NAME
-        } else if (strcmp(port, MICROPY_HW_SPI5_NAME) == 0) {
-            return PYB_SPI_5;
-        #endif
-		#ifdef MICROPY_HW_SPI6_NAME
-        } else if (strcmp(port, MICROPY_HW_SPI6_NAME) == 0) {
-            return PYB_SPI_6;
-        #endif
-        #ifdef MICROPY_HW_SPI7_NAME
-        } else if (strcmp(port, MICROPY_HW_SPI7_NAME) == 0) {
-            return PYB_SPI_7;
-        #endif
-        #ifdef MICROPY_HW_SPI8_NAME
-        } else if (strcmp(port, MICROPY_HW_SPI8_NAME) == 0) {
-            return PYB_SPI_8;
-        #endif
-		#ifdef MICROPY_HW_SPI9_NAME
-        } else if (strcmp(port, MICROPY_HW_SPI9_NAME) == 0) {
-            return PYB_SPI_9;
-        #endif
         }			
         nlr_raise(mp_obj_new_exception_msg_varg(&mp_type_ValueError,
-            "SPI(%s) does not exist", port));
+            "SPI(%s) doesn't exist", port));
     } else {
         // given an integer id
         int spi_id = mp_obj_get_int(id);
@@ -239,46 +179,38 @@ STATIC pyb_spi_t spi_find(mp_obj_t id) {
 STATIC void spi_set_params(pyb_spi_obj_t *self, int32_t baudrate,
     int32_t polarity, int32_t phase, int32_t bits, int32_t firstbit) 
 {
-	self->mstCfg.baudRate_Bps = self->mstBaudrate = baudrate;
-	self->mstCfg.polarity = !polarity ? kSPI_ClockPolarityActiveHigh : kSPI_ClockPolarityActiveLow;
-	self->mstCfg.phase = !phase ? kSPI_ClockPhaseFirstEdge : kSPI_ClockPhaseSecondEdge; 
-	self->mstCfg.dataWidth = (spi_data_width_t)(kSPI_Data4Bits + bits - 4);
-	self->mstCfg.direction = !firstbit ? kSPI_MsbFirst : kSPI_LsbFirst;
+	self->mstCfg.baudRate = self->mstBaudrate = baudrate;
+	self->mstCfg.cpol = !polarity ? kLPSPI_ClockPolarityActiveHigh : kLPSPI_ClockPolarityActiveLow;
+	self->mstCfg.cpha = !phase ? kLPSPI_ClockPhaseFirstEdge : kLPSPI_ClockPhaseSecondEdge; 
+	//self->mstCfg.dataWidth = (spi_data_width_t)(kLPSPI_Data4Bits + bits - 4);  maybe have no this function in our rt but have it in the lpc
+	self->mstCfg.direction = !firstbit ? kLPSPI_MsbFirst : kLPSPI_LsbFirst;
 }
 
 // TODO allow to take a list of pins to use
 void spi_init(pyb_spi_obj_t *self) 
 {
     // init the GPIO lines
-	gpio_pin_config_t t;
-	t.pinDirection = kGPIO_DigitalOutput , t.outputLogic = 1;    
-	// we use GPIO to control SSEL
-	mp_hal_pin_config(self->pSSEL, GPIO_FILTEROFF | GPIO_MODE_DIGITAL, MP_HAL_PIN_PULL_UP, 0);
-	GPIO_PinInit(self->pSSEL->gpio, self->pSSEL->port, self->pSSEL->pin, &t);
-	
-	mp_hal_pin_config_alt(self->pSCK, GPIO_FILTEROFF | GPIO_MODE_DIGITAL, MP_HAL_PIN_PULL_UP, AF_FN_SPI, self->ndx);
-	mp_hal_pin_config_alt(self->pMOSI, GPIO_FILTEROFF | GPIO_MODE_DIGITAL, MP_HAL_PIN_PULL_UP, AF_FN_SPI, self->ndx);
+	mp_hal_pin_config_alt(self->pSCK, GPIO_MODE_OUTPUT_PP, AF_FN_LPSPI);
+	mp_hal_pin_config_alt(self->pSCK, GPIO_MODE_OUTPUT_PP, AF_FN_LPSPI);//here the GPIO_MODE_OUTPUT_PP is the var in the function IOMUXC_SetPinConfig the last var configvalue
+	mp_hal_pin_config_alt(self->pMOSI, GPIO_MODE_OUTPUT_PP, AF_FN_LPSPI);
 	if (self->pMISO != self->pMOSI) // if we don't use MISO, then set MISO the same pin as MOSI to mark
-		mp_hal_pin_config_alt(self->pMISO, GPIO_FILTEROFF | GPIO_MODE_DIGITAL, MP_HAL_PIN_PULL_UP, AF_FN_SPI, self->ndx);
-    CLOCK_AttachClk(self->clockSel);
+		mp_hal_pin_config_alt(self->pMISO,GPIO_MODE_OUTPUT_PP, AF_FN_LPSPI);//the before one is MP_HAL_PIN_PULL_UP
+	
 
-    /* attach 12 MHz clock to FLEXCOMM8 (I2C slave) */
-    // CLOCK_AttachClk(kFRO12M_to_FLEXCOMM8);
-    /* reset FLEXCOMM for I2C */
-    RESET_PeripheralReset(self->resetNdx);
 
+        CLOCK_SetMux(self->clockSel, LPSPI_CLOCK_SOURCE_SELECT);
+        CLOCK_SetDiv(self->clockDiv, LPSPI_CLOCK_SOURCE_DIVIDER);
 	NVIC_EnableIRQ(self->irqn);
 	
-	status_t ret = SPI_MasterInit(self->pSPI, &self->mstCfg, 12000*1000);
-	if (ret != kStatus_Success) {
+	LPSPI_MasterInit(self->pSPI, &self->mstCfg, LPSPI_MASTER_CLOCK_FREQ);
+	/*if (ret != kStatus_Success) {
 		nlr_raise(mp_obj_new_exception_msg(&mp_type_Exception, "SPI master init failed!"));	
-	}
+	}*/ //sadly our rt sdk write a new init function with void type var
 }
 
 void spi_deinit(pyb_spi_t ndx) {
 	pyb_spi_obj_t *pOb = pyb_spi_obj + ndx;
-	SPI_Deinit(pOb->pSPI);
-	RESET_PeripheralReset(pOb->resetNdx);
+	LPSPI_Deinit(pOb->pSPI);
 	CLOCK_DisableClock(pOb->myClock);
 	NVIC_DisableIRQ(pOb->irqn);
 }
@@ -300,7 +232,7 @@ void spi_transfer(pyb_spi_t ndx, size_t txLen, const uint8_t *src, size_t rxLen,
     // Note: there seems to be a problem sending 1 byte using DMA the first
     // time directly after the SPI/DMA is initialised.  The cause of this is
     // unknown but we sidestep the issue by using polling for 1 byte transfer.
-	spi_transfer_t xfer;
+	lpspi_transfer_t xfer;
 	pyb_spi_obj_t *self = pyb_spi_obj + ndx;
     status_t st = kStatus_Success;
 
@@ -312,7 +244,7 @@ void spi_transfer(pyb_spi_t ndx, size_t txLen, const uint8_t *src, size_t rxLen,
 		xfer.rxData = 0;
 		xfer.dataSize = txLen;
 		xfer.configFlags = 0;
-		st = SPI_MasterTransferBlocking(self->pSPI, &xfer);
+		st = LPSPI_MasterTransferBlocking(self->pSPI, &xfer);
 		if (st != kStatus_Success)
 			goto cleanup;
 	}
@@ -320,7 +252,7 @@ void spi_transfer(pyb_spi_t ndx, size_t txLen, const uint8_t *src, size_t rxLen,
 		xfer.txData = 0;
 		xfer.rxData = dest;
 		xfer.dataSize = rxLen;
-		st = SPI_MasterTransferBlocking(self->pSPI, &xfer);
+		st = LPSPI_MasterTransferBlocking(self->pSPI, &xfer);
 	}	
 cleanup:
 	if (isCtrlSSEL)
@@ -336,7 +268,7 @@ cleanup:
     // Note: there seems to be a problem sending 1 byte using DMA the first
     // time directly after the SPI/DMA is initialised.  The cause of this is
     // unknown but we sidestep the issue by using polling for 1 byte transfer.
-	spi_transfer_t xfer;
+	lpspi_transfer_t xfer;
     status_t st = kStatus_Success;
 	if (isCtrlSSEL)
 		mp_hal_pin_low(self->pSSEL);	
@@ -344,7 +276,7 @@ cleanup:
 	xfer.rxData = dest;
 	xfer.dataSize = len;
 	xfer.configFlags = 0;
-	st = SPI_MasterTransferBlocking(self->pSPI, &xfer);
+	st = LPSPI_MasterTransferBlocking(self->pSPI, &xfer);
 
 	if (isCtrlSSEL)
 		mp_hal_pin_high(self->pSSEL);
@@ -366,7 +298,8 @@ STATIC void spi_print(const mp_print_t *print, pyb_spi_obj_t *self, bool legacy)
         } else {
             mp_printf(print, ", SPI.SLAVE");
         }
-        mp_printf(print, ", polarity=%u, phase=%u, bits=%u", self->mstCfg.polarity, self->mstCfg.phase, self->mstCfg.dataWidth + 1);
+				//we should know whether our rt have the var about datawidth
+        mp_printf(print, ", polarity=%u, phase=%u", self->mstCfg.cpol, self->mstCfg.cpha);
         // if (spi->Init.CRCCalculation == SPI_CRCCALCULATION_ENABLED) {
         //    mp_printf(print, ", crc=0x%x", spi->Init.CRCPolynomial);
         // }
@@ -390,7 +323,7 @@ bool pyb_spi_init_c(pyb_spi_t ndx, mp_arg_val_t args[]) {
     }
 
     // init the SPI bus
-	SPI_MasterGetDefaultConfig(&self->mstCfg);
+	LPSPI_MasterGetDefaultConfig(&self->mstCfg);
 	spi_set_params(self, args[1].u_int, args[2].u_int, args[3].u_int, args[4].u_int, args[5].u_int);    
     spi_init(self);
 	self->flags |= SPI_OBJ_FLAG_ENABLED;
@@ -410,7 +343,7 @@ STATIC mp_obj_t pyb_spi_init_helper(pyb_spi_obj_t *self, mp_uint_t n_args, const
         { MP_QSTR_polarity, MP_ARG_KW_ONLY | MP_ARG_INT,  {.u_int = 0} },
         { MP_QSTR_phase,    MP_ARG_KW_ONLY | MP_ARG_INT,  {.u_int = 0} },
         { MP_QSTR_bits,     MP_ARG_KW_ONLY | MP_ARG_INT,  {.u_int = 8} },
-        { MP_QSTR_firstbit, MP_ARG_KW_ONLY | MP_ARG_INT,  {.u_int = kSPI_MsbFirst} },
+        { MP_QSTR_firstbit, MP_ARG_KW_ONLY | MP_ARG_INT,  {.u_int = kLPSPI_MsbFirst} },
 		// >>> unsupported/unnessary args, keep for compatibility
         { MP_QSTR_prescaler, MP_ARG_KW_ONLY | MP_ARG_INT, {.u_int = 0xffffffff} },
         { MP_QSTR_dir,      MP_ARG_KW_ONLY | MP_ARG_INT,  {.u_int = 0} },
@@ -638,8 +571,8 @@ STATIC const mp_rom_map_elem_t pyb_spi_locals_dict_table[] = {
     /// \constant LSB - set the first bit to LSB
     { MP_ROM_QSTR(MP_QSTR_MASTER), MP_ROM_INT(0) },
     { MP_ROM_QSTR(MP_QSTR_SLAVE),  MP_ROM_INT(1) },
-    { MP_ROM_QSTR(MP_QSTR_MSB),    MP_ROM_INT(kSPI_MsbFirst) },
-    { MP_ROM_QSTR(MP_QSTR_LSB),    MP_ROM_INT(kSPI_LsbFirst) },
+    { MP_ROM_QSTR(MP_QSTR_MSB),    MP_ROM_INT(kLPSPI_MsbFirst) },
+    { MP_ROM_QSTR(MP_QSTR_LSB),    MP_ROM_INT(kLPSPI_LsbFirst) },
     /* TODO
     { MP_ROM_QSTR(MP_QSTR_DIRECTION_2LINES             ((uint32_t)0x00000000)
     { MP_ROM_QSTR(MP_QSTR_DIRECTION_2LINES_RXONLY      SPI_CR1_RXONLY
@@ -684,11 +617,6 @@ STATIC const machine_hard_spi_obj_t machine_hard_spi_obj[] = {
     {{&machine_hard_spi_type}, &pyb_spi_obj[2]},
     {{&machine_hard_spi_type}, &pyb_spi_obj[3]},
     {{&machine_hard_spi_type}, &pyb_spi_obj[4]},
-    {{&machine_hard_spi_type}, &pyb_spi_obj[5]},
-    {{&machine_hard_spi_type}, &pyb_spi_obj[6]},
-    {{&machine_hard_spi_type}, &pyb_spi_obj[7]},
-    {{&machine_hard_spi_type}, &pyb_spi_obj[8]},
-    {{&machine_hard_spi_type}, &pyb_spi_obj[9]},
 };
 
 STATIC void machine_hard_spi_print(const mp_print_t *print, mp_obj_t self_in, mp_print_kind_t kind) {
@@ -704,7 +632,7 @@ mp_obj_t machine_hard_spi_make_new(const mp_obj_type_t *type, size_t n_args, siz
         { MP_QSTR_polarity, MP_ARG_KW_ONLY | MP_ARG_INT, {.u_int = 0} },
         { MP_QSTR_phase,    MP_ARG_KW_ONLY | MP_ARG_INT, {.u_int = 0} },
         { MP_QSTR_bits,     MP_ARG_KW_ONLY | MP_ARG_INT, {.u_int = 8} },
-        { MP_QSTR_firstbit, MP_ARG_KW_ONLY | MP_ARG_INT, {.u_int = kSPI_MsbFirst} },
+        { MP_QSTR_firstbit, MP_ARG_KW_ONLY | MP_ARG_INT, {.u_int = kLPSPI_MsbFirst} },
         { MP_QSTR_sck,      MP_ARG_KW_ONLY | MP_ARG_OBJ, {.u_obj = MP_OBJ_NULL} },
         { MP_QSTR_mosi,     MP_ARG_KW_ONLY | MP_ARG_OBJ, {.u_obj = MP_OBJ_NULL} },
         { MP_QSTR_miso,     MP_ARG_KW_ONLY | MP_ARG_OBJ, {.u_obj = MP_OBJ_NULL} },
@@ -716,7 +644,7 @@ mp_obj_t machine_hard_spi_make_new(const mp_obj_type_t *type, size_t n_args, siz
     int spi_id = spi_find(args[ARG_id].u_obj);
     const machine_hard_spi_obj_t *self = &machine_hard_spi_obj[spi_id - 1];
 
-	SPI_MasterGetDefaultConfig(&self->pyb->mstCfg);
+	LPSPI_MasterGetDefaultConfig(&self->pyb->mstCfg);
 	spi_set_params(self->pyb, args[ARG_baudrate].u_int, args[ARG_polarity].u_int, args[ARG_phase].u_int, 
 		args[ARG_bits].u_int, args[ARG_firstbit].u_int);  
 
@@ -747,7 +675,7 @@ STATIC void machine_hard_spi_init(mp_obj_base_t *self_in, size_t n_args, const m
     mp_arg_val_t args[MP_ARRAY_SIZE(allowed_args)];
     mp_arg_parse_all(n_args, pos_args, kw_args, MP_ARRAY_SIZE(allowed_args), allowed_args, args);
 
-	SPI_MasterGetDefaultConfig(&self->pyb->mstCfg);
+	LPSPI_MasterGetDefaultConfig(&self->pyb->mstCfg);
 	spi_set_params(self->pyb, args[ARG_baudrate].u_int, args[ARG_polarity].u_int, args[ARG_phase].u_int, 
 		args[ARG_bits].u_int, args[ARG_firstbit].u_int);  
     // init the SPI bus

@@ -4,9 +4,10 @@ sensor.reset()                          # Reset and initialize the sensor.
 sensor.set_contrast(3)
 sensor.set_pixformat(sensor.RGB565)     # Set pixel format to RGB565 (or GRAYSCALE)
 sensor.set_framesize(sensor.QVGA)       # Set frame size to QVGA (320x240)
-sensor.set_windowing((192, 192))        # Set window
-sensor.set_framerate(2<<9|2<<11)
+sensor.set_windowing((128, 128))        # Set window
 sensor.skip_frames(time = 100)          # Wait for settings take effect.
+sensor.set_auto_gain(False)
+#sensor.set_framerate(0<<9|2<<11)
 #net = nn.load('/cifar10.network')
 net = nn.load('/cifar10_fast.network')
 labels = ['plane', 'auto', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']

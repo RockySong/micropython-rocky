@@ -4,10 +4,9 @@ import sensor, time, nn, image, os, pyb
 sensor.reset()                          # Reset and initialize the sensor.
 sensor.set_contrast(3)
 sensor.set_pixformat(sensor.GRAYSCALE)     # Set pixel format to RGB565 (or GRAYSCALE)
-sensor.set_framesize(sensor.VGA)       # Set frame size to QVGA (320x240)
-sensor.set_windowing((240,240))        # Set 128x128 window.
-sensor.set_framerate(2<<9|2<<11)
-sensor.set_auto_gain(False)
+sensor.set_framesize(sensor.QVGA)       # Set frame size to QVGA (320x240)
+sensor.set_windowing((56, 56))        # Set 128x128 window.
+sensor.set_auto_gain(True)
 sensor.set_auto_whitebal(False)
 sensor.set_auto_exposure(False)
 sensor.skip_frames(time = 100)          # Wait for settings take effect.

@@ -4,7 +4,7 @@ def BlobTest(thresholds):
     sensor.set_pixformat(sensor.RGB565)
     sensor.set_framesize(sensor.QVGA)
 
-    sensor.set_framerate(1<<9|6<<11)
+    #sensor.set_framerate(1<<9|6<<11)
     #sensor.set_framerate(2<<9|2<<11) #120/3=40M
     sensor.set_auto_gain(True)
     #sensor.set_windowing((50, 50, 50, 90))
@@ -18,7 +18,7 @@ def BlobTest(thresholds):
     lpCnt = 0
     #sensor.__write_reg(0xa6, c)
 
-    for i in range(50000):
+    for i in range(500):
             clock.tick()
             img = sensor.snapshot()
             n = 0
@@ -56,7 +56,7 @@ def FaceTest():
     face_cascade = image.HaarCascade("frontalface", stages=25)
     print(face_cascade)
     clock = time.clock()
-    for i in range(25000):
+    for i in range(250):
         clock.tick()
         img = sensor.snapshot()
         objects = img.find_features(face_cascade, threshold=0.75, scale_factor=1.25)
@@ -104,6 +104,6 @@ while (True):
     pyb.LED(2).on()
     pyb.LED(3).on()
     pyb.LED(4).off()
-    #FaceTest()
+    FaceTest()
     BlobTest(thresholds3)
 

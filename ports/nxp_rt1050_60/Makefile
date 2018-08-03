@@ -316,6 +316,7 @@ SRC_C = \
 	modnetwork.c \
 	flash_hyper.c \
 	pin.c \
+	spi.c \
 	uart.c \
 	usb_app.c \
 	usrsw.c \

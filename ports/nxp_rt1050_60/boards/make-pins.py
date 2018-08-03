@@ -20,7 +20,7 @@ SUPPORTED_FN = {
 
 CONDITIONAL_VAR = {
     'SAI'   : 'MICROPY_HW_ENABLE_SAI{num}',
-    'LPSPI'   : 'MICROPY_HW_LPSPI{num}_PCS',
+    #'LPSPI'   : 'MICROPY_HW_LPSPI{num}_PCS',
 }
 
 def parse_port_pin(gpio_str):

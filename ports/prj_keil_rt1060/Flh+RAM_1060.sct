@@ -7,9 +7,9 @@
 #define DTCM_SIZE	(512-32)*1024
 #define OCRAM_SIZE	512*1024
 
-#define OMV_MAIN_FB_SIZE	365*1024 //301*1024
-#define OMV_FB_ALLOC_SIZE	144*1024 //83*1024
-#define OMV_JPEG_FB_SIZE    40*1024
+#define OMV_MAIN_FB_SIZE	301*1024 //301*1024
+#define OMV_FB_ALLOC_SIZE	83*1024 //83*1024
+#define OMV_JPEG_FB_SIZE    32*1024
 
 ; must use "VECTOR_RAM", "RW_m_data", "VECTOR_ROM" as names to work with "InstallIRQHandler()" API
 
@@ -101,10 +101,8 @@ LR_XIP_FLASH ROM_BASE + 0x2000 {
 	}	
 	
 	ER_DTCM +0 {
-		.ANY (+RW, +ZI)
-		* (.jpeg_buf)
-		sincos_tab.o (+RO)
-		* (.ram_const)
+		fsl_sd*.o (+RW, +ZI)
+		usb*.o (+RW, +ZI)
 	}
 	
 	ARM_LIB_HEAP +0 EMPTY 0x100 {} ; Heap region growing up
@@ -116,7 +114,12 @@ LR_XIP_FLASH ROM_BASE + 0x2000 {
 	OMV_MAIN_FB +0 EMPTY OMV_MAIN_FB_SIZE  + OMV_FB_ALLOC_SIZE {}
 //	OMV_FB_ALLOC +0 EMPTY OMV_FB_ALLOC_SIZE {}
 	OMV_FB_END +0 EMPTY 16 {}	
-	
+	ER_OCRAM +0 {
+		.ANY (+RW, +ZI)
+		* (.jpeg_buf)
+		sincos_tab.o (+RO)
+		* (.ram_const)
+	}
 	OCRAM_END 0x20280000 EMPTY 4 {}
 	; <<<
 	
