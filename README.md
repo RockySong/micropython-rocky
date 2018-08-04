@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/micropython/micropython.png?branch=master)](https://travis-ci.org/micropython/micropython) [![Coverage Status](https://coveralls.io/repos/micropython/micropython/badge.png?branch=master)](https://coveralls.io/r/micropython/micropython?branch=master)
 
-The MicroPython for i.mx rt105x and LPC546xx project
+The MicroPython and OpenMV port to NXP MCUs
 =======================
 <p align="center">
   <img src="https://raw.githubusercontent.com/micropython/micropython/master/logo/upython-with-micro.jpg" alt="MicroPython Logo"/>
@@ -35,8 +35,8 @@ Major components in this repository:
 - mpy-cross/ -- the MicroPython cross-compiler which is used to turn scripts
   into precompiled bytecode.
 - ports/unix/ -- a version of MicroPython that runs on Unix.
-- ports/nxp_rt105/ -- a version of MicroPython that runs on the imxrtevk105x and similar
-  i.mx rt105x boards (using NXP's MCUXpresso SDK drivers).
+- ports/nxp_rt1050_60/ -- a version of MicroPython that runs on the imxrtevk105x and similar
+  i.mx rt1050/60 boards (using NXP's MCUXpresso SDK drivers). OpenMV is also ported to i.MX RT1050/60 devices.
 - ports/nxp_lpc546/ -- a version of MicroPython that runs on the LPCXPresso54608 board and similar
   lpc54608 boards (using NXP's MCUXpresso SDK drivers).
 - tests/ -- test framework and test scripts.
@@ -139,7 +139,7 @@ above.
 The i.mx RT105x and LPC54608 version
 -----------------
 
-The "rt105" port supports GCC toolchain (as mpy official) and KEIL.
+The "rt1050_60" port supports GCC toolchain (as mpy official) and KEIL.
 To build under keil, just open KEIL project in "prj_keil_<MCU series>" folder.
 To build under GCC, requires an ARM compiler, arm-none-eabi-gcc, and associated
 bin-utils.  For those using Arch Linux, you need arm-none-eabi-binutils,
@@ -157,7 +157,7 @@ To build:
 Contributing
 ------------
 
-MicroPython is an open-source project and welcomes contributions. To be
+MicroPython and OpenMV are open-source projects and welcome contributions. To be
 productive, please be sure to follow the
 [Contributors' Guidelines](https://github.com/micropython/micropython/wiki/ContributorGuidelines)
 and the [Code Conventions](https://github.com/micropython/micropython/blob/master/CODECONVENTIONS.md).
