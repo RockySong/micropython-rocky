@@ -4,6 +4,7 @@ The MicroPython and OpenMV port to NXP MCUs
 =======================
 <p align="center">
   <img src="https://raw.githubusercontent.com/micropython/micropython/master/logo/upython-with-micro.jpg" alt="MicroPython Logo"/>
+  <img src="https://github.com/RockySong/micropython-rocky/blob/master/omvrt_banner.jpg" alt="project banner" />
 </p>
 
 This is project is cloned from MicroPython project, which aims to put an implementation
