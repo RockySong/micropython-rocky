@@ -55,12 +55,12 @@
 
 // this function inits the switch GPIO so that it can be used
 void switch_init0(void) {
-    mp_hal_pin_config(&MICROPY_HW_USRSW_PIN, 1<<7/*digital*/|1<<8/*10ns filter disabled*/, 0, 0);
+    mp_hal_pin_config_alt( &MICROPY_HW_USRSW_PIN,GPIO_MODE_OUTPUT_PP_WEAK, AF_FN_GPIO );
 }
 
 int switch_get(void) {
     volatile int val = 0;
-	val = GPIO_ReadPinInput(GPIO, MICROPY_HW_USRSW_PIN.port, MICROPY_HW_USRSW_PIN.pin);
+	val = GPIO_ReadPinInput(MICROPY_HW_USRSW_PIN.gpio, MICROPY_HW_USRSW_PIN.pin);
     return (val == MICROPY_HW_USRSW_PRESSED);
 }
 

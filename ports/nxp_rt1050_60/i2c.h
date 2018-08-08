@@ -31,33 +31,15 @@
 #define MICROPY_HW_I2C_BAUDRATE_MAX	(1000*1000)
 
 // I2C busses
-#define MICROPY_HW_I2C0_NAME "i2c0"
-#define MICROPY_HW_I2C0_SDA (pin_024)
-#define MICROPY_HW_I2C0_SCL (pin_025)
-
-#define MICROPY_HW_I2C2_NAME "i2c2"
-#define MICROPY_HW_I2C2_SDA (pin_323)
-#define MICROPY_HW_I2C2_SCL (pin_324)
 
 #define MICROPY_HW_I2C3_NAME "i2c3"
-#define MICROPY_HW_I2C3_SDA (pin_218)
-#define MICROPY_HW_I2C3_SCL (pin_219)
+#define MICROPY_HW_I2C3_SDA (pin_EMC_21)
+#define MICROPY_HW_I2C3_SCL (pin_EMC_22)
 
 #define MICROPY_HW_I2C4_NAME "i2c4"
-#define MICROPY_HW_I2C4_SDA (pin_326)
-#define MICROPY_HW_I2C4_SCL (pin_327)
+#define MICROPY_HW_I2C4_SDA (pin_EMC_11)
+#define MICROPY_HW_I2C4_SCL (pin_EMC_12)
 
-#define MICROPY_HW_I2C6_NAME "i2c6"
-#define MICROPY_HW_I2C6_SDA (pin_42)
-#define MICROPY_HW_I2C6_SCL (pin_43)
-
-#define MICROPY_HW_I2C8_NAME "i2c8"
-#define MICROPY_HW_I2C8_SDA (pin_117)
-#define MICROPY_HW_I2C8_SCL (pin_118)
-
-#define MICROPY_HW_I2C9_NAME "i2c9"
-#define MICROPY_HW_I2C9_SDA (pin_321)
-#define MICROPY_HW_I2C9_SCL (pin_322)
 
 typedef enum {
 	PYB_I2C_0 = 0,
@@ -65,12 +47,7 @@ typedef enum {
     PYB_I2C_2 = 2,
     PYB_I2C_3 = 3,
     PYB_I2C_4 = 4,
-    PYB_I2C_5 = 5,
-    PYB_I2C_6 = 6,
-    PYB_I2C_7 = 7,
-    PYB_I2C_8 = 8,
-    PYB_I2C_9 = 9,
-    PYB_I2C_NONE = 31, 
+
 } pyb_i2c_t;
 
 #define I2C_OBJ_FLAG_ENABLED	1
@@ -82,6 +59,7 @@ typedef struct _pyb_i2c_obj_t {
     pyb_i2c_t ndx;
 	clock_name_t myClock;
 	clock_mux_t clockSel;
+	clock_div_t clockDiv;
 	// SYSCON_RSTn_t resetNdx;  // call LPI2C_MasterReset();
     IRQn_Type irqn;
 	uint32_t mstBaudrate;
@@ -89,8 +67,7 @@ typedef struct _pyb_i2c_obj_t {
 	bool isUseDMA;
 	bool isMaster;
 	lpi2c_master_config_t mstCfg;
-	// lpi2c_master_dma_handle_t hMstDma;
-	// lpi2c_slave_config_t slvCfg;
+	lpi2c_slave_config_t slvCfg;
 } pyb_i2c_obj_t;
 
 // use this for OwnAddress1 to configure I2C in master mode

@@ -528,6 +528,10 @@ Q(I25)
 
 Q(I2C)
 
+Q(I2C)
+
+Q(I2C)
+
 Q(IN)
 
 Q(INT16)
@@ -637,6 +641,8 @@ Q(LSB)
 Q(LookupError)
 
 Q(LookupError)
+
+Q(MASTER)
 
 Q(MASTER)
 
@@ -796,6 +802,8 @@ Q(SIF)
 
 Q(SLAVE)
 
+Q(SLAVE)
+
 Q(SLEW_FAST)
 
 Q(SNVS)
@@ -837,6 +845,10 @@ Q(StopIteration)
 Q(StringIO)
 
 Q(StringIO)
+
+Q(Switch)
+
+Q(Switch)
 
 Q(SyntaxError)
 
@@ -1378,6 +1390,16 @@ Q(add_frame)
 
 Q(addr)
 
+Q(addr)
+
+Q(addr)
+
+Q(addr)
+
+Q(addr)
+
+Q(addr_size)
+
 Q(addressof)
 
 Q(addrsize)
@@ -1495,6 +1517,8 @@ Q(b_xnor)
 Q(b_xor)
 
 Q(barcode)
+
+Q(baudrate)
 
 Q(baudrate)
 
@@ -1637,6 +1661,8 @@ Q(bytes_at)
 Q(calcsize)
 
 Q(callable)
+
+Q(callback)
 
 Q(capacity)
 
@@ -1854,6 +1880,8 @@ Q(data)
 
 Q(data)
 
+Q(data)
+
 Q(data_type)
 
 Q(datamatrix)
@@ -1873,6 +1901,8 @@ Q(deepsleep)
 Q(default)
 
 Q(degrees)
+
+Q(deinit)
 
 Q(deinit)
 
@@ -1929,6 +1959,8 @@ Q(displacement)
 Q(div)
 
 Q(divmod)
+
+Q(dma)
 
 Q(doc)
 
@@ -2198,6 +2230,8 @@ Q(gc)
 
 Q(gc)
 
+Q(gencall)
+
 Q(generator)
 
 Q(generator)
@@ -2391,6 +2425,8 @@ Q(info)
 Q(info)
 
 Q(info)
+
+Q(init)
 
 Q(init)
 
@@ -2790,6 +2826,12 @@ Q(mem_free)
 
 Q(mem_info)
 
+Q(mem_read)
+
+Q(mem_write)
+
+Q(memaddr)
+
 Q(memaddr)
 
 Q(memoryview)
@@ -2851,6 +2893,8 @@ Q(mkfs)
 Q(mkfs)
 
 Q(mktime)
+
+Q(mode)
 
 Q(mode)
 
@@ -3350,6 +3394,10 @@ Q(recv)
 
 Q(recv)
 
+Q(recv)
+
+Q(recv)
+
 Q(reg)
 
 Q(register)
@@ -3484,6 +3532,8 @@ Q(scale_mul)
 
 Q(scan)
 
+Q(scan)
+
 Q(sck)
 
 Q(sck)
@@ -3517,6 +3567,10 @@ Q(seek)
 Q(select)
 
 Q(select)
+
+Q(send)
+
+Q(send)
 
 Q(send)
 
@@ -3923,6 +3977,12 @@ Q(time)
 Q(time)
 
 Q(time)
+
+Q(timeout)
+
+Q(timeout)
+
+Q(timeout)
 
 Q(timeout)
 

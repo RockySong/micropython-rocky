@@ -28,38 +28,38 @@
 #define _UART_H_
 #define LPUART_FIFO_CAP		4
 
+#if defined(BOARD_OMVRT1)
+#define MICROPY_HW_UART4_NAME   "uart4"	//ALT2
+#define MICROPY_HW_UART4_RX     (pin_EMC_20)	// D0/RXD
+#define MICROPY_HW_UART4_TX     (pin_EMC_19)	// D1/TXD
+#define MICROPY_HW_UART4_ALT	2
+
+#elif defined(BOARD_IMXRTEVK1050_60)
+
 #define MICROPY_HW_UART1_RX     (pin_AD_B0_13)	// CMSIS-DAP
 #define MICROPY_HW_UART1_TX     (pin_AD_B0_12)	// CMSIS-DAP
 #define MICROPY_HW_UART1_ALT	2
-
 
 #define MICROPY_HW_UART2_NAME   "uart2"	//ALT2
 #define MICROPY_HW_UART2_RX    (pin_AD_B1_03)	// D7
 #define MICROPY_HW_UART2_TX    (pin_AD_B1_02)	// D6
 #define MICROPY_HW_UART2_ALT	2
 
-
 #define MICROPY_HW_UART3_NAME   "uart3"	//ALT2
 #define MICROPY_HW_UART3_RX     (pin_AD_B1_06)	// D0/RXD
 #define MICROPY_HW_UART3_TX     (pin_AD_B1_07)	// D1/TXD
 #define MICROPY_HW_UART3_ALT	2
-
-#define MICROPY_HW_UART4_NAME   "uart4"	//ALT2
-#define MICROPY_HW_UART4_RX     (pin_EMC_20)	// D0/RXD
-#define MICROPY_HW_UART4_TX     (pin_EMC_19)	// D1/TXD
-#define MICROPY_HW_UART4_ALT	2
 
 #define MICROPY_HW_UART6_NAME   "uart6"	//ALT2
 #define MICROPY_HW_UART6_RX    (pin_AD_B0_03)		// D8
 #define MICROPY_HW_UART6_TX    (pin_AD_B0_02)		// D9
 #define MICROPY_HW_UART6_ALT	2
 
-
 #define MICROPY_HW_UART8_NAME   "uart8"	// ALT2
 #define MICROPY_HW_UART8_RX    (pin_AD_B1_11)	// A1
 #define MICROPY_HW_UART8_TX    (pin_AD_B1_10)	// A0
 #define MICROPY_HW_UART8_ALT	2
-
+#endif
 
 typedef enum {
 	PYB_UART_0 = 0,

@@ -90,27 +90,26 @@
 ///     i2c.mem_write('abc', 0x42, 2, timeout=1000)
 #define PYB_I2C_MASTER (0)
 #define PYB_I2C_SLAVE  (1)
-#define IS_MST_IDLE(self)  ((self->pI2C->STAT & 0xF) == 1)
+#define IS_MST_IDLE(self)  ((self->pI2C->MSR & 1<<25) == 0)
 
+/* Select USB1 PLL (480 MHz) as master lpi2c clock source */
+#define LPI2C_CLOCK_SOURCE_SELECT (1U)
+/* Clock divider for master lpi2c clock source */
+#define LPI2C_CLOCK_SOURCE_DIVIDER (0U)
 
 pyb_i2c_obj_t pyb_i2c_obj[10] = {
-    {{&pyb_i2c_type}, I2C0, PYB_I2C_0, kCLOCK_Flexcomm0, kFRO12M_to_FLEXCOMM0, kFC0_RST_SHIFT_RSTn, FLEXCOMM0_IRQn, 400000, 0, 1, 1, {0}, {0}, {0}},
-    {{&pyb_i2c_type}, I2C1, PYB_I2C_1, kCLOCK_Flexcomm1, kFRO12M_to_FLEXCOMM1, kFC1_RST_SHIFT_RSTn, FLEXCOMM1_IRQn, 400000, 0, 1, 1, {0}, {0}, {0}},
-    {{&pyb_i2c_type}, I2C2, PYB_I2C_2, kCLOCK_Flexcomm2, kFRO12M_to_FLEXCOMM2, kFC2_RST_SHIFT_RSTn, FLEXCOMM2_IRQn, 400000, 0, 1, 1, {0}, {0}, {0}},
-    {{&pyb_i2c_type}, I2C3, PYB_I2C_3, kCLOCK_Flexcomm3, kFRO12M_to_FLEXCOMM3, kFC3_RST_SHIFT_RSTn, FLEXCOMM3_IRQn, 400000, 0, 1, 1, {0}, {0}, {0}},
-    {{&pyb_i2c_type}, I2C4, PYB_I2C_4, kCLOCK_Flexcomm4, kFRO12M_to_FLEXCOMM4, kFC4_RST_SHIFT_RSTn, FLEXCOMM4_IRQn, 400000, 0, 1, 1, {0}, {0}, {0}},
-    {{&pyb_i2c_type}, I2C5, PYB_I2C_5, kCLOCK_Flexcomm5, kFRO12M_to_FLEXCOMM5, kFC5_RST_SHIFT_RSTn, FLEXCOMM5_IRQn, 400000, 0, 1, 1, {0}, {0}, {0}},
-    {{&pyb_i2c_type}, I2C6, PYB_I2C_6, kCLOCK_Flexcomm6, kFRO12M_to_FLEXCOMM6, kFC6_RST_SHIFT_RSTn, FLEXCOMM6_IRQn, 400000, 0, 1, 1, {0}, {0}, {0}},
-    {{&pyb_i2c_type}, I2C7, PYB_I2C_7, kCLOCK_Flexcomm7, kFRO12M_to_FLEXCOMM7, kFC7_RST_SHIFT_RSTn, FLEXCOMM7_IRQn, 400000, 0, 1, 1, {0}, {0}, {0}},
-    {{&pyb_i2c_type}, I2C8, PYB_I2C_8, kCLOCK_Flexcomm8, kFRO12M_to_FLEXCOMM8, kFC8_RST_SHIFT_RSTn, FLEXCOMM8_IRQn, 400000, 0, 1, 1, {0}, {0}, {0}},
-    {{&pyb_i2c_type}, I2C9, PYB_I2C_9, kCLOCK_Flexcomm9, kFRO12M_to_FLEXCOMM9, kFC9_RST_SHIFT_RSTn, FLEXCOMM9_IRQn, 400000, 0, 1, 1, {0}, {0}, {0}},
+    {{&pyb_i2c_type}, 0, PYB_I2C_0, 0 , 0, 0, 0, 100000, 0, 1, 1, {0}},
+    {{&pyb_i2c_type}, LPI2C1, PYB_I2C_1, kCLOCK_Usb1PllClk, kCLOCK_Lpi2cMux, kCLOCK_Lpi2cDiv, LPI2C1_IRQn, 100000, 0, 1, 1, {0}},
+    {{&pyb_i2c_type}, LPI2C2, PYB_I2C_2, kCLOCK_Usb1PllClk, kCLOCK_Lpi2cMux, kCLOCK_Lpi2cDiv, LPI2C1_IRQn, 100000, 0, 1, 1, {0}},
+    {{&pyb_i2c_type}, LPI2C3, PYB_I2C_3, kCLOCK_Usb1PllClk, kCLOCK_Lpi2cMux, kCLOCK_Lpi2cDiv, LPI2C1_IRQn, 100000, 0, 1, 1, {0}},
+    {{&pyb_i2c_type}, LPI2C4, PYB_I2C_4, kCLOCK_Usb1PllClk, kCLOCK_Lpi2cMux, kCLOCK_Lpi2cDiv, LPI2C1_IRQn, 100000, 0, 1, 1, {0}},
 };
 
 #define NUM_BAUDRATE_TIMINGS MP_ARRAY_SIZE(pyb_i2c_baudrate_timing)
 
 STATIC void i2c_set_baudrate(uint32_t ndx, uint32_t baudrate) {
     if (baudrate <= 1000 * 1000) {
-		pyb_i2c_obj[ndx].mstCfg.baudRate_Bps = baudrate;
+		pyb_i2c_obj[ndx].mstCfg.baudRate_Hz = baudrate;
 		pyb_i2c_obj[ndx].mstBaudrate = baudrate;
 	} else {
 	    nlr_raise(mp_obj_new_exception_msg_varg(&mp_type_ValueError,
@@ -119,7 +118,7 @@ STATIC void i2c_set_baudrate(uint32_t ndx, uint32_t baudrate) {
 }
 
 uint32_t i2c_get_baudrate(uint32_t ndx) {
-    return pyb_i2c_obj[ndx].mstCfg.baudRate_Bps;
+    return pyb_i2c_obj[ndx].mstCfg.baudRate_Hz;
 }
 
 
@@ -171,7 +170,6 @@ void i2c_init0(void) {
 case PYB_I2C_##n: \
 	pins[0] = &MICROPY_HW_I2C##n##_SCL; \
 	pins[1] = &MICROPY_HW_I2C##n##_SDA; \
-	CLOCK_EnableClock(kCLOCK_Flexcomm##n); \
 	break;
 
 bool i2c_init(uint32_t ndx, uint32_t baudRate) {
@@ -227,12 +225,10 @@ bool i2c_init(uint32_t ndx, uint32_t baudRate) {
 			if (pins[i]->port == 0 && (pins[i]->pin == 13 || pins[i]->pin == 14) ||
 				pins[i]->port == 3 && (pins[i]->pin == 23 || pins[i]->pin == 24)) {
 				// true OD, has different encoding to IOMUX 
-				ret = mp_hal_pin_config_alt(pins[i], GPIO_TRUE_OD_400KHz, 
-					0, AF_FN_I2C, ndx);
+				ret = mp_hal_pin_config_alt(pins[i], GPIO_MODE_OUTPUT_PP_WEAK , AF_FN_LPI2C);
 			} else {
 				// simulated OD
-				ret = mp_hal_pin_config_alt(pins[i], GPIO_FILTEROFF | GPIO_MODE_DIGITAL | GPIO_MODE_OUTPUT_OD, 
-					MP_HAL_PIN_PULL_UP, AF_FN_I2C, ndx);
+				ret = mp_hal_pin_config_alt(pins[i], GPIO_MODE_OUTPUT_PP_WEAK,AF_FN_LPI2C);
 			}
 			if (!ret) {
                 return false;
@@ -240,26 +236,23 @@ bool i2c_init(uint32_t ndx, uint32_t baudRate) {
         }
     }
 	pyb_i2c_obj_t *pOb = &pyb_i2c_obj[ndx];
-    /* attach 12 MHz clock to FLEXCOMM9 (I2C master) */
-    CLOCK_AttachClk(pOb->clockSel);
-
-    /* attach 12 MHz clock to FLEXCOMM8 (I2C slave) */
-    // CLOCK_AttachClk(kFRO12M_to_FLEXCOMM8);
-    /* reset FLEXCOMM for I2C */
-    RESET_PeripheralReset(pOb->resetNdx);
+        uint32_t sourceClock;
+    /* attach usb1 pll(480MHZ (I2C master) */
+        CLOCK_SetMux(pOb->clockSel, LPI2C_CLOCK_SOURCE_SELECT);
+        CLOCK_SetDiv(pOb->clockDiv, LPI2C_CLOCK_SOURCE_DIVIDER);
 
 	NVIC_EnableIRQ(pOb->irqn);
-	
-	I2C_MasterGetDefaultConfig(&pOb->mstCfg);
-	pOb->mstCfg.baudRate_Bps = baudRate;
-	I2C_MasterInit(pOb->pI2C, &pOb->mstCfg, 12000*1000);
+	        /* LPI2C clock is OSC clock. */
+        sourceClock = CLOCK_GetOscFreq();
+	LPI2C_MasterGetDefaultConfig(&pOb->mstCfg);
+	pOb->mstCfg.baudRate_Hz = baudRate;
+	LPI2C_MasterInit(pOb->pI2C, &pOb->mstCfg, sourceClock);
 	return true;
 }
 
 void i2c_deinit(uint32_t ndx) {
 	pyb_i2c_obj_t *pOb = pyb_i2c_obj + ndx;
-	I2C_MasterDeinit(pOb->pI2C);
-	RESET_PeripheralReset(pOb->resetNdx);
+	LPI2C_MasterDeinit(pOb->pI2C);
 	CLOCK_DisableClock(pOb->myClock);
 	NVIC_DisableIRQ(pOb->irqn);
 }
@@ -297,7 +290,7 @@ STATIC void pyb_i2c_print(const mp_print_t *print, mp_obj_t self_in, mp_print_ki
         if (self->isMaster) {
             mp_printf(print, "I2C(%u, I2C.MASTER, baudrate=%u)", i2c_num, self->mstBaudrate);
         } else {
-            mp_printf(print, "I2C(%u, I2C.SLAVE, addr=0x%02x)", i2c_num, self->slvCfg.address0.address & 0x7f);
+            mp_printf(print, "I2C(%u, I2C.SLAVE, addr=0x%02x)", i2c_num, self->slvCfg.address0 & 0x7f);
         }
     }
 }
@@ -323,9 +316,9 @@ STATIC mp_obj_t pyb_i2c_init_helper(pyb_i2c_obj_t *self, mp_uint_t n_args, const
     mp_arg_val_t args[MP_ARRAY_SIZE(allowed_args)];
     mp_arg_parse_all(n_args, pos_args, kw_args, MP_ARRAY_SIZE(allowed_args), allowed_args, args);
 
-    // set the I2C configuration values
-	  self->slvCfg.address0.address = (uint8_t)(args[1].u_int & 0x7F);
-	  self->slvCfg.address1.address = (uint8_t)((args[1].u_int << 1) & 0xFE);
+    // set the I2C configuration values, we just use the master mode , so we do not need to use the slave configure, but we add a slave configure_t in our self obj struct
+	  self->slvCfg.address0 = (uint8_t)(args[1].u_int & 0x7F);
+	  self->slvCfg.address1 = (uint8_t)((args[1].u_int << 1) & 0xFE);
 	
     i2c_set_baudrate(self->ndx, MIN(args[2].u_int, MICROPY_HW_I2C_BAUDRATE_MAX));
 	self->isUseDMA = args[4].u_bool;
@@ -440,35 +433,26 @@ STATIC mp_obj_t pyb_i2c_deinit(mp_obj_t self_in) {
     return mp_const_none;
 }
 STATIC MP_DEFINE_CONST_FUN_OBJ_1(pyb_i2c_deinit_obj, pyb_i2c_deinit);
-
-bool HAL_I2C_IsDeviceReady(I2C_Type *pI2C, uint16_t DevAddress, uint32_t Trials, uint32_t Timeout)
+/*  may we do not need to use this function in our rt board
+bool HAL_I2C_IsDeviceReady(LPI2C_Type *pI2C, uint16_t DevAddress, uint32_t Trials, uint32_t Timeout)
 {
 	uint32_t I2C_Trials = 0;
 	uint32_t t0, t1;
 	uint32_t status;
-	/* Get tick */
+	// Get tick 
 	t0 = HAL_GetTick();
 
 	do {
-		I2C_MasterStart(pI2C, DevAddress, kI2C_Write);
+		LPI2C_MasterStart(pI2C, DevAddress, kLPI2C_Write);
 		do
 		{
-			status = I2C_GetStatusFlags(pI2C);
-		} while ((status & I2C_STAT_MSTPENDING_MASK) == 0);
+			status = LPI2C_MasterGetStatusFlags(pI2C);
+		} while ((status & LPI2C_STAT_MSTPENDING_MASK) == 0);
 
-		/* Clear controller state. */
-		I2C_MasterClearStatusFlags(pI2C, I2C_STAT_MSTARBLOSS_MASK | I2C_STAT_MSTSTSTPERR_MASK);
-		if (status & 1<<6) {
-			// Start/Stop error
-			pI2C->CFG &= ~1;
-			pI2C->CFG |= 1; // if master get an ACK of address and we do nothing, then next time master can't send start. So we disable and reenable
-		
-		} else {
-			pI2C->MSTCTL = I2C_MSTCTL_MSTSTOP_MASK;	// stop
-			while ((I2C_GetStatusFlags(pI2C) & I2C_STAT_MSTPENDING_MASK) == 0);
-		}
-		status = (status & I2C_STAT_MSTSTATE_MASK) >> I2C_STAT_MSTSTATE_SHIFT;
-		if (status == I2C_STAT_MSTCODE_TXREADY) {
+		// Clear controller state. 
+		LPI2C_MasterClearStatusFlags(pI2C, LPI2C_MSR_ALF_MASK);
+		status = (status & LPI2C_STAT_MSTSTATE_MASK) >> LPI2C_STAT_MSTSTATE_SHIFT;
+		if (status == LPI2C_STAT_MSTCODE_TXREADY) {
 //			pI2C->CFG &= ~1;
 //			pI2C->CFG |= 1; // if master get an ACK of address and we do nothing, then next time master can't send start. So we disable and reenable
 			
@@ -484,7 +468,7 @@ bool HAL_I2C_IsDeviceReady(I2C_Type *pI2C, uint16_t DevAddress, uint32_t Trials,
 
 /// \method is_ready(addr)
 /// Check if an I2C device responds to the given address.  Only valid when in master mode.
-STATIC mp_obj_t pyb_i2c_is_ready(mp_obj_t self_in, mp_obj_t i2c_addr_o) {
+//STATIC mp_obj_t pyb_i2c_is_ready(mp_obj_t self_in, mp_obj_t i2c_addr_o) {
     pyb_i2c_obj_t *self = self_in;
 
     if (!self->isMaster) {
@@ -502,7 +486,7 @@ STATIC mp_obj_t pyb_i2c_is_ready(mp_obj_t self_in, mp_obj_t i2c_addr_o) {
 
     return mp_const_false;
 }
-STATIC MP_DEFINE_CONST_FUN_OBJ_2(pyb_i2c_is_ready_obj, pyb_i2c_is_ready);
+STATIC MP_DEFINE_CONST_FUN_OBJ_2(pyb_i2c_is_ready_obj, pyb_i2c_is_ready);*/
 
 /// \method scan()
 /// Scan all I2C addresses from 0x08 to 0x77 and return a list of those that respond.
@@ -517,8 +501,8 @@ STATIC mp_obj_t pyb_i2c_scan(mp_obj_t self_in) {
     mp_obj_t list = mp_obj_new_list(0, NULL);
 
     for (uint addr = 0x02; addr <= 0x7E; addr++) {
-		bool isOK = HAL_I2C_IsDeviceReady(self->pI2C, addr, 3, 200);
-		if (isOK) {
+	//	bool isOK = HAL_I2C_IsDeviceReady(self->pI2C, addr, 3, 200);
+		if (1) {
 			mp_obj_list_append(list, mp_obj_new_int(addr));
 		}
     }
@@ -568,9 +552,22 @@ STATIC mp_obj_t pyb_i2c_send(mp_uint_t n_args, const mp_obj_t *pos_args, mp_map_
         }
         mp_uint_t i2c_addr = args[1].u_int;
         if (!use_dma) {
-			I2C_MasterStart(self->pI2C, i2c_addr, kI2C_Write);
-			status = I2C_MasterWriteBlocking(self->pI2C, bufinfo.buf, bufinfo.len, kI2C_TransferNoStopFlag);
-			I2C_MasterStop(self->pI2C);
+			 while(1)
+    {
+	status = LPI2C_MasterStart(self->pI2C, i2c_addr, kLPI2C_Write);
+
+        if (kStatus_Success != status)
+        {
+            LPI2C_MasterStop(self->pI2C);
+	          return (mp_obj_t)-1;
+        }
+        else
+        {
+            break;
+        }
+    }
+			LPI2C_MasterSend(self->pI2C, bufinfo.buf, bufinfo.len);
+			LPI2C_MasterStop(self->pI2C);
         } else {
             status = status; // todo: dma
         }
@@ -631,16 +628,29 @@ STATIC mp_obj_t pyb_i2c_recv(mp_uint_t n_args, const mp_obj_t *pos_args, mp_map_
 	}
 
     // receive the data
-    HAL_StatusTypeDef status;
+    status_t reVal;
     if (self->isMaster) {
         if (args[1].u_int == PYB_I2C_MASTER_ADDRESS) {
             nlr_raise(mp_obj_new_exception_msg(&mp_type_TypeError, "addr argument required"));
         }
         mp_uint_t i2c_addr = args[1].u_int;
         if (!use_dma) {
-			I2C_MasterStart(self->pI2C, i2c_addr, kI2C_Read);
-			status = I2C_MasterReadBlocking(self->pI2C, vstr.buf, vstr.len, kI2C_TransferNoStopFlag);
-			I2C_MasterStop(self->pI2C); 
+			   while (1)
+    {
+        reVal = LPI2C_MasterStart(self->pI2C, i2c_addr, kLPI2C_Read);   //attention:in our read function,this will be the write,because i2c need send the control word to the salve kit before read.
+
+        if (kStatus_Success != reVal)
+        {
+            LPI2C_MasterStop(self->pI2C);
+	    return (mp_obj_t)-1;
+        }
+        else
+        {
+            break;
+        }
+    }
+	LPI2C_MasterReceive(self->pI2C, vstr.buf, vstr.len);
+	LPI2C_MasterStop(self->pI2C); 
         } else {
             // todo: DMA
         }
@@ -657,10 +667,10 @@ STATIC mp_obj_t pyb_i2c_recv(mp_uint_t n_args, const mp_obj_t *pos_args, mp_map_
         // todo: dma
     }
 
-    if (status != kStatus_Success) {
+    if (reVal != kStatus_Success) {
         i2c_reset_after_error(self);
 
-        mp_hal_raise(status);
+        mp_hal_raise(reVal);
     }
 
     // return the received data
@@ -695,21 +705,36 @@ STATIC const mp_arg_t pyb_i2c_mem_io_allowed_args[] = {
 status_t pyb_i2c_mem_read_c(pyb_i2c_t ndx, bool use_dma, 
 	mp_uint_t i2c_addr, mp_uint_t mem_addr, mp_uint_t mem_addr_size, char*buf, uint32_t cbRx)
 {
-    status_t status = kStatus_Fail;
+    status_t reVal = kStatus_Fail;
 	pyb_i2c_obj_t *self = pyb_i2c_obj + ndx;
     if (!use_dma) {
-		I2C_MasterStart(self->pI2C, i2c_addr, kI2C_Write);
-		status = I2C_MasterWriteBlocking(self->pI2C, &mem_addr, mem_addr_size, kI2C_TransferNoStopFlag);
-		if (status == kStatus_Success) {
-			I2C_MasterStart(self->pI2C, i2c_addr, kI2C_Read);
-			status = I2C_MasterReadBlocking(self->pI2C, buf, cbRx, kI2C_TransferNoStopFlag);	
-				I2C_MasterStop(self->pI2C);		
+		    while (1)
+    {
+        reVal = LPI2C_MasterStart(self->pI2C, i2c_addr, kLPI2C_Write);   //attention:in our read function,this will be the write,because i2c need send the control word to the salve kit before read.
+
+        if (kStatus_Success != reVal)
+        {
+            LPI2C_MasterStop(self->pI2C);
+	    return -1;
+        }
+        else
+        {
+            break;
+        }
 		}
-		I2C_MasterStop(self->pI2C);	
+     LPI2C_MasterSend(self->pI2C, &mem_addr, mem_addr_size);
+
+    LPI2C_MasterStop(self->pI2C);
+
+    LPI2C_MasterStart(self->pI2C, i2c_addr, kLPI2C_Read);
+
+    LPI2C_MasterReceive(self->pI2C, buf, 1);
+
+    LPI2C_MasterStop(self->pI2C);
     } else {
         // todo: dma
     }
-	return status;
+	return reVal;
 }
 
 STATIC mp_obj_t pyb_i2c_mem_read(mp_uint_t n_args, const mp_obj_t *pos_args, mp_map_t *kw_args) {
@@ -792,12 +817,34 @@ STATIC mp_obj_t pyb_i2c_mem_write(mp_uint_t n_args, const mp_obj_t *pos_args, mp
 
     HAL_StatusTypeDef status;
     if (!use_dma) {
-		I2C_MasterStart(self->pI2C, i2c_addr, kI2C_Write);
-		status = I2C_MasterWriteBlocking(self->pI2C, &mem_addr, mem_addr_size, kI2C_TransferNoStopFlag);
-		if (status == kStatus_Success) {
-			status = I2C_MasterWriteBlocking(self->pI2C, bufinfo.buf, bufinfo.len, kI2C_TransferNoStopFlag);
+     while(1)
+    {
+		status = LPI2C_MasterStart(self->pI2C, i2c_addr, kLPI2C_Write);
+        if (kStatus_Success != status) {
+            LPI2C_MasterStop(self->pI2C);
+			return (mp_obj_t)-1;
+        } else {
+			break;
 		}
-		I2C_MasterStop(self->pI2C);	
+    }
+		/* a silly way to resolve the promblem: our sdk maybe noly support the way ,pack the data into one array to transport,
+		so here we use the way below to construct the array, we define a temp var named data, and use it to trans*/
+		uint8_t data_temp;
+    uint8_t *data = &data_temp;
+		uint8_t size=0;
+		data[size++] = (uint8_t)mem_addr;
+		uint8_t *temp = bufinfo.buf;
+		for(int i=0;i<=bufinfo.len-1;i++)
+		{
+		   data[size++] = *(uint8_t*)temp;
+		   temp++;
+		}
+   // LPI2C_MasterSend(self->pI2C, &mem_addr, mem_addr_size);
+   // LPI2C_MasterSend(self->pI2C, bufinfo.buf, bufinfo.len);
+		LPI2C_MasterSend(self->pI2C, data, size);
+    LPI2C_MasterStop(self->pI2C);
+
+    	
     } else {
         // todo: dma
     }
@@ -815,7 +862,7 @@ STATIC const mp_rom_map_elem_t pyb_i2c_locals_dict_table[] = {
     // instance methods
     { MP_ROM_QSTR(MP_QSTR_init), MP_ROM_PTR(&pyb_i2c_init_obj) },
     { MP_ROM_QSTR(MP_QSTR_deinit), MP_ROM_PTR(&pyb_i2c_deinit_obj) },
-    { MP_ROM_QSTR(MP_QSTR_is_ready), MP_ROM_PTR(&pyb_i2c_is_ready_obj) },
+   // { MP_ROM_QSTR(MP_QSTR_is_ready), MP_ROM_PTR(&pyb_i2c_is_ready_obj) },
     { MP_ROM_QSTR(MP_QSTR_scan), MP_ROM_PTR(&pyb_i2c_scan_obj) },
     { MP_ROM_QSTR(MP_QSTR_send), MP_ROM_PTR(&pyb_i2c_send_obj) },
     { MP_ROM_QSTR(MP_QSTR_recv), MP_ROM_PTR(&pyb_i2c_recv_obj) },

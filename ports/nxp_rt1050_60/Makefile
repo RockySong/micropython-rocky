@@ -72,6 +72,7 @@ INC += -I./omv/nn
 
 CFLAGS_CORTEX_M4 = -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -fsingle-precision-constant -Wdouble-promotion -mtune=cortex-m4 -mcpu=cortex-m4
 CFLAGS_CORTEX_M7 = -mthumb -DCPU_MIMXRT1052DVL6A -g -DARM_MATH_CM7 -DMCU_SERIES_RT105 -fno-common -ffunction-sections -fdata-sections -ffreestanding -fno-builtin -mfpu=fpv5-d16 -mfloat-abi=hard -fsingle-precision-constant -Wdouble-promotion -mtune=cortex-m7 -mcpu=cortex-m7
+
 CFLAGS = $(INC) -Wpointer-arith -std=gnu99 -g
 CFLAGS += $(CFLAGS_CORTEX_M7) 
 CFLAGS += -Wno-int-conversion -Wno-incompatible-pointer-types -Wno-error
@@ -80,6 +81,13 @@ CFLAGS += -DUSB_STACK_BM
 CFLAGS += -DUSB_DEVICE_CONFIG_BUFFER_PROPERTY_CACHEABLE=1
 CFLAGS += -DFSL_SDK_ENABLE_DRIVER_CACHE_CONTROL=1
 CFLAGS += -D__FPU_PRESENT=1
+
+ifeq ($(BOARD), omvrt1)
+CFLAGS += -DBOARD_OMVRT1
+else
+CFLAGS += -DBOARD_IMXRTEVK1050_60
+endif
+
 LDFLAGS = -L $(LD_DIR) -T $(LD_FILE) -Xlinker -Map=$(@:.elf=.map) -Xlinker --cref
 LIBS = $(shell $(CC) $(CFLAGS) -print-libgcc-file-name)
 
@@ -316,6 +324,7 @@ SRC_C = \
 	modnetwork.c \
 	flash_hyper.c \
 	pin.c \
+	i2c.c \
 	spi.c \
 	uart.c \
 	usb_app.c \
@@ -353,7 +362,6 @@ SRC_C_BKUP = \
 	pin_named_pins.c \
 	bufhelper.c \
 	dma.c \
-	i2c.c \
 	spi.c \
 	uart.c \
 	can.c \

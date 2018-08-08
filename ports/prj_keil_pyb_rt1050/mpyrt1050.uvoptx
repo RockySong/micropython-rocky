@@ -100,6 +100,7 @@
         <tRSysVw>1</tRSysVw>
         <sRunDeb>0</sRunDeb>
         <sLrtime>0</sLrtime>
+        <bEvRecOn>1</bEvRecOn>
         <nTsel>3</nTsel>
         <sDll></sDll>
         <sDllPa></sDllPa>
@@ -212,6 +213,86 @@
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>0</BreakIfRCount>
           <Filename>..\nxp_rt1050_60\pin.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression></Expression>
+        </Bp>
+        <Bp>
+          <Number>4</Number>
+          <Type>0</Type>
+          <LineNumber>417</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>0</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>0</BreakIfRCount>
+          <Filename>..\nxp_rt1050_60\i2c.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression></Expression>
+        </Bp>
+        <Bp>
+          <Number>5</Number>
+          <Type>0</Type>
+          <LineNumber>734</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>0</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>0</BreakIfRCount>
+          <Filename>..\nxp_rt1050_60\i2c.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression></Expression>
+        </Bp>
+        <Bp>
+          <Number>6</Number>
+          <Type>0</Type>
+          <LineNumber>583</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>0</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>0</BreakIfRCount>
+          <Filename>..\nxp_rt1050_60\i2c.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression></Expression>
+        </Bp>
+        <Bp>
+          <Number>7</Number>
+          <Type>0</Type>
+          <LineNumber>589</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>0</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>0</BreakIfRCount>
+          <Filename>..\nxp_rt1050_60\i2c.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression></Expression>
+        </Bp>
+        <Bp>
+          <Number>8</Number>
+          <Type>0</Type>
+          <LineNumber>673</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>0</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>0</BreakIfRCount>
+          <Filename>..\nxp_rt1050_60\i2c.c</Filename>
           <ExecCommand></ExecCommand>
           <Expression></Expression>
         </Bp>
@@ -386,9 +467,12 @@
       <LintExecutable></LintExecutable>
       <LintConfigFile></LintConfigFile>
       <bLintAuto>0</bLintAuto>
-      <Lin2Executable></Lin2Executable>
-      <Lin2ConfigFile></Lin2ConfigFile>
-      <bLin2Auto>0</bLin2Auto>
+      <bAutoGenD>0</bAutoGenD>
+      <LntExFlags>0</LntExFlags>
+      <pMisraName></pMisraName>
+      <pszMrule></pszMrule>
+      <pSingCmds></pSingCmds>
+      <pMultCmds></pMultCmds>
       <SystemViewers>
         <Entry>
           <Name>System Viewer\CCM</Name>
@@ -455,13 +539,6 @@
         <IsCurrentTarget>1</IsCurrentTarget>
       </OPTFL>
       <CpuCode>8</CpuCode>
-      <Books>
-        <Book>
-          <Number>0</Number>
-          <Title>iMX RT1052 Developer's Kit Web Page (iMXRT1052 Developers Kit)</Title>
-          <Path>http://www.embeddedartists.com/products/kits/imxrt1052_kit.php</Path>
-        </Book>
-      </Books>
       <DebugOpt>
         <uSim>0</uSim>
         <uTrg>1</uTrg>
@@ -484,6 +561,7 @@
         <tRSysVw>1</tRSysVw>
         <sRunDeb>0</sRunDeb>
         <sLrtime>0</sLrtime>
+        <bEvRecOn>1</bEvRecOn>
         <nTsel>3</nTsel>
         <sDll></sDll>
         <sDllPa></sDllPa>
@@ -526,7 +604,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGTARM</Key>
-          <Name>(1010=934,185,1384,742,0)(6017=105,137,294,473,0)(1008=89,129,465,365,0)(6016=2283,556,2541,1209,0)(1012=1413,192,1890,507,0)</Name>
+          <Name>(1010=934,185,1384,742,0)(1007=-1,-1,-1,-1,0)(1008=89,129,465,365,0)(1009=-1,-1,-1,-1,0)(1012=1059,192,1536,507,0)</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -540,7 +618,7 @@
           <Type>0</Type>
           <LineNumber>185</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>1610692394</Address>
+          <Address>1610696706</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -556,7 +634,7 @@
           <Type>0</Type>
           <LineNumber>167</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>1610833738</Address>
+          <Address>1610840418</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -566,6 +644,54 @@
           <Filename>..\nxp_rt1050_60\pin.c</Filename>
           <ExecCommand></ExecCommand>
           <Expression>\\mpyrt_flexspi\../nxp_rt1050_60/pin.c\167</Expression>
+        </Bp>
+        <Bp>
+          <Number>2</Number>
+          <Type>0</Type>
+          <LineNumber>589</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>1610847334</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>..\nxp_rt1050_60\i2c.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\mpyrt_flexspi\../nxp_rt1050_60/i2c.c\589</Expression>
+        </Bp>
+        <Bp>
+          <Number>3</Number>
+          <Type>0</Type>
+          <LineNumber>673</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>1610846986</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>..\nxp_rt1050_60\i2c.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\mpyrt_flexspi\../nxp_rt1050_60/i2c.c\673</Expression>
+        </Bp>
+        <Bp>
+          <Number>4</Number>
+          <Type>0</Type>
+          <LineNumber>583</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>0</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>0</BreakIfRCount>
+          <Filename>..\nxp_rt1050_60\i2c.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression></Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -669,12 +795,22 @@
           <WinNumber>1</WinNumber>
           <ItemText>acmInfo</ItemText>
         </Ww>
+        <Ww>
+          <count>20</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>i</ItemText>
+        </Ww>
+        <Ww>
+          <count>21</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>kStatus_Success</ItemText>
+        </Ww>
       </WatchWindow1>
       <MemoryWindow1>
         <Mm>
           <WinNumber>1</WinNumber>
           <SubType>2</SubType>
-          <ItemText>acmReqParam</ItemText>
+          <ItemText>0x401F8230</ItemText>
           <AccSizeX>0</AccSizeX>
         </Mm>
       </MemoryWindow1>
@@ -718,9 +854,12 @@
       <LintExecutable></LintExecutable>
       <LintConfigFile></LintConfigFile>
       <bLintAuto>0</bLintAuto>
-      <Lin2Executable></Lin2Executable>
-      <Lin2ConfigFile></Lin2ConfigFile>
-      <bLin2Auto>0</bLin2Auto>
+      <bAutoGenD>0</bAutoGenD>
+      <LntExFlags>0</LntExFlags>
+      <pMisraName></pMisraName>
+      <pszMrule></pszMrule>
+      <pSingCmds></pSingCmds>
+      <pMultCmds></pMultCmds>
     </TargetOption>
   </Target>
 
@@ -803,6 +942,7 @@
         <tRSysVw>1</tRSysVw>
         <sRunDeb>0</sRunDeb>
         <sLrtime>0</sLrtime>
+        <bEvRecOn>1</bEvRecOn>
         <nTsel>2</nTsel>
         <sDll></sDll>
         <sDllPa></sDllPa>
@@ -915,6 +1055,86 @@
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>0</BreakIfRCount>
           <Filename>..\nxp_rt1050_60\pin.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression></Expression>
+        </Bp>
+        <Bp>
+          <Number>4</Number>
+          <Type>0</Type>
+          <LineNumber>417</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>0</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>0</BreakIfRCount>
+          <Filename>..\nxp_rt1050_60\i2c.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression></Expression>
+        </Bp>
+        <Bp>
+          <Number>5</Number>
+          <Type>0</Type>
+          <LineNumber>734</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>0</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>0</BreakIfRCount>
+          <Filename>..\nxp_rt1050_60\i2c.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression></Expression>
+        </Bp>
+        <Bp>
+          <Number>6</Number>
+          <Type>0</Type>
+          <LineNumber>583</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>0</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>0</BreakIfRCount>
+          <Filename>..\nxp_rt1050_60\i2c.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression></Expression>
+        </Bp>
+        <Bp>
+          <Number>7</Number>
+          <Type>0</Type>
+          <LineNumber>589</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>0</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>0</BreakIfRCount>
+          <Filename>..\nxp_rt1050_60\i2c.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression></Expression>
+        </Bp>
+        <Bp>
+          <Number>8</Number>
+          <Type>0</Type>
+          <LineNumber>673</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>0</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>0</BreakIfRCount>
+          <Filename>..\nxp_rt1050_60\i2c.c</Filename>
           <ExecCommand></ExecCommand>
           <Expression></Expression>
         </Bp>
@@ -1059,9 +1279,12 @@
       <LintExecutable></LintExecutable>
       <LintConfigFile></LintConfigFile>
       <bLintAuto>0</bLintAuto>
-      <Lin2Executable></Lin2Executable>
-      <Lin2ConfigFile></Lin2ConfigFile>
-      <bLin2Auto>0</bLin2Auto>
+      <bAutoGenD>0</bAutoGenD>
+      <LntExFlags>0</LntExFlags>
+      <pMisraName></pMisraName>
+      <pszMrule></pszMrule>
+      <pSingCmds></pSingCmds>
+      <pMultCmds></pMultCmds>
       <SystemViewers>
         <Entry>
           <Name>System Viewer\CCM</Name>
@@ -1857,7 +2080,7 @@
 
   <Group>
     <GroupName>py</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -5049,7 +5272,7 @@
       <GroupNumber>8</GroupNumber>
       <FileNumber>326</FileNumber>
       <FileType>1</FileType>
-      <tvExp>0</tvExp>
+      <tvExp>1</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_lpspi.c</PathWithFileName>
@@ -5673,7 +5896,7 @@
       <GroupNumber>11</GroupNumber>
       <FileNumber>376</FileNumber>
       <FileType>1</FileType>
-      <tvExp>1</tvExp>
+      <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\nxp_rt1050_60\irq.c</PathWithFileName>
@@ -5940,30 +6163,6 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\i2c.c</PathWithFileName>
-      <FilenameWithoutPath>i2c.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>11</GroupNumber>
-      <FileNumber>399</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\spi.c</PathWithFileName>
-      <FilenameWithoutPath>spi.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>11</GroupNumber>
-      <FileNumber>400</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
       <PathWithFileName>..\nxp_rt1050_60\storage.c</PathWithFileName>
       <FilenameWithoutPath>storage.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
@@ -5971,7 +6170,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>401</FileNumber>
+      <FileNumber>399</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -5983,7 +6182,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>402</FileNumber>
+      <FileNumber>400</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -5995,7 +6194,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>403</FileNumber>
+      <FileNumber>401</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6007,7 +6206,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>404</FileNumber>
+      <FileNumber>402</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6019,7 +6218,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>405</FileNumber>
+      <FileNumber>403</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6031,7 +6230,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>406</FileNumber>
+      <FileNumber>404</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6043,7 +6242,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>407</FileNumber>
+      <FileNumber>405</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6055,7 +6254,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>408</FileNumber>
+      <FileNumber>406</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6067,7 +6266,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>409</FileNumber>
+      <FileNumber>407</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6079,7 +6278,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>410</FileNumber>
+      <FileNumber>408</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6091,7 +6290,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>411</FileNumber>
+      <FileNumber>409</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6103,7 +6302,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>412</FileNumber>
+      <FileNumber>410</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6115,7 +6314,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>413</FileNumber>
+      <FileNumber>411</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6127,7 +6326,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>414</FileNumber>
+      <FileNumber>412</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6139,7 +6338,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>415</FileNumber>
+      <FileNumber>413</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6151,7 +6350,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>416</FileNumber>
+      <FileNumber>414</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6163,7 +6362,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>417</FileNumber>
+      <FileNumber>415</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6175,7 +6374,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>418</FileNumber>
+      <FileNumber>416</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6187,7 +6386,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>419</FileNumber>
+      <FileNumber>417</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6199,7 +6398,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>420</FileNumber>
+      <FileNumber>418</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6211,7 +6410,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>421</FileNumber>
+      <FileNumber>419</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6223,7 +6422,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>422</FileNumber>
+      <FileNumber>420</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6235,7 +6434,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>423</FileNumber>
+      <FileNumber>421</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6247,7 +6446,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>424</FileNumber>
+      <FileNumber>422</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6259,7 +6458,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>425</FileNumber>
+      <FileNumber>423</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6271,7 +6470,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>426</FileNumber>
+      <FileNumber>424</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6283,7 +6482,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>427</FileNumber>
+      <FileNumber>425</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6295,7 +6494,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>428</FileNumber>
+      <FileNumber>426</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6307,7 +6506,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>429</FileNumber>
+      <FileNumber>427</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6319,7 +6518,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>430</FileNumber>
+      <FileNumber>428</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6331,7 +6530,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>431</FileNumber>
+      <FileNumber>429</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6343,7 +6542,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>432</FileNumber>
+      <FileNumber>430</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6355,7 +6554,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>433</FileNumber>
+      <FileNumber>431</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6367,7 +6566,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>434</FileNumber>
+      <FileNumber>432</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6379,7 +6578,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>435</FileNumber>
+      <FileNumber>433</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6391,7 +6590,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>436</FileNumber>
+      <FileNumber>434</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6403,7 +6602,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>437</FileNumber>
+      <FileNumber>435</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6415,7 +6614,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>438</FileNumber>
+      <FileNumber>436</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6427,7 +6626,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>439</FileNumber>
+      <FileNumber>437</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6439,7 +6638,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>440</FileNumber>
+      <FileNumber>438</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6451,7 +6650,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>441</FileNumber>
+      <FileNumber>439</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6463,7 +6662,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>442</FileNumber>
+      <FileNumber>440</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6475,7 +6674,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>443</FileNumber>
+      <FileNumber>441</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6487,7 +6686,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>444</FileNumber>
+      <FileNumber>442</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6499,7 +6698,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>445</FileNumber>
+      <FileNumber>443</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6511,7 +6710,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>446</FileNumber>
+      <FileNumber>444</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6523,7 +6722,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>447</FileNumber>
+      <FileNumber>445</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6535,7 +6734,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>448</FileNumber>
+      <FileNumber>446</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6547,7 +6746,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>449</FileNumber>
+      <FileNumber>447</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6559,7 +6758,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>450</FileNumber>
+      <FileNumber>448</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6571,7 +6770,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>451</FileNumber>
+      <FileNumber>449</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6583,7 +6782,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>452</FileNumber>
+      <FileNumber>450</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6595,7 +6794,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>453</FileNumber>
+      <FileNumber>451</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6607,7 +6806,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>454</FileNumber>
+      <FileNumber>452</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6619,7 +6818,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>455</FileNumber>
+      <FileNumber>453</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6631,7 +6830,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>456</FileNumber>
+      <FileNumber>454</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6643,7 +6842,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>457</FileNumber>
+      <FileNumber>455</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6655,7 +6854,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>458</FileNumber>
+      <FileNumber>456</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6667,7 +6866,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>459</FileNumber>
+      <FileNumber>457</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6679,7 +6878,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>460</FileNumber>
+      <FileNumber>458</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6691,7 +6890,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>461</FileNumber>
+      <FileNumber>459</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6703,7 +6902,7 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>462</FileNumber>
+      <FileNumber>460</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -6715,13 +6914,37 @@
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
-      <FileNumber>463</FileNumber>
+      <FileNumber>461</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\nxp_rt1050_60\flash_pgm.c</PathWithFileName>
       <FilenameWithoutPath>flash_pgm.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>11</GroupNumber>
+      <FileNumber>462</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\nxp_rt1050_60\spi.c</PathWithFileName>
+      <FilenameWithoutPath>spi.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>11</GroupNumber>
+      <FileNumber>463</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\nxp_rt1050_60\i2c.c</PathWithFileName>
+      <FilenameWithoutPath>i2c.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
