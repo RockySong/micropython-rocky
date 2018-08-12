@@ -28,6 +28,8 @@ def get_mean_values(mean_file):
         blob.ParseFromString(data)
         arr = np.array(caffe.io.blobproto_to_array(blob))[0]
         mean_vals = [int(x.mean().round()) for x in arr]
+        if (len(mean_vals) < 3):
+            mean_vals += [mean_vals[0]] * (3 - len(mean_vals))
     return mean_vals
 
 def convert_to_x4_weights(weights):
@@ -40,10 +42,10 @@ def convert_to_x4_weights(weights):
     new_weights = np.copy(weights)
     new_weights = np.reshape(new_weights, (r*h*w*c))
     counter = 0
-    for i in range(int(num_of_rows)/4):
+    for i in range(int(num_of_rows)//4):
       # we only need to do the re-ordering for every 4 rows
       row_base = 4*i
-      for j in range (int(num_of_cols)/4):
+      for j in range (int(num_of_cols)//4):
         # for each 4 entries
         column_base = 4*j
         new_weights[counter]   =  weights[row_base  ][column_base  ]
@@ -78,7 +80,7 @@ def dump_network(caffe_model, file_name):
     net = caffe.Net(caffe_model.model_file, caffe_model.quant_weight_file, caffe.TEST)
 
     # Write network type
-    fout.write(struct.pack('4c', 'C', 'A', 'F', 'E'))
+    fout.write(struct.pack('4c', b'C', b'A', b'F', b'E'))
 
     num_layers = 0
     # Check and count layers
@@ -146,11 +148,11 @@ def dump_network(caffe_model, file_name):
 
             # Write weights size and array
             fout.write(struct.pack('i', len(reordered_wts)))
-            for i in reordered_wts: fout.write(struct.pack('b', i))
+            for i in reordered_wts: fout.write(struct.pack('b', int(i)))
 
             # Write bias size and array
             fout.write(struct.pack('i', len(net.params[layer][1].data)))
-            for i in net.params[layer][1].data: fout.write(struct.pack('b', i))
+            for i in net.params[layer][1].data: fout.write(struct.pack('b', int(i)))
 
         if layer_type  == 'innerproduct':
             net.params[layer][0].data[:]=np.round(net.params[layer][0].data*(2**caffe_model.wt_dec_bits[layer]))
@@ -169,11 +171,12 @@ def dump_network(caffe_model, file_name):
 
             # Write weights size and array
             fout.write(struct.pack('i', len(reordered_wts)))
-            for i in reordered_wts: fout.write(struct.pack('b', i))
+            print(type(reordered_wts[0]))
+            for i in reordered_wts: fout.write(struct.pack('b', int(i)))
 
             # Write bias size and array
             fout.write(struct.pack('i', len(net.params[layer][1].data)))
-            for i in net.params[layer][1].data: fout.write(struct.pack('b', i))
+            for i in net.params[layer][1].data: fout.write(struct.pack('b', int(i)))
 
     fout.close()
 
