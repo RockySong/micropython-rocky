@@ -455,7 +455,7 @@ typedef struct _CSIIrq_t
 	uint8_t isGray;
 	uint32_t base0;
 	uint32_t linePerFrag;
-	
+	uint32_t cnt;
 	uint32_t dmaBytePerLine;
 	uint32_t dmaBytePerFrag;
 	uint32_t dmaFragNdx;
@@ -471,7 +471,7 @@ typedef struct _CSIIrq_t
 	// in gray mode, to save memory, move backword nextDmaBulk every 4 lines
 	
 }CSIIrq_t;
-CSIIrq_t s_irq;
+volatile CSIIrq_t s_irq;
 
 typedef union {
 	uint8_t u8Ary[4][2];
@@ -698,6 +698,7 @@ void CsiFragModeCalc(void) {
 void CsiFragModeStartNewFrame(void) {
 	CsiFragModeCalc();
 	s_irq.dmaFragNdx = 0;
+	s_irq.cnt++;
 
 	if (s_irq.isGray || sensor.isWindowing) {
 		s_pCSI->CSIDMASA_FB1 = (uint32_t) s_dmaFragBufs[0];
@@ -970,10 +971,6 @@ int sensor_set_pixformat(pixformat_t pixformat)
 
 int sensor_set_framesize(framesize_t framesize)
 {
-    if (sensor.framesize == framesize) {
-        // No change
-        return 0;
-    }
 
     // Call the sensor specific function
     if (sensor.set_framesize == NULL

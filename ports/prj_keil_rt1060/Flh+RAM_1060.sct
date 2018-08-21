@@ -103,6 +103,7 @@ LR_XIP_FLASH ROM_BASE + 0x2000 {
 	ER_DTCM +0 {
 		fsl_sd*.o (+RW, +ZI)
 		usb*.o (+RW, +ZI)
+		sensor.o (+RW, +ZI)
 	}
 	
 	ARM_LIB_HEAP +0 EMPTY 0x100 {} ; Heap region growing up
@@ -118,6 +119,7 @@ LR_XIP_FLASH ROM_BASE + 0x2000 {
 		.ANY (+RW, +ZI)
 		* (.jpeg_buf)
 		sincos_tab.o (+RO)
+		usbd_msc_storage.o (+RW, +ZI)
 		* (.ram_const)
 	}
 	OCRAM_END 0x20280000 EMPTY 4 {}

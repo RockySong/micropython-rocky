@@ -132,7 +132,7 @@ int OverlaySwitch(uint8_t ovlyNdx) {
 	}	
 	memcpy(pDst, pSrc, cb);	
 	// <<<
-	
+Cleanup:	
 	return ovlyNdxBkup;
 }
 #endif
