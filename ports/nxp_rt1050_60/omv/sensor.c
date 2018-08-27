@@ -1255,6 +1255,7 @@ __asm uint16_t* LCDMonitor_UpdateLineGray(uint16_t *pLcdFB, uint16_t *pCamFB, ui
 	push	{r4-r6, lr}
 	mov		r5,	#0
 	mov		r6,	#0
+	add		r0,	r2,	lsl #3
 10
 	subs	r2,	r2,	#1
 	
@@ -1293,18 +1294,23 @@ __asm uint16_t* LCDMonitor_UpdateLineGray(uint16_t *pLcdFB, uint16_t *pCamFB, ui
 	bfi		r5,	r3,	#27,	#5
 	bfi		r6,	r4,	#27,	#5	
 	
-	strd	r5,	r6,	[r0], #8
+	ror		r5,	r5,	#16
+	ror		r6,	r6,	#16	
+	strd	r6,	r5,	[r0, #-8]!
 	bne		%b10
 	pop		{r4-r6, pc}
 }
 
 __asm uint16_t* LCDMonitor_UpdateLineRGB565(uint16_t *pLcdFB, uint16_t *pCamFB, uint32_t u64Cnt) {
+	add		r0,	r2,	lsl #3
 10
 	subs	r2,	r2,	#1
 	ldrd	r3, ip, [r1], #8
 	rev16	r3,	r3
 	rev16	ip,	ip
-	strd	r3,	ip,	[r0], #8
+	ror		r3,	r3,	#16
+	ror		ip,	ip,	#16
+	strd	ip,	r3,	[r0, #-8]!
 	bne		%b10
 	bx		lr
 }

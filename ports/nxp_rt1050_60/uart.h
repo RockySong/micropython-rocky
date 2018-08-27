@@ -34,8 +34,9 @@
 #define MICROPY_HW_UART4_TX     (pin_EMC_19)	// D1/TXD
 #define MICROPY_HW_UART4_ALT	2
 
-#elif defined(BOARD_IMXRTEVK1050_60)
-
+#else 
+// default board is i.MX RT1050/60 EVK
+#define MICROPY_HW_UART1_NAME   "repl"	//ALT2
 #define MICROPY_HW_UART1_RX     (pin_AD_B0_13)	// CMSIS-DAP
 #define MICROPY_HW_UART1_TX     (pin_AD_B0_12)	// CMSIS-DAP
 #define MICROPY_HW_UART1_ALT	2

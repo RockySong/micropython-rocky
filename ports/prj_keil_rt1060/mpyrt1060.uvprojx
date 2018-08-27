@@ -6320,6 +6320,11 @@
               <FileType>1</FileType>
               <FilePath>..\nxp_rt1050_60\omv\py\py_sensor.c</FilePath>
             </File>
+            <File>
+              <FileName>omv_boardconfig.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\nxp_rt1050_60\boards\omvrt1\omv_boardconfig.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -12976,6 +12981,11 @@
               <FileName>py_sensor.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\nxp_rt1050_60\omv\py\py_sensor.c</FilePath>
+            </File>
+            <File>
+              <FileName>omv_boardconfig.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\nxp_rt1050_60\boards\omvrt1\omv_boardconfig.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -19715,6 +19725,11 @@
               <FileName>py_sensor.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\nxp_rt1050_60\omv\py\py_sensor.c</FilePath>
+            </File>
+            <File>
+              <FileName>omv_boardconfig.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\nxp_rt1050_60\boards\omvrt1\omv_boardconfig.h</FilePath>
             </File>
           </Files>
         </Group>

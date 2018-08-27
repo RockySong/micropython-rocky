@@ -657,21 +657,17 @@ int main(void) {
     bool first_soft_reset = true;
 	retCode = true;
 soft_reset:
-
-	#ifdef BOARD_OMVRT1
 	{
 		uint32_t wait;
 		uint32_t i = 0;
-		for (wait = HAL_GetTick(); wait < 2001; wait = HAL_GetTick()) {
-			if (wait % 250 == 0) {
-				PRINTF("%d\r\n", (1501 - wait) / 250);
+		for (wait = HAL_GetTick(); wait < 1001; wait = HAL_GetTick()) {
+			if (wait % 125 == 0) {
 				led_state(1, (++i) & 1);
 			}
 			// __WFI();
 		}
 		led_state(1, 0);
 	}
-	#endif
 	
     led_state(1, 1);
 	#if defined(MICROPY_HW_LED2)

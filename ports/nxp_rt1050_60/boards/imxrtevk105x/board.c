@@ -73,6 +73,7 @@ void BOARD_InitDebugConsole(void)
 /* MPU configuration. */
 void BOARD_ConfigMPU(void)
 {
+	uint32_t rgn = 0;
     /* Disable I cache and D cache */ 
     SCB_DisableICache();
     SCB_DisableDCache();
@@ -94,7 +95,7 @@ void BOARD_ConfigMPU(void)
     /* Region 3 setting */
     MPU->RBAR = ARM_MPU_RBAR(3, 0x20200000U);	// ocram
 	// rocky: Must NOT set to device or strong ordered types, otherwise, unaligned access leads to fault
-    MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_FULL, 0, 1, 1, 1, 0, ARM_MPU_REGION_SIZE_256KB);    
+    MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_FULL, 0, 1, 1, 1, 0, ARM_MPU_REGION_SIZE_512KB);    
 	// MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_FULL, 0, 0, 1, 1, 0, ARM_MPU_REGION_SIZE_256KB);
 
     MPU->RBAR = ARM_MPU_RBAR(4, 0x60000000U);

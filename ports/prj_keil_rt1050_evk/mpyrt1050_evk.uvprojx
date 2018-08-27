@@ -6280,6 +6280,11 @@
               <FileType>1</FileType>
               <FilePath>..\nxp_rt1050_60\omv\py\py_sensor.c</FilePath>
             </File>
+            <File>
+              <FileName>omv_boardconfig.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\nxp_rt1050_60\boards\imxrtevk105x\omv_boardconfig.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -6966,10 +6971,10 @@
             <TextAddressRange>0x00000000</TextAddressRange>
             <DataAddressRange>0x20000000</DataAddressRange>
             <pXoBase></pXoBase>
-            <ScatterFile>.\Flh+RAM.sct</ScatterFile>
+            <ScatterFile>.\Flh+RAM+SDRAM.sct</ScatterFile>
             <IncludeLibs></IncludeLibs>
             <IncludeLibsPath></IncludeLibsPath>
-            <Misc>--any_placement=next_fit --keep=*.o(.boot*) --emit_debug_overlay_relocs --emit_debug_overlay_section --no_debug</Misc>
+            <Misc>--any_placement=next_fit --keep=*.o(.boot*) --emit_debug_overlay_relocs --emit_debug_overlay_section</Misc>
             <LinkerInputFile></LinkerInputFile>
             <DisabledWarnings></DisabledWarnings>
           </LDads>
@@ -12878,6 +12883,11 @@
               <FileName>py_sensor.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\nxp_rt1050_60\omv\py\py_sensor.c</FilePath>
+            </File>
+            <File>
+              <FileName>omv_boardconfig.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\nxp_rt1050_60\boards\imxrtevk105x\omv_boardconfig.h</FilePath>
             </File>
           </Files>
         </Group>
