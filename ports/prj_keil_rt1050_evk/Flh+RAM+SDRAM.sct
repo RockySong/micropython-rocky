@@ -7,8 +7,8 @@
 #define DTCM_SIZE	(512-32)*1024
 #define OCRAM_SIZE	512*1024
 
-#define OMV_MAIN_FB_SIZE	512*1024 //301*1024
-#define OMV_FB_ALLOC_SIZE	256*1024 //83*1024
+#define OMV_MAIN_FB_SIZE	601*1024 //301*1024
+#define OMV_FB_ALLOC_SIZE	423*1024 //83*1024
 #define OMV_JPEG_FB_SIZE    48*1024
 
 ; must use "VECTOR_RAM", "RW_m_data", "VECTOR_ROM" as names to work with "InstallIRQHandler()" API

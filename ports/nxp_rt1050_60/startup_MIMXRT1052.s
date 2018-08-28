@@ -417,6 +417,7 @@ Reset_Handler   PROC
 
                   CPSID   I               ; Mask interrupts
 				; check if our code runs from 0x60000000
+
 				MOV		R0,  PC
 				MOV		R1,	 #0x60000000
 				SUB		R0,	 R0, R1

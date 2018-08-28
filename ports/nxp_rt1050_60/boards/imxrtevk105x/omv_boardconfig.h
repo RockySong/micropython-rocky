@@ -100,13 +100,17 @@
 #define OMV_FB_MEMORY       SRAM1   // Framebuffer, fb_alloc
 #define OMV_MAIN_MEMORY     CCM     // data, bss, stack and heap
 #define OMV_DMA_MEMORY      CCM     // Misc DMA buffers
-
-#define OMV_FB_SIZE         (512 * 1024)  // FB memory: header + VGA/GS image
-#define OMV_FB_ALLOC_SIZE   (256 * 1024)   // minimum fb alloc size
 #define OMV_STACK_SIZE      (8 * 1024)
 
+#if defined(EVK1050_60_QSPI)
+#define OMV_FB_SIZE         (601 * 1024)  // FB memory: header + VGA/GS image
+#define OMV_FB_ALLOC_SIZE   (323 * 1024)   // minimum fb alloc size
 #define OMV_JPEG_BUF_SIZE   (48 * 1024) // IDE JPEG buffer (header + data).
-
+#else
+#define OMV_FB_SIZE         (301 * 1024)  // FB memory: header + VGA/GS image
+#define OMV_FB_ALLOC_SIZE   (83 * 1024)   // minimum fb alloc size
+#define OMV_JPEG_BUF_SIZE   (32 * 1024) // IDE JPEG buffer (header + data).
+#endif
 // RAW buffer size
 #define OMV_RAW_BUF_SIZE        (OMV_FB_SIZE)
 

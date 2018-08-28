@@ -5,7 +5,7 @@ def BlobTest(thresholds, loopCnt = 390, barLen = 120):
     sensor.set_framesize(sensor.CIF)
     #sensor.set_windowing((320,240))
     sensor.set_auto_gain(True)
-    sensor.set_auto_whitebal(True) # must be turned off for color tracking
+    #sensor.set_auto_whitebal(True) # must be turned off for color tracking
     clock = time.clock()
     avg = 0.0
     startTick = time.ticks()
@@ -142,17 +142,17 @@ def CIFAR10Test(loopCnt = 600, isFull = False, barLen = 105):
             img.draw_string(barLen+10, 0, labels[obj.index()])
         print('algo time cost : %.2f ms' % (tAvg))
 
-def LENETTest(loopCnt = 1200, barLen=78):
+def LENETTest(loopCnt = 1200, barLen=60):
     sensor.reset()                          # Reset and initialize the sensor.
     sensor.set_contrast(3)
     sensor.set_pixformat(sensor.GRAYSCALE)     # Set pixel format to RGB565 (or GRAYSCALE)
     sensor.set_framesize(sensor.VGA)       # Set frame size to QVGA (320x240)
-    sensor.set_windowing((114, 114))        # Set 128x128 window.
-    sensor.set_auto_gain(True)
+    sensor.set_windowing((84, 84))        # Set 128x128 window.
+    sensor.skip_frames(time = 1400)          # Wait for settings take effect.
+    sensor.set_auto_gain(False)
     sensor.set_framerate(2<<2)
     #sensor.set_auto_whitebal(False)
     #sensor.set_auto_exposure(False)
-    sensor.skip_frames(time = 100)          # Wait for settings take effect.
 
     net = nn.load('/lenet.network')
     labels = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
@@ -165,7 +165,7 @@ def LENETTest(loopCnt = 1200, barLen=78):
             break
         clock.tick()
         img = sensor.snapshot()
-        img.draw_string(3,8,'classify 0-9', color=(0,0,0))
+        img.draw_string(3,8,'recg 0-9', color=(0,0,0))
         t1 = time.ticks()
         tmp_img = img.copy().binary([(120,255)], invert=True)
         lst = net.search(tmp_img, threshold=0.8, min_scale=1, scale_mul=0.8, \
@@ -173,8 +173,8 @@ def LENETTest(loopCnt = 1200, barLen=78):
         t2 = time.ticks() - t1
         avg = avg * 0.95 + t2 * 0.05
         lnLen = (barLen * (loopCnt - (time.ticks() - startTick))) // loopCnt
-        img.draw_rectangle(0, 2, barLen + 2, 5)
-        img.draw_rectangle(0, 3, lnLen, 3, fill=True)
+        img.draw_rectangle(0, 2, barLen + 1, 3)
+        img.draw_rectangle(0, 3, lnLen, 1, fill=True)
         for obj in lst:
             print('Detected %s - Confidence %f%%' % (labels[obj.index()], obj.value()))
             img.draw_rectangle(obj.rect())
@@ -191,7 +191,7 @@ thresholds = [(30, 100, 15, 127, 15, 127), # generic_red_thresholds
 # You may pass up to 16 thresholds above. However, it's not really possible to segment any
 # scene with 16 thresholds before color thresholds start to overlap heavily.
 thresholds2 = [(50, 92, -68, -16, 9, 119)]
-thresholds3 = [(92, 64, -81, -9, 13, 75),(63, 25, 86, 63, 11, 127),(9, 72, -12, 77, -60, -118)]
+thresholds3 = [(92, 64, -81, -9, 13, 75),(63, 25, 86, 63, 11, 127),(27, 69, -50,15, -67, -22)]
 
 def LEDTest():
     i = 0
@@ -215,8 +215,9 @@ def QRCodeTest(loopCnt = 120, barLen = 120):
     sensor.reset()
     sensor.set_pixformat(sensor.RGB565)
     sensor.set_framesize(sensor.VGA)
-    sensor.set_windowing((384,200))
-    sensor.set_auto_gain(True) # must turn this off to prevent image washout...
+    sensor.set_windowing((400,272))
+    sensor.skip_frames(time = 1000)
+    sensor.set_auto_gain(False)
     clock = time.clock()
     avg = 0.0
     startTick = time.ticks()
@@ -225,7 +226,7 @@ def QRCodeTest(loopCnt = 120, barLen = 120):
             break
         clock.tick()
         img = sensor.snapshot()
-        #img.lens_corr(1.5) # strength of 1.8 is good for the 2.8mm lens.
+        img.lens_corr(1.5) # strength of 1.8 is good for the 2.8mm lens.
         img.draw_string(4,8,'QR Code Scan', color=(0,0,0))
         t1 = time.ticks()
         codeSet = img.find_qrcodes()
@@ -237,15 +238,15 @@ def QRCodeTest(loopCnt = 120, barLen = 120):
 
         for code in codeSet:
             rc = code.rect()
-            img.draw_rectangle(rc, thickess = 2)
+            img.draw_rectangle(rc, thickness = 2, color=(0,191,255))
             #print(type(code))
             #print(code.payload())
 
             sPayload = code.payload()
             #print(len(sPayload))
             lnLen = len(sPayload) * 8
-            if rc[0] + lnLen >= 384:
-                x = 384 - lnLen
+            if rc[0] + lnLen >= 400:
+                x = 400 - lnLen
             else:
                 x = rc[0]
             img.draw_rectangle(x - 1, rc[1]+1, lnLen+2, 8, color=(0,0,0), fill=True)
@@ -258,11 +259,10 @@ while (True):
     #pyb.LED(2).on()
     #pyb.LED(3).on()
     #pyb.LED(4).off()
-    #LENETTest(220000)
-    CorrTest(1000)
+    CorrTest(9000)
     QRCodeTest(20000)
     BlobTest(thresholds3, 20000)
     FaceTest(20000)
     CIFAR10Test(20000, True)
-
+    #LENETTest(20000)
 

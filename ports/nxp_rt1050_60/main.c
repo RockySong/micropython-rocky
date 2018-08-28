@@ -707,7 +707,7 @@ soft_reset:
 #endif
     if (first_soft_reset) {
 		// rocky: OMVRT1 uses GD32 flash, not yet supported internal file system
-        #ifndef BOARD_OMVRT1
+        #if defined(EVK1050_60_HYPER)
         storage_init();
 		#endif
     }

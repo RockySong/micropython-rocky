@@ -94,7 +94,7 @@ void BOARD_BootClockRUN(void)
     CLOCK_SetMux(kCLOCK_PeriphMux, 0x0);    /* Set PERIPH_CLK MUX to PRE_PERIPH_CLK */
 
     /* Disable unused clock */
-    BOARD_BootClockGate();
+    // BOARD_BootClockGate();
 
     /* Power down all unused PLL */
     CLOCK_DeinitAudioPll();
