@@ -1,4 +1,4 @@
-import sensor, image, time, pyb, nn
+import sensor, image, time, machine, pyb, nn
 def BlobTest(thresholds, loopCnt = 390, barLen = 120):
     sensor.reset()
     sensor.set_pixformat(sensor.RGB565)
@@ -226,7 +226,7 @@ def QRCodeTest(loopCnt = 120, barLen = 120):
             break
         clock.tick()
         img = sensor.snapshot()
-        img.lens_corr(1.5) # strength of 1.8 is good for the 2.8mm lens.
+        #img.lens_corr(1.5) # strength of 1.8 is good for the 2.8mm lens.
         img.draw_string(4,8,'QR Code Scan', color=(0,0,0))
         t1 = time.ticks()
         codeSet = img.find_qrcodes()
@@ -264,5 +264,6 @@ while (True):
     BlobTest(thresholds3, 20000)
     FaceTest(20000)
     CIFAR10Test(20000, True)
+    machine.reset()
     #LENETTest(20000)
 

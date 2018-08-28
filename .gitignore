@@ -423,3 +423,7 @@ ports/prj_keil_rt105/Objects/
 ports/prj_keil_rt105/Listings/
 ports/nxp_rt105/build-imxrtevk105x/firmware.map
 ports/prj_keil_rt105/Objects_SDRAM/
+ports/prj_keil_pyb_rt1050/JLinkLog.txt
+ports/prj_keil_pyb_rt1050/mpyrt1050.uvguix.hp
+ports/prj_keil_pyb_rt1050/mpyrt1050.uvguix.nxf48054
+ports/prj_keil_pyb_rt1050/omvrt.bin
