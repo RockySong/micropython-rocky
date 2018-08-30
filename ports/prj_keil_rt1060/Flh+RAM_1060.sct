@@ -103,6 +103,7 @@ LR_XIP_FLASH ROM_BASE + 0x2000 {
 	ER_DTCM +0 {
 		fsl_sd*.o (+RW, +ZI)
 		usb*.o (+RW, +ZI)
+		virtual_com.o (+RW, +ZI)
 		sensor.o (+RW, +ZI)
 	}
 	
@@ -111,21 +112,22 @@ LR_XIP_FLASH ROM_BASE + 0x2000 {
 	
 	DTCM_END 0x20078000 EMPTY 4 {}
 	
-	OCRAM_START_PLACEHOLDER 0x20200000 EMPTY 0 {}
-	OMV_MAIN_FB +0 EMPTY OMV_MAIN_FB_SIZE  + OMV_FB_ALLOC_SIZE {}
+	MAIN_RW_START_PLACEHOLDER 0x20200000 EMPTY 0 {}
+	OMV_MAIN_FB +0 EMPTY OMV_MAIN_FB_SIZE + OMV_FB_ALLOC_SIZE{}
 	OMV_FB_END +0 EMPTY 16 {}	
-	ER_OCRAM +0 {
+	ER_MAIN_RW +0 {
 		.ANY (+RW, +ZI)
 		* (.jpeg_buf)
 		sincos_tab.o (+RO)
 		usbd_msc_storage.o (+RW, +ZI)
 		* (.ram_const)
 	}
-	OCRAM_END 0x20280000 EMPTY 4 {}
+	MAIN_RW_END 0x20280000 EMPTY 4 {}
 	; <<<
 	
-	; >>> SDRAM >>>
-	ER_LCD_FB 0x81C00000 UNINIT 1024*1024  {
+	; >>> SDRAM NCACHAE >>>
+	SDRAM_NC_START 0x81C00000 EMPTY 0 {}
+	ER_LCD_FB +0 UNINIT 1024*1024  {
 		* (.lcd_fb)
 	}
 }

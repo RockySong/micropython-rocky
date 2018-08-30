@@ -1,4 +1,17 @@
 import sensor, image, time, machine, pyb, nn
+
+barCol = 0
+def DrawPgsBar(img, barLen, loopCnt, startTick, width=5):
+    global barCol
+    lnLen = (barLen * (loopCnt - (time.ticks() - startTick))) // loopCnt
+    if (barCol & 0x80) == 0:
+        c = barCol & 0x7F
+    else:
+        c = 128 - (barCol & 0x7F)
+    img.draw_rectangle(2, 2, barLen + 2, width, color=(0,0,0))
+    img.draw_rectangle(2, 3, lnLen, width-2, fill=True, color=(c,c,c))
+    barCol += 16
+
 def BlobTest(thresholds, loopCnt = 390, barLen = 120):
     sensor.reset()
     sensor.set_pixformat(sensor.RGB565)
@@ -20,8 +33,7 @@ def BlobTest(thresholds, loopCnt = 390, barLen = 120):
         t1 = time.ticks() - t0
         avg = avg * 0.95 + t1 * 0.05
         lnLen = (barLen * (loopCnt - (time.ticks() - startTick))) // loopCnt
-        img.draw_rectangle(2, 2, barLen + 2, 5)
-        img.draw_rectangle(2, 3, lnLen, 3, fill=True)
+        DrawPgsBar(img, barLen, loopCnt, startTick)
         for blob in blobSet:
             img.draw_rectangle(blob.rect())
             img.draw_cross(blob.cx(), blob.cy())
@@ -54,8 +66,7 @@ def CorrTest(loopCnt = 220, barLen=120):
         img.lens_corr(corr)
 
         lnLen = (barLen * (loopCnt - (time.ticks() - startTick))) // loopCnt
-        img.draw_rectangle(2, 1, barLen + 2, 5)
-        img.draw_rectangle(3, 2, lnLen, 3, fill=True)
+        DrawPgsBar(img, barLen, loopCnt, startTick)
         img.draw_string(4,4,'Lens correction %.2f' % (corr), color=(0,0,0))
 
 def FaceTest(loopCnt = 220, barLen=120):
@@ -92,8 +103,7 @@ def FaceTest(loopCnt = 220, barLen=120):
         avg = avg * 0.90 + t1 * 0.10
         fID = 0
         lnLen = (barLen * (loopCnt - (time.ticks() - startTick))) // loopCnt
-        img.draw_rectangle(2, 1, barLen + 2, 5)
-        img.draw_rectangle(3, 2, lnLen, 3, fill=True)
+        DrawPgsBar(img, barLen, loopCnt, startTick)
         for r in objects:
             img.draw_rectangle(r, thickness=3)
             img.draw_rectangle(r[0], r[1], 48, 10, fill=True)
@@ -132,8 +142,7 @@ def CIFAR10Test(loopCnt = 600, isFull = False, barLen = 105):
         tAvg = tAvg * 0.9 + t1 * 0.1
         img.draw_string(4,8,'CIFAR-10: classify:\nplane,auto,cat,dog,\ndeer,horse,frog,ship,\ntruck,horse', color=(0,0,0))
         lnLen = (barLen * (loopCnt - (time.ticks() - startTick))) // loopCnt
-        img.draw_rectangle(2, 2, barLen + 2, 5)
-        img.draw_rectangle(3, 3, lnLen, 3, fill=True)
+        DrawPgsBar(img, barLen, loopCnt, startTick)
         for obj in lst:
             print(' %s  - Confidence %f%%' % (labels[obj.index()], obj.value()))
             rc = obj.rect()
@@ -232,8 +241,7 @@ def QRCodeTest(loopCnt = 120, barLen = 120):
         codeSet = img.find_qrcodes()
         t2 = time.ticks() - t1
         lnLen = (barLen * (loopCnt - (time.ticks() - startTick))) // loopCnt
-        img.draw_rectangle(2, 2, barLen + 2, 5)
-        img.draw_rectangle(2, 3, lnLen, 3, fill=True)
+        DrawPgsBar(img, barLen, loopCnt, startTick)
         avg = avg * 0.92 + t2 * 0.08
 
         for code in codeSet:
@@ -259,11 +267,11 @@ while (True):
     #pyb.LED(2).on()
     #pyb.LED(3).on()
     #pyb.LED(4).off()
-    CorrTest(9000)
-    QRCodeTest(20000)
-    BlobTest(thresholds3, 20000)
-    FaceTest(20000)
-    CIFAR10Test(20000, True)
+    #CorrTest(9000)
+    #QRCodeTest(20000)
+    BlobTest(thresholds3, 203000)
+    #FaceTest(20000)
+    #CIFAR10Test(2022000, True)
     machine.reset()
     #LENETTest(20000)
 

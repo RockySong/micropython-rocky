@@ -103,6 +103,7 @@ LR_XIP_FLASH ROM_BASE + 0x2000 {
 	ER_DTCM +0 {
 		fsl_sd*.o (+RW, +ZI)
 		usb*.o (+RW, +ZI)
+		virtual_com.o (+RW, +ZI)
 		sensor.o (+RW, +ZI)
 	}
 	
