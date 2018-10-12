@@ -94,8 +94,9 @@ void BOARD_ConfigMPU(void)
     
     /* Region 3 setting */
     MPU->RBAR = ARM_MPU_RBAR(3, 0x20200000U);	// ocram
-	// rocky: Must NOT set to device or strong ordered types, otherwise, unaligned access leads to fault
-    MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_FULL, 0, 1, 1, 1, 0, ARM_MPU_REGION_SIZE_512KB);    
+	// rocky: Must NOT set to device or strong ordered types, otherwise, unaligned access leads to fault	// ocram
+	// better to disable bufferable ---- write back, so CPU always write through, avoid DMA and CPU write same line, error prone
+	MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_FULL, 0, 0, 1, 0, 0, ARM_MPU_REGION_SIZE_512KB);
 	// MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_FULL, 0, 0, 1, 1, 0, ARM_MPU_REGION_SIZE_256KB);
 
     MPU->RBAR = ARM_MPU_RBAR(4, 0x60000000U);

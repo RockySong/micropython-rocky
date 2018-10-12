@@ -69,7 +69,7 @@ void BOARD_InitDebugConsole(void)
 
     DbgConsole_Init(BOARD_DEBUG_UART_BASEADDR, BOARD_DEBUG_UART_BAUDRATE, BOARD_DEBUG_UART_TYPE, uartClkSrcFreq);
 }
-   
+ 
 /* MPU configuration. */
 void BOARD_ConfigMPU(void)
 {
@@ -94,7 +94,8 @@ void BOARD_ConfigMPU(void)
     
 	/* Region 3 setting : OCRAM, non-cachable part*/
     MPU->RBAR = ARM_MPU_RBAR(rgnNdx++, 0x20200000U);	// ocram
-	MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_FULL, 0, 0, 1, 1, 0, ARM_MPU_REGION_SIZE_512KB);
+	// better to disable bufferable ---- write back, so CPU always write through, avoid DMA and CPU write same line, error prone
+	MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_FULL, 0, 0, 1, 0, 0, ARM_MPU_REGION_SIZE_512KB);
 	
 	/* Region 4 setting : OCRAM, cachable part*/
 	// rocky: Must NOT set to device or strong ordered types, otherwise, unaligned access leads to fault

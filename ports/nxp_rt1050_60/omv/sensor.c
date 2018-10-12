@@ -32,6 +32,7 @@
 #include "fsl_edma.h"
 #include "fsl_dmamux.h"
 #include "omv_boardconfig.h"
+#include "fsl_cache.h"
 
 #define OV_CHIP_ID      (0x0A)
 #define ON_CHIP_ID      (0x00)
@@ -564,7 +565,7 @@ RAM_CODE void CSI_IRQHandler(void) {
 			else
 				dmaBase = s_pCSI->CSIDMASA_FB1;
 		if (dmaBase >= 0x20200000)
-			DCACHE_InvalidateByRange(dmaBase, s_irq.dmaBytePerFrag);
+			DCACHE_CleanInvalidateByRange(dmaBase, s_irq.dmaBytePerFrag);
 		if (s_irq.isGray || 
 			(sensor.isWindowing &&  lineNdx >= sensor.wndY && lineNdx - sensor.wndY <= sensor.wndH) )
 		{
@@ -699,7 +700,8 @@ void CsiFragModeStartNewFrame(void) {
 	CsiFragModeCalc();
 	s_irq.dmaFragNdx = 0;
 	s_irq.cnt++;
-
+	// DMA also writes to this cache line, to avoid being invalidated, clean MAIN_FB header.
+	DCACHE_CleanByRange(MAIN_FB(), 32);
 	if (s_irq.isGray || sensor.isWindowing) {
 		s_pCSI->CSIDMASA_FB1 = (uint32_t) s_dmaFragBufs[0];
 		s_pCSI->CSIDMASA_FB2 = (uint32_t) s_dmaFragBufs[1];

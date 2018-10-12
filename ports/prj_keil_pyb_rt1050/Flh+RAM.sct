@@ -5,7 +5,7 @@
 #define IVT_BASE	0x60001000
 #define ITCM_SIZE	32*1024
 #define DTCM_SIZE	(512-32)*1024
-#define OCRAM_SIZE	0
+#define OCRAM_SIZE	512*1024
 
 #define OMV_MAIN_FB_SIZE	365*1024 //301*1024
 #define OMV_FB_ALLOC_SIZE	144*1024 //83*1024
@@ -40,6 +40,10 @@ LR_XIP_FLASH ROM_BASE + 0x2000 {
 	
 	TEXT_ROM +0  { ; load address = execution address
 		.ANY (+RO)
+		__*.o (+RO)
+		anon*.o (+RO)
+		startup*.o (+RO)
+		system_*.o (+RO)
 	}
 
 	VECTOR_RAM 0 EMPTY 1*1024 { ; RAM vector region (in RAMX)
@@ -72,15 +76,19 @@ LR_XIP_FLASH ROM_BASE + 0x2000 {
 		sincos_tab.o (+RO)
 		fsl_flexspi.o flash_hyper.o (+RO)
 		* (.ram_const)
+		*.o (+RO)
 	}
 	
 	ARM_LIB_HEAP +0 EMPTY 0x100 {} ; Heap region growing up
+	
 	MPY_HEAP_START +0 EMPTY 4 {}
 	
 	DTCM_END 0x20078000 EMPTY 4 {}
 	
+	OCRAM_START 0x20200000 EMPTY 0 {}
+
 	; <<<
 	
-
+	OCRAM_END 0x20200000+OCRAM_SIZE EMPTY 4 {}
 }
 
