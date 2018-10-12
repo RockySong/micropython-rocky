@@ -408,6 +408,41 @@ zero_itcm2
 				ENDP
 
 
+TestCchBug		PROC
+				EXPORT	TestCchBug
+				LDR		R0,	=0x20200000	;The MPU has been programmed to set this address as Write-Through
+				LDR		R1, =0x20208000
+				MOV		R3,	#0x12
+				
+				; ensure R0 address is in cache (The address of interest must be in the cache)
+				LDR		R2,	[R0]
+				LDR		R2,	[R0]
+				LDR		R2,	[R0]
+				LDR		R2,	[R0]
+				LDR		R2,	[R0]
+				LDR		R2,	[R0]
+				LDR		R2,	[R0]
+				LDR		R2,	[R0]
+				
+				; A Write-Through store to the same doubleword as the address of interest
+				STRD	R3,R2,	[R0]
+				MOV		R3,	#0x34
+				; initiate another cache line fill (to a different cacheline to the address of interest) that allocates to the same set as the address of interest
+				LDR		R2,	[R1]
+				
+				; A store to the address of interest
+				STR		R3,	[R0]
+				
+				;A load to the address of interest
+				LDR		R3,	[R0]
+				;In certain timing conditions, R3 will not be 0x34 (If certain specific timing conditions are met, the load will get the data from the first store, or from what was in the cache at the start of the sequence instead of the data from the second store)
+				CMP		R3,	#0x34
+				ITE		EQ
+				MOVEQ	R0,	#0
+				MOVNE	R0,	#1
+				BX		LR
+				
+
 RelocateVTOR
 
 Reset_Handler   PROC

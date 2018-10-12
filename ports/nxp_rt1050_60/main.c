@@ -64,6 +64,7 @@
 // #include "can.h"
 #include "modnetwork.h"
 #include "virtual_com.h"
+#include "fsl_cache.h"
 void UnalignTest(void);
 void SystemClock_Config(void);
 
@@ -624,6 +625,13 @@ __WEAK void sensor_init() {}
 
 extern int OpenMV_Main(uint32_t first_soft_reset);
 
+extern int TestCchBug(void);
+int TestCacheBug(void)
+{
+	L1CACHE_CleanInvalidateDCache();
+	return TestCchBug();
+}	
+	
 int main(void) {
 	int retCode = 0;
     // TODO disable JTAG
@@ -634,7 +642,7 @@ int main(void) {
          - Global MSP (MCU Support Package) initialization
        */
     HAL_Init();
-
+	TestCacheBug();
     #if defined(MICROPY_BOARD_EARLY_INIT)
     MICROPY_BOARD_EARLY_INIT();
     #endif
