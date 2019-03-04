@@ -862,7 +862,7 @@ soft_reset:
     // Initialise the local flash filesystem.
     // Create it if needed, mount in on /flash, and set it as current dir.
 	bool mounted_flash;
-	#ifndef XIP_EXTERNAL_FLASH
+	#if !defined(XIP_EXTERNAL_FLASH) && defined(EVK1050_60_HYPER) 
     mounted_flash = init_flash_fs(reset_mode);
 	#else
 	mounted_flash = 0;

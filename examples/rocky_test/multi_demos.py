@@ -119,9 +119,9 @@ def CIFAR10Test(loopCnt = 600, isFull = False, barLen = 105):
     sensor.set_pixformat(sensor.RGB565)     # Set pixel format to RGB565 (or GRAYSCALE)
     sensor.set_framesize(sensor.VGA)       # Set frame size to QVGA (320x240)
     sensor.set_windowing((192, 192))        # Set window
-    sensor.skip_frames(time = 100)          # Wait for settings take effect.
-    sensor.set_auto_gain(True)
-    sensor.set_framerate(0<<9|1<<12)
+    sensor.skip_frames(time = 300)          # Wait for settings take effect.
+    sensor.set_auto_gain(False)
+    #sensor.set_framerate(0<<9|1<<12)
     if isFull:
         net = nn.load('/cifar10.network')
     else:
@@ -267,10 +267,11 @@ while (True):
     #pyb.LED(2).on()
     #pyb.LED(3).on()
     #pyb.LED(4).off()
-    CorrTest(9000)
-    QRCodeTest(20000)
-    BlobTest(thresholds3, 20000)
-    FaceTest(20000)
-    CIFAR10Test(20000, True)
+    #CorrTest(9000)
+    CIFAR10Test(40000, True)
+    QRCodeTest(40000)
+    BlobTest(thresholds3, 30000)
+    FaceTest(40000)
+
     #LENETTest(20000)
 

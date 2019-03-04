@@ -115,7 +115,7 @@ int OverlaySwitch(uint8_t ovlyNdx) {
 		OVERLAY_CASE(LAB_TAB)
 		OVERLAY_CASE(HAAR)
 		#ifdef XIP_EXTERNAL_FLASH
-		OVERLAY_CASE(FLASHPGM)
+		//OVERLAY_CASE(FLASHPGM)
 		#endif
 	default:
 		return -1L;
@@ -152,7 +152,7 @@ int OverlaySwitch(uint8_t ovlyNdx) {
 		OVERLAY_CASE(YUV_TAB)
 		OVERLAY_CASE(LAB_TAB)
 		OVERLAY_CASE(HAAR)
-		#ifdef XIP_EXTERNAL_FLASH
+		#if defined(XIP_EXTERNAL_FLASH) && defined(EVK1050_60_HYPER) 
 		OVERLAY_CASE(FLASHPGM)
 		#endif
 	default:
