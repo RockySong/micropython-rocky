@@ -212,7 +212,7 @@ int nn_load_network(nn_t *net, const char *path)
         prev_layer = layer->prev;
 
         if (layer->type == LAYER_TYPE_IP) {
-            uint32_t fc_buffer_size = 2 * prev_layer->c * prev_layer->w * prev_layer->h;
+            uint32_t fc_buffer_size = 2 * layer->c;
             net->max_colbuf_size = IM_MAX(net->max_colbuf_size, fc_buffer_size);
         }
 
