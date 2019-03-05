@@ -212,7 +212,7 @@ int nn_load_network(nn_t *net, const char *path)
         prev_layer = layer->prev;
 
         if (layer->type == LAYER_TYPE_IP) {
-            uint32_t fc_buffer_size = 2 * layer->c;
+            uint32_t fc_buffer_size = 2 * prev_layer->c * prev_layer->w * prev_layer->h;
             net->max_colbuf_size = IM_MAX(net->max_colbuf_size, fc_buffer_size);
         }
 
@@ -224,16 +224,12 @@ int nn_load_network(nn_t *net, const char *path)
 
         if (layer->type == LAYER_TYPE_IP) {
             uint32_t buffer_size = layer->c;
-			uint32_t col16Size = 0;
             if (prev_layer->type == LAYER_TYPE_IP) {
                 buffer_size = buffer_size + prev_layer->c; 
-				col16Size = prev_layer->c * sizeof(q15_t);
             } else if (prev_layer->type == LAYER_TYPE_CONV || prev_layer->type == LAYER_TYPE_POOL) {
                 buffer_size = buffer_size + prev_layer->c * prev_layer->h * prev_layer->w;
-				col16Size = prev_layer->c * prev_layer->h * prev_layer->w * sizeof(q15_t);
             }
             net->max_scrbuf_size = IM_MAX(net->max_scrbuf_size, buffer_size);
-			net->max_colbuf_size = IM_MAX(net->max_colbuf_size, col16Size);
         }
 
         if (layer->type == LAYER_TYPE_CONV || layer->type == LAYER_TYPE_POOL) {
