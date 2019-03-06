@@ -528,6 +528,8 @@ Q(I25)
 
 Q(I2C)
 
+Q(I2C)
+
 Q(IN)
 
 Q(INT16)
@@ -632,9 +634,17 @@ Q(LPUART8)
 
 Q(LSB)
 
+Q(LSB)
+
 Q(LookupError)
 
 Q(LookupError)
+
+Q(MASTER)
+
+Q(MASTER)
+
+Q(MSB)
 
 Q(MSB)
 
@@ -788,6 +798,10 @@ Q(SEMC)
 
 Q(SIF)
 
+Q(SLAVE)
+
+Q(SLAVE)
+
 Q(SLEW_FAST)
 
 Q(SNVS)
@@ -795,6 +809,10 @@ Q(SNVS)
 Q(SOFT_RESET)
 
 Q(SPDIF)
+
+Q(SPI)
+
+Q(SPI)
 
 Q(SRC)
 
@@ -823,6 +841,10 @@ Q(StopIteration)
 Q(StringIO)
 
 Q(StringIO)
+
+Q(Switch)
+
+Q(Switch)
 
 Q(SyntaxError)
 
@@ -1202,6 +1224,8 @@ Q(__name__)
 
 Q(__name__)
 
+Q(__name__)
+
 Q(__neg__)
 
 Q(__new__)
@@ -1364,6 +1388,16 @@ Q(add_frame)
 
 Q(addr)
 
+Q(addr)
+
+Q(addr)
+
+Q(addr)
+
+Q(addr)
+
+Q(addr_size)
+
 Q(addressof)
 
 Q(addrsize)
@@ -1490,6 +1524,14 @@ Q(baudrate)
 
 Q(baudrate)
 
+Q(baudrate)
+
+Q(baudrate)
+
+Q(baudrate)
+
+Q(baudrate)
+
 Q(bias)
 
 Q(bias)
@@ -1537,6 +1579,12 @@ Q(bins)
 Q(bins)
 
 Q(bins)
+
+Q(bits)
+
+Q(bits)
+
+Q(bits)
 
 Q(bits)
 
@@ -1611,6 +1659,8 @@ Q(bytes_at)
 Q(calcsize)
 
 Q(callable)
+
+Q(callback)
 
 Q(capacity)
 
@@ -1804,6 +1854,8 @@ Q(cpu)
 
 Q(cpu)
 
+Q(crc)
+
 Q(cx)
 
 Q(cx)
@@ -1819,6 +1871,10 @@ Q(cy)
 Q(cy)
 
 Q(cy)
+
+Q(data)
+
+Q(data)
 
 Q(data)
 
@@ -1845,6 +1901,10 @@ Q(deepsleep)
 Q(default)
 
 Q(degrees)
+
+Q(deinit)
+
+Q(deinit)
 
 Q(deinit)
 
@@ -1884,6 +1944,8 @@ Q(dilate)
 
 Q(dir)
 
+Q(dir)
+
 Q(disable)
 
 Q(disable_irq)
@@ -1894,9 +1956,13 @@ Q(discard)
 
 Q(displacement)
 
+Q(display)
+
 Q(div)
 
 Q(divmod)
+
+Q(dma)
 
 Q(doc)
 
@@ -2064,6 +2130,12 @@ Q(find_template)
 
 Q(firstbit)
 
+Q(firstbit)
+
+Q(firstbit)
+
+Q(firstbit)
+
 Q(fix_rotation_scale)
 
 Q(float)
@@ -2160,6 +2232,8 @@ Q(gc)
 
 Q(gc)
 
+Q(gencall)
+
 Q(generator)
 
 Q(generator)
@@ -2214,9 +2288,13 @@ Q(getcwd)
 
 Q(getcwd)
 
+Q(getnum)
+
 Q(getrandbits)
 
 Q(getter)
+
+Q(gettime)
 
 Q(getvalue)
 
@@ -2247,6 +2325,8 @@ Q(h)
 Q(h)
 
 Q(h)
+
+Q(halfduplex)
 
 Q(hamming)
 
@@ -2308,6 +2388,8 @@ Q(id)
 
 Q(id)
 
+Q(id)
+
 Q(idle)
 
 Q(ilistdir)
@@ -2344,11 +2426,19 @@ Q(index)
 
 Q(index)
 
+Q(index)
+
+Q(info)
+
 Q(info)
 
 Q(info)
 
 Q(info)
+
+Q(init)
+
+Q(init)
 
 Q(init)
 
@@ -2746,6 +2836,12 @@ Q(mem_free)
 
 Q(mem_info)
 
+Q(mem_read)
+
+Q(mem_write)
+
+Q(memaddr)
+
 Q(memaddr)
 
 Q(memoryview)
@@ -2790,6 +2886,8 @@ Q(miso)
 
 Q(miso)
 
+Q(miso)
+
 Q(mjpeg)
 
 Q(mjpeg)
@@ -2822,6 +2920,10 @@ Q(mode)
 
 Q(mode)
 
+Q(mode)
+
+Q(mode)
+
 Q(modf)
 
 Q(modify)
@@ -2835,6 +2937,8 @@ Q(modules)
 Q(mono_space)
 
 Q(morph)
+
+Q(mosi)
 
 Q(mosi)
 
@@ -2896,6 +3000,10 @@ Q(nn)
 
 Q(nn_class)
 
+Q(nndemo)
+
+Q(nndemo)
+
 Q(nodename)
 
 Q(nop)
@@ -2903,6 +3011,8 @@ Q(nop)
 Q(nor)
 
 Q(normalized)
+
+Q(nss)
 
 Q(object)
 
@@ -3002,6 +3112,12 @@ Q(phase)
 
 Q(phase)
 
+Q(phase)
+
+Q(phase)
+
+Q(phase)
+
 Q(pi)
 
 Q(pi)
@@ -3019,6 +3135,12 @@ Q(pixels_threshold)
 Q(platform)
 
 Q(polar)
+
+Q(polarity)
+
+Q(polarity)
+
+Q(polarity)
 
 Q(polarity)
 
@@ -3049,6 +3171,8 @@ Q(pow)
 Q(pow)
 
 Q(power)
+
+Q(prescaler)
 
 Q(present)
 
@@ -3192,6 +3316,10 @@ Q(read)
 
 Q(read)
 
+Q(read)
+
+Q(readID)
+
 Q(read_buf_len)
 
 Q(read_channel)
@@ -3211,6 +3339,8 @@ Q(readfrom_into)
 Q(readfrom_mem)
 
 Q(readfrom_mem_into)
+
+Q(readinto)
 
 Q(readinto)
 
@@ -3269,6 +3399,16 @@ Q(rect)
 Q(rect)
 
 Q(rect)
+
+Q(recv)
+
+Q(recv)
+
+Q(recv)
+
+Q(recv)
+
+Q(recv)
 
 Q(recv)
 
@@ -3360,6 +3500,12 @@ Q(rmdir)
 
 Q(rmdir)
 
+Q(rng)
+
+Q(rng)
+
+Q(rng)
+
 Q(robust)
 
 Q(roi)
@@ -3392,6 +3538,10 @@ Q(rstrip)
 
 Q(rstrip)
 
+Q(rtc)
+
+Q(rtc)
+
 Q(save)
 
 Q(save_descriptor)
@@ -3407,6 +3557,10 @@ Q(scale_factor)
 Q(scale_mul)
 
 Q(scan)
+
+Q(scan)
+
+Q(sck)
 
 Q(sck)
 
@@ -3447,6 +3601,18 @@ Q(send)
 Q(send)
 
 Q(send)
+
+Q(send)
+
+Q(send)
+
+Q(send)
+
+Q(send)
+
+Q(send)
+
+Q(send_recv)
 
 Q(sendbreak)
 
@@ -3527,6 +3693,8 @@ Q(sha256)
 Q(sha256)
 
 Q(sharpen)
+
+Q(show)
 
 Q(similarity)
 
@@ -3812,6 +3980,8 @@ Q(throw)
 
 Q(throw)
 
+Q(ti)
+
 Q(tick)
 
 Q(ticks)
@@ -3844,6 +4014,18 @@ Q(timeout)
 
 Q(timeout)
 
+Q(timeout)
+
+Q(timeout)
+
+Q(timeout)
+
+Q(timeout)
+
+Q(timeout)
+
+Q(timeout)
+
 Q(timeout_char)
 
 Q(to_bitmap)
@@ -3861,6 +4043,10 @@ Q(to_rgb565)
 Q(toggle)
 
 Q(top_hat)
+
+Q(tpyboard)
+
+Q(tpyboard)
 
 Q(trunc)
 
@@ -3944,6 +4130,10 @@ Q(union)
 
 Q(union)
 
+Q(uniqueID)
+
+Q(uniqueID)
+
 Q(unique_id)
 
 Q(unique_id)
@@ -3975,6 +4165,8 @@ Q(upper)
 Q(upper)
 
 Q(uq)
+
+Q(urandom)
 
 Q(urandom)
 
@@ -4133,6 +4325,10 @@ Q(write)
 Q(write)
 
 Q(write)
+
+Q(write)
+
+Q(write_readinto)
 
 Q(write_readinto)
 

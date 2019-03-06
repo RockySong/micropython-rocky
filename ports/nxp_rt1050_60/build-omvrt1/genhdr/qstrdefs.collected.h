@@ -1956,6 +1956,8 @@ Q(discard)
 
 Q(displacement)
 
+Q(display)
+
 Q(div)
 
 Q(divmod)
@@ -2290,6 +2292,8 @@ Q(getrandbits)
 
 Q(getter)
 
+Q(gettime)
+
 Q(getvalue)
 
 Q(gif)
@@ -2419,6 +2423,8 @@ Q(index)
 Q(index)
 
 Q(index)
+
+Q(info)
 
 Q(info)
 
@@ -3304,6 +3310,8 @@ Q(read)
 
 Q(read)
 
+Q(readID)
+
 Q(read_buf_len)
 
 Q(read_channel)
@@ -3515,6 +3523,8 @@ Q(rsplit)
 Q(rstrip)
 
 Q(rstrip)
+
+Q(rtc)
 
 Q(save)
 
@@ -4016,6 +4026,10 @@ Q(toggle)
 
 Q(top_hat)
 
+Q(tpyboard)
+
+Q(tpyboard)
+
 Q(trunc)
 
 Q(tuple)
@@ -4097,6 +4111,10 @@ Q(uniform)
 Q(union)
 
 Q(union)
+
+Q(uniqueID)
+
+Q(uniqueID)
 
 Q(unique_id)
 

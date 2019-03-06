@@ -51,9 +51,7 @@ const pin_af_obj_t pin_AD_B0_01_af[] = {
   //( 4, LPI2C   ,  1, SDAS            , LPI2C1     , 0          , 0   ), // LPI2C1_SDAS
   AF( 5, GPIO    ,  1, PIN1            , GPIO1      , 0          , 0   ), // GPIO1_PIN1
   //( 6, EWM     ,  0, EWM_OUT_B       , EWM        , 0          , 0   ), // EWM_EWM_OUT_B
-#if defined(MICROPY_HW_LPSPI3_PCS)
   AF( 7, LPSPI   ,  3, SDO             , LPSPI3     , 0x401F8518U, 0x0U), // LPSPI3_SDO
-#endif
   //(15, AD      ,  0, B0_01           , AD         ,            ,     ), // AD_B0_01
 };
 
@@ -67,9 +65,7 @@ const pin_af_obj_t pin_AD_B0_02_af[] = {
   //( 4, FLEXPWM ,  1, PWMX0           , FLEXPWM1   , 0          , 0   ), // FLEXPWM1_PWMX0
   AF( 5, GPIO    ,  1, PIN2            , GPIO1      , 0          , 0   ), // GPIO1_PIN2
   //( 6, LPI2C   ,  1, HREQ            , LPI2C1     , 0          , 0   ), // LPI2C1_HREQ
-#if defined(MICROPY_HW_LPSPI3_PCS)
   AF( 7, LPSPI   ,  3, SDI             , LPSPI3     , 0x401F8514U, 0x0U), // LPSPI3_SDI
-#endif
   //(15, AD      ,  0, B0_02           , AD         ,            ,     ), // AD_B0_02
 };
 
@@ -83,9 +79,7 @@ const pin_af_obj_t pin_AD_B0_03_af[] = {
   //( 4, FLEXPWM ,  1, PWMX1           , FLEXPWM1   , 0          , 0   ), // FLEXPWM1_PWMX1
   AF( 5, GPIO    ,  1, PIN3            , GPIO1      , 0          , 0   ), // GPIO1_PIN3
   //( 6, ANATOP  ,  0, 24M_OUT         , ANATOP     , 0          , 0   ), // ANATOP_24M_OUT
-#if defined(MICROPY_HW_LPSPI3_PCS)
   AF( 7, LPSPI   ,  3, PCS0            , LPSPI3     , 0x401F850CU, 0x0U), // LPSPI3_PCS0
-#endif
   //(15, AD      ,  0, B0_03           , AD         ,            ,     ), // AD_B0_03
 };
 
@@ -328,9 +322,7 @@ const pin_af_obj_t pin_SD_B0_00_af[] = {
   //( 1, FLEXPWM ,  1, PWMA0           , FLEXPWM1   , 0x401F8458U, 0x1U), // FLEXPWM1_PWMA0
   AF( 2, LPI2C   ,  3, SCL             , LPI2C3     , 0x401F84DCU, 0x1U), // LPI2C3_SCL
   //( 3, XBAR    ,  1, XBAR_INOUT4     , XBAR1      , 0x401F8614U, 0x1U), // XBAR1_XBAR_INOUT4
-#if defined(MICROPY_HW_LPSPI1_PCS)
   AF( 4, LPSPI   ,  1, SCK             , LPSPI1     , 0x401F84F0U, 0x1U), // LPSPI1_SCK
-#endif
   AF( 5, GPIO    ,  3, PIN12           , GPIO3      , 0          , 0   ), // GPIO3_PIN12
   //( 6, FLEXSPI ,  0, A_SS1_B         , FLEXSPI    , 0          , 0   ), // FLEXSPI_A_SS1_B
   //( 7, TPSMP   ,  0, HDATA30         , TPSMP      ,            ,     ), // TPSMP_HDATA30
@@ -344,9 +336,7 @@ const pin_af_obj_t pin_SD_B0_01_af[] = {
   //( 1, FLEXPWM ,  1, PWMB0           , FLEXPWM1   , 0x401F8468U, 0x1U), // FLEXPWM1_PWMB0
   AF( 2, LPI2C   ,  3, SDA             , LPI2C3     , 0x401F84E0U, 0x1U), // LPI2C3_SDA
   //( 3, XBAR    ,  1, XBAR_INOUT5     , XBAR1      , 0x401F8618U, 0x1U), // XBAR1_XBAR_INOUT5
-#if defined(MICROPY_HW_LPSPI1_PCS)
   AF( 4, LPSPI   ,  1, PCS0            , LPSPI1     , 0x401F84ECU, 0x0U), // LPSPI1_PCS0
-#endif
   AF( 5, GPIO    ,  3, PIN13           , GPIO3      , 0          , 0   ), // GPIO3_PIN13
   //( 6, FLEXSPI ,  0, B_SS1_B         , FLEXSPI    , 0          , 0   ), // FLEXSPI_B_SS1_B
   //( 7, TPSMP   ,  0, HDATA31         , TPSMP      ,            ,     ), // TPSMP_HDATA31
@@ -360,9 +350,7 @@ const pin_af_obj_t pin_SD_B0_02_af[] = {
   //( 1, FLEXPWM ,  1, PWMA1           , FLEXPWM1   , 0x401F845CU, 0x1U), // FLEXPWM1_PWMA1
   AF( 2, LPUART  ,  8, CTS_B           , LPUART8    , 0          , 0   ), // LPUART8_CTS_B
   //( 3, XBAR    ,  1, XBAR_INOUT6     , XBAR1      , 0x401F861CU, 0x1U), // XBAR1_XBAR_INOUT6
-#if defined(MICROPY_HW_LPSPI1_PCS)
   AF( 4, LPSPI   ,  1, SDO             , LPSPI1     , 0x401F84F8U, 0x1U), // LPSPI1_SDO
-#endif
   AF( 5, GPIO    ,  3, PIN14           , GPIO3      , 0          , 0   ), // GPIO3_PIN14
   //( 6, CCM     ,  0, OUT0            , CCM        ,            ,     ), // CCM_OUT0
   //( 7, OBSERVE ,  0, MUX_OUT0        , OBSERVE    ,            ,     ), // OBSERVE_MUX_OUT0
@@ -376,9 +364,7 @@ const pin_af_obj_t pin_SD_B0_03_af[] = {
   //( 1, FLEXPWM ,  1, PWMB1           , FLEXPWM1   , 0x401F846CU, 0x1U), // FLEXPWM1_PWMB1
   AF( 2, LPUART  ,  8, RTS_B           , LPUART8    , 0          , 0   ), // LPUART8_RTS_B
   //( 3, XBAR    ,  1, XBAR_INOUT7     , XBAR1      , 0x401F8620U, 0x1U), // XBAR1_XBAR_INOUT7
-#if defined(MICROPY_HW_LPSPI1_PCS)
   AF( 4, LPSPI   ,  1, SDI             , LPSPI1     , 0x401F84F4U, 0x1U), // LPSPI1_SDI
-#endif
   AF( 5, GPIO    ,  3, PIN15           , GPIO3      , 0          , 0   ), // GPIO3_PIN15
   //( 6, CCM     ,  0, OUT1            , CCM        ,            ,     ), // CCM_OUT1
   //( 7, OBSERVE ,  0, MUX_OUT1        , OBSERVE    ,            ,     ), // OBSERVE_MUX_OUT1

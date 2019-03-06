@@ -54,7 +54,7 @@
 #include "extint.h"
 #include "usrsw.h"
 #include "usb_app.h"
-// #include "rtc.h"
+#include "rtc.h"
 #include "storage.h"
 #include "sdcard.h"
 #include "rng.h"
@@ -67,6 +67,8 @@
 #include "fsl_cache.h"
 void UnalignTest(void);
 void SystemClock_Config(void);
+
+uint64_t GetTick(void);
 
 pyb_thread_t pyb_thread_main;
 fs_user_mount_t fs_user_mount_flash;
@@ -692,8 +694,25 @@ int TestCacheBug(void)
 		while(1) {}
 	return ret;
 }	
+extern uint16_t g_uid[4];	
 	
 int main(void) {
+	snvs_hp_rtc_config_t snvsRtcConfig;
+	snvs_hp_rtc_datetime_t rtcDate;
+	rtcDate.year = 2019U;
+	rtcDate.month = 2U;
+	rtcDate.day = 18U;
+	rtcDate.hour = 11U;
+	rtcDate.minute = 30U;
+	rtcDate.second = 35U;
+	SNVS_HP_RTC_GetDefaultConfig(&snvsRtcConfig);
+    SNVS_HP_RTC_Init(SNVS, &snvsRtcConfig);
+	SNVS_HP_RTC_SetDatetime(SNVS, &rtcDate);
+	SNVS_HP_RTC_StartTimer(SNVS);
+	uint32_t uid[2];
+	uid[0] = OCOTP->CFG0;
+	uid[1] = OCOTP->CFG1;
+	memcpy(g_uid, uid, sizeof(g_uid));
 	int retCode = 0;
     // TODO disable JTAG
     /* STM32F4xx HAL library initialization:
@@ -715,7 +734,7 @@ int main(void) {
     pendsv_init();
     led_init();
 #if MICROPY_HW_HAS_SWITCH
-    switch_init0();
+   switch_get();
 #endif
 
 #if defined(USE_DEVICE_MODE)
@@ -752,12 +771,11 @@ soft_reset:
     led_state(4, 1);
 	#endif
     uint reset_mode = update_reset_mode(1);
-
     machine_init();
+
 #if MICROPY_HW_ENABLE_RTC
-    if (first_soft_reset) {
-        rtc_init_start(false);
-    }
+		rtc_info_init();
+        rtc_init_start();
 #endif
 
     // more sub-system init
@@ -851,7 +869,7 @@ soft_reset:
 #endif
 
 #if MICROPY_HW_ENABLE_RNG
-    rng_init0();
+	rng_get();
 #endif
 	usbdbg_init();	// must be after mpy's heap init, as it uses mpy's heap
 	// rocky ignore: i2c_init0();
@@ -963,11 +981,15 @@ soft_reset:
     mod_network_init();
 #endif
 
+//PRINTF("%x%x\n",g_uid[1],g_uid[0]);
+
 
     // At this point everything is fully configured and initialised.
 
  	VCOM_Open();
+	mp_printf(&mp_plat_print, "Unique ID: %04x %04x %04x %04x\n",g_uid[0],g_uid[1], g_uid[2], g_uid[3]);
 	retCode = OpenMV_Main(retCode);
+	
 soft_reset_exit:
 
     // soft reset
@@ -989,6 +1011,7 @@ soft_reset_exit:
 
     first_soft_reset = false;
     goto soft_reset;
+	
 }
 
 void _exit(int x) {

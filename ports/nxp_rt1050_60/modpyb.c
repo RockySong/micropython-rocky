@@ -48,7 +48,7 @@
 #include "extint.h"
 #include "usrsw.h"
 #include "rng.h"
-#include "rtc.h"
+//#include "rtc.h"
 #include "i2c.h"
 #include "spi.h"
 #include "uart.h"
@@ -67,6 +67,10 @@
 #include "modmachine.h"
 #include "extmod/vfs.h"
 #include "extmod/utime_mphal.h"
+//#include "tpyboard.h"
+#include "rng.h"
+#include "rtc.h"
+#include "uniqueID.h"
 extern int pyb_hard_fault_debug;
 
 STATIC mp_obj_t pyb_fault_debug(mp_obj_t val) {
@@ -112,6 +116,8 @@ STATIC MP_DEFINE_CONST_FUN_OBJ_1(pyb_elapsed_micros_obj, pyb_elapsed_micros);
 MP_DECLARE_CONST_FUN_OBJ_KW(pyb_main_obj); // defined in main.c
 
 STATIC const mp_rom_map_elem_t pyb_module_globals_table[] = {
+//	{ MP_ROM_QSTR(MP_QSTR_tpyboard), MP_ROM_PTR(&pyb_tpyboard_type) },
+	{ MP_ROM_QSTR(MP_QSTR_uniqueID), MP_ROM_PTR(&pyb_uniqueID_type) },
     { MP_ROM_QSTR(MP_QSTR___name__), MP_ROM_QSTR(MP_QSTR_pyb) },
 
     { MP_ROM_QSTR(MP_QSTR_fault_debug), MP_ROM_PTR(&pyb_fault_debug_obj) },
@@ -158,11 +164,11 @@ STATIC const mp_rom_map_elem_t pyb_module_globals_table[] = {
     // rocky ignore { MP_ROM_QSTR(MP_QSTR_Timer), MP_ROM_PTR(&pyb_timer_type) },
 
 #if MICROPY_HW_ENABLE_RNG
-    { MP_ROM_QSTR(MP_QSTR_rng), MP_ROM_PTR(&pyb_rng_get_obj) },
+    { MP_ROM_QSTR(MP_QSTR_rng), MP_ROM_PTR(&pyb_rng_type) },
 #endif
 
 #if MICROPY_HW_ENABLE_RTC
-    { MP_ROM_QSTR(MP_QSTR_RTC), MP_ROM_PTR(&pyb_rtc_type) },
+    { MP_ROM_QSTR(MP_QSTR_rtc), MP_ROM_PTR(&pyb_rtc_type) },
 #endif
 
     { MP_ROM_QSTR(MP_QSTR_Pin), MP_ROM_PTR(&pin_type) },

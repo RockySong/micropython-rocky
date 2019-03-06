@@ -24,7 +24,7 @@
  * THE SOFTWARE.
  */
 
-void rng_init0(void);
+#include "py/obj.h"
 uint32_t rng_get(void);
-
-MP_DECLARE_CONST_FUN_OBJ_0(pyb_rng_get_obj);
+extern const mp_obj_type_t pyb_rng_type;
+MP_DECLARE_CONST_FUN_OBJ_0(pyb_rng_getnum_obj);
