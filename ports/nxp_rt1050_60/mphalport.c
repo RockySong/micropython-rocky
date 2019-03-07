@@ -125,7 +125,7 @@ void mp_hal_ConfigGPIO(const pin_obj_t *p, uint32_t gpioMode, uint32_t isInitial
 	uint32_t pinMask = 1 << p->pin;
 	mp_hal_gpio_clock_enable(p->port);
 	pGPIO->IMR &= ~pinMask;	 // disable pin IRQ
-	if (gpioMode & (1<<31)) {
+	if (gpioMode & (GPIO_PAD_OUTPUT_MASK)) {
 		// output
 		if (isInitialHighForOutput)
 			pGPIO->DR |= pinMask;

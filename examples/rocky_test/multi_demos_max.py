@@ -233,7 +233,7 @@ def QRCodeTest(loopCnt = 120, barLen = 120):
         clock.tick()
         img = sensor.snapshot()
         #img.lens_corr(1.5) # strength of 1.8 is good for the 2.8mm lens.
-        img.draw_string(4,8,'QR Code Scan', color=(0,0,0))
+        img.draw_string(4,8,'QR Code Scan', color=(0,255,0))
         t1 = time.ticks()
         codeSet = img.find_qrcodes()
         t2 = time.ticks() - t1
@@ -261,15 +261,17 @@ def QRCodeTest(loopCnt = 120, barLen = 120):
 while (True):
     #LEDTest()
     pyb.LED(1).on()
-    pyb.LED(2).on()
-    pyb.LED(3).on()
+    pyb.LED(2).off()
+    pyb.LED(3).off()
+    #pyb.LED(2).on()
+    #pyb.LED(3).on()
     pyb.LED(4).off()
-    CorrTest(9000)
-    BlobTest(thresholds3, 40000)
-    QRCodeTest(40000)
+    #CorrTest(9000)
+    #BlobTest(thresholds3, 40000)
+    #QRCodeTest(40000)
     FaceTest(40000)
-    LENetTest(40000)
-    CIFAR10Test(40000, True)
+    #LENetTest(40000)
+    #CIFAR10Test(40000, True)
 
 
 
