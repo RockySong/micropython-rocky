@@ -555,7 +555,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGUARM</Key>
-          <Name>/</Name>
+          <Name>燩Lw犜}燩Lw犜}</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -580,7 +580,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGTARM</Key>
-          <Name>(1010=934,185,1384,742,0)(6017=105,137,294,473,0)(1008=89,129,465,365,0)(6016=1264,389,1522,1042,0)(1012=343,513,820,828,1)</Name>
+          <Name>(1010=934,185,1384,742,0)(6017=105,137,294,473,0)(1008=89,129,465,365,0)(6016=1264,389,1522,1042,0)(1012=343,513,820,828,0)</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -592,25 +592,9 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>439</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>1610623476</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\nxp_rt1050_60\startup_MIMXRT1052.s</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\mpyrt_flexspi\../nxp_rt1050_60/startup_MIMXRT1052.s\439</Expression>
-        </Bp>
-        <Bp>
-          <Number>1</Number>
-          <Type>0</Type>
           <LineNumber>189</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>1610706174</Address>
+          <Address>1610706782</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -622,11 +606,11 @@
           <Expression>\\mpyrt_flexspi\../nxp_rt1050_60/adc.c\189</Expression>
         </Bp>
         <Bp>
-          <Number>2</Number>
+          <Number>1</Number>
           <Type>0</Type>
           <LineNumber>37</LineNumber>
           <EnabledFlag>0</EnabledFlag>
-          <Address>1611015332</Address>
+          <Address>1611016100</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -638,7 +622,7 @@
           <Expression>\\mpyrt_flexspi\../nxp_rt1050_60/omv/py/py_mjpeg.c\37</Expression>
         </Bp>
         <Bp>
-          <Number>3</Number>
+          <Number>2</Number>
           <Type>2</Type>
           <LineNumber>0</LineNumber>
           <EnabledFlag>0</EnabledFlag>
@@ -654,7 +638,7 @@
           <Expression>&amp;sensor.wndX</Expression>
         </Bp>
         <Bp>
-          <Number>4</Number>
+          <Number>3</Number>
           <Type>2</Type>
           <LineNumber>0</LineNumber>
           <EnabledFlag>0</EnabledFlag>
@@ -668,22 +652,6 @@
           <Filename></Filename>
           <ExecCommand></ExecCommand>
           <Expression>0x20200004</Expression>
-        </Bp>
-        <Bp>
-          <Number>5</Number>
-          <Type>0</Type>
-          <LineNumber>415</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>1610623442</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\nxp_rt1050_60\startup_MIMXRT1052.s</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\mpyrt_flexspi\../nxp_rt1050_60/startup_MIMXRT1052.s\415</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -797,7 +765,7 @@
         <Mm>
           <WinNumber>1</WinNumber>
           <SubType>2</SubType>
-          <ItemText>R0</ItemText>
+          <ItemText>dbg_xfer_buffer</ItemText>
           <AccSizeX>0</AccSizeX>
         </Mm>
       </MemoryWindow1>
@@ -2045,7 +2013,7 @@
 
   <Group>
     <GroupName>py</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -5641,7 +5609,7 @@
 
   <Group>
     <GroupName>build_evk</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -6121,7 +6089,7 @@
       <GroupNumber>12</GroupNumber>
       <FileNumber>397</FileNumber>
       <FileType>1</FileType>
-      <tvExp>0</tvExp>
+      <tvExp>1</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\nxp_rt1050_60\pin.c</PathWithFileName>
@@ -8249,7 +8217,7 @@
 
   <Group>
     <GroupName>omv_mini</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -8469,7 +8437,7 @@
 
   <Group>
     <GroupName>omv_py</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
