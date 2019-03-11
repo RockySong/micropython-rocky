@@ -521,7 +521,7 @@ void Profiling(uint32_t pc)
 	}
 }
 #endif
-
+extern void NndemoTickHandler(void);
 void SysTick_C_Handler(ExceptionRegisters_t *regs) {
     extern uint32_t uwTick;
 	
@@ -540,6 +540,7 @@ void SysTick_C_Handler(ExceptionRegisters_t *regs) {
 
     uwTick += 1;
 	SDMMC_Tick_Handler();
+	NndemoTickHandler();
     // Read the systick control regster. This has the side effect of clearing
     // the COUNTFLAG bit, which makes the logic in mp_hal_ticks_us
     // work properly.

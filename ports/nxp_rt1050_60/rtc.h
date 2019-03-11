@@ -25,10 +25,16 @@
  */
 
 // The pyboard has a 32kHz crystal for the RTC
+#include "fsl_debug_console.h"
+#include "board.h"
+#include "fsl_snvs_hp.h"
+#include "pin_mux.h"
+#include "clock_config.h"
+#include "py/obj.h"
+
 #define MICROPY_HW_RTC_USE_LSE      (1)
 #define MICROPY_HW_RTC_USE_US       (0)
 #define MICROPY_HW_RTC_USE_CALOUT   (1)
-
 
 typedef struct
 {
@@ -84,6 +90,5 @@ typedef struct
 
 extern int RTCHandle;
 extern const mp_obj_type_t pyb_rtc_type;
-
-void rtc_init_start(bool force_init);
-void rtc_init_finalise(void);
+int rtc_init_start(void);
+int rtc_info_init(void);

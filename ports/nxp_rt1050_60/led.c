@@ -33,6 +33,14 @@
 #include "led.h"
 #include "pin.h"
 #include "genhdr/pins.h"
+#include "timer.h"
+#include "fsl_pwm.h"
+#include "pin_mux.h"
+//#include "board.h"
+
+
+#define EXAMPLE_LED_GPIO BOARD_USER_LED_GPIO
+#define EXAMPLE_LED_GPIO_PIN BOARD_USER_LED_GPIO_PIN
 
 #if defined(MICROPY_HW_LED1)
 
@@ -100,6 +108,50 @@ void led_init(void) {
 
 #define LED_PWM_TIM_PERIOD (10000) // TIM runs at 1MHz and fires every 10ms
 
+pwm_config_t pwm2sm3_config;   
+void PWM2_SM3_PWMAB_Init(uint16_t psc,uint32_t fre,uint8_t duty)
+{
+    uint32_t sourceclock;
+    pwm_signal_param_t pwm_ignal;
+    pwm_clock_prescale_t pwm_prescale=(pwm_clock_prescale_t)psc; 
+    PWM_GetDefaultConfig(&pwm2sm3_config);             
+    pwm2sm3_config.clockSource=kPWM_BusClock;           
+    pwm2sm3_config.prescale=pwm_prescale;               
+    pwm2sm3_config.reloadLogic=kPWM_ReloadPwmFullCycle; 
+    pwm2sm3_config.pairOperation=kPWM_Independent;      
+	PWM_Init(PWM2,kPWM_Module_3,&pwm2sm3_config);       
+    PWM2->SM[3].DISMAP[0]=0;     
+    sourceclock=CLOCK_GetFreq(kCLOCK_IpgClk);
+  
+    pwm_ignal.pwmChannel=kPWM_PwmA;                     
+    pwm_ignal.level=kPWM_HighTrue;                      
+    pwm_ignal.dutyCyclePercent=duty;                   
+
+    PWM_SetupPwm(PWM2,kPWM_Module_3,&pwm_ignal,1,kPWM_CenterAligned,fre,sourceclock);
+    PWM_SetPwmLdok(PWM2,kPWM_Control_Module_3,true);   
+    PWM_StartTimer(PWM2,kPWM_Control_Module_3);        
+}
+
+
+void PWM2_SM3_DutySet(uint8_t duty) 
+{
+    PWM_UpdatePwmDutycycle(PWM2,kPWM_Module_3,kPWM_PwmA,kPWM_CenterAligned,duty); 
+    PWM_SetPwmLdok(PWM2,kPWM_Control_Module_3,true);    
+}
+
+void PWM2_SM3_Pininit() 
+{
+    /* Define the init structure for the output LED pin*/
+	uint16_t led1pwmval=0;  
+    gpio_pin_config_t led_config = {kGPIO_DigitalOutput, 0, kGPIO_NoIntmode};
+    /* Board pin init */
+    BOARD_InitPins();
+    /* Update the core clock */
+    SystemCoreClockUpdate();
+    /* Init output LED GPIO. */
+    GPIO_PinInit(GPIO1, 9U, &led_config);
+}
+
 typedef struct _led_pwm_config_t {
 	union{
 		GPT_Type *pGPT;
@@ -128,6 +180,8 @@ static inline bool led_pwm_is_enabled(int led) {
 // this function has a large stack so it should not be inlined
 void led_pwm_init(int led) __attribute__((noinline));
 void led_pwm_init(int led) {
+	
+	PWM2_SM3_PWMAB_Init(7,1000,50);
     // const pin_obj_t *led_pin = pyb_led_obj[led - 1].led_pin;
 
     // >>> rocky: todos
@@ -166,9 +220,9 @@ void led_state(pyb_led_t led, int state) {
     }
 
     #if LED_PWM_ENABLED
-    if (led_pwm_is_enabled(led)) {
-        led_pwm_deinit(led);
-    }
+//    if (led_pwm_is_enabled(led)) {
+//        led_pwm_deinit(led);
+//    }
     #endif
 }
 
@@ -180,7 +234,7 @@ void led_toggle(pyb_led_t led) {
     #if LED_PWM_ENABLED
     if (led_pwm_is_enabled(led)) {
         // if PWM is enabled then LED has non-zero intensity, so turn it off
-        led_state(led, 0);
+        //led_state(led, 0);
         return;
     }
     #endif
@@ -204,14 +258,23 @@ int led_get_intensity(pyb_led_t led) {
 }
 
 void led_set_intensity(pyb_led_t led, mp_int_t intensity) {
+//		while(1)
+//	{
+	PWM2_SM3_Pininit(); 
+	PWM2_SM3_PWMAB_Init(7,1000,50);
+
     #if LED_PWM_ENABLED
-    if (intensity > 0 && intensity < 255) {
+//    if (intensity >= 0 && intensity <= 255) {
+
+		PWM2_SM3_DutySet(100-(intensity));  
+//		}
+		//led_state(led, intensity > 0);
 //        const led_pwm_config_t *pwm_cfg = &led_pwm_config[led - 1];
-    }
+//    }
     #endif
 
     // intensity not supported for this LED; just turn it on/off
-    led_state(led, intensity > 0);
+    //led_state(led, intensity > 0);
 }
 
 void led_debug(int n, int delay) {

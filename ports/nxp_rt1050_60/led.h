@@ -24,6 +24,8 @@
  * THE SOFTWARE.
  */
 
+#include "pin.h"
+#include "fsl_pwm.h"
 #ifdef BOARD_OMVRT1
 #define MICROPY_HW_LED1             (pin_EMC_40) // red
 #define MICROPY_HW_LED2             (pin_EMC_41) // grn
@@ -39,7 +41,7 @@
 // <<<
 #define MICROPY_HW_LED_ON(pin)      (mp_hal_pin_low(pin))
 #define MICROPY_HW_LED_OFF(pin)     (mp_hal_pin_high(pin))
-
+#define MICROPY_HW_LED1_PWM    		{ NULL, 0, 0, 0 }
 typedef enum {
     // PYBv3
     PYB_LED_R1 = 1,
@@ -67,5 +69,6 @@ void led_init(void);
 void led_state(pyb_led_t led, int state);
 void led_toggle(pyb_led_t led);
 void led_debug(int value, int delay);
-
+void PWM2_SM3_PWMAB_Init(uint16_t psc,uint32_t fre,uint8_t duty);
+void PWM2_SM3_Pininit();
 extern const mp_obj_type_t pyb_led_type;

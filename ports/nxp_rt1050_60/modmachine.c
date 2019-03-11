@@ -162,9 +162,9 @@ STATIC mp_obj_t machine_info(mp_uint_t n_args, const mp_obj_t *args) {
 MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(machine_info_obj, 0, 1, machine_info);
 
 // Returns a string of 12 bytes (96 bits), which is the unique ID for the MCU.
+extern uint32_t g_uid[];
 STATIC mp_obj_t machine_unique_id(void) {
-    byte *id = (byte*)0x1234; //MP_HAL_UNIQUE_ID_ADDRESS;
-    return mp_obj_new_bytes(id, 12);
+    return mp_obj_new_bytes((byte*)g_uid, 8);
 }
 MP_DEFINE_CONST_FUN_OBJ_0(machine_unique_id_obj, machine_unique_id);
 
@@ -334,7 +334,7 @@ STATIC const mp_rom_map_elem_t machine_module_globals_table[] = {
     { MP_ROM_QSTR(MP_QSTR_bootloader),          MP_ROM_PTR(&machine_bootloader_obj) },
     { MP_ROM_QSTR(MP_QSTR_freq),                MP_ROM_PTR(&machine_freq_obj) },
 #if MICROPY_HW_ENABLE_RNG
-    { MP_ROM_QSTR(MP_QSTR_rng),                 MP_ROM_PTR(&pyb_rng_get_obj) },
+    { MP_ROM_QSTR(MP_QSTR_rng),                 MP_ROM_PTR(&pyb_rng_getnum_obj) },
 #endif
     { MP_ROM_QSTR(MP_QSTR_idle),                MP_ROM_PTR(&pyb_wfi_obj) },
     { MP_ROM_QSTR(MP_QSTR_sleep),               MP_ROM_PTR(&machine_sleep_obj) },

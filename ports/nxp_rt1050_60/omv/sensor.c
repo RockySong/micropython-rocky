@@ -881,9 +881,13 @@ int sensor_reset()
 	sensor.wndW = sensor.fb_w;
 	sensor.wndX = sensor.wndY = 0;	
 
+	#ifdef BOARD_RTEVK
+	// CSI clk src: 24MHz XTAL,
+	sensor_set_framerate(0x80000000 | (0<<9|(2-1)<<11));	
+	#else
 	// CSI clk src: 480MHz USBPLL, CSI MCLK = 480 / 4 / 8 = 15MHz
 	sensor_set_framerate(0x80000000 | (2<<9|(8-1)<<11));
-	
+	#endif
     // Reset the sesnor state
     sensor.sde          = 0xFF;
     sensor.pixformat    = 0xFF;

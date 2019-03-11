@@ -1610,7 +1610,7 @@ status_t SD_CardInit(sd_card_t *card)
         return kStatus_SDMMC_HandShakeOperationConditionFailed;
     }
 
-	#ifndef BOARD_OMVRT1
+	#if 0 // #ifndef BOARD_OMVRT1
     /* check if card support 1.8V */
     if ((card->flags & kSD_SupportVoltage180v))
     {

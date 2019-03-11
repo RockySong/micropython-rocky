@@ -1882,6 +1882,8 @@ Q(data)
 
 Q(data)
 
+Q(data)
+
 Q(data_type)
 
 Q(datamatrix)
@@ -2407,6 +2409,8 @@ Q(imagereader)
 Q(imagewriter)
 
 Q(implementation)
+
+Q(index)
 
 Q(index)
 

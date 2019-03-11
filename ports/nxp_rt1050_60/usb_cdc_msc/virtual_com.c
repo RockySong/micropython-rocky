@@ -629,6 +629,7 @@ void VCOM_WriteAlways(const uint8_t *buf, uint32_t len) {
 		goto cleanup;	
 	int i;
 	int retry = 0;
+	// while (!g_isUsbHostOpen) {}
 	if (!g_isUsbHostOpen)
 		return;
     for (i = 0; i < len; ) {

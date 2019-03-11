@@ -62,6 +62,7 @@ int switch_get(void) {
     volatile int val = 0;
 	val = GPIO_ReadPinInput(MICROPY_HW_USRSW_PIN.gpio, MICROPY_HW_USRSW_PIN.pin);
     return (val == MICROPY_HW_USRSW_PRESSED);
+	
 }
 
 /******************************************************************************/
@@ -123,7 +124,8 @@ mp_obj_t pyb_switch_callback(mp_obj_t self_in, mp_obj_t callback) {
                     callback == mp_const_none ? mp_const_none : (mp_obj_t)&switch_callback_obj,
                     true);
     */
-    return mp_const_none;
+//    return mp_const_none;
+	return mp_obj_new_int (switch_get());
 }
 STATIC MP_DEFINE_CONST_FUN_OBJ_2(pyb_switch_callback_obj, pyb_switch_callback);
 
