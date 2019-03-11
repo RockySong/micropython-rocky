@@ -538,7 +538,7 @@
         <bEvRecOn>1</bEvRecOn>
         <bSchkAxf>0</bSchkAxf>
         <bTchkAxf>0</bTchkAxf>
-        <nTsel>4</nTsel>
+        <nTsel>3</nTsel>
         <sDll></sDll>
         <sDllPa></sDllPa>
         <sDlgDll></sDlgDll>
@@ -549,13 +549,13 @@
         <tDlgDll></tDlgDll>
         <tDlgPa></tDlgPa>
         <tIfile>.\flexspi.ini</tIfile>
-        <pMon>Segger\JL2CM3.dll</pMon>
+        <pMon>BIN\CMSIS_AGDI.dll</pMon>
       </DebugOpt>
       <TargetDriverDllRegistry>
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGUARM</Key>
-          <Name>燩Lw犜}燩Lw犜}</Name>
+          <Name></Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -570,7 +570,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>CMSIS_AGDI</Key>
-          <Name>-X"Any" -UAny -O974 -S8 -C0 -P00 -N00("ARM CoreSight SW-DP") -D00(0BD11477) -L00(0) -TO18 -TC10000000 -TP20 -TDS8007 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -FO3 -FD0 -FC8000 -FN2 -FF0MIMXRT105x_HYPER_256KB_SEC.FLM -FS060000000 -FL04000000 -FP0($$Device:MIMXRT1052$Flash\MIMXRT105x_HYPER_256KB_SEC.FLM) -FF1MIMXRT_IS26KS512S -FS130000000 -FL14000000</Name>
+          <Name>-X"Any" -UAny -O974 -S8 -C0 -P00 -N00("ARM CoreSight SW-DP") -D00(0BD11477) -L00(0) -TO18 -TC10000000 -TP20 -TDS8007 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -FO3 -FD0 -FC8000 -FN2 -FF0MIMXRT105x_HYPER_256KB_SEC.FLM -FS050000000 -FL04000000 -FP0($$Device:MIMXRT1052$Flash\MIMXRT105x_HYPER_256KB_SEC.FLM) -FF1MIMXRT106x_QSPI_4KB_SEC -FS160000000 -FL1800000</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -580,7 +580,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGTARM</Key>
-          <Name>(1010=934,185,1384,742,0)(6017=105,137,294,473,0)(1008=89,129,465,365,0)(6016=1264,389,1522,1042,0)(1012=343,513,820,828,0)</Name>
+          <Name>(1010=934,185,1384,742,0)(6017=105,137,294,473,0)(1008=89,129,465,365,0)(6016=1264,389,1522,1042,0)(1012=665,539,1142,854,0)</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -765,7 +765,7 @@
         <Mm>
           <WinNumber>1</WinNumber>
           <SubType>2</SubType>
-          <ItemText>dbg_xfer_buffer</ItemText>
+          <ItemText>R0</ItemText>
           <AccSizeX>0</AccSizeX>
         </Mm>
       </MemoryWindow1>
@@ -5609,7 +5609,7 @@
 
   <Group>
     <GroupName>build_evk</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -6089,7 +6089,7 @@
       <GroupNumber>12</GroupNumber>
       <FileNumber>397</FileNumber>
       <FileType>1</FileType>
-      <tvExp>1</tvExp>
+      <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\nxp_rt1050_60\pin.c</PathWithFileName>
@@ -8437,7 +8437,7 @@
 
   <Group>
     <GroupName>omv_py</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>

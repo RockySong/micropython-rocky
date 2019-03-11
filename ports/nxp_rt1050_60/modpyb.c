@@ -67,7 +67,6 @@
 #include "modmachine.h"
 #include "extmod/vfs.h"
 #include "extmod/utime_mphal.h"
-//#include "tpyboard.h"
 #include "rng.h"
 #include "rtc.h"
 #include "uniqueID.h"
@@ -116,7 +115,6 @@ STATIC MP_DEFINE_CONST_FUN_OBJ_1(pyb_elapsed_micros_obj, pyb_elapsed_micros);
 MP_DECLARE_CONST_FUN_OBJ_KW(pyb_main_obj); // defined in main.c
 
 STATIC const mp_rom_map_elem_t pyb_module_globals_table[] = {
-//	{ MP_ROM_QSTR(MP_QSTR_tpyboard), MP_ROM_PTR(&pyb_tpyboard_type) },
 	{ MP_ROM_QSTR(MP_QSTR_uniqueID), MP_ROM_PTR(&pyb_uniqueID_type) },
     { MP_ROM_QSTR(MP_QSTR___name__), MP_ROM_QSTR(MP_QSTR_pyb) },
 

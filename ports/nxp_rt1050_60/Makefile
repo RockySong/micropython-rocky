@@ -339,7 +339,6 @@ SRC_C = \
 	./flegftl/flegftl.c \
 	overlay_manager.c \
 	flash_pgm.c  \
-	tpyboard.c	\
 	rtc.c	\
 	rng.c	\
 	uniqueID.c	\

@@ -55,7 +55,7 @@ int HyperFlush(void) {
 	return 0;
 }
 
-__attribute__((weak)) int flexspi_nor_init(void) {return 0;}
+__WEAK int flexspi_nor_init(void) {return -1;}
 
 int FlashPgmInit(void) {
 	OVERLAY_SWITCH();

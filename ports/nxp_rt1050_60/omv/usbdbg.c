@@ -89,7 +89,7 @@ void usbdbg_data_in(void *buffer, int length)
         case USBDBG_FW_VERSION: {
             uint32_t *ver_buf = buffer;
             ver_buf[0] = FIRMWARE_VERSION_MAJOR;
-            ver_buf[1] = 15; // FIRMWARE_VERSION_MINOR;
+            ver_buf[1] = FIRMWARE_VERSION_MINOR;
             ver_buf[2] = 0; //FIRMWARE_VERSION_PATCH;
             cmd = USBDBG_NONE;
             break;
