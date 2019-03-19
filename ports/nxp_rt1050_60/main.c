@@ -872,8 +872,8 @@ soft_reset:
 	rng_get();
 #endif
 	usbdbg_init();	// must be after mpy's heap init, as it uses mpy's heap
-	// rocky ignore: i2c_init0();
-	// rocky ignore: spi_init0();
+	i2c_init0();
+	spi_init0();
 
 	pyb_usb_init0();
 

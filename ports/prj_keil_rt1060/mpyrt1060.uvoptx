@@ -538,7 +538,7 @@
         <bEvRecOn>1</bEvRecOn>
         <bSchkAxf>0</bSchkAxf>
         <bTchkAxf>0</bTchkAxf>
-        <nTsel>3</nTsel>
+        <nTsel>4</nTsel>
         <sDll></sDll>
         <sDllPa></sDllPa>
         <sDlgDll></sDlgDll>
@@ -549,13 +549,13 @@
         <tDlgDll></tDlgDll>
         <tDlgPa></tDlgPa>
         <tIfile>.\flexspi.ini</tIfile>
-        <pMon>BIN\CMSIS_AGDI.dll</pMon>
+        <pMon>Segger\JL2CM3.dll</pMon>
       </DebugOpt>
       <TargetDriverDllRegistry>
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGUARM</Key>
-          <Name></Name>
+          <Name>靭?</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -594,7 +594,7 @@
           <Type>0</Type>
           <LineNumber>189</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>1610706782</Address>
+          <Address>1610707494</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -610,7 +610,7 @@
           <Type>0</Type>
           <LineNumber>37</LineNumber>
           <EnabledFlag>0</EnabledFlag>
-          <Address>1611016100</Address>
+          <Address>1611018604</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -2013,7 +2013,7 @@
 
   <Group>
     <GroupName>py</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -5769,7 +5769,7 @@
 
   <Group>
     <GroupName>port</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -8217,7 +8217,7 @@
 
   <Group>
     <GroupName>omv_mini</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -8496,8 +8496,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\omv\py\py_lcd.c</PathWithFileName>
-      <FilenameWithoutPath>py_lcd.c</FilenameWithoutPath>
+      <PathWithFileName>..\nxp_rt1050_60\omv\py\py_lcd_omvrt1.c</PathWithFileName>
+      <FilenameWithoutPath>py_lcd_omvrt1.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

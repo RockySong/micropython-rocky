@@ -112,8 +112,10 @@ int OverlaySwitch(uint8_t ovlyNdx) {
 	
 	switch (ovlyNdx) {
 		OVERLAY_CASE(YUV_TAB)
+		#if !defined(OMV_SENSOR_ONLY) && !defined(OMV_MPY_ONLY)		
 		OVERLAY_CASE(LAB_TAB)
 		OVERLAY_CASE(HAAR)
+		#endif
 		#if defined(XIP_EXTERNAL_FLASH) && defined(EVK1050_60_HYPER) 
 		OVERLAY_CASE(FLASHPGM)
 		#endif

@@ -786,10 +786,16 @@ status_t LPSPI_MasterTransferBlocking(LPSPI_Type *base, lpspi_transfer_t *transf
     }
     else
     {
+		#if 0 // rocky: this will cause SPI LCD panel get messed
         /* If no RX buffer, then transfer is not complete until transfer complete flag sets */
         while (!(LPSPI_GetStatusFlags(base) & kLPSPI_TransferCompleteFlag))
         {
         }
+		#else
+        while ((LPSPI_GetStatusFlags(base) & kLPSPI_ModuleBusyFlag))
+        {
+        }		
+		#endif
     }
 
     return kStatus_Success;

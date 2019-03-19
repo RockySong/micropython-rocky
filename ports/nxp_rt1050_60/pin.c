@@ -359,7 +359,7 @@ STATIC mp_obj_t pin_obj_init_helper(const pin_obj_t *self, mp_uint_t n_args, con
 	mp_uint_t slew = (args.fastslew.u_bool != 0) << 0;	// SRE bit
 	mp_uint_t padCfg;
     if (args.pad_expert_cfg.u_obj != MP_OBJ_NULL) {
-		padCfg = mp_obj_get_int(&args.pad_expert_cfg);
+		padCfg = (int)args.pad_expert_cfg.u_obj;
     } else {
 		padCfg = args.mode.u_int | hys | slew;		
     }

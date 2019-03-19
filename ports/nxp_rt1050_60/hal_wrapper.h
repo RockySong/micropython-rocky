@@ -1,6 +1,8 @@
 #ifndef _HAL_WRAPPER_H_
 #define _HAL_WRAPPER_H_
-
+#include "fsl_common.h"
+#include "fsl_gpio.h"
+#include "pin.h"
 typedef enum 
 {
   HAL_OK       = 0x00U,
@@ -200,4 +202,15 @@ uint32_t HAL_GetHalVersion(void);
 uint32_t HAL_GetREVID(void);
 uint32_t HAL_GetDEVID(void);
 void HAL_NVIC_SetPriority(IRQn_Type IRQn, uint32_t PreemptPriority, uint32_t SubPriority);
+
+#define HAL_GPIO_ReadPin GPIO_PinRead
+#define HAL_GPIO_WritePin GPIO_PinWrite
+
+static inline void HAL_GPIO_DeInit(GPIO_Type *pPort, uint32_t pin) {
+	gpio_pin_config_t cfg;
+	cfg.direction = kGPIO_DigitalInput;
+	GPIO_PinInit(pPort, pin, &cfg);
+}
+
+
 #endif

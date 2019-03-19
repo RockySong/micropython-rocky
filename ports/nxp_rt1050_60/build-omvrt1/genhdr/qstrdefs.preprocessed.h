@@ -6706,12 +6706,13 @@ extern const struct _mp_obj_module_t time_module;
 extern const struct _mp_obj_module_t sensor_module;
 extern const struct _mp_obj_module_t image_module;
 extern const struct _mp_obj_module_t mjpeg_module;
+extern const struct _mp_obj_module_t lcd_module;
 extern const struct _mp_obj_module_t nn_module;
-# 310 "./mpconfigport.h"
+# 312 "./mpconfigport.h"
 typedef int mp_int_t;
 typedef unsigned int mp_uint_t;
 typedef long mp_off_t;
-# 325 "./mpconfigport.h"
+# 327 "./mpconfigport.h"
 static inline void enable_irq(mp_uint_t state) {
     __set_PRIMASK(state);
 }
@@ -6721,7 +6722,7 @@ static inline mp_uint_t disable_irq(void) {
     __disable_irq();
     return state;
 }
-# 352 "./mpconfigport.h"
+# 354 "./mpconfigport.h"
 extern void HAL_WFI(void);
 # 46 "../../py/mpconfig.h" 2
 # 554 "../../py/mpconfig.h"
@@ -9633,8 +9634,6 @@ Q(discard)
 
 Q(displacement)
 
-Q(display)
-
 Q(div)
 
 Q(divmod)
@@ -9964,6 +9963,8 @@ Q(getcwd)
 Q(getcwd)
 
 Q(getcwd)
+
+Q(getnum)
 
 Q(getrandbits)
 
@@ -10328,6 +10329,8 @@ Q(label)
 Q(laplacian)
 
 Q(lbp_desc)
+
+Q(lcd)
 
 Q(ldexp)
 
@@ -11169,6 +11172,12 @@ Q(rmdir)
 
 Q(rmdir)
 
+Q(rng)
+
+Q(rng)
+
+Q(rng)
+
 Q(robust)
 
 Q(roi)
@@ -11200,6 +11209,8 @@ Q(rsplit)
 Q(rstrip)
 
 Q(rstrip)
+
+Q(rtc)
 
 Q(rtc)
 
@@ -11703,10 +11714,6 @@ Q(toggle)
 
 Q(top_hat)
 
-Q(tpyboard)
-
-Q(tpyboard)
-
 Q(trunc)
 
 Q(tuple)
@@ -11824,6 +11831,8 @@ Q(upper)
 Q(upper)
 
 Q(uq)
+
+Q(urandom)
 
 Q(urandom)
 

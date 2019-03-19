@@ -32,8 +32,8 @@
 #define MICROPY_HW_SPI1_NAME "spi1"
 #define MICROPY_HW_SPI1_NSS  (pin_EMC_30)
 #define MICROPY_HW_SPI1_SCK  (pin_EMC_27) // 
-#define MICROPY_HW_SPI1_MISO (pin_EMC_28) // 
-#define MICROPY_HW_SPI1_MOSI (pin_EMC_29) // 
+#define MICROPY_HW_SPI1_MISO (pin_EMC_29) // 
+#define MICROPY_HW_SPI1_MOSI (pin_EMC_28) // 
 /*for our new use, we have only one interface of spi in our new board, so we write only one defination of the spi pin above for the easy use
 #define MICROPY_HW_SPI7_NAME "spi7"
 #define MICROPY_HW_SPI7_NSS  (pin_122) // use GPIO
@@ -49,7 +49,7 @@
 #define MICROPY_HW_SPI9_MOSI (pin_321) // J9_13
 */
 typedef enum {
-	PYB_SPI_0 = 0,
+	PYB_SPI_0 = 0, // index 0 is not exist on RT10xx!
     PYB_SPI_1 = 1,
     PYB_SPI_2 = 2,
     PYB_SPI_3 = 3,

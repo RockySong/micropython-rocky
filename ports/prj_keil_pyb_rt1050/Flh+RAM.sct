@@ -76,7 +76,6 @@ LR_XIP_FLASH ROM_BASE + 0x2000 {
 		sincos_tab.o (+RO)
 		fsl_flexspi.o flash_hyper.o (+RO)
 		* (.ram_const)
-		*.o (+RO)
 	}
 	
 	ARM_LIB_HEAP +0 EMPTY 0x100 {} ; Heap region growing up

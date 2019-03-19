@@ -1956,8 +1956,6 @@ Q(discard)
 
 Q(displacement)
 
-Q(display)
-
 Q(div)
 
 Q(divmod)
@@ -2287,6 +2285,8 @@ Q(getcwd)
 Q(getcwd)
 
 Q(getcwd)
+
+Q(getnum)
 
 Q(getrandbits)
 
@@ -2651,6 +2651,8 @@ Q(label)
 Q(laplacian)
 
 Q(lbp_desc)
+
+Q(lcd)
 
 Q(ldexp)
 
@@ -3492,6 +3494,12 @@ Q(rmdir)
 
 Q(rmdir)
 
+Q(rng)
+
+Q(rng)
+
+Q(rng)
+
 Q(robust)
 
 Q(roi)
@@ -3523,6 +3531,8 @@ Q(rsplit)
 Q(rstrip)
 
 Q(rstrip)
+
+Q(rtc)
 
 Q(rtc)
 
@@ -4026,10 +4036,6 @@ Q(toggle)
 
 Q(top_hat)
 
-Q(tpyboard)
-
-Q(tpyboard)
-
 Q(trunc)
 
 Q(tuple)
@@ -4147,6 +4153,8 @@ Q(upper)
 Q(upper)
 
 Q(uq)
+
+Q(urandom)
 
 Q(urandom)
 

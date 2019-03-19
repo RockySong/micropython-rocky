@@ -119,13 +119,13 @@ bool mp_hal_pin_config_alt(mp_hal_pin_obj_t pin, uint32_t padCfg,  uint8_t fn) {
     return true;
 }
 
-void mp_hal_ConfigGPIO(const pin_obj_t *p, uint32_t gpioMode, uint32_t isInitialHighForOutput)
+void mp_hal_ConfigGPIO(const pin_obj_t *p, uint32_t gpioModeAndPadCfg, uint32_t isInitialHighForOutput)
 {
 	GPIO_Type *pGPIO = p->gpio;
 	uint32_t pinMask = 1 << p->pin;
 	mp_hal_gpio_clock_enable(p->port);
 	pGPIO->IMR &= ~pinMask;	 // disable pin IRQ
-	if (gpioMode & (GPIO_PAD_OUTPUT_MASK)) {
+	if (gpioModeAndPadCfg & (GPIO_PAD_OUTPUT_MASK)) {
 		// output
 		if (isInitialHighForOutput)
 			pGPIO->DR |= pinMask;
@@ -137,7 +137,7 @@ void mp_hal_ConfigGPIO(const pin_obj_t *p, uint32_t gpioMode, uint32_t isInitial
 		// input
 		pGPIO->GDIR &= ~pinMask;
 	}
-	mp_hal_pin_config_alt(p, gpioMode, AF_FN_GPIO);
+	mp_hal_pin_config_alt(p, gpioModeAndPadCfg, AF_FN_GPIO);
 }
 
 

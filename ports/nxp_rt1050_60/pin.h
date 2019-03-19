@@ -26,6 +26,9 @@
 
 #ifndef __MICROPY_INCLUDED_STMHAL_PIN_H__
 #define __MICROPY_INCLUDED_STMHAL_PIN_H__
+#ifdef __CC_ARM
+#pragma anon_unions
+#endif
 
 #include "fsl_iomuxc.h"
 #include "fsl_gpio.h"

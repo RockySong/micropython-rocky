@@ -184,22 +184,31 @@ STATIC void spi_set_params(pyb_spi_obj_t *self, int32_t baudrate,
 	self->mstCfg.cpha = !phase ? kLPSPI_ClockPhaseFirstEdge : kLPSPI_ClockPhaseSecondEdge; 
 	//self->mstCfg.dataWidth = (spi_data_width_t)(kLPSPI_Data4Bits + bits - 4);  maybe have no this function in our rt but have it in the lpc
 	self->mstCfg.direction = !firstbit ? kLPSPI_MsbFirst : kLPSPI_LsbFirst;
+    self->mstCfg.bitsPerFrame = 8;
+
+    self->mstCfg.pcsToSckDelayInNanoSec = 1000000000 / self->mstCfg.baudRate;
+    self->mstCfg.lastSckToPcsDelayInNanoSec = 1000000000 / self->mstCfg.baudRate;
+    self->mstCfg.betweenTransferDelayInNanoSec = 1000000000 / self->mstCfg.baudRate;
+
+    self->mstCfg.whichPcs = kLPSPI_Pcs0;
+    self->mstCfg.pcsActiveHighOrLow = kLPSPI_PcsActiveLow;
+
+    self->mstCfg.pinCfg = kLPSPI_SdiInSdoOut;
+    self->mstCfg.dataOutConfig = kLpspiDataOutRetained;
+
 }
 
 // TODO allow to take a list of pins to use
 void spi_init(pyb_spi_obj_t *self) 
 {
     // init the GPIO lines
-	mp_hal_pin_config_alt(self->pSCK, GPIO_MODE_OUTPUT_PP, AF_FN_LPSPI);
+
 	mp_hal_pin_config_alt(self->pSCK, GPIO_MODE_OUTPUT_PP, AF_FN_LPSPI);//here the GPIO_MODE_OUTPUT_PP is the var in the function IOMUXC_SetPinConfig the last var configvalue
 	mp_hal_pin_config_alt(self->pMOSI, GPIO_MODE_OUTPUT_PP, AF_FN_LPSPI);
 	if (self->pMISO != self->pMOSI) // if we don't use MISO, then set MISO the same pin as MOSI to mark
-		mp_hal_pin_config_alt(self->pMISO,GPIO_MODE_OUTPUT_PP, AF_FN_LPSPI);//the before one is MP_HAL_PIN_PULL_UP
-	
-
-
-        CLOCK_SetMux(self->clockSel, LPSPI_CLOCK_SOURCE_SELECT);
-        CLOCK_SetDiv(self->clockDiv, LPSPI_CLOCK_SOURCE_DIVIDER);
+		mp_hal_pin_config_alt(self->pMISO,GPIO_MODE_INPUT, AF_FN_LPSPI);//the before one is MP_HAL_PIN_PULL_UP
+    CLOCK_SetMux(self->clockSel, LPSPI_CLOCK_SOURCE_SELECT);
+    CLOCK_SetDiv(self->clockDiv, LPSPI_CLOCK_SOURCE_DIVIDER);
 	NVIC_EnableIRQ(self->irqn);
 	
 	LPSPI_MasterInit(self->pSPI, &self->mstCfg, LPSPI_MASTER_CLOCK_FREQ);
@@ -227,6 +236,28 @@ void spi_deinit(pyb_spi_t ndx) {
 // and use that value for the baudrate in the formula, plus a small constant.
 #define SPI_TRANSFER_TIMEOUT(len) ((len) + 100)
 
+void SPI_SendReg(LPSPI_Type *pSPI, const uint8_t *pSrc, uint32_t txLen) {
+	volatile uint32_t busyFlag, drainFlag;
+	pSPI->TCR |= 1 << 19; // undocumented remark: Must disable RX, otherwise TX is halted when RXFIFO is full!
+	while(txLen--) {
+		do {
+			// pSPI->RDR;
+			drainFlag = pSPI->SR & 1<<0;
+			/*
+			__DSB(); __ISB();
+			__NOP();__NOP();__NOP();__NOP()  ;  __NOP();__NOP();__NOP();__NOP();
+			__NOP();__NOP();__NOP();__NOP()  ;  __NOP();__NOP();__NOP();__NOP();
+			__NOP();__NOP();__NOP();__NOP()  ;  __NOP();__NOP();__NOP();__NOP();
+			__NOP();__NOP();__NOP();__NOP()  ;  __NOP();__NOP();__NOP();__NOP();
+			*/
+		} while (drainFlag == 0);
+		pSPI->TDR = *pSrc++;
+	}
+	do {
+		busyFlag = pSPI->SR & 1<<24; // wait while busy
+	} while(busyFlag);
+}
+
 void spi_transfer(pyb_spi_t ndx, size_t txLen, const uint8_t *src, size_t rxLen, uint8_t *dest, uint32_t timeout, bool isCtrlSSEL) 
 {
     // Note: there seems to be a problem sending 1 byte using DMA the first
@@ -240,19 +271,30 @@ void spi_transfer(pyb_spi_t ndx, size_t txLen, const uint8_t *src, size_t rxLen,
 	if (isCtrlSSEL)
 		mp_hal_pin_low(self->pSSEL);
 	if (src) {
-		xfer.txData = (uint8_t*) src;
-		xfer.rxData = 0;
-		xfer.dataSize = txLen;
-		xfer.configFlags = 0;
-		st = LPSPI_MasterTransferBlocking(self->pSPI, &xfer);
-		if (st != kStatus_Success)
-			goto cleanup;
+		#if 0
+        self->pSPI->FCR = 3;
+		self->pSPI->TCR = (8-1)<<0 | 1<<19;
+		self->pSPI->CFGR0 = 0;
+		self->pSPI->CFGR1 = 1<<0 | 0<<3 | 0<<26;
+		SPI_SendReg(self->pSPI, src, txLen);
+		#else
+			// rocky: if we use SDK driver and control CS by GPIO, make sure modify it to let it check LPSPI.SR.MBF (busy flag)
+			xfer.txData = (uint8_t*) src;
+			xfer.rxData = 0;
+			xfer.dataSize = txLen;
+			xfer.configFlags = 0;
+			st = LPSPI_MasterTransferBlocking(self->pSPI, &xfer);
+			if (st != kStatus_Success)
+				goto cleanup;
+			while (LPSPI_GetStatusFlags(self->pSPI) & kLPSPI_ModuleBusyFlag) {}
+		#endif
 	}
 	if (dest) {
 		xfer.txData = 0;
 		xfer.rxData = dest;
 		xfer.dataSize = rxLen;
 		st = LPSPI_MasterTransferBlocking(self->pSPI, &xfer);
+		while (LPSPI_GetStatusFlags(self->pSPI) & kLPSPI_ModuleBusyFlag) {}
 	}	
 cleanup:
 	if (isCtrlSSEL)
@@ -263,12 +305,13 @@ cleanup:
 }
 
 /*STATIC*/ void spi_transfer_full_duplex(
-	pyb_spi_obj_t *self, size_t len, const uint8_t *src, uint8_t *dest, uint32_t timeout, bool isCtrlSSEL) 
+	pyb_spi_t ndx, size_t len, const uint8_t *src, uint8_t *dest, uint32_t timeout, bool isCtrlSSEL) 
 {
     // Note: there seems to be a problem sending 1 byte using DMA the first
     // time directly after the SPI/DMA is initialised.  The cause of this is
     // unknown but we sidestep the issue by using polling for 1 byte transfer.
 	lpspi_transfer_t xfer;
+	pyb_spi_obj_t *self = pyb_spi_obj + ndx;
     status_t st = kStatus_Success;
 	if (isCtrlSSEL)
 		mp_hal_pin_low(self->pSSEL);	
@@ -373,7 +416,7 @@ STATIC mp_obj_t pyb_spi_init_helper(pyb_spi_obj_t *self, mp_uint_t n_args, const
 ///
 /// At the moment, the NSS pin is not used by the SPI driver and is free
 /// for other use.
-STATIC mp_obj_t pyb_spi_make_new(const mp_obj_type_t *type, size_t n_args, size_t n_kw, const mp_obj_t *args) {
+mp_obj_t pyb_spi_make_new(const mp_obj_type_t *type, size_t n_args, size_t n_kw, const mp_obj_t *args) {
     // check arguments
     mp_arg_check_num(n_args, n_kw, 1, MP_OBJ_FUN_ARGS_MAX, true);
 
@@ -400,7 +443,7 @@ STATIC MP_DEFINE_CONST_FUN_OBJ_KW(pyb_spi_init_obj, 1, pyb_spi_init);
 
 /// \method deinit()
 /// Turn off the SPI bus.
-STATIC mp_obj_t pyb_spi_deinit(mp_obj_t self_in) {
+mp_obj_t pyb_spi_deinit(mp_obj_t self_in) {
     pyb_spi_obj_t *self = self_in;
 	self->flags &= ~SPI_OBJ_FLAG_ENABLED;
     spi_deinit(self->ndx);
@@ -415,7 +458,7 @@ STATIC MP_DEFINE_CONST_FUN_OBJ_1(pyb_spi_deinit_obj, pyb_spi_deinit);
 ///   - `timeout` is the timeout in milliseconds to wait for the send.
 ///
 /// Return value: `None`.
-STATIC mp_obj_t pyb_spi_send(mp_uint_t n_args, const mp_obj_t *pos_args, mp_map_t *kw_args) {
+mp_obj_t pyb_spi_send(mp_uint_t n_args, const mp_obj_t *pos_args, mp_map_t *kw_args) {
     // TODO assumes transmission size is 8-bits wide
 
     static const mp_arg_t allowed_args[] = {
@@ -434,7 +477,7 @@ STATIC mp_obj_t pyb_spi_send(mp_uint_t n_args, const mp_obj_t *pos_args, mp_map_
     pyb_buf_get_for_send(args[0].u_obj, &bufinfo, data);
 
     // send the data
-    spi_transfer(self->ndx, bufinfo.len, bufinfo.buf, 0, NULL, args[1].u_int, 1);
+    spi_transfer(self->ndx, bufinfo.len, bufinfo.buf, 0, NULL, args[1].u_int, 0);
 
     return mp_const_none;
 }
@@ -468,7 +511,7 @@ STATIC mp_obj_t pyb_spi_recv(mp_uint_t n_args, const mp_obj_t *pos_args, mp_map_
     mp_obj_t o_ret = pyb_buf_get_for_recv(args[0].u_obj, &vstr);
 
     // receive the data
-	spi_transfer(self->ndx, 0, NULL, vstr.len, (uint8_t*)vstr.buf, args[1].u_int, 1);
+	spi_transfer(self->ndx, 0, NULL, vstr.len, (uint8_t*)vstr.buf, args[1].u_int, 0);
 
     // return the received data
     if (o_ret != MP_OBJ_NULL) {
@@ -496,7 +539,7 @@ STATIC mp_obj_t pyb_spi_send_recv(mp_uint_t n_args, const mp_obj_t *pos_args, mp
         { MP_QSTR_send,    MP_ARG_REQUIRED | MP_ARG_OBJ, {.u_obj = MP_OBJ_NULL} },
         { MP_QSTR_recv,    MP_ARG_OBJ, {.u_obj = MP_OBJ_NULL} },
         { MP_QSTR_timeout, MP_ARG_KW_ONLY | MP_ARG_INT, {.u_int = 5000} },
-		{ MP_QSTR_halfduplex , MP_ARG_KW_ONLY | MP_ARG_BOOL, {.u_bool = false} },
+		{ MP_QSTR_halfduplex , MP_ARG_KW_ONLY | MP_ARG_BOOL, {.u_bool = true} },
     };
 
     // parse args
@@ -538,8 +581,10 @@ STATIC mp_obj_t pyb_spi_send_recv(mp_uint_t n_args, const mp_obj_t *pos_args, mp
     }
 
     // do the transfer
-    spi_transfer(self->ndx, bufinfo_send.len, bufinfo_send.buf, bufinfo_recv.len, bufinfo_recv.buf, args[2].u_int, args[3].u_bool);
-
+    if (args[3].u_bool)
+    	spi_transfer(self->ndx, bufinfo_send.len, bufinfo_send.buf, bufinfo_recv.len, bufinfo_recv.buf, args[2].u_int, 0);
+	else
+		spi_transfer_full_duplex(self->ndx, bufinfo_send.len, bufinfo_send.buf, bufinfo_recv.buf, args[2].u_int, 0);
     // return the received data
     if (o_ret != MP_OBJ_NULL) {
         return o_ret;
@@ -650,9 +695,9 @@ mp_obj_t machine_hard_spi_make_new(const mp_obj_type_t *type, size_t n_args, siz
 
 	if (args[ARG_sck].u_obj != MP_OBJ_NULL)
 		self->pyb->pSCK = mp_hal_get_pin_obj(args[ARG_sck].u_obj);
-	if (args[ARG_sck].u_obj != MP_OBJ_NULL)
+	if (args[ARG_mosi].u_obj != MP_OBJ_NULL)
 		self->pyb->pMOSI = mp_hal_get_pin_obj(args[ARG_mosi].u_obj);
-	if (args[ARG_sck].u_obj != MP_OBJ_NULL)
+	if (args[ARG_miso].u_obj != MP_OBJ_NULL)
 		self->pyb->pMISO = mp_hal_get_pin_obj(args[ARG_miso].u_obj);
 
     // init the SPI bus
