@@ -635,7 +635,7 @@ void VCOM_WriteAlways(const uint8_t *buf, uint32_t len) {
     for (i = 0; i < len; ) {
 		while (RingBlk_GetFreeBytes(&s_txRB) == 0) {
 			HAL_WFI();
-			if (retry++ >= 100) {
+			if (retry++ >= 10) {
 				s_isTxIdle = 1; // it seems some bug prevent from restoring s_isTxIdle
 				goto cleanup;
 			}
@@ -665,6 +665,11 @@ bool VCOM_IsTxIdle(void) {
 	return s_isTxIdle ? 1 : 0;
 }
 
+extern volatile uint8_t g_omvIdeConnecting;
+
+bool VCOM_OmvIsIdeConnecting(void) {
+	return g_omvIdeConnecting;
+}
 bool VCOM_OmvIsIdeConnected(void)
 {
 	if (debug_mode)
@@ -678,7 +683,7 @@ void VCOM_OmvWriteAlways(const uint8_t *buf, uint32_t len) {
     for (i = 0; i < len; ) {
 		while (RingBlk_GetFreeBytes(&s_omvRB) == 0) {
 			HAL_WFI();
-			if (retry++ >= 1/*100*/) {
+			if (retry++ >= 10/*100*/) {
 				goto cleanup;
 			}
 		}
@@ -688,6 +693,9 @@ cleanup:
 	return;
 }
 
+void VCOM_FlushTxBuffer(void) {
+	RingBlk_Init(&s_txRB, s_SendBuf[0], VCP_RINGBLK_SIZE, VCP_OUTEPBUF_CNT);
+}
 
 uint32_t VCOM_OmvGetLogTxLen(void)
 {

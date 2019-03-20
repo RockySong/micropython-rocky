@@ -81,12 +81,14 @@ inline void usbdbg_set_irq_enabled(bool enabled)
 #else
 #define DUMP_FB JPEG_FB
 #endif
-
+volatile uint8_t g_omvIdeConnecting;
 void usbdbg_data_in(void *buffer, int length)
 {
 	logout("usbdbg_data_in: cmd=%x, buffer=0x%08x, bytes=%d\r\n", cmd, buffer, length);
     switch (cmd) {
         case USBDBG_FW_VERSION: {
+			g_omvIdeConnecting = 1;
+			VCOM_FlushTxBuffer();
             uint32_t *ver_buf = buffer;
             ver_buf[0] = FIRMWARE_VERSION_MAJOR;
             ver_buf[1] = FIRMWARE_VERSION_MINOR;
@@ -118,6 +120,7 @@ void usbdbg_data_in(void *buffer, int length)
         }
 
         case USBDBG_FRAME_SIZE:
+			g_omvIdeConnecting = 0;
 		#ifdef OMV_MPY_ONLY
 			((uint32_t*)buffer)[0] = 0;
 			((uint32_t*)buffer)[1] = 0;

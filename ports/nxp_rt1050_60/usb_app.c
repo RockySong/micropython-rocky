@@ -154,6 +154,8 @@ int usb_vcp_recv_byte(uint8_t *c) {
 
 void usb_vcp_send_strn(const char *str, int len) {
 #ifdef USE_DEVICE_MODE
+	if (VCOM_OmvIsIdeConnecting())
+		return;	
 	bool omvUsbDbg = VCOM_OmvIsIdeConnected();
     if (pyb_usb_flags & PYB_USB_FLAG_DEV_ENABLED) {
 		if (omvUsbDbg) {
@@ -167,6 +169,8 @@ void usb_vcp_send_strn(const char *str, int len) {
 
 void usb_vcp_send_strn_cooked(const char *str, int len) {
 #ifdef USE_DEVICE_MODE
+	if (VCOM_OmvIsIdeConnecting())
+		return;
 	bool omvUsbDbg = VCOM_OmvIsIdeConnected();
     if (pyb_usb_flags & PYB_USB_FLAG_DEV_ENABLED) {
         for (const char *top = str + len; str < top; str++) {

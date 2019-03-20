@@ -110,10 +110,12 @@ int USBD_CDC_TxHalfEmpty(void);
 void VCOM_Open(void);
 void VCOM_Close(void);
 
+bool VCOM_OmvIsIdeConnecting(void);
 bool VCOM_OmvIsIdeConnected(void);
 uint32_t VCOM_OmvGetLogTxLen(void);
 int VCOM_OmvReadLogTxBlk(uint8_t *pBuf, uint32_t bufSize);
 void VCOM_OmvWriteAlways(const uint8_t *buf, uint32_t len);
+void VCOM_FlushTxBuffer(void);
 
 
 

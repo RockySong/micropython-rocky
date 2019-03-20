@@ -162,7 +162,7 @@ STATIC const mp_rom_map_elem_t pyb_module_globals_table[] = {
     // rocky ignore { MP_ROM_QSTR(MP_QSTR_Timer), MP_ROM_PTR(&pyb_timer_type) },
 
 #if MICROPY_HW_ENABLE_RNG
-    { MP_ROM_QSTR(MP_QSTR_rng), MP_ROM_PTR(&pyb_rng_type) },
+    { MP_ROM_QSTR(MP_QSTR_rng), MP_ROM_PTR(&pyb_rng_getnum_obj) },
 #endif
 
 #if MICROPY_HW_ENABLE_RTC
