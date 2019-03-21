@@ -30,10 +30,10 @@ INC +=  -I$(TOP)
 INC += -I$(BUILD)
 
 # compiler settings
-CWARN = -Wall -Werror
+CWARN = -Wall -Wno-error
 CWARN += -Wpointer-arith -Wuninitialized
 CFLAGS = $(INC) $(CWARN) -std=gnu99 $(CFLAGS_MOD) $(COPT) $(CFLAGS_EXTRA)
-CFLAGS += -fdata-sections -ffunction-sections -fno-asynchronous-unwind-tables
+CFLAGS += -fdata-sections -ffunction-sections -fno-asynchronous-unwind-tables -DCROSS_MPY
 
 # Debugging/Optimization
 ifdef DEBUG

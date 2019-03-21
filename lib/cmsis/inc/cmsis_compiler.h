@@ -63,7 +63,13 @@
   #ifndef   __STATIC_INLINE
     #define __STATIC_INLINE                        static inline
   #endif
+#ifndef   __FORCEINLINE
+  #define __FORCEINLINE         _Pragma("inline=forced")
+#endif
 
+#ifndef   __STATIC_FORCEINLINE
+  #define __STATIC_FORCEINLINE  __FORCEINLINE __STATIC_INLINE
+#endif
   #include <cmsis_iar.h>
 
   /* CMSIS compiler control architecture macros */

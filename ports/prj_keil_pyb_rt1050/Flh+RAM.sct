@@ -1,0 +1,93 @@
+#! armcc -E
+
+#define STACK_SIZE 0x2000
+#define ROM_BASE	0x60000000
+#define IVT_BASE	0x60001000
+#define ITCM_SIZE	32*1024
+#define DTCM_SIZE	(512-32)*1024
+#define OCRAM_SIZE	512*1024
+
+#define OMV_MAIN_FB_SIZE	365*1024 //301*1024
+#define OMV_FB_ALLOC_SIZE	144*1024 //83*1024
+#define OMV_JPEG_FB_SIZE    40*1024
+
+; must use "VECTOR_RAM", "RW_m_data", "VECTOR_ROM" as names to work with "InstallIRQHandler()" API
+
+LR_XIP_FLASH_INFO ROM_BASE  {
+  ; >>> RO regions
+	ER_boot_hdr_conf +0 0xF000 {
+	* (.boot_hdr.conf)
+	}
+}
+
+LR_XIP_FLASH_IVT IVT_BASE {
+	ER_boot_hdr_ivt +0 0x20 {
+	* (.boot_hdr.ivt)
+	}
+	ER_boot_hdr_boot_data +0 0x10{
+	* (.boot_hdr.boot_data)
+	}  
+	ER_boot_hdr_dcd_data +0 {
+	* (.boot_hdr.dcd_data)
+	}
+}
+
+LR_XIP_FLASH ROM_BASE + 0x2000 {
+	VECTOR_ROM +0 0x400 { ; vector table
+		* (RESET,+FIRST)
+		* (InRoot$$Section)
+	}
+	
+	TEXT_ROM +0  { ; load address = execution address
+		.ANY (+RO)
+		__*.o (+RO)
+		anon*.o (+RO)
+		startup*.o (+RO)
+		system_*.o (+RO)
+	}
+
+	VECTOR_RAM 0 EMPTY 1*1024 { ; RAM vector region (in RAMX)
+	}
+	ER_ITCM +0 ITCM_SIZE - 8*1024 - 1*1024 { ; Stack region growing down
+		// vm.o pendsv.o objfun.o (+RO)
+		// nlrthumb.o (+RO)
+		// framebuffer.o fb_alloc.o (+RO)
+		gc.o rt_mem*.o (+RO)
+		// obj.o objarray.o objfloat.o objlist.o objobject.o  (+RO)
+		// objfun.o  nativeglue.o malloc.o (+RO)	
+		// objdict.o  modmath.o modarray.o modbuiltins.o modmicropython.o map.o (+RO)
+		/*
+		acos*.o asin*.o atan*.o ceil*.o cos*.o erf*.o expf*.o expm*.o floor*.o fmod*.o (+RO)
+		frexp*.o ldex*.o lgamma*.o log*.o modff.o nanf.o nearbyintf.o powf.o roundf.o (+RO)
+		sin*.o sqrt*.o tan*.o tgammaf*.o trunc*.o dunder.o funder.o (+RO)
+		*/
+		* (.ram_code)
+	}
+	ARM_LIB_STACK 0x6000 - STACK_SIZE EMPTY STACK_SIZE {}
+	
+    DTCM_START_PLACEHOLDER 0x20000000 EMPTY 0 {}
+	
+	QH_BUFFER_LAYOUT +0 {
+		* (.qh_buffer_2kalign)
+	}
+
+	ER_DTCM +0 {
+		.ANY (+RW, +ZI)
+		sincos_tab.o (+RO)
+		fsl_flexspi.o flash_hyper.o (+RO)
+		* (.ram_const)
+	}
+	
+	ARM_LIB_HEAP +0 EMPTY 0x100 {} ; Heap region growing up
+	
+	MPY_HEAP_START +0 EMPTY 4 {}
+	
+	DTCM_END 0x20078000 EMPTY 4 {}
+	
+	OCRAM_START 0x20200000 EMPTY 0 {}
+
+	; <<<
+	
+	OCRAM_END 0x20200000+OCRAM_SIZE EMPTY 4 {}
+}
+

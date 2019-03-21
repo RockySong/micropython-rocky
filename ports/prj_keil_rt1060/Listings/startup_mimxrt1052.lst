@@ -1,0 +1,4401 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         ; * ----------------------------------------------------
+                       ---------------------
+    2 00000000         ; *  @file:    startup_MIMXRT1052.s
+    3 00000000         ; *  @purpose: CMSIS Cortex-M7 Core Device Startup File
+    4 00000000         ; *            MIMXRT1052
+    5 00000000         ; *  @version: 0.1
+    6 00000000         ; *  @date:    2017-1-10
+    7 00000000         ; *  @build:   b171208
+    8 00000000         ; * ----------------------------------------------------
+                       ---------------------
+    9 00000000         ; *
+   10 00000000         ; * The Clear BSD License
+   11 00000000         ; * Copyright 1997-2016 Freescale Semiconductor, Inc.
+   12 00000000         ; * Copyright 2016-2017 NXP
+   13 00000000         ; * All rights reserved.
+   14 00000000         ; *
+   15 00000000         ; * Redistribution and use in source and binary forms, w
+                       ith or without
+   16 00000000         ; * modification, are permitted (subject to the limitati
+                       ons in the
+   17 00000000         ; * disclaimer below) provided that the following condit
+                       ions are met:
+   18 00000000         ; *
+   19 00000000         ; * * Redistributions of source code must retain the abo
+                       ve copyright
+   20 00000000         ; *   notice, this list of conditions and the following 
+                       disclaimer.
+   21 00000000         ; *
+   22 00000000         ; * * Redistributions in binary form must reproduce the 
+                       above copyright
+   23 00000000         ; *   notice, this list of conditions and the following 
+                       disclaimer in the
+   24 00000000         ; *   documentation and/or other materials provided with
+                        the distribution.
+   25 00000000         ; *
+   26 00000000         ; * * Neither the name of the copyright holder nor the n
+                       ames of its
+   27 00000000         ; *   contributors may be used to endorse or promote pro
+                       ducts derived from
+   28 00000000         ; *   this software without specific prior written permi
+                       ssion.
+   29 00000000         ; *
+   30 00000000         ; * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT
+                        RIGHTS ARE
+   31 00000000         ; * GRANTED BY THIS LICENSE. THIS SOFTWARE IS PROVIDED B
+                       Y THE COPYRIGHT
+   32 00000000         ; * HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR 
+                       IMPLIED
+   33 00000000         ; * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLI
+                       ED WARRANTIES OF
+   34 00000000         ; * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+                        ARE
+   35 00000000         ; * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER O
+                       R CONTRIBUTORS BE
+   36 00000000         ; * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL
+                       , EXEMPLARY, OR
+   37 00000000         ; * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO
+                       , PROCUREMENT OF
+   38 00000000         ; * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR 
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+                       PROFITS; OR
+   39 00000000         ; * BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THE
+                       ORY OF LIABILITY,
+   40 00000000         ; * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCL
+                       UDING NEGLIGENCE
+   41 00000000         ; * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF T
+                       HIS SOFTWARE, EVEN
+   42 00000000         ; * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+   43 00000000         ; *
+   44 00000000         ; *------- <<< Use Configuration Wizard in Context Menu 
+                       >>> ------------------
+   45 00000000         ; *
+   46 00000000         ; ******************************************************
+                       ***********************/
+   47 00000000         
+   48 00000000         
+   49 00000000                 PRESERVE8
+   50 00000000                 THUMB
+   51 00000000         
+   52 00000000         
+   53 00000000         ; Vector Table Mapped to Address 0 at Reset
+   54 00000000         
+   55 00000000                 AREA             RESET, DATA, READONLY
+   56 00000000                 EXPORT           __Vectors
+   57 00000000                 EXPORT           __Vectors_End
+   58 00000000                 EXPORT           __Vectors_Size
+   59 00000000                 IMPORT           |Image$$ARM_LIB_STACK$$ZI$$Limi
+t|
+   60 00000000         
+   61 00000000 00000000 
+                       __Vectors
+                               DCD              |Image$$ARM_LIB_STACK$$ZI$$Limi
+t| 
+                                                            ; Top of Stack
+   62 00000004 00000000        DCD              Reset_Handler ; Reset Handler
+   63 00000008 00000000        DCD              NMI_Handler ;NMI Handler
+   64 0000000C 00000000        DCD              HardFault_Handler 
+                                                            ;Hard Fault Handler
+                                                            
+   65 00000010 00000000        DCD              MemManage_Handler 
+                                                            ;MPU Fault Handler
+   66 00000014 00000000        DCD              BusFault_Handler 
+                                                            ;Bus Fault Handler
+   67 00000018 00000000        DCD              UsageFault_Handler ;Usage Fault
+                                                             Handler
+   68 0000001C 00000000        DCD              0           ;Reserved
+   69 00000020 00000000        DCD              0           ;Reserved
+   70 00000024 00000000        DCD              0           ;Reserved
+   71 00000028 00000000        DCD              0           ;Reserved
+   72 0000002C 00000000        DCD              SVC_Handler ;SVCall Handler
+   73 00000030 00000000        DCD              DebugMon_Handler ;Debug Monitor
+                                                             Handler
+   74 00000034 00000000        DCD              0           ;Reserved
+   75 00000038 00000000        DCD              PendSV_Handler ;PendSV Handler
+   76 0000003C 00000000        DCD              SysTick_Handler 
+                                                            ;SysTick Handler
+   77 00000040         
+   78 00000040         ;External Interrupts
+   79 00000040 00000000        DCD              DMA0_DMA16_IRQHandler ;DMA chan
+
+
+
+ARM Macro Assembler    Page 3 
+
+
+                                                            nel 0/16 transfer c
+                                                            omplete
+   80 00000044 00000000        DCD              DMA1_DMA17_IRQHandler ;DMA chan
+                                                            nel 1/17 transfer c
+                                                            omplete
+   81 00000048 00000000        DCD              DMA2_DMA18_IRQHandler ;DMA chan
+                                                            nel 2/18 transfer c
+                                                            omplete
+   82 0000004C 00000000        DCD              DMA3_DMA19_IRQHandler ;DMA chan
+                                                            nel 3/19 transfer c
+                                                            omplete
+   83 00000050 00000000        DCD              DMA4_DMA20_IRQHandler ;DMA chan
+                                                            nel 4/20 transfer c
+                                                            omplete
+   84 00000054 00000000        DCD              DMA5_DMA21_IRQHandler ;DMA chan
+                                                            nel 5/21 transfer c
+                                                            omplete
+   85 00000058 00000000        DCD              DMA6_DMA22_IRQHandler ;DMA chan
+                                                            nel 6/22 transfer c
+                                                            omplete
+   86 0000005C 00000000        DCD              DMA7_DMA23_IRQHandler ;DMA chan
+                                                            nel 7/23 transfer c
+                                                            omplete
+   87 00000060 00000000        DCD              DMA8_DMA24_IRQHandler ;DMA chan
+                                                            nel 8/24 transfer c
+                                                            omplete
+   88 00000064 00000000        DCD              DMA9_DMA25_IRQHandler ;DMA chan
+                                                            nel 9/25 transfer c
+                                                            omplete
+   89 00000068 00000000        DCD              DMA10_DMA26_IRQHandler ;DMA cha
+                                                            nnel 10/26 transfer
+                                                             complete
+   90 0000006C 00000000        DCD              DMA11_DMA27_IRQHandler ;DMA cha
+                                                            nnel 11/27 transfer
+                                                             complete
+   91 00000070 00000000        DCD              DMA12_DMA28_IRQHandler ;DMA cha
+                                                            nnel 12/28 transfer
+                                                             complete
+   92 00000074 00000000        DCD              DMA13_DMA29_IRQHandler ;DMA cha
+                                                            nnel 13/29 transfer
+                                                             complete
+   93 00000078 00000000        DCD              DMA14_DMA30_IRQHandler ;DMA cha
+                                                            nnel 14/30 transfer
+                                                             complete
+   94 0000007C 00000000        DCD              DMA15_DMA31_IRQHandler ;DMA cha
+                                                            nnel 15/31 transfer
+                                                             complete
+   95 00000080 00000000        DCD              DMA_ERROR_IRQHandler ;DMA error
+                                                             interrupt channels
+                                                             0-15 / 16-31
+   96 00000084 00000000        DCD              CTI0_ERROR_IRQHandler 
+                                                            ;CTI0_Error
+   97 00000088 00000000        DCD              CTI1_ERROR_IRQHandler 
+                                                            ;CTI1_Error
+   98 0000008C 00000000        DCD              CORE_IRQHandler ;CorePlatform e
+                                                            xception IRQ
+   99 00000090 00000000        DCD              LPUART1_IRQHandler ;LPUART1 TX 
+                                                            interrupt and RX in
+                                                            terrupt
+
+
+
+ARM Macro Assembler    Page 4 
+
+
+  100 00000094 00000000        DCD              LPUART2_IRQHandler ;LPUART2 TX 
+                                                            interrupt and RX in
+                                                            terrupt
+  101 00000098 00000000        DCD              LPUART3_IRQHandler ;LPUART3 TX 
+                                                            interrupt and RX in
+                                                            terrupt
+  102 0000009C 00000000        DCD              LPUART4_IRQHandler ;LPUART4 TX 
+                                                            interrupt and RX in
+                                                            terrupt
+  103 000000A0 00000000        DCD              LPUART5_IRQHandler ;LPUART5 TX 
+                                                            interrupt and RX in
+                                                            terrupt
+  104 000000A4 00000000        DCD              LPUART6_IRQHandler ;LPUART6 TX 
+                                                            interrupt and RX in
+                                                            terrupt
+  105 000000A8 00000000        DCD              LPUART7_IRQHandler ;LPUART7 TX 
+                                                            interrupt and RX in
+                                                            terrupt
+  106 000000AC 00000000        DCD              LPUART8_IRQHandler ;LPUART8 TX 
+                                                            interrupt and RX in
+                                                            terrupt
+  107 000000B0 00000000        DCD              LPI2C1_IRQHandler 
+                                                            ;LPI2C1 interrupt
+  108 000000B4 00000000        DCD              LPI2C2_IRQHandler 
+                                                            ;LPI2C2 interrupt
+  109 000000B8 00000000        DCD              LPI2C3_IRQHandler 
+                                                            ;LPI2C3 interrupt
+  110 000000BC 00000000        DCD              LPI2C4_IRQHandler 
+                                                            ;LPI2C4 interrupt
+  111 000000C0 00000000        DCD              LPSPI1_IRQHandler ;LPSPI1 singl
+                                                            e interrupt vector 
+                                                            for all sources
+  112 000000C4 00000000        DCD              LPSPI2_IRQHandler ;LPSPI2 singl
+                                                            e interrupt vector 
+                                                            for all sources
+  113 000000C8 00000000        DCD              LPSPI3_IRQHandler ;LPSPI3 singl
+                                                            e interrupt vector 
+                                                            for all sources
+  114 000000CC 00000000        DCD              LPSPI4_IRQHandler ;LPSPI4  sing
+                                                            le interrupt vector
+                                                             for all sources
+  115 000000D0 00000000        DCD              CAN1_IRQHandler ;CAN1 interrupt
+                                                            
+  116 000000D4 00000000        DCD              CAN2_IRQHandler ;CAN2 interrupt
+                                                            
+  117 000000D8 00000000        DCD              FLEXRAM_IRQHandler ;FlexRAM add
+                                                            ress out of range O
+                                                            r access hit IRQ
+  118 000000DC 00000000        DCD              KPP_IRQHandler ;Keypad nterrupt
+                                                            
+  119 000000E0 00000000        DCD              TSC_DIG_IRQHandler 
+                                                            ;TSC interrupt
+  120 000000E4 00000000        DCD              GPR_IRQ_IRQHandler 
+                                                            ;GPR interrupt
+  121 000000E8 00000000        DCD              LCDIF_IRQHandler 
+                                                            ;LCDIF interrupt
+  122 000000EC 00000000        DCD              CSI_IRQHandler ;CSI interrupt
+  123 000000F0 00000000        DCD              PXP_IRQHandler ;PXP interrupt
+  124 000000F4 00000000        DCD              WDOG2_IRQHandler 
+
+
+
+ARM Macro Assembler    Page 5 
+
+
+                                                            ;WDOG2 interrupt
+  125 000000F8 00000000        DCD              SNVS_HP_WRAPPER_IRQHandler ;SRT
+                                                            C Consolidated Inte
+                                                            rrupt. Non TZ
+  126 000000FC 00000000        DCD              SNVS_HP_WRAPPER_TZ_IRQHandler ;
+                                                            SRTC Security Inter
+                                                            rupt. TZ
+  127 00000100 00000000        DCD              SNVS_LP_WRAPPER_IRQHandler ;ON-
+                                                            OFF button press sh
+                                                            orter than 5 secs (
+                                                            pulse event)
+  128 00000104 00000000        DCD              CSU_IRQHandler ;CSU interrupt
+  129 00000108 00000000        DCD              DCP_IRQHandler 
+                                                            ;DCP_IRQ interrupt
+  130 0000010C 00000000        DCD              DCP_VMI_IRQHandler ;DCP_VMI_IRQ
+                                                             interrupt
+  131 00000110 00000000        DCD              Reserved68_IRQHandler 
+                                                            ;Reserved interrupt
+                                                            
+  132 00000114 00000000        DCD              TRNG_IRQHandler ;TRNG interrupt
+                                                            
+  133 00000118 00000000        DCD              SJC_IRQHandler ;SJC interrupt
+  134 0000011C 00000000        DCD              BEE_IRQHandler ;BEE interrupt
+  135 00000120 00000000        DCD              SAI1_IRQHandler ;SAI1 interrupt
+                                                            
+  136 00000124 00000000        DCD              SAI2_IRQHandler ;SAI1 interrupt
+                                                            
+  137 00000128 00000000        DCD              SAI3_RX_IRQHandler 
+                                                            ;SAI3 interrupt
+  138 0000012C 00000000        DCD              SAI3_TX_IRQHandler 
+                                                            ;SAI3 interrupt
+  139 00000130 00000000        DCD              SPDIF_IRQHandler 
+                                                            ;SPDIF interrupt
+  140 00000134 00000000        DCD              ANATOP_EVENT0_IRQHandler 
+                                                            ;ANATOP interrupt
+  141 00000138 00000000        DCD              ANATOP_EVENT1_IRQHandler 
+                                                            ;ANATOP interrupt
+  142 0000013C 00000000        DCD              ANATOP_TAMP_LOW_HIGH_IRQHandler
+ 
+                                                            ;ANATOP interrupt
+  143 00000140 00000000        DCD              ANATOP_TEMP_PANIC_IRQHandler 
+                                                            ;ANATOP interrupt
+  144 00000144 00000000        DCD              USB_PHY1_IRQHandler ;USBPHY (UT
+                                                            MI0), Interrupt
+  145 00000148 00000000        DCD              USB_PHY2_IRQHandler ;USBPHY (UT
+                                                            MI0), Interrupt
+  146 0000014C 00000000        DCD              ADC1_IRQHandler ;ADC1 interrupt
+                                                            
+  147 00000150 00000000        DCD              ADC2_IRQHandler ;ADC2 interrupt
+                                                            
+  148 00000154 00000000        DCD              DCDC_IRQHandler ;DCDC interrupt
+                                                            
+  149 00000158 00000000        DCD              Reserved86_IRQHandler 
+                                                            ;Reserved interrupt
+                                                            
+  150 0000015C 00000000        DCD              Reserved87_IRQHandler 
+                                                            ;Reserved interrupt
+                                                            
+  151 00000160 00000000        DCD              GPIO1_INT0_IRQHandler ;Active H
+
+
+
+ARM Macro Assembler    Page 6 
+
+
+                                                            IGH Interrupt from 
+                                                            INT0 from GPIO
+  152 00000164 00000000        DCD              GPIO1_INT1_IRQHandler ;Active H
+                                                            IGH Interrupt from 
+                                                            INT1 from GPIO
+  153 00000168 00000000        DCD              GPIO1_INT2_IRQHandler ;Active H
+                                                            IGH Interrupt from 
+                                                            INT2 from GPIO
+  154 0000016C 00000000        DCD              GPIO1_INT3_IRQHandler ;Active H
+                                                            IGH Interrupt from 
+                                                            INT3 from GPIO
+  155 00000170 00000000        DCD              GPIO1_INT4_IRQHandler ;Active H
+                                                            IGH Interrupt from 
+                                                            INT4 from GPIO
+  156 00000174 00000000        DCD              GPIO1_INT5_IRQHandler ;Active H
+                                                            IGH Interrupt from 
+                                                            INT5 from GPIO
+  157 00000178 00000000        DCD              GPIO1_INT6_IRQHandler ;Active H
+                                                            IGH Interrupt from 
+                                                            INT6 from GPIO
+  158 0000017C 00000000        DCD              GPIO1_INT7_IRQHandler ;Active H
+                                                            IGH Interrupt from 
+                                                            INT7 from GPIO
+  159 00000180 00000000        DCD              GPIO1_Combined_0_15_IRQHandler 
+                                                            ;Combined interrupt
+                                                             indication for GPI
+                                                            O1 signal 0 through
+                                                            out 15
+  160 00000184 00000000        DCD              GPIO1_Combined_16_31_IRQHandler
+ 
+                                                            ;Combined interrupt
+                                                             indication for GPI
+                                                            O1 signal 16 throug
+                                                            hout 31
+  161 00000188 00000000        DCD              GPIO2_Combined_0_15_IRQHandler 
+                                                            ;Combined interrupt
+                                                             indication for GPI
+                                                            O2 signal 0 through
+                                                            out 15
+  162 0000018C 00000000        DCD              GPIO2_Combined_16_31_IRQHandler
+ 
+                                                            ;Combined interrupt
+                                                             indication for GPI
+                                                            O2 signal 16 throug
+                                                            hout 31
+  163 00000190 00000000        DCD              GPIO3_Combined_0_15_IRQHandler 
+                                                            ;Combined interrupt
+                                                             indication for GPI
+                                                            O3 signal 0 through
+                                                            out 15
+  164 00000194 00000000        DCD              GPIO3_Combined_16_31_IRQHandler
+ 
+                                                            ;Combined interrupt
+                                                             indication for GPI
+                                                            O3 signal 16 throug
+                                                            hout 31
+  165 00000198 00000000        DCD              GPIO4_Combined_0_15_IRQHandler 
+                                                            ;Combined interrupt
+                                                             indication for GPI
+
+
+
+ARM Macro Assembler    Page 7 
+
+
+                                                            O4 signal 0 through
+                                                            out 15
+  166 0000019C 00000000        DCD              GPIO4_Combined_16_31_IRQHandler
+ 
+                                                            ;Combined interrupt
+                                                             indication for GPI
+                                                            O4 signal 16 throug
+                                                            hout 31
+  167 000001A0 00000000        DCD              GPIO5_Combined_0_15_IRQHandler 
+                                                            ;Combined interrupt
+                                                             indication for GPI
+                                                            O5 signal 0 through
+                                                            out 15
+  168 000001A4 00000000        DCD              GPIO5_Combined_16_31_IRQHandler
+ 
+                                                            ;Combined interrupt
+                                                             indication for GPI
+                                                            O5 signal 16 throug
+                                                            hout 31
+  169 000001A8 00000000        DCD              FLEXIO1_IRQHandler 
+                                                            ;FLEXIO1 interrupt
+  170 000001AC 00000000        DCD              FLEXIO2_IRQHandler 
+                                                            ;FLEXIO2 interrupt
+  171 000001B0 00000000        DCD              WDOG1_IRQHandler 
+                                                            ;WDOG1 interrupt
+  172 000001B4 00000000        DCD              RTWDOG_IRQHandler 
+                                                            ;RTWDOG interrupt
+  173 000001B8 00000000        DCD              EWM_IRQHandler ;EWM interrupt
+  174 000001BC 00000000        DCD              CCM_1_IRQHandler 
+                                                            ;CCM IRQ1 interrupt
+                                                            
+  175 000001C0 00000000        DCD              CCM_2_IRQHandler 
+                                                            ;CCM IRQ2 interrupt
+                                                            
+  176 000001C4 00000000        DCD              GPC_IRQHandler ;GPC interrupt
+  177 000001C8 00000000        DCD              SRC_IRQHandler ;SRC interrupt
+  178 000001CC 00000000        DCD              Reserved115_IRQHandler 
+                                                            ;Reserved interrupt
+                                                            
+  179 000001D0 00000000        DCD              GPT1_IRQHandler ;GPT1 interrupt
+                                                            
+  180 000001D4 00000000        DCD              GPT2_IRQHandler ;GPT2 interrupt
+                                                            
+  181 000001D8 00000000        DCD              PWM1_0_IRQHandler ;PWM1 capture
+                                                             0, compare 0, or r
+                                                            eload 0 interrupt
+  182 000001DC 00000000        DCD              PWM1_1_IRQHandler ;PWM1 capture
+                                                             1, compare 1, or r
+                                                            eload 0 interrupt
+  183 000001E0 00000000        DCD              PWM1_2_IRQHandler ;PWM1 capture
+                                                             2, compare 2, or r
+                                                            eload 0 interrupt
+  184 000001E4 00000000        DCD              PWM1_3_IRQHandler ;PWM1 capture
+                                                             3, compare 3, or r
+                                                            eload 0 interrupt
+  185 000001E8 00000000        DCD              PWM1_FAULT_IRQHandler ;PWM1 fau
+                                                            lt or reload error 
+                                                            interrupt
+  186 000001EC 00000000        DCD              Reserved123_IRQHandler 
+
+
+
+ARM Macro Assembler    Page 8 
+
+
+                                                            ;Reserved interrupt
+                                                            
+  187 000001F0 00000000        DCD              FLEXSPI_IRQHandler 
+                                                            ;FlexSPI0 interrupt
+                                                            
+  188 000001F4 00000000        DCD              SEMC_IRQHandler 
+                                                            ;Reserved interrupt
+                                                            
+  189 000001F8 00000000        DCD              USDHC1_IRQHandler 
+                                                            ;USDHC1 interrupt
+  190 000001FC 00000000        DCD              USDHC2_IRQHandler 
+                                                            ;USDHC2 interrupt
+  191 00000200 00000000        DCD              USB_OTG2_IRQHandler 
+                                                            ;USBO2 USB OTG2
+  192 00000204 00000000        DCD              USB_OTG1_IRQHandler 
+                                                            ;USBO2 USB OTG1
+  193 00000208 00000000        DCD              ENET_IRQHandler ;ENET interrupt
+                                                            
+  194 0000020C 00000000        DCD              ENET_1588_Timer_IRQHandler ;ENE
+                                                            T_1588_Timer interr
+                                                            upt
+  195 00000210 00000000        DCD              XBAR1_IRQ_0_1_IRQHandler 
+                                                            ;XBAR1 interrupt
+  196 00000214 00000000        DCD              XBAR1_IRQ_2_3_IRQHandler 
+                                                            ;XBAR1 interrupt
+  197 00000218 00000000        DCD              ADC_ETC_IRQ0_IRQHandler ;ADCETC
+                                                             IRQ0 interrupt
+  198 0000021C 00000000        DCD              ADC_ETC_IRQ1_IRQHandler ;ADCETC
+                                                             IRQ1 interrupt
+  199 00000220 00000000        DCD              ADC_ETC_IRQ2_IRQHandler ;ADCETC
+                                                             IRQ2 interrupt
+  200 00000224 00000000        DCD              ADC_ETC_ERROR_IRQ_IRQHandler ;A
+                                                            DCETC Error IRQ int
+                                                            errupt
+  201 00000228 00000000        DCD              PIT_IRQHandler ;PIT interrupt
+  202 0000022C 00000000        DCD              ACMP1_IRQHandler 
+                                                            ;ACMP interrupt
+  203 00000230 00000000        DCD              ACMP2_IRQHandler 
+                                                            ;ACMP interrupt
+  204 00000234 00000000        DCD              ACMP3_IRQHandler 
+                                                            ;ACMP interrupt
+  205 00000238 00000000        DCD              ACMP4_IRQHandler 
+                                                            ;ACMP interrupt
+  206 0000023C 00000000        DCD              Reserved143_IRQHandler 
+                                                            ;Reserved interrupt
+                                                            
+  207 00000240 00000000        DCD              Reserved144_IRQHandler 
+                                                            ;Reserved interrupt
+                                                            
+  208 00000244 00000000        DCD              ENC1_IRQHandler ;ENC1 interrupt
+                                                            
+  209 00000248 00000000        DCD              ENC2_IRQHandler ;ENC2 interrupt
+                                                            
+  210 0000024C 00000000        DCD              ENC3_IRQHandler ;ENC3 interrupt
+                                                            
+  211 00000250 00000000        DCD              ENC4_IRQHandler ;ENC4 interrupt
+                                                            
+  212 00000254 00000000        DCD              TMR1_IRQHandler ;TMR1 interrupt
+                                                            
+
+
+
+ARM Macro Assembler    Page 9 
+
+
+  213 00000258 00000000        DCD              TMR2_IRQHandler ;TMR2 interrupt
+                                                            
+  214 0000025C 00000000        DCD              TMR3_IRQHandler ;TMR3 interrupt
+                                                            
+  215 00000260 00000000        DCD              TMR4_IRQHandler ;TMR4 interrupt
+                                                            
+  216 00000264 00000000        DCD              PWM2_0_IRQHandler ;PWM2 capture
+                                                             0, compare 0, or r
+                                                            eload 0 interrupt
+  217 00000268 00000000        DCD              PWM2_1_IRQHandler ;PWM2 capture
+                                                             1, compare 1, or r
+                                                            eload 0 interrupt
+  218 0000026C 00000000        DCD              PWM2_2_IRQHandler ;PWM2 capture
+                                                             2, compare 2, or r
+                                                            eload 0 interrupt
+  219 00000270 00000000        DCD              PWM2_3_IRQHandler ;PWM2 capture
+                                                             3, compare 3, or r
+                                                            eload 0 interrupt
+  220 00000274 00000000        DCD              PWM2_FAULT_IRQHandler ;PWM2 fau
+                                                            lt or reload error 
+                                                            interrupt
+  221 00000278 00000000        DCD              PWM3_0_IRQHandler ;PWM3 capture
+                                                             0, compare 0, or r
+                                                            eload 0 interrupt
+  222 0000027C 00000000        DCD              PWM3_1_IRQHandler ;PWM3 capture
+                                                             1, compare 1, or r
+                                                            eload 0 interrupt
+  223 00000280 00000000        DCD              PWM3_2_IRQHandler ;PWM3 capture
+                                                             2, compare 2, or r
+                                                            eload 0 interrupt
+  224 00000284 00000000        DCD              PWM3_3_IRQHandler ;PWM3 capture
+                                                             3, compare 3, or r
+                                                            eload 0 interrupt
+  225 00000288 00000000        DCD              PWM3_FAULT_IRQHandler ;PWM3 fau
+                                                            lt or reload error 
+                                                            interrupt
+  226 0000028C 00000000        DCD              PWM4_0_IRQHandler ;PWM4 capture
+                                                             0, compare 0, or r
+                                                            eload 0 interrupt
+  227 00000290 00000000        DCD              PWM4_1_IRQHandler ;PWM4 capture
+                                                             1, compare 1, or r
+                                                            eload 0 interrupt
+  228 00000294 00000000        DCD              PWM4_2_IRQHandler ;PWM4 capture
+                                                             2, compare 2, or r
+                                                            eload 0 interrupt
+  229 00000298 00000000        DCD              PWM4_3_IRQHandler ;PWM4 capture
+                                                             3, compare 3, or r
+                                                            eload 0 interrupt
+  230 0000029C 00000000        DCD              PWM4_FAULT_IRQHandler ;PWM4 fau
+                                                            lt or reload error 
+                                                            interrupt
+  231 000002A0 00000000        DCD              Reserved168_IRQHandler 
+                                                            ;Reserved interrupt
+                                                            
+  232 000002A4 00000000        DCD              Reserved169_IRQHandler 
+                                                            ;Reserved interrupt
+                                                            
+  233 000002A8 00000000        DCD              Reserved170_IRQHandler 
+                                                            ;Reserved interrupt
+
+
+
+ARM Macro Assembler    Page 10 
+
+
+                                                            
+  234 000002AC 00000000        DCD              Reserved171_IRQHandler 
+                                                            ;Reserved interrupt
+                                                            
+  235 000002B0 00000000        DCD              Reserved172_IRQHandler 
+                                                            ;Reserved interrupt
+                                                            
+  236 000002B4 00000000        DCD              Reserved173_IRQHandler 
+                                                            ;Reserved interrupt
+                                                            
+  237 000002B8 00000000        DCD              SJC_ARM_DEBUG_IRQHandler ;SJC A
+                                                            RM debug interrupt
+  238 000002BC 00000000        DCD              NMI_WAKEUP_IRQHandler 
+                                                            ;NMI wake up
+  239 000002C0 00000000        DCD              DefaultISR  ;176
+  240 000002C4 00000000        DCD              DefaultISR  ;177
+  241 000002C8 00000000        DCD              DefaultISR  ;178
+  242 000002CC 00000000        DCD              DefaultISR  ;179
+  243 000002D0 00000000        DCD              DefaultISR  ;180
+  244 000002D4 00000000        DCD              DefaultISR  ;181
+  245 000002D8 00000000        DCD              DefaultISR  ;182
+  246 000002DC 00000000        DCD              DefaultISR  ;183
+  247 000002E0 00000000        DCD              DefaultISR  ;184
+  248 000002E4 00000000        DCD              DefaultISR  ;185
+  249 000002E8 00000000        DCD              DefaultISR  ;186
+  250 000002EC 00000000        DCD              DefaultISR  ;187
+  251 000002F0 00000000        DCD              DefaultISR  ;188
+  252 000002F4 00000000        DCD              DefaultISR  ;189
+  253 000002F8 00000000        DCD              DefaultISR  ;190
+  254 000002FC 00000000        DCD              DefaultISR  ;191
+  255 00000300 00000000        DCD              DefaultISR  ;192
+  256 00000304 00000000        DCD              DefaultISR  ;193
+  257 00000308 00000000        DCD              DefaultISR  ;194
+  258 0000030C 00000000        DCD              DefaultISR  ;195
+  259 00000310 00000000        DCD              DefaultISR  ;196
+  260 00000314 00000000        DCD              DefaultISR  ;197
+  261 00000318 00000000        DCD              DefaultISR  ;198
+  262 0000031C 00000000        DCD              DefaultISR  ;199
+  263 00000320 00000000        DCD              DefaultISR  ;200
+  264 00000324 00000000        DCD              DefaultISR  ;201
+  265 00000328 00000000        DCD              DefaultISR  ;202
+  266 0000032C 00000000        DCD              DefaultISR  ;203
+  267 00000330 00000000        DCD              DefaultISR  ;204
+  268 00000334 00000000        DCD              DefaultISR  ;205
+  269 00000338 00000000        DCD              DefaultISR  ;206
+  270 0000033C 00000000        DCD              DefaultISR  ;207
+  271 00000340 00000000        DCD              DefaultISR  ;208
+  272 00000344 00000000        DCD              DefaultISR  ;209
+  273 00000348 00000000        DCD              DefaultISR  ;210
+  274 0000034C 00000000        DCD              DefaultISR  ;211
+  275 00000350 00000000        DCD              DefaultISR  ;212
+  276 00000354 00000000        DCD              DefaultISR  ;213
+  277 00000358 00000000        DCD              DefaultISR  ;214
+  278 0000035C 00000000        DCD              DefaultISR  ;215
+  279 00000360 00000000        DCD              DefaultISR  ;216
+  280 00000364 00000000        DCD              DefaultISR  ;217
+  281 00000368 00000000        DCD              DefaultISR  ;218
+  282 0000036C 00000000        DCD              DefaultISR  ;219
+  283 00000370 00000000        DCD              DefaultISR  ;220
+
+
+
+ARM Macro Assembler    Page 11 
+
+
+  284 00000374 00000000        DCD              DefaultISR  ;221
+  285 00000378 00000000        DCD              DefaultISR  ;222
+  286 0000037C 00000000        DCD              DefaultISR  ;223
+  287 00000380 00000000        DCD              DefaultISR  ;224
+  288 00000384 00000000        DCD              DefaultISR  ;225
+  289 00000388 00000000        DCD              DefaultISR  ;226
+  290 0000038C 00000000        DCD              DefaultISR  ;227
+  291 00000390 00000000        DCD              DefaultISR  ;228
+  292 00000394 00000000        DCD              DefaultISR  ;229
+  293 00000398 00000000        DCD              DefaultISR  ;230
+  294 0000039C 00000000        DCD              DefaultISR  ;231
+  295 000003A0 00000000        DCD              DefaultISR  ;232
+  296 000003A4 00000000        DCD              DefaultISR  ;233
+  297 000003A8 00000000        DCD              DefaultISR  ;234
+  298 000003AC 00000000        DCD              DefaultISR  ;235
+  299 000003B0 00000000        DCD              DefaultISR  ;236
+  300 000003B4 00000000        DCD              DefaultISR  ;237
+  301 000003B8 00000000        DCD              DefaultISR  ;238
+  302 000003BC 00000000        DCD              DefaultISR  ;239
+  303 000003C0 00000000        DCD              DefaultISR  ;240
+  304 000003C4 00000000        DCD              DefaultISR  ;241
+  305 000003C8 00000000        DCD              DefaultISR  ;242
+  306 000003CC 00000000        DCD              DefaultISR  ;243
+  307 000003D0 00000000        DCD              DefaultISR  ;244
+  308 000003D4 00000000        DCD              DefaultISR  ;245
+  309 000003D8 00000000        DCD              DefaultISR  ;246
+  310 000003DC 00000000        DCD              DefaultISR  ;247
+  311 000003E0 00000000        DCD              DefaultISR  ;248
+  312 000003E4 00000000        DCD              DefaultISR  ;249
+  313 000003E8 00000000        DCD              DefaultISR  ;250
+  314 000003EC 00000000        DCD              DefaultISR  ;251
+  315 000003F0 00000000        DCD              DefaultISR  ;252
+  316 000003F4 00000000        DCD              DefaultISR  ;253
+  317 000003F8 00000000        DCD              DefaultISR  ;254
+  318 000003FC FFFFFFFF        DCD              0xFFFFFFFF  ; Reserved for user
+                                                             TRIM value
+  319 00000400         __Vectors_End
+  320 00000400         
+  321 00000400 00000400 
+                       __Vectors_Size
+                               EQU              __Vectors_End - __Vectors
+  322 00000400         
+  323 00000400                 AREA             |.text|, CODE, READONLY
+  324 00000000         
+  325 00000000         ; Reset Handler
+  326 00000000         
+  327 00000000         UnalignTest
+                               PROC
+  328 00000000                 EXPORT           UnalignTest
+  329 00000000         ; >>> test unaligned access
+  330 00000000 B410            PUSH             {R4}
+  331 00000002 4C6D            LDR              R4, = 0x202063F3
+  332 00000004 F834 0B02       LDRH             R0, [R4], #02
+  333 00000008         ; <<< 
+  334 00000008 BC10            POP              {R4}
+  335 0000000A 4770            BX               LR
+  336 0000000C                 ENDP
+  337 0000000C         
+  338 0000000C         ConfigFlexRAM
+
+
+
+ARM Macro Assembler    Page 12 
+
+
+                               PROC
+  339 0000000C         ; >>> do custom FlexRAM configuration
+  340 0000000C 486B            ldr              r0, = 0x400AC038 ; IOMUXC.GPR14
+                                                            
+  341 0000000E F04F 01AA       ldr              r1, = 10 :OR: 10<<4 ; config (m
+                                                            ax allowed) ITCM=51
+                                                            2KB, DTCM=512KB
+  342 00000012 6802            ldr              r2, [r0]
+  343 00000014 F361 4217       bfi              r2, r1, #16, #8
+  344 00000018 6002            str              r2, [r0]
+  345 0000001A         
+  346 0000001A 4869            ldr              r0, = 0x400AC044 ; IOMUXC.GPR17
+                                                            
+  347 0000001C 4969            ldr              r1, = 0xEAAAAAAA ; 32kB ITCM, (
+                                                            512-32) KB DTCM, 0K
+                                                            B OCRAM
+  348 0000001E 6001            str              r1, [r0]
+  349 00000020         
+  350 00000020 4869            ldr              r0, = 0x400AC040 ; IOMUXC.GPR16
+                                                            
+  351 00000022 6802            ldr              r2, [r0]
+  352 00000024 F042 0207       orr              r2, #7      ; enable ITCM, DTCM
+                                                            , apply IOMUXC's cf
+                                                            g instead of FUSE c
+                                                            onfig
+  353 00000028 6002            str              r2, [r0]
+  354 0000002A         
+  355 0000002A F04F 5000       ldr              r0, =0x20000000
+  356 0000002E 4967            ldr              r1, =0x20078000
+  357 00000030 F04F 0200       ldr              r2, =0
+  358 00000034         zero_dtcm
+  359 00000034 F840 2B04       str              r2, [r0], #4
+  360 00000038 4288            cmp              r0, r1
+  361 0000003A D1FB            bne              zero_dtcm
+  362 0000003C         
+  363 0000003C F04F 0000       ldr              r0, =0x00000000
+  364 00000040 F44F 4100       ldr              r1, =0x00008000
+  365 00000044 F04F 0200       ldr              r2, =0
+  366 00000048         zero_itcm
+  367 00000048 F840 2B04       str              r2, [r0], #4
+  368 0000004C 4288            cmp              r0, r1
+  369 0000004E D1FB            bne              zero_itcm
+  370 00000050 4770            bx               lr
+  371 00000052         ; <<< 
+  372 00000052                 ENDP
+  373 00000052         
+  374 00000052         ConfigFlexRAM_OCRAM
+                               PROC
+  375 00000052         ; >>> do custom FlexRAM configuration
+  376 00000052 485A            ldr              r0, = 0x400AC038 ; IOMUXC.GPR14
+                                                            
+  377 00000054 F04F 01AA       ldr              r1, = 10 :OR: 10<<4 ; config (m
+                                                            ax allowed) ITCM=51
+                                                            2KB, DTCM=512KB
+  378 00000058 6802            ldr              r2, [r0]
+  379 0000005A F361 4217       bfi              r2, r1, #16, #8
+  380 0000005E 6002            str              r2, [r0]
+  381 00000060         
+  382 00000060 4857            ldr              r0, = 0x400AC044 ; IOMUXC.GPR17
+
+
+
+ARM Macro Assembler    Page 13 
+
+
+                                                            
+  383 00000062 495B            ldr              r1, = 0xD5555555 ; 32kB ITCM, 0
+                                                            KB DTCM, (512-32) k
+                                                            B OCRAM
+  384 00000064 6001            str              r1, [r0]
+  385 00000066         
+  386 00000066 4858            ldr              r0, = 0x400AC040 ; IOMUXC.GPR16
+                                                            
+  387 00000068 6802            ldr              r2, [r0]
+  388 0000006A F042 0207       orr              r2, #7      ; enable ITCM, DTCM
+                                                            , apply IOMUXC's cf
+                                                            g instead of FUSE c
+                                                            onfig
+  389 0000006E 6002            str              r2, [r0]
+  390 00000070         
+  391 00000070 4858            ldr              r0, =0x20200000
+  392 00000072 4959            ldr              r1, =0x20278000
+  393 00000074 F04F 0200       ldr              r2, =0
+  394 00000078         zero_dtcm2
+  395 00000078 F840 2B04       str              r2, [r0], #4
+  396 0000007C 4288            cmp              r0, r1
+  397 0000007E D1D9            bne              zero_dtcm
+  398 00000080         
+  399 00000080 F04F 0000       ldr              r0, =0x00000000
+  400 00000084 F44F 4100       ldr              r1, =0x00008000
+  401 00000088 F04F 0200       ldr              r2, =0
+  402 0000008C         zero_itcm2
+  403 0000008C F840 2B04       str              r2, [r0], #4
+  404 00000090 4288            cmp              r0, r1
+  405 00000092 D1D9            bne              zero_itcm
+  406 00000094 4770            bx               lr
+  407 00000096         ; <<< 
+  408 00000096                 ENDP
+  409 00000096         
+  410 00000096         
+  411 00000096         TestCchBug
+                               PROC
+  412 00000096                 EXPORT           TestCchBug
+  413 00000096 484F            LDR              R0, =0x20200000 ;The MPU has be
+                                                            en programmed to se
+                                                            t this address as W
+                                                            rite-Through
+  414 00000098 4950            LDR              R1, =0x20208000
+  415 0000009A F04F 0312       MOV              R3, #0x12
+  416 0000009E         
+  417 0000009E         ; ensure R0 address is in cache (The address of interest
+                        must be in the cache)
+  418 0000009E 6802            LDR              R2, [R0]
+  419 000000A0 6802            LDR              R2, [R0]
+  420 000000A2 6802            LDR              R2, [R0]
+  421 000000A4 6802            LDR              R2, [R0]
+  422 000000A6 6802            LDR              R2, [R0]
+  423 000000A8 6802            LDR              R2, [R0]
+  424 000000AA 6802            LDR              R2, [R0]
+  425 000000AC 6802            LDR              R2, [R0]
+  426 000000AE         
+  427 000000AE         ; A Write-Through store to the same doubleword as the ad
+                       dress of interest
+  428 000000AE E9C0 3200       STRD             R3,R2, [R0]
+
+
+
+ARM Macro Assembler    Page 14 
+
+
+  429 000000B2 F04F 0334       MOV              R3, #0x34
+  430 000000B6         ; initiate another cache line fill (to a different cache
+                       line to the address of interest) that allocates to the s
+                       ame set as the address of interest
+  431 000000B6 680A            LDR              R2, [R1]
+  432 000000B8         
+  433 000000B8         ; A store to the address of interest
+  434 000000B8 6003            STR              R3, [R0]
+  435 000000BA         
+  436 000000BA         ;A load to the address of interest
+  437 000000BA 6803            LDR              R3, [R0]
+  438 000000BC         ;In certain timing conditions, R3 will not be 0x34 (If c
+                       ertain specific timing conditions are met, the load will
+                        get the data from the first store, or from what was in 
+                       the cache at the start of the sequence instead of the da
+                       ta from the second store)
+  439 000000BC 2B34            CMP              R3, #0x34
+  440 000000BE BF0C            ITE              EQ
+  441 000000C0 2000            MOVEQ            R0, #0
+  442 000000C2 2001            MOVNE            R0, #1
+  443 000000C4 4770            BX               LR
+  444 000000C6         
+  445 000000C6         
+  446 000000C6         RelocateVTOR
+  447 000000C6         
+  448 000000C6         Reset_Handler
+                               PROC
+  449 000000C6                 EXPORT           Reset_Handler             [WEAK
+]
+  450 000000C6                 IMPORT           SystemInit
+  451 000000C6                 IMPORT           __main
+  452 000000C6         
+  453 000000C6 B672            CPSID            I           ; Mask interrupts
+  454 000000C8         ; check if our code runs from 0x60000000
+  455 000000C8         
+  456 000000C8 4678            MOV              R0,  PC
+  457 000000CA F04F 41C0       MOV              R1,  #0x60000000
+  458 000000CE EBA0 0001       SUB              R0,  R0, R1
+  459 000000D2 F04F 5200       MOV              R2,  #0x20000000
+  460 000000D6 4290            CMP              R0, R2
+  461 000000D8         ; BLE  .
+  462 000000D8                 IF               :DEF:USE_OCRAM
+  465 000000D8 F7FF FFFE       BL               ConfigFlexRAM
+  466 000000DC                 ENDIF
+  467 000000DC 4840            LDR              R0, =SystemInit
+  468 000000DE 4780            BLX              R0
+  469 000000E0         
+  470 000000E0 B662            CPSIE            i           ; Unmask interrupts
+                                                            
+  471 000000E2 4840            LDR              R0, =__main
+  472 000000E4 4700            BX               R0
+  473 000000E6                 ENDP
+  474 000000E6         
+  475 000000E6         
+  476 000000E6         ; Dummy Exception Handlers (infinite loops which can be 
+                       modified)
+  478 000000E6         NMI_Handler
+                               PROC
+  479 000000E6                 EXPORT           NMI_Handler         [WEAK]
+
+
+
+ARM Macro Assembler    Page 15 
+
+
+  480 000000E6 E7FE            B                .
+  481 000000E8                 ENDP
+  483 000000E8         HardFault_Handler
+                               PROC
+  484 000000E8                 EXPORT           HardFault_Handler         [WEAK
+]
+  485 000000E8 E7FE            B                .
+  486 000000EA                 ENDP
+  488 000000EA         MemManage_Handler
+                               PROC
+  489 000000EA                 EXPORT           MemManage_Handler         [WEAK
+]
+  490 000000EA E7FE            B                .
+  491 000000EC                 ENDP
+  493 000000EC         BusFault_Handler
+                               PROC
+  494 000000EC                 EXPORT           BusFault_Handler         [WEAK]
+  495 000000EC E7FE            B                .
+  496 000000EE                 ENDP
+  498 000000EE         UsageFault_Handler
+                               PROC
+  499 000000EE                 EXPORT           UsageFault_Handler         [WEA
+K]
+  500 000000EE E7FE            B                .
+  501 000000F0                 ENDP
+  503 000000F0         SVC_Handler
+                               PROC
+  504 000000F0                 EXPORT           SVC_Handler         [WEAK]
+  505 000000F0 E7FE            B                .
+  506 000000F2                 ENDP
+  508 000000F2         DebugMon_Handler
+                               PROC
+  509 000000F2                 EXPORT           DebugMon_Handler         [WEAK]
+  510 000000F2 E7FE            B                .
+  511 000000F4                 ENDP
+  513 000000F4         PendSV_Handler
+                               PROC
+  514 000000F4                 EXPORT           PendSV_Handler         [WEAK]
+  515 000000F4 E7FE            B                .
+  516 000000F6                 ENDP
+  518 000000F6         SysTick_Handler
+                               PROC
+  519 000000F6                 EXPORT           SysTick_Handler         [WEAK]
+  520 000000F6 E7FE            B                .
+  521 000000F8                 ENDP
+  523 000000F8         DMA0_DMA16_IRQHandler
+                               PROC
+  524 000000F8                 EXPORT           DMA0_DMA16_IRQHandler         [
+WEAK]
+  525 000000F8 483B            LDR              R0, =DMA0_DMA16_DriverIRQHandle
+r
+  526 000000FA 4700            BX               R0
+  527 000000FC                 ENDP
+  528 000000FC         
+  530 000000FC         DMA1_DMA17_IRQHandler
+                               PROC
+  531 000000FC                 EXPORT           DMA1_DMA17_IRQHandler         [
+WEAK]
+  532 000000FC 483B            LDR              R0, =DMA1_DMA17_DriverIRQHandle
+
+
+
+ARM Macro Assembler    Page 16 
+
+
+r
+  533 000000FE 4700            BX               R0
+  534 00000100                 ENDP
+  535 00000100         
+  537 00000100         DMA2_DMA18_IRQHandler
+                               PROC
+  538 00000100                 EXPORT           DMA2_DMA18_IRQHandler         [
+WEAK]
+  539 00000100 483B            LDR              R0, =DMA2_DMA18_DriverIRQHandle
+r
+  540 00000102 4700            BX               R0
+  541 00000104                 ENDP
+  542 00000104         
+  544 00000104         DMA3_DMA19_IRQHandler
+                               PROC
+  545 00000104                 EXPORT           DMA3_DMA19_IRQHandler         [
+WEAK]
+  546 00000104 483B            LDR              R0, =DMA3_DMA19_DriverIRQHandle
+r
+  547 00000106 4700            BX               R0
+  548 00000108                 ENDP
+  549 00000108         
+  551 00000108         DMA4_DMA20_IRQHandler
+                               PROC
+  552 00000108                 EXPORT           DMA4_DMA20_IRQHandler         [
+WEAK]
+  553 00000108 483B            LDR              R0, =DMA4_DMA20_DriverIRQHandle
+r
+  554 0000010A 4700            BX               R0
+  555 0000010C                 ENDP
+  556 0000010C         
+  558 0000010C         DMA5_DMA21_IRQHandler
+                               PROC
+  559 0000010C                 EXPORT           DMA5_DMA21_IRQHandler         [
+WEAK]
+  560 0000010C 483B            LDR              R0, =DMA5_DMA21_DriverIRQHandle
+r
+  561 0000010E 4700            BX               R0
+  562 00000110                 ENDP
+  563 00000110         
+  565 00000110         DMA6_DMA22_IRQHandler
+                               PROC
+  566 00000110                 EXPORT           DMA6_DMA22_IRQHandler         [
+WEAK]
+  567 00000110 483B            LDR              R0, =DMA6_DMA22_DriverIRQHandle
+r
+  568 00000112 4700            BX               R0
+  569 00000114                 ENDP
+  570 00000114         
+  572 00000114         DMA7_DMA23_IRQHandler
+                               PROC
+  573 00000114                 EXPORT           DMA7_DMA23_IRQHandler         [
+WEAK]
+  574 00000114 483B            LDR              R0, =DMA7_DMA23_DriverIRQHandle
+r
+  575 00000116 4700            BX               R0
+  576 00000118                 ENDP
+  577 00000118         
+  579 00000118         DMA8_DMA24_IRQHandler
+
+
+
+ARM Macro Assembler    Page 17 
+
+
+                               PROC
+  580 00000118                 EXPORT           DMA8_DMA24_IRQHandler         [
+WEAK]
+  581 00000118 483B            LDR              R0, =DMA8_DMA24_DriverIRQHandle
+r
+  582 0000011A 4700            BX               R0
+  583 0000011C                 ENDP
+  584 0000011C         
+  586 0000011C         DMA9_DMA25_IRQHandler
+                               PROC
+  587 0000011C                 EXPORT           DMA9_DMA25_IRQHandler         [
+WEAK]
+  588 0000011C 483B            LDR              R0, =DMA9_DMA25_DriverIRQHandle
+r
+  589 0000011E 4700            BX               R0
+  590 00000120                 ENDP
+  591 00000120         
+  593 00000120         DMA10_DMA26_IRQHandler
+                               PROC
+  594 00000120                 EXPORT           DMA10_DMA26_IRQHandler         
+[WEAK]
+  595 00000120 483B            LDR              R0, =DMA10_DMA26_DriverIRQHandl
+er
+  596 00000122 4700            BX               R0
+  597 00000124                 ENDP
+  598 00000124         
+  600 00000124         DMA11_DMA27_IRQHandler
+                               PROC
+  601 00000124                 EXPORT           DMA11_DMA27_IRQHandler         
+[WEAK]
+  602 00000124 483B            LDR              R0, =DMA11_DMA27_DriverIRQHandl
+er
+  603 00000126 4700            BX               R0
+  604 00000128                 ENDP
+  605 00000128         
+  607 00000128         DMA12_DMA28_IRQHandler
+                               PROC
+  608 00000128                 EXPORT           DMA12_DMA28_IRQHandler         
+[WEAK]
+  609 00000128 483B            LDR              R0, =DMA12_DMA28_DriverIRQHandl
+er
+  610 0000012A 4700            BX               R0
+  611 0000012C                 ENDP
+  612 0000012C         
+  614 0000012C         DMA13_DMA29_IRQHandler
+                               PROC
+  615 0000012C                 EXPORT           DMA13_DMA29_IRQHandler         
+[WEAK]
+  616 0000012C 483B            LDR              R0, =DMA13_DMA29_DriverIRQHandl
+er
+  617 0000012E 4700            BX               R0
+  618 00000130                 ENDP
+  619 00000130         
+  621 00000130         DMA14_DMA30_IRQHandler
+                               PROC
+  622 00000130                 EXPORT           DMA14_DMA30_IRQHandler         
+[WEAK]
+  623 00000130 483B            LDR              R0, =DMA14_DMA30_DriverIRQHandl
+er
+
+
+
+ARM Macro Assembler    Page 18 
+
+
+  624 00000132 4700            BX               R0
+  625 00000134                 ENDP
+  626 00000134         
+  628 00000134         DMA15_DMA31_IRQHandler
+                               PROC
+  629 00000134                 EXPORT           DMA15_DMA31_IRQHandler         
+[WEAK]
+  630 00000134 483B            LDR              R0, =DMA15_DMA31_DriverIRQHandl
+er
+  631 00000136 4700            BX               R0
+  632 00000138                 ENDP
+  633 00000138         
+  635 00000138         DMA_ERROR_IRQHandler
+                               PROC
+  636 00000138                 EXPORT           DMA_ERROR_IRQHandler         [W
+EAK]
+  637 00000138 483B            LDR              R0, =DMA_ERROR_DriverIRQHandler
+  638 0000013A 4700            BX               R0
+  639 0000013C                 ENDP
+  640 0000013C         
+  642 0000013C         LPUART1_IRQHandler
+                               PROC
+  643 0000013C                 EXPORT           LPUART1_IRQHandler         [WEA
+K]
+  644 0000013C 483B            LDR              R0, =LPUART1_DriverIRQHandler
+  645 0000013E 4700            BX               R0
+  646 00000140                 ENDP
+  647 00000140         
+  649 00000140         LPUART2_IRQHandler
+                               PROC
+  650 00000140                 EXPORT           LPUART2_IRQHandler         [WEA
+K]
+  651 00000140 483B            LDR              R0, =LPUART2_DriverIRQHandler
+  652 00000142 4700            BX               R0
+  653 00000144                 ENDP
+  654 00000144         
+  656 00000144         LPUART3_IRQHandler
+                               PROC
+  657 00000144                 EXPORT           LPUART3_IRQHandler         [WEA
+K]
+  658 00000144 483B            LDR              R0, =LPUART3_DriverIRQHandler
+  659 00000146 4700            BX               R0
+  660 00000148                 ENDP
+  661 00000148         
+  663 00000148         LPUART4_IRQHandler
+                               PROC
+  664 00000148                 EXPORT           LPUART4_IRQHandler         [WEA
+K]
+  665 00000148 483B            LDR              R0, =LPUART4_DriverIRQHandler
+  666 0000014A 4700            BX               R0
+  667 0000014C                 ENDP
+  668 0000014C         
+  670 0000014C         LPUART5_IRQHandler
+                               PROC
+  671 0000014C                 EXPORT           LPUART5_IRQHandler         [WEA
+K]
+  672 0000014C 483B            LDR              R0, =LPUART5_DriverIRQHandler
+  673 0000014E 4700            BX               R0
+  674 00000150                 ENDP
+
+
+
+ARM Macro Assembler    Page 19 
+
+
+  675 00000150         
+  677 00000150         LPUART6_IRQHandler
+                               PROC
+  678 00000150                 EXPORT           LPUART6_IRQHandler         [WEA
+K]
+  679 00000150 483B            LDR              R0, =LPUART6_DriverIRQHandler
+  680 00000152 4700            BX               R0
+  681 00000154                 ENDP
+  682 00000154         
+  684 00000154         LPUART7_IRQHandler
+                               PROC
+  685 00000154                 EXPORT           LPUART7_IRQHandler         [WEA
+K]
+  686 00000154 483B            LDR              R0, =LPUART7_DriverIRQHandler
+  687 00000156 4700            BX               R0
+  688 00000158                 ENDP
+  689 00000158         
+  691 00000158         LPUART8_IRQHandler
+                               PROC
+  692 00000158                 EXPORT           LPUART8_IRQHandler         [WEA
+K]
+  693 00000158 483B            LDR              R0, =LPUART8_DriverIRQHandler
+  694 0000015A 4700            BX               R0
+  695 0000015C                 ENDP
+  696 0000015C         
+  698 0000015C         LPI2C1_IRQHandler
+                               PROC
+  699 0000015C                 EXPORT           LPI2C1_IRQHandler         [WEAK
+]
+  700 0000015C 483B            LDR              R0, =LPI2C1_DriverIRQHandler
+  701 0000015E 4700            BX               R0
+  702 00000160                 ENDP
+  703 00000160         
+  705 00000160         LPI2C2_IRQHandler
+                               PROC
+  706 00000160                 EXPORT           LPI2C2_IRQHandler         [WEAK
+]
+  707 00000160 483B            LDR              R0, =LPI2C2_DriverIRQHandler
+  708 00000162 4700            BX               R0
+  709 00000164                 ENDP
+  710 00000164         
+  712 00000164         LPI2C3_IRQHandler
+                               PROC
+  713 00000164                 EXPORT           LPI2C3_IRQHandler         [WEAK
+]
+  714 00000164 483B            LDR              R0, =LPI2C3_DriverIRQHandler
+  715 00000166 4700            BX               R0
+  716 00000168                 ENDP
+  717 00000168         
+  719 00000168         LPI2C4_IRQHandler
+                               PROC
+  720 00000168                 EXPORT           LPI2C4_IRQHandler         [WEAK
+]
+  721 00000168 483B            LDR              R0, =LPI2C4_DriverIRQHandler
+  722 0000016A 4700            BX               R0
+  723 0000016C                 ENDP
+  724 0000016C         
+  726 0000016C         LPSPI1_IRQHandler
+                               PROC
+
+
+
+ARM Macro Assembler    Page 20 
+
+
+  727 0000016C                 EXPORT           LPSPI1_IRQHandler         [WEAK
+]
+  728 0000016C 483B            LDR              R0, =LPSPI1_DriverIRQHandler
+  729 0000016E 4700            BX               R0
+  730 00000170                 ENDP
+  731 00000170         
+  733 00000170         LPSPI2_IRQHandler
+                               PROC
+  734 00000170                 EXPORT           LPSPI2_IRQHandler         [WEAK
+]
+  735 00000170 483B            LDR              R0, =LPSPI2_DriverIRQHandler
+  736 00000172 4700            BX               R0
+  737 00000174                 ENDP
+  738 00000174         
+  740 00000174         LPSPI3_IRQHandler
+                               PROC
+  741 00000174                 EXPORT           LPSPI3_IRQHandler         [WEAK
+]
+  742 00000174 483B            LDR              R0, =LPSPI3_DriverIRQHandler
+  743 00000176 4700            BX               R0
+  744 00000178                 ENDP
+  745 00000178         
+  747 00000178         LPSPI4_IRQHandler
+                               PROC
+  748 00000178                 EXPORT           LPSPI4_IRQHandler         [WEAK
+]
+  749 00000178 483B            LDR              R0, =LPSPI4_DriverIRQHandler
+  750 0000017A 4700            BX               R0
+  751 0000017C                 ENDP
+  752 0000017C         
+  754 0000017C         CAN1_IRQHandler
+                               PROC
+  755 0000017C                 EXPORT           CAN1_IRQHandler         [WEAK]
+  756 0000017C 483B            LDR              R0, =CAN1_DriverIRQHandler
+  757 0000017E 4700            BX               R0
+  758 00000180                 ENDP
+  759 00000180         
+  761 00000180         CAN2_IRQHandler
+                               PROC
+  762 00000180                 EXPORT           CAN2_IRQHandler         [WEAK]
+  763 00000180 483B            LDR              R0, =CAN2_DriverIRQHandler
+  764 00000182 4700            BX               R0
+  765 00000184                 ENDP
+  766 00000184         
+  768 00000184         SAI1_IRQHandler
+                               PROC
+  769 00000184                 EXPORT           SAI1_IRQHandler         [WEAK]
+  770 00000184 483B            LDR              R0, =SAI1_DriverIRQHandler
+  771 00000186 4700            BX               R0
+  772 00000188                 ENDP
+  773 00000188         
+  775 00000188         SAI2_IRQHandler
+                               PROC
+  776 00000188                 EXPORT           SAI2_IRQHandler         [WEAK]
+  777 00000188 483B            LDR              R0, =SAI2_DriverIRQHandler
+  778 0000018A 4700            BX               R0
+  779 0000018C                 ENDP
+  780 0000018C         
+  782 0000018C         SAI3_RX_IRQHandler
+
+
+
+ARM Macro Assembler    Page 21 
+
+
+                               PROC
+  783 0000018C                 EXPORT           SAI3_RX_IRQHandler         [WEA
+K]
+  784 0000018C 483B            LDR              R0, =SAI3_RX_DriverIRQHandler
+  785 0000018E 4700            BX               R0
+  786 00000190                 ENDP
+  787 00000190         
+  789 00000190         SAI3_TX_IRQHandler
+                               PROC
+  790 00000190                 EXPORT           SAI3_TX_IRQHandler         [WEA
+K]
+  791 00000190 483B            LDR              R0, =SAI3_TX_DriverIRQHandler
+  792 00000192 4700            BX               R0
+  793 00000194                 ENDP
+  794 00000194         
+  796 00000194         SPDIF_IRQHandler
+                               PROC
+  797 00000194                 EXPORT           SPDIF_IRQHandler         [WEAK]
+  798 00000194 483B            LDR              R0, =SPDIF_DriverIRQHandler
+  799 00000196 4700            BX               R0
+  800 00000198                 ENDP
+  801 00000198         
+  803 00000198         FLEXIO1_IRQHandler
+                               PROC
+  804 00000198                 EXPORT           FLEXIO1_IRQHandler         [WEA
+K]
+  805 00000198 483B            LDR              R0, =FLEXIO1_DriverIRQHandler
+  806 0000019A 4700            BX               R0
+  807 0000019C                 ENDP
+  808 0000019C         
+  810 0000019C         FLEXIO2_IRQHandler
+                               PROC
+  811 0000019C                 EXPORT           FLEXIO2_IRQHandler         [WEA
+K]
+  812 0000019C 483B            LDR              R0, =FLEXIO2_DriverIRQHandler
+  813 0000019E 4700            BX               R0
+  814 000001A0                 ENDP
+  815 000001A0         
+  817 000001A0         FLEXSPI_IRQHandler
+                               PROC
+  818 000001A0                 EXPORT           FLEXSPI_IRQHandler         [WEA
+K]
+  819 000001A0 483B            LDR              R0, =FLEXSPI_DriverIRQHandler
+  820 000001A2 4700            BX               R0
+  821 000001A4                 ENDP
+  822 000001A4         
+  824 000001A4         USDHC1_IRQHandler
+                               PROC
+  825 000001A4                 EXPORT           USDHC1_IRQHandler         [WEAK
+]
+  826 000001A4 483B            LDR              R0, =USDHC1_DriverIRQHandler
+  827 000001A6 4700            BX               R0
+  828 000001A8                 ENDP
+  829 000001A8         
+  831 000001A8         USDHC2_IRQHandler
+                               PROC
+  832 000001A8                 EXPORT           USDHC2_IRQHandler         [WEAK
+]
+  833 000001A8 483B            LDR              R0, =USDHC2_DriverIRQHandler
+
+
+
+ARM Macro Assembler    Page 22 
+
+
+  834 000001AA 4700            BX               R0
+  835 000001AC                 ENDP
+  836 000001AC         
+  838 000001AC         ENET_IRQHandler
+                               PROC
+  839 000001AC                 EXPORT           ENET_IRQHandler         [WEAK]
+  840 000001AC 483B            LDR              R0, =ENET_DriverIRQHandler
+  841 000001AE 4700            BX               R0
+  842 000001B0                 ENDP
+  843 000001B0         
+  845 000001B0         ENET_1588_Timer_IRQHandler
+                               PROC
+  846 000001B0                 EXPORT           ENET_1588_Timer_IRQHandler     
+    [WEAK]
+  847 000001B0 483B            LDR              R0, =ENET_1588_Timer_DriverIRQH
+andler
+  848 000001B2 4700            BX               R0
+  849 000001B4                 ENDP
+  850 000001B4         
+  852 000001B4         Default_Handler
+                               PROC
+  853 000001B4                 EXPORT           DMA0_DMA16_DriverIRQHandler    
+     [WEAK]
+  854 000001B4                 EXPORT           DMA1_DMA17_DriverIRQHandler    
+     [WEAK]
+  855 000001B4                 EXPORT           DMA2_DMA18_DriverIRQHandler    
+     [WEAK]
+  856 000001B4                 EXPORT           DMA3_DMA19_DriverIRQHandler    
+     [WEAK]
+  857 000001B4                 EXPORT           DMA4_DMA20_DriverIRQHandler    
+     [WEAK]
+  858 000001B4                 EXPORT           DMA5_DMA21_DriverIRQHandler    
+     [WEAK]
+  859 000001B4                 EXPORT           DMA6_DMA22_DriverIRQHandler    
+     [WEAK]
+  860 000001B4                 EXPORT           DMA7_DMA23_DriverIRQHandler    
+     [WEAK]
+  861 000001B4                 EXPORT           DMA8_DMA24_DriverIRQHandler    
+     [WEAK]
+  862 000001B4                 EXPORT           DMA9_DMA25_DriverIRQHandler    
+     [WEAK]
+  863 000001B4                 EXPORT           DMA10_DMA26_DriverIRQHandler   
+      [WEAK]
+  864 000001B4                 EXPORT           DMA11_DMA27_DriverIRQHandler   
+      [WEAK]
+  865 000001B4                 EXPORT           DMA12_DMA28_DriverIRQHandler   
+      [WEAK]
+  866 000001B4                 EXPORT           DMA13_DMA29_DriverIRQHandler   
+      [WEAK]
+  867 000001B4                 EXPORT           DMA14_DMA30_DriverIRQHandler   
+      [WEAK]
+  868 000001B4                 EXPORT           DMA15_DMA31_DriverIRQHandler   
+      [WEAK]
+  869 000001B4                 EXPORT           DMA_ERROR_DriverIRQHandler     
+    [WEAK]
+  870 000001B4                 EXPORT           CTI0_ERROR_IRQHandler         [
+WEAK]
+  871 000001B4                 EXPORT           CTI1_ERROR_IRQHandler         [
+WEAK]
+
+
+
+ARM Macro Assembler    Page 23 
+
+
+  872 000001B4                 EXPORT           CORE_IRQHandler         [WEAK]
+  873 000001B4                 EXPORT           LPUART1_DriverIRQHandler       
+  [WEAK]
+  874 000001B4                 EXPORT           LPUART2_DriverIRQHandler       
+  [WEAK]
+  875 000001B4                 EXPORT           LPUART3_DriverIRQHandler       
+  [WEAK]
+  876 000001B4                 EXPORT           LPUART4_DriverIRQHandler       
+  [WEAK]
+  877 000001B4                 EXPORT           LPUART5_DriverIRQHandler       
+  [WEAK]
+  878 000001B4                 EXPORT           LPUART6_DriverIRQHandler       
+  [WEAK]
+  879 000001B4                 EXPORT           LPUART7_DriverIRQHandler       
+  [WEAK]
+  880 000001B4                 EXPORT           LPUART8_DriverIRQHandler       
+  [WEAK]
+  881 000001B4                 EXPORT           LPI2C1_DriverIRQHandler        
+ [WEAK]
+  882 000001B4                 EXPORT           LPI2C2_DriverIRQHandler        
+ [WEAK]
+  883 000001B4                 EXPORT           LPI2C3_DriverIRQHandler        
+ [WEAK]
+  884 000001B4                 EXPORT           LPI2C4_DriverIRQHandler        
+ [WEAK]
+  885 000001B4                 EXPORT           LPSPI1_DriverIRQHandler        
+ [WEAK]
+  886 000001B4                 EXPORT           LPSPI2_DriverIRQHandler        
+ [WEAK]
+  887 000001B4                 EXPORT           LPSPI3_DriverIRQHandler        
+ [WEAK]
+  888 000001B4                 EXPORT           LPSPI4_DriverIRQHandler        
+ [WEAK]
+  889 000001B4                 EXPORT           CAN1_DriverIRQHandler         [
+WEAK]
+  890 000001B4                 EXPORT           CAN2_DriverIRQHandler         [
+WEAK]
+  891 000001B4                 EXPORT           FLEXRAM_IRQHandler         [WEA
+K]
+  892 000001B4                 EXPORT           KPP_IRQHandler         [WEAK]
+  893 000001B4                 EXPORT           TSC_DIG_IRQHandler         [WEA
+K]
+  894 000001B4                 EXPORT           GPR_IRQ_IRQHandler         [WEA
+K]
+  895 000001B4                 EXPORT           LCDIF_IRQHandler         [WEAK]
+  896 000001B4                 EXPORT           CSI_IRQHandler         [WEAK]
+  897 000001B4                 EXPORT           PXP_IRQHandler         [WEAK]
+  898 000001B4                 EXPORT           WDOG2_IRQHandler         [WEAK]
+  899 000001B4                 EXPORT           SNVS_HP_WRAPPER_IRQHandler     
+    [WEAK]
+  900 000001B4                 EXPORT           SNVS_HP_WRAPPER_TZ_IRQHandler  
+       [WEAK]
+  901 000001B4                 EXPORT           SNVS_LP_WRAPPER_IRQHandler     
+    [WEAK]
+  902 000001B4                 EXPORT           CSU_IRQHandler         [WEAK]
+  903 000001B4                 EXPORT           DCP_IRQHandler         [WEAK]
+  904 000001B4                 EXPORT           DCP_VMI_IRQHandler         [WEA
+K]
+  905 000001B4                 EXPORT           Reserved68_IRQHandler         [
+
+
+
+ARM Macro Assembler    Page 24 
+
+
+WEAK]
+  906 000001B4                 EXPORT           TRNG_IRQHandler         [WEAK]
+  907 000001B4                 EXPORT           SJC_IRQHandler         [WEAK]
+  908 000001B4                 EXPORT           BEE_IRQHandler         [WEAK]
+  909 000001B4                 EXPORT           SAI1_DriverIRQHandler         [
+WEAK]
+  910 000001B4                 EXPORT           SAI2_DriverIRQHandler         [
+WEAK]
+  911 000001B4                 EXPORT           SAI3_RX_DriverIRQHandler       
+  [WEAK]
+  912 000001B4                 EXPORT           SAI3_TX_DriverIRQHandler       
+  [WEAK]
+  913 000001B4                 EXPORT           SPDIF_DriverIRQHandler         
+[WEAK]
+  914 000001B4                 EXPORT           ANATOP_EVENT0_IRQHandler       
+  [WEAK]
+  915 000001B4                 EXPORT           ANATOP_EVENT1_IRQHandler       
+  [WEAK]
+  916 000001B4                 EXPORT           ANATOP_TAMP_LOW_HIGH_IRQHandler
+         [WEAK]
+  917 000001B4                 EXPORT           ANATOP_TEMP_PANIC_IRQHandler   
+      [WEAK]
+  918 000001B4                 EXPORT           USB_PHY1_IRQHandler         [WE
+AK]
+  919 000001B4                 EXPORT           USB_PHY2_IRQHandler         [WE
+AK]
+  920 000001B4                 EXPORT           ADC1_IRQHandler         [WEAK]
+  921 000001B4                 EXPORT           ADC2_IRQHandler         [WEAK]
+  922 000001B4                 EXPORT           DCDC_IRQHandler         [WEAK]
+  923 000001B4                 EXPORT           Reserved86_IRQHandler         [
+WEAK]
+  924 000001B4                 EXPORT           Reserved87_IRQHandler         [
+WEAK]
+  925 000001B4                 EXPORT           GPIO1_INT0_IRQHandler         [
+WEAK]
+  926 000001B4                 EXPORT           GPIO1_INT1_IRQHandler         [
+WEAK]
+  927 000001B4                 EXPORT           GPIO1_INT2_IRQHandler         [
+WEAK]
+  928 000001B4                 EXPORT           GPIO1_INT3_IRQHandler         [
+WEAK]
+  929 000001B4                 EXPORT           GPIO1_INT4_IRQHandler         [
+WEAK]
+  930 000001B4                 EXPORT           GPIO1_INT5_IRQHandler         [
+WEAK]
+  931 000001B4                 EXPORT           GPIO1_INT6_IRQHandler         [
+WEAK]
+  932 000001B4                 EXPORT           GPIO1_INT7_IRQHandler         [
+WEAK]
+  933 000001B4                 EXPORT           GPIO1_Combined_0_15_IRQHandler 
+        [WEAK]
+  934 000001B4                 EXPORT           GPIO1_Combined_16_31_IRQHandler
+         [WEAK]
+  935 000001B4                 EXPORT           GPIO2_Combined_0_15_IRQHandler 
+        [WEAK]
+  936 000001B4                 EXPORT           GPIO2_Combined_16_31_IRQHandler
+         [WEAK]
+  937 000001B4                 EXPORT           GPIO3_Combined_0_15_IRQHandler 
+        [WEAK]
+
+
+
+ARM Macro Assembler    Page 25 
+
+
+  938 000001B4                 EXPORT           GPIO3_Combined_16_31_IRQHandler
+         [WEAK]
+  939 000001B4                 EXPORT           GPIO4_Combined_0_15_IRQHandler 
+        [WEAK]
+  940 000001B4                 EXPORT           GPIO4_Combined_16_31_IRQHandler
+         [WEAK]
+  941 000001B4                 EXPORT           GPIO5_Combined_0_15_IRQHandler 
+        [WEAK]
+  942 000001B4                 EXPORT           GPIO5_Combined_16_31_IRQHandler
+         [WEAK]
+  943 000001B4                 EXPORT           FLEXIO1_DriverIRQHandler       
+  [WEAK]
+  944 000001B4                 EXPORT           FLEXIO2_DriverIRQHandler       
+  [WEAK]
+  945 000001B4                 EXPORT           WDOG1_IRQHandler         [WEAK]
+  946 000001B4                 EXPORT           RTWDOG_IRQHandler         [WEAK
+]
+  947 000001B4                 EXPORT           EWM_IRQHandler         [WEAK]
+  948 000001B4                 EXPORT           CCM_1_IRQHandler         [WEAK]
+  949 000001B4                 EXPORT           CCM_2_IRQHandler         [WEAK]
+  950 000001B4                 EXPORT           GPC_IRQHandler         [WEAK]
+  951 000001B4                 EXPORT           SRC_IRQHandler         [WEAK]
+  952 000001B4                 EXPORT           Reserved115_IRQHandler         
+[WEAK]
+  953 000001B4                 EXPORT           GPT1_IRQHandler         [WEAK]
+  954 000001B4                 EXPORT           GPT2_IRQHandler         [WEAK]
+  955 000001B4                 EXPORT           PWM1_0_IRQHandler         [WEAK
+]
+  956 000001B4                 EXPORT           PWM1_1_IRQHandler         [WEAK
+]
+  957 000001B4                 EXPORT           PWM1_2_IRQHandler         [WEAK
+]
+  958 000001B4                 EXPORT           PWM1_3_IRQHandler         [WEAK
+]
+  959 000001B4                 EXPORT           PWM1_FAULT_IRQHandler         [
+WEAK]
+  960 000001B4                 EXPORT           Reserved123_IRQHandler         
+[WEAK]
+  961 000001B4                 EXPORT           FLEXSPI_DriverIRQHandler       
+  [WEAK]
+  962 000001B4                 EXPORT           SEMC_IRQHandler         [WEAK]
+  963 000001B4                 EXPORT           USDHC1_DriverIRQHandler        
+ [WEAK]
+  964 000001B4                 EXPORT           USDHC2_DriverIRQHandler        
+ [WEAK]
+  965 000001B4                 EXPORT           USB_OTG2_IRQHandler         [WE
+AK]
+  966 000001B4                 EXPORT           USB_OTG1_IRQHandler         [WE
+AK]
+  967 000001B4                 EXPORT           ENET_DriverIRQHandler         [
+WEAK]
+  968 000001B4                 EXPORT           ENET_1588_Timer_DriverIRQHandle
+r         [WEAK]
+  969 000001B4                 EXPORT           XBAR1_IRQ_0_1_IRQHandler       
+  [WEAK]
+  970 000001B4                 EXPORT           XBAR1_IRQ_2_3_IRQHandler       
+  [WEAK]
+  971 000001B4                 EXPORT           ADC_ETC_IRQ0_IRQHandler        
+ [WEAK]
+
+
+
+ARM Macro Assembler    Page 26 
+
+
+  972 000001B4                 EXPORT           ADC_ETC_IRQ1_IRQHandler        
+ [WEAK]
+  973 000001B4                 EXPORT           ADC_ETC_IRQ2_IRQHandler        
+ [WEAK]
+  974 000001B4                 EXPORT           ADC_ETC_ERROR_IRQ_IRQHandler   
+      [WEAK]
+  975 000001B4                 EXPORT           PIT_IRQHandler         [WEAK]
+  976 000001B4                 EXPORT           ACMP1_IRQHandler         [WEAK]
+  977 000001B4                 EXPORT           ACMP2_IRQHandler         [WEAK]
+  978 000001B4                 EXPORT           ACMP3_IRQHandler         [WEAK]
+  979 000001B4                 EXPORT           ACMP4_IRQHandler         [WEAK]
+  980 000001B4                 EXPORT           Reserved143_IRQHandler         
+[WEAK]
+  981 000001B4                 EXPORT           Reserved144_IRQHandler         
+[WEAK]
+  982 000001B4                 EXPORT           ENC1_IRQHandler         [WEAK]
+  983 000001B4                 EXPORT           ENC2_IRQHandler         [WEAK]
+  984 000001B4                 EXPORT           ENC3_IRQHandler         [WEAK]
+  985 000001B4                 EXPORT           ENC4_IRQHandler         [WEAK]
+  986 000001B4                 EXPORT           TMR1_IRQHandler         [WEAK]
+  987 000001B4                 EXPORT           TMR2_IRQHandler         [WEAK]
+  988 000001B4                 EXPORT           TMR3_IRQHandler         [WEAK]
+  989 000001B4                 EXPORT           TMR4_IRQHandler         [WEAK]
+  990 000001B4                 EXPORT           PWM2_0_IRQHandler         [WEAK
+]
+  991 000001B4                 EXPORT           PWM2_1_IRQHandler         [WEAK
+]
+  992 000001B4                 EXPORT           PWM2_2_IRQHandler         [WEAK
+]
+  993 000001B4                 EXPORT           PWM2_3_IRQHandler         [WEAK
+]
+  994 000001B4                 EXPORT           PWM2_FAULT_IRQHandler         [
+WEAK]
+  995 000001B4                 EXPORT           PWM3_0_IRQHandler         [WEAK
+]
+  996 000001B4                 EXPORT           PWM3_1_IRQHandler         [WEAK
+]
+  997 000001B4                 EXPORT           PWM3_2_IRQHandler         [WEAK
+]
+  998 000001B4                 EXPORT           PWM3_3_IRQHandler         [WEAK
+]
+  999 000001B4                 EXPORT           PWM3_FAULT_IRQHandler         [
+WEAK]
+ 1000 000001B4                 EXPORT           PWM4_0_IRQHandler         [WEAK
+]
+ 1001 000001B4                 EXPORT           PWM4_1_IRQHandler         [WEAK
+]
+ 1002 000001B4                 EXPORT           PWM4_2_IRQHandler         [WEAK
+]
+ 1003 000001B4                 EXPORT           PWM4_3_IRQHandler         [WEAK
+]
+ 1004 000001B4                 EXPORT           PWM4_FAULT_IRQHandler         [
+WEAK]
+ 1005 000001B4                 EXPORT           Reserved168_IRQHandler         
+[WEAK]
+ 1006 000001B4                 EXPORT           Reserved169_IRQHandler         
+[WEAK]
+ 1007 000001B4                 EXPORT           Reserved170_IRQHandler         
+[WEAK]
+
+
+
+ARM Macro Assembler    Page 27 
+
+
+ 1008 000001B4                 EXPORT           Reserved171_IRQHandler         
+[WEAK]
+ 1009 000001B4                 EXPORT           Reserved172_IRQHandler         
+[WEAK]
+ 1010 000001B4                 EXPORT           Reserved173_IRQHandler         
+[WEAK]
+ 1011 000001B4                 EXPORT           SJC_ARM_DEBUG_IRQHandler       
+  [WEAK]
+ 1012 000001B4                 EXPORT           NMI_WAKEUP_IRQHandler         [
+WEAK]
+ 1013 000001B4                 EXPORT           DefaultISR         [WEAK]
+ 1014 000001B4         DMA0_DMA16_DriverIRQHandler
+ 1015 000001B4         DMA1_DMA17_DriverIRQHandler
+ 1016 000001B4         DMA2_DMA18_DriverIRQHandler
+ 1017 000001B4         DMA3_DMA19_DriverIRQHandler
+ 1018 000001B4         DMA4_DMA20_DriverIRQHandler
+ 1019 000001B4         DMA5_DMA21_DriverIRQHandler
+ 1020 000001B4         DMA6_DMA22_DriverIRQHandler
+ 1021 000001B4         DMA7_DMA23_DriverIRQHandler
+ 1022 000001B4         DMA8_DMA24_DriverIRQHandler
+ 1023 000001B4         DMA9_DMA25_DriverIRQHandler
+ 1024 000001B4         DMA10_DMA26_DriverIRQHandler
+ 1025 000001B4         DMA11_DMA27_DriverIRQHandler
+ 1026 000001B4         DMA12_DMA28_DriverIRQHandler
+ 1027 000001B4         DMA13_DMA29_DriverIRQHandler
+ 1028 000001B4         DMA14_DMA30_DriverIRQHandler
+ 1029 000001B4         DMA15_DMA31_DriverIRQHandler
+ 1030 000001B4         DMA_ERROR_DriverIRQHandler
+ 1031 000001B4         CTI0_ERROR_IRQHandler
+ 1032 000001B4         CTI1_ERROR_IRQHandler
+ 1033 000001B4         CORE_IRQHandler
+ 1034 000001B4         LPUART1_DriverIRQHandler
+ 1035 000001B4         LPUART2_DriverIRQHandler
+ 1036 000001B4         LPUART3_DriverIRQHandler
+ 1037 000001B4         LPUART4_DriverIRQHandler
+ 1038 000001B4         LPUART5_DriverIRQHandler
+ 1039 000001B4         LPUART6_DriverIRQHandler
+ 1040 000001B4         LPUART7_DriverIRQHandler
+ 1041 000001B4         LPUART8_DriverIRQHandler
+ 1042 000001B4         LPI2C1_DriverIRQHandler
+ 1043 000001B4         LPI2C2_DriverIRQHandler
+ 1044 000001B4         LPI2C3_DriverIRQHandler
+ 1045 000001B4         LPI2C4_DriverIRQHandler
+ 1046 000001B4         LPSPI1_DriverIRQHandler
+ 1047 000001B4         LPSPI2_DriverIRQHandler
+ 1048 000001B4         LPSPI3_DriverIRQHandler
+ 1049 000001B4         LPSPI4_DriverIRQHandler
+ 1050 000001B4         CAN1_DriverIRQHandler
+ 1051 000001B4         CAN2_DriverIRQHandler
+ 1052 000001B4         FLEXRAM_IRQHandler
+ 1053 000001B4         KPP_IRQHandler
+ 1054 000001B4         TSC_DIG_IRQHandler
+ 1055 000001B4         GPR_IRQ_IRQHandler
+ 1056 000001B4         LCDIF_IRQHandler
+ 1057 000001B4         CSI_IRQHandler
+ 1058 000001B4         PXP_IRQHandler
+ 1059 000001B4         WDOG2_IRQHandler
+ 1060 000001B4         SNVS_HP_WRAPPER_IRQHandler
+ 1061 000001B4         SNVS_HP_WRAPPER_TZ_IRQHandler
+
+
+
+ARM Macro Assembler    Page 28 
+
+
+ 1062 000001B4         SNVS_LP_WRAPPER_IRQHandler
+ 1063 000001B4         CSU_IRQHandler
+ 1064 000001B4         DCP_IRQHandler
+ 1065 000001B4         DCP_VMI_IRQHandler
+ 1066 000001B4         Reserved68_IRQHandler
+ 1067 000001B4         TRNG_IRQHandler
+ 1068 000001B4         SJC_IRQHandler
+ 1069 000001B4         BEE_IRQHandler
+ 1070 000001B4         SAI1_DriverIRQHandler
+ 1071 000001B4         SAI2_DriverIRQHandler
+ 1072 000001B4         SAI3_RX_DriverIRQHandler
+ 1073 000001B4         SAI3_TX_DriverIRQHandler
+ 1074 000001B4         SPDIF_DriverIRQHandler
+ 1075 000001B4         ANATOP_EVENT0_IRQHandler
+ 1076 000001B4         ANATOP_EVENT1_IRQHandler
+ 1077 000001B4         ANATOP_TAMP_LOW_HIGH_IRQHandler
+ 1078 000001B4         ANATOP_TEMP_PANIC_IRQHandler
+ 1079 000001B4         USB_PHY1_IRQHandler
+ 1080 000001B4         USB_PHY2_IRQHandler
+ 1081 000001B4         ADC1_IRQHandler
+ 1082 000001B4         ADC2_IRQHandler
+ 1083 000001B4         DCDC_IRQHandler
+ 1084 000001B4         Reserved86_IRQHandler
+ 1085 000001B4         Reserved87_IRQHandler
+ 1086 000001B4         GPIO1_INT0_IRQHandler
+ 1087 000001B4         GPIO1_INT1_IRQHandler
+ 1088 000001B4         GPIO1_INT2_IRQHandler
+ 1089 000001B4         GPIO1_INT3_IRQHandler
+ 1090 000001B4         GPIO1_INT4_IRQHandler
+ 1091 000001B4         GPIO1_INT5_IRQHandler
+ 1092 000001B4         GPIO1_INT6_IRQHandler
+ 1093 000001B4         GPIO1_INT7_IRQHandler
+ 1094 000001B4         GPIO1_Combined_0_15_IRQHandler
+ 1095 000001B4         GPIO1_Combined_16_31_IRQHandler
+ 1096 000001B4         GPIO2_Combined_0_15_IRQHandler
+ 1097 000001B4         GPIO2_Combined_16_31_IRQHandler
+ 1098 000001B4         GPIO3_Combined_0_15_IRQHandler
+ 1099 000001B4         GPIO3_Combined_16_31_IRQHandler
+ 1100 000001B4         GPIO4_Combined_0_15_IRQHandler
+ 1101 000001B4         GPIO4_Combined_16_31_IRQHandler
+ 1102 000001B4         GPIO5_Combined_0_15_IRQHandler
+ 1103 000001B4         GPIO5_Combined_16_31_IRQHandler
+ 1104 000001B4         FLEXIO1_DriverIRQHandler
+ 1105 000001B4         FLEXIO2_DriverIRQHandler
+ 1106 000001B4         WDOG1_IRQHandler
+ 1107 000001B4         RTWDOG_IRQHandler
+ 1108 000001B4         EWM_IRQHandler
+ 1109 000001B4         CCM_1_IRQHandler
+ 1110 000001B4         CCM_2_IRQHandler
+ 1111 000001B4         GPC_IRQHandler
+ 1112 000001B4         SRC_IRQHandler
+ 1113 000001B4         Reserved115_IRQHandler
+ 1114 000001B4         GPT1_IRQHandler
+ 1115 000001B4         GPT2_IRQHandler
+ 1116 000001B4         PWM1_0_IRQHandler
+ 1117 000001B4         PWM1_1_IRQHandler
+ 1118 000001B4         PWM1_2_IRQHandler
+ 1119 000001B4         PWM1_3_IRQHandler
+ 1120 000001B4         PWM1_FAULT_IRQHandler
+
+
+
+ARM Macro Assembler    Page 29 
+
+
+ 1121 000001B4         Reserved123_IRQHandler
+ 1122 000001B4         FLEXSPI_DriverIRQHandler
+ 1123 000001B4         SEMC_IRQHandler
+ 1124 000001B4         USDHC1_DriverIRQHandler
+ 1125 000001B4         USDHC2_DriverIRQHandler
+ 1126 000001B4         USB_OTG2_IRQHandler
+ 1127 000001B4         USB_OTG1_IRQHandler
+ 1128 000001B4         ENET_DriverIRQHandler
+ 1129 000001B4         ENET_1588_Timer_DriverIRQHandler
+ 1130 000001B4         XBAR1_IRQ_0_1_IRQHandler
+ 1131 000001B4         XBAR1_IRQ_2_3_IRQHandler
+ 1132 000001B4         ADC_ETC_IRQ0_IRQHandler
+ 1133 000001B4         ADC_ETC_IRQ1_IRQHandler
+ 1134 000001B4         ADC_ETC_IRQ2_IRQHandler
+ 1135 000001B4         ADC_ETC_ERROR_IRQ_IRQHandler
+ 1136 000001B4         PIT_IRQHandler
+ 1137 000001B4         ACMP1_IRQHandler
+ 1138 000001B4         ACMP2_IRQHandler
+ 1139 000001B4         ACMP3_IRQHandler
+ 1140 000001B4         ACMP4_IRQHandler
+ 1141 000001B4         Reserved143_IRQHandler
+ 1142 000001B4         Reserved144_IRQHandler
+ 1143 000001B4         ENC1_IRQHandler
+ 1144 000001B4         ENC2_IRQHandler
+ 1145 000001B4         ENC3_IRQHandler
+ 1146 000001B4         ENC4_IRQHandler
+ 1147 000001B4         TMR1_IRQHandler
+ 1148 000001B4         TMR2_IRQHandler
+ 1149 000001B4         TMR3_IRQHandler
+ 1150 000001B4         TMR4_IRQHandler
+ 1151 000001B4         PWM2_0_IRQHandler
+ 1152 000001B4         PWM2_1_IRQHandler
+ 1153 000001B4         PWM2_2_IRQHandler
+ 1154 000001B4         PWM2_3_IRQHandler
+ 1155 000001B4         PWM2_FAULT_IRQHandler
+ 1156 000001B4         PWM3_0_IRQHandler
+ 1157 000001B4         PWM3_1_IRQHandler
+ 1158 000001B4         PWM3_2_IRQHandler
+ 1159 000001B4         PWM3_3_IRQHandler
+ 1160 000001B4         PWM3_FAULT_IRQHandler
+ 1161 000001B4         PWM4_0_IRQHandler
+ 1162 000001B4         PWM4_1_IRQHandler
+ 1163 000001B4         PWM4_2_IRQHandler
+ 1164 000001B4         PWM4_3_IRQHandler
+ 1165 000001B4         PWM4_FAULT_IRQHandler
+ 1166 000001B4         Reserved168_IRQHandler
+ 1167 000001B4         Reserved169_IRQHandler
+ 1168 000001B4         Reserved170_IRQHandler
+ 1169 000001B4         Reserved171_IRQHandler
+ 1170 000001B4         Reserved172_IRQHandler
+ 1171 000001B4         Reserved173_IRQHandler
+ 1172 000001B4         SJC_ARM_DEBUG_IRQHandler
+ 1173 000001B4         NMI_WAKEUP_IRQHandler
+ 1174 000001B4         DefaultISR
+ 1175 000001B4 483B            LDR              R0, =DefaultISR
+ 1176 000001B6 4700            BX               R0
+ 1177 000001B8                 ENDP
+ 1178 000001B8                 ALIGN
+ 1179 000001B8         
+
+
+
+ARM Macro Assembler    Page 30 
+
+
+ 1180 000001B8         
+ 1181 000001B8                 END
+              202063F3 
+              400AC038 
+              400AC044 
+              EAAAAAAA 
+              400AC040 
+              20078000 
+              D5555555 
+              20200000 
+              20278000 
+              20208000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+
+
+
+ARM Macro Assembler    Page 31 
+
+
+              00000000 
+              00000000 
+              00000000 
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M7.fp.sp --apcs=
+interwork --depend=.\objects\startup_mimxrt1052.d -o.\objects\startup_mimxrt105
+2.o -IC:\Users\nxf48054\Desktop\share\newone\test_floder\micropython-rocky\port
+s\prj_keil_rt1060\RTE -IC:\Keil_v5\ARM\PACK\NXP\iMXRT_DFP\1.0.2\Device\Include 
+-IC:\Keil_v5\ARM\CMSIS\Include --predefine="__UVISION_VERSION SETA 521" --prede
+fine="_RTE_ SETA 1" --predefine="MIMXRT1052 SETA 1" --predefine="XIP_EXTERNAL_F
+LASH SETA 1" --list=.\listings\startup_mimxrt1052.lst ..\nxp_rt1050_60\startup_
+MIMXRT1052.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+RESET 00000000
+
+Symbol: RESET
+   Definitions
+      At line 55 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      None
+Comment: RESET unused
+__Vectors 00000000
+
+Symbol: __Vectors
+   Definitions
+      At line 61 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 56 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 321 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+__Vectors_End 00000400
+
+Symbol: __Vectors_End
+   Definitions
+      At line 319 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 57 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 321 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+3 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+.text 00000000
+
+Symbol: .text
+   Definitions
+      At line 323 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      None
+Comment: .text unused
+ACMP1_IRQHandler 000001B4
+
+Symbol: ACMP1_IRQHandler
+   Definitions
+      At line 1137 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 202 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 976 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+ACMP2_IRQHandler 000001B4
+
+Symbol: ACMP2_IRQHandler
+   Definitions
+      At line 1138 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 203 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 977 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+ACMP3_IRQHandler 000001B4
+
+Symbol: ACMP3_IRQHandler
+   Definitions
+      At line 1139 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 204 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 978 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+ACMP4_IRQHandler 000001B4
+
+Symbol: ACMP4_IRQHandler
+   Definitions
+      At line 1140 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 205 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 979 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+ADC1_IRQHandler 000001B4
+
+Symbol: ADC1_IRQHandler
+   Definitions
+      At line 1081 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 146 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 920 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+ADC2_IRQHandler 000001B4
+
+Symbol: ADC2_IRQHandler
+   Definitions
+      At line 1082 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+Relocatable symbols
+
+      At line 147 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 921 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+ADC_ETC_ERROR_IRQ_IRQHandler 000001B4
+
+Symbol: ADC_ETC_ERROR_IRQ_IRQHandler
+   Definitions
+      At line 1135 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 200 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 974 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+ADC_ETC_IRQ0_IRQHandler 000001B4
+
+Symbol: ADC_ETC_IRQ0_IRQHandler
+   Definitions
+      At line 1132 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 197 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 971 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+ADC_ETC_IRQ1_IRQHandler 000001B4
+
+Symbol: ADC_ETC_IRQ1_IRQHandler
+   Definitions
+      At line 1133 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 198 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 972 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+ADC_ETC_IRQ2_IRQHandler 000001B4
+
+Symbol: ADC_ETC_IRQ2_IRQHandler
+   Definitions
+      At line 1134 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 199 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 973 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+ANATOP_EVENT0_IRQHandler 000001B4
+
+Symbol: ANATOP_EVENT0_IRQHandler
+   Definitions
+      At line 1075 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 140 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 914 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+ANATOP_EVENT1_IRQHandler 000001B4
+
+Symbol: ANATOP_EVENT1_IRQHandler
+   Definitions
+      At line 1076 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 141 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 915 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+ANATOP_TAMP_LOW_HIGH_IRQHandler 000001B4
+
+
+
+
+ARM Macro Assembler    Page 3 Alphabetic symbol ordering
+Relocatable symbols
+
+Symbol: ANATOP_TAMP_LOW_HIGH_IRQHandler
+   Definitions
+      At line 1077 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 142 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 916 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+ANATOP_TEMP_PANIC_IRQHandler 000001B4
+
+Symbol: ANATOP_TEMP_PANIC_IRQHandler
+   Definitions
+      At line 1078 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 143 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 917 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+BEE_IRQHandler 000001B4
+
+Symbol: BEE_IRQHandler
+   Definitions
+      At line 1069 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 134 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 908 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+BusFault_Handler 000000EC
+
+Symbol: BusFault_Handler
+   Definitions
+      At line 493 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 66 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 494 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+CAN1_DriverIRQHandler 000001B4
+
+Symbol: CAN1_DriverIRQHandler
+   Definitions
+      At line 1050 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 756 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 889 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+CAN1_IRQHandler 0000017C
+
+Symbol: CAN1_IRQHandler
+   Definitions
+      At line 754 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 115 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 755 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+CAN2_DriverIRQHandler 000001B4
+
+Symbol: CAN2_DriverIRQHandler
+   Definitions
+      At line 1051 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 763 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+
+
+ARM Macro Assembler    Page 4 Alphabetic symbol ordering
+Relocatable symbols
+
+      At line 890 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+CAN2_IRQHandler 00000180
+
+Symbol: CAN2_IRQHandler
+   Definitions
+      At line 761 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 116 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 762 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+CCM_1_IRQHandler 000001B4
+
+Symbol: CCM_1_IRQHandler
+   Definitions
+      At line 1109 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 174 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 948 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+CCM_2_IRQHandler 000001B4
+
+Symbol: CCM_2_IRQHandler
+   Definitions
+      At line 1110 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 175 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 949 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+CORE_IRQHandler 000001B4
+
+Symbol: CORE_IRQHandler
+   Definitions
+      At line 1033 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 98 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 872 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+CSI_IRQHandler 000001B4
+
+Symbol: CSI_IRQHandler
+   Definitions
+      At line 1057 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 122 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 896 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+CSU_IRQHandler 000001B4
+
+Symbol: CSU_IRQHandler
+   Definitions
+      At line 1063 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 128 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 902 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+CTI0_ERROR_IRQHandler 000001B4
+
+Symbol: CTI0_ERROR_IRQHandler
+
+
+
+ARM Macro Assembler    Page 5 Alphabetic symbol ordering
+Relocatable symbols
+
+   Definitions
+      At line 1031 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 96 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 870 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+CTI1_ERROR_IRQHandler 000001B4
+
+Symbol: CTI1_ERROR_IRQHandler
+   Definitions
+      At line 1032 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 97 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 871 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+ConfigFlexRAM 0000000C
+
+Symbol: ConfigFlexRAM
+   Definitions
+      At line 338 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 465 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+Comment: ConfigFlexRAM used once
+ConfigFlexRAM_OCRAM 00000052
+
+Symbol: ConfigFlexRAM_OCRAM
+   Definitions
+      At line 374 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      None
+Comment: ConfigFlexRAM_OCRAM unused
+DCDC_IRQHandler 000001B4
+
+Symbol: DCDC_IRQHandler
+   Definitions
+      At line 1083 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 148 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 922 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+DCP_IRQHandler 000001B4
+
+Symbol: DCP_IRQHandler
+   Definitions
+      At line 1064 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 129 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 903 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+DCP_VMI_IRQHandler 000001B4
+
+Symbol: DCP_VMI_IRQHandler
+   Definitions
+      At line 1065 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 130 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 904 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+DMA0_DMA16_DriverIRQHandler 000001B4
+
+
+
+ARM Macro Assembler    Page 6 Alphabetic symbol ordering
+Relocatable symbols
+
+
+Symbol: DMA0_DMA16_DriverIRQHandler
+   Definitions
+      At line 1014 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 525 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 853 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+DMA0_DMA16_IRQHandler 000000F8
+
+Symbol: DMA0_DMA16_IRQHandler
+   Definitions
+      At line 523 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 79 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 524 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+DMA10_DMA26_DriverIRQHandler 000001B4
+
+Symbol: DMA10_DMA26_DriverIRQHandler
+   Definitions
+      At line 1024 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 595 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 863 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+DMA10_DMA26_IRQHandler 00000120
+
+Symbol: DMA10_DMA26_IRQHandler
+   Definitions
+      At line 593 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 89 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 594 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+DMA11_DMA27_DriverIRQHandler 000001B4
+
+Symbol: DMA11_DMA27_DriverIRQHandler
+   Definitions
+      At line 1025 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 602 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 864 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+DMA11_DMA27_IRQHandler 00000124
+
+Symbol: DMA11_DMA27_IRQHandler
+   Definitions
+      At line 600 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 90 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 601 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+DMA12_DMA28_DriverIRQHandler 000001B4
+
+Symbol: DMA12_DMA28_DriverIRQHandler
+   Definitions
+      At line 1026 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+
+
+
+ARM Macro Assembler    Page 7 Alphabetic symbol ordering
+Relocatable symbols
+
+      At line 609 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 865 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+DMA12_DMA28_IRQHandler 00000128
+
+Symbol: DMA12_DMA28_IRQHandler
+   Definitions
+      At line 607 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 91 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 608 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+DMA13_DMA29_DriverIRQHandler 000001B4
+
+Symbol: DMA13_DMA29_DriverIRQHandler
+   Definitions
+      At line 1027 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 616 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 866 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+DMA13_DMA29_IRQHandler 0000012C
+
+Symbol: DMA13_DMA29_IRQHandler
+   Definitions
+      At line 614 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 92 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 615 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+DMA14_DMA30_DriverIRQHandler 000001B4
+
+Symbol: DMA14_DMA30_DriverIRQHandler
+   Definitions
+      At line 1028 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 623 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 867 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+DMA14_DMA30_IRQHandler 00000130
+
+Symbol: DMA14_DMA30_IRQHandler
+   Definitions
+      At line 621 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 93 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 622 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+DMA15_DMA31_DriverIRQHandler 000001B4
+
+Symbol: DMA15_DMA31_DriverIRQHandler
+   Definitions
+      At line 1029 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 630 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 868 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+DMA15_DMA31_IRQHandler 00000134
+
+
+
+
+ARM Macro Assembler    Page 8 Alphabetic symbol ordering
+Relocatable symbols
+
+Symbol: DMA15_DMA31_IRQHandler
+   Definitions
+      At line 628 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 94 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 629 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+DMA1_DMA17_DriverIRQHandler 000001B4
+
+Symbol: DMA1_DMA17_DriverIRQHandler
+   Definitions
+      At line 1015 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 532 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 854 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+DMA1_DMA17_IRQHandler 000000FC
+
+Symbol: DMA1_DMA17_IRQHandler
+   Definitions
+      At line 530 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 80 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 531 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+DMA2_DMA18_DriverIRQHandler 000001B4
+
+Symbol: DMA2_DMA18_DriverIRQHandler
+   Definitions
+      At line 1016 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 539 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 855 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+DMA2_DMA18_IRQHandler 00000100
+
+Symbol: DMA2_DMA18_IRQHandler
+   Definitions
+      At line 537 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 81 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 538 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+DMA3_DMA19_DriverIRQHandler 000001B4
+
+Symbol: DMA3_DMA19_DriverIRQHandler
+   Definitions
+      At line 1017 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 546 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 856 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+DMA3_DMA19_IRQHandler 00000104
+
+Symbol: DMA3_DMA19_IRQHandler
+   Definitions
+      At line 544 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 82 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+
+
+ARM Macro Assembler    Page 9 Alphabetic symbol ordering
+Relocatable symbols
+
+      At line 545 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+DMA4_DMA20_DriverIRQHandler 000001B4
+
+Symbol: DMA4_DMA20_DriverIRQHandler
+   Definitions
+      At line 1018 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 553 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 857 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+DMA4_DMA20_IRQHandler 00000108
+
+Symbol: DMA4_DMA20_IRQHandler
+   Definitions
+      At line 551 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 83 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 552 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+DMA5_DMA21_DriverIRQHandler 000001B4
+
+Symbol: DMA5_DMA21_DriverIRQHandler
+   Definitions
+      At line 1019 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 560 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 858 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+DMA5_DMA21_IRQHandler 0000010C
+
+Symbol: DMA5_DMA21_IRQHandler
+   Definitions
+      At line 558 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 84 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 559 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+DMA6_DMA22_DriverIRQHandler 000001B4
+
+Symbol: DMA6_DMA22_DriverIRQHandler
+   Definitions
+      At line 1020 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 567 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 859 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+DMA6_DMA22_IRQHandler 00000110
+
+Symbol: DMA6_DMA22_IRQHandler
+   Definitions
+      At line 565 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 85 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 566 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+DMA7_DMA23_DriverIRQHandler 000001B4
+
+Symbol: DMA7_DMA23_DriverIRQHandler
+
+
+
+ARM Macro Assembler    Page 10 Alphabetic symbol ordering
+Relocatable symbols
+
+   Definitions
+      At line 1021 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 574 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 860 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+DMA7_DMA23_IRQHandler 00000114
+
+Symbol: DMA7_DMA23_IRQHandler
+   Definitions
+      At line 572 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 86 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 573 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+DMA8_DMA24_DriverIRQHandler 000001B4
+
+Symbol: DMA8_DMA24_DriverIRQHandler
+   Definitions
+      At line 1022 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 581 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 861 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+DMA8_DMA24_IRQHandler 00000118
+
+Symbol: DMA8_DMA24_IRQHandler
+   Definitions
+      At line 579 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 87 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 580 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+DMA9_DMA25_DriverIRQHandler 000001B4
+
+Symbol: DMA9_DMA25_DriverIRQHandler
+   Definitions
+      At line 1023 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 588 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 862 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+DMA9_DMA25_IRQHandler 0000011C
+
+Symbol: DMA9_DMA25_IRQHandler
+   Definitions
+      At line 586 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 88 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 587 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+DMA_ERROR_DriverIRQHandler 000001B4
+
+Symbol: DMA_ERROR_DriverIRQHandler
+   Definitions
+      At line 1030 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 637 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 869 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+
+
+ARM Macro Assembler    Page 11 Alphabetic symbol ordering
+Relocatable symbols
+
+
+DMA_ERROR_IRQHandler 00000138
+
+Symbol: DMA_ERROR_IRQHandler
+   Definitions
+      At line 635 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 95 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 636 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+DebugMon_Handler 000000F2
+
+Symbol: DebugMon_Handler
+   Definitions
+      At line 508 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 73 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 509 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+DefaultISR 000001B4
+
+Symbol: DefaultISR
+   Definitions
+      At line 1174 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 239 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 240 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 241 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 242 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 243 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 244 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 245 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 246 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 247 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 248 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 249 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 250 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 251 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 252 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 253 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 254 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 255 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 256 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 257 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 258 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 259 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 260 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 261 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 262 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 263 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 264 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 265 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 266 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 267 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 268 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 269 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 270 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 271 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 272 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+
+
+ARM Macro Assembler    Page 12 Alphabetic symbol ordering
+Relocatable symbols
+
+      At line 273 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 274 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 275 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 276 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 277 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 278 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 279 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 280 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 281 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 282 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 283 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 284 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 285 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 286 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 287 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 288 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 289 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 290 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 291 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 292 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 293 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 294 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 295 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 296 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 297 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 298 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 299 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 300 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 301 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 302 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 303 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 304 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 305 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 306 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 307 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 308 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 309 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 310 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 311 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 312 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 313 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 314 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 315 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 316 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 317 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 1013 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 1175 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+Default_Handler 000001B4
+
+Symbol: Default_Handler
+   Definitions
+      At line 852 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      None
+Comment: Default_Handler unused
+ENC1_IRQHandler 000001B4
+
+Symbol: ENC1_IRQHandler
+
+
+
+ARM Macro Assembler    Page 13 Alphabetic symbol ordering
+Relocatable symbols
+
+   Definitions
+      At line 1143 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 208 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 982 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+ENC2_IRQHandler 000001B4
+
+Symbol: ENC2_IRQHandler
+   Definitions
+      At line 1144 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 209 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 983 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+ENC3_IRQHandler 000001B4
+
+Symbol: ENC3_IRQHandler
+   Definitions
+      At line 1145 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 210 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 984 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+ENC4_IRQHandler 000001B4
+
+Symbol: ENC4_IRQHandler
+   Definitions
+      At line 1146 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 211 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 985 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+ENET_1588_Timer_DriverIRQHandler 000001B4
+
+Symbol: ENET_1588_Timer_DriverIRQHandler
+   Definitions
+      At line 1129 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 847 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 968 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+ENET_1588_Timer_IRQHandler 000001B0
+
+Symbol: ENET_1588_Timer_IRQHandler
+   Definitions
+      At line 845 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 194 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 846 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+ENET_DriverIRQHandler 000001B4
+
+Symbol: ENET_DriverIRQHandler
+   Definitions
+      At line 1128 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 840 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 967 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+
+
+ARM Macro Assembler    Page 14 Alphabetic symbol ordering
+Relocatable symbols
+
+
+ENET_IRQHandler 000001AC
+
+Symbol: ENET_IRQHandler
+   Definitions
+      At line 838 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 193 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 839 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+EWM_IRQHandler 000001B4
+
+Symbol: EWM_IRQHandler
+   Definitions
+      At line 1108 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 173 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 947 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+FLEXIO1_DriverIRQHandler 000001B4
+
+Symbol: FLEXIO1_DriverIRQHandler
+   Definitions
+      At line 1104 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 805 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 943 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+FLEXIO1_IRQHandler 00000198
+
+Symbol: FLEXIO1_IRQHandler
+   Definitions
+      At line 803 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 169 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 804 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+FLEXIO2_DriverIRQHandler 000001B4
+
+Symbol: FLEXIO2_DriverIRQHandler
+   Definitions
+      At line 1105 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 812 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 944 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+FLEXIO2_IRQHandler 0000019C
+
+Symbol: FLEXIO2_IRQHandler
+   Definitions
+      At line 810 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 170 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 811 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+FLEXRAM_IRQHandler 000001B4
+
+Symbol: FLEXRAM_IRQHandler
+   Definitions
+
+
+
+ARM Macro Assembler    Page 15 Alphabetic symbol ordering
+Relocatable symbols
+
+      At line 1052 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 117 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 891 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+FLEXSPI_DriverIRQHandler 000001B4
+
+Symbol: FLEXSPI_DriverIRQHandler
+   Definitions
+      At line 1122 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 819 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 961 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+FLEXSPI_IRQHandler 000001A0
+
+Symbol: FLEXSPI_IRQHandler
+   Definitions
+      At line 817 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 187 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 818 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+GPC_IRQHandler 000001B4
+
+Symbol: GPC_IRQHandler
+   Definitions
+      At line 1111 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 176 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 950 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+GPIO1_Combined_0_15_IRQHandler 000001B4
+
+Symbol: GPIO1_Combined_0_15_IRQHandler
+   Definitions
+      At line 1094 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 159 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 933 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+GPIO1_Combined_16_31_IRQHandler 000001B4
+
+Symbol: GPIO1_Combined_16_31_IRQHandler
+   Definitions
+      At line 1095 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 160 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 934 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+GPIO1_INT0_IRQHandler 000001B4
+
+Symbol: GPIO1_INT0_IRQHandler
+   Definitions
+      At line 1086 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 151 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 925 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+
+
+
+ARM Macro Assembler    Page 16 Alphabetic symbol ordering
+Relocatable symbols
+
+GPIO1_INT1_IRQHandler 000001B4
+
+Symbol: GPIO1_INT1_IRQHandler
+   Definitions
+      At line 1087 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 152 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 926 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+GPIO1_INT2_IRQHandler 000001B4
+
+Symbol: GPIO1_INT2_IRQHandler
+   Definitions
+      At line 1088 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 153 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 927 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+GPIO1_INT3_IRQHandler 000001B4
+
+Symbol: GPIO1_INT3_IRQHandler
+   Definitions
+      At line 1089 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 154 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 928 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+GPIO1_INT4_IRQHandler 000001B4
+
+Symbol: GPIO1_INT4_IRQHandler
+   Definitions
+      At line 1090 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 155 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 929 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+GPIO1_INT5_IRQHandler 000001B4
+
+Symbol: GPIO1_INT5_IRQHandler
+   Definitions
+      At line 1091 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 156 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 930 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+GPIO1_INT6_IRQHandler 000001B4
+
+Symbol: GPIO1_INT6_IRQHandler
+   Definitions
+      At line 1092 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 157 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 931 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+GPIO1_INT7_IRQHandler 000001B4
+
+Symbol: GPIO1_INT7_IRQHandler
+   Definitions
+      At line 1093 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+
+
+ARM Macro Assembler    Page 17 Alphabetic symbol ordering
+Relocatable symbols
+
+   Uses
+      At line 158 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 932 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+GPIO2_Combined_0_15_IRQHandler 000001B4
+
+Symbol: GPIO2_Combined_0_15_IRQHandler
+   Definitions
+      At line 1096 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 161 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 935 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+GPIO2_Combined_16_31_IRQHandler 000001B4
+
+Symbol: GPIO2_Combined_16_31_IRQHandler
+   Definitions
+      At line 1097 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 162 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 936 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+GPIO3_Combined_0_15_IRQHandler 000001B4
+
+Symbol: GPIO3_Combined_0_15_IRQHandler
+   Definitions
+      At line 1098 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 163 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 937 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+GPIO3_Combined_16_31_IRQHandler 000001B4
+
+Symbol: GPIO3_Combined_16_31_IRQHandler
+   Definitions
+      At line 1099 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 164 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 938 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+GPIO4_Combined_0_15_IRQHandler 000001B4
+
+Symbol: GPIO4_Combined_0_15_IRQHandler
+   Definitions
+      At line 1100 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 165 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 939 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+GPIO4_Combined_16_31_IRQHandler 000001B4
+
+Symbol: GPIO4_Combined_16_31_IRQHandler
+   Definitions
+      At line 1101 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 166 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 940 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+GPIO5_Combined_0_15_IRQHandler 000001B4
+
+
+
+ARM Macro Assembler    Page 18 Alphabetic symbol ordering
+Relocatable symbols
+
+
+Symbol: GPIO5_Combined_0_15_IRQHandler
+   Definitions
+      At line 1102 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 167 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 941 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+GPIO5_Combined_16_31_IRQHandler 000001B4
+
+Symbol: GPIO5_Combined_16_31_IRQHandler
+   Definitions
+      At line 1103 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 168 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 942 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+GPR_IRQ_IRQHandler 000001B4
+
+Symbol: GPR_IRQ_IRQHandler
+   Definitions
+      At line 1055 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 120 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 894 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+GPT1_IRQHandler 000001B4
+
+Symbol: GPT1_IRQHandler
+   Definitions
+      At line 1114 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 179 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 953 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+GPT2_IRQHandler 000001B4
+
+Symbol: GPT2_IRQHandler
+   Definitions
+      At line 1115 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 180 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 954 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+HardFault_Handler 000000E8
+
+Symbol: HardFault_Handler
+   Definitions
+      At line 483 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 64 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 484 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+KPP_IRQHandler 000001B4
+
+Symbol: KPP_IRQHandler
+   Definitions
+      At line 1053 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+
+
+
+ARM Macro Assembler    Page 19 Alphabetic symbol ordering
+Relocatable symbols
+
+      At line 118 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 892 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+LCDIF_IRQHandler 000001B4
+
+Symbol: LCDIF_IRQHandler
+   Definitions
+      At line 1056 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 121 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 895 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+LPI2C1_DriverIRQHandler 000001B4
+
+Symbol: LPI2C1_DriverIRQHandler
+   Definitions
+      At line 1042 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 700 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 881 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+LPI2C1_IRQHandler 0000015C
+
+Symbol: LPI2C1_IRQHandler
+   Definitions
+      At line 698 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 107 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 699 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+LPI2C2_DriverIRQHandler 000001B4
+
+Symbol: LPI2C2_DriverIRQHandler
+   Definitions
+      At line 1043 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 707 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 882 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+LPI2C2_IRQHandler 00000160
+
+Symbol: LPI2C2_IRQHandler
+   Definitions
+      At line 705 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 108 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 706 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+LPI2C3_DriverIRQHandler 000001B4
+
+Symbol: LPI2C3_DriverIRQHandler
+   Definitions
+      At line 1044 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 714 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 883 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+LPI2C3_IRQHandler 00000164
+
+
+
+
+ARM Macro Assembler    Page 20 Alphabetic symbol ordering
+Relocatable symbols
+
+Symbol: LPI2C3_IRQHandler
+   Definitions
+      At line 712 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 109 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 713 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+LPI2C4_DriverIRQHandler 000001B4
+
+Symbol: LPI2C4_DriverIRQHandler
+   Definitions
+      At line 1045 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 721 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 884 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+LPI2C4_IRQHandler 00000168
+
+Symbol: LPI2C4_IRQHandler
+   Definitions
+      At line 719 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 110 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 720 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+LPSPI1_DriverIRQHandler 000001B4
+
+Symbol: LPSPI1_DriverIRQHandler
+   Definitions
+      At line 1046 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 728 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 885 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+LPSPI1_IRQHandler 0000016C
+
+Symbol: LPSPI1_IRQHandler
+   Definitions
+      At line 726 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 111 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 727 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+LPSPI2_DriverIRQHandler 000001B4
+
+Symbol: LPSPI2_DriverIRQHandler
+   Definitions
+      At line 1047 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 735 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 886 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+LPSPI2_IRQHandler 00000170
+
+Symbol: LPSPI2_IRQHandler
+   Definitions
+      At line 733 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 112 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+
+
+ARM Macro Assembler    Page 21 Alphabetic symbol ordering
+Relocatable symbols
+
+      At line 734 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+LPSPI3_DriverIRQHandler 000001B4
+
+Symbol: LPSPI3_DriverIRQHandler
+   Definitions
+      At line 1048 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 742 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 887 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+LPSPI3_IRQHandler 00000174
+
+Symbol: LPSPI3_IRQHandler
+   Definitions
+      At line 740 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 113 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 741 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+LPSPI4_DriverIRQHandler 000001B4
+
+Symbol: LPSPI4_DriverIRQHandler
+   Definitions
+      At line 1049 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 749 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 888 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+LPSPI4_IRQHandler 00000178
+
+Symbol: LPSPI4_IRQHandler
+   Definitions
+      At line 747 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 114 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 748 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+LPUART1_DriverIRQHandler 000001B4
+
+Symbol: LPUART1_DriverIRQHandler
+   Definitions
+      At line 1034 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 644 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 873 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+LPUART1_IRQHandler 0000013C
+
+Symbol: LPUART1_IRQHandler
+   Definitions
+      At line 642 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 99 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 643 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+LPUART2_DriverIRQHandler 000001B4
+
+Symbol: LPUART2_DriverIRQHandler
+
+
+
+ARM Macro Assembler    Page 22 Alphabetic symbol ordering
+Relocatable symbols
+
+   Definitions
+      At line 1035 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 651 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 874 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+LPUART2_IRQHandler 00000140
+
+Symbol: LPUART2_IRQHandler
+   Definitions
+      At line 649 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 100 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 650 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+LPUART3_DriverIRQHandler 000001B4
+
+Symbol: LPUART3_DriverIRQHandler
+   Definitions
+      At line 1036 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 658 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 875 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+LPUART3_IRQHandler 00000144
+
+Symbol: LPUART3_IRQHandler
+   Definitions
+      At line 656 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 101 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 657 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+LPUART4_DriverIRQHandler 000001B4
+
+Symbol: LPUART4_DriverIRQHandler
+   Definitions
+      At line 1037 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 665 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 876 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+LPUART4_IRQHandler 00000148
+
+Symbol: LPUART4_IRQHandler
+   Definitions
+      At line 663 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 102 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 664 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+LPUART5_DriverIRQHandler 000001B4
+
+Symbol: LPUART5_DriverIRQHandler
+   Definitions
+      At line 1038 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 672 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 877 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+
+
+ARM Macro Assembler    Page 23 Alphabetic symbol ordering
+Relocatable symbols
+
+
+LPUART5_IRQHandler 0000014C
+
+Symbol: LPUART5_IRQHandler
+   Definitions
+      At line 670 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 103 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 671 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+LPUART6_DriverIRQHandler 000001B4
+
+Symbol: LPUART6_DriverIRQHandler
+   Definitions
+      At line 1039 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 679 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 878 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+LPUART6_IRQHandler 00000150
+
+Symbol: LPUART6_IRQHandler
+   Definitions
+      At line 677 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 104 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 678 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+LPUART7_DriverIRQHandler 000001B4
+
+Symbol: LPUART7_DriverIRQHandler
+   Definitions
+      At line 1040 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 686 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 879 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+LPUART7_IRQHandler 00000154
+
+Symbol: LPUART7_IRQHandler
+   Definitions
+      At line 684 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 105 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 685 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+LPUART8_DriverIRQHandler 000001B4
+
+Symbol: LPUART8_DriverIRQHandler
+   Definitions
+      At line 1041 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 693 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 880 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+LPUART8_IRQHandler 00000158
+
+Symbol: LPUART8_IRQHandler
+   Definitions
+
+
+
+ARM Macro Assembler    Page 24 Alphabetic symbol ordering
+Relocatable symbols
+
+      At line 691 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 106 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 692 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+MemManage_Handler 000000EA
+
+Symbol: MemManage_Handler
+   Definitions
+      At line 488 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 65 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 489 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+NMI_Handler 000000E6
+
+Symbol: NMI_Handler
+   Definitions
+      At line 478 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 63 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 479 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+NMI_WAKEUP_IRQHandler 000001B4
+
+Symbol: NMI_WAKEUP_IRQHandler
+   Definitions
+      At line 1173 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 238 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 1012 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+PIT_IRQHandler 000001B4
+
+Symbol: PIT_IRQHandler
+   Definitions
+      At line 1136 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 201 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 975 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+PWM1_0_IRQHandler 000001B4
+
+Symbol: PWM1_0_IRQHandler
+   Definitions
+      At line 1116 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 181 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 955 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+PWM1_1_IRQHandler 000001B4
+
+Symbol: PWM1_1_IRQHandler
+   Definitions
+      At line 1117 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 182 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 956 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+
+
+
+ARM Macro Assembler    Page 25 Alphabetic symbol ordering
+Relocatable symbols
+
+PWM1_2_IRQHandler 000001B4
+
+Symbol: PWM1_2_IRQHandler
+   Definitions
+      At line 1118 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 183 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 957 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+PWM1_3_IRQHandler 000001B4
+
+Symbol: PWM1_3_IRQHandler
+   Definitions
+      At line 1119 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 184 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 958 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+PWM1_FAULT_IRQHandler 000001B4
+
+Symbol: PWM1_FAULT_IRQHandler
+   Definitions
+      At line 1120 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 185 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 959 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+PWM2_0_IRQHandler 000001B4
+
+Symbol: PWM2_0_IRQHandler
+   Definitions
+      At line 1151 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 216 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 990 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+PWM2_1_IRQHandler 000001B4
+
+Symbol: PWM2_1_IRQHandler
+   Definitions
+      At line 1152 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 217 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 991 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+PWM2_2_IRQHandler 000001B4
+
+Symbol: PWM2_2_IRQHandler
+   Definitions
+      At line 1153 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 218 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 992 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+PWM2_3_IRQHandler 000001B4
+
+Symbol: PWM2_3_IRQHandler
+   Definitions
+      At line 1154 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+
+
+ARM Macro Assembler    Page 26 Alphabetic symbol ordering
+Relocatable symbols
+
+   Uses
+      At line 219 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 993 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+PWM2_FAULT_IRQHandler 000001B4
+
+Symbol: PWM2_FAULT_IRQHandler
+   Definitions
+      At line 1155 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 220 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 994 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+PWM3_0_IRQHandler 000001B4
+
+Symbol: PWM3_0_IRQHandler
+   Definitions
+      At line 1156 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 221 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 995 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+PWM3_1_IRQHandler 000001B4
+
+Symbol: PWM3_1_IRQHandler
+   Definitions
+      At line 1157 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 222 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 996 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+PWM3_2_IRQHandler 000001B4
+
+Symbol: PWM3_2_IRQHandler
+   Definitions
+      At line 1158 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 223 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 997 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+PWM3_3_IRQHandler 000001B4
+
+Symbol: PWM3_3_IRQHandler
+   Definitions
+      At line 1159 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 224 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 998 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+PWM3_FAULT_IRQHandler 000001B4
+
+Symbol: PWM3_FAULT_IRQHandler
+   Definitions
+      At line 1160 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 225 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 999 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+PWM4_0_IRQHandler 000001B4
+
+
+
+ARM Macro Assembler    Page 27 Alphabetic symbol ordering
+Relocatable symbols
+
+
+Symbol: PWM4_0_IRQHandler
+   Definitions
+      At line 1161 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 226 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 1000 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+PWM4_1_IRQHandler 000001B4
+
+Symbol: PWM4_1_IRQHandler
+   Definitions
+      At line 1162 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 227 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 1001 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+PWM4_2_IRQHandler 000001B4
+
+Symbol: PWM4_2_IRQHandler
+   Definitions
+      At line 1163 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 228 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 1002 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+PWM4_3_IRQHandler 000001B4
+
+Symbol: PWM4_3_IRQHandler
+   Definitions
+      At line 1164 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 229 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 1003 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+PWM4_FAULT_IRQHandler 000001B4
+
+Symbol: PWM4_FAULT_IRQHandler
+   Definitions
+      At line 1165 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 230 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 1004 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+PXP_IRQHandler 000001B4
+
+Symbol: PXP_IRQHandler
+   Definitions
+      At line 1058 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 123 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 897 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+PendSV_Handler 000000F4
+
+Symbol: PendSV_Handler
+   Definitions
+      At line 513 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+
+
+
+ARM Macro Assembler    Page 28 Alphabetic symbol ordering
+Relocatable symbols
+
+      At line 75 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 514 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+RTWDOG_IRQHandler 000001B4
+
+Symbol: RTWDOG_IRQHandler
+   Definitions
+      At line 1107 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 172 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 946 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+RelocateVTOR 000000C6
+
+Symbol: RelocateVTOR
+   Definitions
+      At line 446 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      None
+Comment: RelocateVTOR unused
+Reserved115_IRQHandler 000001B4
+
+Symbol: Reserved115_IRQHandler
+   Definitions
+      At line 1113 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 178 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 952 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+Reserved123_IRQHandler 000001B4
+
+Symbol: Reserved123_IRQHandler
+   Definitions
+      At line 1121 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 186 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 960 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+Reserved143_IRQHandler 000001B4
+
+Symbol: Reserved143_IRQHandler
+   Definitions
+      At line 1141 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 206 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 980 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+Reserved144_IRQHandler 000001B4
+
+Symbol: Reserved144_IRQHandler
+   Definitions
+      At line 1142 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 207 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 981 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+Reserved168_IRQHandler 000001B4
+
+Symbol: Reserved168_IRQHandler
+
+
+
+ARM Macro Assembler    Page 29 Alphabetic symbol ordering
+Relocatable symbols
+
+   Definitions
+      At line 1166 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 231 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 1005 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+Reserved169_IRQHandler 000001B4
+
+Symbol: Reserved169_IRQHandler
+   Definitions
+      At line 1167 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 232 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 1006 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+Reserved170_IRQHandler 000001B4
+
+Symbol: Reserved170_IRQHandler
+   Definitions
+      At line 1168 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 233 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 1007 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+Reserved171_IRQHandler 000001B4
+
+Symbol: Reserved171_IRQHandler
+   Definitions
+      At line 1169 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 234 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 1008 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+Reserved172_IRQHandler 000001B4
+
+Symbol: Reserved172_IRQHandler
+   Definitions
+      At line 1170 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 235 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 1009 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+Reserved173_IRQHandler 000001B4
+
+Symbol: Reserved173_IRQHandler
+   Definitions
+      At line 1171 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 236 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 1010 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+Reserved68_IRQHandler 000001B4
+
+Symbol: Reserved68_IRQHandler
+   Definitions
+      At line 1066 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 131 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 905 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+
+
+ARM Macro Assembler    Page 30 Alphabetic symbol ordering
+Relocatable symbols
+
+
+Reserved86_IRQHandler 000001B4
+
+Symbol: Reserved86_IRQHandler
+   Definitions
+      At line 1084 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 149 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 923 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+Reserved87_IRQHandler 000001B4
+
+Symbol: Reserved87_IRQHandler
+   Definitions
+      At line 1085 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 150 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 924 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+Reset_Handler 000000C6
+
+Symbol: Reset_Handler
+   Definitions
+      At line 448 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 62 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 449 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+SAI1_DriverIRQHandler 000001B4
+
+Symbol: SAI1_DriverIRQHandler
+   Definitions
+      At line 1070 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 770 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 909 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+SAI1_IRQHandler 00000184
+
+Symbol: SAI1_IRQHandler
+   Definitions
+      At line 768 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 135 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 769 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+SAI2_DriverIRQHandler 000001B4
+
+Symbol: SAI2_DriverIRQHandler
+   Definitions
+      At line 1071 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 777 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 910 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+SAI2_IRQHandler 00000188
+
+Symbol: SAI2_IRQHandler
+   Definitions
+
+
+
+ARM Macro Assembler    Page 31 Alphabetic symbol ordering
+Relocatable symbols
+
+      At line 775 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 136 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 776 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+SAI3_RX_DriverIRQHandler 000001B4
+
+Symbol: SAI3_RX_DriverIRQHandler
+   Definitions
+      At line 1072 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 784 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 911 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+SAI3_RX_IRQHandler 0000018C
+
+Symbol: SAI3_RX_IRQHandler
+   Definitions
+      At line 782 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 137 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 783 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+SAI3_TX_DriverIRQHandler 000001B4
+
+Symbol: SAI3_TX_DriverIRQHandler
+   Definitions
+      At line 1073 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 791 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 912 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+SAI3_TX_IRQHandler 00000190
+
+Symbol: SAI3_TX_IRQHandler
+   Definitions
+      At line 789 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 138 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 790 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+SEMC_IRQHandler 000001B4
+
+Symbol: SEMC_IRQHandler
+   Definitions
+      At line 1123 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 188 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 962 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+SJC_ARM_DEBUG_IRQHandler 000001B4
+
+Symbol: SJC_ARM_DEBUG_IRQHandler
+   Definitions
+      At line 1172 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 237 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 1011 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+
+
+
+ARM Macro Assembler    Page 32 Alphabetic symbol ordering
+Relocatable symbols
+
+SJC_IRQHandler 000001B4
+
+Symbol: SJC_IRQHandler
+   Definitions
+      At line 1068 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 133 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 907 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+SNVS_HP_WRAPPER_IRQHandler 000001B4
+
+Symbol: SNVS_HP_WRAPPER_IRQHandler
+   Definitions
+      At line 1060 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 125 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 899 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+SNVS_HP_WRAPPER_TZ_IRQHandler 000001B4
+
+Symbol: SNVS_HP_WRAPPER_TZ_IRQHandler
+   Definitions
+      At line 1061 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 126 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 900 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+SNVS_LP_WRAPPER_IRQHandler 000001B4
+
+Symbol: SNVS_LP_WRAPPER_IRQHandler
+   Definitions
+      At line 1062 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 127 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 901 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+SPDIF_DriverIRQHandler 000001B4
+
+Symbol: SPDIF_DriverIRQHandler
+   Definitions
+      At line 1074 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 798 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 913 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+SPDIF_IRQHandler 00000194
+
+Symbol: SPDIF_IRQHandler
+   Definitions
+      At line 796 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 139 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 797 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+SRC_IRQHandler 000001B4
+
+Symbol: SRC_IRQHandler
+   Definitions
+      At line 1112 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+
+
+ARM Macro Assembler    Page 33 Alphabetic symbol ordering
+Relocatable symbols
+
+   Uses
+      At line 177 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 951 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+SVC_Handler 000000F0
+
+Symbol: SVC_Handler
+   Definitions
+      At line 503 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 72 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 504 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+SysTick_Handler 000000F6
+
+Symbol: SysTick_Handler
+   Definitions
+      At line 518 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 76 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 519 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+TMR1_IRQHandler 000001B4
+
+Symbol: TMR1_IRQHandler
+   Definitions
+      At line 1147 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 212 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 986 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+TMR2_IRQHandler 000001B4
+
+Symbol: TMR2_IRQHandler
+   Definitions
+      At line 1148 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 213 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 987 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+TMR3_IRQHandler 000001B4
+
+Symbol: TMR3_IRQHandler
+   Definitions
+      At line 1149 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 214 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 988 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+TMR4_IRQHandler 000001B4
+
+Symbol: TMR4_IRQHandler
+   Definitions
+      At line 1150 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 215 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 989 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+TRNG_IRQHandler 000001B4
+
+
+
+ARM Macro Assembler    Page 34 Alphabetic symbol ordering
+Relocatable symbols
+
+
+Symbol: TRNG_IRQHandler
+   Definitions
+      At line 1067 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 132 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 906 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+TSC_DIG_IRQHandler 000001B4
+
+Symbol: TSC_DIG_IRQHandler
+   Definitions
+      At line 1054 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 119 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 893 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+TestCchBug 00000096
+
+Symbol: TestCchBug
+   Definitions
+      At line 411 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 412 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+Comment: TestCchBug used once
+USB_OTG1_IRQHandler 000001B4
+
+Symbol: USB_OTG1_IRQHandler
+   Definitions
+      At line 1127 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 192 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 966 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+USB_OTG2_IRQHandler 000001B4
+
+Symbol: USB_OTG2_IRQHandler
+   Definitions
+      At line 1126 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 191 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 965 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+USB_PHY1_IRQHandler 000001B4
+
+Symbol: USB_PHY1_IRQHandler
+   Definitions
+      At line 1079 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 144 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 918 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+USB_PHY2_IRQHandler 000001B4
+
+Symbol: USB_PHY2_IRQHandler
+   Definitions
+      At line 1080 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 145 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+
+
+ARM Macro Assembler    Page 35 Alphabetic symbol ordering
+Relocatable symbols
+
+      At line 919 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+USDHC1_DriverIRQHandler 000001B4
+
+Symbol: USDHC1_DriverIRQHandler
+   Definitions
+      At line 1124 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 826 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 963 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+USDHC1_IRQHandler 000001A4
+
+Symbol: USDHC1_IRQHandler
+   Definitions
+      At line 824 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 189 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 825 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+USDHC2_DriverIRQHandler 000001B4
+
+Symbol: USDHC2_DriverIRQHandler
+   Definitions
+      At line 1125 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 833 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 964 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+USDHC2_IRQHandler 000001A8
+
+Symbol: USDHC2_IRQHandler
+   Definitions
+      At line 831 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 190 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 832 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+UnalignTest 00000000
+
+Symbol: UnalignTest
+   Definitions
+      At line 327 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 328 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+Comment: UnalignTest used once
+UsageFault_Handler 000000EE
+
+Symbol: UsageFault_Handler
+   Definitions
+      At line 498 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 67 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 499 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+WDOG1_IRQHandler 000001B4
+
+Symbol: WDOG1_IRQHandler
+   Definitions
+
+
+
+ARM Macro Assembler    Page 36 Alphabetic symbol ordering
+Relocatable symbols
+
+      At line 1106 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 171 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 945 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+WDOG2_IRQHandler 000001B4
+
+Symbol: WDOG2_IRQHandler
+   Definitions
+      At line 1059 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 124 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 898 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+XBAR1_IRQ_0_1_IRQHandler 000001B4
+
+Symbol: XBAR1_IRQ_0_1_IRQHandler
+   Definitions
+      At line 1130 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 195 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 969 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+XBAR1_IRQ_2_3_IRQHandler 000001B4
+
+Symbol: XBAR1_IRQ_2_3_IRQHandler
+   Definitions
+      At line 1131 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 196 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 970 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+zero_dtcm 00000034
+
+Symbol: zero_dtcm
+   Definitions
+      At line 358 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 361 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 397 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+zero_dtcm2 00000078
+
+Symbol: zero_dtcm2
+   Definitions
+      At line 394 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      None
+Comment: zero_dtcm2 unused
+zero_itcm 00000048
+
+Symbol: zero_itcm
+   Definitions
+      At line 366 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 369 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+      At line 405 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+
+zero_itcm2 0000008C
+
+
+
+ARM Macro Assembler    Page 37 Alphabetic symbol ordering
+Relocatable symbols
+
+
+Symbol: zero_itcm2
+   Definitions
+      At line 402 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      None
+Comment: zero_itcm2 unused
+229 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Absolute symbols
+
+__Vectors_Size 00000400
+
+Symbol: __Vectors_Size
+   Definitions
+      At line 321 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 58 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+Comment: __Vectors_Size used once
+1 symbol
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+External symbols
+
+Image$$ARM_LIB_STACK$$ZI$$Limit 00000000
+
+Symbol: Image$$ARM_LIB_STACK$$ZI$$Limit
+   Definitions
+      At line 59 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 61 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+Comment: Image$$ARM_LIB_STACK$$ZI$$Limit used once
+SystemInit 00000000
+
+Symbol: SystemInit
+   Definitions
+      At line 450 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 467 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+Comment: SystemInit used once
+__main 00000000
+
+Symbol: __main
+   Definitions
+      At line 451 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+   Uses
+      At line 471 in file ..\nxp_rt1050_60\startup_MIMXRT1052.s
+Comment: __main used once
+3 symbols
+575 symbols in table

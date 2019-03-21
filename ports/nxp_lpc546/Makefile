@@ -61,7 +61,7 @@ CFLAGS_CORTEX_M4 = -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -fsingle-precision
 CFLAGS_CORTEX_M7 = -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -fsingle-precision-constant -Wdouble-promotion -mtune=cortex-m4 -mcpu=cortex-m7
 
 
-CFLAGS = $(INC) -Wall -Wpointer-arith -std=gnu99 -nostdlib $(CFLAGS_MOD)
+CFLAGS = $(INC) -Wall -Wpointer-arith -Wno-error -std=gnu99 -nostdlib $(CFLAGS_MOD)
 CFLAGS += -D$(SDK_MCU)
 CFLAGS += $(CFLAGS_CORTEX_M4)
 CFLAGS += $(COPT)
