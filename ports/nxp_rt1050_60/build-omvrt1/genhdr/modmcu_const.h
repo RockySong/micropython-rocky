@@ -1,4 +1,4 @@
-// Automatically generated from mcusdk/MIMXRT1052.h by make-stmconst.py
+// Automatically generated from mcusdk/MIMXRT1052.h by make-rtconst.py
 
 { MP_OBJ_NEW_QSTR(MP_QSTR_ADC1), (mp_obj_t)&mpz_400c4000 },
 { MP_OBJ_NEW_QSTR(MP_QSTR_ADC2), (mp_obj_t)&mpz_400c8000 },
@@ -198,4 +198,18 @@
 { MP_OBJ_NEW_QSTR(MP_QSTR_GPIO_IMR), MP_OBJ_NEW_SMALL_INT(0x14) }, // 32-bits, GPIO interrupt mask registe
 { MP_OBJ_NEW_QSTR(MP_QSTR_GPIO_ISR), MP_OBJ_NEW_SMALL_INT(0x18) }, // 32-bits, GPIO interrupt status registe
 { MP_OBJ_NEW_QSTR(MP_QSTR_GPIO_EDGE_SEL), MP_OBJ_NEW_SMALL_INT(0x1c) }, // 32-bits, GPIO edge select registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_TMR_COMP1), MP_OBJ_NEW_SMALL_INT(0x0) }, // 16-bits, Timer Channel Compare Register 
+{ MP_OBJ_NEW_QSTR(MP_QSTR_TMR_COMP2), MP_OBJ_NEW_SMALL_INT(0x2) }, // 16-bits, Timer Channel Compare Register 
+{ MP_OBJ_NEW_QSTR(MP_QSTR_TMR_CAPT), MP_OBJ_NEW_SMALL_INT(0x4) }, // 16-bits, Timer Channel Capture Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_TMR_LOAD), MP_OBJ_NEW_SMALL_INT(0x6) }, // 16-bits, Timer Channel Load Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_TMR_HOLD), MP_OBJ_NEW_SMALL_INT(0x8) }, // 16-bits, Timer Channel Hold Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_TMR_CNTR), MP_OBJ_NEW_SMALL_INT(0xa) }, // 16-bits, Timer Channel Counter Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_TMR_CTRL), MP_OBJ_NEW_SMALL_INT(0xc) }, // 16-bits, Timer Channel Control Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_TMR_SCTRL), MP_OBJ_NEW_SMALL_INT(0xe) }, // 16-bits, Timer Channel Status and Control Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_TMR_CMPLD1), MP_OBJ_NEW_SMALL_INT(0x10) }, // 16-bits, Timer Channel Comparator Load Register 
+{ MP_OBJ_NEW_QSTR(MP_QSTR_TMR_CMPLD2), MP_OBJ_NEW_SMALL_INT(0x12) }, // 16-bits, Timer Channel Comparator Load Register 
+{ MP_OBJ_NEW_QSTR(MP_QSTR_TMR_CSCTRL), MP_OBJ_NEW_SMALL_INT(0x14) }, // 16-bits, Timer Channel Comparator Status and Control Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_TMR_FILT), MP_OBJ_NEW_SMALL_INT(0x16) }, // 16-bits, Timer Channel Input Filter Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_TMR_DMA), MP_OBJ_NEW_SMALL_INT(0x18) }, // 16-bits, Timer Channel DMA Enable Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_TMR_ENBL), MP_OBJ_NEW_SMALL_INT(0x1e) }, // 16-bits, Timer Channel Enable Registe
 

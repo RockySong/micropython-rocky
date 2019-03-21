@@ -1,0 +1,129 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000                 PRESERVE8
+    2 00000000                 THUMB
+    3 00000000                 AREA             |.text|, CODE, READONLY
+    4 00000000         
+    5 00000000         gc_helper_get_regs_and_sp
+                               PROC
+    6 00000000                 EXPORT           gc_helper_get_regs_and_sp
+    7 00000000         
+    8 00000000 F840 4B04       str              r4, [r0], #4
+    9 00000004 F840 5B04       str              r5, [r0], #4
+   10 00000008 F840 6B04       str              r6, [r0], #4
+   11 0000000C F840 7B04       str              r7, [r0], #4
+   12 00000010 F840 8B04       str              r8, [r0], #4
+   13 00000014 F840 9B04       str              r9, [r0], #4
+   14 00000018 F840 AB04       str              r10, [r0], #4
+   15 0000001C F840 BB04       str              r11, [r0], #4
+   16 00000020 F840 CB04       str              r12, [r0], #4
+   17 00000024 F840 DB04       str              r13, [r0], #4
+   18 00000028         
+   19 00000028         ; return the sp
+   20 00000028 4668            mov              r0, sp
+   21 0000002A 4770            bx               lr
+   22 0000002C                 ENDP
+   23 0000002C         
+   24 0000002C         ; this next function is now obsolete
+   25 0000002C         
+   26 0000002C         ;.size   gc_helper_get_regs_and_clean_stack, .-gc_helper
+                       _get_regs_and_clean_stack
+   27 0000002C         ; void gc_helper_get_regs_and_clean_stack(r0=uint regs[1
+                       0], r1=heap_end)
+   28 0000002C         
+   29 0000002C         gc_helper_get_regs_and_clean_stack
+                               PROC
+   30 0000002C                 export           gc_helper_get_regs_and_clean_st
+ack
+   31 0000002C         ; store registers into given array
+   32 0000002C F840 4B04       str              r4, [r0], #4
+   33 00000030 F840 5B04       str              r5, [r0], #4
+   34 00000034 F840 6B04       str              r6, [r0], #4
+   35 00000038 F840 7B04       str              r7, [r0], #4
+   36 0000003C F840 8B04       str              r8, [r0], #4
+   37 00000040 F840 9B04       str              r9, [r0], #4
+   38 00000044 F840 AB04       str              r10, [r0], #4
+   39 00000048 F840 BB04       str              r11, [r0], #4
+   40 0000004C F840 CB04       str              r12, [r0], #4
+   41 00000050 F840 DB04       str              r13, [r0], #4
+   42 00000054         
+   43 00000054         ; clean the stack from given pointer up to current sp
+   44 00000054 2000            movs             r0, #0
+   45 00000056 466A            mov              r2, sp
+   46 00000058 E001            b.n              _entry
+   47 0000005A         _loop
+   48 0000005A F841 0B04       str              r0, [r1], #4
+   49 0000005E         _entry
+   50 0000005E 4291            cmp              r1, r2
+   51 00000060 D3FB            bcc.n            _loop
+   52 00000062 4770            bx               lr
+   53 00000064                 ENDP
+   54 00000064         ;.size   gc_helper_get_regs_and_clean_stack, .-gc_helper
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+                       _get_regs_and_clean_stack
+   55 00000064                 END
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M7.fp.sp --apcs=
+interwork --depend=.\objects\gchelper_armccv5.d -o.\objects\gchelper_armccv5.o 
+-IC:\Users\nxf48054\Desktop\share\newone\test_floder\micropython-rocky\ports\pr
+j_keil_rt1060\RTE -IC:\Keil_v5\ARM\PACK\NXP\iMXRT_DFP\1.0.2\Device\Include -IC:
+\Keil_v5\ARM\CMSIS\Include --predefine="__UVISION_VERSION SETA 521" --predefine
+="_RTE_ SETA 1" --predefine="MIMXRT1052 SETA 1" --predefine="XIP_EXTERNAL_FLASH
+ SETA 1" --list=.\listings\gchelper_armccv5.lst ..\nxp_rt1050_60\gchelper_armcc
+v5.S
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+.text 00000000
+
+Symbol: .text
+   Definitions
+      At line 3 in file ..\nxp_rt1050_60\gchelper_armccv5.S
+   Uses
+      None
+Comment: .text unused
+_entry 0000005E
+
+Symbol: _entry
+   Definitions
+      At line 49 in file ..\nxp_rt1050_60\gchelper_armccv5.S
+   Uses
+      At line 46 in file ..\nxp_rt1050_60\gchelper_armccv5.S
+Comment: _entry used once
+_loop 0000005A
+
+Symbol: _loop
+   Definitions
+      At line 47 in file ..\nxp_rt1050_60\gchelper_armccv5.S
+   Uses
+      At line 51 in file ..\nxp_rt1050_60\gchelper_armccv5.S
+Comment: _loop used once
+gc_helper_get_regs_and_clean_stack 0000002C
+
+Symbol: gc_helper_get_regs_and_clean_stack
+   Definitions
+      At line 29 in file ..\nxp_rt1050_60\gchelper_armccv5.S
+   Uses
+      At line 30 in file ..\nxp_rt1050_60\gchelper_armccv5.S
+Comment: gc_helper_get_regs_and_clean_stack used once
+gc_helper_get_regs_and_sp 00000000
+
+Symbol: gc_helper_get_regs_and_sp
+   Definitions
+      At line 5 in file ..\nxp_rt1050_60\gchelper_armccv5.S
+   Uses
+      At line 6 in file ..\nxp_rt1050_60\gchelper_armccv5.S
+Comment: gc_helper_get_regs_and_sp used once
+5 symbols
+340 symbols in table

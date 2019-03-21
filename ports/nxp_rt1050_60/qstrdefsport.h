@@ -40,7 +40,7 @@ Q(VCP+HID)
 Q(CDC+MSC)
 Q(CDC+HID)
 Q(/)
-
+Q(inverted)
 
 // The following qstrings not referenced from anywhere in the sources
 Q(CDC)

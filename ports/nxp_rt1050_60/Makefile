@@ -324,6 +324,7 @@ SRC_C = \
 	modnetwork.c \
 	flash_hyper.c \
 	pin.c \
+	pwm.c \
 	i2c.c \
 	spi.c \
 	uart.c \

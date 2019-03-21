@@ -878,6 +878,34 @@ Q(TMR3)
 
 Q(TMR4)
 
+Q(TMR_CAPT)
+
+Q(TMR_CMPLD1)
+
+Q(TMR_CMPLD2)
+
+Q(TMR_CNTR)
+
+Q(TMR_COMP1)
+
+Q(TMR_COMP2)
+
+Q(TMR_CSCTRL)
+
+Q(TMR_CTRL)
+
+Q(TMR_DMA)
+
+Q(TMR_ENBL)
+
+Q(TMR_FILT)
+
+Q(TMR_HOLD)
+
+Q(TMR_LOAD)
+
+Q(TMR_SCTRL)
+
 Q(TRNG)
 
 Q(TSC)
@@ -1912,6 +1940,8 @@ Q(deinit)
 
 Q(deinit)
 
+Q(deinit)
+
 Q(delattr)
 
 Q(delay)
@@ -2171,6 +2201,8 @@ Q(format)
 Q(forward)
 
 Q(fps)
+
+Q(freq)
 
 Q(freq)
 
@@ -2446,6 +2478,8 @@ Q(init)
 
 Q(init)
 
+Q(init)
+
 Q(input)
 
 Q(insert)
@@ -2507,6 +2541,8 @@ Q(invert)
 Q(invert)
 
 Q(invert)
+
+Q(inverted)
 
 Q(io)
 
@@ -3230,6 +3266,16 @@ Q(put_text)
 
 Q(put_text_xy)
 
+Q(pwm)
+
+Q(pwm)
+
+Q(pwm_freq)
+
+Q(pwm_inverted)
+
+Q(pwm_width)
+
 Q(pyb)
 
 Q(pyb)
@@ -3898,6 +3944,8 @@ Q(tell)
 
 Q(template_roi)
 
+Q(test)
+
 Q(theta)
 
 Q(theta)
@@ -4279,6 +4327,8 @@ Q(w)
 Q(wfi)
 
 Q(wfi)
+
+Q(width)
 
 Q(width)
 

@@ -2,6 +2,8 @@ extern const pin_obj_t pin_AD_B0_12;
 extern const pin_af_obj_t pin_AD_B0_12_af[];
 extern const pin_obj_t pin_AD_B0_13;
 extern const pin_af_obj_t pin_AD_B0_13_af[];
+extern const pin_obj_t pin_B1_09;
+extern const pin_af_obj_t pin_B1_09_af[];
 extern const pin_obj_t pin_B1_15;
 extern const pin_af_obj_t pin_B1_15_af[];
 extern const pin_obj_t pin_EMC_11;
@@ -52,3 +54,4 @@ extern const pin_obj_t * const pin_adc3[];
 #define pyb_pin_SCL3 pin_EMC_22
 #define pyb_pin_SDA4 pin_EMC_11
 #define pyb_pin_SCL4 pin_EMC_12
+#define pyb_pin_TMR pin_B1_09

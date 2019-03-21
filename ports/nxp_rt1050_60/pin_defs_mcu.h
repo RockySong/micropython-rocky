@@ -54,6 +54,7 @@ enum {
   AF_FN_GPT,
   AF_FN_TMR,
   AF_FN_SDMMC,
+  AF_FN_PWM,
 };
 
 enum {
@@ -128,6 +129,8 @@ enum {
   AF_PIN_TYPE_SAI_RX_SYNC,
   AF_PIN_TYPE_SAI_RX_DATA,
   AF_PIN_TYPE_SAI_RX_DATA0 = AF_PIN_TYPE_SAI_RX_DATA,
+  
+  AF_PIN_TYPE_PWM_PWMX3,
 };
 
 enum {

@@ -217,7 +217,7 @@ def main():
     needed_qstrs = set()
     needed_mpzs = set()
 
-    print("// Automatically generated from %s by make-stmconst.py" % args.file[0])
+    print("// Automatically generated from %s by make-rtconst.py" % args.file[0])
     print("")
 
     for periph_name, periph_val in periphs:
@@ -250,6 +250,7 @@ def main():
         'USART',
         'WWDG',
         'RNG',
+		'TMR',
         ):
         if reg in reg_defs:
             print_regs(reg, reg_defs[reg], needed_qstrs, needed_mpzs)
