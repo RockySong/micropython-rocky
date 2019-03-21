@@ -43,8 +43,9 @@ class Lexer:
     re_comment = r'(?P<comment>[A-Za-z0-9 \-/_()&]+)'
     re_addr_offset = r'Address offset: (?P<offset>0x[0-9A-Z]{2,3})'
     regexs = (
-        ('#define hex', re.compile(r'#define\s+(?P<id>[A-Z0-9_]+)\s+\(*(?P<hex>0x[0-9A-F]+)\)*')),
-        ('#define X', re.compile(r'#define\s+(?P<id>[A-Z0-9_]+)\s+(?P<id2>[A-Z0-9_]+)($| +/\*)')),
+        ('#define bf', re.compile(r'#define\s+(?P<id>[A-Z0-9_]+)_MASK\s+\(*(?P<hex>0x[0-9A-F]+)\)*')),
+        ('#define X',   re.compile(r'#define\s+(?P<id>[A-Z0-9_]+)\s+(?P<id2>[A-Z0-9_]+)($| +/\*)')),
+        ('#define bf', re.compile(r'#define\s+(?P<id>[A-Z0-9_]+)\s+\(*(?P<hex>0x[0-9A-F]+)\)*')),
         ('#define X+hex', re.compile(r'#define +(?P<id>[A-Za-z0-9_]+) +\((?P<id2>[A-Z0-9_]+) \+ (?P<hex>0x[0-9A-F]+)U?\)($| +/\*)')),
         ('#define typedef', re.compile(r'#define\s+(?P<id>[A-Z0-9_]+)\s+\(\([A-Za-z0-9_]+_Type\s*\*\)\s*(?P<id2>[A-Za-z0-9_]+)\)')),
         ('typedef struct {', re.compile(r'typedef struct {$')),
@@ -76,9 +77,10 @@ class Lexer:
             raise LexerError(self.line_number)
         return match
 
-def parse_file(filename):
+def parse_file(filename, wantedPerips):
     lexer = Lexer(filename)
 
+    bfs = {}
     reg_defs = {}
     consts = {}
     periphs = []
@@ -86,8 +88,20 @@ def parse_file(filename):
         m = lexer.next_match()
         if m[0] == 'EOF':
             break
-        elif m[0] == '#define hex':
+        elif m[0] == '#define bf':
             d = m[1].groupdict()
+
+            lst = d['id'].split('_')
+            regNdx = 1 if d['id'].find('ADC_ETC') < 0 else 2
+            sKeyShort = '_'.join(lst[regNdx:])
+            bfVal = int(d['hex'], base=16)
+            consts[d['id']] = bfVal
+            if lst[0] in wantedPerips:
+                if sKeyShort not in bfs.keys():
+                    bfs[sKeyShort] = bfVal
+                elif bfs[sKeyShort] != bfVal:
+                    bfs[d['id']] = bfVal
+        elif m[0] == '#define hex':
             consts[d['id']] = int(d['hex'], base=16)
         elif m[0] == '#define X':
             d = m[1].groupdict()
@@ -99,8 +113,7 @@ def parse_file(filename):
                 consts[d['id']] = consts[d['id2']] + int(d['hex'], base=16)
         elif m[0] == '#define typedef':
             d = m[1].groupdict()
-            if d['id2'] in consts:
-                periphs.append((d['id'], consts[d['id2']]))
+            periphs.append((d['id'], consts[d['id2']]))
         elif m[0] == 'typedef struct {':
             m = lexer.next_match()
             regs = []
@@ -139,7 +152,7 @@ def parse_file(filename):
             else:
                 raise LexerError(lexer.line_number)
 
-    return periphs, reg_defs
+    return periphs, reg_defs, bfs
 
 def print_int_obj(val, needed_mpzs):
     if -0x40000000 <= val < 0x40000000:
@@ -147,6 +160,13 @@ def print_int_obj(val, needed_mpzs):
     else:
         print('(mp_obj_t)&mpz_%08x' % val, end='')
         needed_mpzs.add(val)
+
+def print_bfs(bf_defs, needed_qstrs, needed_mpzs):
+    for qstr in bf_defs.keys():
+        print('{ MP_OBJ_NEW_QSTR(MP_QSTR_%s), ' % qstr, end='')
+        print_int_obj(bf_defs[qstr], needed_mpzs)
+        print(' },')
+        needed_qstrs.add(qstr)
 
 def print_periph(periph_name, periph_val, needed_qstrs, needed_mpzs):
     qstr = periph_name.upper()
@@ -202,11 +222,13 @@ def main():
     cmd_parser.add_argument('file', nargs=1, help='input file')
     cmd_parser.add_argument('-q', '--qstr', dest='qstr_filename', default='build/mcuconst_qstr.h',
                             help='Specified the name of the generated qstr header file')
+    cmd_parser.add_argument('-bf', '--bitfield', help='generate QSTRs for bitfields, costy', action='store_true')
     cmd_parser.add_argument('--mpz', dest='mpz_filename', default='build/mcuconst_mpz.h',
                             help='the destination file of the generated mpz header')
     args = cmd_parser.parse_args()
 
-    periphs, reg_defs = parse_file(args.file[0])
+    wantedPerips = ('ADC', 'GPIO', 'TMR', 'PWM', 'LPSPI', 'LPI2C')
+    periphs, reg_defs, bf_defs = parse_file(args.file[0], wantedPerips)
 
     modules = []
     needed_qstrs = set()
@@ -218,16 +240,13 @@ def main():
     for periph_name, periph_val in periphs:
         print_periph(periph_name, periph_val, needed_qstrs, needed_mpzs)
 
-    for reg in (
-        'ADC',
-        'GPIO',
-        'TMR',
-        'PWM',
-        'LPSPI',
-        'LPI2C'
-        ):
+
+    for reg in wantedPerips:
         if reg in reg_defs:
             print_regs(reg, reg_defs[reg], needed_qstrs, needed_mpzs)
+
+    if args.bitfield == True:
+        print_bfs(bf_defs, needed_qstrs, needed_mpzs)
         #print_regs_as_submodules(reg, reg_defs[reg], modules, needed_qstrs)
 
     #print("#define MOD_MCU_CONST_MODULES \\")

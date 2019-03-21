@@ -260,18 +260,18 @@ def QRCodeTest(loopCnt = 120, barLen = 120):
 
 while (True):
     #LEDTest()
-    pyb.LED(1).on()
+    pyb.LED(1).off()
     pyb.LED(2).off()
-    pyb.LED(3).off()
+    pyb.LED(3).on()
     #pyb.LED(2).on()
     #pyb.LED(3).on()
     pyb.LED(4).off()
     #CorrTest(9000)
-    #BlobTest(thresholds3, 40000)
-    #QRCodeTest(40000)
+    BlobTest(thresholds3, 40000)
+    QRCodeTest(40000)
     FaceTest(40000)
-    #LENetTest(40000)
-    #CIFAR10Test(40000, True)
+    LENetTest(40000)
+    CIFAR10Test(40000, True)
 
 
 

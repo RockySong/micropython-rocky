@@ -1,3 +1,4 @@
+STATIC const mp_obj_int_t mpz_40000000 = {{&mp_type_int}, {.neg=0, .fixed_dig=1, .alloc=2, .len=2, .dig=(uint16_t[]){0x0, 0x4000}}};
 STATIC const mp_obj_int_t mpz_4007c000 = {{&mp_type_int}, {.neg=0, .fixed_dig=1, .alloc=2, .len=2, .dig=(uint16_t[]){0xc000, 0x4007}}};
 STATIC const mp_obj_int_t mpz_40080000 = {{&mp_type_int}, {.neg=0, .fixed_dig=1, .alloc=2, .len=2, .dig=(uint16_t[]){0x0, 0x4008}}};
 STATIC const mp_obj_int_t mpz_40084000 = {{&mp_type_int}, {.neg=0, .fixed_dig=1, .alloc=2, .len=2, .dig=(uint16_t[]){0x4000, 0x4008}}};
@@ -96,3 +97,7 @@ STATIC const mp_obj_int_t mpz_403f0000 = {{&mp_type_int}, {.neg=0, .fixed_dig=1,
 STATIC const mp_obj_int_t mpz_403f4000 = {{&mp_type_int}, {.neg=0, .fixed_dig=1, .alloc=2, .len=2, .dig=(uint16_t[]){0x4000, 0x403f}}};
 STATIC const mp_obj_int_t mpz_403f8000 = {{&mp_type_int}, {.neg=0, .fixed_dig=1, .alloc=2, .len=2, .dig=(uint16_t[]){0x8000, 0x403f}}};
 STATIC const mp_obj_int_t mpz_403fc000 = {{&mp_type_int}, {.neg=0, .fixed_dig=1, .alloc=2, .len=2, .dig=(uint16_t[]){0xc000, 0x403f}}};
+STATIC const mp_obj_int_t mpz_80000000 = {{&mp_type_int}, {.neg=0, .fixed_dig=1, .alloc=2, .len=2, .dig=(uint16_t[]){0x0, 0x8000}}};
+STATIC const mp_obj_int_t mpz_c0000000 = {{&mp_type_int}, {.neg=0, .fixed_dig=1, .alloc=2, .len=2, .dig=(uint16_t[]){0x0, 0xc000}}};
+STATIC const mp_obj_int_t mpz_ff000000 = {{&mp_type_int}, {.neg=0, .fixed_dig=1, .alloc=2, .len=2, .dig=(uint16_t[]){0x0, 0xff00}}};
+STATIC const mp_obj_int_t mpz_ffffffff = {{&mp_type_int}, {.neg=0, .fixed_dig=1, .alloc=2, .len=2, .dig=(uint16_t[]){0xffff, 0xffff}}};

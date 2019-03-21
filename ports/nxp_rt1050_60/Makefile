@@ -641,7 +641,7 @@ CMSIS_MCU_HDR = mcusdk/$(CMSIS_MCU_UPPER).h
 
 $(BUILD)/modmcu_qstr.h: $(CMSIS_MCU_HDR) make-mcuconst.py | $(HEADER_BUILD)
 	$(ECHO) "Rocky's create modmcu_qstr.h"
-	$(Q)$(PYTHON) make-mcuconst.py --qstr $(GEN_MCUCONST_QSTR) --mpz $(GEN_MCUCONST_MPZ) $(CMSIS_MCU_HDR) > $(GEN_MCUCONST_HDR)
+	$(Q)$(PYTHON) make-mcuconst.py -bf --qstr $(GEN_MCUCONST_QSTR) --mpz $(GEN_MCUCONST_MPZ) $(CMSIS_MCU_HDR) > $(GEN_MCUCONST_HDR)
 	
 $(BUILD)/modmcu.o: $(GEN_MCUCONST_HDR)
 # Use a pattern rule here so that make will only call make-mcuconst.py once to
