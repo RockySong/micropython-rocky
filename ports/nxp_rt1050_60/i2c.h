@@ -36,11 +36,6 @@
 #define MICROPY_HW_I2C3_SDA (pin_EMC_21)
 #define MICROPY_HW_I2C3_SCL (pin_EMC_22)
 
-#define MICROPY_HW_I2C4_NAME "i2c4"
-#define MICROPY_HW_I2C4_SDA (pin_EMC_11)
-#define MICROPY_HW_I2C4_SCL (pin_EMC_12)
-
-
 typedef enum {
 	PYB_I2C_0 = 0,
     PYB_I2C_1 = 1,

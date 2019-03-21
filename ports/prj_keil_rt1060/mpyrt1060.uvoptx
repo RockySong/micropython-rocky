@@ -586,10 +586,6 @@
       <TargetDriverDllRegistry>
         <SetRegEntry>
           <Number>0</Number>
-          <Key>DLGUARM</Key>
-        </SetRegEntry>
-        <SetRegEntry>
-          <Number>0</Number>
           <Key>JL2CM3</Key>
           <Name>-U59402905 -O70 -S2 -ZTIFSpeedSel5000 -A0 -C0 -JU1 -JI127.0.0.1 -JP0 -RST1 -N00("ARM CoreSight SW-DP") -D00(0BD11477) -L00(0) -TO18 -TC10000000 -TP21 -TDS8001 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -TB1 -TFE0 -FO3 -FD0 -FC8000 -FN3 -FF0MIMXRT105x_HYPER_256KB_SEC.FLM -FS030000000 -FL04000000 -FP0($$Device:MIMXRT1052$Flash\MIMXRT105x_HYPER_256KB_SEC.FLM) -FF1MIMXRT_IS26KS512S -FS170000000 -FL14000000 -FF2MIMXRT_QSPIFLASH_GD3v3 -FS260000000 -FL2400000</Name>
         </SetRegEntry>
@@ -5725,7 +5721,7 @@
 
   <Group>
     <GroupName>build_evk</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>

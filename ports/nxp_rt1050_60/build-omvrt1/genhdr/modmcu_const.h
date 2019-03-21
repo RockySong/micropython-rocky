@@ -1,4 +1,4 @@
-// Automatically generated from mcusdk/MIMXRT1052.h by make-stmconst.py
+// Automatically generated from mcusdk/MIMXRT1052.h by make-mcuconst.py
 
 { MP_OBJ_NEW_QSTR(MP_QSTR_ADC1), (mp_obj_t)&mpz_400c4000 },
 { MP_OBJ_NEW_QSTR(MP_QSTR_ADC2), (mp_obj_t)&mpz_400c8000 },
@@ -127,69 +127,6 @@
 { MP_OBJ_NEW_QSTR(MP_QSTR_ADC_CV), MP_OBJ_NEW_SMALL_INT(0x50) }, // 32-bits, Compare value registe
 { MP_OBJ_NEW_QSTR(MP_QSTR_ADC_OFS), MP_OBJ_NEW_SMALL_INT(0x54) }, // 32-bits, Offset correction value registe
 { MP_OBJ_NEW_QSTR(MP_QSTR_ADC_CAL), MP_OBJ_NEW_SMALL_INT(0x58) }, // 32-bits, Calibration value registe
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_CR), MP_OBJ_NEW_SMALL_INT(0x0) }, // 32-bits, Control Registe
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_ES), MP_OBJ_NEW_SMALL_INT(0x4) }, // 32-bits, Error Status Registe
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_ERQ), MP_OBJ_NEW_SMALL_INT(0xc) }, // 32-bits, Enable Request Registe
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_EEI), MP_OBJ_NEW_SMALL_INT(0x14) }, // 32-bits, Enable Error Interrupt Registe
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_CEEI), MP_OBJ_NEW_SMALL_INT(0x18) }, // 8-bits, Clear Enable Error Interrupt Registe
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_SEEI), MP_OBJ_NEW_SMALL_INT(0x19) }, // 8-bits, Set Enable Error Interrupt Registe
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_CERQ), MP_OBJ_NEW_SMALL_INT(0x1a) }, // 8-bits, Clear Enable Request Registe
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_SERQ), MP_OBJ_NEW_SMALL_INT(0x1b) }, // 8-bits, Set Enable Request Registe
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_CDNE), MP_OBJ_NEW_SMALL_INT(0x1c) }, // 8-bits, Clear DONE Status Bit Registe
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_SSRT), MP_OBJ_NEW_SMALL_INT(0x1d) }, // 8-bits, Set START Bit Registe
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_CERR), MP_OBJ_NEW_SMALL_INT(0x1e) }, // 8-bits, Clear Error Registe
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_CINT), MP_OBJ_NEW_SMALL_INT(0x1f) }, // 8-bits, Clear Interrupt Request Registe
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_INT), MP_OBJ_NEW_SMALL_INT(0x24) }, // 32-bits, Interrupt Request Registe
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_ERR), MP_OBJ_NEW_SMALL_INT(0x2c) }, // 32-bits, Error Registe
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_HRS), MP_OBJ_NEW_SMALL_INT(0x34) }, // 32-bits, Hardware Request Status Registe
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_EARS), MP_OBJ_NEW_SMALL_INT(0x44) }, // 32-bits, Enable Asynchronous Request in Stop Registe
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_DCHPRI3), MP_OBJ_NEW_SMALL_INT(0x100) }, // 8-bits, Channel n Priority Registe
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_DCHPRI2), MP_OBJ_NEW_SMALL_INT(0x101) }, // 8-bits, Channel n Priority Registe
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_DCHPRI1), MP_OBJ_NEW_SMALL_INT(0x102) }, // 8-bits, Channel n Priority Registe
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_DCHPRI0), MP_OBJ_NEW_SMALL_INT(0x103) }, // 8-bits, Channel n Priority Registe
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_DCHPRI7), MP_OBJ_NEW_SMALL_INT(0x104) }, // 8-bits, Channel n Priority Registe
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_DCHPRI6), MP_OBJ_NEW_SMALL_INT(0x105) }, // 8-bits, Channel n Priority Registe
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_DCHPRI5), MP_OBJ_NEW_SMALL_INT(0x106) }, // 8-bits, Channel n Priority Registe
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_DCHPRI4), MP_OBJ_NEW_SMALL_INT(0x107) }, // 8-bits, Channel n Priority Registe
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_DCHPRI11), MP_OBJ_NEW_SMALL_INT(0x108) }, // 8-bits, Channel n Priority Registe
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_DCHPRI10), MP_OBJ_NEW_SMALL_INT(0x109) }, // 8-bits, Channel n Priority Registe
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_DCHPRI9), MP_OBJ_NEW_SMALL_INT(0x10a) }, // 8-bits, Channel n Priority Registe
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_DCHPRI8), MP_OBJ_NEW_SMALL_INT(0x10b) }, // 8-bits, Channel n Priority Registe
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_DCHPRI15), MP_OBJ_NEW_SMALL_INT(0x10c) }, // 8-bits, Channel n Priority Registe
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_DCHPRI14), MP_OBJ_NEW_SMALL_INT(0x10d) }, // 8-bits, Channel n Priority Registe
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_DCHPRI13), MP_OBJ_NEW_SMALL_INT(0x10e) }, // 8-bits, Channel n Priority Registe
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_DCHPRI12), MP_OBJ_NEW_SMALL_INT(0x10f) }, // 8-bits, Channel n Priority Registe
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_DCHPRI19), MP_OBJ_NEW_SMALL_INT(0x110) }, // 8-bits, Channel n Priority Registe
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_DCHPRI18), MP_OBJ_NEW_SMALL_INT(0x111) }, // 8-bits, Channel n Priority Registe
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_DCHPRI17), MP_OBJ_NEW_SMALL_INT(0x112) }, // 8-bits, Channel n Priority Registe
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_DCHPRI16), MP_OBJ_NEW_SMALL_INT(0x113) }, // 8-bits, Channel n Priority Registe
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_DCHPRI23), MP_OBJ_NEW_SMALL_INT(0x114) }, // 8-bits, Channel n Priority Registe
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_DCHPRI22), MP_OBJ_NEW_SMALL_INT(0x115) }, // 8-bits, Channel n Priority Registe
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_DCHPRI21), MP_OBJ_NEW_SMALL_INT(0x116) }, // 8-bits, Channel n Priority Registe
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_DCHPRI20), MP_OBJ_NEW_SMALL_INT(0x117) }, // 8-bits, Channel n Priority Registe
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_DCHPRI27), MP_OBJ_NEW_SMALL_INT(0x118) }, // 8-bits, Channel n Priority Registe
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_DCHPRI26), MP_OBJ_NEW_SMALL_INT(0x119) }, // 8-bits, Channel n Priority Registe
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_DCHPRI25), MP_OBJ_NEW_SMALL_INT(0x11a) }, // 8-bits, Channel n Priority Registe
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_DCHPRI24), MP_OBJ_NEW_SMALL_INT(0x11b) }, // 8-bits, Channel n Priority Registe
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_DCHPRI31), MP_OBJ_NEW_SMALL_INT(0x11c) }, // 8-bits, Channel n Priority Registe
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_DCHPRI30), MP_OBJ_NEW_SMALL_INT(0x11d) }, // 8-bits, Channel n Priority Registe
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_DCHPRI29), MP_OBJ_NEW_SMALL_INT(0x11e) }, // 8-bits, Channel n Priority Registe
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_DCHPRI28), MP_OBJ_NEW_SMALL_INT(0x11f) }, // 8-bits, Channel n Priority Registe
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_SADDR), MP_OBJ_NEW_SMALL_INT(0x1000) }, // 32-bits, TCD Source Addres
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_SOFF), MP_OBJ_NEW_SMALL_INT(0x1004) }, // 16-bits, TCD Signed Source Address Offse
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_ATTR), MP_OBJ_NEW_SMALL_INT(0x1006) }, // 16-bits, TCD Transfer Attribute
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_NBYTES_MLNO), MP_OBJ_NEW_SMALL_INT(0x1008) }, // 32-bits, TCD Minor Byte Count (Minor Loop Mapping Disabled
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_NBYTES_MLOFFNO), MP_OBJ_NEW_SMALL_INT(0x1008) }, // 32-bits, TCD Signed Minor Loop Offset (Minor Loop Mapping Enabled and Offset Disabled
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_NBYTES_MLOFFYES), MP_OBJ_NEW_SMALL_INT(0x1008) }, // 32-bits, TCD Signed Minor Loop Offset (Minor Loop Mapping and Offset Enabled
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_SLAST), MP_OBJ_NEW_SMALL_INT(0x100c) }, // 32-bits, TCD Last Source Address Adjustmen
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_DADDR), MP_OBJ_NEW_SMALL_INT(0x1010) }, // 32-bits, TCD Destination Addres
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_DOFF), MP_OBJ_NEW_SMALL_INT(0x1014) }, // 16-bits, TCD Signed Destination Address Offse
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_CITER_ELINKNO), MP_OBJ_NEW_SMALL_INT(0x1016) }, // 16-bits, TCD Current Minor Loop Link, Major Loop Count (Channel Linking Disabled
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_CITER_ELINKYES), MP_OBJ_NEW_SMALL_INT(0x1016) }, // 16-bits, TCD Current Minor Loop Link, Major Loop Count (Channel Linking Enabled
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_DLAST_SGA), MP_OBJ_NEW_SMALL_INT(0x1018) }, // 32-bits, TCD Last Destination Address Adjustment/Scatter Gather Addres
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_CSR), MP_OBJ_NEW_SMALL_INT(0x101c) }, // 16-bits, TCD Control and Statu
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_BITER_ELINKNO), MP_OBJ_NEW_SMALL_INT(0x101e) }, // 16-bits, TCD Beginning Minor Loop Link, Major Loop Count (Channel Linking Disabled
-{ MP_OBJ_NEW_QSTR(MP_QSTR_DMA_BITER_ELINKYES), MP_OBJ_NEW_SMALL_INT(0x101e) }, // 16-bits, TCD Beginning Minor Loop Link, Major Loop Count (Channel Linking Enabled
 { MP_OBJ_NEW_QSTR(MP_QSTR_GPIO_DR), MP_OBJ_NEW_SMALL_INT(0x0) }, // 32-bits, GPIO data registe
 { MP_OBJ_NEW_QSTR(MP_QSTR_GPIO_GDIR), MP_OBJ_NEW_SMALL_INT(0x4) }, // 32-bits, GPIO direction registe
 { MP_OBJ_NEW_QSTR(MP_QSTR_GPIO_PSR), MP_OBJ_NEW_SMALL_INT(0x8) }, // 32-bits, GPIO pad status registe
@@ -198,4 +135,117 @@
 { MP_OBJ_NEW_QSTR(MP_QSTR_GPIO_IMR), MP_OBJ_NEW_SMALL_INT(0x14) }, // 32-bits, GPIO interrupt mask registe
 { MP_OBJ_NEW_QSTR(MP_QSTR_GPIO_ISR), MP_OBJ_NEW_SMALL_INT(0x18) }, // 32-bits, GPIO interrupt status registe
 { MP_OBJ_NEW_QSTR(MP_QSTR_GPIO_EDGE_SEL), MP_OBJ_NEW_SMALL_INT(0x1c) }, // 32-bits, GPIO edge select registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_TMR_COMP1), MP_OBJ_NEW_SMALL_INT(0x0) }, // 16-bits, Timer Channel Compare Register 
+{ MP_OBJ_NEW_QSTR(MP_QSTR_TMR_COMP2), MP_OBJ_NEW_SMALL_INT(0x2) }, // 16-bits, Timer Channel Compare Register 
+{ MP_OBJ_NEW_QSTR(MP_QSTR_TMR_CAPT), MP_OBJ_NEW_SMALL_INT(0x4) }, // 16-bits, Timer Channel Capture Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_TMR_LOAD), MP_OBJ_NEW_SMALL_INT(0x6) }, // 16-bits, Timer Channel Load Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_TMR_HOLD), MP_OBJ_NEW_SMALL_INT(0x8) }, // 16-bits, Timer Channel Hold Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_TMR_CNTR), MP_OBJ_NEW_SMALL_INT(0xa) }, // 16-bits, Timer Channel Counter Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_TMR_CTRL), MP_OBJ_NEW_SMALL_INT(0xc) }, // 16-bits, Timer Channel Control Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_TMR_SCTRL), MP_OBJ_NEW_SMALL_INT(0xe) }, // 16-bits, Timer Channel Status and Control Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_TMR_CMPLD1), MP_OBJ_NEW_SMALL_INT(0x10) }, // 16-bits, Timer Channel Comparator Load Register 
+{ MP_OBJ_NEW_QSTR(MP_QSTR_TMR_CMPLD2), MP_OBJ_NEW_SMALL_INT(0x12) }, // 16-bits, Timer Channel Comparator Load Register 
+{ MP_OBJ_NEW_QSTR(MP_QSTR_TMR_CSCTRL), MP_OBJ_NEW_SMALL_INT(0x14) }, // 16-bits, Timer Channel Comparator Status and Control Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_TMR_FILT), MP_OBJ_NEW_SMALL_INT(0x16) }, // 16-bits, Timer Channel Input Filter Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_TMR_DMA), MP_OBJ_NEW_SMALL_INT(0x18) }, // 16-bits, Timer Channel DMA Enable Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_TMR_ENBL), MP_OBJ_NEW_SMALL_INT(0x1e) }, // 16-bits, Timer Channel Enable Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_CNT), MP_OBJ_NEW_SMALL_INT(0x0) }, // 16-bits, Counter Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_INIT), MP_OBJ_NEW_SMALL_INT(0x2) }, // 16-bits, Initial Count Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_CTRL2), MP_OBJ_NEW_SMALL_INT(0x4) }, // 16-bits, Control 2 Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_CTRL), MP_OBJ_NEW_SMALL_INT(0x6) }, // 16-bits, Control Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_VAL0), MP_OBJ_NEW_SMALL_INT(0xa) }, // 16-bits, Value Register 
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_FRACVAL1), MP_OBJ_NEW_SMALL_INT(0xc) }, // 16-bits, Fractional Value Register 
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_VAL1), MP_OBJ_NEW_SMALL_INT(0xe) }, // 16-bits, Value Register 
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_FRACVAL2), MP_OBJ_NEW_SMALL_INT(0x10) }, // 16-bits, Fractional Value Register 
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_VAL2), MP_OBJ_NEW_SMALL_INT(0x12) }, // 16-bits, Value Register 
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_FRACVAL3), MP_OBJ_NEW_SMALL_INT(0x14) }, // 16-bits, Fractional Value Register 
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_VAL3), MP_OBJ_NEW_SMALL_INT(0x16) }, // 16-bits, Value Register 
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_FRACVAL4), MP_OBJ_NEW_SMALL_INT(0x18) }, // 16-bits, Fractional Value Register 
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_VAL4), MP_OBJ_NEW_SMALL_INT(0x1a) }, // 16-bits, Value Register 
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_FRACVAL5), MP_OBJ_NEW_SMALL_INT(0x1c) }, // 16-bits, Fractional Value Register 
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_VAL5), MP_OBJ_NEW_SMALL_INT(0x1e) }, // 16-bits, Value Register 
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_FRCTRL), MP_OBJ_NEW_SMALL_INT(0x20) }, // 16-bits, Fractional Control Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_OCTRL), MP_OBJ_NEW_SMALL_INT(0x22) }, // 16-bits, Output Control Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_STS), MP_OBJ_NEW_SMALL_INT(0x24) }, // 16-bits, Status Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_INTEN), MP_OBJ_NEW_SMALL_INT(0x26) }, // 16-bits, Interrupt Enable Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_DMAEN), MP_OBJ_NEW_SMALL_INT(0x28) }, // 16-bits, DMA Enable Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_TCTRL), MP_OBJ_NEW_SMALL_INT(0x2a) }, // 16-bits, Output Trigger Control Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_DISMAP0), MP_OBJ_NEW_SMALL_INT(0x2c) }, // 16-bits, Fault Disable Mapping Register 0..Fault Disable Mapping Register 
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_DISMAP1), MP_OBJ_NEW_SMALL_INT(0x2e) }, // 16-bits, Fault Disable Mapping Register 0..Fault Disable Mapping Register 
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_DTCNT0), MP_OBJ_NEW_SMALL_INT(0x30) }, // 16-bits, Deadtime Count Register 
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_DTCNT1), MP_OBJ_NEW_SMALL_INT(0x32) }, // 16-bits, Deadtime Count Register 
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_CAPTCTRLA), MP_OBJ_NEW_SMALL_INT(0x34) }, // 16-bits, Capture Control A Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_CAPTCOMPA), MP_OBJ_NEW_SMALL_INT(0x36) }, // 16-bits, Capture Compare A Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_CAPTCTRLB), MP_OBJ_NEW_SMALL_INT(0x38) }, // 16-bits, Capture Control B Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_CAPTCOMPB), MP_OBJ_NEW_SMALL_INT(0x3a) }, // 16-bits, Capture Compare B Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_CAPTCTRLX), MP_OBJ_NEW_SMALL_INT(0x3c) }, // 16-bits, Capture Control X Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_CAPTCOMPX), MP_OBJ_NEW_SMALL_INT(0x3e) }, // 16-bits, Capture Compare X Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_CVAL0), MP_OBJ_NEW_SMALL_INT(0x40) }, // 16-bits, Capture Value 0 Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_CVAL0CYC), MP_OBJ_NEW_SMALL_INT(0x42) }, // 16-bits, Capture Value 0 Cycle Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_CVAL1), MP_OBJ_NEW_SMALL_INT(0x44) }, // 16-bits, Capture Value 1 Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_CVAL1CYC), MP_OBJ_NEW_SMALL_INT(0x46) }, // 16-bits, Capture Value 1 Cycle Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_CVAL2), MP_OBJ_NEW_SMALL_INT(0x48) }, // 16-bits, Capture Value 2 Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_CVAL2CYC), MP_OBJ_NEW_SMALL_INT(0x4a) }, // 16-bits, Capture Value 2 Cycle Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_CVAL3), MP_OBJ_NEW_SMALL_INT(0x4c) }, // 16-bits, Capture Value 3 Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_CVAL3CYC), MP_OBJ_NEW_SMALL_INT(0x4e) }, // 16-bits, Capture Value 3 Cycle Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_CVAL4), MP_OBJ_NEW_SMALL_INT(0x50) }, // 16-bits, Capture Value 4 Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_CVAL4CYC), MP_OBJ_NEW_SMALL_INT(0x52) }, // 16-bits, Capture Value 4 Cycle Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_CVAL5), MP_OBJ_NEW_SMALL_INT(0x54) }, // 16-bits, Capture Value 5 Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_CVAL5CYC), MP_OBJ_NEW_SMALL_INT(0x56) }, // 16-bits, Capture Value 5 Cycle Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_OUTEN), MP_OBJ_NEW_SMALL_INT(0x180) }, // 16-bits, Output Enable Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_MASK), MP_OBJ_NEW_SMALL_INT(0x182) }, // 16-bits, Mask Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_SWCOUT), MP_OBJ_NEW_SMALL_INT(0x184) }, // 16-bits, Software Controlled Output Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_DTSRCSEL), MP_OBJ_NEW_SMALL_INT(0x186) }, // 16-bits, PWM Source Select Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_MCTRL), MP_OBJ_NEW_SMALL_INT(0x188) }, // 16-bits, Master Control Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_MCTRL2), MP_OBJ_NEW_SMALL_INT(0x18a) }, // 16-bits, Master Control 2 Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_FCTRL), MP_OBJ_NEW_SMALL_INT(0x18c) }, // 16-bits, Fault Control Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_FSTS), MP_OBJ_NEW_SMALL_INT(0x18e) }, // 16-bits, Fault Status Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_FFILT), MP_OBJ_NEW_SMALL_INT(0x190) }, // 16-bits, Fault Filter Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_FTST), MP_OBJ_NEW_SMALL_INT(0x192) }, // 16-bits, Fault Test Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_PWM_FCTRL2), MP_OBJ_NEW_SMALL_INT(0x194) }, // 16-bits, Fault Control 2 Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_LPSPI_VERID), MP_OBJ_NEW_SMALL_INT(0x0) }, // 32-bits, Version ID Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_LPSPI_PARAM), MP_OBJ_NEW_SMALL_INT(0x4) }, // 32-bits, Parameter Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_LPSPI_CR), MP_OBJ_NEW_SMALL_INT(0x10) }, // 32-bits, Control Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_LPSPI_SR), MP_OBJ_NEW_SMALL_INT(0x14) }, // 32-bits, Status Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_LPSPI_IER), MP_OBJ_NEW_SMALL_INT(0x18) }, // 32-bits, Interrupt Enable Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_LPSPI_DER), MP_OBJ_NEW_SMALL_INT(0x1c) }, // 32-bits, DMA Enable Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_LPSPI_CFGR0), MP_OBJ_NEW_SMALL_INT(0x20) }, // 32-bits, Configuration Register 
+{ MP_OBJ_NEW_QSTR(MP_QSTR_LPSPI_CFGR1), MP_OBJ_NEW_SMALL_INT(0x24) }, // 32-bits, Configuration Register 
+{ MP_OBJ_NEW_QSTR(MP_QSTR_LPSPI_DMR0), MP_OBJ_NEW_SMALL_INT(0x30) }, // 32-bits, Data Match Register 
+{ MP_OBJ_NEW_QSTR(MP_QSTR_LPSPI_DMR1), MP_OBJ_NEW_SMALL_INT(0x34) }, // 32-bits, Data Match Register 
+{ MP_OBJ_NEW_QSTR(MP_QSTR_LPSPI_CCR), MP_OBJ_NEW_SMALL_INT(0x40) }, // 32-bits, Clock Configuration Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_LPSPI_FCR), MP_OBJ_NEW_SMALL_INT(0x58) }, // 32-bits, FIFO Control Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_LPSPI_FSR), MP_OBJ_NEW_SMALL_INT(0x5c) }, // 32-bits, FIFO Status Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_LPSPI_TCR), MP_OBJ_NEW_SMALL_INT(0x60) }, // 32-bits, Transmit Command Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_LPSPI_TDR), MP_OBJ_NEW_SMALL_INT(0x64) }, // 32-bits, Transmit Data Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_LPSPI_RSR), MP_OBJ_NEW_SMALL_INT(0x70) }, // 32-bits, Receive Status Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_LPSPI_RDR), MP_OBJ_NEW_SMALL_INT(0x74) }, // 32-bits, Receive Data Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_LPI2C_VERID), MP_OBJ_NEW_SMALL_INT(0x0) }, // 32-bits, Version ID Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_LPI2C_PARAM), MP_OBJ_NEW_SMALL_INT(0x4) }, // 32-bits, Parameter Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_LPI2C_MCR), MP_OBJ_NEW_SMALL_INT(0x10) }, // 32-bits, Master Control Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_LPI2C_MSR), MP_OBJ_NEW_SMALL_INT(0x14) }, // 32-bits, Master Status Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_LPI2C_MIER), MP_OBJ_NEW_SMALL_INT(0x18) }, // 32-bits, Master Interrupt Enable Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_LPI2C_MDER), MP_OBJ_NEW_SMALL_INT(0x1c) }, // 32-bits, Master DMA Enable Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_LPI2C_MCFGR0), MP_OBJ_NEW_SMALL_INT(0x20) }, // 32-bits, Master Configuration Register 
+{ MP_OBJ_NEW_QSTR(MP_QSTR_LPI2C_MCFGR1), MP_OBJ_NEW_SMALL_INT(0x24) }, // 32-bits, Master Configuration Register 
+{ MP_OBJ_NEW_QSTR(MP_QSTR_LPI2C_MCFGR2), MP_OBJ_NEW_SMALL_INT(0x28) }, // 32-bits, Master Configuration Register 
+{ MP_OBJ_NEW_QSTR(MP_QSTR_LPI2C_MCFGR3), MP_OBJ_NEW_SMALL_INT(0x2c) }, // 32-bits, Master Configuration Register 
+{ MP_OBJ_NEW_QSTR(MP_QSTR_LPI2C_MDMR), MP_OBJ_NEW_SMALL_INT(0x40) }, // 32-bits, Master Data Match Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_LPI2C_MCCR0), MP_OBJ_NEW_SMALL_INT(0x48) }, // 32-bits, Master Clock Configuration Register 
+{ MP_OBJ_NEW_QSTR(MP_QSTR_LPI2C_MCCR1), MP_OBJ_NEW_SMALL_INT(0x50) }, // 32-bits, Master Clock Configuration Register 
+{ MP_OBJ_NEW_QSTR(MP_QSTR_LPI2C_MFCR), MP_OBJ_NEW_SMALL_INT(0x58) }, // 32-bits, Master FIFO Control Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_LPI2C_MFSR), MP_OBJ_NEW_SMALL_INT(0x5c) }, // 32-bits, Master FIFO Status Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_LPI2C_MTDR), MP_OBJ_NEW_SMALL_INT(0x60) }, // 32-bits, Master Transmit Data Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_LPI2C_MRDR), MP_OBJ_NEW_SMALL_INT(0x70) }, // 32-bits, Master Receive Data Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_LPI2C_SCR), MP_OBJ_NEW_SMALL_INT(0x110) }, // 32-bits, Slave Control Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_LPI2C_SSR), MP_OBJ_NEW_SMALL_INT(0x114) }, // 32-bits, Slave Status Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_LPI2C_SIER), MP_OBJ_NEW_SMALL_INT(0x118) }, // 32-bits, Slave Interrupt Enable Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_LPI2C_SDER), MP_OBJ_NEW_SMALL_INT(0x11c) }, // 32-bits, Slave DMA Enable Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_LPI2C_SCFGR1), MP_OBJ_NEW_SMALL_INT(0x124) }, // 32-bits, Slave Configuration Register 
+{ MP_OBJ_NEW_QSTR(MP_QSTR_LPI2C_SCFGR2), MP_OBJ_NEW_SMALL_INT(0x128) }, // 32-bits, Slave Configuration Register 
+{ MP_OBJ_NEW_QSTR(MP_QSTR_LPI2C_SAMR), MP_OBJ_NEW_SMALL_INT(0x140) }, // 32-bits, Slave Address Match Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_LPI2C_SASR), MP_OBJ_NEW_SMALL_INT(0x150) }, // 32-bits, Slave Address Status Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_LPI2C_STAR), MP_OBJ_NEW_SMALL_INT(0x154) }, // 32-bits, Slave Transmit ACK Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_LPI2C_STDR), MP_OBJ_NEW_SMALL_INT(0x160) }, // 32-bits, Slave Transmit Data Registe
+{ MP_OBJ_NEW_QSTR(MP_QSTR_LPI2C_SRDR), MP_OBJ_NEW_SMALL_INT(0x170) }, // 32-bits, Slave Receive Data Registe
 

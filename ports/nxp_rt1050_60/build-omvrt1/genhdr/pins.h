@@ -1,13 +1,11 @@
-extern const pin_obj_t pin_AD_B0_12;
-extern const pin_af_obj_t pin_AD_B0_12_af[];
 extern const pin_obj_t pin_AD_B0_13;
 extern const pin_af_obj_t pin_AD_B0_13_af[];
+extern const pin_obj_t pin_B1_08;
+extern const pin_af_obj_t pin_B1_08_af[];
+extern const pin_obj_t pin_B1_09;
+extern const pin_af_obj_t pin_B1_09_af[];
 extern const pin_obj_t pin_B1_15;
 extern const pin_af_obj_t pin_B1_15_af[];
-extern const pin_obj_t pin_EMC_11;
-extern const pin_af_obj_t pin_EMC_11_af[];
-extern const pin_obj_t pin_EMC_12;
-extern const pin_af_obj_t pin_EMC_12_af[];
 extern const pin_obj_t pin_EMC_19;
 extern const pin_af_obj_t pin_EMC_19_af[];
 extern const pin_obj_t pin_EMC_20;
@@ -40,15 +38,14 @@ extern const pin_obj_t * const pin_adc3[];
 #define pyb_pin_LED_B pin_EMC_41
 #define pyb_pin_LED_IR pin_B1_15
 #define pyb_pin_KEY pin_WAKEUP
-#define pyb_pin_DBG_RXD pin_AD_B0_13
-#define pyb_pin_DBG_TXD pin_AD_B0_12
-#define pyb_pin_UART4_TXD pin_EMC_19
-#define pyb_pin_UART4_RXD pin_EMC_20
-#define pyb_pin_SDO pin_EMC_28
-#define pyb_pin_SDI pin_EMC_29
-#define pyb_pin_SCK pin_EMC_27
-#define pyb_pin_PCSO pin_EMC_30
-#define pyb_pin_SDA3 pin_EMC_21
-#define pyb_pin_SCL3 pin_EMC_22
-#define pyb_pin_SDA4 pin_EMC_11
-#define pyb_pin_SCL4 pin_EMC_12
+#define pyb_pin_P6 pin_AD_B0_13
+#define pyb_pin_P7 pin_EMC_19
+#define pyb_pin_P8 pin_EMC_20
+#define pyb_pin_P0 pin_EMC_28
+#define pyb_pin_P1 pin_EMC_29
+#define pyb_pin_P2 pin_EMC_27
+#define pyb_pin_P3 pin_EMC_30
+#define pyb_pin_P4 pin_EMC_22
+#define pyb_pin_P5 pin_EMC_21
+#define pyb_pin_P10 pin_B1_08
+#define pyb_pin_P9 pin_B1_09

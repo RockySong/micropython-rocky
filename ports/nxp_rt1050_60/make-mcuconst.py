@@ -1,8 +1,8 @@
 """
-Read in the cmsis/devinc/stm32f405xx.h header, extract relevant constants,
-and create modstmconst.c.
+Read in the MCU file header, extract relevant constants,
+and create modmcuconst.c.
 
-This is not part of the automatic build process because stm32f405xx.h isn't
+This is not part of the automatic build process because MCU header file isn't
 expected to change.  After generating the file, some manual intervention is
 needed to copy the new qstr definitions to qstrdefsport.h.
 """
@@ -111,20 +111,20 @@ def parse_file(filename):
                     m = lexer.next_match()
                     continue
                 bits = int(d['bits'])
-                sTmp = m[1].string
-                ndxCmntStart = sTmp.find('/**< ') + 5
-                ndxCmntEnd = sTmp.rfind('array offset: ')
+                mcup = m[1].string
+                ndxCmntStart = mcup.find('/**< ') + 5
+                ndxCmntEnd = mcup.rfind('array offset: ')
                 if ndxCmntEnd > 0:
                     isAry = True
                     ndxOfsStart = ndxCmntEnd + len('array offset: ')
-                    ndxOfsEnd = ndxOfsStart + sTmp[ndxOfsStart:].find(',')
+                    ndxOfsEnd = ndxOfsStart + mcup[ndxOfsStart:].find(',')
                 else:
                     isAry = False
-                    ndxCmntEnd = sTmp.rfind('offset: ')
+                    ndxCmntEnd = mcup.rfind('offset: ')
                     ndxOfsStart = ndxCmntEnd + len('offset: ')
-                    ndxOfsEnd = ndxOfsStart + sTmp[ndxOfsStart:].rfind(' ')
-                comment = sTmp[ndxCmntStart:ndxCmntEnd - 3]
-                sOfs = sTmp[ndxOfsStart:ndxOfsEnd]
+                    ndxOfsEnd = ndxOfsStart + mcup[ndxOfsStart:].rfind(' ')
+                comment = mcup[ndxCmntStart:ndxCmntEnd - 3]
+                sOfs = mcup[ndxOfsStart:ndxOfsEnd]
                 offset = int(sOfs, base=16)
                 if m[0] == 'IO reg':
                     regs.append((reg, offset, bits, comment))
@@ -177,7 +177,7 @@ def print_regs_as_submodules(reg_name, reg_defs, modules, needed_qstrs):
     modules.append((mod_name_lower, mod_name_upper))
 
     print("""
-STATIC const mp_rom_map_elem_t stm_%s_globals_table[] = {
+STATIC const mp_rom_map_elem_t mcu_%s_globals_table[] = {
     { MP_ROM_QSTR(MP_QSTR___name__), MP_ROM_QSTR(MP_QSTR_%s) },
 """ % (mod_name_lower, mod_name_upper))
     needed_qstrs.add(mod_name_upper)
@@ -188,36 +188,31 @@ STATIC const mp_rom_map_elem_t stm_%s_globals_table[] = {
 
     print("""};
 
-STATIC MP_DEFINE_CONST_DICT(stm_%s_globals, stm_%s_globals_table);
+STATIC MP_DEFINE_CONST_DICT(mcu_%s_globals, mcu_%s_globals_table);
 
-const mp_obj_module_t stm_%s_obj = {
+const mp_obj_module_t mcu_%s_obj = {
     .base = { &mp_type_module },
     .name = MP_QSTR_%s,
-    .globals = (mp_obj_dict_t*)&stm_%s_globals,
+    .globals = (mp_obj_dict_t*)&mcu_%s_globals,
 };
 """ % (mod_name_lower, mod_name_lower, mod_name_lower, mod_name_upper, mod_name_lower))
 
 def main():
-    cmd_parser = argparse.ArgumentParser(description='Extract ST constants from a C header file.')
+    cmd_parser = argparse.ArgumentParser(description='Extract MCU constants from a C header file.')
     cmd_parser.add_argument('file', nargs=1, help='input file')
-    cmd_parser.add_argument('-q', '--qstr', dest='qstr_filename', default='build/stmconst_qstr.h',
+    cmd_parser.add_argument('-q', '--qstr', dest='qstr_filename', default='build/mcuconst_qstr.h',
                             help='Specified the name of the generated qstr header file')
-    cmd_parser.add_argument('--mpz', dest='mpz_filename', default='build/stmconst_mpz.h',
+    cmd_parser.add_argument('--mpz', dest='mpz_filename', default='build/mcuconst_mpz.h',
                             help='the destination file of the generated mpz header')
     args = cmd_parser.parse_args()
 
     periphs, reg_defs = parse_file(args.file[0])
 
-    # add legacy GPIO constants that were removed when upgrading CMSIS
-    if 'GPIO' in reg_defs and 'stm32f4' in args.file[0]:
-        reg_defs['GPIO'].append(['BSRRL', 0x18, 16, 'legacy register'])
-        reg_defs['GPIO'].append(['BSRRH', 0x1a, 16, 'legacy register'])
-
     modules = []
     needed_qstrs = set()
     needed_mpzs = set()
 
-    print("// Automatically generated from %s by make-stmconst.py" % args.file[0])
+    print("// Automatically generated from %s by make-mcuconst.py" % args.file[0])
     print("")
 
     for periph_name, periph_val in periphs:
@@ -225,39 +220,19 @@ def main():
 
     for reg in (
         'ADC',
-        #'ADC_Common',
-        #'CAN_TxMailBox',
-        #'CAN_FIFOMailBox',
-        #'CAN_FilterRegister',
-        #'CAN',
-        'CRC',
-        'DAC',
-        'DBGMCU',
-        'DMA_Stream',
-        'DMA',
-        'EXTI',
-        'FLASH',
         'GPIO',
-        'SYSCFG',
-        'I2C',
-        'IWDG',
-        'PWR',
-        'RCC',
-        'RTC',
-        #'SDIO',
-        'SPI',
-        'TIM',
-        'USART',
-        'WWDG',
-        'RNG',
+        'TMR',
+        'PWM',
+        'LPSPI',
+        'LPI2C'
         ):
         if reg in reg_defs:
             print_regs(reg, reg_defs[reg], needed_qstrs, needed_mpzs)
         #print_regs_as_submodules(reg, reg_defs[reg], modules, needed_qstrs)
 
-    #print("#define MOD_STM_CONST_MODULES \\")
+    #print("#define MOD_MCU_CONST_MODULES \\")
     #for mod_lower, mod_upper in modules:
-    #    print("    { MP_OBJ_NEW_QSTR(MP_QSTR_%s), (mp_obj_t)&stm_%s_obj }, \\" % (mod_upper, mod_lower))
+    #    print("    { MP_OBJ_NEW_QSTR(MP_QSTR_%s), (mp_obj_t)&mcu_%s_obj }, \\" % (mod_upper, mod_lower))
 
     print("")
 
