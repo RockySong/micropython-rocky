@@ -1,9 +1,7 @@
-[![Build Status](https://travis-ci.org/micropython/micropython.png?branch=master)](https://travis-ci.org/micropython/micropython) [![Coverage Status](https://coveralls.io/repos/micropython/micropython/badge.png?branch=master)](https://coveralls.io/r/micropython/micropython?branch=master)
-
 The face recognition (MobileFaceNet,64x64RGB) demo for i.MX RT1060
 =======================
 <p align="center">
-  <img src="https://raw.githubusercontent.com/micropython/micropython/master/logo/upython-with-micro.jpg" alt="MicroPython Logo"/>
+  <img src="https://github.com/RockySong/micropython-rocky/blob/mfn_demo/logo/mfn_demo.jpg" alt="project banner" />
 </p>
 
 This is a KEIL project for building the MobileFaceNet demo, you need i.MX RT1060 EVK with LCD panel and OV7725 module.
@@ -19,6 +17,10 @@ Then to give it a try (save below content to 'main.py'):
     while True:
         nndemo.show(0, 0) # use nndemo.show(0, 1) if you want to just recognize a fixed area
 
+Note
+------------
+
+Original MobileFaceNet wants 112x112 RGB, we use 64x64 instead, model is ~97.4% for LFW test, inference time is 295ms on 600MHz i.MX RT1062.
 
 Contributing
 ------------
