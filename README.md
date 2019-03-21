@@ -7,11 +7,14 @@ The face recognition (MobileFaceNet,64x64RGB) demo for i.MX RT1060
 </p>
 
 This is a KEIL project for building the MobileFaceNet demo, you need i.MX RT1060 EVK with LCD panel and OV7725 module.
-
+There is a video for the demo: http://bbs.eeworld.com.cn/huodong/NXP_iMXVideo_201903/index.php#zbjs , and watch "基于恩智浦i.MX RT运行的现代大型神经网络：面部识别系统"
 To build:
 
     open KEIL project, build and download.
-
+To start the demo, save below content in 'main.py' and copy it to the root dir of a TF card, plug it in the TF card socket.
+import nndemo
+while True:
+    nndemo.show(0, 0) # use nndemo.show(0, 1) if you want to just recognize a fixed area
 
 
 Contributing
