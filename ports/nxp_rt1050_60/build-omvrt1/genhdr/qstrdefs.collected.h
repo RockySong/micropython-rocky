@@ -2012,6 +2012,8 @@ Q(deinit)
 
 Q(deinit)
 
+Q(deinit)
+
 Q(delattr)
 
 Q(delay)
@@ -2271,6 +2273,8 @@ Q(format)
 Q(forward)
 
 Q(fps)
+
+Q(freq)
 
 Q(freq)
 
@@ -2546,6 +2550,8 @@ Q(init)
 
 Q(init)
 
+Q(init)
+
 Q(input)
 
 Q(insert)
@@ -2607,6 +2613,8 @@ Q(invert)
 Q(invert)
 
 Q(invert)
+
+Q(inverted)
 
 Q(io)
 
@@ -3332,6 +3340,16 @@ Q(put_text)
 
 Q(put_text_xy)
 
+Q(pwm)
+
+Q(pwm)
+
+Q(pwm_freq)
+
+Q(pwm_inverted)
+
+Q(pwm_width)
+
 Q(pyb)
 
 Q(pyb)
@@ -3998,6 +4016,8 @@ Q(tell)
 
 Q(template_roi)
 
+Q(test)
+
 Q(theta)
 
 Q(theta)
@@ -4379,6 +4399,8 @@ Q(w)
 Q(wfi)
 
 Q(wfi)
+
+Q(width)
 
 Q(width)
 

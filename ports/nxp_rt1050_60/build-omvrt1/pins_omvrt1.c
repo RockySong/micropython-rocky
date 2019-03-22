@@ -48,7 +48,7 @@ const pin_af_obj_t pin_AD_B0_13_af[] = {
   AF( 1, GPT     ,  1, CLK             , GPT1       , 0          , 0   ), // GPT1_CLK
   AF( 2, LPUART  ,  1, RX              , LPUART1    , 0          , 0   ), // LPUART1_RX
   //( 3, EWM     ,  0, EWM_OUT_B       , EWM        , 0          , 0   ), // EWM_EWM_OUT_B
-  //( 4, FLEXPWM ,  1, PWMX3           , FLEXPWM1   , 0          , 0   ), // FLEXPWM1_PWMX3
+  AF( 4, PWM     ,  1, PWMX3           , PWM1       , 0          , 0   ), // FLEXPWM1_PWMX3
   AF( 5, GPIO    ,  1, PIN13           , GPIO1      , 0          , 0   ), // GPIO1_PIN13
   //( 6, ENET    ,  0, 1588_EVENT1_IN  , ENET       , 0          , 0   ), // ENET_1588_EVENT1_IN
   //( 7, ANATOP  ,  0, 24M_OUT         , ANATOP     , 0          , 0   ), // ANATOP_24M_OUT
@@ -59,7 +59,7 @@ const pin_obj_t pin_AD_B0_13 = PIN(AD_B0_13, 1, 13, pin_AD_B0_13_af, PIN_ADC1, 2
 
 const pin_af_obj_t pin_B1_08_af[] = {
   //( 0, LCDIF   ,  0, DATA20          , LCDIF      , 0          , 0   ), // LCDIF_DATA20
-  //( 1, TMR     ,  1, TIMER3          , TMR1       , 0          , 0   ), // TMR1_TIMER3
+  AF( 1, TMR     ,  1, TIMER3          , TMR1       , 0          , 0   ), // TMR1_TIMER3
   //( 2, CSI     ,  0, DATA11          , CSI        , 0          , 0   ), // CSI_DATA11
   //( 3, ENET    ,  0, TDATA1          , ENET       , 0          , 0   ), // ENET_TDATA1
   //( 4, FLEXIO  ,  2, FLEXIO24        , FLEXIO2    , 0          , 0   ), // FLEXIO2_FLEXIO24
@@ -73,7 +73,7 @@ const pin_obj_t pin_B1_08 = PIN(B1_08, 2, 24, pin_B1_08_af, 0, 0, 0x401F819CU, 0
 
 const pin_af_obj_t pin_B1_09_af[] = {
   //( 0, LCDIF   ,  0, DATA21          , LCDIF      , 0          , 0   ), // LCDIF_DATA21
-  //( 1, TMR     ,  2, TIMER3          , TMR2       , 0x401F8578U, 0x1U), // TMR2_TIMER3
+  AF( 1, TMR     ,  2, TIMER3          , TMR2       , 0x401F8578U, 0x1U), // TMR2_TIMER3
   //( 2, CSI     ,  0, DATA10          , CSI        , 0          , 0   ), // CSI_DATA10
   //( 3, ENET    ,  0, TX_EN           , ENET       , 0          , 0   ), // ENET_TX_EN
   //( 4, FLEXIO  ,  2, FLEXIO25        , FLEXIO2    , 0          , 0   ), // FLEXIO2_FLEXIO25
@@ -87,7 +87,7 @@ const pin_obj_t pin_B1_09 = PIN(B1_09, 2, 25, pin_B1_09_af, 0, 0, 0x401F81A0U, 0
 
 const pin_af_obj_t pin_B1_15_af[] = {
   //( 0, ENET    ,  0, MDIO            , ENET       , 0x401F8430U, 0x2U), // ENET_MDIO
-  //( 1, FLEXPWM ,  4, PWMA3           , FLEXPWM4   , 0x401F84A0U, 0x1U), // FLEXPWM4_PWMA3
+  //( 1, PWM     ,  4, PWMA3           , PWM4       , 0x401F84A0U, 0x1U), // FLEXPWM4_PWMA3
   //( 2, CSI     ,  0, MCLK            , CSI        , 0          , 0   ), // CSI_MCLK
   //( 3, XBAR    ,  1, XBAR_IN3        , XBAR1      , 0x401F8610U, 0x1U), // XBAR1_XBAR_IN3
   //( 4, FLEXIO  ,  2, FLEXIO31        , FLEXIO2    , 0          , 0   ), // FLEXIO2_FLEXIO31
@@ -101,10 +101,10 @@ const pin_obj_t pin_B1_15 = PIN(B1_15, 2, 31, pin_B1_15_af, 0, 0, 0x401F81B8U, 0
 
 const pin_af_obj_t pin_EMC_19_af[] = {
   //( 0, SEMC    ,  0, ADDR11          , SEMC       , 0          , 0   ), // SEMC_ADDR11
-  //( 1, FLEXPWM ,  2, PWMA3           , FLEXPWM2   , 0x401F8474U, 0x1U), // FLEXPWM2_PWMA3
+  //( 1, PWM     ,  2, PWMA3           , PWM2       , 0x401F8474U, 0x1U), // FLEXPWM2_PWMA3
   AF( 2, LPUART  ,  4, TX              , LPUART4    , 0x401F8544U, 0x1U), // LPUART4_TX
   //( 3, ENET    ,  0, RDATA1          , ENET       , 0x401F8438U, 0x0U), // ENET_RDATA1
-  //( 4, TMR     ,  2, TIMER0          , TMR2       , 0x401F856CU, 0x0U), // TMR2_TIMER0
+  AF( 4, TMR     ,  2, TIMER0          , TMR2       , 0x401F856CU, 0x0U), // TMR2_TIMER0
   AF( 5, GPIO    ,  4, PIN19           , GPIO4      , 0          , 0   ), // GPIO4_PIN19
   //( 6, SNVS    ,  0, HP_VIO_5_B      , SNVS       , 0          , 0   ), // SNVS_HP_VIO_5_B
   //( 7, SIM     ,  0, M_HADDR15       , SIM        ,            ,     ), // SIM_M_HADDR15
@@ -115,10 +115,10 @@ const pin_obj_t pin_EMC_19 = PIN(EMC_19, 4, 19, pin_EMC_19_af, 0, 0, 0x401F8060U
 
 const pin_af_obj_t pin_EMC_20_af[] = {
   //( 0, SEMC    ,  0, ADDR12          , SEMC       , 0          , 0   ), // SEMC_ADDR12
-  //( 1, FLEXPWM ,  2, PWMB3           , FLEXPWM2   , 0x401F8484U, 0x1U), // FLEXPWM2_PWMB3
+  //( 1, PWM     ,  2, PWMB3           , PWM2       , 0x401F8484U, 0x1U), // FLEXPWM2_PWMB3
   AF( 2, LPUART  ,  4, RX              , LPUART4    , 0x401F8540U, 0x1U), // LPUART4_RX
   //( 3, ENET    ,  0, RDATA0          , ENET       , 0x401F8434U, 0x0U), // ENET_RDATA0
-  //( 4, TMR     ,  2, TIMER1          , TMR2       , 0x401F8570U, 0x0U), // TMR2_TIMER1
+  AF( 4, TMR     ,  2, TIMER1          , TMR2       , 0x401F8570U, 0x0U), // TMR2_TIMER1
   AF( 5, GPIO    ,  4, PIN20           , GPIO4      , 0          , 0   ), // GPIO4_PIN20
   //( 6, ANATOP  ,  0, TESTO0          , ANATOP     ,            ,     ), // ANATOP_TESTO0
   //( 7, SIM     ,  0, M_HADDR16       , SIM        ,            ,     ), // SIM_M_HADDR16
@@ -129,10 +129,10 @@ const pin_obj_t pin_EMC_20 = PIN(EMC_20, 4, 20, pin_EMC_20_af, 0, 0, 0x401F8064U
 
 const pin_af_obj_t pin_EMC_21_af[] = {
   //( 0, SEMC    ,  0, BA0             , SEMC       , 0          , 0   ), // SEMC_BA0
-  //( 1, FLEXPWM ,  3, PWMA3           , FLEXPWM3   , 0          , 0   ), // FLEXPWM3_PWMA3
+  //( 1, PWM     ,  3, PWMA3           , PWM3       , 0          , 0   ), // FLEXPWM3_PWMA3
   AF( 2, LPI2C   ,  3, SDA             , LPI2C3     , 0x401F84E0U, 0x0U), // LPI2C3_SDA
   //( 3, ENET    ,  0, TDATA1          , ENET       , 0          , 0   ), // ENET_TDATA1
-  //( 4, TMR     ,  2, TIMER2          , TMR2       , 0x401F8574U, 0x0U), // TMR2_TIMER2
+  AF( 4, TMR     ,  2, TIMER2          , TMR2       , 0x401F8574U, 0x0U), // TMR2_TIMER2
   AF( 5, GPIO    ,  4, PIN21           , GPIO4      , 0          , 0   ), // GPIO4_PIN21
   //( 6, ANATOP  ,  0, TESTO1          , ANATOP     ,            ,     ), // ANATOP_TESTO1
   //( 7, SIM     ,  0, M_HADDR17       , SIM        ,            ,     ), // SIM_M_HADDR17
@@ -143,10 +143,10 @@ const pin_obj_t pin_EMC_21 = PIN(EMC_21, 4, 21, pin_EMC_21_af, 0, 0, 0x401F8068U
 
 const pin_af_obj_t pin_EMC_22_af[] = {
   //( 0, SEMC    ,  0, BA1             , SEMC       , 0          , 0   ), // SEMC_BA1
-  //( 1, FLEXPWM ,  3, PWMB3           , FLEXPWM3   , 0          , 0   ), // FLEXPWM3_PWMB3
+  //( 1, PWM     ,  3, PWMB3           , PWM3       , 0          , 0   ), // FLEXPWM3_PWMB3
   AF( 2, LPI2C   ,  3, SCL             , LPI2C3     , 0x401F84DCU, 0x0U), // LPI2C3_SCL
   //( 3, ENET    ,  0, TDATA0          , ENET       , 0          , 0   ), // ENET_TDATA0
-  //( 4, TMR     ,  2, TIMER3          , TMR2       , 0x401F8578U, 0x0U), // TMR2_TIMER3
+  AF( 4, TMR     ,  2, TIMER3          , TMR2       , 0x401F8578U, 0x0U), // TMR2_TIMER3
   AF( 5, GPIO    ,  4, PIN22           , GPIO4      , 0          , 0   ), // GPIO4_PIN22
   //( 6, ANATOP  ,  0, TESTO2          , ANATOP     ,            ,     ), // ANATOP_TESTO2
   //( 7, SIM     ,  0, M_HADDR18       , SIM        ,            ,     ), // SIM_M_HADDR18
@@ -157,7 +157,7 @@ const pin_obj_t pin_EMC_22 = PIN(EMC_22, 4, 22, pin_EMC_22_af, 0, 0, 0x401F806CU
 
 const pin_af_obj_t pin_EMC_27_af[] = {
   //( 0, SEMC    ,  0, CKE             , SEMC       , 0          , 0   ), // SEMC_CKE
-  //( 1, FLEXPWM ,  1, PWMA2           , FLEXPWM1   , 0x401F8460U, 0x0U), // FLEXPWM1_PWMA2
+  //( 1, PWM     ,  1, PWMA2           , PWM1       , 0x401F8460U, 0x0U), // FLEXPWM1_PWMA2
   AF( 2, LPUART  ,  5, RTS_B           , LPUART5    , 0          , 0   ), // LPUART5_RTS_B
   AF( 3, LPSPI   ,  1, SCK             , LPSPI1     , 0x401F84F0U, 0x0U), // LPSPI1_SCK
   //( 4, FLEXIO  ,  1, FLEXIO13        , FLEXIO1    , 0          , 0   ), // FLEXIO1_FLEXIO13
@@ -171,7 +171,7 @@ const pin_obj_t pin_EMC_27 = PIN(EMC_27, 4, 27, pin_EMC_27_af, 0, 0, 0x401F8080U
 
 const pin_af_obj_t pin_EMC_28_af[] = {
   //( 0, SEMC    ,  0, WE              , SEMC       , 0          , 0   ), // SEMC_WE
-  //( 1, FLEXPWM ,  1, PWMB2           , FLEXPWM1   , 0x401F8470U, 0x0U), // FLEXPWM1_PWMB2
+  //( 1, PWM     ,  1, PWMB2           , PWM1       , 0x401F8470U, 0x0U), // FLEXPWM1_PWMB2
   AF( 2, LPUART  ,  5, CTS_B           , LPUART5    , 0          , 0   ), // LPUART5_CTS_B
   AF( 3, LPSPI   ,  1, SDO             , LPSPI1     , 0x401F84F8U, 0x0U), // LPSPI1_SDO
   //( 4, FLEXIO  ,  1, FLEXIO14        , FLEXIO1    , 0          , 0   ), // FLEXIO1_FLEXIO14
@@ -185,7 +185,7 @@ const pin_obj_t pin_EMC_28 = PIN(EMC_28, 4, 28, pin_EMC_28_af, 0, 0, 0x401F8084U
 
 const pin_af_obj_t pin_EMC_29_af[] = {
   //( 0, SEMC    ,  0, CS0             , SEMC       , 0          , 0   ), // SEMC_CS0
-  //( 1, FLEXPWM ,  3, PWMA0           , FLEXPWM3   , 0          , 0   ), // FLEXPWM3_PWMA0
+  //( 1, PWM     ,  3, PWMA0           , PWM3       , 0          , 0   ), // FLEXPWM3_PWMA0
   AF( 2, LPUART  ,  6, RTS_B           , LPUART6    , 0          , 0   ), // LPUART6_RTS_B
   AF( 3, LPSPI   ,  1, SDI             , LPSPI1     , 0x401F84F4U, 0x0U), // LPSPI1_SDI
   //( 4, FLEXIO  ,  1, FLEXIO15        , FLEXIO1    , 0          , 0   ), // FLEXIO1_FLEXIO15
@@ -199,7 +199,7 @@ const pin_obj_t pin_EMC_29 = PIN(EMC_29, 4, 29, pin_EMC_29_af, 0, 0, 0x401F8088U
 
 const pin_af_obj_t pin_EMC_30_af[] = {
   //( 0, SEMC    ,  0, DATA8           , SEMC       , 0          , 0   ), // SEMC_DATA8
-  //( 1, FLEXPWM ,  3, PWMB0           , FLEXPWM3   , 0          , 0   ), // FLEXPWM3_PWMB0
+  //( 1, PWM     ,  3, PWMB0           , PWM3       , 0          , 0   ), // FLEXPWM3_PWMB0
   AF( 2, LPUART  ,  6, CTS_B           , LPUART6    , 0          , 0   ), // LPUART6_CTS_B
   AF( 3, LPSPI   ,  1, PCS0            , LPSPI1     , 0x401F84ECU, 0x1U), // LPSPI1_PCS0
   //( 4, CSI     ,  0, DATA23          , CSI        , 0          , 0   ), // CSI_DATA23
@@ -213,7 +213,7 @@ const pin_obj_t pin_EMC_30 = PIN(EMC_30, 4, 30, pin_EMC_30_af, 0, 0, 0x401F808CU
 
 const pin_af_obj_t pin_EMC_39_af[] = {
   //( 0, SEMC    ,  0, DQS             , SEMC       , 0          , 0   ), // SEMC_DQS
-  //( 1, FLEXPWM ,  1, PWMB3           , FLEXPWM1   , 0x401F8464U, 0x2U), // FLEXPWM1_PWMB3
+  //( 1, PWM     ,  1, PWMB3           , PWM1       , 0x401F8464U, 0x2U), // FLEXPWM1_PWMB3
   AF( 2, LPUART  ,  8, RX              , LPUART8    , 0x401F8560U, 0x2U), // LPUART8_RX
 #if (defined(MICROPY_HW_ENABLE_SAI3) && MICROPY_HW_ENABLE_SAI3)
   AF( 3, SAI     ,  3, TX_SYNC         , SAI3       , 0          , 0   ), // SAI3_TX_SYNC

@@ -3934,6 +3934,11 @@
               </FileOption>
             </File>
             <File>
+              <FileName>pwm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt1050_60\pwm.c</FilePath>
+            </File>
+            <File>
               <FileName>spi.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\nxp_rt1050_60\spi.c</FilePath>
@@ -10758,6 +10763,11 @@
               <FilePath>..\nxp_rt1050_60\i2c.c</FilePath>
             </File>
             <File>
+              <FileName>pwm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt1050_60\pwm.c</FilePath>
+            </File>
+            <File>
               <FileName>spi.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\nxp_rt1050_60\spi.c</FilePath>
@@ -17530,6 +17540,11 @@
                   </Cads>
                 </FileArmAds>
               </FileOption>
+            </File>
+            <File>
+              <FileName>pwm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt1050_60\pwm.c</FilePath>
             </File>
             <File>
               <FileName>spi.c</FileName>

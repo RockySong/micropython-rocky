@@ -6779,6 +6779,8 @@ Q(AD_B0_13)
 Q(AF0_LPI2C4)
 Q(AF1_GPT1)
 Q(AF1_GPT2)
+Q(AF1_TMR1)
+Q(AF1_TMR2)
 Q(AF2_LPI2C3)
 Q(AF2_LPUART1)
 Q(AF2_LPUART4)
@@ -6789,6 +6791,8 @@ Q(AF3_LPSPI1)
 
 
 
+Q(AF4_PWM1)
+Q(AF4_TMR2)
 Q(AF5_GPIO1)
 Q(AF5_GPIO2)
 Q(AF5_GPIO3)
@@ -7617,7 +7621,7 @@ Q(XBARA1)
 Q(XBARB2)
 Q(XBARB3)
 Q(XTALOSC24M)
-# 953 "<stdin>"
+# 957 "<stdin>"
 Q(image)
 Q(Image)
 Q(rgb_to_lab)
@@ -7958,7 +7962,7 @@ Q(CPUFREQ_192MHZ)
 Q(CPUFREQ_216MHZ)
 Q(get_frequency)
 Q(set_frequency)
-# 1301 "<stdin>"
+# 1305 "<stdin>"
 Q(remove_shadows)
 
 
@@ -8025,7 +8029,7 @@ Q(value)
 Q(l_value)
 Q(a_value)
 Q(b_value)
-# 1384 "<stdin>"
+# 1388 "<stdin>"
 Q(lq)
 Q(uq)
 Q(l_mean)
@@ -8141,7 +8145,7 @@ Q(find_rects)
 
 
 Q(corners)
-# 1507 "<stdin>"
+# 1511 "<stdin>"
 Q(find_qrcodes)
 
 
@@ -8206,7 +8210,7 @@ Q(find_datamatrices)
 Q(effort)
 
 Q(datamatrix)
-# 1579 "<stdin>"
+# 1583 "<stdin>"
 Q(rows)
 Q(columns)
 Q(capacity)
@@ -8217,7 +8221,7 @@ Q(find_barcodes)
 
 
 Q(barcode)
-# 1599 "<stdin>"
+# 1603 "<stdin>"
 Q(EAN2)
 Q(EAN5)
 Q(EAN8)
@@ -10282,6 +10286,8 @@ Q(deinit)
 
 Q(deinit)
 
+Q(deinit)
+
 Q(delattr)
 
 Q(delay)
@@ -10541,6 +10547,8 @@ Q(format)
 Q(forward)
 
 Q(fps)
+
+Q(freq)
 
 Q(freq)
 
@@ -10816,6 +10824,8 @@ Q(init)
 
 Q(init)
 
+Q(init)
+
 Q(input)
 
 Q(insert)
@@ -10877,6 +10887,8 @@ Q(invert)
 Q(invert)
 
 Q(invert)
+
+Q(inverted)
 
 Q(io)
 
@@ -11602,6 +11614,16 @@ Q(put_text)
 
 Q(put_text_xy)
 
+Q(pwm)
+
+Q(pwm)
+
+Q(pwm_freq)
+
+Q(pwm_inverted)
+
+Q(pwm_width)
+
 Q(pyb)
 
 Q(pyb)
@@ -12268,6 +12290,8 @@ Q(tell)
 
 Q(template_roi)
 
+Q(test)
+
 Q(theta)
 
 Q(theta)
@@ -12649,6 +12673,8 @@ Q(w)
 Q(wfi)
 
 Q(wfi)
+
+Q(width)
 
 Q(width)
 
