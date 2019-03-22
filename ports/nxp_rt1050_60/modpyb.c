@@ -70,6 +70,7 @@
 #include "rng.h"
 #include "rtc.h"
 #include "uniqueID.h"
+#include "pwm.h"
 extern int pyb_hard_fault_debug;
 
 STATIC mp_obj_t pyb_fault_debug(mp_obj_t val) {
@@ -158,11 +159,14 @@ STATIC const mp_rom_map_elem_t pyb_module_globals_table[] = {
     { MP_ROM_QSTR(MP_QSTR_udelay), MP_ROM_PTR(&mp_utime_sleep_us_obj) },
     { MP_ROM_QSTR(MP_QSTR_sync), MP_ROM_PTR(&mod_os_sync_obj) },
     { MP_ROM_QSTR(MP_QSTR_mount), MP_ROM_PTR(&mp_vfs_mount_obj) },
+	
+	//Crist to test:
+	{ MP_ROM_QSTR(MP_QSTR_pwm), MP_ROM_PTR(&pyb_pwm_type) },
 
     // rocky ignore { MP_ROM_QSTR(MP_QSTR_Timer), MP_ROM_PTR(&pyb_timer_type) },
 
 #if MICROPY_HW_ENABLE_RNG
-    { MP_ROM_QSTR(MP_QSTR_rng), MP_ROM_PTR(&pyb_rng_getnum_obj) },
+    { MP_ROM_QSTR(MP_QSTR_rng), MP_ROM_PTR(&pyb_rng_type) },
 #endif
 
 #if MICROPY_HW_ENABLE_RTC
