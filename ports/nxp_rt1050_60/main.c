@@ -58,6 +58,8 @@
 #include "storage.h"
 #include "sdcard.h"
 #include "rng.h"
+
+#include "pwm.h"
 // #include "accel.h"
 // #include "servo.h"
 // #include "dac.h"
@@ -695,7 +697,7 @@ int TestCacheBug(void)
 	return ret;
 }	
 extern uint16_t g_uid[4];	
-	
+
 int main(void) {
 	snvs_hp_rtc_config_t snvsRtcConfig;
 	snvs_hp_rtc_datetime_t rtcDate;
@@ -966,9 +968,10 @@ soft_reset:
     // MMA accel: init and reset
     accel_init();
 #endif
-
+pwm_init0();
 #if MICROPY_HW_ENABLE_SERVO
     // servo
+	
     servo_init();
 #endif
 

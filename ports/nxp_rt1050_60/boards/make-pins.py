@@ -9,13 +9,15 @@ import csv
 
 SUPPORTED_FN = {
     #'GPIO'  : ['PIN'],
-    'TMR': ['TMR0',  'TMR1',  'TMR2', 'TMR3'],
+    'TMR': ['TIMER0',  'TIMER1',  'TIMER2', 'TIMER3'],
     'GPT'   : ['CLK', 'CAPTURE1', 'CAPTURE2', 'COMPARE1', 'COMPARE2', 'COMPARE3'],
     'LPI2C' : ['SDA', 'SCL'],
     'LPUART': ['RX', 'TX', 'CTS_B', 'RTS_B'],
     'LPSPI' : ['PCS0', 'SCK', 'SDI', 'SDO'],
     'SAI'   : ['TX_BCLK', 'TX_SYNC', 'TX_DATA', 'TX_DATA0', 'TX_DATA1', 'TX_DATA2', 'TX_DATA3',
             'RX_BCLK', 'RX_SYNC', 'RX_DATA', 'RX_DATA0', 'MCLK'],
+	'FLEXPWM' : ['PWMX3'],# 'PWMX1', 'PWMX2', 'PWMX3'], #function, pin_name, in the csv, style is function?_pin_name, ?is any number, we list all pwm function, no need this line,
+	# also add a new line on 144, our RT's pwm named in a peculiar way for its reg is PWM1 not FLEXPWM1 just the same as the fun-name, so need to modify
 }
 
 CONDITIONAL_VAR = {
@@ -102,7 +104,11 @@ class AlternateFunction(object):
         self.func, self.fn_num = split_name_num(af_words[0])
         if len(af_words) > 1:
             self.pin_type = af_words[1]
-        # for GPIO, we do not list all pin_types (PIN0, PIN1, .., PIN31)
+        # for pwm, we do not list all pwm_types (PWMX1,PWMX2,PWMA1,PWMA2,PWMB1....)
+       # if self.func == 'FLEXPWM':
+       #     if self.pin_type[:3] == 'PWM' and self.pin_type[4:].isdigit():
+       #         self.supported = True
+		# for GPIO, we do not list all pin_types (PIN0, PIN1, .., PIN31)
         if self.func == 'GPIO':
             if self.pin_type[:3] == 'PIN' and self.pin_type[3:].isdigit():
                 self.supported = True
@@ -135,6 +141,8 @@ class AlternateFunction(object):
         fn_num = self.fn_num
         if fn_num is None:
             fn_num = 0
+        if self.func in ['FLEXPWM']:
+            self.func = self.func[4:]
         print('({:2d}, {:8s}, {:2d}, {:16s}, {:11s}, {:11s}, {:4s}), // {:s}'.format(self.idx,
               self.func, fn_num, self.pin_type, self.ptr(), self.inSelReg, self.inSelVal, self.af_str))
         print_conditional_endif(cond_var)

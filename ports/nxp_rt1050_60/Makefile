@@ -341,6 +341,7 @@ SRC_C = \
 	flash_pgm.c  \
 	rtc.c	\
 	rng.c	\
+	pwm.c   \
 	uniqueID.c	\
 	$(wildcard boards/$(BOARD)/*.c)
 
