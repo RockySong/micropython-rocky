@@ -190,6 +190,7 @@ static status_t cambus_writes(uint8_t slv_addr, const ov7725_reg_t regs[], uint3
     return status;
 }
 const int resolution[][2] = {
+    {0,    0   },
     // C/SIF Resolutions
     {88,   72  },    /* QQCIF     */
     {176,  144 },    /* QCIF      */
@@ -212,8 +213,10 @@ const int resolution[][2] = {
     {128,  64  },    /* 128x64    */
     {128,  128 },    /* 128x64    */
     // Other
-    {480,  272 },    /* LCD       */
+    {128,  160 },    /* LCD       */
     {128,  160 },    /* QQVGA2    */
+    {720,  480 },    /* WVGA      */
+    {752,  480 },    /* WVGA2     */
     {800,  600 },    /* SVGA      */
     {1280, 1024},    /* SXGA      */
     {1600, 1200},    /* UXGA      */
@@ -701,7 +704,7 @@ void CsiFragModeStartNewFrame(void) {
 	s_irq.dmaFragNdx = 0;
 	s_irq.cnt++;
 	// DMA also writes to this cache line, to avoid being invalidated, clean MAIN_FB header.
-	DCACHE_CleanByRange(MAIN_FB(), 32);
+	DCACHE_CleanByRange((uint32_t)MAIN_FB(), 32);
 	if (s_irq.isGray || s_sensor.isWindowing) {
 		s_pCSI->CSIDMASA_FB1 = (uint32_t) s_dmaFragBufs[0];
 		s_pCSI->CSIDMASA_FB2 = (uint32_t) s_dmaFragBufs[1];
@@ -989,9 +992,14 @@ int sensor_set_framesize(framesize_t framesize)
     s_sensor.framesize = framesize;
 
     // Skip the first frame.
-    MAIN_FB()->bpp = 0;
-    MAIN_FB()->w = s_sensor.fb_w = resolution[framesize][0];
-    MAIN_FB()->h = s_sensor.fb_h = resolution[framesize][1];
+    MAIN_FB()->bpp = -1;
+    // Set MAIN FB width and height.
+    s_sensor.fb_w = MAIN_FB()->w = resolution[framesize][0];
+    s_sensor.fb_h = MAIN_FB()->h = resolution[framesize][1];
+
+    // Set MAIN FB backup width and height.
+    MAIN_FB()->u = resolution[framesize][0];
+    MAIN_FB()->v = resolution[framesize][1];
 	s_sensor.wndX = 0; s_sensor.wndY = 0 ; s_sensor.wndW = s_sensor.fb_w ; s_sensor.wndH = s_sensor.fb_h;
 	// CsiFragModeCalc();
     return 0;
@@ -1220,6 +1228,29 @@ int sensor_set_lens_correction(int enable, int radi, int coef)
     return 0;
 }
 
+int sensor_ioctl(int request, ... /* arg */)
+{
+    int ret = -1;
+    if (s_sensor.ioctl != NULL) {
+        va_list ap;
+        va_start(ap, request);
+        /* call the sensor specific function */
+        ret = s_sensor.ioctl(&s_sensor, request, ap);
+        va_end(ap);
+    }
+    return ret;
+}
+int sensor_set_color_palette(const uint16_t *color_palette)
+{
+    s_sensor.color_palette = color_palette;
+    return 0;
+}
+
+const uint16_t *sensor_get_color_palette()
+{
+    return s_sensor.color_palette;
+}
+
 static void sensor_check_bufsize()
 {
     int bpp=0;
@@ -1412,59 +1443,7 @@ void LCDMonitor_Update(uint32_t fbNdx)
 }
 #endif
 
-// This function is called back after each line transfer is complete,
-// with a pointer to the line buffer that was used. At this point the
-// DMA transfers the next line to the other half of the line buffer.
-// Note:  For JPEG this function is called once (and ignored) at the end of the transfer.
 
-void PreprocessOneLine(uint32_t addr, int line)
-{
-    uint8_t *src = (uint8_t*) addr;
-    uint8_t *dst = MAIN_FB()->pixels;
-
-    if (s_sensor.line_filter_func && s_sensor.line_filter_args) {
-        int bpp = ((s_sensor.pixformat == PIXFORMAT_GRAYSCALE) ? 1:2);
-        dst += line++ * MAIN_FB()->w * bpp;
-        // If there's an image filter installed call it.
-        // Note: BPP is the target BPP, not the line bpp (the line is always 2 bytes per pixel) if the target BPP is 1
-        // it means the image currently being read is going to be Grayscale, and the function needs to output w * 1BPP.
-        s_sensor.line_filter_func(src, MAIN_FB()->w * 2 , dst, MAIN_FB()->w * bpp, s_sensor.line_filter_args);
-    } else {
-        switch (s_sensor.pixformat) {
-            case PIXFORMAT_BAYER:
-                dst += line++ * MAIN_FB()->w;
-                for (int i=0; i<MAIN_FB()->w; i++) {
-                    dst[i] = src[i];
-                }
-                break;
-            case PIXFORMAT_GRAYSCALE:
-                dst += line++ * MAIN_FB()->w;
-                if (s_sensor.gs_bpp == 1) {
-                    // 1BPP GRAYSCALE.
-                    for (int i=0; i<MAIN_FB()->w; i++) {
-                        dst[i] = src[i];
-                    }
-                } else {
-                    // Extract Y channel from YUV.
-                    for (int i=0; i<MAIN_FB()->w; i++) {
-                        dst[i] = src[i<<1];
-                    }
-                }
-                break;
-            case PIXFORMAT_YUV422:
-            case PIXFORMAT_RGB565:
-                dst += line++ * MAIN_FB()->w * 2;
-                for (int i=0; i<MAIN_FB()->w * 2; i++) {
-                    dst[i] = src[i];
-                }
-                break;
-            case PIXFORMAT_JPEG:
-                break;
-            default:
-                break;
-        }
-    }
-}
 
 // The JPEG offset allows JPEG compression of the framebuffer without overwriting the pixels.
 // The offset size may need to be adjusted depending on the quality, otherwise JPEG data may

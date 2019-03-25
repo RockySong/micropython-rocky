@@ -9,6 +9,7 @@
 #ifndef __SENSOR_H__
 #define __SENSOR_H__
 #include <stdint.h>
+#include <stdarg.h>
 #include "imlib.h"
 #define OV9650_ID       (0x96)
 #define OV2640_ID       (0x26)
@@ -17,14 +18,17 @@
 #define LEPTON_ID       (0x54)
 
 typedef enum {
-    PIXFORMAT_BAYER,     // 1BPP/RAW
+    PIXFORMAT_INVALID = 0,
+    PIXFORMAT_BINARY,    // 1BPP/BINARY
+    PIXFORMAT_GRAYSCALE, // 1BPP/GRAYSCALE
     PIXFORMAT_RGB565,    // 2BPP/RGB565
     PIXFORMAT_YUV422,    // 2BPP/YUV422
-    PIXFORMAT_GRAYSCALE, // 1BPP/GRAYSCALE
+    PIXFORMAT_BAYER,     // 1BPP/RAW
     PIXFORMAT_JPEG,      // JPEG/COMPRESSED
 } pixformat_t;
 
 typedef enum {
+    FRAMESIZE_INVALID = 0,
     // C/SIF Resolutions
     FRAMESIZE_QQCIF,    // 88x72
     FRAMESIZE_QCIF,     // 176x144
@@ -62,7 +66,7 @@ typedef enum {
     FRAMERATE_15FPS=0x83,
     FRAMERATE_30FPS=0x81,
     FRAMERATE_60FPS=0x80,
-	FRAMERATE_HWREG = 0x80000000,
+	FRAMERATE_HWREG = 0x80000000, 
 } framerate_t;
 
 typedef enum {
@@ -92,7 +96,24 @@ typedef enum {
     ACTIVE_HIGH
 } polarity_t;
 
-typedef void (*line_filter_t) (uint8_t *src, int src_stride, uint8_t *dst, int dst_stride, void *args);
+typedef enum {
+    IOCTL_SET_TRIGGERED_MODE,
+    IOCTL_GET_TRIGGERED_MODE,
+    IOCTL_LEPTON_GET_WIDTH,
+    IOCTL_LEPTON_GET_HEIGHT,
+    IOCTL_LEPTON_GET_RADIOMETRY,
+    IOCTL_LEPTON_GET_REFRESH,
+    IOCTL_LEPTON_GET_RESOLUTION,
+    IOCTL_LEPTON_RUN_COMMAND,
+    IOCTL_LEPTON_SET_ATTRIBUTE,
+    IOCTL_LEPTON_GET_ATTRIBUTE,
+    IOCTL_LEPTON_GET_FPA_TEMPERATURE,
+    IOCTL_LEPTON_GET_AUX_TEMPERATURE,
+    IOCTL_LEPTON_SET_MEASUREMENT_MODE,
+    IOCTL_LEPTON_GET_MEASUREMENT_MODE,
+    IOCTL_LEPTON_SET_MEASUREMENT_RANGE,
+    IOCTL_LEPTON_GET_MEASUREMENT_RANGE
+} ioctl_t;
 
 #define SENSOR_HW_FLAGS_VSYNC        (0) // vertical sync polarity.
 #define SENSOR_HW_FLAGS_HSYNC        (1) // horizontal sync polarity.
@@ -116,10 +137,6 @@ typedef struct _sensor {
     int fb_w, fb_h;             // Backup for MAIN_FB().
     uint16_t wndX, wndY, wndW, wndH;
 	uint8_t isWindowing;
-
-    // Line pre-processing function and args
-    void *line_filter_args;
-    line_filter_t line_filter_func;
 
     polarity_t pwdn_pol;        // PWDN polarity (TODO move to hw_flags)
     polarity_t reset_pol;       // Reset polarity (TODO move to hw_flags)
@@ -155,6 +172,8 @@ typedef struct _sensor {
     int  (*set_vflip)           (sensor_t *sensor, int enable);
     int  (*set_special_effect)  (sensor_t *sensor, sde_t sde);
     int  (*set_lens_correction) (sensor_t *sensor, int enable, int radi, int coef);
+    int  (*ioctl)               (sensor_t *sensor, int request, va_list ap);
+    int  (*snapshot)            (sensor_t *sensor, image_t *image, streaming_cb_t streaming_cb);
 } sensor_t;
 
 // Resolution table

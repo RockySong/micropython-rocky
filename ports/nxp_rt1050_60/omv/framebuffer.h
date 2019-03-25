@@ -14,14 +14,14 @@
 typedef struct framebuffer {
 	union {
 		struct {
-			uint16_t w, h, bpp, res;
+			int x, y, w, h, u, v, bpp, res;
 		};
 		uint64_t u64AlignForIMxRT;	// in i.MX RT, this address must be aligned to 8 bytes!
 	};
     uint8_t pixels[];	
 } framebuffer_t;
 
-
+extern framebuffer_t *fb_framebuffer;
 
 typedef struct jpegbuffer {
     int w,h;
@@ -32,7 +32,6 @@ typedef struct jpegbuffer {
     uint8_t pixels[];
 } jpegbuffer_t;
 
-extern framebuffer_t *fb_framebuffer;
 extern jpegbuffer_t *jpeg_fb_framebuffer;
 
 // Use these macros to get a pointer to main or JPEG framebuffer.

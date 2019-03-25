@@ -8,7 +8,7 @@
 #define OCRAM_SIZE	512*1024
 
 #define OMV_MAIN_FB_SIZE	301*1024 //301*1024
-#define OMV_FB_ALLOC_SIZE	96*1024 //83*1024
+#define OMV_FB_ALLOC_SIZE	120*1024 //83*1024
 #define OMV_JPEG_FB_SIZE    32*1024
 
 ; must use "VECTOR_RAM", "RW_m_data", "VECTOR_ROM" as names to work with "InstallIRQHandler()" API
@@ -103,7 +103,7 @@ LR_XIP_FLASH ROM_BASE + 0x2000 {
 	ER_DTCM +0 {
 		fsl_sd*.o (+RW, +ZI)
 		usb*.o (+RW, +ZI)
-		virtual_com.o (+RW, +ZI)
+		//virtual_com.o (+RW, +ZI)
 		sensor.o (+RW, +ZI)
 	}
 	
