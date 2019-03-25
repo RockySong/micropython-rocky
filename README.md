@@ -3,7 +3,7 @@
 OpenMV port to i.MX RT1050/1060
 =======================
 <p align="center">
-  <img src="https://raw.githubusercontent.com/micropython/micropython/master/logo/upython-with-micro.jpg" alt="MicroPython Logo"/>
+  <img src="https://github.com/RockySong/micropython-rocky/blob/master/omvrt_banner.jpg" alt="project banner" />
 </p>
 
 OpenMV3 Cam port to i.MX RT1050/1060, can run on NXP i.MXRT1060/1060 evk and a small camear board that is highly compatible with OpenMV3 Cam.
