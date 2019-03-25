@@ -77,7 +77,7 @@
 #define APP_CAMERA_CONTROL_FLAGS (kCAMERA_HrefActiveHigh | kCAMERA_DataLatchOnRisingEdge)
 #define APP_FRAME_BUFFER_COUNT 4
 #define FRAME_BUFFER_ALIGN 64
-sensor_t sensor;
+sensor_t s_sensor;
 
 /*static*/ volatile uint8_t s_isOmvSensorSnapshotReady;
 
@@ -567,15 +567,15 @@ RAM_CODE void CSI_IRQHandler(void) {
 		if (dmaBase >= 0x20200000)
 			DCACHE_CleanInvalidateByRange(dmaBase, s_irq.dmaBytePerFrag);
 		if (s_irq.isGray || 
-			(sensor.isWindowing &&  lineNdx >= sensor.wndY && lineNdx - sensor.wndY <= sensor.wndH) )
+			(s_sensor.isWindowing &&  lineNdx >= s_sensor.wndY && lineNdx - s_sensor.wndY <= s_sensor.wndH) )
 		{
 
-			dmaBase += sensor.wndX * 2 * s_irq.linePerFrag;	// apply line window offset
+			dmaBase += s_sensor.wndX * 2 * s_irq.linePerFrag;	// apply line window offset
 			if (s_irq.isGray) {
 				
-				s_irq.datCurBase = ExtractYFromYuv(dmaBase, s_irq.datCurBase, (sensor.wndW * s_irq.linePerFrag) >> 3);
+				s_irq.datCurBase = ExtractYFromYuv(dmaBase, s_irq.datCurBase, (s_sensor.wndW * s_irq.linePerFrag) >> 3);
 			} else {
-				uint32_t byteToCopy = (sensor.wndW * s_irq.linePerFrag) << 1;
+				uint32_t byteToCopy = (s_sensor.wndW * s_irq.linePerFrag) << 1;
 				memcpy((void*)s_irq.datCurBase, (void*)dmaBase, byteToCopy);
 				s_irq.datCurBase += byteToCopy;
 			}
@@ -592,10 +592,10 @@ RAM_CODE void CSI_IRQHandler(void) {
 		}
 		
 		if (csisr & (1<<19) ) {
-			if (!s_irq.isGray && !sensor.isWindowing)
+			if (!s_irq.isGray && !s_sensor.isWindowing)
 				s_pCSI->CSIDMASA_FB1 += 2 * s_irq.dmaBytePerFrag;
 		} else {
-			if (!s_irq.isGray && !sensor.isWindowing)
+			if (!s_irq.isGray && !s_sensor.isWindowing)
 				s_pCSI->CSIDMASA_FB2 += 2 * s_irq.dmaBytePerFrag;
 			s_pCSI->CSICR3 |= CSI_CSICR3_DMA_REFLASH_RFF_MASK;	// reflash DMA
 		}
@@ -628,23 +628,23 @@ void CsiFragModeInit(void) {
 }
 
 void CsiFragModeCalc(void) {
-	s_irq.datBytePerLine = s_irq.dmaBytePerLine = sensor.fb_w * 2;
-	if (sensor.pixformat == PIXFORMAT_GRAYSCALE) {
+	s_irq.datBytePerLine = s_irq.dmaBytePerLine = s_sensor.fb_w * 2;
+	if (s_sensor.pixformat == PIXFORMAT_GRAYSCALE) {
 		s_irq.datBytePerLine /= 2;	// only contain Y
 		s_irq.isGray = 1;
-		sensor.gs_bpp = 1;
+		s_sensor.gs_bpp = 1;
 	} else {
 		s_irq.isGray = 0;
-		sensor.gs_bpp = 2;
+		s_sensor.gs_bpp = 2;
 	}
-	if (sensor.fb_w == 0 || sensor.fb_h == 0)
+	if (s_sensor.fb_w == 0 || s_sensor.fb_h == 0)
 		return;
 
 	// calculate max bytes per DMA frag
 	uint32_t dmaBytePerFrag, byteStep, dmaByteTotal;
 	uint32_t maxBytePerLine = sizeof(s_dmaFragBufs) / ARRAY_SIZE(s_dmaFragBufs);
-	dmaByteTotal = sensor.fb_w * sensor.fb_h * 2;	
-	if (sensor.wndX == 0 && sensor.wndY == 0) // (s_irq.isGray)
+	dmaByteTotal = s_sensor.fb_w * s_sensor.fb_h * 2;	
+	if (s_sensor.wndX == 0 && s_sensor.wndY == 0) // (s_irq.isGray)
 	{
 		dmaBytePerFrag = s_irq.dmaBytePerLine;  // set a minial default value
 		for (byteStep = s_irq.dmaBytePerLine; byteStep < maxBytePerLine; byteStep += s_irq.dmaBytePerLine) {
@@ -692,7 +692,7 @@ void CsiFragModeCalc(void) {
 		s_pCSI->CSICR2 = CSI_CSICR2_DMA_BURST_TYPE_RFF(1U);
 		s_pCSI->CSICR3 = (CSI->CSICR3 & ~CSI_CSICR3_RxFF_LEVEL_MASK) | ((0U << CSI_CSICR3_RxFF_LEVEL_SHIFT));
 	}
-	s_irq.fragCnt = sensor.fb_h / s_irq.linePerFrag;
+	s_irq.fragCnt = s_sensor.fb_h / s_irq.linePerFrag;
 	// <<<
 }
 
@@ -702,14 +702,14 @@ void CsiFragModeStartNewFrame(void) {
 	s_irq.cnt++;
 	// DMA also writes to this cache line, to avoid being invalidated, clean MAIN_FB header.
 	DCACHE_CleanByRange(MAIN_FB(), 32);
-	if (s_irq.isGray || sensor.isWindowing) {
+	if (s_irq.isGray || s_sensor.isWindowing) {
 		s_pCSI->CSIDMASA_FB1 = (uint32_t) s_dmaFragBufs[0];
 		s_pCSI->CSIDMASA_FB2 = (uint32_t) s_dmaFragBufs[1];
 	} else {
 		s_pCSI->CSIDMASA_FB1 = s_irq.base0;
 		s_pCSI->CSIDMASA_FB2 = s_irq.base0 + s_irq.dmaBytePerFrag;
 	}
-	s_irq.datCurBase = s_irq.base0; // + sensor.wndY * s_irq.datBytePerLine + sensor.wndX * sensor.gs_bpp;
+	s_irq.datCurBase = s_irq.base0; // + s_sensor.wndY * s_irq.datBytePerLine + s_sensor.wndX * s_sensor.gs_bpp;
 	s_pCSI->CSICR1 = CSICR1_INIT_VAL | 1<<16;	// enable SOF iRQ
 	if (s_irq.dmaBytePerFrag & 0xFFFF0000) {
 		
@@ -748,28 +748,28 @@ int sensor_init()
 	#endif
 	sensor_gpio_init();
     cambus_init();
-	memset(&sensor, 0, sizeof(sensor));
+	memset(&s_sensor, 0, sizeof(s_sensor));
 	s_irq.base0 = (uint32_t)(MAIN_FB()->pixels);
  //   uint8_t com10=0,com2=0,com3=0,clkrc=0;	
     // Clear sensor chip ID.
-    sensor.chip_id = 0;
-    sensor.slv_addr = 0x21U; //?
+    s_sensor.chip_id = 0;
+    s_sensor.slv_addr = 0x21U; //?
     // Read ON semi sensor ID.
-    cambus_readb(sensor.slv_addr, ON_CHIP_ID, &sensor.chip_id);
-    if (sensor.chip_id == MT9V034_ID) {
-        mt9v034_init(&sensor);
+    cambus_readb(s_sensor.slv_addr, ON_CHIP_ID, &s_sensor.chip_id);
+    if (s_sensor.chip_id == MT9V034_ID) {
+        mt9v034_init(&s_sensor);
     } else { // Read OV sensor ID.
-        cambus_readb(sensor.slv_addr, OV_CHIP_ID, &sensor.chip_id);
+        cambus_readb(s_sensor.slv_addr, OV_CHIP_ID, &s_sensor.chip_id);
         // Initialize sensor struct.
         switch (119) {
             case OV9650_ID:
-                ov9650_init(&sensor);
+                ov9650_init(&s_sensor);
                 break;
             case OV2640_ID:
-                ov2640_init(&sensor);
+                ov2640_init(&s_sensor);
                 break;
             case OV7725_ID:
-                ov7725_init(&sensor);
+                ov7725_init(&s_sensor);
                 break;
             default:
                 // Sensor is not supported.
@@ -784,7 +784,7 @@ int sensor_init()
     
   /*  for(uint8_t i=0;i<=0x3F;i++)     for the test:print the reg of the ov7725
 {
-    cambus_readb(sensor.slv_addr,i,&temp);
+    cambus_readb(s_sensor.slv_addr,i,&temp);
     PRINTF("%x \r\n",temp);
 }*/
 	
@@ -876,10 +876,10 @@ int sensor_reset()
 	#ifndef NO_LCD_MONITOR
 	LCDMonitor_InitFB();
 	#endif
-	sensor.isWindowing = 0;
-	sensor.wndH = sensor.fb_h;
-	sensor.wndW = sensor.fb_w;
-	sensor.wndX = sensor.wndY = 0;	
+	s_sensor.isWindowing = 0;
+	s_sensor.wndH = s_sensor.fb_h;
+	s_sensor.wndW = s_sensor.fb_w;
+	s_sensor.wndX = s_sensor.wndY = 0;	
 
 	#ifdef BOARD_RTEVK
 	// CSI clk src: 24MHz XTAL,
@@ -889,40 +889,40 @@ int sensor_reset()
 	sensor_set_framerate(0x80000000 | (2<<9|(8-1)<<11));
 	#endif
     // Reset the sesnor state
-    sensor.sde          = 0xFF;
-    sensor.pixformat    = 0xFF;
-    sensor.framesize    = 0xFF;
-    sensor.framerate    = 0xFF;
-    sensor.gainceiling  = 0xFF;
+    s_sensor.sde          = 0xFF;
+    s_sensor.pixformat    = 0xFF;
+    s_sensor.framesize    = 0xFF;
+    s_sensor.framerate    = 0xFF;
+    s_sensor.gainceiling  = 0xFF;
 
 
     // Call sensor-specific reset function; in the moment,we use our init function and defaults regs
-    sensor.reset(&sensor);
+    s_sensor.reset(&s_sensor);
 	/*
       // Reset all registers
-    cambus_writeb(sensor.slv_addr, COM7, COM7_RESET);   
+    cambus_writeb(s_sensor.slv_addr, COM7, COM7_RESET);   
     OV7725_DelayMs(2);
-    cambus_writes(sensor.slv_addr,ov7725InitRegs,ARRAY_SIZE(ov7725InitRegs));  
+    cambus_writes(s_sensor.slv_addr,ov7725InitRegs,ARRAY_SIZE(ov7725InitRegs));  
 	*/
     return 0;
 }
 
 int sensor_get_id()
 {
-    return sensor.chip_id;
+    return s_sensor.chip_id;
 }
 
-int sensor_set_vsync_output(void *gpio, uint32_t pin)
+int sensor_set_vsync_output(GPIO_Type *gpio, uint32_t pin)
 {
-    // sensor.vsync_pin  = pin;
-    // sensor.vsync_gpio = gpio;
+    // s_sensor.vsync_pin  = pin;
+    // s_sensor.vsync_gpio = gpio;
     return 0;
 }
 
 int sensor_sleep(int enable)
 {
-    if (sensor.sleep == NULL
-        || sensor.sleep(&sensor, enable) != 0) {
+    if (s_sensor.sleep == NULL
+        || s_sensor.sleep(&s_sensor, enable) != 0) {
         // Operation not supported
         return -1;
     }
@@ -931,38 +931,38 @@ int sensor_sleep(int enable)
 
 int sensor_read_reg(uint8_t reg_addr)
 {
-    if (sensor.read_reg == NULL) {
+    if (s_sensor.read_reg == NULL) {
         // Operation not supported
         return -1;
     }
-    return sensor.read_reg(&sensor, reg_addr);
+    return s_sensor.read_reg(&s_sensor, reg_addr);
 }
 
 int sensor_write_reg(uint8_t reg_addr, uint16_t reg_data)
 {
-    if (sensor.write_reg == NULL) {
+    if (s_sensor.write_reg == NULL) {
         // Operation not supported
         return -1;
     }
-    return sensor.write_reg(&sensor, reg_addr, reg_data);
+    return s_sensor.write_reg(&s_sensor, reg_addr, reg_data);
 }
 
 int sensor_set_pixformat(pixformat_t pixformat)
 {
 
-    if (sensor.pixformat == pixformat) {
+    if (s_sensor.pixformat == pixformat) {
         // No change
         return 0;
     }
 
-    if (sensor.set_pixformat == NULL
-        || sensor.set_pixformat(&sensor, pixformat) != 0) {
+    if (s_sensor.set_pixformat == NULL
+        || s_sensor.set_pixformat(&s_sensor, pixformat) != 0) {
         // Operation not supported
         return -1;
     }
 
     // Set pixel format
-    sensor.pixformat = pixformat;
+    s_sensor.pixformat = pixformat;
 
     // Set JPEG mode + no support function
     if (pixformat == PIXFORMAT_JPEG) {
@@ -979,27 +979,27 @@ int sensor_set_framesize(framesize_t framesize)
 {
 
     // Call the sensor specific function
-    if (sensor.set_framesize == NULL
-        || sensor.set_framesize(&sensor, framesize) != 0) {
+    if (s_sensor.set_framesize == NULL
+        || s_sensor.set_framesize(&s_sensor, framesize) != 0) {
         // Operation not supported
         return -1;
     }
 
     // Set framebuffer size
-    sensor.framesize = framesize;
+    s_sensor.framesize = framesize;
 
     // Skip the first frame.
     MAIN_FB()->bpp = 0;
-    MAIN_FB()->w = sensor.fb_w = resolution[framesize][0];
-    MAIN_FB()->h = sensor.fb_h = resolution[framesize][1];
-	sensor.wndX = 0; sensor.wndY = 0 ; sensor.wndW = sensor.fb_w ; sensor.wndH = sensor.fb_h;
+    MAIN_FB()->w = s_sensor.fb_w = resolution[framesize][0];
+    MAIN_FB()->h = s_sensor.fb_h = resolution[framesize][1];
+	s_sensor.wndX = 0; s_sensor.wndY = 0 ; s_sensor.wndW = s_sensor.fb_w ; s_sensor.wndH = s_sensor.fb_h;
 	// CsiFragModeCalc();
     return 0;
 }
 
 int sensor_set_framerate(framerate_t framerate)
 {
-    if (sensor.framerate == framerate) {
+    if (s_sensor.framerate == framerate) {
        /* no change */
         return 0;
     }
@@ -1007,14 +1007,14 @@ int sensor_set_framerate(framerate_t framerate)
 		CCM->CSCDR3 = framerate & (0x1F<<9);
 
     /* call the sensor specific function */
-    if (sensor.set_framerate == NULL
-        || sensor.set_framerate(&sensor, framerate) != 0) {
+    if (s_sensor.set_framerate == NULL
+        || s_sensor.set_framerate(&s_sensor, framerate) != 0) {
         /* operation not supported */
         return -1;
     }
 
     /* set the frame rate */
-    sensor.framerate = framerate;
+    s_sensor.framerate = framerate;
 
     return 0;
 }
@@ -1022,17 +1022,17 @@ int sensor_set_framerate(framerate_t framerate)
 int sensor_set_windowing(int x, int y, int w, int h)      //may no this function in our RT csi,be used to set the output window,draw a rect in the picture
 {
 	w = (w + 7) & ~7 , x = (x + 7) & ~7;
-	if (x >= sensor.fb_w - 8)
-		x = sensor.fb_w - 8;
-	if (y >= sensor.fb_h - 1)
-		y = sensor.fb_h - 1;
-	if (x + w > sensor.fb_w)
-		w = sensor.fb_w - x;
-	if (y + h > sensor.fb_h)
-		h = sensor.fb_h - y;
+	if (x >= s_sensor.fb_w - 8)
+		x = s_sensor.fb_w - 8;
+	if (y >= s_sensor.fb_h - 1)
+		y = s_sensor.fb_h - 1;
+	if (x + w > s_sensor.fb_w)
+		w = s_sensor.fb_w - x;
+	if (y + h > s_sensor.fb_h)
+		h = s_sensor.fb_h - y;
 
-	sensor.isWindowing = (w < sensor.fb_w && h < sensor.fb_h) ? 1 : 0;
-	sensor.wndX = x ; sensor.wndY = y ; sensor.wndW = w ; sensor.wndH = h;
+	s_sensor.isWindowing = (w < s_sensor.fb_w && h < s_sensor.fb_h) ? 1 : 0;
+	s_sensor.wndX = x ; s_sensor.wndY = y ; s_sensor.wndW = w ; s_sensor.wndH = h;
     MAIN_FB()->w = w;
     MAIN_FB()->h = h;
     return 0;
@@ -1040,51 +1040,51 @@ int sensor_set_windowing(int x, int y, int w, int h)      //may no this function
 
 int sensor_set_contrast(int level)
 {
-    if (sensor.set_contrast != NULL) {
-        return sensor.set_contrast(&sensor, level);
+    if (s_sensor.set_contrast != NULL) {
+        return s_sensor.set_contrast(&s_sensor, level);
     }
     return -1;
 }
 
 int sensor_set_brightness(int level)
 {
-    if (sensor.set_brightness != NULL) {
-        return sensor.set_brightness(&sensor, level);
+    if (s_sensor.set_brightness != NULL) {
+        return s_sensor.set_brightness(&s_sensor, level);
     }
     return -1;
 }
 
 int sensor_set_saturation(int level)
 {
-    if (sensor.set_saturation != NULL) {
-        return sensor.set_saturation(&sensor, level);
+    if (s_sensor.set_saturation != NULL) {
+        return s_sensor.set_saturation(&s_sensor, level);
     }
     return -1;
 }
 
 int sensor_set_gainceiling(gainceiling_t gainceiling)
 {
-    if (sensor.gainceiling == gainceiling) {
+    if (s_sensor.gainceiling == gainceiling) {
         /* no change */
         return 0;
     }
 
     /* call the sensor specific function */
-    if (sensor.set_gainceiling == NULL
-        || sensor.set_gainceiling(&sensor, gainceiling) != 0) {
+    if (s_sensor.set_gainceiling == NULL
+        || s_sensor.set_gainceiling(&s_sensor, gainceiling) != 0) {
         /* operation not supported */
         return -1;
     }
 
-    sensor.gainceiling = gainceiling;
+    s_sensor.gainceiling = gainceiling;
     return 0;
 }
 
 int sensor_set_quality(int qs)
 {
     /* call the sensor specific function */
-    if (sensor.set_quality == NULL
-        || sensor.set_quality(&sensor, qs) != 0) {
+    if (s_sensor.set_quality == NULL
+        || s_sensor.set_quality(&s_sensor, qs) != 0) {
         /* operation not supported */
         return -1;
     }
@@ -1094,8 +1094,8 @@ int sensor_set_quality(int qs)
 int sensor_set_colorbar(int enable)
 {
     /* call the sensor specific function */
-    if (sensor.set_colorbar == NULL
-        || sensor.set_colorbar(&sensor, enable) != 0) {
+    if (s_sensor.set_colorbar == NULL
+        || s_sensor.set_colorbar(&s_sensor, enable) != 0) {
         /* operation not supported */
         return -1;
     }
@@ -1105,8 +1105,8 @@ int sensor_set_colorbar(int enable)
 int sensor_set_auto_gain(int enable, float gain_db, float gain_db_ceiling)
 {
     /* call the sensor specific function */
-    if (sensor.set_auto_gain == NULL
-        || sensor.set_auto_gain(&sensor, enable, gain_db, gain_db_ceiling) != 0) {
+    if (s_sensor.set_auto_gain == NULL
+        || s_sensor.set_auto_gain(&s_sensor, enable, gain_db, gain_db_ceiling) != 0) {
         /* operation not supported */
         return -1;
     }
@@ -1116,8 +1116,8 @@ int sensor_set_auto_gain(int enable, float gain_db, float gain_db_ceiling)
 int sensor_get_gain_db(float *gain_db)
 {
     /* call the sensor specific function */
-    if (sensor.get_gain_db == NULL
-        || sensor.get_gain_db(&sensor, gain_db) != 0) {
+    if (s_sensor.get_gain_db == NULL
+        || s_sensor.get_gain_db(&s_sensor, gain_db) != 0) {
         /* operation not supported */
         return -1;
     }
@@ -1127,8 +1127,8 @@ int sensor_get_gain_db(float *gain_db)
 int sensor_set_auto_exposure(int enable, int exposure_us)
 {
     /* call the sensor specific function */
-    if (sensor.set_auto_exposure == NULL
-        || sensor.set_auto_exposure(&sensor, enable, exposure_us) != 0) {
+    if (s_sensor.set_auto_exposure == NULL
+        || s_sensor.set_auto_exposure(&s_sensor, enable, exposure_us) != 0) {
         /* operation not supported */
         return -1;
     }
@@ -1138,8 +1138,8 @@ int sensor_set_auto_exposure(int enable, int exposure_us)
 int sensor_get_exposure_us(int *exposure_us)
 {
     /* call the sensor specific function */
-    if (sensor.get_exposure_us == NULL
-        || sensor.get_exposure_us(&sensor, exposure_us) != 0) {
+    if (s_sensor.get_exposure_us == NULL
+        || s_sensor.get_exposure_us(&s_sensor, exposure_us) != 0) {
         /* operation not supported */
         return -1;
     }
@@ -1149,8 +1149,8 @@ int sensor_get_exposure_us(int *exposure_us)
 int sensor_set_auto_whitebal(int enable, float r_gain_db, float g_gain_db, float b_gain_db)
 {
     /* call the sensor specific function */
-    if (sensor.set_auto_whitebal == NULL
-        || sensor.set_auto_whitebal(&sensor, enable, r_gain_db, g_gain_db, b_gain_db) != 0) {
+    if (s_sensor.set_auto_whitebal == NULL
+        || s_sensor.set_auto_whitebal(&s_sensor, enable, r_gain_db, g_gain_db, b_gain_db) != 0) {
         /* operation not supported */
         return -1;
     }
@@ -1160,8 +1160,8 @@ int sensor_set_auto_whitebal(int enable, float r_gain_db, float g_gain_db, float
 int sensor_get_rgb_gain_db(float *r_gain_db, float *g_gain_db, float *b_gain_db)
 {
     /* call the sensor specific function */
-    if (sensor.get_rgb_gain_db == NULL
-        || sensor.get_rgb_gain_db(&sensor, r_gain_db, g_gain_db, b_gain_db) != 0) {
+    if (s_sensor.get_rgb_gain_db == NULL
+        || s_sensor.get_rgb_gain_db(&s_sensor, r_gain_db, g_gain_db, b_gain_db) != 0) {
         /* operation not supported */
         return -1;
     }
@@ -1171,8 +1171,8 @@ int sensor_get_rgb_gain_db(float *r_gain_db, float *g_gain_db, float *b_gain_db)
 int sensor_set_hmirror(int enable)
 {
     /* call the sensor specific function */
-    if (sensor.set_hmirror == NULL
-        || sensor.set_hmirror(&sensor, enable) != 0) {
+    if (s_sensor.set_hmirror == NULL
+        || s_sensor.set_hmirror(&s_sensor, enable) != 0) {
         /* operation not supported */
         return -1;
     }
@@ -1182,8 +1182,8 @@ int sensor_set_hmirror(int enable)
 int sensor_set_vflip(int enable)
 {
     /* call the sensor specific function */
-    if (sensor.set_vflip == NULL
-        || sensor.set_vflip(&sensor, enable) != 0) {
+    if (s_sensor.set_vflip == NULL
+        || s_sensor.set_vflip(&s_sensor, enable) != 0) {
         /* operation not supported */
         return -1;
     }
@@ -1192,36 +1192,27 @@ int sensor_set_vflip(int enable)
 
 int sensor_set_special_effect(sde_t sde)
 {
-    if (sensor.sde == sde) {
+    if (s_sensor.sde == sde) {
         /* no change */
         return 0;
     }
 
     /* call the sensor specific function */
-    if (sensor.set_special_effect == NULL
-        || sensor.set_special_effect(&sensor, sde) != 0) {
+    if (s_sensor.set_special_effect == NULL
+        || s_sensor.set_special_effect(&s_sensor, sde) != 0) {
         /* operation not supported */
         return -1;
     }
 
-    sensor.sde = sde;
+    s_sensor.sde = sde;
     return 0;
 }
-
-int sensor_set_line_filter(line_filter_t line_filter_func, void *line_filter_args)
-{
-    // Set line pre-processing function and args
-    sensor.line_filter_func = line_filter_func;
-    sensor.line_filter_args = line_filter_args;
-    return 0;
-}
-
 
 int sensor_set_lens_correction(int enable, int radi, int coef)
 {
     /* call the sensor specific function */
-    if (sensor.set_lens_correction == NULL
-        || sensor.set_lens_correction(&sensor, enable, radi, coef) != 0) {
+    if (s_sensor.set_lens_correction == NULL
+        || s_sensor.set_lens_correction(&s_sensor, enable, radi, coef) != 0) {
         /* operation not supported */
         return -1;
     }
@@ -1232,7 +1223,7 @@ int sensor_set_lens_correction(int enable, int radi, int coef)
 static void sensor_check_bufsize()
 {
     int bpp=0;
-    switch (sensor.pixformat) {
+    switch (s_sensor.pixformat) {
         case PIXFORMAT_BAYER:
         case PIXFORMAT_GRAYSCALE:
             bpp = 1;
@@ -1246,10 +1237,10 @@ static void sensor_check_bufsize()
     }
 
     if ((MAIN_FB()->w * MAIN_FB()->h * bpp) > OMV_RAW_BUF_SIZE) {
-        if (sensor.pixformat == PIXFORMAT_GRAYSCALE) {
+        if (s_sensor.pixformat == PIXFORMAT_GRAYSCALE) {
             // Crop higher GS resolutions to QVGA
             sensor_set_windowing(190, 120, 320, 240);
-        } else if (sensor.pixformat == PIXFORMAT_RGB565) {
+        } else if (s_sensor.pixformat == PIXFORMAT_RGB565) {
             // Switch to BAYER if the frame is too big to fit in RAM.
             sensor_set_pixformat(PIXFORMAT_BAYER);
         }
@@ -1394,24 +1385,24 @@ void LCDMonitor_Update(uint32_t fbNdx)
 	uint8_t *pFBGray = (uint8_t*) MAIN_FB()->pixels;
 	uint16_t *pLcd = (uint16_t*) (s_frameBuffer[fbNdx & 1]);
 	uint16_t *pLcdBkup;
-	uint32_t h = sensor.wndH > 272 ? 272 : sensor.wndH;
+	uint32_t h = s_sensor.wndH > 272 ? 272 : s_sensor.wndH;
 	pLcdBkup = pLcd;
 	
-	pLcd += (480 - sensor.wndW) >> 1;
+	pLcd += (480 - s_sensor.wndW) >> 1;
 	pLcd += ((272 - h) >> 1) * 480;
 	
-	t1 = sensor.wndW * 2 / 8;
+	t1 = s_sensor.wndW * 2 / 8;
 	if (s_irq.isGray) {
-		pFBGray += (h - 1) * sensor.wndW;
-		for (y=0; y< h; y++, pFBGray -= sensor.wndW) {
+		pFBGray += (h - 1) * s_sensor.wndW;
+		for (y=0; y< h; y++, pFBGray -= s_sensor.wndW) {
 			LCDMonitor_UpdateLineGray(pLcd, pFBGray, t1);
 			pLcd += 480;
 		}
 		ELCDIF_SetNextBufferAddr(LCDIF, (uint32_t) pLcdBkup);		
 	}
 	else {
-		pFB += (h - 1) * sensor.wndW;
-		for (y=0; y< h; y++, pFB -= sensor.wndW) {
+		pFB += (h - 1) * s_sensor.wndW;
+		for (y=0; y< h; y++, pFB -= s_sensor.wndW) {
 			LCDMonitor_UpdateLineRGB565(pLcd, pFB, t1);
 			pLcd += 480;
 		}		
@@ -1431,15 +1422,15 @@ void PreprocessOneLine(uint32_t addr, int line)
     uint8_t *src = (uint8_t*) addr;
     uint8_t *dst = MAIN_FB()->pixels;
 
-    if (sensor.line_filter_func && sensor.line_filter_args) {
-        int bpp = ((sensor.pixformat == PIXFORMAT_GRAYSCALE) ? 1:2);
+    if (s_sensor.line_filter_func && s_sensor.line_filter_args) {
+        int bpp = ((s_sensor.pixformat == PIXFORMAT_GRAYSCALE) ? 1:2);
         dst += line++ * MAIN_FB()->w * bpp;
         // If there's an image filter installed call it.
         // Note: BPP is the target BPP, not the line bpp (the line is always 2 bytes per pixel) if the target BPP is 1
         // it means the image currently being read is going to be Grayscale, and the function needs to output w * 1BPP.
-        sensor.line_filter_func(src, MAIN_FB()->w * 2 , dst, MAIN_FB()->w * bpp, sensor.line_filter_args);
+        s_sensor.line_filter_func(src, MAIN_FB()->w * 2 , dst, MAIN_FB()->w * bpp, s_sensor.line_filter_args);
     } else {
-        switch (sensor.pixformat) {
+        switch (s_sensor.pixformat) {
             case PIXFORMAT_BAYER:
                 dst += line++ * MAIN_FB()->w;
                 for (int i=0; i<MAIN_FB()->w; i++) {
@@ -1448,7 +1439,7 @@ void PreprocessOneLine(uint32_t addr, int line)
                 break;
             case PIXFORMAT_GRAYSCALE:
                 dst += line++ * MAIN_FB()->w;
-                if (sensor.gs_bpp == 1) {
+                if (s_sensor.gs_bpp == 1) {
                     // 1BPP GRAYSCALE.
                     for (int i=0; i<MAIN_FB()->w; i++) {
                         dst[i] = src[i];
@@ -1478,14 +1469,14 @@ void PreprocessOneLine(uint32_t addr, int line)
 // The JPEG offset allows JPEG compression of the framebuffer without overwriting the pixels.
 // The offset size may need to be adjusted depending on the quality, otherwise JPEG data may
 // overwrite image pixels before they are compressed.
-int sensor_snapshot(image_t *pImg, void *pv1, void *pv2)
+int sensor_snapshot(sensor_t *sensor, image_t *pImg, streaming_cb_t streaming_cb)
 {
  //   uint32_t activeADDR;//, length;
   //  uint32_t inactiveADDR;
-  	pv1 = pv1 , pv2 = pv2;	// keep compatible with original openMV
+  	sensor = sensor , streaming_cb = streaming_cb;	// keep compatible with original openMV
     sensor_check_bufsize();
 
-    switch (sensor.pixformat) {
+    switch (s_sensor.pixformat) {
         case PIXFORMAT_GRAYSCALE:
             MAIN_FB()->bpp = 1;
             break;
@@ -1529,8 +1520,8 @@ int sensor_snapshot(image_t *pImg, void *pv1, void *pv2)
 		uint16_t *p = (uint16_t*) fb_framebuffer->pixels;
 		
 		uint32_t j;		
-		for (i=0; i<sensor.fb_h; i++) {
-			for (j=0; j<sensor.fb_w; j++) {
+		for (i=0; i<s_sensor.fb_h; i++) {
+			for (j=0; j<s_sensor.fb_w; j++) {
 				if (i > 120)
 					p[0] = 0xBeef; //(n & 0x1F) <<0;
 				else
@@ -1546,9 +1537,9 @@ int sensor_snapshot(image_t *pImg, void *pv1, void *pv2)
 		n++;
 
 		/*
-		for (i=0, p = (uint16_t*) fb_framebuffer->pixels; i<sensor.fb_h; i++) {
+		for (i=0, p = (uint16_t*) fb_framebuffer->pixels; i<s_sensor.fb_h; i++) {
 			PreprocessOneLine((uint32_t)p, i);
-			p += sensor.fb_w;
+			p += s_sensor.fb_w;
 		}
 		*/
     }

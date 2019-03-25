@@ -19,15 +19,19 @@ extern char _fballoc;
 #endif
 
 static char *pointer = &_fballoc;
+static int marks = 0;
 
-NORETURN void fb_alloc_fail()
+__weak NORETURN void fb_alloc_fail()
 {
-    nlr_raise(mp_obj_new_exception_msg(&mp_type_MemoryError, "FB Alloc Collision!!!"));
+    nlr_raise(mp_obj_new_exception_msg(&mp_type_MemoryError,
+        "Out of fast Frame Buffer Stack Memory!"
+        " Please reduce the resolution of the image you are running this algorithm on to bypass this issue!"));
 }
 
 void fb_alloc_init0()
 {
     pointer = &_fballoc;
+    marks = 0;
 }
 
 uint32_t fb_avail()
@@ -43,7 +47,9 @@ void fb_alloc_mark()
 
     // Check if allocation overwrites the framebuffer pixels
     if (new_pointer < (char *) MAIN_FB_PIXELS()) {
-        nlr_raise_for_fb_alloc_mark(mp_obj_new_exception_msg(&mp_type_MemoryError, "FB Alloc Collision!!!"));
+        nlr_raise_for_fb_alloc_mark(mp_obj_new_exception_msg(&mp_type_MemoryError,
+            "Out of fast Frame Buffer Stack Memory!"
+            " Please reduce the resolution of the image you are running this algorithm on to bypass this issue!"));
     }
 
     // fb_alloc does not allow regions which are a size of 0 to be alloced,
@@ -51,15 +57,18 @@ void fb_alloc_mark()
     // we will use a size value of 4 as a marker in the alloc stack.
     *((uint32_t *) new_pointer) = sizeof(uint32_t); // Save size.
     pointer = new_pointer;
+    marks += 1;
 }
 
 void fb_alloc_free_till_mark()
 {
+    if (!marks) return;
     while (pointer < &_fballoc) {
         int size = *((uint32_t *) pointer);
         pointer += size; // Get size and pop.
         if (size == sizeof(uint32_t)) break; // Break on first marker.
     }
+    marks -= 1;
 }
 
 // returns null pointer without error if size==0
@@ -132,4 +141,5 @@ void fb_free_all()
     while (pointer < &_fballoc) {
         pointer += *((uint32_t *) pointer); // Get size and pop.
     }
+    marks = 0;
 }

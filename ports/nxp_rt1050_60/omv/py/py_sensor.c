@@ -19,7 +19,7 @@
 #include "framebuffer.h"
 #include "systick.h"
 
-extern sensor_t sensor;
+extern sensor_t s_sensor;
 
 static mp_obj_t py_sensor_reset() {
     sensor_reset();
@@ -63,9 +63,9 @@ static mp_obj_t py_sensor_snapshot(uint n_args, const mp_obj_t *args, mp_map_t *
    mp_obj_t image = py_image(0, 0, 0, 0);
 
     // Sanity checks
-    PY_ASSERT_TRUE_MSG((sensor.pixformat != PIXFORMAT_JPEG), "Operation not supported on JPEG");
+    PY_ASSERT_TRUE_MSG((s_sensor.pixformat != PIXFORMAT_JPEG), "Operation not supported on JPEG");
 
-    if (sensor_snapshot((image_t*) py_image_cobj(image), 0, 0)==-1) {
+    if (sensor_snapshot(&s_sensor, (image_t*) py_image_cobj(image), 0)==-1) {
         nlr_raise(mp_obj_new_exception_msg(&mp_type_RuntimeError, "Sensor Timeout!!"));
         return mp_const_false;
 	}
@@ -107,12 +107,12 @@ static mp_obj_t py_sensor_skip_frames(uint n_args, const mp_obj_t *args, mp_map_
 
 static mp_obj_t py_sensor_width()
 {
-    return mp_obj_new_int(resolution[sensor.framesize][0]);
+    return mp_obj_new_int(resolution[s_sensor.framesize][0]);
 }
 
 static mp_obj_t py_sensor_height()
 {
-    return mp_obj_new_int(resolution[sensor.framesize][1]);
+    return mp_obj_new_int(resolution[s_sensor.framesize][1]);
 }
 
 static mp_obj_t py_sensor_get_fb()
@@ -247,8 +247,8 @@ static mp_obj_t py_sensor_set_windowing(mp_obj_t roi_obj) {
     } else if (array_len == 2) {
         w = mp_obj_get_int(array[0]);
         h = mp_obj_get_int(array[1]);
-        x = (resolution[sensor.framesize][0] / 2) - (w / 2);
-        y = (resolution[sensor.framesize][1] / 2) - (h / 2);
+        x = (resolution[s_sensor.framesize][0] / 2) - (w / 2);
+        y = (resolution[s_sensor.framesize][1] / 2) - (h / 2);
     } else {
         nlr_raise(mp_obj_new_exception_msg(&mp_type_ValueError,
             "tuple/list must either be (x, y, w, h) or (w, h)"));

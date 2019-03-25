@@ -90,7 +90,7 @@ typedef enum {
 typedef enum {
     ACTIVE_LOW,
     ACTIVE_HIGH
-} reset_polarity_t;
+} polarity_t;
 
 typedef void (*line_filter_t) (uint8_t *src, int src_stride, uint8_t *dst, int dst_stride, void *args);
 
@@ -103,13 +103,16 @@ typedef void (*line_filter_t) (uint8_t *src, int src_stride, uint8_t *dst, int d
 #define SENSOR_HW_FLAGS_SET(s, x, v) ((s)->hw_flags |= (v<<x))
 #define SENSOR_HW_FLAGS_CLR(s, x)    ((s)->hw_flags &= ~(1<<x))
 
+typedef bool (*streaming_cb_t)(image_t *image);
+
 typedef struct _sensor sensor_t;
 typedef struct _sensor {
     uint8_t  chip_id;           // Sensor ID.
     uint8_t  slv_addr;          // Sensor I2C slave address.
     uint16_t gs_bpp;            // Grayscale bytes per pixel.
     uint32_t hw_flags;          // Hardware flags (clock polarities/hw capabilities)
-    uint32_t vsync_pin;
+    const uint16_t *color_palette;    // Color palette used for color lookup.
+	uint32_t vsync_pin;
     int fb_w, fb_h;             // Backup for MAIN_FB().
     uint16_t wndX, wndY, wndW, wndH;
 	uint8_t isWindowing;
@@ -118,7 +121,8 @@ typedef struct _sensor {
     void *line_filter_args;
     line_filter_t line_filter_func;
 
-    reset_polarity_t reset_pol; // Reset polarity (TODO move to hw_flags)
+    polarity_t pwdn_pol;        // PWDN polarity (TODO move to hw_flags)
+    polarity_t reset_pol;       // Reset polarity (TODO move to hw_flags)
 
     // Sensor state
     sde_t sde;                  // Special digital effects
@@ -170,6 +174,9 @@ int sensor_get_id();
 
 // Sleep mode.
 int sensor_sleep(int enable);
+
+// Shutdown mode.
+int sensor_shutdown(int enable);
 
 // Read a sensor register.
 int sensor_read_reg(uint8_t reg_addr);
@@ -237,10 +244,18 @@ int sensor_set_special_effect(sde_t sde);
 
 // Set lens shading correction
 int sensor_set_lens_correction(int enable, int radi, int coef);
+// IOCTL function
+int sensor_ioctl(int request, ...);
 
-int sensor_set_line_filter(line_filter_t line_filter_func, void *line_filter_args);
+// Set vsync output pin
+int sensor_set_vsync_output(GPIO_Type *gpio, uint32_t pin);
 
-// Capture a Snapshot.
-int sensor_snapshot(image_t *pImg, void *pv1, void *pv2);
+// Set color palette
+int sensor_set_color_palette(const uint16_t *color_palette);
 
+// Get color palette
+const uint16_t *sensor_get_color_palette();
+
+// Default snapshot function.
+int sensor_snapshot(sensor_t *sensor, image_t *image, streaming_cb_t streaming_cb);
 #endif /* __SENSOR_H__ */
