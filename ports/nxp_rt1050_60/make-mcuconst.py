@@ -45,7 +45,7 @@ class Lexer:
     regexs = (
         ('#define bf', re.compile(r'#define\s+(?P<id>[A-Z0-9_]+)_MASK\s+\(*(?P<hex>0x[0-9A-F]+)\)*')),
         ('#define X',   re.compile(r'#define\s+(?P<id>[A-Z0-9_]+)\s+(?P<id2>[A-Z0-9_]+)($| +/\*)')),
-        ('#define bf', re.compile(r'#define\s+(?P<id>[A-Z0-9_]+)\s+\(*(?P<hex>0x[0-9A-F]+)\)*')),
+        ('#define hex', re.compile(r'#define\s+(?P<id>[A-Z0-9_]+)\s+\(*(?P<hex>0x[0-9A-F]+)\)*')),
         ('#define X+hex', re.compile(r'#define +(?P<id>[A-Za-z0-9_]+) +\((?P<id2>[A-Z0-9_]+) \+ (?P<hex>0x[0-9A-F]+)U?\)($| +/\*)')),
         ('#define typedef', re.compile(r'#define\s+(?P<id>[A-Z0-9_]+)\s+\(\([A-Za-z0-9_]+_Type\s*\*\)\s*(?P<id2>[A-Za-z0-9_]+)\)')),
         ('typedef struct {', re.compile(r'typedef struct {$')),
@@ -90,11 +90,18 @@ def parse_file(filename, wantedPerips):
             break
         elif m[0] == '#define bf':
             d = m[1].groupdict()
-
+            bfVal = int(d['hex'], base=16)
+            msk = 3
+            for lsb in range(31):
+                if bfVal & msk == msk:
+                    #not single bit
+                    bfVal = lsb
+                    d['id'] = d['id'] + '_BF'
+                    break
+                msk <<= 1
             lst = d['id'].split('_')
             regNdx = 1 if d['id'].find('ADC_ETC') < 0 else 2
             sKeyShort = '_'.join(lst[regNdx:])
-            bfVal = int(d['hex'], base=16)
             consts[d['id']] = bfVal
             if lst[0] in wantedPerips:
                 if sKeyShort not in bfs.keys():
@@ -102,6 +109,7 @@ def parse_file(filename, wantedPerips):
                 elif bfs[sKeyShort] != bfVal:
                     bfs[d['id']] = bfVal
         elif m[0] == '#define hex':
+            d = m[1].groupdict()
             consts[d['id']] = int(d['hex'], base=16)
         elif m[0] == '#define X':
             d = m[1].groupdict()

@@ -81,140 +81,140 @@ typedef struct _mp_obj_base_t mp_obj_base_t;
 
 #if MICROPY_OBJ_REPR == MICROPY_OBJ_REPR_A
 
-static inline bool MP_OBJ_IS_SMALL_INT(mp_const_obj_t o)
-    { return ((((mp_int_t)(o)) & 1) != 0); }
-#define MP_OBJ_SMALL_INT_VALUE(o) (((mp_int_t)(o)) >> 1)
-#define MP_OBJ_NEW_SMALL_INT(small_int) ((mp_obj_t)((((mp_uint_t)(small_int)) << 1) | 1))
+	static inline bool MP_OBJ_IS_SMALL_INT(mp_const_obj_t o)
+	    { return ((((mp_int_t)(o)) & 1) != 0); }
+	#define MP_OBJ_SMALL_INT_VALUE(o) (((mp_int_t)(o)) >> 1)
+	#define MP_OBJ_NEW_SMALL_INT(small_int) ((mp_obj_t)((((mp_uint_t)(small_int)) << 1) | 1))
 
-static inline bool MP_OBJ_IS_QSTR(mp_const_obj_t o)
-    { return ((((mp_int_t)(o)) & 3) == 2); }
-#define MP_OBJ_QSTR_VALUE(o) (((mp_uint_t)(o)) >> 2)
-#define MP_OBJ_NEW_QSTR(qst) ((mp_obj_t)((((mp_uint_t)(qst)) << 2) | 2))
+	static inline bool MP_OBJ_IS_QSTR(mp_const_obj_t o)
+	    { return ((((mp_int_t)(o)) & 3) == 2); }
+	#define MP_OBJ_QSTR_VALUE(o) (((mp_uint_t)(o)) >> 2)
+	#define MP_OBJ_NEW_QSTR(qst) ((mp_obj_t)((((mp_uint_t)(qst)) << 2) | 2))
 
-#if MICROPY_PY_BUILTINS_FLOAT
-#define mp_const_float_e MP_ROM_PTR(&mp_const_float_e_obj)
-#define mp_const_float_pi MP_ROM_PTR(&mp_const_float_pi_obj)
-extern const struct _mp_obj_float_t mp_const_float_e_obj;
-extern const struct _mp_obj_float_t mp_const_float_pi_obj;
+	#if MICROPY_PY_BUILTINS_FLOAT
+	#define mp_const_float_e MP_ROM_PTR(&mp_const_float_e_obj)
+	#define mp_const_float_pi MP_ROM_PTR(&mp_const_float_pi_obj)
+	extern const struct _mp_obj_float_t mp_const_float_e_obj;
+	extern const struct _mp_obj_float_t mp_const_float_pi_obj;
 
-#define mp_obj_is_float(o) MP_OBJ_IS_TYPE((o), &mp_type_float)
-mp_float_t mp_obj_float_get(mp_obj_t self_in);
-mp_obj_t mp_obj_new_float(mp_float_t value);
-#endif
+	#define mp_obj_is_float(o) MP_OBJ_IS_TYPE((o), &mp_type_float)
+	mp_float_t mp_obj_float_get(mp_obj_t self_in);
+	mp_obj_t mp_obj_new_float(mp_float_t value);
+	#endif
 
-static inline bool MP_OBJ_IS_OBJ(mp_const_obj_t o)
-    { return ((((mp_int_t)(o)) & 3) == 0); }
+	static inline bool MP_OBJ_IS_OBJ(mp_const_obj_t o)
+	    { return ((((mp_int_t)(o)) & 3) == 0); }
 
 #elif MICROPY_OBJ_REPR == MICROPY_OBJ_REPR_B
 
-static inline bool MP_OBJ_IS_SMALL_INT(mp_const_obj_t o)
-    { return ((((mp_int_t)(o)) & 3) == 1); }
-#define MP_OBJ_SMALL_INT_VALUE(o) (((mp_int_t)(o)) >> 2)
-#define MP_OBJ_NEW_SMALL_INT(small_int) ((mp_obj_t)((((mp_uint_t)(small_int)) << 2) | 1))
+	static inline bool MP_OBJ_IS_SMALL_INT(mp_const_obj_t o)
+	    { return ((((mp_int_t)(o)) & 3) == 1); }
+	#define MP_OBJ_SMALL_INT_VALUE(o) (((mp_int_t)(o)) >> 2)
+	#define MP_OBJ_NEW_SMALL_INT(small_int) ((mp_obj_t)((((mp_uint_t)(small_int)) << 2) | 1))
 
-static inline bool MP_OBJ_IS_QSTR(mp_const_obj_t o)
-    { return ((((mp_int_t)(o)) & 3) == 3); }
-#define MP_OBJ_QSTR_VALUE(o) (((mp_uint_t)(o)) >> 2)
-#define MP_OBJ_NEW_QSTR(qst) ((mp_obj_t)((((mp_uint_t)(qst)) << 2) | 3))
+	static inline bool MP_OBJ_IS_QSTR(mp_const_obj_t o)
+	    { return ((((mp_int_t)(o)) & 3) == 3); }
+	#define MP_OBJ_QSTR_VALUE(o) (((mp_uint_t)(o)) >> 2)
+	#define MP_OBJ_NEW_QSTR(qst) ((mp_obj_t)((((mp_uint_t)(qst)) << 2) | 3))
 
-#if MICROPY_PY_BUILTINS_FLOAT
-#define mp_const_float_e MP_ROM_PTR(&mp_const_float_e_obj)
-#define mp_const_float_pi MP_ROM_PTR(&mp_const_float_pi_obj)
-extern const struct _mp_obj_float_t mp_const_float_e_obj;
-extern const struct _mp_obj_float_t mp_const_float_pi_obj;
+	#if MICROPY_PY_BUILTINS_FLOAT
+	#define mp_const_float_e MP_ROM_PTR(&mp_const_float_e_obj)
+	#define mp_const_float_pi MP_ROM_PTR(&mp_const_float_pi_obj)
+	extern const struct _mp_obj_float_t mp_const_float_e_obj;
+	extern const struct _mp_obj_float_t mp_const_float_pi_obj;
 
-#define mp_obj_is_float(o) MP_OBJ_IS_TYPE((o), &mp_type_float)
-mp_float_t mp_obj_float_get(mp_obj_t self_in);
-mp_obj_t mp_obj_new_float(mp_float_t value);
-#endif
+	#define mp_obj_is_float(o) MP_OBJ_IS_TYPE((o), &mp_type_float)
+	mp_float_t mp_obj_float_get(mp_obj_t self_in);
+	mp_obj_t mp_obj_new_float(mp_float_t value);
+	#endif
 
-static inline bool MP_OBJ_IS_OBJ(mp_const_obj_t o)
-    { return ((((mp_int_t)(o)) & 1) == 0); }
+	static inline bool MP_OBJ_IS_OBJ(mp_const_obj_t o)
+	    { return ((((mp_int_t)(o)) & 1) == 0); }
 
 #elif MICROPY_OBJ_REPR == MICROPY_OBJ_REPR_C
 
-static inline bool MP_OBJ_IS_SMALL_INT(mp_const_obj_t o)
-    { return ((((mp_int_t)(o)) & 1) != 0); }
-#define MP_OBJ_SMALL_INT_VALUE(o) (((mp_int_t)(o)) >> 1)
-#define MP_OBJ_NEW_SMALL_INT(small_int) ((mp_obj_t)((((mp_uint_t)(small_int)) << 1) | 1))
+	static inline bool MP_OBJ_IS_SMALL_INT(mp_const_obj_t o)
+	    { return ((((mp_int_t)(o)) & 1) != 0); }
+	#define MP_OBJ_SMALL_INT_VALUE(o) (((mp_int_t)(o)) >> 1)
+	#define MP_OBJ_NEW_SMALL_INT(small_int) ((mp_obj_t)((((mp_uint_t)(small_int)) << 1) | 1))
 
-#define mp_const_float_e MP_ROM_PTR((mp_obj_t)(((0x402df854 & ~3) | 2) + 0x80800000))
-#define mp_const_float_pi MP_ROM_PTR((mp_obj_t)(((0x40490fdb & ~3) | 2) + 0x80800000))
+	#define mp_const_float_e MP_ROM_PTR((mp_obj_t)(((0x402df854 & ~3) | 2) + 0x80800000))
+	#define mp_const_float_pi MP_ROM_PTR((mp_obj_t)(((0x40490fdb & ~3) | 2) + 0x80800000))
 
-static inline bool mp_obj_is_float(mp_const_obj_t o)
-    { return (((mp_uint_t)(o)) & 3) == 2 && (((mp_uint_t)(o)) & 0xff800007) != 0x00000006; }
-static inline mp_float_t mp_obj_float_get(mp_const_obj_t o) {
-    union {
-        mp_float_t f;
-        mp_uint_t u;
-    } num = {.u = ((mp_uint_t)o - 0x80800000) & ~3};
-    return num.f;
-}
-static inline mp_obj_t mp_obj_new_float(mp_float_t f) {
-    union {
-        mp_float_t f;
-        mp_uint_t u;
-    } num = {.f = f};
-    return (mp_obj_t)(((num.u & ~0x3) | 2) + 0x80800000);
-}
+	static inline bool mp_obj_is_float(mp_const_obj_t o)
+	    { return (((mp_uint_t)(o)) & 3) == 2 && (((mp_uint_t)(o)) & 0xff800007) != 0x00000006; }
+	static inline mp_float_t mp_obj_float_get(mp_const_obj_t o) {
+	    union {
+	        mp_float_t f;
+	        mp_uint_t u;
+	    } num = {.u = ((mp_uint_t)o - 0x80800000) & ~3};
+	    return num.f;
+	}
+	static inline mp_obj_t mp_obj_new_float(mp_float_t f) {
+	    union {
+	        mp_float_t f;
+	        mp_uint_t u;
+	    } num = {.f = f};
+	    return (mp_obj_t)(((num.u & ~0x3) | 2) + 0x80800000);
+	}
 
-static inline bool MP_OBJ_IS_QSTR(mp_const_obj_t o)
-    { return (((mp_uint_t)(o)) & 0xff800007) == 0x00000006; }
-#define MP_OBJ_QSTR_VALUE(o) (((mp_uint_t)(o)) >> 3)
-#define MP_OBJ_NEW_QSTR(qst) ((mp_obj_t)((((mp_uint_t)(qst)) << 3) | 0x00000006))
+	static inline bool MP_OBJ_IS_QSTR(mp_const_obj_t o)
+	    { return (((mp_uint_t)(o)) & 0xff800007) == 0x00000006; }
+	#define MP_OBJ_QSTR_VALUE(o) (((mp_uint_t)(o)) >> 3)
+	#define MP_OBJ_NEW_QSTR(qst) ((mp_obj_t)((((mp_uint_t)(qst)) << 3) | 0x00000006))
 
-static inline bool MP_OBJ_IS_OBJ(mp_const_obj_t o)
-    { return ((((mp_int_t)(o)) & 3) == 0); }
+	static inline bool MP_OBJ_IS_OBJ(mp_const_obj_t o)
+	    { return ((((mp_int_t)(o)) & 3) == 0); }
 
 #elif MICROPY_OBJ_REPR == MICROPY_OBJ_REPR_D
 
-static inline bool MP_OBJ_IS_SMALL_INT(mp_const_obj_t o)
-    { return ((((mp_int_t)(o)) & 0xffff000000000000) == 0x0001000000000000); }
-#define MP_OBJ_SMALL_INT_VALUE(o) (((intptr_t)(o)) >> 1)
-#define MP_OBJ_NEW_SMALL_INT(small_int) ((mp_obj_t)(((uintptr_t)(small_int)) << 1) | 0x0001000000000001)
+	static inline bool MP_OBJ_IS_SMALL_INT(mp_const_obj_t o)
+	    { return ((((mp_int_t)(o)) & 0xffff000000000000) == 0x0001000000000000); }
+	#define MP_OBJ_SMALL_INT_VALUE(o) (((intptr_t)(o)) >> 1)
+	#define MP_OBJ_NEW_SMALL_INT(small_int) ((mp_obj_t)(((uintptr_t)(small_int)) << 1) | 0x0001000000000001)
 
-static inline bool MP_OBJ_IS_QSTR(mp_const_obj_t o)
-    { return ((((mp_int_t)(o)) & 0xffff000000000000) == 0x0002000000000000); }
-#define MP_OBJ_QSTR_VALUE(o) ((((uint32_t)(o)) >> 1) & 0xffffffff)
-#define MP_OBJ_NEW_QSTR(qst) ((mp_obj_t)((((mp_uint_t)(qst)) << 1) | 0x0002000000000001))
+	static inline bool MP_OBJ_IS_QSTR(mp_const_obj_t o)
+	    { return ((((mp_int_t)(o)) & 0xffff000000000000) == 0x0002000000000000); }
+	#define MP_OBJ_QSTR_VALUE(o) ((((uint32_t)(o)) >> 1) & 0xffffffff)
+	#define MP_OBJ_NEW_QSTR(qst) ((mp_obj_t)((((mp_uint_t)(qst)) << 1) | 0x0002000000000001))
 
-#if MICROPY_PY_BUILTINS_FLOAT
-#define mp_const_float_e {((mp_obj_t)((uint64_t)0x4005bf0a8b125769 + 0x8004000000000000))}
-#define mp_const_float_pi {((mp_obj_t)((uint64_t)0x400921fb54442d18 + 0x8004000000000000))}
+	#if MICROPY_PY_BUILTINS_FLOAT
+		#define mp_const_float_e {((mp_obj_t)((uint64_t)0x4005bf0a8b125769 + 0x8004000000000000))}
+		#define mp_const_float_pi {((mp_obj_t)((uint64_t)0x400921fb54442d18 + 0x8004000000000000))}
 
-static inline bool mp_obj_is_float(mp_const_obj_t o) {
-    return ((uint64_t)(o) & 0xfffc000000000000) != 0;
-}
-static inline mp_float_t mp_obj_float_get(mp_const_obj_t o) {
-    union {
-        mp_float_t f;
-        uint64_t r;
-    } num = {.r = o - 0x8004000000000000};
-    return num.f;
-}
-static inline mp_obj_t mp_obj_new_float(mp_float_t f) {
-    union {
-        mp_float_t f;
-        uint64_t r;
-    } num = {.f = f};
-    return num.r + 0x8004000000000000;
-}
-#endif
+		static inline bool mp_obj_is_float(mp_const_obj_t o) {
+		    return ((uint64_t)(o) & 0xfffc000000000000) != 0;
+		}
+		static inline mp_float_t mp_obj_float_get(mp_const_obj_t o) {
+		    union {
+		        mp_float_t f;
+		        uint64_t r;
+		    } num = {.r = o - 0x8004000000000000};
+		    return num.f;
+		}
+		static inline mp_obj_t mp_obj_new_float(mp_float_t f) {
+		    union {
+		        mp_float_t f;
+		        uint64_t r;
+		    } num = {.f = f};
+		    return num.r + 0x8004000000000000;
+		}
+	#endif
 
-static inline bool MP_OBJ_IS_OBJ(mp_const_obj_t o)
-    { return ((((uint64_t)(o)) & 0xffff000000000000) == 0x0000000000000000); }
-#define MP_OBJ_TO_PTR(o) ((void*)(uintptr_t)(o))
-#define MP_OBJ_FROM_PTR(p) ((mp_obj_t)((uintptr_t)(p)))
+	static inline bool MP_OBJ_IS_OBJ(mp_const_obj_t o)
+	    { return ((((uint64_t)(o)) & 0xffff000000000000) == 0x0000000000000000); }
+	#define MP_OBJ_TO_PTR(o) ((void*)(uintptr_t)(o))
+	#define MP_OBJ_FROM_PTR(p) ((mp_obj_t)((uintptr_t)(p)))
 
-// rom object storage needs special handling to widen 32-bit pointer to 64-bits
-typedef union _mp_rom_obj_t { uint64_t u64; struct { const void *lo, *hi; } u32; } mp_rom_obj_t;
-#define MP_ROM_INT(i) {MP_OBJ_NEW_SMALL_INT(i)}
-#define MP_ROM_QSTR(q) {MP_OBJ_NEW_QSTR(q)}
-#if MP_ENDIANNESS_LITTLE
-#define MP_ROM_PTR(p) {.u32 = {.lo = (p), .hi = NULL}}
-#else
-#define MP_ROM_PTR(p) {.u32 = {.lo = NULL, .hi = (p)}}
-#endif
+	// rom object storage needs special handling to widen 32-bit pointer to 64-bits
+	typedef union _mp_rom_obj_t { uint64_t u64; struct { const void *lo, *hi; } u32; } mp_rom_obj_t;
+	#define MP_ROM_INT(i) {MP_OBJ_NEW_SMALL_INT(i)}
+	#define MP_ROM_QSTR(q) {MP_OBJ_NEW_QSTR(q)}
+	#if MP_ENDIANNESS_LITTLE
+	#define MP_ROM_PTR(p) {.u32 = {.lo = (p), .hi = NULL}}
+	#else
+	#define MP_ROM_PTR(p) {.u32 = {.lo = NULL, .hi = (p)}}
+	#endif
 
 #endif
 
@@ -264,7 +264,9 @@ typedef struct _mp_rom_obj_t { mp_const_obj_t o; } mp_rom_obj_t;
 // Need to forward declare these for the inline function to compile.
 extern const mp_obj_type_t mp_type_int;
 extern const mp_obj_type_t mp_type_bool;
-static inline bool mp_obj_is_integer(mp_const_obj_t o) { return MP_OBJ_IS_INT(o) || MP_OBJ_IS_TYPE(o, &mp_type_bool); } // returns true if o is bool, small int or long int
+static inline bool mp_obj_is_integer(mp_const_obj_t o) {
+	return MP_OBJ_IS_INT(o) || MP_OBJ_IS_TYPE(o, &mp_type_bool); 
+} // returns true if o is bool, small int or long int
 //static inline bool MP_OBJ_IS_STR(mp_const_obj_t o) { return (MP_OBJ_IS_QSTR(o) || MP_OBJ_IS_TYPE(o, &mp_type_str)); }
 
 

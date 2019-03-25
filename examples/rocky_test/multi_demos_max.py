@@ -266,7 +266,7 @@ while (True):
     #pyb.LED(2).on()
     #pyb.LED(3).on()
     pyb.LED(4).off()
-    #CorrTest(9000)
+    CorrTest(9000)
     BlobTest(thresholds3, 40000)
     QRCodeTest(40000)
     FaceTest(40000)
