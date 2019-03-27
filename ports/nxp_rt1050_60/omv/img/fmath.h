@@ -32,7 +32,7 @@ typedef union
 	double f64;
 	long long s64;
 }U64Combo;
-
+#if 0
 __asm static int fast_roundf(float x)
 {
 	vcvtr.s32.f32	s0, s0
@@ -49,7 +49,6 @@ __asm static int  fast_floorf(float x)
 	bx		lr
 	ALIGN
 }
-
 __asm static int fast_ceilf(float x)
 {	
 	vldr.f32	s1,=0.99999
@@ -58,16 +57,43 @@ __asm static int fast_ceilf(float x)
 	vmov	r0, s0
 	bx		lr
 	ALIGN
-	/*
-    float i;
-    x += 0.9999f;
+}
+#else
+static inline int fast_ceilf(float x)
+{	
+    register float fi;
+	register int i;
+    x += 0.99999f;
     __asm{
-		vcvt.s32.f32 i, x
+		vcvt.s32.f32 fi, x
+		vmov  i, fi
     }
-    return (int)i;
-    */
+    return i;
 }
 
+static inline int fast_floorf(float x)
+{	
+    register float fi;
+	register int i;
+    __asm{
+		vcvt.s32.f32 fi, x
+		vmov  i, fi
+    }
+    return i;
+}
+
+static inline int fast_roundf(float x)
+{	
+    register float fi;
+	register int i;
+    __asm{
+		vcvtr.s32.f32 fi, x
+		vmov  i, fi
+    }
+    return i;
+}
+
+#endif
 #define fast_fabsf fabsf
 #define isnanf __ARM_isnanf
 #define isinff __ARM_isinff
@@ -87,6 +113,7 @@ float fast_cbrtf(float d);
 float fast_fabsf(float d);
 float fast_log(float x);
 float fast_log2(float x);
+float fast_powf(float a, float b);
 extern const float cos_table[360];
 extern const float sin_table[360];
 #endif // __FMATH_H__

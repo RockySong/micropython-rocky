@@ -172,7 +172,7 @@ float fast_atan2f(float y, float x)
   if(x > 0 && y < 0)
     return 2*M_PI - fast_atanf(-y/x);
 
-  return 0;
+  return (y == 0) ? 0 : ((y > 0) ? M_PI : -M_PI);
 }
 
 
@@ -190,4 +190,11 @@ float fast_log2(float x)
 float fast_log(float x)
 {
   return 0.69314718f * fast_log2 (x);
+}
+
+float fast_powf(float a, float b)
+{
+    union { float d; int x; } u = { a };
+    u.x = (int)((b * (u.x - 1064866805)) + 1064866805);
+    return u.d;
 }

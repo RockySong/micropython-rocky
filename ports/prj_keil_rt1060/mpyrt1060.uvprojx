@@ -6528,16 +6528,6 @@
               <FilePath>..\nxp_rt1050_60\omv\img\lbp.c</FilePath>
             </File>
             <File>
-              <FileName>lenet.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\omv\img\lenet.c</FilePath>
-            </File>
-            <File>
-              <FileName>lenet_model_num.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\omv\img\lenet_model_num.c</FilePath>
-            </File>
-            <File>
               <FileName>lsd.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\nxp_rt1050_60\omv\img\lsd.c</FilePath>
@@ -6586,6 +6576,11 @@
               <FileName>rectangle.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\nxp_rt1050_60\omv\img\rectangle.c</FilePath>
+            </File>
+            <File>
+              <FileName>selective_search.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt1050_60\omv\img\selective_search.c</FilePath>
             </File>
             <File>
               <FileName>shadow_removal.c</FileName>
@@ -13427,16 +13422,6 @@
               <FilePath>..\nxp_rt1050_60\omv\img\lbp.c</FilePath>
             </File>
             <File>
-              <FileName>lenet.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\omv\img\lenet.c</FilePath>
-            </File>
-            <File>
-              <FileName>lenet_model_num.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\omv\img\lenet_model_num.c</FilePath>
-            </File>
-            <File>
               <FileName>lsd.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\nxp_rt1050_60\omv\img\lsd.c</FilePath>
@@ -13485,6 +13470,11 @@
               <FileName>rectangle.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\nxp_rt1050_60\omv\img\rectangle.c</FilePath>
+            </File>
+            <File>
+              <FileName>selective_search.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt1050_60\omv\img\selective_search.c</FilePath>
             </File>
             <File>
               <FileName>shadow_removal.c</FileName>
@@ -20187,16 +20177,6 @@
               <FilePath>..\nxp_rt1050_60\omv\img\lbp.c</FilePath>
             </File>
             <File>
-              <FileName>lenet.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\omv\img\lenet.c</FilePath>
-            </File>
-            <File>
-              <FileName>lenet_model_num.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\omv\img\lenet_model_num.c</FilePath>
-            </File>
-            <File>
               <FileName>lsd.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\nxp_rt1050_60\omv\img\lsd.c</FilePath>
@@ -20245,6 +20225,11 @@
               <FileName>rectangle.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\nxp_rt1050_60\omv\img\rectangle.c</FilePath>
+            </File>
+            <File>
+              <FileName>selective_search.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt1050_60\omv\img\selective_search.c</FilePath>
             </File>
             <File>
               <FileName>shadow_removal.c</FileName>

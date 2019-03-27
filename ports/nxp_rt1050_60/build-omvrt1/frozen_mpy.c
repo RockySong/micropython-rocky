@@ -106,7 +106,6 @@ enum {
     MP_QSTR_cmd,
     MP_QSTR_fmt,
     MP_QSTR_a0,
-    MP_QSTR_a1,
     MP_QSTR_a2,
     MP_QSTR_a3,
     MP_QSTR_a4,
@@ -151,7 +150,7 @@ enum {
     MP_QSTR_VBAT,
     MP_QSTR_VREF,
     MP_QSTR__percent_6_dot_3fV,
-    MP_QSTR__percent_5_dot_1f_Acirc__deg_C,
+    MP_QSTR__percent_5_dot_1f_deg_C,
     MP_QSTR_adc,
     MP_QSTR_RTC,
     MP_QSTR_FrameBuffer,
@@ -169,8 +168,8 @@ extern const qstr_pool_t mp_qstr_const_pool;
 const qstr_pool_t mp_qstr_frozen_const_pool = {
     (qstr_pool_t*)&mp_qstr_const_pool, // previous pool
     MP_QSTRnumber_of, // previous pool size
-    132, // allocated entries
-    132, // used entries
+    131, // allocated entries
+    131, // used entries
     {
         (const byte*)"\xcf\xa5\x0b" "lcd160cr.py",
         (const byte*)"\xf2\xcd\x08" "PORTRAIT",
@@ -247,7 +246,6 @@ const qstr_pool_t mp_qstr_frozen_const_pool = {
         (const byte*)"\x2f\x4c\x03" "cmd",
         (const byte*)"\x7a\x38\x03" "fmt",
         (const byte*)"\x74\x6e\x02" "a0",
-        (const byte*)"\x75\x6e\x02" "a1",
         (const byte*)"\x76\x6e\x02" "a2",
         (const byte*)"\x77\x6e\x02" "a3",
         (const byte*)"\x70\x6e\x02" "a4",
@@ -4492,7 +4490,7 @@ STATIC const byte bytecode_data_lcd160cr_test__lt_module_gt__show_adc[309] = {
     0xf6, 
     0xc4, 
     0x35, 0x08, 0x80, 
-    0x16, MP_QSTR__percent_5_dot_1f_Acirc__deg_C & 0xff, MP_QSTR__percent_5_dot_1f_Acirc__deg_C >> 8,
+    0x16, MP_QSTR__percent_5_dot_1f_deg_C & 0xff, MP_QSTR__percent_5_dot_1f_deg_C >> 8,
     0xb2, 
     0xb3, 
     0x21, 

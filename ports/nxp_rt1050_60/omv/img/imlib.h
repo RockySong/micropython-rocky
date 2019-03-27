@@ -87,6 +87,8 @@ void point_init(point_t *ptr, int x, int y);
 void point_copy(point_t *dst, point_t *src);
 bool point_equal_fast(point_t *ptr0, point_t *ptr1);
 int point_quadrance(point_t *ptr0, point_t *ptr1);
+void point_rotate(int x, int y, float r, int center_x, int center_y, int16_t *new_x, int16_t *new_y);
+void point_min_area_rectangle(point_t *corners, point_t *new_corners, int corners_len);
 
 ////////////////
 // Line Stuff //
@@ -264,51 +266,28 @@ extern const uint8_t g826_table[256];
 extern const int8_t lab_table[196608];
 extern const int8_t yuv_table[196608];
 
+#ifdef IMLIB_ENABLE_LAB_LUT
 #define COLOR_RGB565_TO_L(pixel) lab_table[(pixel) * 3]
 #define COLOR_RGB565_TO_A(pixel) lab_table[((pixel) * 3) + 1]
 #define COLOR_RGB565_TO_B(pixel) lab_table[((pixel) * 3) + 2]
+#else
+#define COLOR_RGB565_TO_L(pixel) imlib_rgb565_to_l(pixel)
+#define COLOR_RGB565_TO_A(pixel) imlib_rgb565_to_a(pixel)
+#define COLOR_RGB565_TO_B(pixel) imlib_rgb565_to_b(pixel)
+#endif
+
+#ifdef IMLIB_ENABLE_YUV_LUT
 #define COLOR_RGB565_TO_Y(pixel) yuv_table[(pixel) * 3]
 #define COLOR_RGB565_TO_U(pixel) yuv_table[((pixel) * 3) + 1]
 #define COLOR_RGB565_TO_V(pixel) yuv_table[((pixel) * 3) + 2]
+#else
+#define COLOR_RGB565_TO_Y(pixel) imlib_rgb565_to_y(pixel)
+#define COLOR_RGB565_TO_U(pixel) imlib_rgb565_to_u(pixel)
+#define COLOR_RGB565_TO_V(pixel) imlib_rgb565_to_v(pixel)
+#endif
 
-// https://en.wikipedia.org/wiki/Lab_color_space -> CIELAB-CIEXYZ conversions
-// https://en.wikipedia.org/wiki/SRGB -> Specification of the transformation
-
-#define COLOR_LAB_TO_RGB565(l, a, b) \
-({ \
-    __typeof__ (l) _l = (l); \
-    __typeof__ (a) _a = (a); \
-    __typeof__ (b) _b = (b); \
-    float _x = ((_l + 16) * 0.008621f) + (_a * 0.002f); \
-    float _y = ((_l + 16) * 0.008621f); \
-    float _z = ((_l + 16) * 0.008621f) - (_b * 0.005f); \
-    _x = ((_x > 0.206897f) ? (_x * _x * _x) : ((0.128419f * _x) - 0.017713f)) * 095.047f; \
-    _y = ((_y > 0.206897f) ? (_y * _y * _y) : ((0.128419f * _y) - 0.017713f)) * 100.000f; \
-    _z = ((_z > 0.206897f) ? (_z * _z * _z) : ((0.128419f * _z) - 0.017713f)) * 108.883f; \
-    float _r_lin = ((_x * +3.2406f) + (_y * -1.5372f) + (_z * -0.4986f)) / 100.0f; \
-    float _g_lin = ((_x * -0.9689f) + (_y * +1.8758f) + (_z * +0.0415f)) / 100.0f; \
-    float _b_lin = ((_x * +0.0557f) + (_y * -0.2040f) + (_z * +1.0570f)) / 100.0f; \
-    _r_lin = (_r_lin > 0.0031308f) ? ((1.055f * powf(_r_lin, 0.416666f)) - 0.055f) : (_r_lin * 12.92f); \
-    _g_lin = (_g_lin > 0.0031308f) ? ((1.055f * powf(_g_lin, 0.416666f)) - 0.055f) : (_g_lin * 12.92f); \
-    _b_lin = (_b_lin > 0.0031308f) ? ((1.055f * powf(_b_lin, 0.416666f)) - 0.055f) : (_b_lin * 12.92f); \
-    unsigned int _rgb565_r = IM_MAX(IM_MIN(roundf(_r_lin * COLOR_R5_MAX), COLOR_R5_MAX), COLOR_R5_MIN); \
-    unsigned int _rgb565_g = IM_MAX(IM_MIN(roundf(_g_lin * COLOR_G6_MAX), COLOR_G6_MAX), COLOR_G6_MIN); \
-    unsigned int _rgb565_b = IM_MAX(IM_MIN(roundf(_b_lin * COLOR_B5_MAX), COLOR_B5_MAX), COLOR_B5_MIN); \
-    COLOR_R5_G6_B5_TO_RGB565(_rgb565_r, _rgb565_g, _rgb565_b); \
-})
-
-// https://en.wikipedia.org/wiki/YCbCr -> JPEG Conversion
-
-#define COLOR_YUV_TO_RGB565(y, u, v) \
-({ \
-    __typeof__ (y) _y = (y); \
-    __typeof__ (u) _u = (u); \
-    __typeof__ (v) _v = (v); \
-    unsigned int _r = IM_MAX(IM_MIN(128 + _y + ((((uint32_t) ((1.402000 * 65536) + 0.5)) * _v) >> 16), COLOR_R8_MAX), COLOR_R8_MIN); \
-    unsigned int _g = IM_MAX(IM_MIN(128 + _y - (((((uint32_t) ((0.344136 * 65536) + 0.5)) * _u) + (((uint32_t) ((0.714136 * 65536) + 0.5)) * _v)) >> 16), COLOR_G8_MAX), COLOR_G8_MIN); \
-    unsigned int _b = IM_MAX(IM_MIN(128 + _y + ((((uint32_t) ((1.772000 * 65536) + 0.5)) * _u) >> 16), COLOR_B8_MAX), COLOR_B8_MIN); \
-    COLOR_R8_G8_B8_TO_RGB565(_r, _g, _b); \
-})
+#define COLOR_LAB_TO_RGB565(l, a, b) imlib_lab_to_rgb(l, a, b)
+#define COLOR_YUV_TO_RGB565(y, u, v) imlib_yuv_to_rgb(y + 128, u, v)
 
 #define COLOR_BAYER_TO_RGB565(img, x, y, r, g, b)            \
 ({                                                           \
@@ -365,11 +344,20 @@ extern const int8_t yuv_table[196608];
 })
 
 #define COLOR_BINARY_TO_GRAYSCALE(pixel) ((pixel) * COLOR_GRAYSCALE_MAX)
-#define COLOR_BINARY_TO_RGB565(pixel) COLOR_YUV_TO_RGB565((pixel) * 127, 0, 0)
+#define COLOR_BINARY_TO_RGB565(pixel) COLOR_YUV_TO_RGB565((pixel) ? 127 : -128, 0, 0)
 #define COLOR_RGB565_TO_BINARY(pixel) (COLOR_RGB565_TO_Y(pixel) > (((COLOR_Y_MAX - COLOR_Y_MIN) / 2) + COLOR_Y_MIN))
 #define COLOR_RGB565_TO_GRAYSCALE(pixel) (COLOR_RGB565_TO_Y(pixel) + 128)
 #define COLOR_GRAYSCALE_TO_BINARY(pixel) ((pixel) > (((COLOR_GRAYSCALE_MAX - COLOR_GRAYSCALE_MIN) / 2) + COLOR_GRAYSCALE_MIN))
 #define COLOR_GRAYSCALE_TO_RGB565(pixel) COLOR_YUV_TO_RGB565((pixel) - 128, 0, 0)
+
+typedef enum {
+    COLOR_PALETTE_RAINBOW,
+    COLOR_PALETTE_IRONBOW
+} color_palette_t;
+
+// Color palette LUTs
+extern const uint16_t rainbow_table[256];
+extern const uint16_t ironbow_table[256];
 
 /////////////////
 // Image Stuff //
@@ -877,22 +865,24 @@ extern const int kernel_high_pass_3[9];
        __typeof__ (img1) _img1 = (img1); \
        (_img0->w==_img1->w)&&(_img0->h==_img1->h)&&(_img0->bpp==_img1->bpp); })
 
+#define IM_TO_GS_PIXEL(img, x, y)    \
+    (img->bpp == 1 ? img->pixels[((y)*img->w)+(x)] : (COLOR_RGB565_TO_Y(((uint16_t*)img->pixels)[((y)*img->w)+(x)]) + 128))
+
 typedef struct simple_color {
-    uint8_t G;
+    uint8_t G;          // Gray
     union {
-        int8_t L;
-        uint8_t red; // RGB888 not RGB565
+        int8_t L;       // LAB L
+        uint8_t red;    // RGB888 Red
     };
     union {
-        int8_t A;
-        uint8_t green; // RGB888 not RGB565
+        int8_t A;       // LAB A
+        uint8_t green;  // RGB888 Green
     };
     union {
-        int8_t B;
-        uint8_t blue; // RGB888 not RGB565
+        int8_t B;       // LAB B
+        uint8_t blue;   // RGB888 Blue
     };
-}
-simple_color_t;
+} simple_color_t;
 
 typedef struct integral_image {
     int w;
@@ -1051,12 +1041,16 @@ typedef struct statistics {
     int8_t BMean, BMedian, BMode, BSTDev, BMin, BMax, BLQ, BUQ;
 } statistics_t;
 
+#define FIND_BLOBS_CORNERS_RESOLUTION 20 // multiple of 4
+#define FIND_BLOBS_ANGLE_RESOLUTION (360 / FIND_BLOBS_CORNERS_RESOLUTION)
+
 typedef struct find_blobs_list_lnk_data {
+    point_t corners[FIND_BLOBS_CORNERS_RESOLUTION];
     rectangle_t rect;
-    uint32_t pixels;
-    point_t centroid;
-    float rotation;
-    uint16_t code, count;
+    uint32_t pixels, perimeter, code, count;
+    float centroid_x, centroid_y, rotation, roundness;
+    uint16_t x_hist_bins_count, y_hist_bins_count, *x_hist_bins, *y_hist_bins;
+    float centroid_x_acc, centroid_y_acc, rotation_acc_x, rotation_acc_y, roundness_acc;
 } find_blobs_list_lnk_data_t;
 
 typedef struct find_lines_list_lnk_data {
@@ -1144,10 +1138,13 @@ typedef struct find_barcodes_list_lnk_data {
 } find_barcodes_list_lnk_data_t;
 
 /* Color space functions */
-void imlib_rgb_to_lab(simple_color_t *rgb, simple_color_t *lab);
-void imlib_lab_to_rgb(simple_color_t *lab, simple_color_t *rgb);
-void imlib_rgb_to_grayscale(simple_color_t *rgb, simple_color_t *grayscale);
-void imlib_grayscale_to_rgb(simple_color_t *grayscale, simple_color_t *rgb);
+int8_t imlib_rgb565_to_l(uint16_t pixel);
+int8_t imlib_rgb565_to_a(uint16_t pixel);
+int8_t imlib_rgb565_to_b(uint16_t pixel);
+int8_t imlib_rgb565_to_y(uint16_t pixel);
+int8_t imlib_rgb565_to_u(uint16_t pixel);
+int8_t imlib_rgb565_to_v(uint16_t pixel);
+uint16_t imlib_lab_to_rgb(uint8_t l, int8_t a, int8_t b);
 uint16_t imlib_yuv_to_rgb(uint8_t y, int8_t u, int8_t v);
 void imlib_bayer_to_rgb565(image_t *img, int w, int h, int xoffs, int yoffs, uint16_t *rgbbuf);
 
@@ -1169,7 +1166,6 @@ bool imlib_read_geometry(FIL *fp, image_t *img, const char *path, img_read_setti
 void imlib_image_operation(image_t *img, const char *path, image_t *other, int scalar, line_op_t op, void *data);
 void imlib_load_image(image_t *img, const char *path);
 void imlib_save_image(image_t *img, const char *path, rectangle_t *roi, int quality);
-void imlib_copy_image(image_t *dst, image_t *src, rectangle_t *roi);
 
 /* GIF functions */
 void gif_open(FIL *fp, int width, int height, bool color, bool loop);
@@ -1268,6 +1264,7 @@ void imlib_edge_canny(image_t *src, rectangle_t *roi, int low_thresh, int high_t
 void imlib_find_hog(image_t *src, rectangle_t *roi, int cell_size);
 
 // Helper Functions
+void imlib_zero(image_t *img, image_t *mask, bool invert);
 void imlib_flood_fill_int(image_t *out, image_t *img, int x, int y,
                           int seed_threshold, int floating_threshold,
                           flood_fill_call_back_t cb, void *data);
@@ -1277,8 +1274,10 @@ void imlib_set_pixel(image_t *img, int x, int y, int p);
 void imlib_draw_line(image_t *img, int x0, int y0, int x1, int y1, int c, int thickness);
 void imlib_draw_rectangle(image_t *img, int rx, int ry, int rw, int rh, int c, int thickness, bool fill);
 void imlib_draw_circle(image_t *img, int cx, int cy, int r, int c, int thickness, bool fill);
-void imlib_draw_string(image_t *img, int x_off, int y_off, const char *str, int c, int scale, int x_spacing, int y_spacing, bool mono_space);
-void imlib_draw_image(image_t *img, image_t *other, int x_off, int y_off, float x_scale, float y_scale, image_t *mask);
+void imlib_draw_ellipse(image_t *img, int cx, int cy, int rx, int ry, int rotation, int c, int thickness, bool fill);
+void imlib_draw_string(image_t *img, int x_off, int y_off, const char *str, int c, float scale, int x_spacing, int y_spacing, bool mono_space,
+                       int char_rotation, bool char_hmirror, bool char_vflip, int string_rotation, bool string_hmirror, bool string_hflip);
+void imlib_draw_image(image_t *img, image_t *other, int x_off, int y_off, float x_scale, float y_scale, float alpha, image_t *mask);
 void imlib_flood_fill(image_t *img, int x, int y,
                       float seed_threshold, float floating_threshold,
                       int c, bool invert, bool clear_background, image_t *mask);
@@ -1298,12 +1297,13 @@ void imlib_close(image_t *img, int ksize, int threshold, image_t *mask);
 void imlib_top_hat(image_t *img, int ksize, int threshold, image_t *mask);
 void imlib_black_hat(image_t *img, int ksize, int threshold, image_t *mask);
 // Math Functions
+void imlib_gamma_corr(image_t *img, float gamma, float scale, float offset);
 void imlib_negate(image_t *img);
-void imlib_replace(image_t *img, const char *path, image_t *other, int scalar, bool hmirror, bool vflip, image_t *mask);
+void imlib_replace(image_t *img, const char *path, image_t *other, int scalar, bool hmirror, bool vflip, bool transpose, image_t *mask);
 void imlib_add(image_t *img, const char *path, image_t *other, int scalar, image_t *mask);
 void imlib_sub(image_t *img, const char *path, image_t *other, int scalar, bool reverse, image_t *mask);
 void imlib_mul(image_t *img, const char *path, image_t *other, int scalar, bool invert, image_t *mask);
-void imlib_div(image_t *img, const char *path, image_t *other, int scalar, bool invert, image_t *mask);
+void imlib_div(image_t *img, const char *path, image_t *other, int scalar, bool invert, bool mod, image_t *mask);
 void imlib_min(image_t *img, const char *path, image_t *other, int scalar, image_t *mask);
 void imlib_max(image_t *img, const char *path, image_t *other, int scalar, image_t *mask);
 void imlib_difference(image_t *img, const char *path, image_t *other, int scalar, image_t *mask);
@@ -1342,7 +1342,8 @@ void imlib_find_blobs(list_t *out, image_t *ptr, rectangle_t *roi, unsigned int 
                       list_t *thresholds, bool invert, unsigned int area_threshold, unsigned int pixels_threshold,
                       bool merge, int margin,
                       bool (*threshold_cb)(void*,find_blobs_list_lnk_data_t*), void *threshold_cb_arg,
-                      bool (*merge_cb)(void*,find_blobs_list_lnk_data_t*,find_blobs_list_lnk_data_t*), void *merge_cb_arg);
+                      bool (*merge_cb)(void*,find_blobs_list_lnk_data_t*,find_blobs_list_lnk_data_t*), void *merge_cb_arg,
+                      unsigned int x_hist_bins_max, unsigned int y_hist_bins_max);
 // Shape Detection
 size_t trace_line(image_t *ptr, line_t *l, int *theta_buffer, uint32_t *mag_buffer, point_t *point_buffer); // helper/internal
 void merge_alot(list_t *out, int threshold, int theta_threshold); // helper/internal
@@ -1366,55 +1367,6 @@ void imlib_find_barcodes(list_t *out, image_t *ptr, rectangle_t *roi);
 // Template Matching
 void imlib_phasecorrelate(image_t *img0, image_t *img1, rectangle_t *roi0, rectangle_t *roi1, bool logpolar, bool fix_rotation_scale,
                           float *x_translation, float *y_translation, float *rotation, float *scale, float *response);
-// rocky: in fact in latest openMV (2018.06.14), it has already removed
-// LeNet (CNN for character recognition)
-#define LENGTH_KERNEL	5
-#define LENGTH_FEATURE0	32
-#define LENGTH_FEATURE1	(LENGTH_FEATURE0 - LENGTH_KERNEL + 1)
-#define LENGTH_FEATURE2	(LENGTH_FEATURE1 >> 1)
-#define LENGTH_FEATURE3	(LENGTH_FEATURE2 - LENGTH_KERNEL + 1)
-#define	LENGTH_FEATURE4	(LENGTH_FEATURE3 >> 1)
-#define LENGTH_FEATURE5	(LENGTH_FEATURE4 - LENGTH_KERNEL + 1)
 
-#define INPUT			1
-#define LAYER1			6
-#define LAYER2			6
-#define LAYER3			16
-#define LAYER4			16
-#define LAYER5			120
-
-#define LENET_INPUT_W       (28)
-#define LENET_INPUT_H       (28)
-#define LENET_OUTPUT_SIZE   (10)
-#define LENET_PADDING_SIZE  (2)
-#define LENET_MODEL_SIZE    (51902)
-
-typedef struct lenet5 {
-    float weight0_1[INPUT][LAYER1][LENGTH_KERNEL][LENGTH_KERNEL];
-    float weight2_3[LAYER2][LAYER3][LENGTH_KERNEL][LENGTH_KERNEL];
-    float weight4_5[LAYER4][LAYER5][LENGTH_KERNEL][LENGTH_KERNEL];
-    float weight5_6[LAYER5 * LENGTH_FEATURE5 * LENGTH_FEATURE5][LENET_OUTPUT_SIZE];
-
-    float bias0_1[LAYER1];
-    float bias2_3[LAYER3];
-    float bias4_5[LAYER5];
-    float bias5_6[LENET_OUTPUT_SIZE];
-
-} lenet5_t;
-
-typedef struct lenet5_feature {
-    float input[INPUT][LENGTH_FEATURE0][LENGTH_FEATURE0];
-    float layer1[LAYER1][LENGTH_FEATURE1][LENGTH_FEATURE1];
-    float layer2[LAYER2][LENGTH_FEATURE2][LENGTH_FEATURE2];
-    float layer3[LAYER3][LENGTH_FEATURE3][LENGTH_FEATURE3];
-    float layer4[LAYER4][LENGTH_FEATURE4][LENGTH_FEATURE4];
-    float layer5[LAYER5][LENGTH_FEATURE5][LENGTH_FEATURE5];
-    float output[LENET_OUTPUT_SIZE];
-} lenet5_feature_t;
-
-
-// LeNet pretrained models.
-extern const float lenet_model_num[LENET_MODEL_SIZE];
-
-uint8_t lenet_predict(lenet5_t *lenet, image_t *src, rectangle_t *roi, float *conf);
+array_t *imlib_selective_search(image_t *src, float t, int min_size, float a1, float a2, float a3);
 #endif //__IMLIB_H__

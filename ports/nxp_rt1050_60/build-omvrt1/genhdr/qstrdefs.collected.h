@@ -1432,6 +1432,12 @@ Q(_star_)
 
 Q(_star_)
 
+Q(a1)
+
+Q(a1)
+
+Q(a1)
+
 Q(a2b_base64)
 
 Q(a_bins)
@@ -1518,6 +1524,8 @@ Q(alloc_extra_fb)
 
 Q(alpha)
 
+Q(alpha)
+
 Q(alt)
 
 Q(and)
@@ -1565,6 +1573,8 @@ Q(asinh)
 Q(asm_thumb)
 
 Q(asr)
+
+Q(assign)
 
 Q(atan)
 
@@ -1640,23 +1650,19 @@ Q(bias)
 
 Q(bias)
 
-Q(bias)
-
-Q(bias)
-
-Q(bias)
-
-Q(bias)
-
-Q(bias)
-
-Q(bias)
-
 Q(bilateral)
 
 Q(bin)
 
 Q(binary)
+
+Q(binary_to_grayscale)
+
+Q(binary_to_lab)
+
+Q(binary_to_rgb)
+
+Q(binary_to_yuv)
 
 Q(binascii)
 
@@ -1730,6 +1736,8 @@ Q(border_width)
 
 Q(bound_method)
 
+Q(brightness)
+
 Q(buffer)
 
 Q(buffering)
@@ -1773,6 +1781,12 @@ Q(ceil)
 Q(center)
 
 Q(center)
+
+Q(char_hmirror)
+
+Q(char_rotation)
+
+Q(char_vflip)
 
 Q(chdir)
 
@@ -1862,9 +1876,13 @@ Q(color)
 
 Q(color)
 
+Q(color_palette)
+
 Q(color_sigma)
 
 Q(columns)
+
+Q(compactness)
 
 Q(compile)
 
@@ -1886,7 +1904,13 @@ Q(const)
 
 Q(const)
 
+Q(contrast)
+
 Q(contrast_threshold)
+
+Q(convexity)
+
+Q(copy)
 
 Q(copy)
 
@@ -1928,6 +1952,8 @@ Q(corners)
 
 Q(corners)
 
+Q(corners)
+
 Q(cos)
 
 Q(cos)
@@ -1958,13 +1984,17 @@ Q(cpu)
 
 Q(crc)
 
-Q(cx)
+Q(crop)
 
 Q(cx)
 
 Q(cx)
 
 Q(cx)
+
+Q(cx)
+
+Q(cxf)
 
 Q(cy)
 
@@ -1973,6 +2003,8 @@ Q(cy)
 Q(cy)
 
 Q(cy)
+
+Q(cyf)
 
 Q(data)
 
@@ -2072,6 +2104,10 @@ Q(draw_circle)
 
 Q(draw_cross)
 
+Q(draw_edges)
+
+Q(draw_ellipse)
+
 Q(draw_image)
 
 Q(draw_keypoints)
@@ -2102,11 +2138,17 @@ Q(elapsed_micros)
 
 Q(elapsed_millis)
 
+Q(elongation)
+
 Q(enable)
 
 Q(enable_irq)
 
 Q(enable_irq)
+
+Q(enclosed_ellipse)
+
+Q(enclosing_circle)
 
 Q(encode)
 
@@ -2160,6 +2202,8 @@ Q(extend)
 
 Q(extend)
 
+Q(extent)
+
 Q(fabs)
 
 Q(families)
@@ -2177,6 +2221,10 @@ Q(file)
 Q(file)
 
 Q(file)
+
+Q(fill)
+
+Q(fill)
 
 Q(fill)
 
@@ -2326,6 +2374,10 @@ Q(gain_db_ceiling)
 
 Q(gamma)
 
+Q(gamma)
+
+Q(gamma_corr)
+
 Q(gaussian)
 
 Q(gaussian_blur)
@@ -2408,7 +2460,13 @@ Q(goodness)
 
 Q(gpio)
 
+Q(grayscale_to_binary)
+
+Q(grayscale_to_lab)
+
 Q(grayscale_to_rgb)
+
+Q(grayscale_to_yuv)
 
 Q(group)
 
@@ -2752,7 +2810,13 @@ Q(l_value)
 
 Q(l_value)
 
+Q(lab_to_binary)
+
+Q(lab_to_grayscale)
+
 Q(lab_to_rgb)
+
+Q(lab_to_yuv)
 
 Q(label)
 
@@ -2862,6 +2926,8 @@ Q(magnitude)
 
 Q(main)
 
+Q(major_axis_line)
+
 Q(map)
 
 Q(map)
@@ -2873,6 +2939,12 @@ Q(margin)
 Q(mask)
 
 Q(mask)
+
+Q(mask_circle)
+
+Q(mask_ellipse)
+
+Q(mask_rectangle)
 
 Q(match)
 
@@ -2988,7 +3060,11 @@ Q(min)
 
 Q(min)
 
+Q(min_corners)
+
 Q(min_scale)
+
+Q(minor_axis_line)
 
 Q(miso)
 
@@ -3011,6 +3087,8 @@ Q(mkfs)
 Q(mkfs)
 
 Q(mktime)
+
+Q(mod)
 
 Q(mode)
 
@@ -3209,6 +3287,8 @@ Q(peektime)
 Q(percentile)
 
 Q(percentile)
+
+Q(perimeter)
 
 Q(phase)
 
@@ -3592,11 +3672,23 @@ Q(rfind)
 
 Q(rfind)
 
+Q(rgb_channel)
+
+Q(rgb_channel)
+
+Q(rgb_channel)
+
+Q(rgb_channel)
+
 Q(rgb_gain_db)
+
+Q(rgb_to_binary)
 
 Q(rgb_to_grayscale)
 
 Q(rgb_to_lab)
+
+Q(rgb_to_yuv)
 
 Q(rgbtuple)
 
@@ -3636,7 +3728,13 @@ Q(rotation)
 
 Q(rotation_corr)
 
+Q(rotation_deg)
+
+Q(rotation_rad)
+
 Q(round)
+
+Q(roundness)
 
 Q(rows)
 
@@ -3659,6 +3757,8 @@ Q(rtc)
 Q(save)
 
 Q(save_descriptor)
+
+Q(scale)
 
 Q(scale)
 
@@ -3708,6 +3808,8 @@ Q(select)
 
 Q(select)
 
+Q(selective_search)
+
 Q(send)
 
 Q(send)
@@ -3737,6 +3839,8 @@ Q(sensor)
 Q(sep)
 
 Q(sep)
+
+Q(set)
 
 Q(set)
 
@@ -3836,6 +3940,10 @@ Q(size)
 
 Q(size)
 
+Q(size)
+
+Q(size)
+
 Q(sizeof)
 
 Q(skip_frames)
@@ -3863,6 +3971,8 @@ Q(soft_reset)
 Q(softmax)
 
 Q(softmax)
+
+Q(solidity)
 
 Q(sort)
 
@@ -3966,6 +4076,12 @@ Q(strex)
 
 Q(strh)
 
+Q(string_hmirror)
+
+Q(string_rotation)
+
+Q(string_vflip)
+
 Q(strip)
 
 Q(strip)
@@ -4035,6 +4151,12 @@ Q(thickness)
 Q(thickness)
 
 Q(thickness)
+
+Q(thickness)
+
+Q(thickness)
+
+Q(threshold)
 
 Q(threshold)
 
@@ -4155,6 +4277,8 @@ Q(to_rgb565)
 Q(toggle)
 
 Q(top_hat)
+
+Q(transpose)
 
 Q(trunc)
 
@@ -4476,6 +4600,10 @@ Q(x1)
 
 Q(x2)
 
+Q(x_hist_bins)
+
+Q(x_hist_bins_max)
+
 Q(x_margin)
 
 Q(x_overlap)
@@ -4483,6 +4611,8 @@ Q(x_overlap)
 Q(x_rotation)
 
 Q(x_rotation)
+
+Q(x_scale)
 
 Q(x_scale)
 
@@ -4532,6 +4662,10 @@ Q(y1)
 
 Q(y2)
 
+Q(y_hist_bins)
+
+Q(y_hist_bins_max)
+
 Q(y_margin)
 
 Q(y_overlap)
@@ -4539,6 +4673,8 @@ Q(y_overlap)
 Q(y_rotation)
 
 Q(y_rotation)
+
+Q(y_scale)
 
 Q(y_scale)
 
@@ -4557,6 +4693,14 @@ Q(y_translation)
 Q(y_translation)
 
 Q(y_translation)
+
+Q(yuv_to_binary)
+
+Q(yuv_to_grayscale)
+
+Q(yuv_to_lab)
+
+Q(yuv_to_rgb)
 
 Q(ywin_max)
 
