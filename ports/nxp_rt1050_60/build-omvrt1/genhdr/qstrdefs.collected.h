@@ -120,6 +120,8 @@ Q(BF_POS)
 
 Q(BIG_ENDIAN)
 
+Q(BINARY)
+
 Q(BLACK)
 
 Q(BaseException)
@@ -422,6 +424,38 @@ Q(IN_PUP)
 
 Q(IN_PUP_WEAK)
 
+Q(IOCTL_GET_TRIGGERED_MODE)
+
+Q(IOCTL_LEPTON_GET_ATTRIBUTE)
+
+Q(IOCTL_LEPTON_GET_AUX_TEMPERATURE)
+
+Q(IOCTL_LEPTON_GET_FPA_TEMPERATURE)
+
+Q(IOCTL_LEPTON_GET_HEIGHT)
+
+Q(IOCTL_LEPTON_GET_MEASUREMENT_MODE)
+
+Q(IOCTL_LEPTON_GET_MEASUREMENT_RANGE)
+
+Q(IOCTL_LEPTON_GET_RADIOMETRY)
+
+Q(IOCTL_LEPTON_GET_REFRESH)
+
+Q(IOCTL_LEPTON_GET_RESOLUTION)
+
+Q(IOCTL_LEPTON_GET_WIDTH)
+
+Q(IOCTL_LEPTON_RUN_COMMAND)
+
+Q(IOCTL_LEPTON_SET_ATTRIBUTE)
+
+Q(IOCTL_LEPTON_SET_MEASUREMENT_MODE)
+
+Q(IOCTL_LEPTON_SET_MEASUREMENT_RANGE)
+
+Q(IOCTL_SET_TRIGGERED_MODE)
+
 Q(IOMUXC)
 
 Q(IOMUXC_GPR)
@@ -473,6 +507,8 @@ Q(LCDIF)
 Q(LED)
 
 Q(LED)
+
+Q(LEPTON)
 
 Q(LITTLE_ENDIAN)
 
@@ -675,6 +711,10 @@ Q(OrderedDict)
 Q(OverflowError)
 
 Q(OverflowError)
+
+Q(PALETTE_IRONBOW)
+
+Q(PALETTE_RAINBOW)
 
 Q(PDF417)
 
@@ -1067,6 +1107,10 @@ Q(WDOG2)
 Q(WDT_RESET)
 
 Q(WHITE)
+
+Q(WVGA)
+
+Q(WVGA2)
 
 Q(XBARA1)
 
@@ -2396,6 +2440,8 @@ Q(generator)
 
 Q(get)
 
+Q(get_color_palette)
+
 Q(get_exposure_us)
 
 Q(get_fb)
@@ -2675,6 +2721,8 @@ Q(invert)
 Q(inverted)
 
 Q(io)
+
+Q(ioctl)
 
 Q(ioctl)
 
@@ -3856,6 +3904,8 @@ Q(set_bkg_color)
 
 Q(set_brightness)
 
+Q(set_color_palette)
+
 Q(set_colorbar)
 
 Q(set_contrast)
@@ -3911,6 +3961,8 @@ Q(sha256)
 Q(sha256)
 
 Q(sharpen)
+
+Q(shutdown)
 
 Q(similarity)
 

@@ -98,7 +98,6 @@ void imlib_integral_mw_scale(rectangle_t *roi, mw_image_t *sum, int w, int h)
 void imlib_integral_mw(image_t *src, mw_image_t *sum)
 {
     // Image pointers
-    typeof(*src->data) *img_data = src->data;
     typeof(*sum->data) *sum_data = sum->data;
 
     // Compute the first row to avoid branching
@@ -107,7 +106,7 @@ void imlib_integral_mw(image_t *src, mw_image_t *sum)
         sx = (x*sum->x_ratio)>>16;
 
         // Accumulate row data
-        s += img_data[sx];
+        s += IM_TO_GS_PIXEL(src, sx, 0);
         sum_data[0][x] = s;
     }
 
@@ -122,7 +121,7 @@ void imlib_integral_mw(image_t *src, mw_image_t *sum)
             sx = (x*sum->x_ratio)>>16;
 
             // Accumulate row data
-            s += img_data[sy*src->w+sx];
+            s += IM_TO_GS_PIXEL(src, sx, sy);
             sum_data[y][x] = s + sum_data[y-1][x];
         }
     }
@@ -133,7 +132,6 @@ void imlib_integral_mw(image_t *src, mw_image_t *sum)
 void imlib_integral_mw_sq(image_t *src, mw_image_t *sum)
 {
     // Image pointers
-    typeof(*src->data) *img_data = src->data;
     typeof(*sum->data) *sum_data = sum->data;
 
     // Compute the first row to avoid branching
@@ -142,7 +140,7 @@ void imlib_integral_mw_sq(image_t *src, mw_image_t *sum)
         sx = (x*sum->x_ratio)>>16;
 
         // Accumulate row data
-        s += img_data[sx] * img_data[sx];
+        s += IM_TO_GS_PIXEL(src, sx, 0) * IM_TO_GS_PIXEL(src, sx, 0);
         sum_data[0][x] = s;
     }
 
@@ -157,7 +155,7 @@ void imlib_integral_mw_sq(image_t *src, mw_image_t *sum)
             sx = (x*sum->x_ratio)>>16;
 
             // Accumulate row data
-            s += img_data[sy*src->w+sx] * img_data[sy*src->w+sx];
+            s += IM_TO_GS_PIXEL(src, sx, sy) * IM_TO_GS_PIXEL(src, sx, sy);
             sum_data[y][x] = s + sum_data[y-1][x];
         }
     }
@@ -167,9 +165,6 @@ void imlib_integral_mw_sq(image_t *src, mw_image_t *sum)
 
 void imlib_integral_mw_shift(image_t *src, mw_image_t *sum, int n)
 {
-    // Image pointer
-    typeof(*src->data) *img_data = src->data;
-
     // Shift integral image rows by n lines
     for (int y=0; y<sum->h; y++) {
         sum->swap[y] = sum->data[(y+n) % sum->h];
@@ -192,7 +187,7 @@ void imlib_integral_mw_shift(image_t *src, mw_image_t *sum, int n)
             sx = (x*sum->x_ratio)>>16;
 
             // Accumulate row data
-            s += img_data[sy*src->w+sx];
+            s += IM_TO_GS_PIXEL(src, sx, sy);
             sum_data[y][x] = s + sum_data[y-1][x];
         }
     }
@@ -200,9 +195,6 @@ void imlib_integral_mw_shift(image_t *src, mw_image_t *sum, int n)
 
 void imlib_integral_mw_shift_sq(image_t *src, mw_image_t *sum, int n)
 {
-    // Image data pointer
-    typeof(*src->data) *img_data = src->data;
-
     // Shift integral image rows by n lines
     for (int y=0; y<sum->h; y++) {
         sum->swap[y] = sum->data[(y+n) % sum->h];
@@ -225,7 +217,7 @@ void imlib_integral_mw_shift_sq(image_t *src, mw_image_t *sum, int n)
             sx = (x*sum->x_ratio)>>16;
 
             // Accumulate row data
-            s += img_data[sy*src->w+sx] * img_data[sy*src->w+sx];
+            s += IM_TO_GS_PIXEL(src, sx, sy) * IM_TO_GS_PIXEL(src, sx, sy);
             sum_data[y][x] = (s + sum_data[y-1][x]);
         }
     }
@@ -234,7 +226,6 @@ void imlib_integral_mw_shift_sq(image_t *src, mw_image_t *sum, int n)
 void imlib_integral_mw_ss(image_t *src, mw_image_t *sum, mw_image_t *ssq, rectangle_t *roi)
 {
     // Image data pointers
-    typeof(*src->data) *img_data = src->data;
     typeof(*sum->data) *sum_data = sum->data;
     typeof(*sum->data) *ssq_data = ssq->data;
 
@@ -244,8 +235,8 @@ void imlib_integral_mw_ss(image_t *src, mw_image_t *sum, mw_image_t *ssq, rectan
         sx = roi->x+((x*sum->x_ratio)>>16);
 
         // Accumulate row data
-        s += img_data[roi->y*src->w+sx];
-        sq += img_data[roi->y*src->w+sx] * img_data[roi->y*src->w+sx];
+        s  += IM_TO_GS_PIXEL(src, sx, roi->y);
+        sq += IM_TO_GS_PIXEL(src, sx, roi->y) * IM_TO_GS_PIXEL(src, sx, roi->y);
 
         sum_data[0][x] = s;
         ssq_data[0][x] = sq;
@@ -262,8 +253,8 @@ void imlib_integral_mw_ss(image_t *src, mw_image_t *sum, mw_image_t *ssq, rectan
             sx = roi->x+((x*sum->x_ratio)>>16);
 
             // Accumulate row data
-            s += img_data[sy*src->w+sx];
-            sq += img_data[sy*src->w+sx] * img_data[sy*src->w+sx];
+            s  += IM_TO_GS_PIXEL(src, sx, sy);
+            sq += IM_TO_GS_PIXEL(src, sx, sy) * IM_TO_GS_PIXEL(src, sx, sy);
 
             sum_data[y][x] = s + sum_data[y-1][x];
             ssq_data[y][x] = sq + ssq_data[y-1][x];
@@ -276,8 +267,6 @@ void imlib_integral_mw_ss(image_t *src, mw_image_t *sum, mw_image_t *ssq, rectan
 
 void imlib_integral_mw_shift_ss(image_t *src, mw_image_t *sum, mw_image_t *ssq, rectangle_t *roi, int n)
 {
-    typeof(*src->data) *img_data = src->data;
-
     // Shift integral image rows by n lines
     for (int y=0; y<sum->h; y++) {
         sum->swap[y] = sum->data[(y+n) % sum->h];
@@ -303,8 +292,8 @@ void imlib_integral_mw_shift_ss(image_t *src, mw_image_t *sum, mw_image_t *ssq, 
             sx = roi->x+((x*sum->x_ratio)>>16);
 
             // Accumulate row data
-            s += img_data[sy*src->w+sx];
-            sq += img_data[sy*src->w+sx] * img_data[sy*src->w+sx];
+            s  += IM_TO_GS_PIXEL(src, sx, sy);
+            sq += IM_TO_GS_PIXEL(src, sx, sy) * IM_TO_GS_PIXEL(src, sx, sy);
 
             sum_data[y][x] = s  + sum_data[y-1][x];
             ssq_data[y][x] = sq + ssq_data[y-1][x];

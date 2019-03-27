@@ -18,9 +18,8 @@ extern  char Image$$OMV_FB_END$$Base;
 extern char _fballoc;
 #endif
 
-static char *pointer = &_fballoc;
+volatile char *s_pointer = &_fballoc;
 static int marks = 0;
-
 __weak NORETURN void fb_alloc_fail()
 {
     nlr_raise(mp_obj_new_exception_msg(&mp_type_MemoryError,
@@ -30,20 +29,25 @@ __weak NORETURN void fb_alloc_fail()
 
 void fb_alloc_init0()
 {
-    pointer = &_fballoc;
+    s_pointer = &_fballoc;
     marks = 0;
+}
+
+void fbDbgOn(void)
+{
+	s_pointer = s_pointer;
 }
 
 uint32_t fb_avail()
 {
-    int32_t temp = pointer - ((char *) MAIN_FB_PIXELS()) - sizeof(uint32_t);
+    int32_t temp = s_pointer - ((char *) MAIN_FB_PIXELS()) - sizeof(uint32_t);
 
     return (temp < sizeof(uint32_t)) ? 0 : temp;
 }
 
 void fb_alloc_mark()
 {
-    char *new_pointer = pointer - sizeof(uint32_t);
+    char *new_pointer = s_pointer - sizeof(uint32_t);
 
     // Check if allocation overwrites the framebuffer pixels
     if (new_pointer < (char *) MAIN_FB_PIXELS()) {
@@ -56,16 +60,16 @@ void fb_alloc_mark()
     // meaning that the value below is always 8 or more but never 4. So,
     // we will use a size value of 4 as a marker in the alloc stack.
     *((uint32_t *) new_pointer) = sizeof(uint32_t); // Save size.
-    pointer = new_pointer;
+    s_pointer = new_pointer;
     marks += 1;
 }
 
 void fb_alloc_free_till_mark()
 {
     if (!marks) return;
-    while (pointer < &_fballoc) {
-        int size = *((uint32_t *) pointer);
-        pointer += size; // Get size and pop.
+    while (s_pointer < &_fballoc) {
+        int size = *((uint32_t *) s_pointer);
+        s_pointer += size; // Get size and pop.
         if (size == sizeof(uint32_t)) break; // Break on first marker.
     }
     marks -= 1;
@@ -79,7 +83,7 @@ void *fb_alloc(uint32_t size)
     }
 
     size = ((size+sizeof(uint32_t)-1)/sizeof(uint32_t))*sizeof(uint32_t);// Round Up
-    char *result = pointer - size;
+    char *result = s_pointer - size;
     char *new_pointer = result - sizeof(uint32_t);
 
     // Check if allocation overwrites the framebuffer pixels
@@ -90,7 +94,7 @@ void *fb_alloc(uint32_t size)
 
     // size is always 4/8/12/etc. so the value below must be 8 or more.
     *((uint32_t *) new_pointer) = size + sizeof(uint32_t); // Save size.
-    pointer = new_pointer;
+    s_pointer = new_pointer;	
     return result;
 }
 
@@ -104,7 +108,7 @@ void *fb_alloc0(uint32_t size)
 
 void *fb_alloc_all(uint32_t *size)
 {
-    int32_t temp = pointer - ((char *) MAIN_FB_PIXELS()) - sizeof(uint32_t);
+    int32_t temp = s_pointer - ((char *) MAIN_FB_PIXELS()) - sizeof(uint32_t);
 
     if (temp < sizeof(uint32_t)) {
         *size = 0;
@@ -112,12 +116,12 @@ void *fb_alloc_all(uint32_t *size)
     }
 
     *size = (temp / sizeof(uint32_t)) * sizeof(uint32_t); // Round Down
-    char *result = pointer - *size;
+    char *result = s_pointer - *size;
     char *new_pointer = result - sizeof(uint32_t);
 
     // size is always 4/8/12/etc. so the value below must be 8 or more.
     *((uint32_t *) new_pointer) = *size + sizeof(uint32_t); // Save size.
-    pointer = new_pointer;
+    s_pointer = new_pointer;	
     return result;
 }
 
@@ -131,15 +135,15 @@ void *fb_alloc0_all(uint32_t *size)
 
 void fb_free()
 {
-    if (pointer < &_fballoc) {
-        pointer += *((uint32_t *) pointer); // Get size and pop.
+    if (s_pointer < &_fballoc) {
+        s_pointer += *((uint32_t *) s_pointer); // Get size and pop.	
     }
 }
 
 void fb_free_all()
 {
-    while (pointer < &_fballoc) {
-        pointer += *((uint32_t *) pointer); // Get size and pop.
+    while (s_pointer < &_fballoc) {
+        s_pointer += *((uint32_t *) s_pointer); // Get size and pop		
     }
     marks = 0;
 }

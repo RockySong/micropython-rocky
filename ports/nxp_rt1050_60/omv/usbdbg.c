@@ -223,7 +223,6 @@ void usbdbg_data_out(void *buffer, int length)
                 if (xfer_bytes == xfer_length) {
                     // Set script ready flag
                     script_ready = true;
-
                     // Set script running flag
                     script_running = true;
 

@@ -231,6 +231,7 @@ SRC_IMG = $(addprefix omv/img/,   \
 	qsort.c                \
 	filter.c                \
 	mathop.c                \
+	draw.c                \
 	shadow_removal.c        \
 	line.c                  \
 	apriltag.c              \
@@ -274,8 +275,6 @@ SRC_IMG = $(addprefix omv/img/,   \
 	sincos_tab.c            \
 	edge.c                  \
 	hog.c                   \
-	lenet.c                 \
-	lenet_model_num.c       \
    )
 
 SRCS_NN = $(addprefix omv/nn/,    \

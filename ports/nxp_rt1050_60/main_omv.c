@@ -240,7 +240,7 @@ int OpenMV_Main(uint32_t first_soft_reset)
     sensor_init0();
 */
 	#ifndef OMV_MPY_ONLY
-    fb_alloc_init0();
+	fb_alloc_init0();
 	#endif
     file_buffer_init0();
     // py_lcd_init0();
@@ -249,28 +249,35 @@ int OpenMV_Main(uint32_t first_soft_reset)
 
  MainLoop:
     // Run boot script(s)
-    if (first_soft_reset) {
-		first_soft_reset = 0;
-        exec_boot_script("/selftest.py", true, false);
-        apply_settings("/openmv.config");
-		usbdbg_set_irq_enabled(true);
-		// rocky: pyb's main uses different method to access file system from omv
-        mp_import_stat_t stat = mp_import_stat("main.py");
-        if (stat == MP_IMPORT_STAT_FILE) {
-			nlr_buf_t nlr;
-			if (nlr_push(&nlr) == 0) {
-				int ret = pyexec_file("main.py");
-				if (ret & PYEXEC_FORCED_EXIT) {
-					ret = 1;
+	if (!usbdbg_script_ready()) {
+		if (first_soft_reset) {
+			first_soft_reset = 0;
+			exec_boot_script("/selftest.py", true, false);
+			apply_settings("/openmv.config");
+			usbdbg_set_irq_enabled(true);
+			// rocky: pyb's main uses different method to access file system from omv
+			mp_import_stat_t stat = mp_import_stat("main.py");
+			if (stat == MP_IMPORT_STAT_FILE) {
+				nlr_buf_t nlr;
+				if (nlr_push(&nlr) == 0) {
+					int ret = pyexec_file("main.py");
+					if (ret & PYEXEC_FORCED_EXIT) {
+						ret = 1;
+					}
+					if (!ret) {
+						flash_error(3);
+					}
+					nlr_pop();
 				}
-				if (!ret) {
-					flash_error(3);
+				else {
+					// 2019.03.27 19:52 rocky: if main.py is interrupted by running another script, 
+					// we have to do soft reset, otherwise fb alloc logic may fail and led to hard fault
+					goto cleanup;
 				}
-				nlr_pop();
 			}
-        }
-        // exec_boot_script("/sd/main.py", false, true);
-    }
+			// exec_boot_script("/sd/main.py", false, true);
+		}
+	}
 
     // If there's no script ready, just re-exec REPL
     while (!usbdbg_script_ready()) {
@@ -301,7 +308,10 @@ int OpenMV_Main(uint32_t first_soft_reset)
 		PRINTF("script ready!\r\n");
         // execute the script
         if (nlr_push(&nlr) == 0) {
-			// __set_BASEPRI_MAX(((1 << __NVIC_PRIO_BITS) - 1) << (8 - __NVIC_PRIO_BITS));	// disable pendSV
+			// rocky: 2019.03.27 19:00 reset fb alloc memory for new script
+			#ifndef OMV_MPY_ONLY
+			fb_alloc_init0();
+			#endif
 #if 0
 			vstr_t *buf = usbdbg_get_script();
 			mp_obj_t code = pyexec_compile_str(buf);	
@@ -317,6 +327,7 @@ int OpenMV_Main(uint32_t first_soft_reset)
             mp_obj_print_exception(&mp_plat_print, (mp_obj_t)nlr.ret_val);
         }
     }
+cleanup:
 	usbdbg_set_irq_enabled(true);
     // Disable all other IRQs except Systick and Flash IRQs
     // Note: FS IRQ is disable, since we're going for a soft-reset.

@@ -102,7 +102,7 @@
 #define OMV_DMA_MEMORY      CCM     // Misc DMA buffers
 
 #define OMV_FB_SIZE         (301 * 1024)  // FB memory: header + VGA/GS image
-#define OMV_FB_ALLOC_SIZE   (83 * 1024)   // minimum fb alloc size
+#define OMV_FB_ALLOC_SIZE   (120 * 1024)   // minimum fb alloc size
 #define OMV_STACK_SIZE      (8 * 1024)
 
 #define OMV_JPEG_BUF_SIZE   (32 * 1024) // IDE JPEG buffer (header + data).

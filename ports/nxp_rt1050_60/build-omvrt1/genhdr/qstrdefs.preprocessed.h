@@ -7621,12 +7621,37 @@ Q(XBARB2)
 Q(XBARB3)
 Q(XTALOSC24M)
 # 956 "<stdin>"
+Q(omv)
+Q(version_major)
+Q(version_minor)
+Q(version_patch)
+Q(version_string)
+Q(arch)
+Q(board_type)
+Q(board_id)
+
+
 Q(image)
-Q(Image)
-Q(rgb_to_lab)
-Q(lab_to_rgb)
-Q(rgb_to_grayscale)
+Q(binary_to_grayscale)
+Q(binary_to_rgb)
+Q(binary_to_lab)
+Q(binary_to_yuv)
+Q(grayscale_to_binary)
 Q(grayscale_to_rgb)
+Q(grayscale_to_lab)
+Q(grayscale_to_yuv)
+Q(rgb_to_binary)
+Q(rgb_to_grayscale)
+Q(rgb_to_lab)
+Q(rgb_to_yuv)
+Q(lab_to_binary)
+Q(lab_to_grayscale)
+Q(lab_to_rgb)
+Q(lab_to_yuv)
+Q(yuv_to_binary)
+Q(yuv_to_grayscale)
+Q(yuv_to_rgb)
+Q(yuv_to_lab)
 Q(HaarCascade)
 Q(search)
 Q(SEARCH_EX)
@@ -7640,82 +7665,27 @@ Q(save_descriptor)
 Q(match_descriptor)
 
 
-Q(copy)
-Q(copy_to_fb)
-Q(save)
-Q(compress)
-Q(compress_for_ide)
-Q(compressed)
-Q(compressed_for_ide)
-Q(width)
-Q(height)
-Q(format)
-Q(size)
-Q(get_pixel)
-Q(set_pixel)
-Q(draw_line)
-Q(draw_rectangle)
-Q(draw_circle)
-Q(draw_string)
-Q(draw_cross)
-Q(draw_keypoints)
-Q(binary)
-Q(invert)
-Q(and)
-Q(b_and)
-Q(nand)
-Q(b_nand)
-Q(or)
-Q(b_or)
-Q(nor)
-Q(b_nor)
-Q(xor)
-Q(b_xor)
-Q(xnor)
-Q(b_xnor)
-Q(erode)
-Q(dilate)
-Q(negate)
-Q(difference)
-Q(replace)
-Q(blend)
-Q(morph)
-Q(midpoint)
-Q(mean)
-Q(mode)
-Q(median)
-Q(gaussian)
-Q(midpoint_pool)
-Q(midpoint_pooled)
-Q(mean_pool)
-Q(mean_pooled)
 Q(find_template)
 Q(kp_desc)
 Q(lbp_desc)
 Q(Cascade)
-Q(mask_ellipse)
+Q(cmp_lbp)
 Q(find_features)
 Q(find_keypoints)
 Q(find_lbp)
 Q(find_eye)
 Q(find_edges)
 Q(find_hog)
-Q(cmp_lbp)
-Q(quality)
-Q(color)
-Q(roi)
-Q(offset)
-Q(threshold)
-Q(mul)
-Q(add)
-Q(bias)
-Q(percentile)
 Q(normalized)
 Q(filter_outliers)
 Q(scale_factor)
 Q(max_keypoints)
 Q(corner_detector)
 Q(kptmatch)
+Q(selective_search)
+Q(a1)
+Q(a2)
+Q(a3)
 
 
 Q(lcd)
@@ -7726,15 +7696,11 @@ Q(display)
 Q(clear)
 
 
-Q(fir)
-Q(read_ta)
-Q(read_ir)
-Q(draw_ta)
-Q(draw_ir)
-Q(alpha)
-Q(scale)
-Q(refresh)
-Q(resolution)
+Q(tv)
+Q(channel)
+Q(type)
+Q(display)
+Q(palettes)
 
 
 Q(gif)
@@ -7771,19 +7737,44 @@ Q(avg)
 
 
 Q(sensor)
-Q(BAYER)
+Q(BINARY)
+Q(GRAYSCALE)
 Q(RGB565)
 Q(YUV422)
-Q(GRAYSCALE)
+Q(BAYER)
 Q(JPEG)
 Q(OV9650)
 Q(OV2640)
 Q(OV7725)
 Q(MT9V034)
-Q(line_filter)
+Q(LEPTON)
 Q(value)
+Q(shutdown)
 
 
+Q(load)
+
+
+Q(Net)
+
+
+Q(forward)
+Q(dry_run)
+Q(softmax)
+
+
+
+
+
+Q(min_scale)
+Q(scale_mul)
+Q(x_overlap)
+Q(y_overlap)
+Q(contrast_threshold)
+
+
+Q(nn_class)
+# 1117 "<stdin>"
 Q(QQCIF)
 Q(QCIF)
 Q(CIF)
@@ -7807,6 +7798,8 @@ Q(B128X128)
 
 Q(LCD)
 Q(QQVGA2)
+Q(WVGA)
+Q(WVGA2)
 Q(SVGA)
 Q(SXGA)
 Q(UXGA)
@@ -7814,6 +7807,28 @@ Q(UXGA)
 
 Q(NORMAL)
 Q(NEGATIVE)
+
+
+Q(IOCTL_SET_TRIGGERED_MODE)
+Q(IOCTL_GET_TRIGGERED_MODE)
+Q(IOCTL_LEPTON_GET_WIDTH)
+Q(IOCTL_LEPTON_GET_HEIGHT)
+Q(IOCTL_LEPTON_GET_RADIOMETRY)
+Q(IOCTL_LEPTON_GET_REFRESH)
+Q(IOCTL_LEPTON_GET_RESOLUTION)
+Q(IOCTL_LEPTON_RUN_COMMAND)
+Q(IOCTL_LEPTON_SET_ATTRIBUTE)
+Q(IOCTL_LEPTON_GET_ATTRIBUTE)
+Q(IOCTL_LEPTON_GET_FPA_TEMPERATURE)
+Q(IOCTL_LEPTON_GET_AUX_TEMPERATURE)
+Q(IOCTL_LEPTON_SET_MEASUREMENT_MODE)
+Q(IOCTL_LEPTON_GET_MEASUREMENT_MODE)
+Q(IOCTL_LEPTON_SET_MEASUREMENT_RANGE)
+Q(IOCTL_LEPTON_GET_MEASUREMENT_RANGE)
+
+
+Q(PALETTE_RAINBOW)
+Q(PALETTE_IRONBOW)
 
 Q(reset)
 Q(flush)
@@ -7849,6 +7864,9 @@ Q(set_hmirror)
 Q(set_vflip)
 Q(set_special_effect)
 Q(set_lens_correction)
+Q(ioctl)
+Q(set_color_palette)
+Q(get_color_palette)
 Q(__write_reg)
 Q(__read_reg)
 
@@ -7954,23 +7972,349 @@ Q(bssid)
 
 
 Q(cpufreq)
-Q(CPUFREQ_120MHZ)
-Q(CPUFREQ_144MHZ)
-Q(CPUFREQ_168MHZ)
-Q(CPUFREQ_192MHZ)
-Q(CPUFREQ_216MHZ)
-Q(get_frequency)
 Q(set_frequency)
-# 1304 "<stdin>"
-Q(remove_shadows)
+Q(get_current_frequencies)
+Q(get_supported_frequencies)
 
 
-Q(linpolar)
+Q(Image)
+Q(copy_to_fb)
+
+
+Q(width)
+
+
+Q(height)
+
+
+Q(format)
+
+
+Q(size)
+
+
+Q(get_pixel)
+Q(rgbtuple)
+
+
+Q(set_pixel)
+Q(color)
+
+
+Q(mean_pool)
+
+
+Q(mean_pooled)
+
+
+Q(midpoint_pool)
+Q(bias)
+
+
+Q(midpoint_pooled)
+
+
+
+Q(to_bitmap)
+Q(copy)
+Q(rgb_channel)
+
+
+Q(to_grayscale)
+
+
+
+
+Q(to_rgb565)
+
+
+
+
+Q(to_rainbow)
+
+
+Q(color_palette)
+
+
+Q(compress)
+Q(quality)
+
+
+Q(compress_for_ide)
+
+
+
+Q(compressed)
+
+
+
+Q(compressed_for_ide)
+
+
+
+
+Q(crop)
+Q(scale)
+Q(roi)
+Q(x_scale)
+Q(y_scale)
+
+
+
+Q(save)
+
+
+Q(clear)
+Q(mask)
+
+
+Q(draw_line)
+
+Q(thickness)
+
+
+Q(draw_rectangle)
+
+
+Q(fill)
+
+
+Q(draw_circle)
+
+
+
+
+
+Q(draw_ellipse)
+
+
+
+
+
+Q(draw_string)
+
+
+Q(x_spacing)
+Q(y_spacing)
+Q(mono_space)
+Q(char_rotation)
+Q(char_hmirror)
+Q(char_vflip)
+Q(string_rotation)
+Q(string_hmirror)
+Q(string_vflip)
+
+
+Q(draw_cross)
+
+
+
+
+
+Q(draw_arrow)
+
+
+
+
+
+Q(draw_edges)
+
+
+
+
+
+
+Q(draw_image)
+
+
+Q(alpha)
+
+
+
+Q(draw_keypoints)
+
+
+
+
+
+
+Q(flood_fill)
+Q(seed_threshold)
+Q(floating_threshold)
+
+Q(invert)
+Q(clear_background)
+
+
+
+Q(mask_rectangle)
+
+
+Q(mask_circle)
+
+
+Q(mask_ellipse)
+
+
+Q(binary)
+
+Q(zero)
+# 1509 "<stdin>"
+Q(and)
+Q(b_and)
+
+
+
+Q(nand)
+Q(b_nand)
+
+
+
+Q(or)
+Q(b_or)
+
+
+
+Q(nor)
+Q(b_nor)
+
+
+
+Q(xor)
+Q(b_xor)
+
+
+
+Q(xnor)
+Q(b_xnor)
+
+
+
+Q(erode)
+
+
+
+
+Q(dilate)
+Q(threshold)
+# 1559 "<stdin>"
+Q(top_hat)
+
+
+
+
+Q(black_hat)
+
+
+
+
+Q(gamma_corr)
+Q(gamma)
+Q(contrast)
+Q(brightness)
+
+
+Q(negate)
+
+
+Q(assign)
+Q(replace)
+Q(set)
+Q(hmirror)
+Q(vflip)
+Q(transpose)
+
+
+
+Q(add)
+
+
+
+Q(sub)
 Q(reverse)
 
 
-Q(logpolar)
 
+Q(mul)
+
+
+
+
+Q(div)
+
+Q(mod)
+# 1615 "<stdin>"
+Q(difference)
+
+
+
+Q(blend)
+
+
+
+
+Q(histeq)
+Q(adaptive)
+Q(clip_limit)
+
+
+
+Q(mean)
+
+Q(offset)
+
+
+
+
+Q(median)
+Q(percentile)
+
+
+
+
+
+
+Q(mode)
+
+
+
+
+
+
+Q(midpoint)
+
+
+
+
+
+
+
+Q(morph)
+# 1669 "<stdin>"
+Q(blur)
+Q(gaussian)
+Q(gaussian_blur)
+Q(unsharp)
+# 1681 "<stdin>"
+Q(laplacian)
+Q(sharpen)
+# 1691 "<stdin>"
+Q(bilateral)
+Q(color_sigma)
+Q(space_sigma)
+
+
+
+
+
+
+Q(cartoon)
+
+
+Q(mask)
+
+
+Q(remove_shadows)
 
 
 Q(chrominvar)
@@ -7979,7 +8323,12 @@ Q(chrominvar)
 Q(illuminvar)
 
 
-Q(histeq)
+Q(linpolar)
+
+
+
+Q(logpolar)
+
 
 
 Q(lens_corr)
@@ -8012,6 +8361,8 @@ Q(bins)
 Q(l_bins)
 Q(a_bins)
 Q(b_bins)
+Q(thresholds)
+
 
 Q(histogram)
 
@@ -8019,6 +8370,7 @@ Q(histogram)
 
 
 Q(get_percentile)
+Q(get_threshold)
 Q(get_stats)
 Q(get_statistics)
 Q(statistics)
@@ -8028,7 +8380,7 @@ Q(value)
 Q(l_value)
 Q(a_value)
 Q(b_value)
-# 1387 "<stdin>"
+# 1797 "<stdin>"
 Q(lq)
 Q(uq)
 Q(l_mean)
@@ -8089,8 +8441,12 @@ Q(merge)
 Q(margin)
 Q(threshold_cb)
 Q(merge_cb)
+Q(x_hist_bins_max)
+Q(y_hist_bins_max)
 
 Q(blob)
+Q(corners)
+Q(min_corners)
 Q(rect)
 Q(x)
 Q(y)
@@ -8098,12 +8454,29 @@ Q(w)
 Q(h)
 Q(pixels)
 Q(cx)
+Q(cxf)
 Q(cy)
+Q(cyf)
 Q(rotation)
+Q(rotation_deg)
+Q(rotation_rad)
 Q(code)
 Q(count)
+Q(perimeter)
+Q(roundness)
+Q(elongation)
 Q(area)
 Q(density)
+Q(extent)
+Q(compactness)
+Q(solidity)
+Q(convexity)
+Q(x_hist_bins)
+Q(y_hist_bins)
+Q(major_axis_line)
+Q(minor_axis_line)
+Q(enclosing_circle)
+Q(enclosed_ellipse)
 
 
 Q(find_lines)
@@ -8129,6 +8502,9 @@ Q(find_circles)
 Q(x_margin)
 Q(y_margin)
 Q(r_margin)
+Q(r_min)
+Q(r_max)
+Q(r_step)
 
 Q(circle)
 
@@ -8139,12 +8515,7 @@ Q(r)
 
 
 Q(find_rects)
-
-
-
-
-Q(corners)
-# 1510 "<stdin>"
+# 1944 "<stdin>"
 Q(find_qrcodes)
 
 
@@ -8209,7 +8580,7 @@ Q(find_datamatrices)
 Q(effort)
 
 Q(datamatrix)
-# 1582 "<stdin>"
+# 2016 "<stdin>"
 Q(rows)
 Q(columns)
 Q(capacity)
@@ -8220,7 +8591,7 @@ Q(find_barcodes)
 
 
 Q(barcode)
-# 1602 "<stdin>"
+# 2036 "<stdin>"
 Q(EAN2)
 Q(EAN5)
 Q(EAN8)
@@ -8252,9 +8623,6 @@ Q(displacement)
 Q(response)
 
 
-Q(find_number)
-
-
 Q(ImageWriter)
 
 Q(imagewriter)
@@ -8270,6 +8638,35 @@ Q(imagereader)
 Q(next_frame)
 
 
+
+
+
+Q(fir)
+
+Q(FIR_NONE)
+Q(FIR_SHIELD)
+Q(FIR_MLX90620)
+Q(FIR_MLX90621)
+Q(FIR_MLX90640)
+Q(FIR_AMG8833)
+Q(refresh)
+Q(resolution)
+
+
+
+
+Q(read_ta)
+Q(read_ir)
+Q(draw_ta)
+
+
+Q(draw_ir)
+
+
+
+
+
+Q(pixformat)
 
 Q(ADC)
 
@@ -8392,6 +8789,8 @@ Q(BF_LEN)
 Q(BF_POS)
 
 Q(BIG_ENDIAN)
+
+Q(BINARY)
 
 Q(BLACK)
 
@@ -8695,6 +9094,38 @@ Q(IN_PUP)
 
 Q(IN_PUP_WEAK)
 
+Q(IOCTL_GET_TRIGGERED_MODE)
+
+Q(IOCTL_LEPTON_GET_ATTRIBUTE)
+
+Q(IOCTL_LEPTON_GET_AUX_TEMPERATURE)
+
+Q(IOCTL_LEPTON_GET_FPA_TEMPERATURE)
+
+Q(IOCTL_LEPTON_GET_HEIGHT)
+
+Q(IOCTL_LEPTON_GET_MEASUREMENT_MODE)
+
+Q(IOCTL_LEPTON_GET_MEASUREMENT_RANGE)
+
+Q(IOCTL_LEPTON_GET_RADIOMETRY)
+
+Q(IOCTL_LEPTON_GET_REFRESH)
+
+Q(IOCTL_LEPTON_GET_RESOLUTION)
+
+Q(IOCTL_LEPTON_GET_WIDTH)
+
+Q(IOCTL_LEPTON_RUN_COMMAND)
+
+Q(IOCTL_LEPTON_SET_ATTRIBUTE)
+
+Q(IOCTL_LEPTON_SET_MEASUREMENT_MODE)
+
+Q(IOCTL_LEPTON_SET_MEASUREMENT_RANGE)
+
+Q(IOCTL_SET_TRIGGERED_MODE)
+
 Q(IOMUXC)
 
 Q(IOMUXC_GPR)
@@ -8746,6 +9177,8 @@ Q(LCDIF)
 Q(LED)
 
 Q(LED)
+
+Q(LEPTON)
 
 Q(LITTLE_ENDIAN)
 
@@ -8948,6 +9381,10 @@ Q(OrderedDict)
 Q(OverflowError)
 
 Q(OverflowError)
+
+Q(PALETTE_IRONBOW)
+
+Q(PALETTE_RAINBOW)
 
 Q(PDF417)
 
@@ -9340,6 +9777,10 @@ Q(WDOG2)
 Q(WDT_RESET)
 
 Q(WHITE)
+
+Q(WVGA)
+
+Q(WVGA2)
 
 Q(XBARA1)
 
@@ -10669,6 +11110,8 @@ Q(generator)
 
 Q(get)
 
+Q(get_color_palette)
+
 Q(get_exposure_us)
 
 Q(get_fb)
@@ -10948,6 +11391,8 @@ Q(invert)
 Q(inverted)
 
 Q(io)
+
+Q(ioctl)
 
 Q(ioctl)
 
@@ -12129,6 +12574,8 @@ Q(set_bkg_color)
 
 Q(set_brightness)
 
+Q(set_color_palette)
+
 Q(set_colorbar)
 
 Q(set_contrast)
@@ -12184,6 +12631,8 @@ Q(sha256)
 Q(sha256)
 
 Q(sharpen)
+
+Q(shutdown)
 
 Q(similarity)
 
