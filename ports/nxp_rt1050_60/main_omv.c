@@ -272,6 +272,7 @@ int OpenMV_Main(uint32_t first_soft_reset)
 				else {
 					// 2019.03.27 19:52 rocky: if main.py is interrupted by running another script, 
 					// we have to do soft reset, otherwise fb alloc logic may fail and led to hard fault
+					// In this case, it makes user have to press start button twice to start the script in OpenMV IDE
 					goto cleanup;
 				}
 			}
