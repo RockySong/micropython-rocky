@@ -3939,6 +3939,11 @@
               <FilePath>..\nxp_rt1050_60\pwm.c</FilePath>
             </File>
             <File>
+              <FileName>rpm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt1050_60\rpm.c</FilePath>
+            </File>
+            <File>
               <FileName>spi.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\nxp_rt1050_60\spi.c</FilePath>
@@ -4438,6 +4443,11 @@
               <FileName>rng.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\nxp_rt1050_60\rng.h</FilePath>
+            </File>
+            <File>
+              <FileName>rpm.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\nxp_rt1050_60\rpm.h</FilePath>
             </File>
             <File>
               <FileName>rtc.h</FileName>
@@ -10768,6 +10778,11 @@
               <FilePath>..\nxp_rt1050_60\pwm.c</FilePath>
             </File>
             <File>
+              <FileName>rpm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt1050_60\rpm.c</FilePath>
+            </File>
+            <File>
               <FileName>spi.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\nxp_rt1050_60\spi.c</FilePath>
@@ -11267,6 +11282,11 @@
               <FileName>rng.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\nxp_rt1050_60\rng.h</FilePath>
+            </File>
+            <File>
+              <FileName>rpm.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\nxp_rt1050_60\rpm.h</FilePath>
             </File>
             <File>
               <FileName>rtc.h</FileName>
@@ -17598,6 +17618,11 @@
               <FilePath>..\nxp_rt1050_60\pwm.c</FilePath>
             </File>
             <File>
+              <FileName>rpm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt1050_60\rpm.c</FilePath>
+            </File>
+            <File>
               <FileName>spi.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\nxp_rt1050_60\spi.c</FilePath>
@@ -18097,6 +18122,11 @@
               <FileName>rng.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\nxp_rt1050_60\rng.h</FilePath>
+            </File>
+            <File>
+              <FileName>rpm.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\nxp_rt1050_60\rpm.h</FilePath>
             </File>
             <File>
               <FileName>rtc.h</FileName>

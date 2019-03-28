@@ -71,6 +71,7 @@
 #include "rtc.h"
 #include "uniqueID.h"
 #include "pwm.h"
+#include "rpm.h"
 extern int pyb_hard_fault_debug;
 
 STATIC mp_obj_t pyb_fault_debug(mp_obj_t val) {
@@ -162,6 +163,7 @@ STATIC const mp_rom_map_elem_t pyb_module_globals_table[] = {
 	
 	//Crist to test:
 	{ MP_ROM_QSTR(MP_QSTR_pwm), MP_ROM_PTR(&pyb_pwm_type) },
+	{ MP_ROM_QSTR(MP_QSTR_rpm), MP_ROM_PTR(&pyb_rpm_type) },
 
     // rocky ignore { MP_ROM_QSTR(MP_QSTR_Timer), MP_ROM_PTR(&pyb_timer_type) },
 

@@ -522,9 +522,12 @@ void Profiling(uint32_t pc)
 }
 #endif
 
+extern void calc_speed(void);	// for rpm
+__WEAK void calc_speed(void) {}
 void SysTick_C_Handler(ExceptionRegisters_t *regs) {
     extern uint32_t uwTick;
 	
+	calc_speed();
 	#if SYSTICK_PRESCALE > 1
 	s_traces[s_traceNdx++] = *regs;
 	if (s_traceNdx >= 256)

@@ -60,6 +60,7 @@
 #include "rng.h"
 
 #include "pwm.h"
+#include "rpm.h"
 // #include "accel.h"
 // #include "servo.h"
 // #include "dac.h"
@@ -969,6 +970,7 @@ soft_reset:
     accel_init();
 #endif
 pwm_init0();
+rpm_init0();
 #if MICROPY_HW_ENABLE_SERVO
     // servo
 	

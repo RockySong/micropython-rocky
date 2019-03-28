@@ -10246,6 +10246,8 @@ Q(and)
 
 Q(and_)
 
+Q(angle)
+
 Q(any)
 
 Q(any)
@@ -10760,6 +10762,8 @@ Q(deinit)
 
 Q(deinit)
 
+Q(deinit)
+
 Q(delattr)
 
 Q(delay)
@@ -10889,6 +10893,8 @@ Q(erode)
 Q(errno)
 
 Q(errno)
+
+Q(erro)
 
 Q(errorcode)
 
@@ -11112,6 +11118,8 @@ Q(get)
 
 Q(get_color_palette)
 
+Q(get_count)
+
 Q(get_exposure_us)
 
 Q(get_fb)
@@ -11132,9 +11140,13 @@ Q(get_pixel)
 
 Q(get_pixel_physical)
 
+Q(get_pps)
+
 Q(get_regression)
 
 Q(get_rgb_gain_db)
+
+Q(get_rpm)
 
 Q(get_similarity)
 
@@ -11326,6 +11338,8 @@ Q(init)
 
 Q(init)
 
+Q(init)
+
 Q(input)
 
 Q(insert)
@@ -11349,6 +11363,8 @@ Q(intersection)
 Q(intersection)
 
 Q(intersection_update)
+
+Q(interval)
 
 Q(invert)
 
@@ -12074,6 +12090,8 @@ Q(pow)
 
 Q(power)
 
+Q(pprparam)
+
 Q(prescaler)
 
 Q(present)
@@ -12459,6 +12477,10 @@ Q(rows)
 Q(rpartition)
 
 Q(rpartition)
+
+Q(rpm)
+
+Q(rpm)
 
 Q(rsplit)
 
