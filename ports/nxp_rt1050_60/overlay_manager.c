@@ -123,16 +123,18 @@ int OverlaySwitch(uint8_t ovlyNdx) {
 		return -1L;
 	}
 
-	s_curOvly = ovlyNdx;
-	memcpy(pDst, pSrc, cb);		
+	if (cb != 0) {
+		memcpy(pDst, pSrc, cb);
+	}
 	// >>> copy code
 	switch (ovlyNdx) {
 		OVERLAY_CASE(CODE_JPEG)
 		OVERLAY_CASE(CODE_BLOB)
 	default:
 		return -1L;
-	}	
-	memcpy(pDst, pSrc, cb);	
+	}
+	if (cb != 0)
+		memcpy(pDst, pSrc, cb);	
 	// <<<
 Cleanup:	
 	return ovlyNdxBkup;

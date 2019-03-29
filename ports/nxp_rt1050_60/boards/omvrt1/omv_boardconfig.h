@@ -105,7 +105,7 @@
 #define OMV_FB_ALLOC_SIZE   (120 * 1024)   // minimum fb alloc size
 #define OMV_STACK_SIZE      (8 * 1024)
 
-#define OMV_JPEG_BUF_SIZE   (32 * 1024) // IDE JPEG buffer (header + data).
+#define OMV_JPEG_BUF_SIZE   (24 * 1024) // IDE JPEG buffer (header + data).
 
 // RAW buffer size
 #define OMV_RAW_BUF_SIZE        (OMV_FB_SIZE)

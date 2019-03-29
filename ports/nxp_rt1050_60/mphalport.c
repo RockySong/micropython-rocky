@@ -105,7 +105,7 @@ void mp_hal_pin_config(const pin_obj_t *p, const pin_af_obj_t *af, uint32_t alt,
 	
 	if (alt == PIN_ALT_NC) 
 		alt = REG_READ32(p->afReg) & 7;
-	isInputPathForcedOn =  (alt != 5);	// Alt 5 is GPIO
+	isInputPathForcedOn =  (alt == 5 || (padCfgVal | 1<<11) );	// Alt 5 is GPIO or OD mode is selected
 	IOMUXC_SetPinMux(p->afReg, alt, af->inSelReg, af->inSelVal, p->cfgReg, isInputPathForcedOn);
 	IOMUXC_SetPinConfig(p->afReg,alt,af->inSelReg, af->inSelVal, p->cfgReg, padCfgVal);
 }

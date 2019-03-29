@@ -84,7 +84,7 @@ static inline void mp_hal_pin_toggle(const pin_obj_t *pPin)
 #define mp_hal_pin_open_drain(p) mp_hal_pin_config_alt((p), GPIO_MODE_OUTPUT_OD_PUP, AF_FN_GPIO)
 #define mp_hal_pin_od_low(p)    mp_hal_pin_low(p)
 #define mp_hal_pin_od_high(p)   mp_hal_pin_high(p)
-#define mp_hal_pin_read(p)      (GPIO_PinRead(_find_gpio(p), (p)->pin))
+#define mp_hal_pin_read(p)      (GPIO_PinReadPadStatus(_find_gpio(p), (p)->pin))
 #define mp_hal_pin_write(p, v)  do { if (v) { mp_hal_pin_high(p); } else { mp_hal_pin_low(p); } } while (0)
 
 void mp_hal_gpio_clock_enable(uint32_t portNum);

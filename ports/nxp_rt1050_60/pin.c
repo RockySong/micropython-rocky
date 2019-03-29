@@ -241,7 +241,7 @@ STATIC void pin_print(const mp_print_t *print, mp_obj_t self_in, mp_print_kind_t
 		_INC_PRINT("---, ");
 
 	if (mux.b04_1_inForceOn)
-		_INC_PRINT("INON, ");
+		_INC_PRINT("Input path ON, ");
 	else
 		_INC_PRINT("----, ");
 	if (afNdx & 0x10) {

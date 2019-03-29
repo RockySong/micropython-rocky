@@ -92,7 +92,7 @@
 #define PYB_I2C_SLAVE  (1)
 #define IS_MST_IDLE(self)  ((self->pI2C->MSR & 1<<25) == 0)
 
-/* Select USB1 PLL (480 MHz) as master lpi2c clock source */
+/* Select 24MHz XTAL OSC as master lpi2c clock source */
 #define LPI2C_CLOCK_SOURCE_SELECT (1U)
 /* Clock divider for master lpi2c clock source */
 #define LPI2C_CLOCK_SOURCE_DIVIDER (0U)
@@ -219,31 +219,16 @@ bool i2c_init(uint32_t ndx, uint32_t baudRate) {
             return false;
     }
 	
-    for (uint i = 0; i < 2; i++) {
-        if (pins[i] != NULL) {
-            bool ret;
-			if (pins[i]->port == 0 && (pins[i]->pin == 13 || pins[i]->pin == 14) ||
-				pins[i]->port == 3 && (pins[i]->pin == 23 || pins[i]->pin == 24)) {
-				// true OD, has different encoding to IOMUX 
-				ret = mp_hal_pin_config_alt(pins[i], GPIO_MODE_OUTPUT_PP_WEAK , AF_FN_LPI2C);
-			} else {
-				// simulated OD
-				ret = mp_hal_pin_config_alt(pins[i], GPIO_MODE_OUTPUT_PP_WEAK,AF_FN_LPI2C);
-			}
-			if (!ret) {
-                return false;
-            }
-        }
-    }
+    mp_hal_pin_config_alt(pins[0], GPIO_MODE_OUTPUT_OD_PUP , AF_FN_LPI2C);
+	mp_hal_pin_config_alt(pins[1], GPIO_MODE_OUTPUT_OD_PUP , AF_FN_LPI2C);
+	
 	pyb_i2c_obj_t *pOb = &pyb_i2c_obj[ndx];
-        uint32_t sourceClock;
-    /* attach usb1 pll(480MHZ (I2C master) */
-        CLOCK_SetMux(pOb->clockSel, LPI2C_CLOCK_SOURCE_SELECT);
-        CLOCK_SetDiv(pOb->clockDiv, LPI2C_CLOCK_SOURCE_DIVIDER);
-
+    uint32_t sourceClock;
+    
+    CLOCK_SetMux(pOb->clockSel, LPI2C_CLOCK_SOURCE_SELECT);
+    CLOCK_SetDiv(pOb->clockDiv, LPI2C_CLOCK_SOURCE_DIVIDER);
 	NVIC_EnableIRQ(pOb->irqn);
-	        /* LPI2C clock is OSC clock. */
-        sourceClock = CLOCK_GetOscFreq();
+    sourceClock = CLOCK_GetOscFreq();
 	LPI2C_MasterGetDefaultConfig(&pOb->mstCfg);
 	pOb->mstCfg.baudRate_Hz = baudRate;
 	LPI2C_MasterInit(pOb->pI2C, &pOb->mstCfg, sourceClock);
@@ -488,6 +473,36 @@ bool HAL_I2C_IsDeviceReady(LPI2C_Type *pI2C, uint16_t DevAddress, uint32_t Trial
 }
 STATIC MP_DEFINE_CONST_FUN_OBJ_2(pyb_i2c_is_ready_obj, pyb_i2c_is_ready);*/
 
+bool HAL_I2C_IsDeviceReady(LPI2C_Type *pI2C, uint16_t DevAddress, uint32_t Trials, uint32_t baudrate)
+{
+	uint32_t I2C_Trials = 0;
+	uint32_t status;
+	bool isRdy = 0;
+	/* Get tick */
+	uint32_t safeDelay = 10000 * 100000 / baudrate;
+	do {
+		LPI2C_MasterStart(pI2C, DevAddress, kLPI2C_Write);
+		#if 1
+		// on rt at 600MHz, must use such sb and frustrating busy wait for lpi2c to send out addr
+		for (volatile int i = 0; i<safeDelay; i++) {} // safe for 600MHz CPU at 100kHz I2C bus
+		#else
+		//Though seems reasonable , LPI2C does not work with this, very irritating
+		// there are too many weared things on RT, and it is extremely error prone and what's more, not reasonable, 
+		// don't ever think you are an expert of MCU on RT, RT will help you know what is a true deep pool of water!
+		while (LPI2C_CheckForBusyBus(pI2C) != kStatus_Success) {}
+		#endif
+		if (0 == (pI2C->MSR & LPI2C_MSR_NDF_MASK)) {
+			isRdy = 1;
+			goto cleanup;
+		}
+	}while(++I2C_Trials < Trials);
+cleanup:
+	LPI2C_MasterStop(pI2C);
+	for (volatile int i = 0; i<safeDelay; i++) {}
+	return isRdy;
+}
+
+
 /// \method scan()
 /// Scan all I2C addresses from 0x08 to 0x77 and return a list of those that respond.
 /// Only valid when in master mode.
@@ -501,8 +516,8 @@ STATIC mp_obj_t pyb_i2c_scan(mp_obj_t self_in) {
     mp_obj_t list = mp_obj_new_list(0, NULL);
 
     for (uint addr = 0x02; addr <= 0x7E; addr++) {
-	//	bool isOK = HAL_I2C_IsDeviceReady(self->pI2C, addr, 3, 200);
-		if (1) {
+		bool isOK = HAL_I2C_IsDeviceReady(self->pI2C, addr, 3, self->mstBaudrate);
+		if (isOK) {
 			mp_obj_list_append(list, mp_obj_new_int(addr));
 		}
     }
