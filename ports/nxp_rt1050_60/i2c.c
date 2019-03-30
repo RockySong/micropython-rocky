@@ -480,7 +480,7 @@ bool HAL_I2C_IsDeviceReady(LPI2C_Type *pI2C, uint16_t DevAddress, uint32_t Trial
 	uint32_t I2C_Trials = 0;
 	uint32_t status;
 	bool isRdy = 0;
-	uint32_t safeDelay = 10000 * 100 / (baudrate / 1000);
+	uint32_t safeDelay = 10000 * 150 / (baudrate / 1000);
 	do {
 		LPI2C_MasterStart(pI2C, DevAddress, kLPI2C_Write);
 		#if 1

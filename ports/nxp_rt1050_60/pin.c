@@ -203,14 +203,17 @@ STATIC void pin_print(const mp_print_t *print, mp_obj_t self_in, mp_print_kind_t
 	pBoardName = (const char*) qstr_data(self->board_name, &qstrLen);	
     cfg.v32 = REG_READ32(self->cfgReg);
 	mux.v32 = REG_READ32(self->afReg);
-	_INC_PRINT("Pin %s (GPIO%d.%02d %s), MUX_CFG=0x%02x, PAD_CFG=0x%05x:\n", pBoardName, self->port, self->pin, pName, mux.v32, cfg.v32);	
+	uint32_t inLevel = levels[(self->gpio->PSR >> self->pin) & 1];
+	uint32_t drvLevel = levels[(self->gpio->DR >> self->pin) & 1];
+	if (mux.b04_1_inForceOn)
+		_INC_PRINT("Pin %s (GPIO%d.%02d %s), PAD:%c, MUX_CFG=0x%02x, PAD_CFG=0x%05x:\n", pBoardName, self->port, self->pin, pName, inLevel, mux.v32, cfg.v32);
+	else
+		_INC_PRINT("Pin %s (GPIO%d.%02d %s), PAD:-, MUX_CFG=0x%02x, PAD_CFG=0x%05x:\n", pBoardName, self->port, self->pin, pName, mux.v32, cfg.v32);	
 	afNdx = pin_get_af(self);
 	if (cfg.b11_1_OD_isOD)
 		_INC_PRINT("OD, ");
 	else
 		_INC_PRINT("--, ");
-	uint32_t inLevel = levels[(self->gpio->PSR >> self->pin) & 1];
-	uint32_t drvLevel = levels[(self->gpio->DR >> self->pin) & 1];
     if (!(cfg.b12_1_PKE_digiInEn)) {
         // analog
 		_INC_PRINT("Analog/Hiz\n");
