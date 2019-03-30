@@ -1,7 +1,7 @@
 PINS_AF = (
-  ('LED_R', (2, 'LPUART8_RX'), (3, 'SAI3_TX_SYNC'), (5, 'GPIO3_PIN25'), ),
-  ('LED_G', (1, 'GPT2_CAPTURE2'), (5, 'GPIO3_PIN26'), ),
-  ('LED_B', (1, 'GPT2_CAPTURE1'), (5, 'GPIO3_PIN27'), ),
+  ('LED_R', (1, 'GPT2_CAPTURE2'), (5, 'GPIO3_PIN26'), ),
+  ('LED_G', (1, 'GPT2_CAPTURE1'), (5, 'GPIO3_PIN27'), ),
+  ('LED_B', (2, 'LPUART8_RX'), (3, 'SAI3_TX_SYNC'), (5, 'GPIO3_PIN25'), ),
   ('LED_IR', (5, 'GPIO2_PIN31'), ),
   ('KEY', (5, 'GPIO5_PIN0'), ),
   ('P6', (0, 'LPI2C4_SDA'), (1, 'GPT1_CLK'), (2, 'LPUART1_RX'), (4, 'FLEXPWM1_PWMX3'), (5, 'GPIO1_PIN13'), ),

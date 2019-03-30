@@ -19,10 +19,11 @@
     .inSelVal = (af_inSelVal), \
 }
 
-#define PIN(p_name, p_port, p_pin, p_af, p_adc_num, p_adc_channel, p_afReg, p_cfgReg) \
+#define PIN(p_name, p_board_name, p_port, p_pin, p_af, p_adc_num, p_adc_channel, p_afReg, p_cfgReg) \
 { \
     { &pin_type }, \
     .name = MP_QSTR_ ## p_name, \
+    .board_name = MP_QSTR_ ## p_board_name, \
     .port = PORT_ ## p_port, \
     .pin = (p_pin), \
     .num_af = (sizeof(p_af) / sizeof(pin_af_obj_t)), \

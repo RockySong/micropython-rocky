@@ -473,23 +473,25 @@ bool HAL_I2C_IsDeviceReady(LPI2C_Type *pI2C, uint16_t DevAddress, uint32_t Trial
 }
 STATIC MP_DEFINE_CONST_FUN_OBJ_2(pyb_i2c_is_ready_obj, pyb_i2c_is_ready);*/
 
+/*static*/ volatile int s_i; // use global volatile so it is immune to compiler optimization
 bool HAL_I2C_IsDeviceReady(LPI2C_Type *pI2C, uint16_t DevAddress, uint32_t Trials, uint32_t baudrate)
 {
+
 	uint32_t I2C_Trials = 0;
 	uint32_t status;
 	bool isRdy = 0;
-	/* Get tick */
-	uint32_t safeDelay = 10000 * 100000 / baudrate;
+	uint32_t safeDelay = 10000 * 100 / (baudrate / 1000);
 	do {
 		LPI2C_MasterStart(pI2C, DevAddress, kLPI2C_Write);
 		#if 1
-		// on rt at 600MHz, must use such sb and frustrating busy wait for lpi2c to send out addr
-		for (volatile int i = 0; i<safeDelay; i++) {} // safe for 600MHz CPU at 100kHz I2C bus
+		// on rt at 600MHz, must use such busy wait for lpi2c to send out addr
+		for (s_i = 0; s_i<safeDelay; s_i++) {} // safe for 600MHz CPU, should use volatile global to anti-optimization
 		#else
 		//Though seems reasonable , LPI2C does not work with this, very irritating
-		// there are too many weared things on RT, and it is extremely error prone and what's more, not reasonable, 
-		// don't ever think you are an expert of MCU on RT, RT will help you know what is a true deep pool of water!
-		while (LPI2C_CheckForBusyBus(pI2C) != kStatus_Success) {}
+		for (s_i=0; s_i<32; s_i++) {}
+		pI2C->MTDR = LPI2C_MTDR_CMD(0x2U); // stop. can't use LPI2C_MasterStop(pI2C); otherwise deadloop after 2-3 times
+		for (s_i=0; s_i<32; s_i++) {}
+		while (pI2C->MSR & (kLPI2C_MasterBusyFlag|kLPI2C_MasterBusBusyFlag) ) {}
 		#endif
 		if (0 == (pI2C->MSR & LPI2C_MSR_NDF_MASK)) {
 			isRdy = 1;
@@ -498,7 +500,6 @@ bool HAL_I2C_IsDeviceReady(LPI2C_Type *pI2C, uint16_t DevAddress, uint32_t Trial
 	}while(++I2C_Trials < Trials);
 cleanup:
 	LPI2C_MasterStop(pI2C);
-	for (volatile int i = 0; i<safeDelay; i++) {}
 	return isRdy;
 }
 

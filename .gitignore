@@ -434,3 +434,8 @@ ports/prj_keil_rt1060/mpyrt1060.uvguix.hp
 ports/prj_keil_rt1060/mpyrt1060.uvguix.nxf48054
 ports/prj_keil_rt1060/omvrt.bin
 ports/nxp_rt1050_60/build-omvrt1/firmware.map
+py/__pycache__/makeqstrdata.cpython-36.pyc
+ports/prj_keil_rt1050/EventRecorderStub.scvd
+ports/prj_keil_rt1050/JLinkLog.txt
+ports/prj_keil_rt1050/JLinkSettings.in2i
+ports/prj_keil_rt1050/omvrt.bin

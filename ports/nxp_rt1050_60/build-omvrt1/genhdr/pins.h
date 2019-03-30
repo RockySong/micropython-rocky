@@ -33,9 +33,9 @@ extern const pin_af_obj_t pin_WAKEUP_af[];
 extern const pin_obj_t * const pin_adc1[];
 extern const pin_obj_t * const pin_adc2[];
 extern const pin_obj_t * const pin_adc3[];
-#define pyb_pin_LED_R pin_EMC_39
-#define pyb_pin_LED_G pin_EMC_40
-#define pyb_pin_LED_B pin_EMC_41
+#define pyb_pin_LED_R pin_EMC_40
+#define pyb_pin_LED_G pin_EMC_41
+#define pyb_pin_LED_B pin_EMC_39
 #define pyb_pin_LED_IR pin_B1_15
 #define pyb_pin_KEY pin_WAKEUP
 #define pyb_pin_P6 pin_AD_B0_13
