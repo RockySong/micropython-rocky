@@ -3939,6 +3939,11 @@
               <FilePath>..\nxp_rt1050_60\pwm.c</FilePath>
             </File>
             <File>
+              <FileName>qtimer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt1050_60\qtimer.c</FilePath>
+            </File>
+            <File>
               <FileName>rpm.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\nxp_rt1050_60\rpm.c</FilePath>
@@ -4438,6 +4443,11 @@
               <FileName>qstrdefsport.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\nxp_rt1050_60\qstrdefsport.h</FilePath>
+            </File>
+            <File>
+              <FileName>qtimer.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\nxp_rt1050_60\qtimer.h</FilePath>
             </File>
             <File>
               <FileName>rng.h</FileName>
@@ -10778,6 +10788,11 @@
               <FilePath>..\nxp_rt1050_60\pwm.c</FilePath>
             </File>
             <File>
+              <FileName>qtimer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt1050_60\qtimer.c</FilePath>
+            </File>
+            <File>
               <FileName>rpm.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\nxp_rt1050_60\rpm.c</FilePath>
@@ -11277,6 +11292,11 @@
               <FileName>qstrdefsport.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\nxp_rt1050_60\qstrdefsport.h</FilePath>
+            </File>
+            <File>
+              <FileName>qtimer.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\nxp_rt1050_60\qtimer.h</FilePath>
             </File>
             <File>
               <FileName>rng.h</FileName>
@@ -17618,6 +17638,11 @@
               <FilePath>..\nxp_rt1050_60\pwm.c</FilePath>
             </File>
             <File>
+              <FileName>qtimer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt1050_60\qtimer.c</FilePath>
+            </File>
+            <File>
               <FileName>rpm.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\nxp_rt1050_60\rpm.c</FilePath>
@@ -18117,6 +18142,11 @@
               <FileName>qstrdefsport.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\nxp_rt1050_60\qstrdefsport.h</FilePath>
+            </File>
+            <File>
+              <FileName>qtimer.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\nxp_rt1050_60\qtimer.h</FilePath>
             </File>
             <File>
               <FileName>rng.h</FileName>

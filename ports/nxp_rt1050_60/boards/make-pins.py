@@ -16,7 +16,7 @@ SUPPORTED_FN = {
     'LPSPI' : ['PCS0', 'SCK', 'SDI', 'SDO'],
     'SAI'   : ['TX_BCLK', 'TX_SYNC', 'TX_DATA', 'TX_DATA0', 'TX_DATA1', 'TX_DATA2', 'TX_DATA3',
             'RX_BCLK', 'RX_SYNC', 'RX_DATA', 'RX_DATA0', 'MCLK'],
-	'FLEXPWM' : ['PWMX3'],# 'PWMX1', 'PWMX2', 'PWMX3'], #function, pin_name, in the csv, style is function?_pin_name, ?is any number, we list all pwm function, no need this line,
+	# 'FLEXPWM' : ['PWMX3'],'PWMX1', 'PWMX2', 'PWMX3'], #function, pin_name, in the csv, style is function?_pin_name, ?is any number, we list all pwm function, no need this line,
 	# also add a new line on 144, our RT's pwm named in a peculiar way for its reg is PWM1 not FLEXPWM1 just the same as the fun-name, so need to modify
 }
 
@@ -105,9 +105,9 @@ class AlternateFunction(object):
         if len(af_words) > 1:
             self.pin_type = af_words[1]
         # for pwm, we do not list all pwm_types (PWMX1,PWMX2,PWMA1,PWMA2,PWMB1....)
-       # if self.func == 'FLEXPWM':
-       #     if self.pin_type[:3] == 'PWM' and self.pin_type[4:].isdigit():
-       #         self.supported = True
+        if self.func == 'FLEXPWM':
+            if self.pin_type[:3] == 'PWM' and self.pin_type[4:].isdigit():
+                self.supported = True
 		# for GPIO, we do not list all pin_types (PIN0, PIN1, .., PIN31)
         if self.func == 'GPIO':
             if self.pin_type[:3] == 'PIN' and self.pin_type[3:].isdigit():

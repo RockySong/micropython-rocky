@@ -59,6 +59,7 @@
 #include "storage.h"
 #include "sdcard.h"
 #include "accel.h"
+#include "qtimer.h"
 #include "servo.h"
 #include "dac.h"
 #include "lcd.h"
@@ -164,6 +165,7 @@ STATIC const mp_rom_map_elem_t pyb_module_globals_table[] = {
 	//Crist to test:
 	{ MP_ROM_QSTR(MP_QSTR_pwm), MP_ROM_PTR(&pyb_pwm_type) },
 	{ MP_ROM_QSTR(MP_QSTR_rpm), MP_ROM_PTR(&pyb_rpm_type) },
+	{ MP_ROM_QSTR(MP_QSTR_qtimer), MP_ROM_PTR(&pyb_qtimer_type) },
 
     // rocky ignore { MP_ROM_QSTR(MP_QSTR_Timer), MP_ROM_PTR(&pyb_timer_type) },
 

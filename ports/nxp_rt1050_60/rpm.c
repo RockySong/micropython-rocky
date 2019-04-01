@@ -152,6 +152,8 @@ STATIC mp_obj_t pyb_rpm_make_new(const mp_obj_type_t *type, size_t n_args, size_
 
     // work out rpm channel
     int id = mp_obj_get_int(args[0]);
+	if((id < 1) || (id>4))
+		nlr_raise(mp_obj_new_exception_msg(&mp_type_ValueError, "only support RPM 1-4"));
 	pyb_rpm_obj_t *s = &pyb_rpm_obj[id-1];
 	s->isActive = true;
     if (n_args > 1 || n_kw > 0) {

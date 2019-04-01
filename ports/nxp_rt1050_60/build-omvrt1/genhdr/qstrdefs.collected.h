@@ -1818,6 +1818,10 @@ Q(callable)
 
 Q(callback)
 
+Q(callback)
+
+Q(callback)
+
 Q(capacity)
 
 Q(cartoon)
@@ -2079,6 +2083,8 @@ Q(deepsleep)
 Q(default)
 
 Q(degrees)
+
+Q(deinit)
 
 Q(deinit)
 
@@ -2450,6 +2456,8 @@ Q(get_color_palette)
 
 Q(get_count)
 
+Q(get_count)
+
 Q(get_exposure_us)
 
 Q(get_fb)
@@ -2490,6 +2498,8 @@ Q(get_stats)
 
 Q(get_threshold)
 
+Q(get_ticks)
+
 Q(get_xy)
 
 Q(getattr)
@@ -2500,8 +2510,6 @@ Q(getcwd)
 
 Q(getcwd)
 
-Q(getnum)
-
 Q(getrandbits)
 
 Q(getter)
@@ -2509,6 +2517,8 @@ Q(getter)
 Q(gettime)
 
 Q(getvalue)
+
+Q(gif)
 
 Q(gif)
 
@@ -2651,6 +2661,8 @@ Q(info)
 Q(info)
 
 Q(info)
+
+Q(init)
 
 Q(init)
 
@@ -3354,6 +3366,10 @@ Q(percentile)
 
 Q(perimeter)
 
+Q(period)
+
+Q(period)
+
 Q(phase)
 
 Q(phase)
@@ -3421,6 +3437,10 @@ Q(pow)
 Q(power)
 
 Q(pprparam)
+
+Q(prescale)
+
+Q(prescale)
 
 Q(prescaler)
 
@@ -3505,6 +3525,8 @@ Q(pyb)
 Q(qrcode)
 
 Q(qstr_info)
+
+Q(qtimer)
 
 Q(quality)
 
@@ -3776,8 +3798,6 @@ Q(rng)
 
 Q(rng)
 
-Q(rng)
-
 Q(robust)
 
 Q(roi)
@@ -3843,6 +3863,8 @@ Q(scale_mul)
 Q(scan)
 
 Q(scan)
+
+Q(schedule)
 
 Q(sck)
 
@@ -4335,6 +4357,8 @@ Q(timeout)
 Q(timeout)
 
 Q(timeout_char)
+
+Q(timer)
 
 Q(to_bitmap)
 

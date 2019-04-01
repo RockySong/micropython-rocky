@@ -297,6 +297,7 @@ void usbdbg_data_out(void *buffer, int length)
     }
 }
 
+__WEAK void QTimer_StopAll(void) {}
 void usbdbg_control(void *buffer, uint8_t request, uint32_t length)
 {
     cmd = (enum usbdbg_cmd) request;
@@ -341,6 +342,7 @@ void usbdbg_control(void *buffer, uint8_t request, uint32_t length)
                 // interrupt running code by raising an exception
                 // pendsv_kbd_intr();
                 mp_obj_exception_clear_traceback(mp_const_ide_interrupt);
+				QTimer_StopAll();
                 pendsv_nlr_jump(mp_const_ide_interrupt);
             } else {
 				logout("no script running!\r\n");

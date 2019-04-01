@@ -59,10 +59,10 @@ void set_pwm(pyb_pwm_obj_t *s)
 	pyb_pwm_obj[n].pin = &MICROPY_HW_PWM_##n; 
 
 pyb_pwm_obj_t pyb_pwm_obj[4]={
-	{.base = {&pyb_pwm_type}, .tmr_base = TMR2, .idex = kQTMR_Channel_0, .pwm_width = 50, .freq = 50000, .inverted = 0, .angle = 0, NULL},
-	{.base = {&pyb_pwm_type}, .tmr_base = TMR2, .idex = kQTMR_Channel_1, .pwm_width = 50, .freq = 50000, .inverted = 0, .angle = 0, NULL},
-	{.base = {&pyb_pwm_type}, .tmr_base = TMR2, .idex = kQTMR_Channel_3, .pwm_width = 50, .freq = 50000, .inverted = 0, .angle = 0, NULL},
-	{.base = {&pyb_pwm_type}, .tmr_base = TMR1, .idex = kQTMR_Channel_3, .pwm_width = 50, .freq = 50000, .inverted = 0, .angle = 0, NULL},
+	{.base = {&pyb_pwm_type}, .tmr_base = TMR2, .idex = kQTMR_Channel_0, .pwm_width = 50, .freq = 50000, .inverted = 0, .angle = 0, 0},
+	{.base = {&pyb_pwm_type}, .tmr_base = TMR2, .idex = kQTMR_Channel_1, .pwm_width = 50, .freq = 50000, .inverted = 0, .angle = 0, 0},
+	{.base = {&pyb_pwm_type}, .tmr_base = TMR2, .idex = kQTMR_Channel_3, .pwm_width = 50, .freq = 50000, .inverted = 0, .angle = 0, 0},
+	{.base = {&pyb_pwm_type}, .tmr_base = TMR1, .idex = kQTMR_Channel_3, .pwm_width = 50, .freq = 50000, .inverted = 0, .angle = 0, 0},
 };
 
 void pwm_init0()
