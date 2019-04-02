@@ -56,16 +56,16 @@ How to play with the demo GUI
     the resized snapshot image (64x64), both are saved into QSPI flash so it is persistent.
     
     After the face is added, the demo returns to recognization mode. If your face is detected again, the demo 
-    runs MobileFaceNet model to get the feature vector, compare the vector angles of all saved vectors, find
-    the nearest one if it lies in the sensitivity threshold.
+    runs MobileFaceNet model to get the feature vector, calculate the vector angles among all saved vectors, 
+    find the nearest one and if it lies within the sensitivity threshold, treat it as the recognized result.
     
     To improve detection rate, keep reasonable ambient lighting and distance to the lens, so your face is not
     too big or too small, nor too bright or too dark. You don't have to put your face in the center of the lens.
     
     Remark: The demo database can save up to 32 faces.
     
-    To delete a face, press del button then press OK button, your face will be deleted when the system recognized 
-    your face. Note: you can only delete your face with this method, not others' :)
+    To delete a face, press del button then press OK button, your face will be deleted when the system 
+    recognizes your face. Note: you can only delete your face with this method, not others' :)
         
     To delete all, press del button 5 times and then OK button. It takes a while if database has many faces.
     
