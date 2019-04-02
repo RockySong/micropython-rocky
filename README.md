@@ -45,20 +45,24 @@ Contents of "main.py":
 How to play with the demo GUI
 ------------
 
-    The demo keeps detecting a face, and if a face is detected, resizes to 64x64 then run MobileFaceNet to recognize.
-    Face detection technology is from OpenMV, model is self-trained by Keras (not the nn module from OpenMV, as it
-    does not support residual connections needed by MobileFaceNet model).
+    The demo keeps detecting a face, and if a face is detected, resizes to 64x64 then run MobileFaceNet
+    to recognize. Face detection technology is from OpenMV, model is self-trained by Keras (not the 
+    nn module from OpenMV, as it does not support residual connections needed by MobileFaceNet model).
 
-    To add a face, press add button then OK button, a count down timer (4 seconds) starts, keep your face in front of
-    the lens, after the count down timer reaches 0, it will take a snapshot when your face is detected, then add the
-    feature vector of your face to database together with the resized snapshot image (64x64).
+    To add a face, press add button then OK button, a count down timer (4 seconds) starts, keep your face
+    in front of the lens, after the count down timer reaches 0, it will take a snapshot when your face is 
+    detected, then add the feature vector of your face to its database together with the resized snapshot 
+    image (64x64), both are saved into QSPI flash so it is persistent.
     
-    To del a face, press del button then OK button, your face will be deleted when the system recognized your face.
+    Remark: The demo database can save up to 32 faces.
     
-    To delete all, press del button 5 times and then OK button.
+    To del a face, press del button then OK button, your face will be deleted when the system recognized 
+    your face.
+        
+    To delete all, press del button 5 times and then OK button. It takes a while if database has many faces.
     
-    You can also adjust sensitivity by increase, decrease and reset. Higher sensitivity tolerance more differences of 
-    faces compared with the snapshot, however, with more false triggers.
+    You can also adjust sensitivity by increase, decrease and reset. Higher sensitivity tolerance more 
+    differences of faces compared with the snapshot, however, with more false triggers.
 
 Note
 ------------
