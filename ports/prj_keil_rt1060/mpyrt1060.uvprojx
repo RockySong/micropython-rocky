@@ -3437,6 +3437,11 @@
               <FilePath>..\nxp_rt1050_60\adc.c</FilePath>
             </File>
             <File>
+              <FileName>dcmc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt1050_60\dcmc.c</FilePath>
+            </File>
+            <File>
               <FileName>extint.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\nxp_rt1050_60\extint.c</FilePath>
@@ -4076,6 +4081,11 @@
               <FilePath>..\nxp_rt1050_60\uart.c</FilePath>
             </File>
             <File>
+              <FileName>uniqueID.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt1050_60\uniqueID.c</FilePath>
+            </File>
+            <File>
               <FileName>usb_app.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\nxp_rt1050_60\usb_app.c</FilePath>
@@ -4340,6 +4350,11 @@
               <FilePath>..\nxp_rt1050_60\dac.h</FilePath>
             </File>
             <File>
+              <FileName>dcmc.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\nxp_rt1050_60\dcmc.h</FilePath>
+            </File>
+            <File>
               <FileName>dma.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\nxp_rt1050_60\dma.h</FilePath>
@@ -4583,11 +4598,6 @@
               <FileName>flash_pgm.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\nxp_rt1050_60\flash_pgm.c</FilePath>
-            </File>
-            <File>
-              <FileName>uniqueID.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\uniqueID.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -10286,6 +10296,11 @@
               <FilePath>..\nxp_rt1050_60\adc.c</FilePath>
             </File>
             <File>
+              <FileName>dcmc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt1050_60\dcmc.c</FilePath>
+            </File>
+            <File>
               <FileName>extint.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\nxp_rt1050_60\extint.c</FilePath>
@@ -10925,6 +10940,11 @@
               <FilePath>..\nxp_rt1050_60\uart.c</FilePath>
             </File>
             <File>
+              <FileName>uniqueID.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt1050_60\uniqueID.c</FilePath>
+            </File>
+            <File>
               <FileName>usb_app.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\nxp_rt1050_60\usb_app.c</FilePath>
@@ -11189,6 +11209,11 @@
               <FilePath>..\nxp_rt1050_60\dac.h</FilePath>
             </File>
             <File>
+              <FileName>dcmc.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\nxp_rt1050_60\dcmc.h</FilePath>
+            </File>
+            <File>
               <FileName>dma.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\nxp_rt1050_60\dma.h</FilePath>
@@ -11432,11 +11457,6 @@
               <FileName>flash_pgm.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\nxp_rt1050_60\flash_pgm.c</FilePath>
-            </File>
-            <File>
-              <FileName>uniqueID.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\uniqueID.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -17085,6 +17105,11 @@
               <FilePath>..\nxp_rt1050_60\adc.c</FilePath>
             </File>
             <File>
+              <FileName>dcmc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt1050_60\dcmc.c</FilePath>
+            </File>
+            <File>
               <FileName>extint.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\nxp_rt1050_60\extint.c</FilePath>
@@ -17775,6 +17800,11 @@
               <FilePath>..\nxp_rt1050_60\uart.c</FilePath>
             </File>
             <File>
+              <FileName>uniqueID.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt1050_60\uniqueID.c</FilePath>
+            </File>
+            <File>
               <FileName>usb_app.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\nxp_rt1050_60\usb_app.c</FilePath>
@@ -18039,6 +18069,11 @@
               <FilePath>..\nxp_rt1050_60\dac.h</FilePath>
             </File>
             <File>
+              <FileName>dcmc.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\nxp_rt1050_60\dcmc.h</FilePath>
+            </File>
+            <File>
               <FileName>dma.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\nxp_rt1050_60\dma.h</FilePath>
@@ -18282,11 +18317,6 @@
               <FileName>flash_pgm.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\nxp_rt1050_60\flash_pgm.c</FilePath>
-            </File>
-            <File>
-              <FileName>uniqueID.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\uniqueID.c</FilePath>
             </File>
           </Files>
         </Group>

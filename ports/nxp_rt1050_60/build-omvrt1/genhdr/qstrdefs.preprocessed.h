@@ -8307,6 +8307,8 @@ Q(DATABAR_EXP)
 
 Q(DCDC)
 
+Q(DCMC)
+
 Q(DCP)
 
 Q(DEBUG)
@@ -8864,6 +8866,8 @@ Q(POLLIN)
 Q(POLLOUT)
 
 Q(PTR)
+
+Q(PWM)
 
 Q(PWM1)
 
@@ -10231,6 +10235,8 @@ Q(deinit)
 
 Q(deinit)
 
+Q(deinit)
+
 Q(delattr)
 
 Q(delay)
@@ -10360,6 +10366,8 @@ Q(erode)
 Q(errno)
 
 Q(errno)
+
+Q(erro)
 
 Q(erro)
 
@@ -10508,6 +10516,10 @@ Q(format)
 Q(forward)
 
 Q(fps)
+
+Q(freq)
+
+Q(freq)
 
 Q(freq)
 
@@ -10813,6 +10825,8 @@ Q(init)
 
 Q(init)
 
+Q(init)
+
 Q(input)
 
 Q(insert)
@@ -10876,6 +10890,10 @@ Q(invert)
 Q(invert)
 
 Q(invert)
+
+Q(inverted)
+
+Q(inverted)
 
 Q(inverted)
 
@@ -11656,6 +11674,8 @@ Q(pyb)
 Q(qrcode)
 
 Q(qstr_info)
+
+Q(qtimer)
 
 Q(qtimer)
 
@@ -12489,8 +12509,6 @@ Q(timeout)
 
 Q(timeout_char)
 
-Q(timer)
-
 Q(to_bitmap)
 
 Q(to_bitmap)
@@ -12752,6 +12770,10 @@ Q(w)
 Q(wfi)
 
 Q(wfi)
+
+Q(width)
+
+Q(width)
 
 Q(width)
 
