@@ -10,7 +10,7 @@ There is a video for the demo: http://bbs.eeworld.com.cn/huodong/NXP_iMXVideo_20
 
 To build:
 
-    (C part) open KEIL project, build and download.
+    (C part) open KEIL project (./ports/prj_keil_omvnndemo/mpyrt1060_evk.uvprojx), build and download.
     (Micropython part) Get a TF card, copy "./ports/prj_keil_omvnndemo/nndemo/main.py" to the ROOT directory 
     of TF card, insert TF card into the i.mx RT1060 EVK board. Power on the board, wait for about 3-5 seconds, 
     then the demo GUI shows, you can play with it now :)
