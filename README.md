@@ -50,8 +50,8 @@ How to play with the demo GUI
     does not support residual connections needed by MobileFaceNet model).
 
     To add a face, press add button then OK button, a count down timer (4 seconds) starts, keep your face in front of
-    the lens, it will take a snapshot when your face is detected, then add the feature vector of your face to database 
-    together with the snapshot.
+    the lens, after the count down timer reaches 0, it will take a snapshot when your face is detected, then add the
+    feature vector of your face to database together with the resized snapshot image (64x64).
     
     To del a face, press del button then OK button, your face will be deleted when the system recognized your face.
     
@@ -63,7 +63,7 @@ How to play with the demo GUI
 Note
 ------------
 
-Original MobileFaceNet wants 112x112 RGB, we use 64x64 instead, model is ~97.4% for LFW test, inference time is 295ms on 600MHz i.MX RT1062.
+Original MobileFaceNet wants 112x112 RGB, we use 64x64 instead, model is ~97.4% for LFW test (sorry my laptop has a weak GPU that can't afford full training set), inference time is 295ms on 600MHz i.MX RT1062. Orignal MobileFaceNet should reaches 99%+ accuracy for LFW test with sufficient training.
 
 Contributing
 ------------
