@@ -49,15 +49,23 @@ How to play with the demo GUI
     to recognize. Face detection technology is from OpenMV, model is self-trained by Keras (not the 
     nn module from OpenMV, as it does not support residual connections needed by MobileFaceNet model).
 
-    To add a face, press add button then OK button, a count down timer (4 seconds) starts, keep your face
-    in front of the lens, after the count down timer reaches 0, it will take a snapshot when your face is 
-    detected, then add the feature vector of your face to its database together with the resized snapshot 
-    image (64x64), both are saved into QSPI flash so it is persistent.
+    To add a face, press 'add' button then OK button, a count down timer (4 seconds) starts, keep your face
+    in front of the lens. After the count down timer reaches 0, when your face is detected, it will take 
+    a snapshot of the detected region and resize to 64x64. Then, the demo runs MobileFaceNet model with the 
+    snapshot to get a 128-dimension feature vector, and save the feature vector to its database together with 
+    the resized snapshot image (64x64), both are saved into QSPI flash so it is persistent.
+    
+    After the face is added, the demo returns to recognization mode. If your face is detected again, the demo 
+    runs MobileFaceNet model to get the feature vector, compare the vector angles of all saved vectors, find
+    the nearest one if it lies in the sensitivity threshold.
+    
+    To improve detection rate, keep reasonable ambient lighting and distance to the lens, so your face is not
+    too big or too small, nor too bright or too dark. You don't have to put your face in the center of the lens.
     
     Remark: The demo database can save up to 32 faces.
     
-    To del a face, press del button then OK button, your face will be deleted when the system recognized 
-    your face.
+    To delete a face, press del button then press OK button, your face will be deleted when the system recognized 
+    your face. Note: you can only delete your face with this method, not others' :)
         
     To delete all, press del button 5 times and then OK button. It takes a while if database has many faces.
     
