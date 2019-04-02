@@ -8,14 +8,18 @@ This is a KEIL project for building the MobileFaceNet demo, you need i.MX RT1060
 There is a video for the demo: http://bbs.eeworld.com.cn/huodong/NXP_iMXVideo_201903/index.php#zbjs , and watch 
 "基于恩智浦i.MX RT运行的现代大型神经网络：面部识别系统"
 
-To build:
+How To build:
+------------
 
+    Build consists of C part and micropython part, both are straightforward.
     (C part) open KEIL project (./ports/prj_keil_omvnndemo/mpyrt1060_evk.uvprojx), build and download.
     (Micropython part) Get a TF card, copy "./ports/prj_keil_omvnndemo/nndemo/main.py" to the ROOT directory 
     of TF card, insert TF card into the i.mx RT1060 EVK board. Power on the board, wait for about 3-5 seconds, 
     then the demo GUI shows, you can play with it now :)
+    Remark: Keil version should >= 5.20, and install cmsis-pack for i.mx rt1060.
     
 Contents of "main.py":
+------------
 
     import sensor, time, image, nndemo
     sensor.reset()
