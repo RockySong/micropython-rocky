@@ -10,12 +10,10 @@ There is a video for the demo: http://bbs.eeworld.com.cn/huodong/NXP_iMXVideo_20
 
 To build:
 
-    open KEIL project, build and download.
-
-Then to give it a try (save below content to 'main.py'):
-
-    Get a TF card, copy "./ports/prj_keil_omvnndemo/nndemo/main.py" to the ROOT directory of TF card, insert 
-    TF card into the i.mx RT1060 EVK board. Power on the board, wait for about 3-5 seconds, then play with it :)
+    (C part) open KEIL project, build and download.
+    (Micropython part) Get a TF card, copy "./ports/prj_keil_omvnndemo/nndemo/main.py" to the ROOT directory 
+    of TF card, insert TF card into the i.mx RT1060 EVK board. Power on the board, wait for about 3-5 seconds, 
+    then the demo GUI shows, you can play with it now :)
     
 Contents of "main.py":
 
@@ -44,7 +42,7 @@ Contents of "main.py":
         print(clock.fps())
 
 
-How to play
+How to play with the demo GUI
 ------------
 
     The demo keeps detecting a face, and if a face is detected, resizes to 64x64 then run MobileFaceNet to recognize.
