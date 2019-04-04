@@ -87,7 +87,7 @@ To add more Python API/constants/modules/classes
     本模块只支持TF卡上的文件系统，不支持使用内部Flash模拟，因此TF卡是必备的。
     OpenMV Cam有很多扩展板，本模块支持其中的LCD Shield。
     本模块还包含了可选的9轴运动传感器MPU9250，OpenMV Cam不包含。
-        注：如需使用，会占用I2C扩展口(I2C4)，因此其它器件的I2C slave地址不要与它(7位地址0x68/0x69)冲突。
+        注：如需使用，会占用I2C扩展口(I2C3)，因此其它器件的I2C slave地址不要与它(7位地址0x68/0x69)冲突。
 
 常见问题
 
