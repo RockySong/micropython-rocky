@@ -716,7 +716,7 @@ void CsiFragModeStartNewFrame(void) {
 	s_pCSI->CSICR1 = CSICR1_INIT_VAL | 1<<16;	// enable SOF iRQ
 	if (s_irq.dmaBytePerFrag & 0xFFFF0000) {
 		
-		uint32_t h16 = s_irq.linePerFrag << 16U , l16 = s_irq.dmaBytePerLine;
+		uint32_t l16 = s_irq.linePerFrag , h16 = s_irq.dmaBytePerLine << 16;
 		s_pCSI->CSIIMAG_PARA = l16 | h16;
 	} else {
 		s_pCSI->CSIIMAG_PARA = 1U | s_irq.dmaBytePerFrag << 16;	// set xfer cnt
