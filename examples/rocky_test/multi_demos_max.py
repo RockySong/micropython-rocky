@@ -272,7 +272,7 @@ while (True):
     FaceTest(40000)
     LENetTest(40000)  # RT1052 does not have enough RAM to run this
     #If you use RT1052, 'isFull' should be False
-    CIFAR10Test(40000, TisFull = rue)
+    CIFAR10Test(40000, TisFull = True)
 
 
 
