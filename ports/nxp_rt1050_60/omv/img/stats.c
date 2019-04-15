@@ -55,6 +55,9 @@ void imlib_similarity_line_op(image_t *img, int line, void *other, void *data, b
             break;
         }
         case IMAGE_BPP_RGB565: {
+			#if defined(IMLIB_ENABLE_LAB_LUT)
+			OverlaySwitch(OVLY_LAB_TAB);
+			#endif
             uint16_t *row_ptr = IMAGE_COMPUTE_RGB565_PIXEL_ROW_PTR(img, line);
             uint16_t *other_row_ptr = (uint16_t *) other;
             for (int x = 0, xx = (img->w + 7) / 8; x < xx; x++) {
@@ -230,9 +233,12 @@ void imlib_get_histogram(histogram_t *out, image_t *ptr, rectangle_t *roi, list_
             float l_mult = (out->LBinCount - 1) / ((float) (COLOR_L_MAX - COLOR_L_MIN));
             float a_mult = (out->ABinCount - 1) / ((float) (COLOR_A_MAX - COLOR_A_MIN));
             float b_mult = (out->BBinCount - 1) / ((float) (COLOR_B_MAX - COLOR_B_MIN));
-
+			#if defined(IMLIB_ENABLE_LAB_LUT)
+			OverlaySwitch(OVLY_LAB_TAB);
+			#endif
             if ((!thresholds) || (!list_size(thresholds))) {
                 // Fast histogram code when no color thresholds list...
+                
                 for (int y = roi->y, yy = roi->y + roi->h; y < yy; y++) {
                     uint16_t *row_ptr = IMAGE_COMPUTE_RGB565_PIXEL_ROW_PTR(ptr, y);
                     for (int x = roi->x, xx = roi->x + roi->w; x < xx; x++) {
@@ -246,7 +252,7 @@ void imlib_get_histogram(histogram_t *out, image_t *ptr, rectangle_t *roi, list_
                 for (list_lnk_t *it = iterator_start_from_head(thresholds); it; it = iterator_next(it)) {
                     color_thresholds_list_lnk_data_t lnk_data;
                     iterator_get(thresholds, it, &lnk_data);
-
+			
             for (int y = roi->y, yy = roi->y + roi->h; y < yy; y++) {
                 uint16_t *row_ptr = IMAGE_COMPUTE_RGB565_PIXEL_ROW_PTR(ptr, y);
                 for (int x = roi->x, xx = roi->x + roi->w; x < xx; x++) {
@@ -723,7 +729,6 @@ bool imlib_get_regression(find_lines_list_lnk_data_t *out, image_t *ptr, rectang
         for (list_lnk_t *it = iterator_start_from_head(thresholds); it; it = iterator_next(it)) {
             color_thresholds_list_lnk_data_t lnk_data;
             iterator_get(thresholds, it, &lnk_data);
-
             switch (ptr->bpp) {
                 case IMAGE_BPP_BINARY: {
                     for (int y = roi->y, yy = roi->y + roi->h; y < yy; y += y_stride) {
@@ -925,6 +930,9 @@ bool imlib_get_regression(find_lines_list_lnk_data_t *out, image_t *ptr, rectang
                         break;
                     }
                     case IMAGE_BPP_RGB565: {
+						#if defined(IMLIB_ENABLE_LAB_LUT)
+						OverlaySwitch(OVLY_LAB_TAB);
+						#endif
                         for (int y = roi->y, yy = roi->y + roi->h; y < yy; y += y_stride) {
                             uint16_t *row_ptr = IMAGE_COMPUTE_RGB565_PIXEL_ROW_PTR(ptr, y);
                             for (int x = roi->x + (y % x_stride), xx = roi->x + roi->w; x < xx; x += x_stride) {

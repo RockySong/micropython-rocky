@@ -2,10 +2,6 @@
 
 #ifdef __CC_ARM
 
-
-extern uint32_t Load$$OVERLAY_YUV_TAB$$Base;
-extern uint32_t Load$$OVERLAY_YUV_TAB$$Length;
-extern uint32_t Image$$OVERLAY_YUV_TAB$$Base;
 extern uint32_t Load$$OVERLAY_CODE_JPEG$$Base;
 extern uint32_t Load$$OVERLAY_CODE_JPEG$$Length;
 extern uint32_t Image$$OVERLAY_CODE_JPEG$$Base;
@@ -38,17 +34,13 @@ extern uint32_t Image$$OVERLAY_CODE_BLOB$$Base;
 #else
 extern uint32_t _overlay_dtcm_base;	// 0x20002000
 extern uint32_t _overlay_itcm_base;	// 0x6000
-extern uint32_t __load_start_OVERLAY_YUV_TAB;
-extern uint32_t __load_stop_OVERLAY_YUV_TAB;
 
 #define OVERLAY_CASE(n) \
 	case OVLY_##n: \
 		pSrc = (const uint32_t*) &__load_start_OVERLAY_##n;\
 		cb = (uint32_t)&__load_stop_OVERLAY_##n - (uint32_t)&__load_start_OVERLAY_##n; \
 		break; \
-	
-extern uint32_t __load_start_OVERLAY_YUV_TAB;
-extern uint32_t __load_stop_OVERLAY_YUV_TAB;
+
 extern uint32_t __load_start_OVERLAY_LAB_TAB;
 extern uint32_t __load_stop_OVERLAY_LAB_TAB;
 extern uint32_t __load_start_OVERLAY_HAAR;
@@ -111,7 +103,6 @@ int OverlaySwitch(uint8_t ovlyNdx) {
 	uint32_t cb;
 	
 	switch (ovlyNdx) {
-		OVERLAY_CASE(YUV_TAB)
 		#if !defined(OMV_SENSOR_ONLY) && !defined(OMV_MPY_ONLY)		
 		OVERLAY_CASE(LAB_TAB)
 		OVERLAY_CASE(HAAR)
@@ -128,7 +119,6 @@ int OverlaySwitch(uint8_t ovlyNdx) {
 	}
 	// >>> copy code
 	switch (ovlyNdx) {
-		OVERLAY_CASE(CODE_JPEG)
 		OVERLAY_CASE(CODE_BLOB)
 	default:
 		return -1L;
@@ -153,7 +143,6 @@ int OverlaySwitch(uint8_t ovlyNdx) {
 	uint32_t cb;
 	
 	switch (ovlyNdx) {
-		OVERLAY_CASE(YUV_TAB)
 		OVERLAY_CASE(LAB_TAB)
 		OVERLAY_CASE(HAAR)
 		#if defined(XIP_EXTERNAL_FLASH) && defined(EVK1050_60_HYPER) 
@@ -182,6 +171,6 @@ int OverlaySwitch(uint8_t ovlyNdx) {
 #endif
 #endif
 int OverlaySetToDefault(void) {
-	return OverlaySwitch(OVLY_YUV_TAB);
+	return OverlaySwitch(OVLY_LAB_TAB);
 }
 

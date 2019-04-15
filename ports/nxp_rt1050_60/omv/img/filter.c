@@ -85,9 +85,6 @@ void imlib_histeq(image_t *img, image_t *mask)
                 sum += hist[i];
                 hist[i] = sum;
             }
-			#if defined(IMLIB_ENABLE_YUV_LUT)
-			OverlaySwitch(OVLY_YUV_TAB);
-			#endif
             for (int y = 0, yy = img->h; y < yy; y++) {
                 uint16_t *row_ptr = IMAGE_COMPUTE_RGB565_PIXEL_ROW_PTR(img, y);
                 for (int x = 0, xx = img->w; x < xx; x++) {

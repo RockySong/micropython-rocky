@@ -4221,6 +4221,11 @@ static mp_obj_t py_image_get_regression(uint n_args, const mp_obj_t *args, mp_ma
 
     find_lines_list_lnk_data_t out;
     fb_alloc_mark();
+	
+	#if defined(IMLIB_ENABLE_LAB_LUT)
+	OverlaySwitch(OVLY_LAB_TAB);
+	#endif
+
     bool result = imlib_get_regression(&out, arg_img, &roi, x_stride, y_stride, &thresholds, invert, area_threshold, pixels_threshold, robust);
     fb_alloc_free_till_mark();
     list_free(&thresholds);
@@ -6856,6 +6861,9 @@ mp_obj_t py_image_binary_to_lab(mp_obj_t arg)
 {
     int8_t b = mp_obj_get_int(arg) & 1;
     uint16_t rgb565 = COLOR_BINARY_TO_RGB565(b);
+	#if defined(IMLIB_ENABLE_LAB_LUT)
+	OverlaySwitch(OVLY_LAB_TAB);
+	#endif
     return mp_obj_new_tuple(3, (mp_obj_t[3])
             {mp_obj_new_int(COLOR_RGB565_TO_L(rgb565)),
              mp_obj_new_int(COLOR_RGB565_TO_A(rgb565)),
@@ -6910,9 +6918,6 @@ mp_obj_t py_image_grayscale_to_yuv(mp_obj_t arg)
 {
     int8_t g = mp_obj_get_int(arg) & 255;
     uint16_t rgb565 = COLOR_GRAYSCALE_TO_RGB565(g);
-	#if defined(IMLIB_ENABLE_YUV_LUT)
-	OverlaySwitch(OVLY_YUV_TAB);
-	#endif
     return mp_obj_new_tuple(3, (mp_obj_t[3])
             {mp_obj_new_int(COLOR_RGB565_TO_Y(rgb565)),
              mp_obj_new_int(COLOR_RGB565_TO_U(rgb565)),
@@ -6952,6 +6957,9 @@ mp_obj_t py_image_rgb_to_lab(uint n_args, const mp_obj_t *args, mp_map_t *kw_arg
     uint8_t g = mp_obj_get_int(arg_vec[1]) & 255;
     uint8_t b = mp_obj_get_int(arg_vec[2]) & 255;
     uint16_t rgb565 = COLOR_R8_G8_B8_TO_RGB565(r, g, b);
+	#if defined(IMLIB_ENABLE_LAB_LUT)
+	OverlaySwitch(OVLY_LAB_TAB);
+	#endif
     return mp_obj_new_tuple(3, (mp_obj_t[3])
             {mp_obj_new_int(COLOR_RGB565_TO_L(rgb565)),
              mp_obj_new_int(COLOR_RGB565_TO_A(rgb565)),
@@ -7075,6 +7083,9 @@ mp_obj_t py_image_yuv_to_lab(uint n_args, const mp_obj_t *args, mp_map_t *kw_arg
     int8_t u = mp_obj_get_int(arg_vec[1]) & 255;
     int8_t v = mp_obj_get_int(arg_vec[2]) & 255;
     uint16_t rgb565 = COLOR_YUV_TO_RGB565(y, u, v);
+	#if defined(IMLIB_ENABLE_LAB_LUT)
+	OverlaySwitch(OVLY_LAB_TAB);
+	#endif
     return mp_obj_new_tuple(3, (mp_obj_t[3])
             {mp_obj_new_int(COLOR_RGB565_TO_L(rgb565)),
              mp_obj_new_int(COLOR_RGB565_TO_A(rgb565)),

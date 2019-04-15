@@ -43,6 +43,9 @@ void imlib_binary(image_t *out, image_t *img, list_t *thresholds, bool invert, b
                 break;
             }
             case IMAGE_BPP_RGB565: {
+				#if defined(IMLIB_ENABLE_LAB_LUT)
+				OverlaySwitch(OVLY_LAB_TAB);
+				#endif
                 for (int y = 0, yy = img->h; y < yy; y++) {
                     uint16_t *old_row_ptr = IMAGE_COMPUTE_RGB565_PIXEL_ROW_PTR(img, y);
                     uint32_t *bmp_row_ptr = IMAGE_COMPUTE_BINARY_PIXEL_ROW_PTR(&bmp, y);
