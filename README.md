@@ -19,10 +19,15 @@ To add more Python API/constants/modules/classes
     Micropython requires "QSTR" for Python binding. KEIL can't generate them, you need to add your new C source files to Makefile, and under a Linux environment with ARMGCC, run Make to generate pins, QSTRs, generated code is also in KEIL projects.
     Note: You don't have to do a entire successful Make to generate all required files (pin definitions, QSTRs, frozenpy C files). So even Make fails, it is not likely prevent you from building under KEIL.
 
-There is a demo showing some key functions of OpenMV and this board.
+There is a demo video showing some key functions of OpenMV and this board.
 (一个演示主要功能的多合一demo视频)
 
 http://cloud.eeworld.com.cn///courselesson/4928/2019222035616-h45jbw.mp4.mp4
+
+And one demo video showing object tacking based on color blob detection
+(基于色块识别的物体追踪)
+http://cloud.eeworld.com.cn///courselesson/4928/2019130042104-tlk9jm.mp4.mp4
+
 
 中文说明 (Introduction in Chinese)
 
