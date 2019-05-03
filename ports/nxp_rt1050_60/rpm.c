@@ -16,11 +16,12 @@ void init_rpm_tmr(pyb_rpm_obj_t *s)
 } 
 
 
-pyb_rpm_obj_t pyb_rpm_obj[4]={
+pyb_rpm_obj_t pyb_rpm_obj[5]={
 	{.base = {&pyb_rpm_type}, .tmr_base = TMR2, .idex = kQTMR_Channel_0, .isActive=false, NULL},
 	{.base = {&pyb_rpm_type}, .tmr_base = TMR2, .idex = kQTMR_Channel_1, .isActive=false, NULL},
 	{.base = {&pyb_rpm_type}, .tmr_base = TMR2, .idex = kQTMR_Channel_3, .isActive=false, NULL},
 	{.base = {&pyb_rpm_type}, .tmr_base = TMR1, .idex = kQTMR_Channel_3, .isActive=false, NULL},
+	{.base = {&pyb_rpm_type}, .tmr_base = TMR2, .idex = kQTMR_Channel_2, .isActive=false, NULL},
 };
 
 #define RPM_INIT_PINS(n) \
@@ -53,6 +54,12 @@ void rpm_init0()
 	RPM_INIT_PINS(3);
 	#endif
 	
+	#if !defined(MICROPY_HW_RPM4_NAME)
+	pyb_rpm_obj[4].pin = 0;
+	#else
+	RPM_INIT_PINS(4);
+	#endif
+	
 }
 mp_obj_t capture_init(pyb_rpm_obj_t *self_in){                                  /* Software Input On Field: Input Path is determined by functionality */
 	
@@ -72,7 +79,7 @@ mp_obj_t get_count(mp_obj_t self_in){
 }
 STATIC MP_DEFINE_CONST_FUN_OBJ_1(get_count_obj, get_count);
 
-void calc_speed()
+void RPM_TickHandler(void)
 {
 	uint32_t i;
 	uint16_t cntr;
@@ -130,7 +137,7 @@ STATIC void pyb_rpm_print(const mp_print_t *print, mp_obj_t self_in, mp_print_ki
 STATIC mp_obj_t pyb_rpm_init_helper(pyb_rpm_obj_t *self, mp_uint_t n_args, const mp_obj_t *pos_args, mp_map_t *kw_args) {
     static const mp_arg_t allowed_args[] = {
         { MP_QSTR_interval,     MP_ARG_REQUIRED | MP_ARG_INT, {.u_int = 20} },	// interval 20ms, ppr 50->pulse per round
-        { MP_QSTR_pprparam, MP_ARG_KW_ONLY | MP_ARG_INT, {.u_int = 50} },
+        { MP_QSTR_pprparam, 	MP_ARG_KW_ONLY | MP_ARG_INT, {.u_int = 50} },
     };
     mp_arg_val_t args[MP_ARRAY_SIZE(allowed_args)];
     mp_arg_parse_all(n_args, pos_args, kw_args, MP_ARRAY_SIZE(allowed_args), allowed_args, args);
@@ -152,8 +159,8 @@ STATIC mp_obj_t pyb_rpm_make_new(const mp_obj_type_t *type, size_t n_args, size_
 
     // work out rpm channel
     int id = mp_obj_get_int(args[0]);
-	if((id < 1) || (id>4))
-		nlr_raise(mp_obj_new_exception_msg(&mp_type_ValueError, "only support RPM 1-4"));
+	if((id < 1) || (id>5))
+		nlr_raise(mp_obj_new_exception_msg(&mp_type_ValueError, "only support 1-5 %%>_<%% "));
 	pyb_rpm_obj_t *s = &pyb_rpm_obj[id-1];
 	s->isActive = true;
     if (n_args > 1 || n_kw > 0) {
@@ -178,7 +185,7 @@ STATIC MP_DEFINE_CONST_DICT(rpm_locals_dict, rpm_locals_dict_table);
 
 const mp_obj_type_t pyb_rpm_type = {
     { &mp_type_type },
-    .name = MP_QSTR_rpm,
+    .name = MP_QSTR_RPM,
 	.print = pyb_rpm_print,
 	.make_new = pyb_rpm_make_new,
     .locals_dict = (mp_obj_dict_t*)&rpm_locals_dict,

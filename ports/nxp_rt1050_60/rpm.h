@@ -8,14 +8,17 @@
 #define MICROPY_HW_RPM_2 pin_B1_09
 #define MICROPY_HW_RPM3_NAME 'rpm3'
 #define MICROPY_HW_RPM_3 pin_B1_08
+#define MICROPY_HW_RPM4_NAME 'rpm4'
+#define MICROPY_HW_RPM_4 pin_EMC_21
 
 
-#define MAX_RPM  4
+#define MAX_RPM  5
 typedef enum {
 	PYB_RPM_0 = 0, // index 0 is not exist on RT10xx!
     PYB_RPM_1 = 1,
     PYB_RPM_2 = 2,
     PYB_RPM_3 = 3,
+	PYB_RPM_4 = 4,
 } pyb_rpm_t;
 typedef struct _rpm_obj_t{
 	mp_obj_base_t base;

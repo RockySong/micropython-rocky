@@ -522,12 +522,21 @@ void Profiling(uint32_t pc)
 }
 #endif
 
-extern void calc_speed(void);	// for rpm
-__WEAK void calc_speed(void) {}
+extern void RPM_TickHandler();
+extern void SRPM_TickHandler(void);
+extern void SwTimerHandler(void);
+#define VTIMER (18)
+extern bool g_need_it;
+uint32_t g_Counter = VTIMER;
 void SysTick_C_Handler(ExceptionRegisters_t *regs) {
-    extern uint32_t uwTick;
-	
-	calc_speed();
+    extern uint32_t uwTick;	
+/*	if(--g_Counter==0)
+	{
+		if(g_need_it)
+			servo_timer_irq_callback();
+		g_Counter = VTIMER;
+		
+	}*/
 	#if SYSTICK_PRESCALE > 1
 	s_traces[s_traceNdx++] = *regs;
 	if (s_traceNdx >= 256)
@@ -542,6 +551,10 @@ void SysTick_C_Handler(ExceptionRegisters_t *regs) {
 	#endif	
 
     uwTick += 1;
+	RPM_TickHandler();
+	SRPM_TickHandler();
+	SwTimerHandler();
+	
 	SDMMC_Tick_Handler();
     // Read the systick control regster. This has the side effect of clearing
     // the COUNTFLAG bit, which makes the logic in mp_hal_ticks_us

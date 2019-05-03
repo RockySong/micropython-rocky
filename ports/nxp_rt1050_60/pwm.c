@@ -50,13 +50,13 @@ uint32_t _CalcPrescale(pyb_pwm_obj_t *s, uint32_t clkSource) {
 	{
 		float temp = (float)(clkSource) / (1<<prescale) / s->freq;
 		if (temp >= 65536.0f)
-			nlr_raise(mp_obj_new_exception_msg(&mp_type_ValueError, "pwm freq is too low, chen qie zuo bu dao a!"));
+			nlr_raise(mp_obj_new_exception_msg(&mp_type_ValueError, "pwm freq is too low, chen qie zuo bu dao a! %>_<% "));
 		error = (temp - (uint32_t)temp)/temp;
 		if(error <= threshold) {				
 			return prescale;
 		}
 	}
-	nlr_raise(mp_obj_new_exception_msg(&mp_type_ValueError, "Allowed error is too small for this freq, chen qie zuo bu dao a!"));	
+	nlr_raise(mp_obj_new_exception_msg(&mp_type_ValueError, "Allowed error is too small for this freq, chen qie zuo bu dao a!  %>_<% "));	
 }
 
 void init_tmr(pyb_pwm_obj_t *s)
@@ -371,7 +371,7 @@ STATIC mp_obj_t pyb_pwm_make_new(const mp_obj_type_t *type, size_t n_args, size_
     // work out pwm channel
     int pwm_id = mp_obj_get_int(args[0]);
 	if((pwm_id < 1) || (pwm_id>10))
-		nlr_raise(mp_obj_new_exception_msg(&mp_type_ValueError, "only support 1-10"));
+		nlr_raise(mp_obj_new_exception_msg(&mp_type_ValueError, "only support 1-10  %%>_<%% "));
 	pyb_pwm_obj_t *s = &pyb_pwm_obj[pwm_id-1];
 	
     if (n_args > 1 || n_kw > 0) {
@@ -390,10 +390,10 @@ STATIC mp_obj_t pyb_pwm_make_new(const mp_obj_type_t *type, size_t n_args, size_
 ///   - `angle` is the angle to move to in degrees.
 ///   - `(optional) offset`= 1.0, pulse width in ms, for 0 degree
 ///   -  (optional) scale = 1.0, scale factor, 1.0 means 0 degree to 180 degree has 1ms width delta
-STATIC mp_obj_t pyb_servo_angle(size_t n_args, const mp_obj_t *args) {
+STATIC mp_obj_t pyb_angle(size_t n_args, const mp_obj_t *args) {
     pyb_pwm_obj_t *self = args[0];
 	if((self-pyb_pwm_obj)>3)
-		nlr_raise(mp_obj_new_exception_msg(&mp_type_ValueError, "only pwm[1-4] support the angle function"));
+		nlr_raise(mp_obj_new_exception_msg(&mp_type_ValueError, "only pwm[1-4] support the angle function  %%>_<%% "));
     if (n_args == 1) {
         // get angle
         return mp_obj_new_int(self->angle);
@@ -419,7 +419,7 @@ STATIC mp_obj_t pyb_servo_angle(size_t n_args, const mp_obj_t *args) {
         return mp_const_none;
     }
 }
-STATIC MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(pyb_servo_angle_obj,1, 4, pyb_servo_angle);
+STATIC MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(pyb_angle_obj,1, 4, pyb_angle);
 
 /// \method pulse_width([value])
 /// Get or set the duty circle in 0-100.
@@ -433,7 +433,7 @@ STATIC mp_obj_t pyb_pwm_pulse_width(size_t n_args, const mp_obj_t *args) {
         float percent = mp_obj_get_float(args[1]);
 		if(percent > 100)
 		{
-			nlr_raise(mp_obj_new_exception_msg(&mp_type_ValueError, "only accept 0-100"));
+			nlr_raise(mp_obj_new_exception_msg(&mp_type_ValueError, "only accept 0-100  %%>_<%% "));
 			return mp_const_none;
 		}
         self->pwm_width = percent;
@@ -464,7 +464,7 @@ STATIC mp_obj_t pyb_pwm_inverted(size_t n_args, const mp_obj_t *args) {
     } else {
 		if(mp_obj_get_int(args[1]) > 1)
 		{
-			nlr_raise(mp_obj_new_exception_msg(&mp_type_ValueError, "only accept 0/1/r/n"));
+			nlr_raise(mp_obj_new_exception_msg(&mp_type_ValueError, "only accept 0/1 %%>_<%%"));
 			return mp_const_none;
 		}
         self->inverted = mp_obj_get_int(args[1]);
@@ -479,7 +479,7 @@ STATIC const mp_rom_map_elem_t pwm_locals_dict_table[] = {
 	{ MP_ROM_QSTR(MP_QSTR_test), MP_ROM_PTR(&pwm_test_obj) },
     { MP_ROM_QSTR(MP_QSTR_init), MP_ROM_PTR(&pyb_pwm_init_obj) },
 	{ MP_ROM_QSTR(MP_QSTR_deinit), MP_ROM_PTR(&pyb_pwm_deinit_obj) },
-	{ MP_ROM_QSTR(MP_QSTR_angle), MP_ROM_PTR(&pyb_servo_angle_obj) },
+	{ MP_ROM_QSTR(MP_QSTR_angle), MP_ROM_PTR(&pyb_angle_obj) },
 	{ MP_ROM_QSTR(MP_QSTR_pwm_width), MP_ROM_PTR(&pyb_pwm_width_obj) },
 	{ MP_ROM_QSTR(MP_QSTR_pwm_freq), MP_ROM_PTR(&pyb_pwm_freq_obj) },
 	{ MP_ROM_QSTR(MP_QSTR_pwm_inverted), MP_ROM_PTR(&pyb_pwm_inverted_obj) },

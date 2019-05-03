@@ -27,7 +27,7 @@ LR_XIP_FLASH_IVT IVT_BASE {
 	}
 }
 
-LR_XIP_FLASH ROM_BASE + 0x2000 {
+LR_XIP_FLASH ROM_BASE + 0x2000 512*1024-0x2000{
 	VECTOR_ROM +0 0x400 { ; vector table
 		* (RESET,+FIRST)
 		* (InRoot$$Section)

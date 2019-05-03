@@ -338,11 +338,14 @@ SRC_C = \
 	./flegftl/flegftl.c \
 	overlay_manager.c \
 	flash_pgm.c  \
+    servo.c \
+    srpm.c \
 	rtc.c	\
 	rng.c	\
 	pwm.c   \
 	rpm.c \
 	qtimer.c \
+    tmr.c \
 	dcmc.c \
 	uniqueID.c	\
 	$(wildcard boards/$(BOARD)/*.c)

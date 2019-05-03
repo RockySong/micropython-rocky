@@ -178,6 +178,8 @@ Q(DCDC)
 
 Q(DCMC)
 
+Q(DCMC)
+
 Q(DCP)
 
 Q(DEBUG)
@@ -738,6 +740,8 @@ Q(PTR)
 
 Q(PWM)
 
+Q(PWM)
+
 Q(PWM1)
 
 Q(PWM2)
@@ -884,11 +888,19 @@ Q(QQVGA2)
 
 Q(QSIF)
 
+Q(QTIMER)
+
+Q(QTIMER)
+
 Q(QVGA)
 
 Q(RGB565)
 
 Q(ROMC)
+
+Q(RPM)
+
+Q(RPM)
 
 Q(RTWDOG)
 
@@ -936,11 +948,19 @@ Q(SPI)
 
 Q(SRC)
 
+Q(SRPM)
+
+Q(SRPM)
+
 Q(SVGA)
 
 Q(SWIM)
 
 Q(SXGA)
+
+Q(Servo)
+
+Q(Servo)
 
 Q(Signal)
 
@@ -985,6 +1005,10 @@ Q(TAG36H10)
 Q(TAG36H11)
 
 Q(TEMPMON)
+
+Q(TMR)
+
+Q(TMR)
 
 Q(TMR1)
 
@@ -1582,6 +1606,8 @@ Q(and_)
 
 Q(angle)
 
+Q(angle)
+
 Q(any)
 
 Q(any)
@@ -1818,7 +1844,13 @@ Q(bytes_at)
 
 Q(calcsize)
 
+Q(calibration)
+
 Q(callable)
+
+Q(callback)
+
+Q(callback)
 
 Q(callback)
 
@@ -2087,6 +2119,12 @@ Q(deepsleep)
 Q(default)
 
 Q(degrees)
+
+Q(deinit)
+
+Q(deinit)
+
+Q(deinit)
 
 Q(deinit)
 
@@ -2470,6 +2508,10 @@ Q(get_count)
 
 Q(get_count)
 
+Q(get_count)
+
+Q(get_count)
+
 Q(get_exposure_us)
 
 Q(get_fb)
@@ -2500,6 +2542,10 @@ Q(get_rpm)
 
 Q(get_similarity)
 
+Q(get_spps)
+
+Q(get_srpm)
+
 Q(get_statistics)
 
 Q(get_statistics)
@@ -2509,6 +2555,8 @@ Q(get_stats)
 Q(get_stats)
 
 Q(get_threshold)
+
+Q(get_ticks)
 
 Q(get_ticks)
 
@@ -2696,6 +2744,10 @@ Q(init)
 
 Q(init)
 
+Q(init)
+
+Q(init)
+
 Q(input)
 
 Q(insert)
@@ -2719,6 +2771,8 @@ Q(intersection)
 Q(intersection)
 
 Q(intersection_update)
+
+Q(interval)
 
 Q(interval)
 
@@ -3388,6 +3442,10 @@ Q(period)
 
 Q(period)
 
+Q(period)
+
+Q(period)
+
 Q(phase)
 
 Q(phase)
@@ -3456,6 +3514,8 @@ Q(power)
 
 Q(pprparam)
 
+Q(pprparam)
+
 Q(prescale)
 
 Q(prescale)
@@ -3498,6 +3558,8 @@ Q(ptr8)
 
 Q(pull)
 
+Q(pulse_width)
+
 Q(push)
 
 Q(push)
@@ -3524,10 +3586,6 @@ Q(put_text)
 
 Q(put_text_xy)
 
-Q(pwm)
-
-Q(pwm)
-
 Q(pwm_freq)
 
 Q(pwm_inverted)
@@ -3543,10 +3601,6 @@ Q(pyb)
 Q(qrcode)
 
 Q(qstr_info)
-
-Q(qtimer)
-
-Q(qtimer)
 
 Q(quality)
 
@@ -3848,10 +3902,6 @@ Q(rpartition)
 
 Q(rpartition)
 
-Q(rpm)
-
-Q(rpm)
-
 Q(rsplit)
 
 Q(rsplit)
@@ -4095,6 +4145,8 @@ Q(sort)
 Q(sorted)
 
 Q(space_sigma)
+
+Q(speed)
 
 Q(split)
 

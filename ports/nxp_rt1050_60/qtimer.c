@@ -14,7 +14,6 @@ pyb_qtimer_obj_t pyb_qtimer_obj[11]={
 	{.base = {&pyb_qtimer_type}, .tmr_base = TMR1, .ticks=0, .IRQn = TMR1_IRQn, .idex = kQTMR_Channel_0, .callback = mp_const_none, .isActive=false},
 	{.base = {&pyb_qtimer_type}, .tmr_base = TMR1, .ticks=0, .IRQn = TMR1_IRQn, .idex = kQTMR_Channel_1, .callback = mp_const_none, .isActive=false},
 	{.base = {&pyb_qtimer_type}, .tmr_base = TMR1, .ticks=0, .IRQn = TMR1_IRQn, .idex = kQTMR_Channel_2, .callback = mp_const_none, .isActive=false},
-	//{.base = {&pyb_qtimer_type}, .tmr_base = TMR2, .ticks=0, .IRQn = TMR2_IRQn, .idex = kQTMR_Channel_3, .callback = mp_const_none, .isActive=false},
 	{.base = {&pyb_qtimer_type}, .tmr_base = TMR3, .ticks=0, .IRQn = TMR3_IRQn, .idex = kQTMR_Channel_0, .callback = mp_const_none, .isActive=false},
 	{.base = {&pyb_qtimer_type}, .tmr_base = TMR3, .ticks=0, .IRQn = TMR3_IRQn, .idex = kQTMR_Channel_1, .callback = mp_const_none, .isActive=false},
 	{.base = {&pyb_qtimer_type}, .tmr_base = TMR3, .ticks=0, .IRQn = TMR3_IRQn, .idex = kQTMR_Channel_2, .callback = mp_const_none, .isActive=false},
@@ -24,10 +23,9 @@ pyb_qtimer_obj_t pyb_qtimer_obj[11]={
 	{.base = {&pyb_qtimer_type}, .tmr_base = TMR4, .ticks=0, .IRQn = TMR4_IRQn, .idex = kQTMR_Channel_2, .callback = mp_const_none, .isActive=false},
 	{.base = {&pyb_qtimer_type}, .tmr_base = TMR4, .ticks=0, .IRQn = TMR4_IRQn, .idex = kQTMR_Channel_3, .callback = mp_const_none, .isActive=false},
 };
-
-void TMR1_IRQHandler()
+void QTmrIRQHandler(int min, int max)
 {
-	for(int i=0;i<3;i++)
+	for(int i=min;i<max;i++)
 	{
 		pyb_qtimer_obj_t *temp = &pyb_qtimer_obj[i];
 		uint16_t reg = temp->tmr_base->CHANNEL[temp->idex].SCTRL;
@@ -40,52 +38,45 @@ void TMR1_IRQHandler()
 		}
 	}
 }
-void TMR2_IRQHandler()
+extern void servo_timer_irq_callback();
+void QTmrCommonIrqHandler(int moduleNdx)
 {
-		//clear the related flags to re-init the interrupt, for the Qtimer can not clear the flag auto
-	pyb_qtimer_obj_t *temp = &pyb_qtimer_obj[3];
-	uint16_t reg = temp->tmr_base->CHANNEL[temp->idex].SCTRL;
-	//check if the timer channel is active, and if the interrupt in this channel is occur 
-	if((temp->isActive) && ((reg & TMR_SCTRL_TCF_MASK)>>TMR_SCTRL_TCF_SHIFT))
+	int min_index, max_index;
+	switch(moduleNdx)
 	{
-		
-		QTMR_ClearStatusFlags(temp->tmr_base, temp->idex, kQTMR_CompareFlag);
-		timer_handle_irq_channel(temp, temp->callback);
-		temp->ticks++;
+		case 1:
+			min_index=0; max_index=3;
+			QTmrIRQHandler(min_index,max_index);
+			servo_timer_irq_callback();
+			break;
+		case 2:
+			servo_timer_irq_callback();
+			break;
+		case 3:
+			min_index=3; max_index=7;
+			QTmrIRQHandler(min_index,max_index);
+			break;
+		case 4:
+			min_index=7; max_index=11;
+			QTmrIRQHandler(min_index,max_index);
+			break;
 	}
 }
-void TMR3_IRQHandler()
+void TMR1_IRQHandler()
 {
-	for(int i=3;i<7;i++)
+	QTmrCommonIrqHandler(1);
+}
+void TMR2_IRQHandler()
 	{
-		pyb_qtimer_obj_t *temp = &pyb_qtimer_obj[i];
-		uint16_t reg = temp->tmr_base->CHANNEL[temp->idex].SCTRL;
-		//check if the timer channel is active, and if the interrupt in this channel is occur 
-		if((temp->isActive) && ((reg & TMR_SCTRL_TCF_MASK)>>TMR_SCTRL_TCF_SHIFT))
+	QTmrCommonIrqHandler(2);
+}
+void TMR3_IRQHandler()
 		{
-
-			QTMR_ClearStatusFlags(temp->tmr_base, temp->idex, kQTMR_CompareFlag);
-			timer_handle_irq_channel(temp, temp->callback);
-			temp->ticks++;
-		}
-	}
+	QTmrCommonIrqHandler(3);
 }
 void TMR4_IRQHandler()
 {
-	//clear the related flags to re-init the interrupt, for the Qtimer can not clear the flag auto
-	for(int i=7;i<11;i++)
-	{
-		pyb_qtimer_obj_t *temp = &pyb_qtimer_obj[i];
-		uint16_t reg = temp->tmr_base->CHANNEL[temp->idex].SCTRL;
-		//check if the timer channel is active, and if the interrupt in this channel is occur 
-		if((temp->isActive) && ((reg & TMR_SCTRL_TCF_MASK)>>TMR_SCTRL_TCF_SHIFT))
-		{
-
-			QTMR_ClearStatusFlags(temp->tmr_base, temp->idex, kQTMR_CompareFlag);
-			timer_handle_irq_channel(temp, temp->callback);
-			temp->ticks++;
-		}
-	}
+	QTmrCommonIrqHandler(4);
 }
 
 #define QTMR_SOURCE_CLOCK CLOCK_GetFreq(kCLOCK_IpgClk)
@@ -138,13 +129,13 @@ STATIC mp_obj_t pyb_qtimer_period(size_t n_args, const mp_obj_t *args) {
         // set pulse width, in us
 		if((mp_obj_get_int(args[1]) > 100) || (mp_obj_get_int(args[1]) <1))
 		{
-			nlr_raise(mp_obj_new_exception_msg(&mp_type_ValueError, "only accept 1-100"));
+			nlr_raise(mp_obj_new_exception_msg(&mp_type_ValueError, "only accept 1-100 %%>_<%%"));
 			return mp_const_none;
 		}
         self->period = mp_obj_get_int(args[1]);
 		if(((QTMR_SOURCE_CLOCK / (1<<self->prescale) / 1000)*1.0*self->period)>((1<<17)-1))
 		{
-			nlr_raise(mp_obj_new_exception_msg(&mp_type_ValueError, "The group of the prescale & period does not support, up the prescale or down the period"));
+			nlr_raise(mp_obj_new_exception_msg(&mp_type_ValueError, "The group of the prescale & period does not support, up the prescale or down the period %%>_<%%"));
 			return mp_const_none;
 		}
 		set_tmr_period(self);
@@ -162,13 +153,13 @@ STATIC mp_obj_t pyb_qtimer_prescale(size_t n_args, const mp_obj_t *args) {
         // set pulse width, in us
 		if((mp_obj_get_int(args[1]) > 7) || (mp_obj_get_int(args[1]) <0))
 		{
-			nlr_raise(mp_obj_new_exception_msg(&mp_type_ValueError, "only accept 0-7"));
+			nlr_raise(mp_obj_new_exception_msg(&mp_type_ValueError, "only accept 0-7 %%>_<%% "));
 			return mp_const_none;
 		}
         self->prescale = mp_obj_get_int(args[1]);
 		if(((QTMR_SOURCE_CLOCK / (1<<self->prescale) / 1000)*1.0*self->period) > ((1<<17)-1))
 		{
-			nlr_raise(mp_obj_new_exception_msg(&mp_type_ValueError, "The group of the prescale & period does not support, up the prescale or down the period"));
+			nlr_raise(mp_obj_new_exception_msg(&mp_type_ValueError, "The group of the prescale & period does not support %>_<% , up the prescale or down the period"));
 			return mp_const_none;
 		}
 		qtimer_init(self);
@@ -177,23 +168,11 @@ STATIC mp_obj_t pyb_qtimer_prescale(size_t n_args, const mp_obj_t *args) {
 }
 STATIC MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(pyb_qtimer_pescale_obj, 1, 2, pyb_qtimer_prescale);
 
-void QTimer_StopAll(void) {
-	uint32_t cnt = sizeof(pyb_qtimer_obj) / sizeof(pyb_qtimer_obj[0]);
-	pyb_qtimer_obj_t *self = pyb_qtimer_obj;
-	for (int i=0; i<cnt;i++,self++) {
-		QTMR_StopTimer(self->tmr_base, self->idex);
-		QTMR_Deinit(self->tmr_base, self->idex);
-		if (self->isActive)
-			self->isActive = 0;
-	}
-}
-
 mp_obj_t pyb_qtimer_deinit(mp_obj_t self_in){
 	pyb_qtimer_obj_t *self = self_in;
 	/* Stop the counter */
     QTMR_StopTimer(self->tmr_base, self->idex);
 	QTMR_Deinit(self->tmr_base, self->idex);
-	self->isActive = 0;
 	return mp_const_none;
 	
 }
@@ -217,9 +196,15 @@ STATIC mp_obj_t pyb_qtimer_init_helper(pyb_qtimer_obj_t *self, mp_uint_t n_args,
 			self->period = mp_obj_get_float(args[0].u_obj);
 		} else 
 			self->period = 20;
+	
+	if((args[1].u_int > 7) || (args[1].u_int <0))
+	{
+		nlr_raise(mp_obj_new_exception_msg(&mp_type_ValueError, "only accept prescale 0-7 %%>_<%% "));
+		return mp_const_none;
+	}
 	self->prescale = args[1].u_int;
 	if(((QTMR_SOURCE_CLOCK / (1<<self->prescale) / 1000)*1.0*self->period)>((1<<17)-1))
-		nlr_raise(mp_obj_new_exception_msg(&mp_type_ValueError, "The group of the prescale & period does not support, up the prescale or down the period"));	
+		nlr_raise(mp_obj_new_exception_msg(&mp_type_ValueError, "The group of the prescale & period does not support, up the prescale or down the period %%>_<%%"));	
 	    // Start the timer running
     if (args[2].u_obj == mp_const_none) {
         qtimer_init(self);
@@ -269,7 +254,7 @@ STATIC mp_obj_t pyb_qtimer_make_new(const mp_obj_type_t *type, size_t n_args, si
 
     int id = mp_obj_get_int(args[0]);
 	if((id < 1) || (id>11))
-		nlr_raise(mp_obj_new_exception_msg(&mp_type_ValueError, "only support 1-11"));
+		nlr_raise(mp_obj_new_exception_msg(&mp_type_ValueError, "only support 1-11 %%>_<%%"));
 	//if(!check_legal(id))
 	//	nlr_raise(mp_obj_new_exception_msg(&mp_type_ValueError, "only support qtimer in diff group([1-3],[4],[5-8],[9-12]."));
 	pyb_qtimer_obj_t *s = &pyb_qtimer_obj[id-1];
@@ -343,7 +328,7 @@ STATIC MP_DEFINE_CONST_DICT(qtimer_locals_dict, qtimer_locals_dict_table);
 
 const mp_obj_type_t pyb_qtimer_type = {
     { &mp_type_type },
-    .name = MP_QSTR_qtimer,
+    .name = MP_QSTR_QTIMER,
 	.print = pyb_qtimer_print,
 	.make_new = pyb_qtimer_make_new,
     .locals_dict = (mp_obj_dict_t*)&qtimer_locals_dict,
