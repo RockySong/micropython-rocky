@@ -147,9 +147,9 @@ http://cloud.eeworld.com.cn///courselesson/4928/2019130042104-tlk9jm.mp4.mp4
     编译前确保选中“debug_flexspi” Target
     使用杜邦线连接J-Link和本模块的调试接口，分别是
         J-Link.Pin6 (GND) -> GND (J1.6)
-        J-Link.Pin1 (VCC) -> 3.3V (J1.5) （可选，若使用USB供电可不连接）
-        J-Link.Pin7 (SWCLK) -> SWC (J1.2)
-        J-Link.Pin9 (SWDIO) -> SWD (J1.3)
+        J-Link.Pin1 (VCC) -> 3.3V (J1.5) （山寨版可选，正版必须连）
+        J-Link.Pin7 (SWCLK) -> SWC (J1.3)
+        J-Link.Pin9 (SWDIO) -> SWD (J1.2)
     在KEIL里点击菜单栏上的下载按钮或按F8键，等候1-2分钟即可擦除和下载完毕
     下载完毕后需重启本模块方使新固件生效
     注意：若烧写中途失败，可导致模块无法再启动，烧写前务必确保J-Link与模块的连接是稳定可靠的。
