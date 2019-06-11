@@ -1,0 +1,25 @@
+/* This file is part of the OpenMV project.
+ * Copyright (c) 2013-2018 Ibrahim Abdelkader <iabdalkader@openmv.io> & Kwabena W. Agyeman <kwagyeman@openmv.io>
+ * This work is licensed under the MIT license, see the file LICENSE for details.
+ */
+#ifndef __WIFI_DBG_H__
+#define __WIFI_DBG_H__
+#include "winc.h"
+
+typedef struct wifidbg_config {
+    winc_mode_t mode;
+    winc_security_t client_security, access_point_security;
+    char client_key[WINC_MAX_PSK_LEN + 1], access_point_key[WINC_MAX_PSK_LEN + 1];
+    char client_ssid[WINC_MAX_SSID_LEN + 1], access_point_ssid[WINC_MAX_SSID_LEN + 1];
+    uint8_t client_channel, access_point_channel;
+    char board_name[WINC_MAX_BOARD_NAME_LEN + 1];
+} wifidbg_config_t;
+
+int wifidbg_init(wifidbg_config_t *config);
+bool wifidbg_AP_connected(void);
+bool wifidbg_isconnected();
+int wifidbg_connect_IDE();
+
+int wifidbg_dispatch();
+
+#endif /* __WIFIDBG_H__ */

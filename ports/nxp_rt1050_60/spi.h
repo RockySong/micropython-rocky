@@ -28,12 +28,19 @@
 #include "fsl_lpspi_edma.h"
 
 #include "dma.h"
-
+#if defined(BOARD_OMVRT1)
 #define MICROPY_HW_SPI1_NAME "spi1"
 #define MICROPY_HW_SPI1_NSS  (pin_EMC_30)
 #define MICROPY_HW_SPI1_SCK  (pin_EMC_27) // 
 #define MICROPY_HW_SPI1_MISO (pin_EMC_29) // 
 #define MICROPY_HW_SPI1_MOSI (pin_EMC_28) // 
+#else
+#define MICROPY_HW_SPI1_NAME "spi1"
+#define MICROPY_HW_SPI1_NSS  (pin_SD_B0_00_af)
+#define MICROPY_HW_SPI1_SCK  (pin_SD_B0_00_af) // 
+#define MICROPY_HW_SPI1_MISO (pin_SD_B0_03_af) // 
+#define MICROPY_HW_SPI1_MOSI (pin_SD_B0_02_af) // 
+#endif
 /*for our new use, we have only one interface of spi in our new board, so we write only one defination of the spi pin above for the easy use
 #define MICROPY_HW_SPI7_NAME "spi7"
 #define MICROPY_HW_SPI7_NSS  (pin_122) // use GPIO

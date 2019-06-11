@@ -31,11 +31,15 @@
 #define MICROPY_HW_I2C_BAUDRATE_MAX	(1000*1000)
 
 // I2C busses
-
+#if defined(BOARD_OMVRT1)
 #define MICROPY_HW_I2C3_NAME "i2c3"
 #define MICROPY_HW_I2C3_SDA (pin_EMC_21)
 #define MICROPY_HW_I2C3_SCL (pin_EMC_22)
-
+#else
+#define MICROPY_HW_I2C3_NAME "i2c3"
+#define MICROPY_HW_I2C3_SDA (pin_AD_B1_01)
+#define MICROPY_HW_I2C3_SCL (pin_AD_B1_00)
+#endif
 typedef enum {
 	PYB_I2C_0 = 0,
     PYB_I2C_1 = 1,

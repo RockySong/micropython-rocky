@@ -160,9 +160,9 @@ STATIC const mp_rom_map_elem_t pyb_module_globals_table[] = {
     { MP_ROM_QSTR(MP_QSTR_sync), MP_ROM_PTR(&mod_os_sync_obj) },
     { MP_ROM_QSTR(MP_QSTR_mount), MP_ROM_PTR(&mp_vfs_mount_obj) },
 	
-	//Crist to test:
+	#if defined(BOARD_OMVRT1)
 	{ MP_ROM_QSTR(MP_QSTR_pwm), MP_ROM_PTR(&pyb_pwm_type) },
-
+  #endif
     // rocky ignore { MP_ROM_QSTR(MP_QSTR_Timer), MP_ROM_PTR(&pyb_timer_type) },
 
 #if MICROPY_HW_ENABLE_RNG
