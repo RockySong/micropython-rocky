@@ -17,7 +17,7 @@
         <TargetCommonOption>
           <Device>MIMXRT1052:M7</Device>
           <Vendor>NXP</Vendor>
-          <PackID>NXP.iMXRT_DFP.1.0.2</PackID>
+          <PackID>NXP.iMXRT_DFP.1.0.3</PackID>
           <PackURL>http://mcuxpresso.nxp.com/cmsis_pack/repo/</PackURL>
           <Cpu>IRAM(0x20000000,0x00060000) IRAM2(0x00000000,0x00020000) CPUTYPE("Cortex-M7") FPU3(SFPU) CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -3437,6 +3437,11 @@
               <FilePath>..\nxp_rt1050_60\adc.c</FilePath>
             </File>
             <File>
+              <FileName>dcmc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt1050_60\dcmc.c</FilePath>
+            </File>
+            <File>
               <FileName>extint.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\nxp_rt1050_60\extint.c</FilePath>
@@ -3939,9 +3944,19 @@
               <FilePath>..\nxp_rt1050_60\pwm.c</FilePath>
             </File>
             <File>
+              <FileName>qtimer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt1050_60\qtimer.c</FilePath>
+            </File>
+            <File>
               <FileName>rpm.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\nxp_rt1050_60\rpm.c</FilePath>
+            </File>
+            <File>
+              <FileName>srpm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt1050_60\srpm.c</FilePath>
             </File>
             <File>
               <FileName>spi.c</FileName>
@@ -4010,65 +4025,19 @@
               <FilePath>..\nxp_rt1050_60\systick.c</FilePath>
             </File>
             <File>
-              <FileName>timer.c</FileName>
+              <FileName>tmr.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\timer.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>0</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>2</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <uGnu>2</uGnu>
-                    <useXO>2</useXO>
-                    <v6Lang>0</v6Lang>
-                    <v6LangP>0</v6LangP>
-                    <vShortEn>2</vShortEn>
-                    <vShortWch>2</vShortWch>
-                    <v6Lto>2</v6Lto>
-                    <v6WtE>2</v6WtE>
-                    <v6Rtti>2</v6Rtti>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
+              <FilePath>..\nxp_rt1050_60\tmr.c</FilePath>
             </File>
             <File>
               <FileName>uart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\nxp_rt1050_60\uart.c</FilePath>
+            </File>
+            <File>
+              <FileName>uniqueID.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt1050_60\uniqueID.c</FilePath>
             </File>
             <File>
               <FileName>usb_app.c</FileName>
@@ -4335,6 +4304,11 @@
               <FilePath>..\nxp_rt1050_60\dac.h</FilePath>
             </File>
             <File>
+              <FileName>dcmc.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\nxp_rt1050_60\dcmc.h</FilePath>
+            </File>
+            <File>
               <FileName>dma.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\nxp_rt1050_60\dma.h</FilePath>
@@ -4438,6 +4412,11 @@
               <FileName>qstrdefsport.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\nxp_rt1050_60\qstrdefsport.h</FilePath>
+            </File>
+            <File>
+              <FileName>qtimer.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\nxp_rt1050_60\qtimer.h</FilePath>
             </File>
             <File>
               <FileName>rng.h</FileName>
@@ -4573,11 +4552,6 @@
               <FileName>flash_pgm.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\nxp_rt1050_60\flash_pgm.c</FilePath>
-            </File>
-            <File>
-              <FileName>uniqueID.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\uniqueID.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -6685,7 +6659,7 @@
         <TargetCommonOption>
           <Device>MIMXRT1052:M7</Device>
           <Vendor>NXP</Vendor>
-          <PackID>NXP.iMXRT_DFP.1.0.2</PackID>
+          <PackID>NXP.iMXRT_DFP.1.0.3</PackID>
           <PackURL>http://mcuxpresso.nxp.com/cmsis_pack/repo/</PackURL>
           <Cpu>IRAM(0x20000000,0x00060000) IRAM2(0x00000000,0x00020000) CPUTYPE("Cortex-M7") FPU3(SFPU) CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -10157,6 +10131,57 @@
               <FileName>isr.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\nxp_rt1050_60\isr.c</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>2</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Cads>
+                    <interw>2</interw>
+                    <Optim>1</Optim>
+                    <oTime>2</oTime>
+                    <SplitLS>2</SplitLS>
+                    <OneElfS>2</OneElfS>
+                    <Strict>2</Strict>
+                    <EnumInt>2</EnumInt>
+                    <PlainCh>2</PlainCh>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <wLevel>0</wLevel>
+                    <uThumb>2</uThumb>
+                    <uSurpInc>2</uSurpInc>
+                    <uC99>2</uC99>
+                    <uGnu>2</uGnu>
+                    <useXO>2</useXO>
+                    <v6Lang>0</v6Lang>
+                    <v6LangP>0</v6LangP>
+                    <vShortEn>2</vShortEn>
+                    <vShortWch>2</vShortWch>
+                    <v6Lto>2</v6Lto>
+                    <v6WtE>2</v6WtE>
+                    <v6Rtti>2</v6Rtti>
+                    <VariousControls>
+                      <MiscControls></MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Cads>
+                </FileArmAds>
+              </FileOption>
             </File>
             <File>
               <FileName>bufhelper.c</FileName>
@@ -10223,6 +10248,11 @@
               <FileName>adc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\nxp_rt1050_60\adc.c</FilePath>
+            </File>
+            <File>
+              <FileName>dcmc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt1050_60\dcmc.c</FilePath>
             </File>
             <File>
               <FileName>extint.c</FileName>
@@ -10547,11 +10577,113 @@
               <FileName>rng.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\nxp_rt1050_60\rng.c</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>2</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Cads>
+                    <interw>2</interw>
+                    <Optim>0</Optim>
+                    <oTime>2</oTime>
+                    <SplitLS>2</SplitLS>
+                    <OneElfS>2</OneElfS>
+                    <Strict>2</Strict>
+                    <EnumInt>2</EnumInt>
+                    <PlainCh>2</PlainCh>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <wLevel>2</wLevel>
+                    <uThumb>2</uThumb>
+                    <uSurpInc>2</uSurpInc>
+                    <uC99>2</uC99>
+                    <uGnu>2</uGnu>
+                    <useXO>2</useXO>
+                    <v6Lang>0</v6Lang>
+                    <v6LangP>0</v6LangP>
+                    <vShortEn>2</vShortEn>
+                    <vShortWch>2</vShortWch>
+                    <v6Lto>2</v6Lto>
+                    <v6WtE>2</v6WtE>
+                    <v6Rtti>2</v6Rtti>
+                    <VariousControls>
+                      <MiscControls></MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Cads>
+                </FileArmAds>
+              </FileOption>
             </File>
             <File>
               <FileName>rtc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\nxp_rt1050_60\rtc.c</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>2</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Cads>
+                    <interw>2</interw>
+                    <Optim>0</Optim>
+                    <oTime>2</oTime>
+                    <SplitLS>2</SplitLS>
+                    <OneElfS>2</OneElfS>
+                    <Strict>2</Strict>
+                    <EnumInt>2</EnumInt>
+                    <PlainCh>2</PlainCh>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <wLevel>2</wLevel>
+                    <uThumb>2</uThumb>
+                    <uSurpInc>2</uSurpInc>
+                    <uC99>2</uC99>
+                    <uGnu>2</uGnu>
+                    <useXO>2</useXO>
+                    <v6Lang>0</v6Lang>
+                    <v6LangP>0</v6LangP>
+                    <vShortEn>2</vShortEn>
+                    <vShortWch>2</vShortWch>
+                    <v6Lto>2</v6Lto>
+                    <v6WtE>2</v6WtE>
+                    <v6Rtti>2</v6Rtti>
+                    <VariousControls>
+                      <MiscControls></MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Cads>
+                </FileArmAds>
+              </FileOption>
             </File>
             <File>
               <FileName>sdcard.c</FileName>
@@ -10569,7 +10701,7 @@
                   <RVCTZI>0</RVCTZI>
                   <RVCTOtherData>0</RVCTOtherData>
                   <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>0</IncludeInBuild>
+                  <IncludeInBuild>2</IncludeInBuild>
                   <AlwaysBuild>2</AlwaysBuild>
                   <GenerateAssemblyFile>2</GenerateAssemblyFile>
                   <AssembleAssemblyFile>2</AssembleAssemblyFile>
@@ -10625,9 +10757,19 @@
               <FilePath>..\nxp_rt1050_60\pwm.c</FilePath>
             </File>
             <File>
+              <FileName>qtimer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt1050_60\qtimer.c</FilePath>
+            </File>
+            <File>
               <FileName>rpm.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\nxp_rt1050_60\rpm.c</FilePath>
+            </File>
+            <File>
+              <FileName>srpm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt1050_60\srpm.c</FilePath>
             </File>
             <File>
               <FileName>spi.c</FileName>
@@ -10696,65 +10838,19 @@
               <FilePath>..\nxp_rt1050_60\systick.c</FilePath>
             </File>
             <File>
-              <FileName>timer.c</FileName>
+              <FileName>tmr.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\timer.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>0</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>2</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <uGnu>2</uGnu>
-                    <useXO>2</useXO>
-                    <v6Lang>0</v6Lang>
-                    <v6LangP>0</v6LangP>
-                    <vShortEn>2</vShortEn>
-                    <vShortWch>2</vShortWch>
-                    <v6Lto>2</v6Lto>
-                    <v6WtE>2</v6WtE>
-                    <v6Rtti>2</v6Rtti>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
+              <FilePath>..\nxp_rt1050_60\tmr.c</FilePath>
             </File>
             <File>
               <FileName>uart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\nxp_rt1050_60\uart.c</FilePath>
+            </File>
+            <File>
+              <FileName>uniqueID.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt1050_60\uniqueID.c</FilePath>
             </File>
             <File>
               <FileName>usb_app.c</FileName>
@@ -11021,6 +11117,11 @@
               <FilePath>..\nxp_rt1050_60\dac.h</FilePath>
             </File>
             <File>
+              <FileName>dcmc.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\nxp_rt1050_60\dcmc.h</FilePath>
+            </File>
+            <File>
               <FileName>dma.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\nxp_rt1050_60\dma.h</FilePath>
@@ -11124,6 +11225,11 @@
               <FileName>qstrdefsport.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\nxp_rt1050_60\qstrdefsport.h</FilePath>
+            </File>
+            <File>
+              <FileName>qtimer.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\nxp_rt1050_60\qtimer.h</FilePath>
             </File>
             <File>
               <FileName>rng.h</FileName>
@@ -11259,11 +11365,6 @@
               <FileName>flash_pgm.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\nxp_rt1050_60\flash_pgm.c</FilePath>
-            </File>
-            <File>
-              <FileName>uniqueID.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\uniqueID.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -13492,7 +13593,7 @@
         <TargetCommonOption>
           <Device>MIMXRT1052:M7</Device>
           <Vendor>NXP</Vendor>
-          <PackID>NXP.iMXRT_DFP.1.0.2</PackID>
+          <PackID>NXP.iMXRT_DFP.1.0.3</PackID>
           <PackURL>http://mcuxpresso.nxp.com/cmsis_pack/repo/</PackURL>
           <Cpu>IRAM(0x20000000,0x00060000) IRAM2(0x00000000,0x00020000) CPUTYPE("Cortex-M7") FPU3(SFPU) CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -16912,6 +17013,11 @@
               <FilePath>..\nxp_rt1050_60\adc.c</FilePath>
             </File>
             <File>
+              <FileName>dcmc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt1050_60\dcmc.c</FilePath>
+            </File>
+            <File>
               <FileName>extint.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\nxp_rt1050_60\extint.c</FilePath>
@@ -17465,9 +17571,19 @@
               <FilePath>..\nxp_rt1050_60\pwm.c</FilePath>
             </File>
             <File>
+              <FileName>qtimer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt1050_60\qtimer.c</FilePath>
+            </File>
+            <File>
               <FileName>rpm.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\nxp_rt1050_60\rpm.c</FilePath>
+            </File>
+            <File>
+              <FileName>srpm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt1050_60\srpm.c</FilePath>
             </File>
             <File>
               <FileName>spi.c</FileName>
@@ -17536,65 +17652,19 @@
               <FilePath>..\nxp_rt1050_60\systick.c</FilePath>
             </File>
             <File>
-              <FileName>timer.c</FileName>
+              <FileName>tmr.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\timer.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>0</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>2</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <uGnu>2</uGnu>
-                    <useXO>2</useXO>
-                    <v6Lang>0</v6Lang>
-                    <v6LangP>0</v6LangP>
-                    <vShortEn>2</vShortEn>
-                    <vShortWch>2</vShortWch>
-                    <v6Lto>2</v6Lto>
-                    <v6WtE>2</v6WtE>
-                    <v6Rtti>2</v6Rtti>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
+              <FilePath>..\nxp_rt1050_60\tmr.c</FilePath>
             </File>
             <File>
               <FileName>uart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\nxp_rt1050_60\uart.c</FilePath>
+            </File>
+            <File>
+              <FileName>uniqueID.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt1050_60\uniqueID.c</FilePath>
             </File>
             <File>
               <FileName>usb_app.c</FileName>
@@ -17861,6 +17931,11 @@
               <FilePath>..\nxp_rt1050_60\dac.h</FilePath>
             </File>
             <File>
+              <FileName>dcmc.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\nxp_rt1050_60\dcmc.h</FilePath>
+            </File>
+            <File>
               <FileName>dma.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\nxp_rt1050_60\dma.h</FilePath>
@@ -17964,6 +18039,11 @@
               <FileName>qstrdefsport.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\nxp_rt1050_60\qstrdefsport.h</FilePath>
+            </File>
+            <File>
+              <FileName>qtimer.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\nxp_rt1050_60\qtimer.h</FilePath>
             </File>
             <File>
               <FileName>rng.h</FileName>
@@ -18099,11 +18179,6 @@
               <FileName>flash_pgm.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\nxp_rt1050_60\flash_pgm.c</FilePath>
-            </File>
-            <File>
-              <FileName>uniqueID.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\uniqueID.c</FilePath>
             </File>
           </Files>
         </Group>
