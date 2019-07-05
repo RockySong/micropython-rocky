@@ -53,16 +53,18 @@ uint32_t fb_buffer_size()
 void fb_update_jpeg_buffer()
 {
     static int overflow_count = 0;
-
+	M8266_DBG_IO_Toggle(3);
     if ((MAIN_FB()->bpp > 3) && JPEG_FB()->enabled) {
         // Lock FB
         if (mutex_try_lock(&JPEG_FB()->lock, MUTEX_TID_OMV)) {
             if((OMV_JPEG_BUF_SIZE-64) < MAIN_FB()->bpp) {
                 // image won't fit. so don't copy.
                 JPEG_FB()->w = 0; JPEG_FB()->h = 0; JPEG_FB()->size = 0;
+                M8266_DBG_IO_Write(1,0);
             } else {
                 memcpy(JPEG_FB()->pixels, MAIN_FB()->pixels, MAIN_FB()->bpp);
                 JPEG_FB()->w = MAIN_FB()->w; JPEG_FB()->h = MAIN_FB()->h; JPEG_FB()->size = MAIN_FB()->bpp;
+                M8266_DBG_IO_Write(1,1);
             }
 
             // Unlock the framebuffer mutex
@@ -86,6 +88,7 @@ void fb_update_jpeg_buffer()
                     JPEG_FB()->quality = IM_MAX(1, (JPEG_FB()->quality/2));
                 }
                 JPEG_FB()->w = 0; JPEG_FB()->h = 0; JPEG_FB()->size = 0;
+                M8266_DBG_IO_Write(1,0);
             } else {
                 if (overflow_count) {
                     overflow_count--;
@@ -97,10 +100,12 @@ void fb_update_jpeg_buffer()
                 }
                 // Set FB from JPEG image
                 JPEG_FB()->w = dst.w; JPEG_FB()->h = dst.h; JPEG_FB()->size = dst.bpp;
+                M8266_DBG_IO_Write(1,1);
             }
 
             // Unlock the framebuffer mutex
             mutex_unlock(&JPEG_FB()->lock, MUTEX_TID_OMV);
         }
     }
+    M8266_DBG_IO_Toggle(3);
 }

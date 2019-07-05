@@ -17,6 +17,7 @@
 #define MICROPY_HW_ENABLE_DAC       (0)
 #define MICROPY_HW_ENABLE_CAN       (0)
 #define MICROPY_MW_ENABLE_SWIM		(0)
+#define MICROPY_HW_WIFIDBG_EN		(1)
 // XTAL is 12MHz
 
 typedef enum _enum_rootPtrs

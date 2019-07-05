@@ -13,6 +13,7 @@ typedef struct wifidbg_config {
     char client_ssid[WINC_MAX_SSID_LEN + 1], access_point_ssid[WINC_MAX_SSID_LEN + 1];
     uint8_t client_channel, access_point_channel;
     char board_name[WINC_MAX_BOARD_NAME_LEN + 1];
+    uint8_t dbg_mode;
 } wifidbg_config_t;
 
 int wifidbg_init(wifidbg_config_t *config);

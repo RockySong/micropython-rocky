@@ -9,6 +9,7 @@
 #include "fsl_gpio.h"
 #include "fsl_iomuxc.h"
 #include "fsl_debug_console.h"
+#include "mpconfigboard.h"
 bool mp_hal_ticks_cpu_enabled = false;
 
 // this table converts from HAL_StatusTypeDef to POSIX errno
@@ -59,6 +60,9 @@ void mp_hal_stdout_tx_strn(const char *str, size_t len) {
 		// will no longer accept data from us!
 		usb_vcp_send_strn(str, len);
 	}
+#if MICROPY_HW_WIFIDBG_EN	
+		wifidbg_send_strn(str, len);
+#endif
 
 }
 
@@ -75,9 +79,9 @@ void mp_hal_stdout_tx_strn_cooked(const char *str, size_t len) {
     } else {
 
     }
-	
+#if MICROPY_HW_WIFIDBG_EN	
 	wifidbg_send_strn(str, len);
-
+#endif
 }
 
 void mp_hal_ticks_cpu_enable(void) {

@@ -70,7 +70,9 @@
 
 #include "ini.h"
 #include "overlay_manager.h"
+#if MICROPY_HW_WIFIDBG_EN
 #include "wifidbg.h"
+#endif
 void NORETURN __fatal_error(const char *msg);
 void flash_error(int n);
 
@@ -178,6 +180,7 @@ FRESULT exec_boot_script(const char *path, bool selftest, bool interruptible)
 extern void ProfReset(void);
 __WEAK int OverlaySwitch(uint8_t ovlyNdx) {return 0;}
 __WEAK int OverlaySetToDefault(void) {return 0;}
+#if MICROPY_HW_WIFIDBG_EN
 typedef struct openmv_config {
     bool wifidbg;
     wifidbg_config_t wifidbg_config;
@@ -220,7 +223,9 @@ static int ini_handler_callback(void *user, const char *section, const char *nam
         openmv_config->wifidbg_config.access_point_channel = ini_atoi(value);
     } else if (MATCH("WiFiConfig", "BoardName")) {
         strncpy(openmv_config->wifidbg_config.board_name,  value, WINC_MAX_BOARD_NAME_LEN);
-    } else {
+    } else if (MATCH("WiFiConfig", "DBGMODE")) {
+        openmv_config->wifidbg_config.dbg_mode= ini_atoi(value);
+    }else {
         return 0;
     }
 
@@ -228,7 +233,7 @@ static int ini_handler_callback(void *user, const char *section, const char *nam
 
     #undef MATCH
 }
-
+#endif
 
 #define SCnSCB_ACTLR_DISDEFWBUF_Pos         1U                                         /*!< ACTLR: DISDEFWBUF Position */
 #define SCnSCB_ACTLR_DISDEFWBUF_Msk        (1UL << SCnSCB_ACTLR_DISDEFWBUF_Pos)        /*!< ACTLR: DISDEFWBUF Mask */
@@ -260,7 +265,9 @@ int OpenMV_Main(uint32_t first_soft_reset)
     // py_lcd_init0();
     // far InfraRed sensor py_fir_init0();
 //    servo_init();
+#if MICROPY_HW_WIFIDBG_EN
 	static openmv_config_t openmv_config;
+#endif
  MainLoop:
     // Run boot script(s)
     if (first_soft_reset) {
@@ -287,8 +294,25 @@ int OpenMV_Main(uint32_t first_soft_reset)
         usbdbg_set_irq_enabled(true);
 #if MICROPY_HW_WIFIDBG_EN        
         memset(&openmv_config, 0, sizeof(openmv_config));
-    	// Parse config, and init wifi if enabled.
-    	ini_parse(&vfs_fat->fatfs, "/openmv.config", ini_handler_callback, &openmv_config);
+#if MICROPY_HW_HAS_SDCARD
+		const char *path_out;
+        mp_vfs_mount_t *vfs = mp_vfs_lookup_path("openmv.config", &path_out);
+        if (vfs != NULL){
+        	fs_user_mount_t *vfs_fat = MP_OBJ_TO_PTR(vfs->obj);
+    		// Parse config, and init wifi if enabled.
+    		ini_parse(&vfs_fat->fatfs, "openmv.config", ini_handler_callback, &openmv_config);
+    	}
+#else
+		openmv_config.wifidbg = true;
+		strcpy(openmv_config.wifidbg_config.client_ssid , "mi_t");
+		strcpy(openmv_config.wifidbg_config.client_key, "1234567890");
+		//strcpy(openmv_config.wifidbg_config.client_ssid , "MICR_WIFI");
+		//strcpy(openmv_config.wifidbg_config.client_key, "52062561");
+		openmv_config.wifidbg_config.mode = 0;
+		openmv_config.wifidbg_config.client_security = 0;
+		strcpy(openmv_config.wifidbg_config.board_name, "openmv_rt");	
+#endif		
+#ifndef BOARD_OMVRT1
 //test only
 		openmv_config.wifidbg = true;
 		strcpy(openmv_config.wifidbg_config.client_ssid , "mi_t");
@@ -298,14 +322,27 @@ int OpenMV_Main(uint32_t first_soft_reset)
 		openmv_config.wifidbg_config.mode = 0;
 		openmv_config.wifidbg_config.client_security = 0;
 		strcpy(openmv_config.wifidbg_config.board_name, "openmv_rt");
-
-		usbdbg_set_irq_enabled(false);
-    	if (openmv_config.wifidbg == true && wifidbg_init(&openmv_config.wifidbg_config) != 0) {
+//test 		
+#endif
+		
+    	if ((openmv_config.wifidbg == true) &&(wifidbg_init(&openmv_config.wifidbg_config) == 0)) {
         		//openmv_config.wifidbg = false;
+				usbdbg_set_irq_enabled(false);
+			
+				if(openmv_config.wifidbg_config.dbg_mode == 1)
+				{
+					wifidbg_enter_dbg_mode();
+				}
     	}
+		else
+		{
+			usbdbg_set_irq_enabled(true);
+		}
+    	
+    	
     }
-//test 
-	
+
+
 	while ((openmv_config.wifidbg == true) && (wifidbg_AP_connected() == true)&& (wifidbg_isconnected() == 0))
 	{
 		wifidbg_connect_IDE();
@@ -318,11 +355,12 @@ int OpenMV_Main(uint32_t first_soft_reset)
 		{
 			ProfReset();
 			wifidbg_init(&openmv_config.wifidbg_config);
+			
 			return 0;
 		}
 	}
 
-	if (usbdbg_script_ready()) {
+	if ((openmv_config.wifidbg == true) && usbdbg_script_ready()) {
         nlr_buf_t nlr;
 		PRINTF("script ready!\r\n");
         // execute the script
@@ -335,6 +373,7 @@ int OpenMV_Main(uint32_t first_soft_reset)
             usbdbg_set_irq_enabled(true);
             pyexec_exec_code(code);
 #else
+			wifidbg_set_irq_enabled(true);
 			pyexec_str(usbdbg_get_script());
 #endif
             nlr_pop();
@@ -343,9 +382,12 @@ int OpenMV_Main(uint32_t first_soft_reset)
       	}
 	}
 	
-	ProfReset();
-	return 0;
-        
+	if (openmv_config.wifidbg == true)
+	{
+		wifidbg_set_irq_enabled(true);
+		ProfReset();
+		return 0;
+    }    
 #else
 	}
 #endif	

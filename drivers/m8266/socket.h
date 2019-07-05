@@ -78,7 +78,7 @@ MACROS
 
 */
 	
-#define SOCKET_BUFFER_MAX_LENGTH							1400
+#define SOCKET_BUFFER_MAX_LENGTH							1024
 /*!< 
 	Maximum allowed size for a socket data buffer. Used with @ref send socket 
 	function to ensure that the buffer sent is within the allowed range. 
@@ -514,7 +514,7 @@ int M8266_socket_connect(int fd, sockaddr *addr, uint32_t timeout);
 int M8266_socket_send(int fd, const uint8_t *buf, uint32_t len, uint32_t timeout);
 
 
-int M8266_socket_recv(int fd, uint8_t *buf, uint32_t len, uint32_t timeout);
+int M8266_socket_recv(int fd, uint8_t *buf, uint32_t len, uint32_t timeout_ms, uint8_t *md);
 
 int M8266_socket_sendto(int fd, const uint8_t *buf, uint32_t len, sockaddr *addr, uint32_t timeout);
 

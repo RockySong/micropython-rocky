@@ -9,6 +9,7 @@
 #include "fb_alloc.h"
 #include "ff_wrapper.h"
 #include "imlib.h"
+#include "overlay_manager.h"
 #define SIZE_OFFSET             (1*4)
 #define MICROS_OFFSET           (8*4)
 #define FRAMES_OFFSET           (12*4)

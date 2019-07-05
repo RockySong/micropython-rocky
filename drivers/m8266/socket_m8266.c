@@ -280,6 +280,12 @@ int M8266_socket_send(int fd, const uint8_t *buf, uint32_t len, uint32_t timeout
                  	PRINTF("%s sent:%d len:%d, status:0x%x\r\n",__func__,sent,len,status);
                  	return -1;
 	            }
+	            else if(   ((status&0xFF) == 0x11)
+	            		||((status&0xFF) == 0x12)||((status&0xFF) == 0x10)  )
+	            {
+					mp_hal_delay_us(200);
+	            	return sent;
+	            }
 	            else
 	            {
 	               mp_hal_delay_us(100);
@@ -292,21 +298,86 @@ int M8266_socket_send(int fd, const uint8_t *buf, uint32_t len, uint32_t timeout
 	return sent;
 }
 
+int M8266_socket_sendblock(int fd, const uint8_t *buf, uint32_t len,uint32_t block_size, uint32_t timeout_ms)
+{
+	
+	uint16_t loops = 0;
+	uint32_t sent = 0; 
+	uint32_t tcp_packet_size = 1024;
+	uint16_t status;
+	static uint16_t error_status;
+	if (fd > socket_out_count)
+		return -1;
+
+   // for(sent=0, loops=0; (sent<len)&&(loops<= 1000); loops++)
+    {		
+		sent = M8266WIFI_SPI_Send_Data_Block((uint8_t *)buf, len,block_size,gSockets_client[fd].linkno, &status);
+		error_status = status;
+        if(sent>=len)  return sent;
+		if((status&0xFF) == 0x00)
+    	{
+      	}
+		else
+		{
+			
+			if( ((status&0xFF) == 0x14)      // 0x14 = connection of link_no not present
+                 || ((status&0xFF) == 0x15)    // 0x15 = connection of link_no closed
+                 || ((status&0xFF) == 0x18))  // 0x18 = TCP server in listening states and no tcp clients connecting to so far
+	            {
+                 // add some failure process here
+                 	PRINTF("%s sent:%d len:%d, status:0x%x\r\n",__func__,sent,len,status);
+                 	return -1;
+	            }
+	            else if( ((status&0xFF) == 0x11)
+	            		||((status&0xFF) == 0x12)||((status&0xFF) == 0x10)  )
+	            {
+					mp_hal_delay_us(200);
+	            	return sent;
+	            }
+	            else
+	            {
+	               mp_hal_delay_us(100);
+	            }
+		}
+
+
+    } // end of for(...
+	return sent;
+}
+
 int M8266_socket_has_data_rev(int fd)
 {
 	return M8266WIFI_SPI_Has_DataReceived();
 }
 
-int M8266_socket_recv(int fd, uint8_t *buf, uint32_t len, uint32_t timeout_ms)
+int M8266_socket_recv(int fd, uint8_t *buf, uint32_t len, uint32_t timeout_ms, uint8_t *md)
 {
 	uint16_t status;
 	uint32_t read_len;
 	uint8_t linkno;
 	read_len = M8266WIFI_SPI_RecvData(buf,len,timeout_ms,&linkno,&status);
 	
+	status = status & 0xff;
 	if (status == 0x2f){
 		PRINTF("M8266_socket_recv error:0x%x\r\n",status);
+		*md = 0;
 		return -1;
+	}
+	else if(status == 0x24)
+	{
+		*md = 1;
+	}
+	else if(status == 0x23)
+	{
+		*md = 1;
+	}
+	else if ( status == 0x22)
+	{
+		*md = 0;
+	}
+	else if (status == 0)
+	{
+		*md = 0;
 	}
 	//PRINTF("TCP Recieved:%d status:0x%x at link %d\r\n",read_len, status,linkno);
 	return read_len;
@@ -400,7 +471,7 @@ int M8266_socket_recvfrom(int fd, uint8_t *buf, uint32_t len, sockaddr *addr, ui
 	}
 
 	int read_len = M8266WIFI_SPI_RecvData_ex(buf,len,timeout_ms,&linkno,remote_addr,&remote_port,&status);
-	if (status == 0x2f)
+	if (status &0xff== 0x2f)
 		return -1;
 	PRINTF("UDP Rev from %d.%d.%d.%d readlen:%d status:0x%x at link %d\r\n",remote_addr[0],remote_addr[1],remote_addr[2],remote_addr[3],read_len,status,linkno);
 
@@ -408,3 +479,99 @@ int M8266_socket_recvfrom(int fd, uint8_t *buf, uint32_t len, sockaddr *addr, ui
 	
 }
 
+void M8266_socket_dbg_mode()
+{
+#define DBG_PORT		4321
+#define DBG_BUF_SIZE	2501
+#define LOOP_CNT		1024
+#define BUFFER_SIZE 1024
+
+	int server_fd,client_fd;
+	sockaddr client_sockaddr,udpbcast_sockaddr,server_sockaddr;
+	int ret;
+	uint8_t ip_addr[WINC_IP_ADDR_LEN] = {0x0};
+	static char buf[DBG_BUF_SIZE];	
+	static int dbg_total_size = 0;
+	uint8_t md;
+	static winc_socket_buf_t dbg_sockbuf;
+	static uint8_t request = 0;
+	static uint32_t xfer_length = 0;
+	int bytes;
+	uint8_t rd_buf[6] = {0};
+	if ((server_fd = winc_socket_socket(SOCK_STREAM)) < 0) {
+            return;
+    }
+
+	make_sockaddr(&server_sockaddr, ip_addr, DBG_PORT);
+    if ((ret = winc_socket_bind(server_fd, &server_sockaddr)) < 0) {
+        return;
+    }
+
+    if ((ret = winc_socket_listen(server_fd, 1)) < 0) {
+        return ;
+    }
+
+    if ((ret = winc_socket_accept(server_fd,
+                        &client_sockaddr, &client_fd, 10)) < 0) {
+        winc_socket_close(server_fd);
+		return ;
+    }
+
+#if 1
+	while(1)
+	{
+		
+		
+		if(M8266WIFI_SPI_Has_DataReceived() == 0)
+			continue;
+		
+		if ((ret = winc_socket_recv_in_int(client_fd, rd_buf, 6, &dbg_sockbuf, 100,&md)) < 0) {
+			
+			
+				
+				continue;
+		}
+		
+		if (ret != 6 || rd_buf[0] != 0x30) {
+			//M8266_DBG_IO_Toggle(0);
+			continue;
+		}
+		//M8266_DBG_IO_Toggle(0);
+		request = rd_buf[1];
+		xfer_length = *((uint32_t*)(rd_buf+2));
+		usbdbg_control(rd_buf+6, request, xfer_length);
+		
+		while (xfer_length>0) {
+        if (request & 0x80) {
+            // Device-to-host data phase
+            bytes = MIN(xfer_length, BUFFER_SIZE);
+            xfer_length -= bytes;
+			
+            wifidbg_data_in(buf, bytes);
+
+			if ((ret = winc_socket_sendblock_in_int(client_fd, (uint8_t *)buf,bytes, 100)) < 0) {
+                  	continue;
+            	}
+			}
+		}
+		mp_hal_delay_us(8000);
+		
+	}
+#else
+	for(int i=0;i<DBG_BUF_SIZE;i++)
+		buf[i] = i;
+
+	for(int j=0;;j++)
+	{
+		if ((ret = winc_socket_sendblock_in_int(client_fd, (uint8_t *)buf, DBG_BUF_SIZE, 100)) < 0) {
+           winc_socket_close(server_fd);
+           return;
+        }
+
+        dbg_total_size += ret;
+		mp_hal_delay_us(400);
+	}
+
+	winc_socket_close(server_fd);
+#endif        
+}

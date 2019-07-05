@@ -88,8 +88,8 @@
         <sRmem>1</sRmem>
         <sRfunc>1</sRfunc>
         <sRbox>1</sRbox>
-        <tLdApp>0</tLdApp>
-        <tGomain>1</tGomain>
+        <tLdApp>1</tLdApp>
+        <tGomain>0</tGomain>
         <tRbreak>1</tRbreak>
         <tRwatch>1</tRwatch>
         <tRmem>1</tRmem>
@@ -103,7 +103,7 @@
         <bEvRecOn>1</bEvRecOn>
         <bSchkAxf>0</bSchkAxf>
         <bTchkAxf>0</bTchkAxf>
-        <nTsel>3</nTsel>
+        <nTsel>4</nTsel>
         <sDll></sDll>
         <sDllPa></sDllPa>
         <sDlgDll></sDlgDll>
@@ -119,23 +119,18 @@
       <TargetDriverDllRegistry>
         <SetRegEntry>
           <Number>0</Number>
-          <Key>DLGUARM</Key>
-          <Name>/</Name>
+          <Key>UL2CM3</Key>
+          <Name>UL2CM3(-S0 -C0 -P0 )  -FN1 -FC8000 -FD20000000 -FF0MIMXRT106x_QSPI_4KB_SEC -FL0800000 -FS060000000 -FP0($$Device:MIMXRT1062CVL5A$arm\MIMXRT106x_QSPI_4KB_SEC.FLM)</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
           <Key>JL2CM3</Key>
-          <Name>-U50116470 -O78 -S1 -ZTIFSpeedSel10000 -A0 -C0 -JU1 -JI127.0.0.1 -JP0 -RST1 -N00("ARM CoreSight SW-DP") -D00(0BD11477) -L00(0) -TO18 -TC10000000 -TP21 -TDS8007 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -TB1 -TFE0 -FO7 -FD0 -FC1000 -FN2 -FF0MIMXRT105x_HYPER_256KB_SEC.FLM -FS070000000 -FL04000000 -FP0($$Device:MIMXRT1052$Flash\MIMXRT105x_HYPER_256KB_SEC.FLM) -FF1MIMXRT_QSPIFLASH_GD3v3 -FS160000000 -FL1400000</Name>
+          <Name>-U59400616 -O78 -S2 -ZTIFSpeedSel5000 -A0 -C0 -JU1 -JI127.0.0.1 -JP0 -RST1 -N00("ARM CoreSight SW-DP") -D00(0BD11477) -L00(0) -TO18 -TC10000000 -TP21 -TDS8007 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -TB1 -TFE0 -FO7 -FD0 -FC1000 -FN2 -FF0MIMXRT105x_HYPER_256KB_SEC.FLM -FS070000000 -FL04000000 -FP0($$Device:MIMXRT1052$Flash\MIMXRT105x_HYPER_256KB_SEC.FLM) -FF1MIMXRT_QSPIFLASH_GD3v3 -FS160000000 -FL1400000</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
-          <Key>UL2CM3</Key>
-          <Name>UL2CM3(-S0 -C0 -P0 )  -FN1 -FC1000 -FD20000000 -FF0MIMXRT105x_HYPER_256KB_SEC -FL04000000 -FS060000000 -FP0($$Device:MIMXRT1052$Flash\MIMXRT105x_HYPER_256KB_SEC.FLM)</Name>
-        </SetRegEntry>
-        <SetRegEntry>
-          <Number>0</Number>
-          <Key>CMSIS_AGDI</Key>
-          <Name>-X"Any" -UAny -O206 -S0 -C0 -P00 -N00("ARM CoreSight SW-DP") -D00(0BD11477) -L00(0) -TO18 -TC10000000 -TP20 -TDS8007 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -FO6 -FD20000000 -FC8000 -FN2 -FF0MIMXRT105x_HYPER_256KB_SEC.FLM -FS090000000 -FL04000000 -FP0($$Device:MIMXRT1052$Flash\MIMXRT105x_HYPER_256KB_SEC.FLM) -FF1MIMXRT_IS26KS512S -FS160000000 -FL14000000</Name>
+          <Key>DLGUARM</Key>
+          <Name>?qw h??qw h?</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -145,7 +140,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGTARM</Key>
-          <Name>(1010=1802,327,2252,884,0)(6017=143,234,332,570,0)(1008=798,238,1174,474,0)(6016=1354,453,1612,1106,1)(1012=1546,123,2023,438,1)</Name>
+          <Name>(1010=1470,327,1920,884,0)(6017=143,234,332,570,0)(1008=798,238,1174,474,0)(6016=1354,277,1694,1080,0)</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -153,152 +148,7 @@
           <Name></Name>
         </SetRegEntry>
       </TargetDriverDllRegistry>
-      <Breakpoint>
-        <Bp>
-          <Number>0</Number>
-          <Type>0</Type>
-          <LineNumber>496</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>0</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>0</BreakIfRCount>
-          <Filename>..\..\lib\utils\pyexec.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression></Expression>
-        </Bp>
-        <Bp>
-          <Number>1</Number>
-          <Type>0</Type>
-          <LineNumber>701</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>0</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>0</BreakIfRCount>
-          <Filename>..\nxp_rt1050_60\main.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression></Expression>
-        </Bp>
-        <Bp>
-          <Number>2</Number>
-          <Type>0</Type>
-          <LineNumber>951</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>0</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>0</BreakIfRCount>
-          <Filename>..\nxp_rt1050_60\omv\img\qrcode.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression></Expression>
-        </Bp>
-        <Bp>
-          <Number>3</Number>
-          <Type>0</Type>
-          <LineNumber>1865</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>0</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>0</BreakIfRCount>
-          <Filename>..\nxp_rt1050_60\omv\img\qrcode.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression></Expression>
-        </Bp>
-        <Bp>
-          <Number>4</Number>
-          <Type>0</Type>
-          <LineNumber>291</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>0</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>0</BreakIfRCount>
-          <Filename>..\..\lib\cmsis\nn\PoolingFunctions\arm_pool_q7_HWC.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression></Expression>
-        </Bp>
-        <Bp>
-          <Number>5</Number>
-          <Type>0</Type>
-          <LineNumber>415</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>0</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>0</BreakIfRCount>
-          <Filename>..\nxp_rt1050_60\startup_MIMXRT1052.s</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression></Expression>
-        </Bp>
-        <Bp>
-          <Number>6</Number>
-          <Type>0</Type>
-          <LineNumber>439</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>0</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>0</BreakIfRCount>
-          <Filename>..\nxp_rt1050_60\startup_MIMXRT1052.s</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression></Expression>
-        </Bp>
-        <Bp>
-          <Number>7</Number>
-          <Type>0</Type>
-          <LineNumber>96</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>0</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>0</BreakIfRCount>
-          <Filename>..\nxp_rt1050_60\omv\py\py_time.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression></Expression>
-        </Bp>
-        <Bp>
-          <Number>8</Number>
-          <Type>0</Type>
-          <LineNumber>626</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>0</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>0</BreakIfRCount>
-          <Filename>..\nxp_rt1050_60\usb_cdc_msc\virtual_com.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression></Expression>
-        </Bp>
-      </Breakpoint>
+      <Breakpoint/>
       <WatchWindow1>
         <Ww>
           <count>0</count>
@@ -586,18 +436,18 @@
       <TargetDriverDllRegistry>
         <SetRegEntry>
           <Number>0</Number>
+          <Key>DLGUARM</Key>
+          <Name>餥??qw餥??qw餥?</Name>
+        </SetRegEntry>
+        <SetRegEntry>
+          <Number>0</Number>
           <Key>JL2CM3</Key>
-          <Name>-U59402905 -O70 -S2 -ZTIFSpeedSel5000 -A0 -C0 -JU1 -JI127.0.0.1 -JP0 -RST1 -N00("ARM CoreSight SW-DP") -D00(0BD11477) -L00(0) -TO18 -TC10000000 -TP21 -TDS8001 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -TB1 -TFE0 -FO3 -FD0 -FC8000 -FN3 -FF0MIMXRT105x_HYPER_256KB_SEC.FLM -FS030000000 -FL04000000 -FP0($$Device:MIMXRT1052$Flash\MIMXRT105x_HYPER_256KB_SEC.FLM) -FF1MIMXRT_IS26KS512S -FS170000000 -FL14000000 -FF2MIMXRT_QSPIFLASH_GD3v3 -FS260000000 -FL2400000</Name>
+          <Name>-U59400616 -O78 -S1 -ZTIFSpeedSel10000 -A0 -C0 -JU1 -JI127.0.0.1 -JP0 -RST1 -N00("ARM CoreSight SW-DP") -D00(0BD11477) -L00(0) -TO18 -TC10000000 -TP21 -TDS8007 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -TB1 -TFE0 -FO7 -FD20000000 -FC8000 -FN1 -FF0MIMXRT_QSPIFLASH_GD3v3 -FS060000000 -FL0400000</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
           <Key>UL2CM3</Key>
-          <Name>UL2CM3(-S0 -C0 -P0 )  -FN1 -FC1000 -FD20000000 -FF0MIMXRT105x_HYPER_256KB_SEC -FL04000000 -FS060000000 -FP0($$Device:MIMXRT1052$Flash\MIMXRT105x_HYPER_256KB_SEC.FLM)</Name>
-        </SetRegEntry>
-        <SetRegEntry>
-          <Number>0</Number>
-          <Key>CMSIS_AGDI</Key>
-          <Name>-X"Any" -UAny -O974 -S8 -C0 -P00 -N00("ARM CoreSight SW-DP") -D00(0BD11477) -L00(0) -TO18 -TC10000000 -TP20 -TDS8007 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -FO3 -FD0 -FC8000 -FN2 -FF0MIMXRT105x_HYPER_256KB_SEC.FLM -FS050000000 -FL04000000 -FP0($$Device:MIMXRT1052$Flash\MIMXRT105x_HYPER_256KB_SEC.FLM) -FF1MIMXRT106x_QSPI_4KB_SEC -FS160000000 -FL1800000</Name>
+          <Name>UL2CM3(-S0 -C0 -P0 )  -FN1 -FC8000 -FD20000000 -FF0MIMXRT106x_QSPI_4KB_SEC -FL0800000 -FS060000000 -FP0($$Device:MIMXRT1062CVL5A$arm\MIMXRT106x_QSPI_4KB_SEC.FLM)</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -607,7 +457,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGTARM</Key>
-          <Name>(1010=934,185,1384,742,0)(6017=105,137,294,473,0)(1008=89,129,465,365,0)(6016=1264,389,1522,1042,0)(1012=665,539,1142,854,0)</Name>
+          <Name>(1010=934,185,1530,870,0)(6017=105,137,294,473,0)(1008=89,129,465,365,0)(6016=1264,389,1522,1042,0)</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -615,237 +465,29 @@
           <Name></Name>
         </SetRegEntry>
       </TargetDriverDllRegistry>
-      <Breakpoint>
-        <Bp>
-          <Number>0</Number>
-          <Type>0</Type>
-          <LineNumber>189</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>1610707942</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\nxp_rt1050_60\adc.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\mpyrt_flexspi\../nxp_rt1050_60/adc.c\189</Expression>
-        </Bp>
-        <Bp>
-          <Number>1</Number>
-          <Type>0</Type>
-          <LineNumber>37</LineNumber>
-          <EnabledFlag>0</EnabledFlag>
-          <Address>1611020924</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\nxp_rt1050_60\omv\py\py_mjpeg.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\mpyrt_flexspi\../nxp_rt1050_60/omv/py/py_mjpeg.c\37</Expression>
-        </Bp>
-        <Bp>
-          <Number>2</Number>
-          <Type>2</Type>
-          <LineNumber>0</LineNumber>
-          <EnabledFlag>0</EnabledFlag>
-          <Address>537073124</Address>
-          <ByteObject>1</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>1</ManyObjects>
-          <SizeOfObject>1</SizeOfObject>
-          <BreakByAccess>2</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename></Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>&amp;sensor.wndX</Expression>
-        </Bp>
-        <Bp>
-          <Number>3</Number>
-          <Type>2</Type>
-          <LineNumber>0</LineNumber>
-          <EnabledFlag>0</EnabledFlag>
-          <Address>538968068</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>1</ManyObjects>
-          <SizeOfObject>1</SizeOfObject>
-          <BreakByAccess>2</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename></Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>0x20200004</Expression>
-        </Bp>
-        <Bp>
-          <Number>4</Number>
-          <Type>0</Type>
-          <LineNumber>96</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>1611029336</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\nxp_rt1050_60\omv\py\py_time.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\mpyrt_flexspi\../nxp_rt1050_60/omv/py/py_time.c\96</Expression>
-        </Bp>
-        <Bp>
-          <Number>5</Number>
-          <Type>2</Type>
-          <LineNumber>0</LineNumber>
-          <EnabledFlag>0</EnabledFlag>
-          <Address>537071764</Address>
-          <ByteObject>1</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>1</ManyObjects>
-          <SizeOfObject>4</SizeOfObject>
-          <BreakByAccess>2</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename></Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>baudrate</Expression>
-        </Bp>
-        <Bp>
-          <Number>6</Number>
-          <Type>2</Type>
-          <LineNumber>0</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>537071730</Address>
-          <ByteObject>1</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>1</ManyObjects>
-          <SizeOfObject>1</SizeOfObject>
-          <BreakByAccess>2</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename></Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>s_lineCoding[0]</Expression>
-        </Bp>
-      </Breakpoint>
+      <Breakpoint/>
       <WatchWindow1>
         <Ww>
           <count>0</count>
           <WinNumber>1</WinNumber>
-          <ItemText>g_deviceComposite</ItemText>
+          <ItemText>sockbuf</ItemText>
         </Ww>
         <Ww>
           <count>1</count>
           <WinNumber>1</WinNumber>
-          <ItemText>classHandle-&gt;configList-&gt;config[0]</ItemText>
+          <ItemText>script_running</ItemText>
         </Ww>
         <Ww>
           <count>2</count>
           <WinNumber>1</WinNumber>
-          <ItemText>pyb_swim_obj[0]</ItemText>
-        </Ww>
-        <Ww>
-          <count>3</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>pyb_swim_obj</ItemText>
-        </Ww>
-        <Ww>
-          <count>4</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>args[3]</ItemText>
-        </Ww>
-        <Ww>
-          <count>5</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>ctx</ItemText>
-        </Ww>
-        <Ww>
-          <count>6</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>acmReqParam</ItemText>
-        </Ww>
-        <Ww>
-          <count>7</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>script_buf</ItemText>
-        </Ww>
-        <Ww>
-          <count>8</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>ctx</ItemText>
-        </Ww>
-        <Ww>
-          <count>9</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>vfs_fat</ItemText>
-        </Ww>
-        <Ww>
-          <count>10</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>script_buf</ItemText>
-        </Ww>
-        <Ww>
-          <count>11</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>s_dbgNdx</ItemText>
-        </Ww>
-        <Ww>
-          <count>12</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>dbgRBs</ItemText>
-        </Ww>
-        <Ww>
-          <count>13</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>g_dbg</ItemText>
-        </Ww>
-        <Ww>
-          <count>14</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>g_composite</ItemText>
-        </Ww>
-        <Ww>
-          <count>15</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>sensor,0x0A</ItemText>
-        </Ww>
-        <Ww>
-          <count>16</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>s_prof</ItemText>
-        </Ww>
-        <Ww>
-          <count>17</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>s_irq</ItemText>
-        </Ww>
-        <Ww>
-          <count>18</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>g_isUsbHostOpen</ItemText>
-        </Ww>
-        <Ww>
-          <count>19</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>acmInfo</ItemText>
-        </Ww>
-        <Ww>
-          <count>20</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>fb_framebuffer</ItemText>
-        </Ww>
-        <Ww>
-          <count>21</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>baudrate,0x0A</ItemText>
+          <ItemText>wd_count</ItemText>
         </Ww>
       </WatchWindow1>
       <MemoryWindow1>
         <Mm>
           <WinNumber>1</WinNumber>
           <SubType>2</SubType>
-          <ItemText>0x2003129C</ItemText>
+          <ItemText>0x202621ee</ItemText>
           <AccSizeX>0</AccSizeX>
         </Mm>
       </MemoryWindow1>
@@ -853,7 +495,7 @@
         <Mm>
           <WinNumber>2</WinNumber>
           <SubType>2</SubType>
-          <ItemText>s_prof.items</ItemText>
+          <ItemText>0x20262234</ItemText>
           <AccSizeX>0</AccSizeX>
         </Mm>
       </MemoryWindow2>
@@ -2125,7 +1767,7 @@
 
   <Group>
     <GroupName>py</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -2445,7 +2087,7 @@
       <GroupNumber>3</GroupNumber>
       <FileNumber>90</FileNumber>
       <FileType>1</FileType>
-      <tvExp>1</tvExp>
+      <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\py\modmath.c</PathWithFileName>
@@ -4972,7 +4614,7 @@
   </Group>
 
   <Group>
-    <GroupName>mcusdk</GroupName>
+    <GroupName>mcusdkRT1062</GroupName>
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
@@ -4984,7 +4626,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_adc.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_adc.c</PathWithFileName>
       <FilenameWithoutPath>fsl_adc.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -4996,7 +4638,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_adc_etc.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_adc_etc.c</PathWithFileName>
       <FilenameWithoutPath>fsl_adc_etc.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5008,7 +4650,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_aipstz.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_aipstz.c</PathWithFileName>
       <FilenameWithoutPath>fsl_aipstz.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5020,7 +4662,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_aoi.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_aoi.c</PathWithFileName>
       <FilenameWithoutPath>fsl_aoi.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5032,7 +4674,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_bee.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_bee.c</PathWithFileName>
       <FilenameWithoutPath>fsl_bee.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5044,7 +4686,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_cache.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_cache.c</PathWithFileName>
       <FilenameWithoutPath>fsl_cache.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5056,7 +4698,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_clock.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_clock.c</PathWithFileName>
       <FilenameWithoutPath>fsl_clock.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5068,7 +4710,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_cmp.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_cmp.c</PathWithFileName>
       <FilenameWithoutPath>fsl_cmp.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5080,7 +4722,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_common.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_common.c</PathWithFileName>
       <FilenameWithoutPath>fsl_common.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5092,7 +4734,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_csi.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_csi.c</PathWithFileName>
       <FilenameWithoutPath>fsl_csi.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5104,7 +4746,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_dcdc.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_dcdc.c</PathWithFileName>
       <FilenameWithoutPath>fsl_dcdc.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5116,7 +4758,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_dcp.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_dcp.c</PathWithFileName>
       <FilenameWithoutPath>fsl_dcp.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5128,7 +4770,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_dmamux.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_dmamux.c</PathWithFileName>
       <FilenameWithoutPath>fsl_dmamux.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5140,7 +4782,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_edma.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_edma.c</PathWithFileName>
       <FilenameWithoutPath>fsl_edma.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5152,7 +4794,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_elcdif.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_elcdif.c</PathWithFileName>
       <FilenameWithoutPath>fsl_elcdif.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5164,7 +4806,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_enc.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_enc.c</PathWithFileName>
       <FilenameWithoutPath>fsl_enc.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5176,7 +4818,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_enet.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_enet.c</PathWithFileName>
       <FilenameWithoutPath>fsl_enet.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5188,7 +4830,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_ewm.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_ewm.c</PathWithFileName>
       <FilenameWithoutPath>fsl_ewm.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5200,7 +4842,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_flexcan.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_flexcan.c</PathWithFileName>
       <FilenameWithoutPath>fsl_flexcan.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5212,7 +4854,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_flexram.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_flexram.c</PathWithFileName>
       <FilenameWithoutPath>fsl_flexram.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5224,7 +4866,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_flexspi.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_flexspi.c</PathWithFileName>
       <FilenameWithoutPath>fsl_flexspi.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5236,7 +4878,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_gpc.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_gpc.c</PathWithFileName>
       <FilenameWithoutPath>fsl_gpc.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5248,7 +4890,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_gpio.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_gpio.c</PathWithFileName>
       <FilenameWithoutPath>fsl_gpio.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5260,7 +4902,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_gpt.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_gpt.c</PathWithFileName>
       <FilenameWithoutPath>fsl_gpt.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5272,7 +4914,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_kpp.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_kpp.c</PathWithFileName>
       <FilenameWithoutPath>fsl_kpp.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5284,7 +4926,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_lpi2c.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_lpi2c.c</PathWithFileName>
       <FilenameWithoutPath>fsl_lpi2c.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5296,7 +4938,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_lpi2c_edma.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_lpi2c_edma.c</PathWithFileName>
       <FilenameWithoutPath>fsl_lpi2c_edma.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5308,7 +4950,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_lpi2c_freertos.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_lpi2c_freertos.c</PathWithFileName>
       <FilenameWithoutPath>fsl_lpi2c_freertos.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5320,7 +4962,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_lpspi.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_lpspi.c</PathWithFileName>
       <FilenameWithoutPath>fsl_lpspi.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5332,7 +4974,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_lpspi_edma.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_lpspi_edma.c</PathWithFileName>
       <FilenameWithoutPath>fsl_lpspi_edma.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5344,7 +4986,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_lpspi_freertos.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_lpspi_freertos.c</PathWithFileName>
       <FilenameWithoutPath>fsl_lpspi_freertos.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5356,7 +4998,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_lpuart.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_lpuart.c</PathWithFileName>
       <FilenameWithoutPath>fsl_lpuart.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5368,7 +5010,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_lpuart_edma.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_lpuart_edma.c</PathWithFileName>
       <FilenameWithoutPath>fsl_lpuart_edma.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5380,7 +5022,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_lpuart_freertos.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_lpuart_freertos.c</PathWithFileName>
       <FilenameWithoutPath>fsl_lpuart_freertos.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5392,7 +5034,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_pit.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_pit.c</PathWithFileName>
       <FilenameWithoutPath>fsl_pit.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5404,7 +5046,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_pmu.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_pmu.c</PathWithFileName>
       <FilenameWithoutPath>fsl_pmu.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5416,7 +5058,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_pwm.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_pwm.c</PathWithFileName>
       <FilenameWithoutPath>fsl_pwm.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5428,7 +5070,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_pxp.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_pxp.c</PathWithFileName>
       <FilenameWithoutPath>fsl_pxp.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5440,7 +5082,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_qtmr.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_qtmr.c</PathWithFileName>
       <FilenameWithoutPath>fsl_qtmr.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5452,7 +5094,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_rtwdog.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_rtwdog.c</PathWithFileName>
       <FilenameWithoutPath>fsl_rtwdog.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5464,7 +5106,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_sai.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_sai.c</PathWithFileName>
       <FilenameWithoutPath>fsl_sai.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5476,7 +5118,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_sai_edma.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_sai_edma.c</PathWithFileName>
       <FilenameWithoutPath>fsl_sai_edma.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5488,7 +5130,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_semc.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_semc.c</PathWithFileName>
       <FilenameWithoutPath>fsl_semc.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5500,7 +5142,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_snvs_hp.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_snvs_hp.c</PathWithFileName>
       <FilenameWithoutPath>fsl_snvs_hp.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5512,7 +5154,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_snvs_lp.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_snvs_lp.c</PathWithFileName>
       <FilenameWithoutPath>fsl_snvs_lp.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5524,7 +5166,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_spdif.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_spdif.c</PathWithFileName>
       <FilenameWithoutPath>fsl_spdif.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5536,7 +5178,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_spdif_edma.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_spdif_edma.c</PathWithFileName>
       <FilenameWithoutPath>fsl_spdif_edma.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5548,7 +5190,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_src.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_src.c</PathWithFileName>
       <FilenameWithoutPath>fsl_src.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5560,7 +5202,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_trng.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_trng.c</PathWithFileName>
       <FilenameWithoutPath>fsl_trng.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5572,7 +5214,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_tsc.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_tsc.c</PathWithFileName>
       <FilenameWithoutPath>fsl_tsc.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5584,7 +5226,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_usdhc.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_usdhc.c</PathWithFileName>
       <FilenameWithoutPath>fsl_usdhc.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5596,7 +5238,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_wdog.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_wdog.c</PathWithFileName>
       <FilenameWithoutPath>fsl_wdog.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5608,7 +5250,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_xbara.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_xbara.c</PathWithFileName>
       <FilenameWithoutPath>fsl_xbara.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5620,7 +5262,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_xbarb.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_xbarb.c</PathWithFileName>
       <FilenameWithoutPath>fsl_xbarb.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5632,7 +5274,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\drivers\fsl_csi_camera_adapter.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_csi_camera_adapter.c</PathWithFileName>
       <FilenameWithoutPath>fsl_csi_camera_adapter.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5640,7 +5282,7 @@
   </Group>
 
   <Group>
-    <GroupName>mcusdk_utils</GroupName>
+    <GroupName>mcusdkRT1062_utils</GroupName>
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
@@ -5652,7 +5294,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\utilities\fsl_debug_console.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\utilities\fsl_debug_console.c</PathWithFileName>
       <FilenameWithoutPath>fsl_debug_console.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5664,7 +5306,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\utilities\log\fsl_log.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\utilities\log\fsl_log.c</PathWithFileName>
       <FilenameWithoutPath>fsl_log.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5676,7 +5318,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\utilities\str\fsl_str.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\utilities\str\fsl_str.c</PathWithFileName>
       <FilenameWithoutPath>fsl_str.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5688,7 +5330,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\utilities\fsl_assert.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\utilities\fsl_assert.c</PathWithFileName>
       <FilenameWithoutPath>fsl_assert.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5700,7 +5342,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\utilities\fsl_shell.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\utilities\fsl_shell.c</PathWithFileName>
       <FilenameWithoutPath>fsl_shell.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5712,7 +5354,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\utilities\io\fsl_io.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\utilities\io\fsl_io.c</PathWithFileName>
       <FilenameWithoutPath>fsl_io.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -5821,7 +5463,7 @@
       <GroupNumber>11</GroupNumber>
       <FileNumber>366</FileNumber>
       <FileType>1</FileType>
-      <tvExp>1</tvExp>
+      <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\nxp_rt1050_60\build-omvrt1\pins_omvrt1.c</PathWithFileName>
@@ -5881,7 +5523,7 @@
 
   <Group>
     <GroupName>port</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -5916,7 +5558,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\system_MIMXRT1052.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\system_MIMXRT1052.c</PathWithFileName>
       <FilenameWithoutPath>system_MIMXRT1052.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -7181,7 +6823,7 @@
 
   <Group>
     <GroupName>sdk_usb</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -7192,7 +6834,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\middleware\sdkusb\device\usb_device_dci.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\device\usb_device_dci.c</PathWithFileName>
       <FilenameWithoutPath>usb_device_dci.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -7204,7 +6846,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\middleware\sdkusb\osa\usb_osa_bm.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\osa\usb_osa_bm.c</PathWithFileName>
       <FilenameWithoutPath>usb_osa_bm.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -7324,7 +6966,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\middleware\sdkusb\device\usb_device_ehci.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\device\usb_device_ehci.c</PathWithFileName>
       <FilenameWithoutPath>usb_device_ehci.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -7336,7 +6978,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\middleware\sdkusb\phy\usb_phy.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\phy\usb_phy.c</PathWithFileName>
       <FilenameWithoutPath>usb_phy.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -7356,7 +6998,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\middleware\sdkusb\osa\usb_osa_bm.h</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\osa\usb_osa_bm.h</PathWithFileName>
       <FilenameWithoutPath>usb_osa_bm.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -7368,7 +7010,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\middleware\sdkusb\osa\usb_osa.h</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\osa\usb_osa.h</PathWithFileName>
       <FilenameWithoutPath>usb_osa.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -7380,7 +7022,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\middleware\sdkusb\device\usb_device_dci.h</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\device\usb_device_dci.h</PathWithFileName>
       <FilenameWithoutPath>usb_device_dci.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -7392,7 +7034,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\middleware\sdkusb\device\usb_device.h</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\device\usb_device.h</PathWithFileName>
       <FilenameWithoutPath>usb_device.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -7404,7 +7046,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\middleware\sdkusb\include\usb_spec.h</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\include\usb_spec.h</PathWithFileName>
       <FilenameWithoutPath>usb_spec.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -7416,7 +7058,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\middleware\sdkusb\include\usb_misc.h</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\include\usb_misc.h</PathWithFileName>
       <FilenameWithoutPath>usb_misc.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -7548,7 +7190,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\middleware\sdkusb\device\usb_device_ehci.h</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\device\usb_device_ehci.h</PathWithFileName>
       <FilenameWithoutPath>usb_device_ehci.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -7557,7 +7199,7 @@
 
   <Group>
     <GroupName>sdmmc</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -8276,7 +7918,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\xip\fsl_flexspi_nor_boot.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\xip\fsl_flexspi_nor_boot.c</PathWithFileName>
       <FilenameWithoutPath>fsl_flexspi_nor_boot.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -8288,7 +7930,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\xip\fsl_flexspi_nor_boot.h</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\xip\fsl_flexspi_nor_boot.h</PathWithFileName>
       <FilenameWithoutPath>fsl_flexspi_nor_boot.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -8300,7 +7942,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\xip\fsl_flexspi_nor_flash.c</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\xip\fsl_flexspi_nor_flash.c</PathWithFileName>
       <FilenameWithoutPath>fsl_flexspi_nor_flash.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -8312,7 +7954,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\mcusdk\xip\fsl_flexspi_nor_flash.h</PathWithFileName>
+      <PathWithFileName>..\nxp_rt1050_60\mcusdkRT1062\xip\fsl_flexspi_nor_flash.h</PathWithFileName>
       <FilenameWithoutPath>fsl_flexspi_nor_flash.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -9377,11 +9019,79 @@
       <GroupNumber>25</GroupNumber>
       <FileNumber>653</FileNumber>
       <FileType>1</FileType>
-      <tvExp>1</tvExp>
+      <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\nxp_rt1050_60\omv\nn\nn.c</PathWithFileName>
       <FilenameWithoutPath>nn.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+  </Group>
+
+  <Group>
+    <GroupName>omv_wifi</GroupName>
+    <tvExp>1</tvExp>
+    <tvExpOptDlg>0</tvExpOptDlg>
+    <cbSel>0</cbSel>
+    <RteFlg>0</RteFlg>
+    <File>
+      <GroupNumber>26</GroupNumber>
+      <FileNumber>654</FileNumber>
+      <FileType>4</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\drivers\m8266\lib\M8266WIFIDrv_iMXRT10xx.lib</PathWithFileName>
+      <FilenameWithoutPath>M8266WIFIDrv_iMXRT10xx.lib</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>26</GroupNumber>
+      <FileNumber>655</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\drivers\m8266\m8266_hw.c</PathWithFileName>
+      <FilenameWithoutPath>m8266_hw.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>26</GroupNumber>
+      <FileNumber>656</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\drivers\m8266\socket_m8266.c</PathWithFileName>
+      <FilenameWithoutPath>socket_m8266.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>26</GroupNumber>
+      <FileNumber>657</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\drivers\m8266\winc.c</PathWithFileName>
+      <FilenameWithoutPath>winc.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>26</GroupNumber>
+      <FileNumber>658</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\nxp_rt1050_60\omv\wifidbg.c</PathWithFileName>
+      <FilenameWithoutPath>wifidbg.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

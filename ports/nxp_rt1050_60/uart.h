@@ -27,7 +27,7 @@
 #ifndef _UART_H_
 #define _UART_H_
 #define LPUART_FIFO_CAP		4
-
+#include "obj.h"
 #if defined(BOARD_OMVRT1)
 #define MICROPY_HW_UART4_NAME   "uart4"	//ALT2
 #define MICROPY_HW_UART4_RX     (pin_EMC_20)	// D0/RXD

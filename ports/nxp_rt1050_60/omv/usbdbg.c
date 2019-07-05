@@ -18,6 +18,7 @@
 #include "compile.h"
 #include "runtime.h"
 #include "omv_boardconfig.h"
+#include "mpconfigboard.h"
 #include "virtual_com.h"
 #include "fsl_debug_console.h"
 static int xfer_bytes;
@@ -40,6 +41,7 @@ void usbdbg_init()
 {
     script_ready = false;
     script_running=false;
+//	M8266_DBG_IO_Toggle(1);
     vstr_init(&script_buf, 32);
 	if (mp_const_ide_interrupt == 0)
 		mp_const_ide_interrupt = mp_obj_new_exception_msg(&mp_type_Exception, "IDE interrupt");
@@ -60,6 +62,11 @@ void usbdbg_set_script_running(bool running)
     script_running = running;
 }
 
+bool usbdbg_script_running()
+{
+	return script_running;
+}
+
 inline void usbdbg_set_irq_enabled(bool enabled)
 {
     if (enabled) {
@@ -75,7 +82,8 @@ inline void usbdbg_set_irq_enabled(bool enabled)
 #else
 #define logout printf
 #endif
-// #define DUMP_RAW
+
+//#define DUMP_RAW
 #ifdef DUMP_RAW
 #define DUMP_FB	MAIN_FB
 #else
@@ -133,6 +141,7 @@ void usbdbg_data_in(void *buffer, int length)
 			#else
 				// Return 0 if FB is locked or not ready.
 				((uint32_t*)buffer)[0] = 0;
+				
 				// Try to lock FB. If header size == 0 frame is not ready
 				if (mutex_try_lock(&JPEG_FB()->lock, MUTEX_TID_IDE)) {
 					// If header size == 0 frame is not ready
@@ -229,6 +238,7 @@ void usbdbg_data_out(void *buffer, int length)
 
                     // Disable IDE IRQ (re-enabled by pyexec or main).
                     usbdbg_set_irq_enabled(false);
+                    //wifidbg_set_irq_enabled(false);
 					#if 1
                     // Clear interrupt traceback
                     mp_obj_exception_clear_traceback(mp_const_ide_interrupt);
@@ -297,7 +307,7 @@ void usbdbg_data_out(void *buffer, int length)
             break;
     }
 }
-
+#if MICROPY_HW_WIFIDBG_EN
 void wifidbg_data_out(void *buffer, int length)
 {
     switch (cmd) {
@@ -311,12 +321,12 @@ void wifidbg_data_out(void *buffer, int length)
                 if (xfer_bytes == xfer_length) {
                     // Set script ready flag
                     script_ready = true;
-
                     // Set script running flag
                     script_running = true;
 
                     // Disable IDE IRQ (re-enabled by pyexec or main).
                     usbdbg_set_irq_enabled(false);
+                    wifidbg_set_irq_enabled(false);
 					#if 0
                     // Clear interrupt traceback
                     mp_obj_exception_clear_traceback(mp_const_ide_interrupt);
@@ -386,6 +396,7 @@ void wifidbg_data_out(void *buffer, int length)
     }
 }
 
+
 void wifidbg_data_in(void *buffer, int length)
 {
 	logout("usbdbg_data_in: cmd=%x, buffer=0x%08x, bytes=%d\r\n", cmd, buffer, length);
@@ -420,6 +431,7 @@ void wifidbg_data_in(void *buffer, int length)
 					cmd = USBDBG_NONE;
 				}
 			}
+			
             break;
         }
 
@@ -437,12 +449,14 @@ void wifidbg_data_in(void *buffer, int length)
 			#else
 				// Return 0 if FB is locked or not ready.
 				((uint32_t*)buffer)[0] = 0;
+				
 				// Try to lock FB. If header size == 0 frame is not ready
 				if (mutex_try_lock(&JPEG_FB()->lock, MUTEX_TID_IDE)) {
 					// If header size == 0 frame is not ready
 					if (JPEG_FB()->size == 0) {
 						// unlock FB
 						mutex_unlock(&JPEG_FB()->lock, MUTEX_TID_IDE);
+						M8266_DBG_IO_Toggle(0);
 					} else {
 						// Return header w, h and size/bpp
 						((uint32_t*)buffer)[0] = JPEG_FB()->w;
@@ -456,6 +470,7 @@ void wifidbg_data_in(void *buffer, int length)
             break;
 
         case USBDBG_FRAME_DUMP:
+        	
 			#ifdef OMV_MPY_ONLY
 				cmd = USBDBG_NONE;
 			#else
@@ -474,9 +489,11 @@ void wifidbg_data_in(void *buffer, int length)
 						JPEG_FB()->w = 0; JPEG_FB()->h = 0; JPEG_FB()->size = 0;
 						mutex_unlock(&JPEG_FB()->lock, MUTEX_TID_IDE);
 					}
+					
 				#endif
             }
 			#endif
+			
             break;
 
         case USBDBG_ARCH_STR: {
@@ -505,13 +522,26 @@ void wifidbg_data_in(void *buffer, int length)
             uint32_t *buf = buffer;
             buf[0] = (uint32_t) script_running;
             cmd = USBDBG_NONE;
+			//if (script_running)
+			///	M8266_DBG_IO_Toggle(1);
+			//else
             break;
+        }
+        case 0x8b:{
+        	if (xfer_bytes < xfer_length) {
+				memset(buffer,0xf1,length);
+        		xfer_bytes += length;
+
+        		if (xfer_bytes == xfer_length) 
+						cmd = USBDBG_NONE;
+        	}
+        	break;
         }
         default: /* error */
             break;
     }
 }
-
+#endif
 
 void usbdbg_control(void *buffer, uint8_t request, uint32_t length)
 {
@@ -553,7 +583,7 @@ void usbdbg_control(void *buffer, uint8_t request, uint32_t length)
 
                 // Disable IDE IRQ (re-enabled by pyexec or main).
                 usbdbg_set_irq_enabled(false);
-
+				wifidbg_set_irq_enabled(false);
                 // interrupt running code by raising an exception
                 // pendsv_kbd_intr();
                 mp_obj_exception_clear_traceback(mp_const_ide_interrupt);
@@ -634,10 +664,11 @@ void usbdbg_control(void *buffer, uint8_t request, uint32_t length)
 
         case USBDBG_TX_BUF:
         case USBDBG_TX_BUF_LEN:
+		case 0x8b:
             xfer_bytes = 0;
             xfer_length = length;
             break;
-
+		
         default: /* error */
             cmd = USBDBG_NONE;
             break;

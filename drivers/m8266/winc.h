@@ -14,7 +14,7 @@
 #define WINC_MAX_SSID_LEN       (33)
 #define WINC_MAX_PSK_LEN        (65)
 #define WINC_MAX_BOARD_NAME_LEN (33)
-#define WINC_SOCKBUF_SIZE       (1400)
+#define WINC_SOCKBUF_SIZE       (1024)
 
 #define MAKE_SOCKADDR(addr, ip, port) \
     addr.sa_family = AF_INET; \
@@ -118,7 +118,7 @@ int winc_socket_recv(int fd, uint8_t *buf, uint32_t len, winc_socket_buf_t *sock
 int winc_socket_sendto(int fd, const uint8_t *buf, uint32_t len, sockaddr *addr, uint32_t timeout);
 int winc_socket_recvfrom(int fd, uint8_t *buf, uint32_t len, sockaddr *addr, uint32_t timeout);
 int winc_socket_setsockopt(int fd, uint32_t level, uint32_t opt, const void *optval, uint32_t optlen);
-int winc_socket_recv_in_int(int fd, uint8_t *buf, uint32_t len, winc_socket_buf_t *sockbuf, uint32_t timeout_ms);
+int winc_socket_recv_in_int(int fd, uint8_t *buf, uint32_t len, winc_socket_buf_t *sockbuf, uint32_t timeout_ms, uint8_t *md);
 int winc_socket_send_in_int(int fd, const uint8_t *buf, uint32_t len, uint32_t timeout);
 
 void make_sockaddr(sockaddr *addr, uint8_t *ip, uint16_t port);

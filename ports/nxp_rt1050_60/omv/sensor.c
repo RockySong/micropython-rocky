@@ -279,6 +279,7 @@ void BOARD_InitLcdifPixClock(void)
      * 100 derive clock from PLL2 PFD1
      * 101 derive clock from PLL3 PFD1
      */
+#if (MCU_SERIES_RT105)	
     CLOCK_SetMux(kCLOCK_Lcdif1PreMux, 2);
 
     CLOCK_SetDiv(kCLOCK_Lcdif1PreDiv, 4);
@@ -293,6 +294,22 @@ void BOARD_InitLcdifPixClock(void)
      * 100 derive clock from ldb_di1_clk
      */
     CLOCK_SetMux(kCLOCK_Lcdif1Mux, 0);
+#elif (MCU_SERIES_RT106)
+	CLOCK_SetMux(kCLOCK_LcdifPreMux, 2);
+
+    CLOCK_SetDiv(kCLOCK_LcdifPreDiv, 4);
+
+    CLOCK_SetDiv(kCLOCK_LcdifDiv, 1);
+
+    /*
+     * 000 derive clock from divided pre-muxed lcdif1 clock
+     * 001 derive clock from ipp_di0_clk
+     * 010 derive clock from ipp_di1_clk
+     * 011 derive clock from ldb_di0_clk
+     * 100 derive clock from ldb_di1_clk
+     */
+    //CLOCK_SetMux(kCLOCK_LcdifMux, 0);
+#endif
 }
 static void OV7725_DelayMs(uint32_t ms)
 {
@@ -1519,10 +1536,16 @@ int sensor_snapshot(image_t *pImg, void *pv1, void *pv2)
 		
 		CAMERA_TAKE_SNAPSHOT();
 		if (!s_isEnUsbIrqForSnapshot)
+		{
 			NVIC_DisableIRQ(USB_OTG1_IRQn);
+		//	NVIC_DisableIRQ(PIT_IRQn);
+		}
 		CAMERA_WAIT_FOR_SNAPSHOT();
 		if (!s_isEnUsbIrqForSnapshot)
+		{
 			NVIC_EnableIRQ(USB_OTG1_IRQn);
+	//		NVIC_EnableIRQ(PIT_IRQn);
+		}
 		#else
 		/*
 		uint32_t i;

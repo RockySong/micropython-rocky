@@ -551,8 +551,10 @@ void SysTick_C_Handler(ExceptionRegisters_t *regs) {
     // follows: ((void(*)(void))(systick_dispatch[uwTick & 0xf]))();
 
     if (STORAGE_IDLE_TICK(uwTick)) {
+	#if (MCU_SERIES_RT105)	
         TRIGGER_FLASH_IRQ();   // borrow UTICK IRQ to handle flash cache flush
-    }
+    #endif
+	}
 
 	/* rocky ignore
     if (DMA_IDLE_ENABLED() && DMA_IDLE_TICK(uwTick)) {

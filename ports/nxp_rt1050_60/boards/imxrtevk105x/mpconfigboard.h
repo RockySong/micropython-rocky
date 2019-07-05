@@ -3,7 +3,9 @@
 
 #define MICROPY_HW_BOARD_NAME       "mimxrt1050-evk"
 #define MICROPY_HW_MCU_NAME         "i.MX RT105x"
+#ifdef repl_uart_id
 #define MICROPY_HW_UART_REPL    	(repl_uart_id)	// uart ID of REPL uart, must be the same as repl_uart_id in uart.h
+#endif
 #define MICROPY_HW_HAS_SWITCH       (1)
 #define MICROPY_HW_HAS_FLASH        (1)
 #define MICROPY_HW_HAS_SDCARD       (0)

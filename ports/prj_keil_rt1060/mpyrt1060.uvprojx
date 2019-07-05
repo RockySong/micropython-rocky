@@ -15,16 +15,16 @@
       <uAC6>0</uAC6>
       <TargetOption>
         <TargetCommonOption>
-          <Device>MIMXRT1052:M7</Device>
+          <Device>MIMXRT1062CVL5A</Device>
           <Vendor>NXP</Vendor>
-          <PackID>NXP.iMXRT_DFP.1.0.2</PackID>
+          <PackID>NXP.MIMXRT1062_DFP.11.0.1</PackID>
           <PackURL>http://mcuxpresso.nxp.com/cmsis_pack/repo/</PackURL>
-          <Cpu>IRAM(0x20000000,0x00060000) IRAM2(0x00000000,0x00020000) CPUTYPE("Cortex-M7") FPU3(SFPU) CLOCK(12000000) ELITTLE</Cpu>
+          <Cpu>IRAM(0x20000000,0x020000) IRAM2(0x00000000,0x020000) XRAM(0x20200000,0x0c0000) CPUTYPE("Cortex-M7") FPU3(DFPU) CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
-          <FlashDriverDll>UL2CM3(-S0 -C0 -P0 -FD20000000 -FC1000 -FN1 -FF0MIMXRT105x_HYPER_256KB_SEC -FS060000000 -FL04000000 -FP0($$Device:MIMXRT1052$Flash\MIMXRT105x_HYPER_256KB_SEC.FLM))</FlashDriverDll>
+          <FlashDriverDll>UL2CM3(-S0 -C0 -P0 -FD20000000 -FC8000 -FN1 -FF0MIMXRT106x_QSPI_4KB_SEC -FS060000000 -FL0800000 -FP0($$Device:MIMXRT1062CVL5A$arm\MIMXRT106x_QSPI_4KB_SEC.FLM))</FlashDriverDll>
           <DeviceId>0</DeviceId>
-          <RegisterFile>$$Device:MIMXRT1052$Device\Include\MIMXRT1052.h</RegisterFile>
+          <RegisterFile>$$Device:MIMXRT1062CVL5A$fsl_device_registers.h</RegisterFile>
           <MemoryEnv></MemoryEnv>
           <Cmp></Cmp>
           <Asm></Asm>
@@ -34,7 +34,7 @@
           <SLE66CMisc></SLE66CMisc>
           <SLE66AMisc></SLE66AMisc>
           <SLE66LinkerMisc></SLE66LinkerMisc>
-          <SFDFile>$$Device:MIMXRT1052$SVD\MIMXRT1052.svd</SFDFile>
+          <SFDFile>$$Device:MIMXRT1062CVL5A$MIMXRT1062.xml</SFDFile>
           <bCustSvd>0</bCustSvd>
           <UseEnv>0</UseEnv>
           <BinPath></BinPath>
@@ -111,11 +111,11 @@
         </CommonProperty>
         <DllOption>
           <SimDllName>SARMCM3.DLL</SimDllName>
-          <SimDllArguments> -REMAP -MPU</SimDllArguments>
+          <SimDllArguments> -REMAP</SimDllArguments>
           <SimDlgDll>DCM.DLL</SimDlgDll>
           <SimDlgDllArguments>-pCM7</SimDlgDllArguments>
           <TargetDllName>SARMCM3.DLL</TargetDllName>
-          <TargetDllArguments> -MPU</TargetDllArguments>
+          <TargetDllArguments></TargetDllArguments>
           <TargetDlgDll>TCM.DLL</TargetDlgDll>
           <TargetDlgDllArguments>-pCM7</TargetDlgDllArguments>
         </DllOption>
@@ -139,7 +139,7 @@
           </Flash1>
           <bUseTDR>1</bUseTDR>
           <Flash2>BIN\UL2CM3.DLL</Flash2>
-          <Flash3>"" ()</Flash3>
+          <Flash3></Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
           <pFcarmGrp></pFcarmGrp>
@@ -182,9 +182,9 @@
             <uocRam>0</uocRam>
             <hadIROM>0</hadIROM>
             <hadIRAM>1</hadIRAM>
-            <hadXRAM>0</hadXRAM>
+            <hadXRAM>1</hadXRAM>
             <uocXRam>0</uocXRam>
-            <RvdsVP>2</RvdsVP>
+            <RvdsVP>3</RvdsVP>
             <RvdsMve>0</RvdsMve>
             <hadIRAM2>1</hadIRAM2>
             <hadIROM2>0</hadIROM2>
@@ -210,7 +210,7 @@
             <Ra1Chk>0</Ra1Chk>
             <Ra2Chk>0</Ra2Chk>
             <Ra3Chk>0</Ra3Chk>
-            <Im1Chk>1</Im1Chk>
+            <Im1Chk>0</Im1Chk>
             <Im2Chk>0</Im2Chk>
             <OnChipMemories>
               <Ocm1>
@@ -246,7 +246,7 @@
               <IRAM>
                 <Type>0</Type>
                 <StartAddress>0x20000000</StartAddress>
-                <Size>0x60000</Size>
+                <Size>0x20000</Size>
               </IRAM>
               <IROM>
                 <Type>1</Type>
@@ -255,8 +255,8 @@
               </IROM>
               <XRAM>
                 <Type>1</Type>
-                <StartAddress>0x40100000</StartAddress>
-                <Size>0x2000</Size>
+                <StartAddress>0x20200000</StartAddress>
+                <Size>0xc0000</Size>
               </XRAM>
               <OCR_RVCT1>
                 <Type>1</Type>
@@ -285,8 +285,8 @@
               </OCR_RVCT5>
               <OCR_RVCT6>
                 <Type>0</Type>
-                <StartAddress>0x0</StartAddress>
-                <Size>0x0</Size>
+                <StartAddress>0x20200000</StartAddress>
+                <Size>0xc0000</Size>
               </OCR_RVCT6>
               <OCR_RVCT7>
                 <Type>0</Type>
@@ -301,7 +301,7 @@
               <OCR_RVCT9>
                 <Type>0</Type>
                 <StartAddress>0x20000000</StartAddress>
-                <Size>0x60000</Size>
+                <Size>0x20000</Size>
               </OCR_RVCT9>
               <OCR_RVCT10>
                 <Type>0</Type>
@@ -337,9 +337,9 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls>--diag_suppress=1,39,61,66,68,111,546,188,1035,144,1211,1295,1296 --no_inline</MiscControls>
-              <Define>__FPU_PRESENT=1,USB_DEVICE_CONFIG_BUFFER_PROPERTY_CACHEABLE=1,ARM_MATH_CM7,N_THUMB,NDEBUG,CPU_MIMXRT1052DVL6A,MCU_SERIES_RT105,USB_STACK_BM,__BYTE_ORDER__=__ORDER_LITTLE_ENDIAN__,MICROPY_QSTR_EXTRA_POOL=mp_qstr_frozen_const_pool,MICROPY_MODULE_FROZEN_MPY,FFCONF_H='\"oofatfs/ffconf.h\"',HARD_FP,FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL=1</Define>
+              <Define>DEBUG_SDRAM,BOARD_OMVRT1,__FPU_PRESENT=1,USB_DEVICE_CONFIG_BUFFER_PROPERTY_CACHEABLE=1,ARM_MATH_CM7,N_THUMB,NDEBUG,CPU_MIMXRT1052DVL6A,MCU_SERIES_RT106,USB_STACK_BM,__BYTE_ORDER__=__ORDER_LITTLE_ENDIAN__,MICROPY_QSTR_EXTRA_POOL=mp_qstr_frozen_const_pool,MICROPY_MODULE_FROZEN_MPY,FFCONF_H='\"oofatfs/ffconf.h\"',HARD_FP,FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL=1</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\;..\..\py;..\..\extmod;..\..\lib;..\..\lib\cmsis\inc;..\nxp_rt1050_60;..\nxp_rt1050_60\boards\omvrt1;..\nxp_rt1050_60\mcusdk\;..\nxp_rt1050_60\mcusdk\drivers;..\nxp_rt1050_60\mcusdk\utilities;..\nxp_rt1050_60\cmsis;..\nxp_rt1050_60\build-omvrt1;..\nxp_rt1050_60\usb_cdc_msc;..\nxp_rt1050_60\mcusdk\middleware\sdkusb\include;..\nxp_rt1050_60\mcusdk\middleware\sdkusb\osa;..\nxp_rt1050_60\mcusdk\middleware\sdkusb\device;..\nxp_rt1050_60\mcusdk\middleware\sdkusb\phy;..\nxp_rt1050_60\sdmmc;..\nxp_rt1050_60\omv;..\nxp_rt1050_60\omv\py;..\nxp_rt1050_60\omv\img;..\nxp_rt1050_60\omv\nn;..\..\lib\oofatfs;..\..\lib\mp-readline</IncludePath>
+              <IncludePath>..\..\;..\..\py;..\..\extmod;..\..\lib;..\..\lib\cmsis\inc;..\nxp_rt1050_60;..\nxp_rt1050_60\boards\omvrt1;..\nxp_rt1050_60\mcusdkRT1062\;..\nxp_rt1050_60\mcusdkRT1062\drivers;..\nxp_rt1050_60\mcusdkRT1062\utilities;..\nxp_rt1050_60\cmsis;..\nxp_rt1050_60\build-omvrt1;..\nxp_rt1050_60\usb_cdc_msc;..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\include;..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\osa;..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\device;..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\phy;..\nxp_rt1050_60\sdmmc;..\nxp_rt1050_60\omv;..\nxp_rt1050_60\omv\py;..\nxp_rt1050_60\omv\img;..\nxp_rt1050_60\omv\nn;..\..\lib\oofatfs;..\..\lib\mp-readline;..\..\drivers\m8266;..\..\drivers\m8266\lib</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -355,7 +355,7 @@
             <uClangAs>0</uClangAs>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>USE_OCRAM=1</Define>
+              <Define>DEBUG,__STARTUP_INITIALIZE_NONCACHEDATA</Define>
               <Undefine></Undefine>
               <IncludePath></IncludePath>
             </VariousControls>
@@ -370,7 +370,7 @@
             <TextAddressRange>0x00000000</TextAddressRange>
             <DataAddressRange>0x20000000</DataAddressRange>
             <pXoBase></pXoBase>
-            <ScatterFile>.\sdram_ocram.sct</ScatterFile>
+            <ScatterFile>.\sdram.sct</ScatterFile>
             <IncludeLibs></IncludeLibs>
             <IncludeLibsPath></IncludeLibsPath>
             <Misc>--any_placement=next_fit --keep=*.o(.boot*)</Misc>
@@ -2552,147 +2552,147 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>mcusdk</GroupName>
+          <GroupName>mcusdkRT1062</GroupName>
           <Files>
             <File>
               <FileName>fsl_adc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_adc.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_adc.c</FilePath>
             </File>
             <File>
               <FileName>fsl_adc_etc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_adc_etc.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_adc_etc.c</FilePath>
             </File>
             <File>
               <FileName>fsl_aipstz.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_aipstz.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_aipstz.c</FilePath>
             </File>
             <File>
               <FileName>fsl_aoi.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_aoi.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_aoi.c</FilePath>
             </File>
             <File>
               <FileName>fsl_bee.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_bee.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_bee.c</FilePath>
             </File>
             <File>
               <FileName>fsl_cache.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_cache.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_cache.c</FilePath>
             </File>
             <File>
               <FileName>fsl_clock.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_clock.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_clock.c</FilePath>
             </File>
             <File>
               <FileName>fsl_cmp.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_cmp.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_cmp.c</FilePath>
             </File>
             <File>
               <FileName>fsl_common.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_common.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_common.c</FilePath>
             </File>
             <File>
               <FileName>fsl_csi.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_csi.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_csi.c</FilePath>
             </File>
             <File>
               <FileName>fsl_dcdc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_dcdc.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_dcdc.c</FilePath>
             </File>
             <File>
               <FileName>fsl_dcp.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_dcp.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_dcp.c</FilePath>
             </File>
             <File>
               <FileName>fsl_dmamux.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_dmamux.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_dmamux.c</FilePath>
             </File>
             <File>
               <FileName>fsl_edma.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_edma.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_edma.c</FilePath>
             </File>
             <File>
               <FileName>fsl_elcdif.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_elcdif.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_elcdif.c</FilePath>
             </File>
             <File>
               <FileName>fsl_enc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_enc.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_enc.c</FilePath>
             </File>
             <File>
               <FileName>fsl_enet.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_enet.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_enet.c</FilePath>
             </File>
             <File>
               <FileName>fsl_ewm.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_ewm.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_ewm.c</FilePath>
             </File>
             <File>
               <FileName>fsl_flexcan.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_flexcan.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_flexcan.c</FilePath>
             </File>
             <File>
               <FileName>fsl_flexram.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_flexram.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_flexram.c</FilePath>
             </File>
             <File>
               <FileName>fsl_flexspi.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_flexspi.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_flexspi.c</FilePath>
             </File>
             <File>
               <FileName>fsl_gpc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_gpc.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_gpc.c</FilePath>
             </File>
             <File>
               <FileName>fsl_gpio.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_gpio.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_gpio.c</FilePath>
             </File>
             <File>
               <FileName>fsl_gpt.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_gpt.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_gpt.c</FilePath>
             </File>
             <File>
               <FileName>fsl_kpp.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_kpp.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_kpp.c</FilePath>
             </File>
             <File>
               <FileName>fsl_lpi2c.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_lpi2c.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_lpi2c.c</FilePath>
             </File>
             <File>
               <FileName>fsl_lpi2c_edma.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_lpi2c_edma.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_lpi2c_edma.c</FilePath>
             </File>
             <File>
               <FileName>fsl_lpi2c_freertos.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_lpi2c_freertos.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_lpi2c_freertos.c</FilePath>
               <FileOption>
                 <CommonProperty>
                   <UseCPPCompiler>2</UseCPPCompiler>
@@ -2748,17 +2748,17 @@
             <File>
               <FileName>fsl_lpspi.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_lpspi.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_lpspi.c</FilePath>
             </File>
             <File>
               <FileName>fsl_lpspi_edma.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_lpspi_edma.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_lpspi_edma.c</FilePath>
             </File>
             <File>
               <FileName>fsl_lpspi_freertos.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_lpspi_freertos.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_lpspi_freertos.c</FilePath>
               <FileOption>
                 <CommonProperty>
                   <UseCPPCompiler>2</UseCPPCompiler>
@@ -2814,17 +2814,17 @@
             <File>
               <FileName>fsl_lpuart.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_lpuart.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_lpuart.c</FilePath>
             </File>
             <File>
               <FileName>fsl_lpuart_edma.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_lpuart_edma.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_lpuart_edma.c</FilePath>
             </File>
             <File>
               <FileName>fsl_lpuart_freertos.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_lpuart_freertos.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_lpuart_freertos.c</FilePath>
               <FileOption>
                 <CommonProperty>
                   <UseCPPCompiler>2</UseCPPCompiler>
@@ -2880,112 +2880,112 @@
             <File>
               <FileName>fsl_pit.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_pit.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_pit.c</FilePath>
             </File>
             <File>
               <FileName>fsl_pmu.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_pmu.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_pmu.c</FilePath>
             </File>
             <File>
               <FileName>fsl_pwm.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_pwm.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_pwm.c</FilePath>
             </File>
             <File>
               <FileName>fsl_pxp.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_pxp.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_pxp.c</FilePath>
             </File>
             <File>
               <FileName>fsl_qtmr.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_qtmr.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_qtmr.c</FilePath>
             </File>
             <File>
               <FileName>fsl_rtwdog.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_rtwdog.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_rtwdog.c</FilePath>
             </File>
             <File>
               <FileName>fsl_sai.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_sai.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_sai.c</FilePath>
             </File>
             <File>
               <FileName>fsl_sai_edma.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_sai_edma.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_sai_edma.c</FilePath>
             </File>
             <File>
               <FileName>fsl_semc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_semc.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_semc.c</FilePath>
             </File>
             <File>
               <FileName>fsl_snvs_hp.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_snvs_hp.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_snvs_hp.c</FilePath>
             </File>
             <File>
               <FileName>fsl_snvs_lp.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_snvs_lp.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_snvs_lp.c</FilePath>
             </File>
             <File>
               <FileName>fsl_spdif.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_spdif.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_spdif.c</FilePath>
             </File>
             <File>
               <FileName>fsl_spdif_edma.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_spdif_edma.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_spdif_edma.c</FilePath>
             </File>
             <File>
               <FileName>fsl_src.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_src.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_src.c</FilePath>
             </File>
             <File>
               <FileName>fsl_trng.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_trng.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_trng.c</FilePath>
             </File>
             <File>
               <FileName>fsl_tsc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_tsc.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_tsc.c</FilePath>
             </File>
             <File>
               <FileName>fsl_usdhc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_usdhc.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_usdhc.c</FilePath>
             </File>
             <File>
               <FileName>fsl_wdog.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_wdog.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_wdog.c</FilePath>
             </File>
             <File>
               <FileName>fsl_xbara.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_xbara.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_xbara.c</FilePath>
             </File>
             <File>
               <FileName>fsl_xbarb.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_xbarb.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_xbarb.c</FilePath>
             </File>
             <File>
               <FileName>fsl_csi_camera_adapter.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_csi_camera_adapter.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_csi_camera_adapter.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>mcusdk_utils</GroupName>
+          <GroupName>mcusdkRT1062_utils</GroupName>
           <GroupOption>
             <CommonProperty>
               <UseCPPCompiler>0</UseCPPCompiler>
@@ -3032,7 +3032,7 @@
                   <MiscControls></MiscControls>
                   <Define></Define>
                   <Undefine></Undefine>
-                  <IncludePath>..\nxp_rt1050_60\mcusdk\utilities\io;..\nxp_rt1050_60\mcusdk\utilities\log;..\nxp_rt1050_60\mcusdk\utilities\str</IncludePath>
+                  <IncludePath>..\nxp_rt1050_60\mcusdkRT1062\utilities\io;..\nxp_rt1050_60\mcusdkRT1062\utilities\log;..\nxp_rt1050_60\mcusdkRT1062\utilities\str</IncludePath>
                 </VariousControls>
               </Cads>
               <Aads>
@@ -3059,32 +3059,32 @@
             <File>
               <FileName>fsl_debug_console.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\utilities\fsl_debug_console.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\utilities\fsl_debug_console.c</FilePath>
             </File>
             <File>
               <FileName>fsl_log.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\utilities\log\fsl_log.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\utilities\log\fsl_log.c</FilePath>
             </File>
             <File>
               <FileName>fsl_str.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\utilities\str\fsl_str.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\utilities\str\fsl_str.c</FilePath>
             </File>
             <File>
               <FileName>fsl_assert.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\utilities\fsl_assert.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\utilities\fsl_assert.c</FilePath>
             </File>
             <File>
               <FileName>fsl_shell.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\utilities\fsl_shell.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\utilities\fsl_shell.c</FilePath>
             </File>
             <File>
               <FileName>fsl_io.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\utilities\io\fsl_io.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\utilities\io\fsl_io.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -3095,11 +3095,113 @@
               <FileName>frozen_mpy.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\nxp_rt1050_60\build-imxrtevk105x\frozen_mpy.c</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>0</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Cads>
+                    <interw>2</interw>
+                    <Optim>0</Optim>
+                    <oTime>2</oTime>
+                    <SplitLS>2</SplitLS>
+                    <OneElfS>2</OneElfS>
+                    <Strict>2</Strict>
+                    <EnumInt>2</EnumInt>
+                    <PlainCh>2</PlainCh>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <wLevel>0</wLevel>
+                    <uThumb>2</uThumb>
+                    <uSurpInc>2</uSurpInc>
+                    <uC99>2</uC99>
+                    <uGnu>2</uGnu>
+                    <useXO>2</useXO>
+                    <v6Lang>0</v6Lang>
+                    <v6LangP>0</v6LangP>
+                    <vShortEn>2</vShortEn>
+                    <vShortWch>2</vShortWch>
+                    <v6Lto>2</v6Lto>
+                    <v6WtE>2</v6WtE>
+                    <v6Rtti>2</v6Rtti>
+                    <VariousControls>
+                      <MiscControls></MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Cads>
+                </FileArmAds>
+              </FileOption>
             </File>
             <File>
               <FileName>pins_imxrtevk105x.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\nxp_rt1050_60\build-imxrtevk105x\pins_imxrtevk105x.c</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>0</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Cads>
+                    <interw>2</interw>
+                    <Optim>0</Optim>
+                    <oTime>2</oTime>
+                    <SplitLS>2</SplitLS>
+                    <OneElfS>2</OneElfS>
+                    <Strict>2</Strict>
+                    <EnumInt>2</EnumInt>
+                    <PlainCh>2</PlainCh>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <wLevel>0</wLevel>
+                    <uThumb>2</uThumb>
+                    <uSurpInc>2</uSurpInc>
+                    <uC99>2</uC99>
+                    <uGnu>2</uGnu>
+                    <useXO>2</useXO>
+                    <v6Lang>0</v6Lang>
+                    <v6LangP>0</v6LangP>
+                    <vShortEn>2</vShortEn>
+                    <vShortWch>2</vShortWch>
+                    <v6Lto>2</v6Lto>
+                    <v6WtE>2</v6WtE>
+                    <v6Rtti>2</v6Rtti>
+                    <VariousControls>
+                      <MiscControls></MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Cads>
+                </FileArmAds>
+              </FileOption>
             </File>
             <File>
               <FileName>pins_qstr.h</FileName>
@@ -3303,6 +3405,44 @@
               <FileName>startup_MIMXRT1052.s</FileName>
               <FileType>2</FileType>
               <FilePath>..\nxp_rt1050_60\startup_MIMXRT1052.s</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>1</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Aads>
+                    <interw>2</interw>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <thumb>2</thumb>
+                    <SplitLS>2</SplitLS>
+                    <SwStkChk>2</SwStkChk>
+                    <NoWarn>2</NoWarn>
+                    <uSurpInc>2</uSurpInc>
+                    <useXO>2</useXO>
+                    <uClangAs>2</uClangAs>
+                    <VariousControls>
+                      <MiscControls></MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Aads>
+                </FileArmAds>
+              </FileOption>
             </File>
             <File>
               <FileName>gchelper_armccv5.S</FileName>
@@ -3312,7 +3452,7 @@
             <File>
               <FileName>system_MIMXRT1052.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\system_MIMXRT1052.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\system_MIMXRT1052.c</FilePath>
             </File>
             <File>
               <FileName>isr.c</FileName>
@@ -3715,7 +3855,7 @@
                   <RVCTZI>0</RVCTZI>
                   <RVCTOtherData>0</RVCTOtherData>
                   <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>0</IncludeInBuild>
+                  <IncludeInBuild>1</IncludeInBuild>
                   <AlwaysBuild>2</AlwaysBuild>
                   <GenerateAssemblyFile>2</GenerateAssemblyFile>
                   <AssembleAssemblyFile>2</AssembleAssemblyFile>
@@ -3771,7 +3911,7 @@
                   <RVCTZI>0</RVCTZI>
                   <RVCTOtherData>0</RVCTOtherData>
                   <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>0</IncludeInBuild>
+                  <IncludeInBuild>1</IncludeInBuild>
                   <AlwaysBuild>2</AlwaysBuild>
                   <GenerateAssemblyFile>2</GenerateAssemblyFile>
                   <AssembleAssemblyFile>2</AssembleAssemblyFile>
@@ -3888,7 +4028,7 @@
                   <RVCTZI>0</RVCTZI>
                   <RVCTOtherData>0</RVCTOtherData>
                   <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>0</IncludeInBuild>
+                  <IncludeInBuild>1</IncludeInBuild>
                   <AlwaysBuild>2</AlwaysBuild>
                   <GenerateAssemblyFile>2</GenerateAssemblyFile>
                   <AssembleAssemblyFile>2</AssembleAssemblyFile>
@@ -3949,7 +4089,7 @@
                   <RVCTZI>0</RVCTZI>
                   <RVCTOtherData>0</RVCTOtherData>
                   <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>0</IncludeInBuild>
+                  <IncludeInBuild>1</IncludeInBuild>
                   <AlwaysBuild>2</AlwaysBuild>
                   <GenerateAssemblyFile>2</GenerateAssemblyFile>
                   <AssembleAssemblyFile>2</AssembleAssemblyFile>
@@ -4612,12 +4752,12 @@
             <File>
               <FileName>usb_device_dci.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\middleware\sdkusb\device\usb_device_dci.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\device\usb_device_dci.c</FilePath>
             </File>
             <File>
               <FileName>usb_osa_bm.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\middleware\sdkusb\osa\usb_osa_bm.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\osa\usb_osa_bm.c</FilePath>
             </File>
             <File>
               <FileName>composite.c</FileName>
@@ -4667,12 +4807,12 @@
             <File>
               <FileName>usb_device_ehci.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\middleware\sdkusb\device\usb_device_ehci.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\device\usb_device_ehci.c</FilePath>
             </File>
             <File>
               <FileName>usb_phy.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\middleware\sdkusb\phy\usb_phy.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\phy\usb_phy.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -4682,32 +4822,32 @@
             <File>
               <FileName>usb_osa_bm.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\middleware\sdkusb\osa\usb_osa_bm.h</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\osa\usb_osa_bm.h</FilePath>
             </File>
             <File>
               <FileName>usb_osa.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\middleware\sdkusb\osa\usb_osa.h</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\osa\usb_osa.h</FilePath>
             </File>
             <File>
               <FileName>usb_device_dci.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\middleware\sdkusb\device\usb_device_dci.h</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\device\usb_device_dci.h</FilePath>
             </File>
             <File>
               <FileName>usb_device.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\middleware\sdkusb\device\usb_device.h</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\device\usb_device.h</FilePath>
             </File>
             <File>
               <FileName>usb_spec.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\middleware\sdkusb\include\usb_spec.h</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\include\usb_spec.h</FilePath>
             </File>
             <File>
               <FileName>usb_misc.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\middleware\sdkusb\include\usb_misc.h</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\include\usb_misc.h</FilePath>
             </File>
             <File>
               <FileName>composite.h</FileName>
@@ -4762,7 +4902,7 @@
             <File>
               <FileName>usb_device_ehci.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\middleware\sdkusb\device\usb_device_ehci.h</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\device\usb_device_ehci.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -5636,22 +5776,22 @@
             <File>
               <FileName>fsl_flexspi_nor_boot.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\xip\fsl_flexspi_nor_boot.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\xip\fsl_flexspi_nor_boot.c</FilePath>
             </File>
             <File>
               <FileName>fsl_flexspi_nor_boot.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\xip\fsl_flexspi_nor_boot.h</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\xip\fsl_flexspi_nor_boot.h</FilePath>
             </File>
             <File>
               <FileName>fsl_flexspi_nor_flash.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\xip\fsl_flexspi_nor_flash.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\xip\fsl_flexspi_nor_flash.c</FilePath>
             </File>
             <File>
               <FileName>fsl_flexspi_nor_flash.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\xip\fsl_flexspi_nor_flash.h</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\xip\fsl_flexspi_nor_flash.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -6337,6 +6477,25 @@
               <FileName>cmsis_nn_iar_lib.lib</FileName>
               <FileType>4</FileType>
               <FilePath>..\..\lib\cmsis_nn_iar_lib.lib</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>0</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds/>
+              </FileOption>
             </File>
           </Files>
         </Group>
@@ -6660,6 +6819,36 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>omv_wifi</GroupName>
+          <Files>
+            <File>
+              <FileName>M8266WIFIDrv_iMXRT10xx.lib</FileName>
+              <FileType>4</FileType>
+              <FilePath>..\..\drivers\m8266\lib\M8266WIFIDrv_iMXRT10xx.lib</FilePath>
+            </File>
+            <File>
+              <FileName>m8266_hw.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\drivers\m8266\m8266_hw.c</FilePath>
+            </File>
+            <File>
+              <FileName>socket_m8266.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\drivers\m8266\socket_m8266.c</FilePath>
+            </File>
+            <File>
+              <FileName>winc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\drivers\m8266\winc.c</FilePath>
+            </File>
+            <File>
+              <FileName>wifidbg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt1050_60\omv\wifidbg.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>::Compiler</GroupName>
         </Group>
       </Groups>
@@ -6673,16 +6862,16 @@
       <uAC6>0</uAC6>
       <TargetOption>
         <TargetCommonOption>
-          <Device>MIMXRT1052:M7</Device>
+          <Device>MIMXRT1062CVL5A</Device>
           <Vendor>NXP</Vendor>
-          <PackID>NXP.iMXRT_DFP.1.0.2</PackID>
+          <PackID>NXP.MIMXRT1062_DFP.11.0.1</PackID>
           <PackURL>http://mcuxpresso.nxp.com/cmsis_pack/repo/</PackURL>
-          <Cpu>IRAM(0x20000000,0x00060000) IRAM2(0x00000000,0x00020000) CPUTYPE("Cortex-M7") FPU3(SFPU) CLOCK(12000000) ELITTLE</Cpu>
+          <Cpu>IRAM(0x20000000,0x020000) IRAM2(0x00000000,0x020000) XRAM(0x20200000,0x0c0000) CPUTYPE("Cortex-M7") FPU3(DFPU) CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
-          <FlashDriverDll>UL2CM3(-S0 -C0 -P0 -FD20000000 -FC1000 -FN1 -FF0MIMXRT105x_HYPER_256KB_SEC -FS060000000 -FL04000000 -FP0($$Device:MIMXRT1052$Flash\MIMXRT105x_HYPER_256KB_SEC.FLM))</FlashDriverDll>
+          <FlashDriverDll>UL2CM3(-S0 -C0 -P0 -FD20000000 -FC8000 -FN1 -FF0MIMXRT106x_QSPI_4KB_SEC -FS060000000 -FL0800000 -FP0($$Device:MIMXRT1062CVL5A$arm\MIMXRT106x_QSPI_4KB_SEC.FLM))</FlashDriverDll>
           <DeviceId>0</DeviceId>
-          <RegisterFile>$$Device:MIMXRT1052$Device\Include\MIMXRT1052.h</RegisterFile>
+          <RegisterFile>$$Device:MIMXRT1062CVL5A$fsl_device_registers.h</RegisterFile>
           <MemoryEnv></MemoryEnv>
           <Cmp></Cmp>
           <Asm></Asm>
@@ -6692,7 +6881,7 @@
           <SLE66CMisc></SLE66CMisc>
           <SLE66AMisc></SLE66AMisc>
           <SLE66LinkerMisc></SLE66LinkerMisc>
-          <SFDFile>$$Device:MIMXRT1052$SVD\MIMXRT1052.svd</SFDFile>
+          <SFDFile>$$Device:MIMXRT1062CVL5A$MIMXRT1062.xml</SFDFile>
           <bCustSvd>0</bCustSvd>
           <UseEnv>0</UseEnv>
           <BinPath></BinPath>
@@ -6769,11 +6958,11 @@
         </CommonProperty>
         <DllOption>
           <SimDllName>SARMCM3.DLL</SimDllName>
-          <SimDllArguments> -REMAP -MPU</SimDllArguments>
+          <SimDllArguments> -REMAP</SimDllArguments>
           <SimDlgDll>DCM.DLL</SimDlgDll>
           <SimDlgDllArguments>-pCM7</SimDlgDllArguments>
           <TargetDllName>SARMCM3.DLL</TargetDllName>
-          <TargetDllArguments> -MPU</TargetDllArguments>
+          <TargetDllArguments></TargetDllArguments>
           <TargetDlgDll>TCM.DLL</TargetDlgDll>
           <TargetDlgDllArguments>-pCM7</TargetDlgDllArguments>
         </DllOption>
@@ -6840,9 +7029,9 @@
             <uocRam>0</uocRam>
             <hadIROM>0</hadIROM>
             <hadIRAM>1</hadIRAM>
-            <hadXRAM>0</hadXRAM>
+            <hadXRAM>1</hadXRAM>
             <uocXRam>0</uocXRam>
-            <RvdsVP>2</RvdsVP>
+            <RvdsVP>3</RvdsVP>
             <RvdsMve>0</RvdsMve>
             <hadIRAM2>1</hadIRAM2>
             <hadIROM2>0</hadIROM2>
@@ -6868,7 +7057,7 @@
             <Ra1Chk>0</Ra1Chk>
             <Ra2Chk>0</Ra2Chk>
             <Ra3Chk>0</Ra3Chk>
-            <Im1Chk>1</Im1Chk>
+            <Im1Chk>0</Im1Chk>
             <Im2Chk>0</Im2Chk>
             <OnChipMemories>
               <Ocm1>
@@ -6904,7 +7093,7 @@
               <IRAM>
                 <Type>0</Type>
                 <StartAddress>0x20000000</StartAddress>
-                <Size>0x60000</Size>
+                <Size>0x20000</Size>
               </IRAM>
               <IROM>
                 <Type>1</Type>
@@ -6913,8 +7102,8 @@
               </IROM>
               <XRAM>
                 <Type>1</Type>
-                <StartAddress>0x40100000</StartAddress>
-                <Size>0x2000</Size>
+                <StartAddress>0x20200000</StartAddress>
+                <Size>0xc0000</Size>
               </XRAM>
               <OCR_RVCT1>
                 <Type>1</Type>
@@ -6943,8 +7132,8 @@
               </OCR_RVCT5>
               <OCR_RVCT6>
                 <Type>0</Type>
-                <StartAddress>0x0</StartAddress>
-                <Size>0x0</Size>
+                <StartAddress>0x20200000</StartAddress>
+                <Size>0xc0000</Size>
               </OCR_RVCT6>
               <OCR_RVCT7>
                 <Type>0</Type>
@@ -6959,7 +7148,7 @@
               <OCR_RVCT9>
                 <Type>0</Type>
                 <StartAddress>0x20000000</StartAddress>
-                <Size>0x60000</Size>
+                <Size>0x20000</Size>
               </OCR_RVCT9>
               <OCR_RVCT10>
                 <Type>0</Type>
@@ -6971,7 +7160,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>1</interw>
-            <Optim>3</Optim>
+            <Optim>1</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>1</OneElfS>
@@ -6995,9 +7184,9 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls>--diag_suppress=1,39,61,66,68,111,546,188,1035,144,1211,1295,1296 --no_inline</MiscControls>
-              <Define>BOARD_OMVRT1,__FPU_PRESENT=1,USB_DEVICE_CONFIG_BUFFER_PROPERTY_CACHEABLE=1,ARM_MATH_CM7,N_THUMB,NDEBUG,CPU_MIMXRT1052DVL6A,MCU_SERIES_RT105,MCU_SERIES_RT106,USB_STACK_BM,__BYTE_ORDER__=__ORDER_LITTLE_ENDIAN__,MICROPY_QSTR_EXTRA_POOL=mp_qstr_frozen_const_pool,MICROPY_MODULE_FROZEN_MPY,FFCONF_H='\"oofatfs/ffconf.h\"',HARD_FP,FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL=1,XIP_EXTERNAL_FLASH</Define>
+              <Define>BOARD_OMVRT1,__FPU_PRESENT=1,USB_DEVICE_CONFIG_BUFFER_PROPERTY_CACHEABLE=1,ARM_MATH_CM7,N_THUMB,NDEBUG,CPU_MIMXRT1062DVL6A,MCU_SERIES_RT106,USB_STACK_BM,__BYTE_ORDER__=__ORDER_LITTLE_ENDIAN__,MICROPY_QSTR_EXTRA_POOL=mp_qstr_frozen_const_pool,MICROPY_MODULE_FROZEN_MPY,FFCONF_H='\"oofatfs/ffconf.h\"',HARD_FP,FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL=1,XIP_EXTERNAL_FLASH</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\;..\..\py;..\..\extmod;..\..\lib;..\..\lib\cmsis\inc;..\nxp_rt1050_60;..\nxp_rt1050_60\boards\omvrt1;..\nxp_rt1050_60\mcusdk\;..\nxp_rt1050_60\mcusdk\drivers;..\nxp_rt1050_60\mcusdk\utilities;..\nxp_rt1050_60\cmsis;..\nxp_rt1050_60\build-omvrt1;..\nxp_rt1050_60\usb_cdc_msc;..\nxp_rt1050_60\mcusdk\middleware\sdkusb\include;..\nxp_rt1050_60\mcusdk\middleware\sdkusb\osa;..\nxp_rt1050_60\mcusdk\middleware\sdkusb\device;..\nxp_rt1050_60\mcusdk\middleware\sdkusb\phy;..\nxp_rt1050_60\sdmmc;..\nxp_rt1050_60\omv;..\nxp_rt1050_60\omv\py;..\nxp_rt1050_60\omv\img;..\nxp_rt1050_60\omv\nn;..\..\lib\oofatfs;..\..\lib\mp-readline</IncludePath>
+              <IncludePath>..\..\;..\..\py;..\..\extmod;..\..\lib;..\..\lib\cmsis\inc;..\nxp_rt1050_60;..\nxp_rt1050_60\boards\omvrt1;..\nxp_rt1050_60\mcusdkRT1062\;..\nxp_rt1050_60\mcusdkRT1062\drivers;..\nxp_rt1050_60\mcusdkRT1062\utilities;..\nxp_rt1050_60\cmsis;..\nxp_rt1050_60\build-omvrt1;..\nxp_rt1050_60\usb_cdc_msc;..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\include;..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\osa;..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\device;..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\phy;..\nxp_rt1050_60\sdmmc;..\nxp_rt1050_60\omv;..\nxp_rt1050_60\omv\py;..\nxp_rt1050_60\omv\img;..\nxp_rt1050_60\omv\nn;..\..\lib\oofatfs;..\..\lib\mp-readline;..\..\drivers\m8266;..\..\drivers\m8266\lib;..\nxp_rt1050_60\mcusdkRT1062\components\lists;..\nxp_rt1050_60\mcusdkRT1062\components\serial_manager</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -7031,7 +7220,8 @@
             <ScatterFile>.\Flh+RAM_1060.sct</ScatterFile>
             <IncludeLibs></IncludeLibs>
             <IncludeLibsPath></IncludeLibsPath>
-            <Misc>--any_placement=next_fit --keep=*.o(.boot*) --emit_debug_overlay_relocs --emit_debug_overlay_section</Misc>
+            <Misc>--any_placement=next_fit --keep=*.o(.boot*) --emit_debug_overlay_relocs --emit_debug_overlay_section
+--callgraph</Misc>
             <LinkerInputFile></LinkerInputFile>
             <DisabledWarnings></DisabledWarnings>
           </LDads>
@@ -9312,147 +9502,147 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>mcusdk</GroupName>
+          <GroupName>mcusdkRT1062</GroupName>
           <Files>
             <File>
               <FileName>fsl_adc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_adc.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_adc.c</FilePath>
             </File>
             <File>
               <FileName>fsl_adc_etc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_adc_etc.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_adc_etc.c</FilePath>
             </File>
             <File>
               <FileName>fsl_aipstz.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_aipstz.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_aipstz.c</FilePath>
             </File>
             <File>
               <FileName>fsl_aoi.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_aoi.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_aoi.c</FilePath>
             </File>
             <File>
               <FileName>fsl_bee.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_bee.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_bee.c</FilePath>
             </File>
             <File>
               <FileName>fsl_cache.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_cache.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_cache.c</FilePath>
             </File>
             <File>
               <FileName>fsl_clock.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_clock.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_clock.c</FilePath>
             </File>
             <File>
               <FileName>fsl_cmp.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_cmp.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_cmp.c</FilePath>
             </File>
             <File>
               <FileName>fsl_common.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_common.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_common.c</FilePath>
             </File>
             <File>
               <FileName>fsl_csi.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_csi.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_csi.c</FilePath>
             </File>
             <File>
               <FileName>fsl_dcdc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_dcdc.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_dcdc.c</FilePath>
             </File>
             <File>
               <FileName>fsl_dcp.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_dcp.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_dcp.c</FilePath>
             </File>
             <File>
               <FileName>fsl_dmamux.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_dmamux.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_dmamux.c</FilePath>
             </File>
             <File>
               <FileName>fsl_edma.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_edma.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_edma.c</FilePath>
             </File>
             <File>
               <FileName>fsl_elcdif.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_elcdif.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_elcdif.c</FilePath>
             </File>
             <File>
               <FileName>fsl_enc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_enc.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_enc.c</FilePath>
             </File>
             <File>
               <FileName>fsl_enet.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_enet.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_enet.c</FilePath>
             </File>
             <File>
               <FileName>fsl_ewm.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_ewm.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_ewm.c</FilePath>
             </File>
             <File>
               <FileName>fsl_flexcan.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_flexcan.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_flexcan.c</FilePath>
             </File>
             <File>
               <FileName>fsl_flexram.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_flexram.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_flexram.c</FilePath>
             </File>
             <File>
               <FileName>fsl_flexspi.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_flexspi.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_flexspi.c</FilePath>
             </File>
             <File>
               <FileName>fsl_gpc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_gpc.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_gpc.c</FilePath>
             </File>
             <File>
               <FileName>fsl_gpio.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_gpio.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_gpio.c</FilePath>
             </File>
             <File>
               <FileName>fsl_gpt.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_gpt.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_gpt.c</FilePath>
             </File>
             <File>
               <FileName>fsl_kpp.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_kpp.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_kpp.c</FilePath>
             </File>
             <File>
               <FileName>fsl_lpi2c.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_lpi2c.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_lpi2c.c</FilePath>
             </File>
             <File>
               <FileName>fsl_lpi2c_edma.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_lpi2c_edma.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_lpi2c_edma.c</FilePath>
             </File>
             <File>
               <FileName>fsl_lpi2c_freertos.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_lpi2c_freertos.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_lpi2c_freertos.c</FilePath>
               <FileOption>
                 <CommonProperty>
                   <UseCPPCompiler>2</UseCPPCompiler>
@@ -9508,17 +9698,17 @@
             <File>
               <FileName>fsl_lpspi.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_lpspi.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_lpspi.c</FilePath>
             </File>
             <File>
               <FileName>fsl_lpspi_edma.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_lpspi_edma.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_lpspi_edma.c</FilePath>
             </File>
             <File>
               <FileName>fsl_lpspi_freertos.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_lpspi_freertos.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_lpspi_freertos.c</FilePath>
               <FileOption>
                 <CommonProperty>
                   <UseCPPCompiler>2</UseCPPCompiler>
@@ -9574,17 +9764,17 @@
             <File>
               <FileName>fsl_lpuart.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_lpuart.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_lpuart.c</FilePath>
             </File>
             <File>
               <FileName>fsl_lpuart_edma.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_lpuart_edma.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_lpuart_edma.c</FilePath>
             </File>
             <File>
               <FileName>fsl_lpuart_freertos.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_lpuart_freertos.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_lpuart_freertos.c</FilePath>
               <FileOption>
                 <CommonProperty>
                   <UseCPPCompiler>2</UseCPPCompiler>
@@ -9640,112 +9830,112 @@
             <File>
               <FileName>fsl_pit.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_pit.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_pit.c</FilePath>
             </File>
             <File>
               <FileName>fsl_pmu.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_pmu.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_pmu.c</FilePath>
             </File>
             <File>
               <FileName>fsl_pwm.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_pwm.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_pwm.c</FilePath>
             </File>
             <File>
               <FileName>fsl_pxp.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_pxp.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_pxp.c</FilePath>
             </File>
             <File>
               <FileName>fsl_qtmr.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_qtmr.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_qtmr.c</FilePath>
             </File>
             <File>
               <FileName>fsl_rtwdog.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_rtwdog.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_rtwdog.c</FilePath>
             </File>
             <File>
               <FileName>fsl_sai.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_sai.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_sai.c</FilePath>
             </File>
             <File>
               <FileName>fsl_sai_edma.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_sai_edma.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_sai_edma.c</FilePath>
             </File>
             <File>
               <FileName>fsl_semc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_semc.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_semc.c</FilePath>
             </File>
             <File>
               <FileName>fsl_snvs_hp.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_snvs_hp.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_snvs_hp.c</FilePath>
             </File>
             <File>
               <FileName>fsl_snvs_lp.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_snvs_lp.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_snvs_lp.c</FilePath>
             </File>
             <File>
               <FileName>fsl_spdif.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_spdif.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_spdif.c</FilePath>
             </File>
             <File>
               <FileName>fsl_spdif_edma.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_spdif_edma.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_spdif_edma.c</FilePath>
             </File>
             <File>
               <FileName>fsl_src.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_src.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_src.c</FilePath>
             </File>
             <File>
               <FileName>fsl_trng.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_trng.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_trng.c</FilePath>
             </File>
             <File>
               <FileName>fsl_tsc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_tsc.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_tsc.c</FilePath>
             </File>
             <File>
               <FileName>fsl_usdhc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_usdhc.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_usdhc.c</FilePath>
             </File>
             <File>
               <FileName>fsl_wdog.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_wdog.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_wdog.c</FilePath>
             </File>
             <File>
               <FileName>fsl_xbara.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_xbara.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_xbara.c</FilePath>
             </File>
             <File>
               <FileName>fsl_xbarb.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_xbarb.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_xbarb.c</FilePath>
             </File>
             <File>
               <FileName>fsl_csi_camera_adapter.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_csi_camera_adapter.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_csi_camera_adapter.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>mcusdk_utils</GroupName>
+          <GroupName>mcusdkRT1062_utils</GroupName>
           <GroupOption>
             <CommonProperty>
               <UseCPPCompiler>0</UseCPPCompiler>
@@ -9792,7 +9982,7 @@
                   <MiscControls></MiscControls>
                   <Define></Define>
                   <Undefine></Undefine>
-                  <IncludePath>..\nxp_rt1050_60\mcusdk\utilities\io;..\nxp_rt1050_60\mcusdk\utilities\log;..\nxp_rt1050_60\mcusdk\utilities\str</IncludePath>
+                  <IncludePath>..\nxp_rt1050_60\mcusdkRT1062\utilities\io;..\nxp_rt1050_60\mcusdkRT1062\utilities\log;..\nxp_rt1050_60\mcusdkRT1062\utilities\str</IncludePath>
                 </VariousControls>
               </Cads>
               <Aads>
@@ -9819,32 +10009,32 @@
             <File>
               <FileName>fsl_debug_console.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\utilities\fsl_debug_console.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\utilities\fsl_debug_console.c</FilePath>
             </File>
             <File>
               <FileName>fsl_log.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\utilities\log\fsl_log.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\utilities\log\fsl_log.c</FilePath>
             </File>
             <File>
               <FileName>fsl_str.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\utilities\str\fsl_str.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\utilities\str\fsl_str.c</FilePath>
             </File>
             <File>
               <FileName>fsl_assert.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\utilities\fsl_assert.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\utilities\fsl_assert.c</FilePath>
             </File>
             <File>
               <FileName>fsl_shell.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\utilities\fsl_shell.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\utilities\fsl_shell.c</FilePath>
             </File>
             <File>
               <FileName>fsl_io.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\utilities\io\fsl_io.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\utilities\io\fsl_io.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -10141,7 +10331,7 @@
             <File>
               <FileName>system_MIMXRT1052.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\system_MIMXRT1052.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\system_MIMXRT1052.c</FilePath>
             </File>
             <File>
               <FileName>isr.c</FileName>
@@ -11441,12 +11631,12 @@
             <File>
               <FileName>usb_device_dci.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\middleware\sdkusb\device\usb_device_dci.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\device\usb_device_dci.c</FilePath>
             </File>
             <File>
               <FileName>usb_osa_bm.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\middleware\sdkusb\osa\usb_osa_bm.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\osa\usb_osa_bm.c</FilePath>
             </File>
             <File>
               <FileName>composite.c</FileName>
@@ -11496,12 +11686,12 @@
             <File>
               <FileName>usb_device_ehci.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\middleware\sdkusb\device\usb_device_ehci.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\device\usb_device_ehci.c</FilePath>
             </File>
             <File>
               <FileName>usb_phy.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\middleware\sdkusb\phy\usb_phy.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\phy\usb_phy.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -11511,32 +11701,32 @@
             <File>
               <FileName>usb_osa_bm.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\middleware\sdkusb\osa\usb_osa_bm.h</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\osa\usb_osa_bm.h</FilePath>
             </File>
             <File>
               <FileName>usb_osa.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\middleware\sdkusb\osa\usb_osa.h</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\osa\usb_osa.h</FilePath>
             </File>
             <File>
               <FileName>usb_device_dci.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\middleware\sdkusb\device\usb_device_dci.h</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\device\usb_device_dci.h</FilePath>
             </File>
             <File>
               <FileName>usb_device.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\middleware\sdkusb\device\usb_device.h</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\device\usb_device.h</FilePath>
             </File>
             <File>
               <FileName>usb_spec.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\middleware\sdkusb\include\usb_spec.h</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\include\usb_spec.h</FilePath>
             </File>
             <File>
               <FileName>usb_misc.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\middleware\sdkusb\include\usb_misc.h</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\include\usb_misc.h</FilePath>
             </File>
             <File>
               <FileName>composite.h</FileName>
@@ -11591,7 +11781,7 @@
             <File>
               <FileName>usb_device_ehci.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\middleware\sdkusb\device\usb_device_ehci.h</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\device\usb_device_ehci.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -12465,22 +12655,22 @@
             <File>
               <FileName>fsl_flexspi_nor_boot.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\xip\fsl_flexspi_nor_boot.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\xip\fsl_flexspi_nor_boot.c</FilePath>
             </File>
             <File>
               <FileName>fsl_flexspi_nor_boot.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\xip\fsl_flexspi_nor_boot.h</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\xip\fsl_flexspi_nor_boot.h</FilePath>
             </File>
             <File>
               <FileName>fsl_flexspi_nor_flash.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\xip\fsl_flexspi_nor_flash.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\xip\fsl_flexspi_nor_flash.c</FilePath>
             </File>
             <File>
               <FileName>fsl_flexspi_nor_flash.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\xip\fsl_flexspi_nor_flash.h</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\xip\fsl_flexspi_nor_flash.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -13559,6 +13749,36 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>omv_wifi</GroupName>
+          <Files>
+            <File>
+              <FileName>M8266WIFIDrv_iMXRT10xx.lib</FileName>
+              <FileType>4</FileType>
+              <FilePath>..\..\drivers\m8266\lib\M8266WIFIDrv_iMXRT10xx.lib</FilePath>
+            </File>
+            <File>
+              <FileName>m8266_hw.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\drivers\m8266\m8266_hw.c</FilePath>
+            </File>
+            <File>
+              <FileName>socket_m8266.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\drivers\m8266\socket_m8266.c</FilePath>
+            </File>
+            <File>
+              <FileName>winc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\drivers\m8266\winc.c</FilePath>
+            </File>
+            <File>
+              <FileName>wifidbg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt1050_60\omv\wifidbg.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>::Compiler</GroupName>
         </Group>
       </Groups>
@@ -13574,7 +13794,7 @@
         <TargetCommonOption>
           <Device>MIMXRT1052:M7</Device>
           <Vendor>NXP</Vendor>
-          <PackID>NXP.iMXRT_DFP.1.0.2</PackID>
+          <PackID>NXP.iMXRT_DFP.1.0.3</PackID>
           <PackURL>http://mcuxpresso.nxp.com/cmsis_pack/repo/</PackURL>
           <Cpu>IRAM(0x20000000,0x00060000) IRAM2(0x00000000,0x00020000) CPUTYPE("Cortex-M7") FPU3(SFPU) CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -13896,7 +14116,7 @@
               <MiscControls>--diag_suppress=1,39,61,66,68,111,546,188,1035,144,1211,1295,1296 --no_inline</MiscControls>
               <Define>__FPU_PRESENT=1,USE_OCRAM=1,USB_DEVICE_CONFIG_BUFFER_PROPERTY_CACHEABLE=1,ARM_MATH_CM7,N_THUMB,NDEBUG,CPU_MIMXRT1052DVL6A,MCU_SERIES_RT105,USB_STACK_BM,__BYTE_ORDER__=__ORDER_LITTLE_ENDIAN__,MICROPY_QSTR_EXTRA_POOL=mp_qstr_frozen_const_pool,MICROPY_MODULE_FROZEN_MPY,FFCONF_H='\"oofatfs/ffconf.h\"',HARD_FP,FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL=1,XIP_EXTERNAL_FLASH</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\;..\..\py;..\..\extmod;..\..\lib;..\..\lib\cmsis\inc;..\nxp_rt1050_60;..\nxp_rt1050_60\boards\omvrt1;..\nxp_rt1050_60\mcusdk\;..\nxp_rt1050_60\mcusdk\drivers;..\nxp_rt1050_60\mcusdk\utilities;..\nxp_rt1050_60\cmsis;..\nxp_rt1050_60\build-omvrt1;..\nxp_rt1050_60\usb_cdc_msc;..\nxp_rt1050_60\mcusdk\middleware\sdkusb\include;..\nxp_rt1050_60\mcusdk\middleware\sdkusb\osa;..\nxp_rt1050_60\mcusdk\middleware\sdkusb\device;..\nxp_rt1050_60\mcusdk\middleware\sdkusb\phy;..\nxp_rt1050_60\sdmmc;..\nxp_rt1050_60\omv;..\nxp_rt1050_60\omv\py;..\nxp_rt1050_60\omv\img;..\nxp_rt1050_60\omv\nn;..\..\lib\oofatfs;..\..\lib\mp-readline</IncludePath>
+              <IncludePath>..\..\;..\..\py;..\..\extmod;..\..\lib;..\..\lib\cmsis\inc;..\nxp_rt1050_60;..\nxp_rt1050_60\boards\omvrt1;..\nxp_rt1050_60\mcusdkRT1062\;..\nxp_rt1050_60\mcusdkRT1062\drivers;..\nxp_rt1050_60\mcusdkRT1062\utilities;..\nxp_rt1050_60\cmsis;..\nxp_rt1050_60\build-omvrt1;..\nxp_rt1050_60\usb_cdc_msc;..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\include;..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\osa;..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\device;..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\phy;..\nxp_rt1050_60\sdmmc;..\nxp_rt1050_60\omv;..\nxp_rt1050_60\omv\py;..\nxp_rt1050_60\omv\img;..\nxp_rt1050_60\omv\nn;..\..\lib\oofatfs;..\..\lib\mp-readline</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -16109,147 +16329,147 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>mcusdk</GroupName>
+          <GroupName>mcusdkRT1062</GroupName>
           <Files>
             <File>
               <FileName>fsl_adc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_adc.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_adc.c</FilePath>
             </File>
             <File>
               <FileName>fsl_adc_etc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_adc_etc.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_adc_etc.c</FilePath>
             </File>
             <File>
               <FileName>fsl_aipstz.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_aipstz.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_aipstz.c</FilePath>
             </File>
             <File>
               <FileName>fsl_aoi.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_aoi.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_aoi.c</FilePath>
             </File>
             <File>
               <FileName>fsl_bee.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_bee.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_bee.c</FilePath>
             </File>
             <File>
               <FileName>fsl_cache.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_cache.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_cache.c</FilePath>
             </File>
             <File>
               <FileName>fsl_clock.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_clock.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_clock.c</FilePath>
             </File>
             <File>
               <FileName>fsl_cmp.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_cmp.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_cmp.c</FilePath>
             </File>
             <File>
               <FileName>fsl_common.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_common.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_common.c</FilePath>
             </File>
             <File>
               <FileName>fsl_csi.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_csi.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_csi.c</FilePath>
             </File>
             <File>
               <FileName>fsl_dcdc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_dcdc.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_dcdc.c</FilePath>
             </File>
             <File>
               <FileName>fsl_dcp.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_dcp.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_dcp.c</FilePath>
             </File>
             <File>
               <FileName>fsl_dmamux.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_dmamux.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_dmamux.c</FilePath>
             </File>
             <File>
               <FileName>fsl_edma.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_edma.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_edma.c</FilePath>
             </File>
             <File>
               <FileName>fsl_elcdif.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_elcdif.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_elcdif.c</FilePath>
             </File>
             <File>
               <FileName>fsl_enc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_enc.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_enc.c</FilePath>
             </File>
             <File>
               <FileName>fsl_enet.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_enet.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_enet.c</FilePath>
             </File>
             <File>
               <FileName>fsl_ewm.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_ewm.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_ewm.c</FilePath>
             </File>
             <File>
               <FileName>fsl_flexcan.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_flexcan.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_flexcan.c</FilePath>
             </File>
             <File>
               <FileName>fsl_flexram.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_flexram.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_flexram.c</FilePath>
             </File>
             <File>
               <FileName>fsl_flexspi.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_flexspi.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_flexspi.c</FilePath>
             </File>
             <File>
               <FileName>fsl_gpc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_gpc.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_gpc.c</FilePath>
             </File>
             <File>
               <FileName>fsl_gpio.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_gpio.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_gpio.c</FilePath>
             </File>
             <File>
               <FileName>fsl_gpt.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_gpt.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_gpt.c</FilePath>
             </File>
             <File>
               <FileName>fsl_kpp.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_kpp.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_kpp.c</FilePath>
             </File>
             <File>
               <FileName>fsl_lpi2c.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_lpi2c.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_lpi2c.c</FilePath>
             </File>
             <File>
               <FileName>fsl_lpi2c_edma.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_lpi2c_edma.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_lpi2c_edma.c</FilePath>
             </File>
             <File>
               <FileName>fsl_lpi2c_freertos.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_lpi2c_freertos.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_lpi2c_freertos.c</FilePath>
               <FileOption>
                 <CommonProperty>
                   <UseCPPCompiler>2</UseCPPCompiler>
@@ -16305,17 +16525,17 @@
             <File>
               <FileName>fsl_lpspi.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_lpspi.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_lpspi.c</FilePath>
             </File>
             <File>
               <FileName>fsl_lpspi_edma.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_lpspi_edma.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_lpspi_edma.c</FilePath>
             </File>
             <File>
               <FileName>fsl_lpspi_freertos.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_lpspi_freertos.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_lpspi_freertos.c</FilePath>
               <FileOption>
                 <CommonProperty>
                   <UseCPPCompiler>2</UseCPPCompiler>
@@ -16371,17 +16591,17 @@
             <File>
               <FileName>fsl_lpuart.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_lpuart.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_lpuart.c</FilePath>
             </File>
             <File>
               <FileName>fsl_lpuart_edma.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_lpuart_edma.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_lpuart_edma.c</FilePath>
             </File>
             <File>
               <FileName>fsl_lpuart_freertos.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_lpuart_freertos.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_lpuart_freertos.c</FilePath>
               <FileOption>
                 <CommonProperty>
                   <UseCPPCompiler>2</UseCPPCompiler>
@@ -16437,112 +16657,112 @@
             <File>
               <FileName>fsl_pit.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_pit.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_pit.c</FilePath>
             </File>
             <File>
               <FileName>fsl_pmu.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_pmu.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_pmu.c</FilePath>
             </File>
             <File>
               <FileName>fsl_pwm.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_pwm.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_pwm.c</FilePath>
             </File>
             <File>
               <FileName>fsl_pxp.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_pxp.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_pxp.c</FilePath>
             </File>
             <File>
               <FileName>fsl_qtmr.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_qtmr.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_qtmr.c</FilePath>
             </File>
             <File>
               <FileName>fsl_rtwdog.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_rtwdog.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_rtwdog.c</FilePath>
             </File>
             <File>
               <FileName>fsl_sai.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_sai.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_sai.c</FilePath>
             </File>
             <File>
               <FileName>fsl_sai_edma.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_sai_edma.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_sai_edma.c</FilePath>
             </File>
             <File>
               <FileName>fsl_semc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_semc.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_semc.c</FilePath>
             </File>
             <File>
               <FileName>fsl_snvs_hp.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_snvs_hp.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_snvs_hp.c</FilePath>
             </File>
             <File>
               <FileName>fsl_snvs_lp.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_snvs_lp.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_snvs_lp.c</FilePath>
             </File>
             <File>
               <FileName>fsl_spdif.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_spdif.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_spdif.c</FilePath>
             </File>
             <File>
               <FileName>fsl_spdif_edma.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_spdif_edma.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_spdif_edma.c</FilePath>
             </File>
             <File>
               <FileName>fsl_src.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_src.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_src.c</FilePath>
             </File>
             <File>
               <FileName>fsl_trng.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_trng.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_trng.c</FilePath>
             </File>
             <File>
               <FileName>fsl_tsc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_tsc.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_tsc.c</FilePath>
             </File>
             <File>
               <FileName>fsl_usdhc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_usdhc.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_usdhc.c</FilePath>
             </File>
             <File>
               <FileName>fsl_wdog.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_wdog.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_wdog.c</FilePath>
             </File>
             <File>
               <FileName>fsl_xbara.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_xbara.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_xbara.c</FilePath>
             </File>
             <File>
               <FileName>fsl_xbarb.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_xbarb.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_xbarb.c</FilePath>
             </File>
             <File>
               <FileName>fsl_csi_camera_adapter.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\drivers\fsl_csi_camera_adapter.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\drivers\fsl_csi_camera_adapter.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>mcusdk_utils</GroupName>
+          <GroupName>mcusdkRT1062_utils</GroupName>
           <GroupOption>
             <CommonProperty>
               <UseCPPCompiler>0</UseCPPCompiler>
@@ -16589,7 +16809,7 @@
                   <MiscControls></MiscControls>
                   <Define></Define>
                   <Undefine></Undefine>
-                  <IncludePath>..\nxp_rt1050_60\mcusdk\utilities\io;..\nxp_rt1050_60\mcusdk\utilities\log;..\nxp_rt1050_60\mcusdk\utilities\str</IncludePath>
+                  <IncludePath>..\nxp_rt1050_60\mcusdkRT1062\utilities\io;..\nxp_rt1050_60\mcusdkRT1062\utilities\log;..\nxp_rt1050_60\mcusdkRT1062\utilities\str</IncludePath>
                 </VariousControls>
               </Cads>
               <Aads>
@@ -16616,32 +16836,32 @@
             <File>
               <FileName>fsl_debug_console.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\utilities\fsl_debug_console.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\utilities\fsl_debug_console.c</FilePath>
             </File>
             <File>
               <FileName>fsl_log.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\utilities\log\fsl_log.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\utilities\log\fsl_log.c</FilePath>
             </File>
             <File>
               <FileName>fsl_str.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\utilities\str\fsl_str.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\utilities\str\fsl_str.c</FilePath>
             </File>
             <File>
               <FileName>fsl_assert.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\utilities\fsl_assert.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\utilities\fsl_assert.c</FilePath>
             </File>
             <File>
               <FileName>fsl_shell.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\utilities\fsl_shell.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\utilities\fsl_shell.c</FilePath>
             </File>
             <File>
               <FileName>fsl_io.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\utilities\io\fsl_io.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\utilities\io\fsl_io.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -16869,7 +17089,7 @@
             <File>
               <FileName>system_MIMXRT1052.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\system_MIMXRT1052.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\system_MIMXRT1052.c</FilePath>
             </File>
             <File>
               <FileName>isr.c</FileName>
@@ -18220,12 +18440,12 @@
             <File>
               <FileName>usb_device_dci.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\middleware\sdkusb\device\usb_device_dci.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\device\usb_device_dci.c</FilePath>
             </File>
             <File>
               <FileName>usb_osa_bm.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\middleware\sdkusb\osa\usb_osa_bm.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\osa\usb_osa_bm.c</FilePath>
             </File>
             <File>
               <FileName>composite.c</FileName>
@@ -18275,12 +18495,12 @@
             <File>
               <FileName>usb_device_ehci.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\middleware\sdkusb\device\usb_device_ehci.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\device\usb_device_ehci.c</FilePath>
             </File>
             <File>
               <FileName>usb_phy.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\middleware\sdkusb\phy\usb_phy.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\phy\usb_phy.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -18290,32 +18510,32 @@
             <File>
               <FileName>usb_osa_bm.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\middleware\sdkusb\osa\usb_osa_bm.h</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\osa\usb_osa_bm.h</FilePath>
             </File>
             <File>
               <FileName>usb_osa.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\middleware\sdkusb\osa\usb_osa.h</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\osa\usb_osa.h</FilePath>
             </File>
             <File>
               <FileName>usb_device_dci.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\middleware\sdkusb\device\usb_device_dci.h</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\device\usb_device_dci.h</FilePath>
             </File>
             <File>
               <FileName>usb_device.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\middleware\sdkusb\device\usb_device.h</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\device\usb_device.h</FilePath>
             </File>
             <File>
               <FileName>usb_spec.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\middleware\sdkusb\include\usb_spec.h</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\include\usb_spec.h</FilePath>
             </File>
             <File>
               <FileName>usb_misc.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\middleware\sdkusb\include\usb_misc.h</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\include\usb_misc.h</FilePath>
             </File>
             <File>
               <FileName>composite.h</FileName>
@@ -18370,7 +18590,7 @@
             <File>
               <FileName>usb_device_ehci.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\middleware\sdkusb\device\usb_device_ehci.h</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\device\usb_device_ehci.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -19244,22 +19464,22 @@
             <File>
               <FileName>fsl_flexspi_nor_boot.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\xip\fsl_flexspi_nor_boot.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\xip\fsl_flexspi_nor_boot.c</FilePath>
             </File>
             <File>
               <FileName>fsl_flexspi_nor_boot.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\xip\fsl_flexspi_nor_boot.h</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\xip\fsl_flexspi_nor_boot.h</FilePath>
             </File>
             <File>
               <FileName>fsl_flexspi_nor_flash.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\xip\fsl_flexspi_nor_flash.c</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\xip\fsl_flexspi_nor_flash.c</FilePath>
             </File>
             <File>
               <FileName>fsl_flexspi_nor_flash.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\nxp_rt1050_60\mcusdk\xip\fsl_flexspi_nor_flash.h</FilePath>
+              <FilePath>..\nxp_rt1050_60\mcusdkRT1062\xip\fsl_flexspi_nor_flash.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -20319,6 +20539,36 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>omv_wifi</GroupName>
+          <Files>
+            <File>
+              <FileName>M8266WIFIDrv_iMXRT10xx.lib</FileName>
+              <FileType>4</FileType>
+              <FilePath>..\..\drivers\m8266\lib\M8266WIFIDrv_iMXRT10xx.lib</FilePath>
+            </File>
+            <File>
+              <FileName>m8266_hw.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\drivers\m8266\m8266_hw.c</FilePath>
+            </File>
+            <File>
+              <FileName>socket_m8266.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\drivers\m8266\socket_m8266.c</FilePath>
+            </File>
+            <File>
+              <FileName>winc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\drivers\m8266\winc.c</FilePath>
+            </File>
+            <File>
+              <FileName>wifidbg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt1050_60\omv\wifidbg.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>::Compiler</GroupName>
         </Group>
       </Groups>
@@ -20329,7 +20579,7 @@
     <apis/>
     <components>
       <component Cbundle="ARM Compiler" Cclass="Compiler" Cgroup="I/O" Csub="STDERR" Cvariant="ITM" Cvendor="Keil" Cversion="1.2.0" condition="ARMCC Cortex-M with ITM">
-        <package name="ARM_Compiler" schemaVersion="1.4.9" url="http://www.keil.com/pack/" vendor="Keil" version="1.3.1"/>
+        <package name="ARM_Compiler" schemaVersion="1.4.9" url="http://www.keil.com/pack/" vendor="Keil" version="1.6.1"/>
         <targetInfos>
           <targetInfo name="debug_flexspi"/>
           <targetInfo name="debug_ocram"/>
@@ -20337,7 +20587,7 @@
         </targetInfos>
       </component>
       <component Cbundle="ARM Compiler" Cclass="Compiler" Cgroup="I/O" Csub="STDIN" Cvariant="ITM" Cvendor="Keil" Cversion="1.2.0" condition="ARMCC Cortex-M with ITM">
-        <package name="ARM_Compiler" schemaVersion="1.4.9" url="http://www.keil.com/pack/" vendor="Keil" version="1.3.1"/>
+        <package name="ARM_Compiler" schemaVersion="1.4.9" url="http://www.keil.com/pack/" vendor="Keil" version="1.6.1"/>
         <targetInfos>
           <targetInfo name="debug_flexspi"/>
           <targetInfo name="debug_ocram"/>
@@ -20345,7 +20595,7 @@
         </targetInfos>
       </component>
       <component Cbundle="ARM Compiler" Cclass="Compiler" Cgroup="I/O" Csub="STDOUT" Cvariant="ITM" Cvendor="Keil" Cversion="1.2.0" condition="ARMCC Cortex-M with ITM">
-        <package name="ARM_Compiler" schemaVersion="1.4.9" url="http://www.keil.com/pack/" vendor="Keil" version="1.3.1"/>
+        <package name="ARM_Compiler" schemaVersion="1.4.9" url="http://www.keil.com/pack/" vendor="Keil" version="1.6.1"/>
         <targetInfos>
           <targetInfo name="debug_flexspi"/>
           <targetInfo name="debug_ocram"/>
