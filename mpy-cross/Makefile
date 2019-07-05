@@ -16,6 +16,10 @@ include ../py/mkenv.mk
 # define main target
 PROG = mpy-cross
 
+ifdef __CYGWIN__
+PROG += mpy-cross.exe
+endif
+
 # qstr definitions (must come before including py.mk)
 QSTR_DEFS = qstrdefsport.h
 
