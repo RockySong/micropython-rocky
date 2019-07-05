@@ -336,7 +336,7 @@ int wifidbg_dispatch()
 		return -1;
 
 	
-	if ((sockbuf.size == 0)&&(winc_socket_rev(client_fd) == 0)){
+	if ((sockbuf.size == 0)&&(winc_socket_has_rev(client_fd) == 0)){
 		return -1;
 	}
 	M8266_DBG_IO_Write(2,1);
@@ -405,7 +405,7 @@ rx_loop:
         }
         else {
 			
-			if ((sockbuf.size == 0) && (winc_socket_rev(client_fd) == 0)){
+			if ((sockbuf.size == 0) && (winc_socket_has_rev(client_fd) == 0)){
 				M8266_DBG_IO_Write(2,0);
 				return -1;
 			}

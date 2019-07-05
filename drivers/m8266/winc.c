@@ -333,7 +333,7 @@ int winc_socket_bind(int fd, sockaddr *addr)
     return ret;
 }
 
-int winc_socket_rev(int fd)
+int winc_socket_has_rev(int fd)
 {
 	return M8266_socket_has_data_rev(fd);
 }
