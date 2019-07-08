@@ -456,7 +456,7 @@ void wifidbg_data_in(void *buffer, int length)
 					if (JPEG_FB()->size == 0) {
 						// unlock FB
 						mutex_unlock(&JPEG_FB()->lock, MUTEX_TID_IDE);
-						M8266_DBG_IO_Toggle(0);
+						
 					} else {
 						// Return header w, h and size/bpp
 						((uint32_t*)buffer)[0] = JPEG_FB()->w;

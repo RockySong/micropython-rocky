@@ -165,7 +165,7 @@ int M8266_socket_accept(int fd, sockaddr *addr, int *fd_out, uint32_t timeout)
 		return -2;		
 	}
 
-	if( M8266WIFI_SPI_Set_TcpServer_Auto_Discon_Timeout(gSockets[fd].linkno, 25, &status) == 0)
+	if( M8266WIFI_SPI_Set_TcpServer_Auto_Discon_Timeout(gSockets[fd].linkno, 0xffff, &status) == 0)
     {
     	PRINTF("%s Set COnnection Auto Dis failed:x%x\r\n",__func__,status);
     	return -2;

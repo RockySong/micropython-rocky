@@ -339,7 +339,7 @@ int wifidbg_dispatch()
 	if ((sockbuf.size == 0)&&(winc_socket_has_rev(client_fd) == 0)){
 		return -1;
 	}
-	M8266_DBG_IO_Write(2,1);
+	M8266_DBG_IO_Write(0,1);
 rx_loop:
 	if(!xfer_length)
 	{//new cmd from IDE	
@@ -376,6 +376,7 @@ rx_loop:
 		#if 1
 			if ((ret = winc_socket_sendblock_in_int(client_fd, (uint8_t *)buf,bytes, 100)) < 0) {
                 	close_all_sockets();
+                	M8266_DBG_IO_Toggle(1);
                 	return -2;
             }
 			xfer_length -= ret;
@@ -406,7 +407,7 @@ rx_loop:
         else {
 			
 			if ((sockbuf.size == 0) && (winc_socket_has_rev(client_fd) == 0)){
-				M8266_DBG_IO_Write(2,0);
+				M8266_DBG_IO_Write(0,0);
 				return -1;
 			}
 			//M8266_DBG_IO_Toggle(1);
@@ -416,6 +417,7 @@ rx_loop:
 	            int bytes = MIN(xfer_length, BUFFER_SIZE);
 	            if ((ret = winc_socket_recv_in_int(client_fd, buf, xfer_length, &sockbuf, 200,&md)) < 0) {
 	                //close_all_sockets();
+	                
 	                return -1;
 	            }
 	            xfer_length -= ret;
@@ -429,7 +431,7 @@ rx_loop:
 //    if((sockbuf.size!= 0) || (winc_socket_rev(client_fd) >0))
 //    	goto rx_loop;
 
-	M8266_DBG_IO_Write(2,0);
+	M8266_DBG_IO_Write(0,0);
     return 0;
 }
 
