@@ -346,15 +346,17 @@ rx_loop:
 		//M8266_DBG_IO_Toggle(0);
 		if ((ret = winc_socket_recv_in_int(client_fd, buf, 6, &sockbuf, 100,&md)) < 0) {
 			if (TIMEDOUT(ret)) {
+				M8266_DBG_IO_Write(0,0);
 				return -1;
 			} else {
 				close_all_sockets();
+				M8266_DBG_IO_Write(0,0);
 				return -2;
 			}
 		}
 
 		if (ret != 6 || buf[0] != 0x30) {
-			//M8266_DBG_IO_Toggle(0);
+			M8266_DBG_IO_Write(0,0);
 			return -1;
 		}
 		//M8266_DBG_IO_Toggle(0);
@@ -370,12 +372,13 @@ rx_loop:
         if (request & 0x80) {
             // Device-to-host data phase
             bytes = MIN(xfer_length, BUFFER_SIZE);
-            
+            M8266_DBG_IO_Toggle(2);
 			wifidbg_data_in(buf, bytes);
-
+			
 		#if 1
 			if ((ret = winc_socket_sendblock_in_int(client_fd, (uint8_t *)buf,bytes, 100)) < 0) {
                 	close_all_sockets();
+					M8266_DBG_IO_Write(0,0);
                 	M8266_DBG_IO_Toggle(1);
                 	return -2;
             }
@@ -388,18 +391,20 @@ rx_loop:
 				//if ((ret = winc_socket_send_in_int(client_fd, (uint8_t *)(buf + ret), bytes, 100)) < 0) {
             	if ((ret = winc_socket_send_in_int(client_fd, (uint8_t *)(buf + ret), bytes, 100)) < 0) {
                 	close_all_sockets();
+                	M8266_DBG_IO_Write(0,0);
+                	M8266_DBG_IO_Toggle(1);
                 	return -2;
             	}
-            	if (request == 0x82)
-					dbg_tx_rt += ret;
+            	
 	            if(ret != bytes)
 	            {
 					mp_hal_delay_us(100);
-	            	M8266_DBG_IO_Toggle(2);
+	            	
 	            }
 
 	            bytes -= ret;
             }
+            xfer_length -= ret;
        #endif     
 			
             //PRINTF("Socket sent:%d,%d\r\n",bytes,ret);
@@ -417,7 +422,7 @@ rx_loop:
 	            int bytes = MIN(xfer_length, BUFFER_SIZE);
 	            if ((ret = winc_socket_recv_in_int(client_fd, buf, xfer_length, &sockbuf, 200,&md)) < 0) {
 	                //close_all_sockets();
-	                
+	                M8266_DBG_IO_Write(0,0);
 	                return -1;
 	            }
 	            xfer_length -= ret;
