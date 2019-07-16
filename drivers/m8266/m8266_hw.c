@@ -444,8 +444,8 @@ int M8266_setup(uint8_t mode)
 	M8266WIFI_Module_Hardware_Reset();
 
 	M8266WIFI_Module_delay_ms(1);
-	M8266HostIf_SPI_SetSpeed(SPI_BaudRatePrescaler_8);					// Setup SPI Clock. Here 192/8 = 24 MHz for for iMXRT10xx.
-	spi_clk = 24000000;
+	M8266HostIf_SPI_SetSpeed(SPI_BaudRatePrescaler_16);					// Setup SPI Clock. Here 192/8 = 24 MHz for for iMXRT10xx.
+	spi_clk = 12000000;
 
 	//It is very important to call M8266HostIf_SPI_Select() to tell the driver which SPI you used
  	 //and how faster the SPI clock you used. The function must be called before SPI access
