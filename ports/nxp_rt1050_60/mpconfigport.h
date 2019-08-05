@@ -83,7 +83,7 @@
 #define MICROPY_MODULE_WEAK_LINKS   (1)
 #define MICROPY_CAN_OVERRIDE_BUILTINS (1)
 #define MICROPY_USE_INTERNAL_ERRNO  (1)
-#define MICROPY_ENABLE_SCHEDULER    (0) //(1)
+#define MICROPY_ENABLE_SCHEDULER    (1)
 #define MICROPY_SCHEDULER_DEPTH     (8)
 #define MICROPY_VFS                 (1)
 #define MICROPY_VFS_FAT             (1)
@@ -238,11 +238,6 @@ extern const struct _mp_obj_module_t gif_module;
 	SOCKET_BUILTIN_MODULE \
 	NETWORK_BUILTIN_MODULE
 #else
-	#if defined(BOARD_OMVRT1)
-	#define LCD_MODULE	{ MP_OBJ_NEW_QSTR(MP_QSTR_lcd),  (mp_obj_t)&lcd_module },
-	#else
-	#define LCD_MODULE
-	#endif
 	#define MICROPY_PORT_BUILTIN_MODULES \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_umachine), (mp_obj_t)&machine_module }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_pyb), (mp_obj_t)&pyb_module }, \
@@ -251,7 +246,7 @@ extern const struct _mp_obj_module_t gif_module;
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_utime), (mp_obj_t)&mp_module_utime }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_time), (mp_obj_t)&time_module }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_sensor),  (mp_obj_t)&sensor_module }, \
-	LCD_MODULE \
+	{ MP_OBJ_NEW_QSTR(MP_QSTR_lcd),  (mp_obj_t)&lcd_module }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_image),  (mp_obj_t)&image_module }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_mjpeg),  (mp_obj_t)&mjpeg_module }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_gif),  (mp_obj_t)&gif_module }, \

@@ -204,7 +204,9 @@ void imlib_remove_shadows(image_t *img, const char *path, image_t *other, int sc
 
         int sum = 0;
         int mean = s.LMean * 0.8f;
-
+		#if defined(IMLIB_ENABLE_LAB_LUT)
+		OverlaySwitch(OVLY_LAB_TAB);
+		#endif
         for (int y = 0, yy = temp_image.h; y < yy; y++) {
             uint16_t *row_ptr = IMAGE_COMPUTE_RGB565_PIXEL_ROW_PTR(&temp_image, y);
 

@@ -221,7 +221,7 @@ def QRCodeTest(loopCnt = 120, barLen = 120):
     sensor.reset()
     sensor.set_pixformat(sensor.RGB565)
     sensor.set_framesize(sensor.VGA)
-    sensor.set_windowing((400,272))
+    sensor.set_windowing((360,240))
     sensor.skip_frames(time = 1000)
     sensor.set_auto_gain(False)
     clock = time.clock()
@@ -270,8 +270,9 @@ while (True):
     BlobTest(thresholds3, 40000)
     QRCodeTest(40000)
     FaceTest(40000)
-    LENetTest(40000)
-    CIFAR10Test(40000, True)
+    LENetTest(40000)  # RT1052 does not have enough RAM to run this
+    #If you use RT1052, 'isFull' should be False
+    CIFAR10Test(40000, isFull = True)
 
 
 

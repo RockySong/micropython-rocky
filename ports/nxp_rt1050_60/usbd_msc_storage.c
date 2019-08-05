@@ -120,14 +120,12 @@ uint32_t g_mscWriteRequestBuffer[USB_DEVICE_MSC_WRITE_BUFF_SIZE >> 2];
 uint8_t s_isUseSDCard;
 void _ConfigLBA(usb_device_lba_information_struct_t *lbaInf)
 {
-#if MICROPY_HW_HAS_SDCARD	
 	if (sdcard_is_present()) 
 	{
 		s_isUseSDCard = 1; //1;
 		lbaInf->totalLbaNumberSupports = sdcard_get_lba_count();
 	}
 	else
-#endif	
 		lbaInf->totalLbaNumberSupports = storage_get_block_count();
 
 	lbaInf->lengthOfEachLba = 512;
@@ -152,13 +150,10 @@ usb_status_t USB_DeviceMscCallback2(class_handle_t handle, uint32_t event, void 
             /*write the data to sd card*/
             if (0 != lba->size)
             {
-#if MICROPY_HW_HAS_SDCARD				
 				if (s_isUseSDCard) {
 					if (sdcard_is_present())
 						t1 = sdcard_write_blocks(lba->buffer,lba->offset, lba->size >> USB_MSC_BLOCK_SIZE_LOG2);
-				} else
-#endif				
-				{
+				} else {
 					t1 = storage_write_blocks(lba->buffer,lba->offset + storage_get_block_offset(), lba->size >> USB_MSC_BLOCK_SIZE_LOG2);
 				}
 				
@@ -180,13 +175,10 @@ usb_status_t USB_DeviceMscCallback2(class_handle_t handle, uint32_t event, void 
         case kUSB_DeviceMscEventReadRequest:
             lba = (usb_device_lba_app_struct_t *)param;
             lba->buffer = (uint8_t *)&g_mscReadRequestBuffer[0];
-#if MICROPY_HW_HAS_SDCARD		
 			if (s_isUseSDCard) {
 				if (sdcard_is_present())
 					t1 = sdcard_read_blocks(lba->buffer,lba->offset, lba->size >> USB_MSC_BLOCK_SIZE_LOG2);
-			} else
-#endif
-		{
+			} else {
 				t1 = storage_read_blocks(lba->buffer,lba->offset + storage_get_block_offset(), lba->size >> USB_MSC_BLOCK_SIZE_LOG2);
 			}
 
@@ -271,13 +263,10 @@ usb_status_t USB_DeviceMscCallback(class_handle_t handle, uint32_t event, void *
             /*write the data to sd card*/
             if (0 != lba->size)
             {
-#if MICROPY_HW_HAS_SDCARD				
 				if (s_isUseSDCard) {
 					if (sdcard_is_present())
 						t1 = sdcard_write_blocks(lba->buffer,lba->offset, lba->size >> USB_MSC_BLOCK_SIZE_LOG2);
-				} else 
-#endif				
-				{
+				} else {
 					t1 = storage_write_blocks(lba->buffer,lba->offset + storage_get_block_offset(), lba->size >> USB_MSC_BLOCK_SIZE_LOG2);
 				}
 				
@@ -316,13 +305,11 @@ usb_status_t USB_DeviceMscCallback(class_handle_t handle, uint32_t event, void *
         case kUSB_DeviceMscEventReadRequest:
             lba = (usb_device_lba_app_struct_t *)param;
             lba->buffer = (uint8_t *)&g_mscReadRequestBuffer[0];
-#if MICROPY_HW_HAS_SDCARD
+
 			if (s_isUseSDCard) {
 				if (sdcard_is_present())
 					t1 = sdcard_read_blocks(lba->buffer,lba->offset, lba->size >> USB_MSC_BLOCK_SIZE_LOG2);
-			} else 
-#endif		
-		{
+			} else {
 				t1 = storage_read_blocks(lba->buffer,lba->offset + storage_get_block_offset(), lba->size >> USB_MSC_BLOCK_SIZE_LOG2);
 			}
 

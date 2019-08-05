@@ -439,7 +439,7 @@ static mp_uint_t py_winc_socket_send(mod_network_socket_obj_t *socket, const byt
 
 static mp_uint_t py_winc_socket_recv(mod_network_socket_obj_t *socket, byte *buf, mp_uint_t len, int *_errno)
 {
-    int ret = winc_socket_recv(socket->fd, buf, len, socket->timeout);
+    int ret = winc_socket_recv(socket->fd, buf, len, &socket->sockbuf, socket->timeout);
     if (ret < 0) {
         *_errno = ret;
         py_winc_socket_close(socket);
@@ -524,7 +524,6 @@ static const mp_map_elem_t winc_locals_dict_table[] = {
     { MP_OBJ_NEW_QSTR(MP_QSTR_WEP),             MP_OBJ_NEW_SMALL_INT(M2M_WIFI_SEC_WEP) },       // Security type WEP (40 or 104) OPEN OR SHARED.
     { MP_OBJ_NEW_QSTR(MP_QSTR_WPA_PSK),       MP_OBJ_NEW_SMALL_INT(M2M_WIFI_SEC_WPA_PSK) },// Network secured with WPA/WPA2 personal(PSK).
     { MP_OBJ_NEW_QSTR(MP_QSTR_802_1X),          MP_OBJ_NEW_SMALL_INT(M2M_WIFI_SEC_802_1X) },    // Network is secured with WPA/WPA2 Enterprise.
-
     { MP_OBJ_NEW_QSTR(MP_QSTR_MODE_STA),        MP_OBJ_NEW_SMALL_INT(WINC_MODE_STA) },          // Start in Staion mode.
     { MP_OBJ_NEW_QSTR(MP_QSTR_MODE_AP),         MP_OBJ_NEW_SMALL_INT(WINC_MODE_AP) },           // Start in Access Point mode.
     { MP_OBJ_NEW_QSTR(MP_QSTR_MODE_P2P),        MP_OBJ_NEW_SMALL_INT(WINC_MODE_P2P) },          // Start in P2P (WiFi Direct) mode.

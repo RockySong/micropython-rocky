@@ -53,6 +53,7 @@ uint32_t fb_buffer_size()
 void fb_update_jpeg_buffer()
 {
     static int overflow_count = 0;
+
     if ((MAIN_FB()->bpp > 3) && JPEG_FB()->enabled) {
         // Lock FB
         if (mutex_try_lock(&JPEG_FB()->lock, MUTEX_TID_OMV)) {
@@ -67,13 +68,12 @@ void fb_update_jpeg_buffer()
             // Unlock the framebuffer mutex
             mutex_unlock(&JPEG_FB()->lock, MUTEX_TID_OMV);
         }
-    } else if ((MAIN_FB()->bpp > 0) && JPEG_FB()->enabled) {
+    } else if ((MAIN_FB()->bpp >= 0) && JPEG_FB()->enabled) {
         // Lock FB
         if (mutex_try_lock(&JPEG_FB()->lock, MUTEX_TID_OMV)) {
             // Set JPEG src and dst images.
             image_t src = {.w=MAIN_FB()->w, .h=MAIN_FB()->h, .bpp=MAIN_FB()->bpp,     .pixels=MAIN_FB()->pixels};
             image_t dst = {.w=MAIN_FB()->w, .h=MAIN_FB()->h, .bpp=(OMV_JPEG_BUF_SIZE-64),  .pixels=JPEG_FB()->pixels};
-			OverlaySwitch(OVLY_YUV_TAB);
             // Note: lower quality saves USB bandwidth and results in a faster IDE FPS.
             bool overflow = jpeg_compress(&src, &dst, JPEG_FB()->quality, false);
             if (overflow == true) {

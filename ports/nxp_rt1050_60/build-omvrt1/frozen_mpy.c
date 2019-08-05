@@ -106,9 +106,6 @@ enum {
     MP_QSTR_cmd,
     MP_QSTR_fmt,
     MP_QSTR_a0,
-    MP_QSTR_a1,
-    MP_QSTR_a2,
-    MP_QSTR_a3,
     MP_QSTR_a4,
     MP_QSTR_n,
     MP_QSTR_g,
@@ -169,8 +166,8 @@ extern const qstr_pool_t mp_qstr_const_pool;
 const qstr_pool_t mp_qstr_frozen_const_pool = {
     (qstr_pool_t*)&mp_qstr_const_pool, // previous pool
     MP_QSTRnumber_of, // previous pool size
-    132, // allocated entries
-    132, // used entries
+    129, // allocated entries
+    129, // used entries
     {
         (const byte*)"\xcf\xa5\x0b" "lcd160cr.py",
         (const byte*)"\xf2\xcd\x08" "PORTRAIT",
@@ -247,9 +244,6 @@ const qstr_pool_t mp_qstr_frozen_const_pool = {
         (const byte*)"\x2f\x4c\x03" "cmd",
         (const byte*)"\x7a\x38\x03" "fmt",
         (const byte*)"\x74\x6e\x02" "a0",
-        (const byte*)"\x75\x6e\x02" "a1",
-        (const byte*)"\x76\x6e\x02" "a2",
-        (const byte*)"\x77\x6e\x02" "a3",
         (const byte*)"\x70\x6e\x02" "a4",
         (const byte*)"\xcb\xb5\x01" "n",
         (const byte*)"\xc2\xb5\x01" "g",

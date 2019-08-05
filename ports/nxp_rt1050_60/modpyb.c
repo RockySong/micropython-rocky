@@ -71,6 +71,12 @@
 #include "rtc.h"
 #include "uniqueID.h"
 #include "pwm.h"
+#include "rpm.h"
+#include "qtimer.h"
+#include "tmr.h"
+#include "dcmc.h"
+#include "srpm.h"
+
 extern int pyb_hard_fault_debug;
 
 STATIC mp_obj_t pyb_fault_debug(mp_obj_t val) {
@@ -160,9 +166,14 @@ STATIC const mp_rom_map_elem_t pyb_module_globals_table[] = {
     { MP_ROM_QSTR(MP_QSTR_sync), MP_ROM_PTR(&mod_os_sync_obj) },
     { MP_ROM_QSTR(MP_QSTR_mount), MP_ROM_PTR(&mp_vfs_mount_obj) },
 	
-	#if defined(BOARD_OMVRT1)
-	{ MP_ROM_QSTR(MP_QSTR_pwm), MP_ROM_PTR(&pyb_pwm_type) },
-  #endif
+	//Crist to test:
+	{ MP_ROM_QSTR(MP_QSTR_PWM), MP_ROM_PTR(&pyb_pwm_type) },
+	{ MP_ROM_QSTR(MP_QSTR_RPM), MP_ROM_PTR(&pyb_rpm_type) },
+	{ MP_ROM_QSTR(MP_QSTR_QTIMER), MP_ROM_PTR(&pyb_qtimer_type) },
+	{ MP_ROM_QSTR(MP_QSTR_TMR), MP_ROM_PTR(&pyb_tmr_type) },
+	{ MP_ROM_QSTR(MP_QSTR_DCMC), MP_ROM_PTR(&pyb_dcmc_type) },
+	{ MP_ROM_QSTR(MP_QSTR_SRPM), MP_ROM_PTR(&pyb_srpm_type) },
+
     // rocky ignore { MP_ROM_QSTR(MP_QSTR_Timer), MP_ROM_PTR(&pyb_timer_type) },
 
 #if MICROPY_HW_ENABLE_RNG
@@ -177,8 +188,8 @@ STATIC const mp_rom_map_elem_t pyb_module_globals_table[] = {
     // rocky ignore: { MP_ROM_QSTR(MP_QSTR_ExtInt), MP_ROM_PTR(&extint_type) },
 
 #if MICROPY_HW_ENABLE_SERVO
-    { MP_ROM_QSTR(MP_QSTR_pwm), MP_ROM_PTR(&pyb_pwm_set_obj) },
-    { MP_ROM_QSTR(MP_QSTR_servo), MP_ROM_PTR(&pyb_servo_set_obj) },
+    //{ MP_ROM_QSTR(MP_QSTR_pwm), MP_ROM_PTR(&pyb_pwm_set_obj) },
+    // { MP_ROM_QSTR(MP_QSTR_servo), MP_ROM_PTR(&pyb_servo_set_obj) },
     { MP_ROM_QSTR(MP_QSTR_Servo), MP_ROM_PTR(&pyb_servo_type) },
 #endif
 

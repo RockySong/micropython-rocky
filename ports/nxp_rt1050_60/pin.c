@@ -188,48 +188,56 @@ const pin_obj_t *pin_find(mp_obj_t user_obj) {
 
 STATIC void pin_print(const mp_print_t *print, mp_obj_t self_in, mp_print_kind_t kind) {
     pin_obj_t *self = self_in;
-	char s[128];
-	const char* ppSpd[] = {"50MHz", "100MHz", "100MHz", "200MHz"};
+	char s[144];
+	const char* ppSpd[] = {"50M", "100M", "100M", "200M"};
 	const char* ppPull[] = {"pDn100K", "pUp47K", "pUp100K", "pUp22K"};
-	uint32_t sNdx, sLenRem = sizeof(s);
+	uint32_t sNdx = 0, sLenRem = sizeof(s);
 
 	McuPinCfgReg_t cfg;
 	McuPinMuxReg_t mux;
 	uint32_t afNdx;
-	const char *pName;
+	const char *pName, *pBoardName;
+	char levels[2] = "LH";
 	size_t qstrLen;
-	pName = (const char*) qstr_data(self->name, &qstrLen);
-	_INC_PRINT("Pin %s (P%02d.%02d):\r\n", pName, self->port, self->pin);
-	
+	pName = (const char*) qstr_data(self->name, &qstrLen);	
+	pBoardName = (const char*) qstr_data(self->board_name, &qstrLen);	
     cfg.v32 = REG_READ32(self->cfgReg);
 	mux.v32 = REG_READ32(self->afReg);
+	uint32_t inLevel = levels[(self->gpio->PSR >> self->pin) & 1];
+	uint32_t drvLevel = levels[(self->gpio->DR >> self->pin) & 1];
+	if (mux.b04_1_inForceOn)
+		_INC_PRINT("Pin %s (GPIO%d.%02d %s), PAD:%c, MUX_CFG=0x%02x, PAD_CFG=0x%05x:\n", pBoardName, self->port, self->pin, pName, inLevel, mux.v32, cfg.v32);
+	else
+		_INC_PRINT("Pin %s (GPIO%d.%02d %s), PAD:-, MUX_CFG=0x%02x, PAD_CFG=0x%05x:\n", pBoardName, self->port, self->pin, pName, mux.v32, cfg.v32);	
 	afNdx = pin_get_af(self);
 	if (cfg.b11_1_OD_isOD)
 		_INC_PRINT("OD, ");
 	else
 		_INC_PRINT("--, ");
-
     if (!(cfg.b12_1_PKE_digiInEn)) {
         // analog
-		_INC_PRINT("Analog/Hiz\r\n");
+		_INC_PRINT("Analog/Hiz\n");
     } else {
     	_INC_PRINT("Digital, mux=%d, ", afNdx & 7);
-
+		if (mux.b04_1_inForceOn)
+			_INC_PRINT("In %c, ", inLevel);
+		else
+			_INC_PRINT("----, ");
     	if (afNdx == 5) {
 			_INC_PRINT("GPIO:");
 			if (self->gpio->GDIR & (1<<self->pin))
-				_INC_PRINT("OUT, ");
+				_INC_PRINT("OUT %c, ", drvLevel);
 			else
 				_INC_PRINT(" IN, ");
     	}
     }
 	if (cfg.b00_1_SRE_isFastSlew)
-		_INC_PRINT("Slew=Fast, ");
+		_INC_PRINT("Fast slew, ");
 	else
-		_INC_PRINT("Slew=Slow, ");
+		_INC_PRINT("Slow slew, ");
 
 	_INC_PRINT("drive=%d/8, ", cfg.b03_3_DSE_driveStrength);
-	_INC_PRINT("%s, ", ppSpd[cfg.b06_2_Speed]);
+	_INC_PRINT("%s SPD, ", ppSpd[cfg.b06_2_Speed]);
 	if (cfg.b13_1_PUE_keepOrPull == 0)
 		_INC_PRINT("keeper, ");
 	else
@@ -240,15 +248,11 @@ STATIC void pin_print(const mp_print_t *print, mp_obj_t self_in, mp_print_kind_t
 	else
 		_INC_PRINT("---, ");
 
-	if (mux.b04_1_inForceOn)
-		_INC_PRINT("INON, ");
-	else
-		_INC_PRINT("----, ");
 	if (afNdx & 0x10) {
 		_INC_PRINT("not selected! ");
 	}
 
-	mp_printf(print, "%s\r\n", s);
+	mp_printf(print, "%s\n", s);
 }
 
 STATIC mp_obj_t pin_obj_init_helper(const pin_obj_t *pin, mp_uint_t n_args, const mp_obj_t *args, mp_map_t *kw_args);

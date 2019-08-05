@@ -32,8 +32,6 @@
 #define M8266WIFI_INT_IO_GPIO									GPIO1
 #define M8266WIFI_INT_IO_PIN									13
 
-#define M8266WIFI_INT_IRQ										GPIO1_Combined_0_15_IRQn
-#define M8266WIFI_INT_HANDLER									GPIO1_Combined_0_15_IRQHandler
 
 #else
 // default board is i.MX RT1050/60 EVK
@@ -60,8 +58,7 @@
 #define M8266WIFI_INT_IO_GPIO									GPIO1
 #define M8266WIFI_INT_IO_PIN									02
 
-#define M8266WIFI_INT_IRQ										GPIO1_Combined_0_15_IRQn
-#define M8266WIFI_INT_HANDLER									GPIO1_Combined_0_15_IRQHandler
+
 #endif
 
 
@@ -148,42 +145,25 @@ void M8266_pin_init()
 
 }
 
-void M8266_Clear_REV_INT_Flags()
+void LED_DBG_STATE(uint8_t idx)
 {
-	GPIO_PortClearInterruptFlags(M8266WIFI_INT_IO_GPIO, 1U << M8266WIFI_INT_IO_PIN);
+	if (idx < 5)
+		led_state(idx, 1);
 }
 
-void M8266WIFI_INT_HANDLER(void)
+void LED_DBG_CLR(uint8_t idx)
 {
-	wifidbg_int_handler();
+	if (idx < 5)
+		led_state(idx, 0);
 }
 
-void M8266_Write_REV_INT(uint8_t en)
+void LED_DBG_CLR_ALL()
 {
-	if (en == 1)
-	{
-		EnableIRQ(M8266WIFI_INT_IRQ);
-		GPIO_PortEnableInterrupts(M8266WIFI_INT_IO_GPIO, 1U << M8266WIFI_INT_IO_PIN);
-	}
-	else
-	{
-		DisableIRQ(M8266WIFI_INT_IRQ);
-		GPIO_PortDisableInterrupts(M8266WIFI_INT_IO_GPIO, 1U << M8266WIFI_INT_IO_PIN);
-	}
-		
+	led_state(1, 0);
+    led_state(2, 0);
+    led_state(3, 0);
+    led_state(4, 0);
 }
-
-void M8266_Init_REV_INT_Pins()
-{
-	gpio_pin_config_t gpio_config;
-	
-	IOMUXC_SetPinMux(M8266WIFI_INT_IO_PORT_MUX, 0);			
-	IOMUXC_SetPinConfig(M8266WIFI_INT_IO_PORT_MUX, 0xB069);   // 0xB069=b0| 10|11 0|000 01|10 1|00|1 -> Hysteresis Disabled, 100KOhm Pullup, pull enabled, 100MHz, R0/5=52, Fast Slew Rate 
-	gpio_config.direction 			= kGPIO_DigitalInput;				// Output
-	gpio_config.interruptMode	=	kGPIO_IntRisingEdge;							// NO Interrupt													// Initially High
-	GPIO_PinInit(M8266WIFI_INT_IO_GPIO, M8266WIFI_INT_IO_PIN, &gpio_config);
-}
-
 void M8266_DBG_IO_Write(int idx, uint8_t value)
 {
 	gpio_pin_config_t gpio_config;

@@ -16,7 +16,7 @@ SUPPORTED_FN = {
     'LPSPI' : ['PCS0', 'SCK', 'SDI', 'SDO'],
     'SAI'   : ['TX_BCLK', 'TX_SYNC', 'TX_DATA', 'TX_DATA0', 'TX_DATA1', 'TX_DATA2', 'TX_DATA3',
             'RX_BCLK', 'RX_SYNC', 'RX_DATA', 'RX_DATA0', 'MCLK'],
-	'FLEXPWM' : ['PWMX3'],# 'PWMX1', 'PWMX2', 'PWMX3'], #function, pin_name, in the csv, style is function?_pin_name, ?is any number, we list all pwm function, no need this line,
+	# 'FLEXPWM' : ['PWMX3'],'PWMX1', 'PWMX2', 'PWMX3'], #function, pin_name, in the csv, style is function?_pin_name, ?is any number, we list all pwm function, no need this line,
 	# also add a new line on 144, our RT's pwm named in a peculiar way for its reg is PWM1 not FLEXPWM1 just the same as the fun-name, so need to modify
 }
 
@@ -105,9 +105,9 @@ class AlternateFunction(object):
         if len(af_words) > 1:
             self.pin_type = af_words[1]
         # for pwm, we do not list all pwm_types (PWMX1,PWMX2,PWMA1,PWMA2,PWMB1....)
-       # if self.func == 'FLEXPWM':
-       #     if self.pin_type[:3] == 'PWM' and self.pin_type[4:].isdigit():
-       #         self.supported = True
+        if self.func == 'FLEXPWM':
+            if self.pin_type[:3] == 'PWM' and self.pin_type[4:].isdigit():
+                self.supported = True
 		# for GPIO, we do not list all pin_types (PIN0, PIN1, .., PIN31)
         if self.func == 'GPIO':
             if self.pin_type[:3] == 'PIN' and self.pin_type[3:].isdigit():
@@ -154,10 +154,10 @@ class AlternateFunction(object):
 class Pin(object):
     """Holds the information associated with a pin."""
 
-    def __init__(self, port, pin, imxrtName = ''):
+    def __init__(self, port, pin, cpuName = ''):
         self.port = port
         self.pin = pin
-        self.imxrtName = imxrtName
+        self.cpuName = cpuName
         self.alt_fn = []
         self.alt_fn_count = 0
         self.adc_num = 0
@@ -169,7 +169,7 @@ class Pin(object):
         return chr(self.port + ord('0'))
 
     def cpu_pin_name(self):
-        return self.imxrtName #'{:s}{:d}'.format(self.port_letter(), self.pin)
+        return self.cpuName #'{:s}{:d}'.format(self.port_letter(), self.pin)
 
     def is_board_pin(self):
         return self.board_pin
@@ -225,8 +225,8 @@ class Pin(object):
             print("// ",  end='')
         print('};')
         print('')
-        print('const pin_obj_t pin_{:s} = PIN({:s}, {:s}, {:d}, {:s}, {:s}, {:d}, {:s}, {:s});'.format(
-            self.cpu_pin_name(), self.cpu_pin_name(), self.port_letter(), self.pin,
+        print('const pin_obj_t pin_{:s} = PIN({:s}, {:s}, {:s}, {:d}, {:s}, {:s}, {:d}, {:s}, {:s});'.format(
+            self.cpu_pin_name(), self.cpu_pin_name(),  self.board_name, self.port_letter(), self.pin,
             self.alt_fn_name(null_if_0=True),
             self.adc_num_str(), self.adc_channel,
             self.afReg, self.padCfgReg))
@@ -266,10 +266,10 @@ class Pins(object):
         self.cpu_pins = []   # list of NamedPin objects
         self.board_pins = [] # list of NamedPin objects
 
-    def find_pin(self, imxrtName):
+    def find_pin(self, cpuName):
         for named_pin in self.cpu_pins:
             pin = named_pin.pin()
-            if pin.imxrtName == imxrtName:
+            if pin.cpuName == cpuName:
                 return pin
 
     def parse_af_file(self, filename, pinname_col, af_col, gpio_col):
@@ -307,7 +307,7 @@ class Pins(object):
                 myPin.afReg = row[1]
                 myPin.padCfgReg = row[5]
                 afNdx = int(row[2][2])
-                #print(myPin.imxrtName, sAfName, row[1], row[5], afNdx)
+                #print(myPin.cpuName, sAfName, row[1], row[5], afNdx)
                 #todo: add InSelReg
 
                 for af in myPin.alt_fn:
@@ -327,11 +327,12 @@ class Pins(object):
             rows = csv.reader(csvfile)
             for row in rows:
                 try:
-                    imxRTName = row[1]
+                    cpuName = row[1]
                 except:
                     continue
-                pin = self.find_pin(imxRTName)
+                pin = self.find_pin(cpuName)
                 if pin:
+                    pin.board_name = row[0]
                     pin.set_is_board_pin()
                     self.board_pins.append(NamedPin(row[0], pin))
 

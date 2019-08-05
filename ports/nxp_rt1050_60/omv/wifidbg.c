@@ -96,6 +96,7 @@ int wifidbg_init(wifidbg_config_t *config)
     server_fd = -1;
     udpbcast_fd = -1;
 	wifidbg_ap_connected = false;
+	LED_DBG_CLR_ALL();
     if(!config->mode) { // STA Mode
 
         // Initialize WiFi in STA mode.
@@ -109,6 +110,7 @@ int wifidbg_init(wifidbg_config_t *config)
                          config->client_key,
                          config->client_channel) != 0) {
             PRINTF("[WIFI DBG] Can't connect with AP:%s\r\n",config->client_ssid);
+			
             return -2;
         }
 
@@ -120,7 +122,7 @@ int wifidbg_init(wifidbg_config_t *config)
 		PRINTF("Connected with %s \r\n",config->client_ssid);
         memcpy(ip_addr, ifconfig.ip_addr, WINC_IP_ADDR_LEN);
         wifidbg_ap_connected = true;
-
+		LED_DBG_STATE(1);
     } else { // AP Mode
 
         // Initialize WiFi in AP mode.
@@ -238,8 +240,9 @@ int wifidbg_connect_IDE()
 		PRINTF("Disconnected with AP...\r\n");
 		return -1;
 	}
-	
+	LED_DBG_STATE(1);
     if ((client_fd < 0) && (udpbcast_fd < 0)) {
+		
         // Create broadcast socket.
         make_sockaddr(&udpbcast_sockaddr, OPENMVCAM_BROADCAST_ADDR, OPENMVCAM_BROADCAST_PORT);
 
@@ -315,6 +318,7 @@ int wifidbg_connect_IDE()
         udpbcast_time = 0;
 		wifidbg_ready = true;
 		wifidbg_enable_connection_loop();		
+		LED_DBG_STATE(2);
     }
 
     return 0;
@@ -451,49 +455,6 @@ int wifidbg_dispatch_handler()
     return wifidbg_dispatch();
 }
 
-void wifidbg_start_rev_io_irq_timeout()
-{
-	qtmr_config_t qtmrConfig;
-	
-	QTMR_GetDefaultConfig(&qtmrConfig);
-    /* Use IP bus clock div by 128 */
-    qtmrConfig.primarySource = kQTMR_ClockDivide_128;
-
-    QTMR_Init(TMR3, kQTMR_Channel_0, &qtmrConfig);
-
-    /* Set timer period to be 50 millisecond */
-    QTMR_SetTimerPeriod(TMR3, kQTMR_Channel_0, MSEC_TO_COUNT(15000U, (CLOCK_GetFreq(kCLOCK_IpgClk) / 128)));
-
-    /* Enable at the NVIC */
-    EnableIRQ(TMR3_IRQn);
-    
-    /* Enable timer compare interrupt */
-    QTMR_EnableInterrupts(TMR3, kQTMR_Channel_0,kQTMR_CompareInterruptEnable);
-
-    /* Start the second channel to count on rising edge of the primary source clock */
-    //QTMR_StartTimer(TMR3, kQTMR_Channel_0,kQTMR_PriSrcRiseEdge);
-}
-
-void TMR3_IRQHandler(void)
-{
-	QTMR_ClearStatusFlags(TMR3, kQTMR_Channel_0, kQTMR_CompareFlag);
-	//PRINTF("5 sec no data from IDE, disconnect...\r\n");
-	//close_all_sockets();
-}
-
-void wifidbg_int_handler(void)
-{
-	
-	M8266_Clear_REV_INT_Flags();
-	
-
-	wifidbg_dispatch_handler();
-
-	QTMR_StopTimer(TMR3, kQTMR_Channel_0);
-	QTMR_SetTimerPeriod(TMR3, kQTMR_Channel_0, MSEC_TO_COUNT(5000U, (CLOCK_GetFreq(kCLOCK_IpgClk) / 128)));
-	QTMR_StartTimer(TMR3, kQTMR_Channel_0,kQTMR_PriSrcRiseEdge);
-
-}
 void PIT_IRQHandler(void)
 {
 	static uint32_t wd_count = 0;
@@ -520,6 +481,7 @@ void PIT_IRQHandler(void)
     			mp_obj_exception_clear_traceback(MP_STATE_PORT(omv_ide_irq));
             	pendsv_nlr_jump_hard(MP_STATE_PORT(omv_ide_irq));
             }
+			LED_DBG_CLR(2);
     	}
     		
     }
@@ -569,14 +531,7 @@ void wifidbg_set_irq_enabled(uint8_t en)
 
 	__DSB(); __ISB();
 #else if WIFI_DBG_USE_INT_LOOP
-	if (en)
-	{
-		M8266_Write_REV_INT(1);
-	}
-	else
-	{
-		M8266_Write_REV_INT(0);
-	}
+
 #endif	
 }
 
@@ -588,8 +543,7 @@ void wifidbg_disable_connection_loop()
 	PIT_ClearStatusFlags(PIT, kPIT_Chnl_0, kPIT_TimerFlag);
 	PRINTF("\r\nStop Timer channel No.0 ...\r\n");
 #else if WIFI_DBG_USE_INT_LOOP
-	M8266_Write_REV_INT(0);
-	DisableIRQ(TMR3_IRQn);
+
 #endif	
 }
 
@@ -598,8 +552,6 @@ void wifidbg_enable_connection_loop()
 #if WIFI_DBG_USE_TIMER_LOOP
 	wifidbg_init_pit_timer_for_connection_loop();
 #else if WIFI_DBG_USE_INT_LOOP
-	M8266_Init_REV_INT_Pins();
-	M8266_Write_REV_INT(1);
-	wifidbg_start_rev_io_irq_timeout();
+
 #endif
 }

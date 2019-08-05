@@ -412,7 +412,7 @@ static mp_obj_t py_lcd_clear()
             return mp_const_none;
         case LCD_SHIELD:
             lcd_write_command_byte(0x2C);
-            uint8_t zero = fb_alloc0(s_width*2);
+            uint8_t* zero = fb_alloc0(s_width*2);
             for (int i=0; i<height; i++) {
                 lcd_write_data(s_width*2, zero);
             }

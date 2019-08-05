@@ -232,6 +232,7 @@ SRC_IMG = $(addprefix omv/img/,   \
 	qsort.c                \
 	filter.c                \
 	mathop.c                \
+	draw.c                \
 	shadow_removal.c        \
 	line.c                  \
 	apriltag.c              \
@@ -275,8 +276,6 @@ SRC_IMG = $(addprefix omv/img/,   \
 	sincos_tab.c            \
 	edge.c                  \
 	hog.c                   \
-	lenet.c                 \
-	lenet_model_num.c       \
    )
 
 SRCS_NN = $(addprefix omv/nn/,    \
@@ -340,9 +339,15 @@ SRC_C = \
 	./flegftl/flegftl.c \
 	overlay_manager.c \
 	flash_pgm.c  \
+    servo.c \
+    srpm.c \
 	rtc.c	\
 	rng.c	\
 	pwm.c   \
+	rpm.c \
+	qtimer.c \
+    tmr.c \
+	dcmc.c \
 	uniqueID.c	\
 	$(wildcard boards/$(BOARD)/*.c)
 

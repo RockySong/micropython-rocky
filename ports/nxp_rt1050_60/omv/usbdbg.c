@@ -41,7 +41,6 @@ void usbdbg_init()
 {
     script_ready = false;
     script_running=false;
-//	M8266_DBG_IO_Toggle(1);
     vstr_init(&script_buf, 32);
 	if (mp_const_ide_interrupt == 0)
 		mp_const_ide_interrupt = mp_obj_new_exception_msg(&mp_type_Exception, "IDE interrupt");
@@ -82,8 +81,7 @@ inline void usbdbg_set_irq_enabled(bool enabled)
 #else
 #define logout printf
 #endif
-
-//#define DUMP_RAW
+// #define DUMP_RAW
 #ifdef DUMP_RAW
 #define DUMP_FB	MAIN_FB
 #else
@@ -141,7 +139,6 @@ void usbdbg_data_in(void *buffer, int length)
 			#else
 				// Return 0 if FB is locked or not ready.
 				((uint32_t*)buffer)[0] = 0;
-				
 				// Try to lock FB. If header size == 0 frame is not ready
 				if (mutex_try_lock(&JPEG_FB()->lock, MUTEX_TID_IDE)) {
 					// If header size == 0 frame is not ready
@@ -232,13 +229,11 @@ void usbdbg_data_out(void *buffer, int length)
                 if (xfer_bytes == xfer_length) {
                     // Set script ready flag
                     script_ready = true;
-
                     // Set script running flag
                     script_running = true;
 
                     // Disable IDE IRQ (re-enabled by pyexec or main).
                     usbdbg_set_irq_enabled(false);
-                    //wifidbg_set_irq_enabled(false);
 					#if 1
                     // Clear interrupt traceback
                     mp_obj_exception_clear_traceback(mp_const_ide_interrupt);
@@ -307,7 +302,9 @@ void usbdbg_data_out(void *buffer, int length)
             break;
     }
 }
-#if MICROPY_HW_WIFIDBG_EN
+
+__WEAK void QTimer_StopAll(void) {}
+#if 1//MICROPY_HW_WIFIDBG_EN
 void wifidbg_data_out(void *buffer, int length)
 {
     switch (cmd) {
@@ -542,7 +539,6 @@ void wifidbg_data_in(void *buffer, int length)
     }
 }
 #endif
-
 void usbdbg_control(void *buffer, uint8_t request, uint32_t length)
 {
     cmd = (enum usbdbg_cmd) request;
@@ -587,6 +583,7 @@ void usbdbg_control(void *buffer, uint8_t request, uint32_t length)
                 // interrupt running code by raising an exception
                 // pendsv_kbd_intr();
                 mp_obj_exception_clear_traceback(mp_const_ide_interrupt);
+				QTimer_StopAll();
                 pendsv_nlr_jump(mp_const_ide_interrupt);
             } else {
 				logout("no script running!\r\n");
@@ -664,11 +661,10 @@ void usbdbg_control(void *buffer, uint8_t request, uint32_t length)
 
         case USBDBG_TX_BUF:
         case USBDBG_TX_BUF_LEN:
-		case 0x8b:
             xfer_bytes = 0;
             xfer_length = length;
             break;
-		
+
         default: /* error */
             cmd = USBDBG_NONE;
             break;

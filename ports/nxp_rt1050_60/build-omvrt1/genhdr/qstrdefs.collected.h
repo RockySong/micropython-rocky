@@ -120,6 +120,8 @@ Q(BF_POS)
 
 Q(BIG_ENDIAN)
 
+Q(BINARY)
+
 Q(BLACK)
 
 Q(BaseException)
@@ -455,6 +457,10 @@ Q(DATABAR)
 Q(DATABAR_EXP)
 
 Q(DCDC)
+
+Q(DCMC)
+
+Q(DCMC)
 
 Q(DCP)
 
@@ -1062,6 +1068,38 @@ Q(IN_PUP)
 
 Q(IN_PUP_WEAK)
 
+Q(IOCTL_GET_TRIGGERED_MODE)
+
+Q(IOCTL_LEPTON_GET_ATTRIBUTE)
+
+Q(IOCTL_LEPTON_GET_AUX_TEMPERATURE)
+
+Q(IOCTL_LEPTON_GET_FPA_TEMPERATURE)
+
+Q(IOCTL_LEPTON_GET_HEIGHT)
+
+Q(IOCTL_LEPTON_GET_MEASUREMENT_MODE)
+
+Q(IOCTL_LEPTON_GET_MEASUREMENT_RANGE)
+
+Q(IOCTL_LEPTON_GET_RADIOMETRY)
+
+Q(IOCTL_LEPTON_GET_REFRESH)
+
+Q(IOCTL_LEPTON_GET_RESOLUTION)
+
+Q(IOCTL_LEPTON_GET_WIDTH)
+
+Q(IOCTL_LEPTON_RUN_COMMAND)
+
+Q(IOCTL_LEPTON_SET_ATTRIBUTE)
+
+Q(IOCTL_LEPTON_SET_MEASUREMENT_MODE)
+
+Q(IOCTL_LEPTON_SET_MEASUREMENT_RANGE)
+
+Q(IOCTL_SET_TRIGGERED_MODE)
+
 Q(IOMUXC)
 
 Q(IOMUXC_GPR)
@@ -1115,6 +1153,8 @@ Q(LCDIF)
 Q(LED)
 
 Q(LED)
+
+Q(LEPTON)
 
 Q(LITTLE_ENDIAN)
 
@@ -1488,6 +1528,10 @@ Q(OverflowError)
 
 Q(OverflowError)
 
+Q(PALETTE_IRONBOW)
+
+Q(PALETTE_RAINBOW)
+
 Q(PARAM_MRXFIFO_BF)
 
 Q(PARAM_MTXFIFO_BF)
@@ -1517,6 +1561,10 @@ Q(POLLOUT)
 Q(PSR_PSR_BF)
 
 Q(PTR)
+
+Q(PWM)
+
+Q(PWM)
 
 Q(PWM1)
 
@@ -1664,6 +1712,10 @@ Q(QQVGA2)
 
 Q(QSIF)
 
+Q(QTIMER)
+
+Q(QTIMER)
+
 Q(QVGA)
 
 Q(RDR_DATA_BF)
@@ -1671,6 +1723,10 @@ Q(RDR_DATA_BF)
 Q(RGB565)
 
 Q(ROMC)
+
+Q(RPM)
+
+Q(RPM)
 
 Q(RSR_RXEMPTY)
 
@@ -1840,6 +1896,10 @@ Q(SRDR_RXEMPTY)
 
 Q(SRDR_SOF)
 
+Q(SRPM)
+
+Q(SRPM)
+
 Q(SR_DMF)
 
 Q(SR_FCF)
@@ -1932,6 +1992,10 @@ Q(SWIM)
 
 Q(SXGA)
 
+Q(Servo)
+
+Q(Servo)
+
 Q(Signal)
 
 Q(Signal)
@@ -2009,6 +2073,10 @@ Q(TCTRL_TRGFRQ)
 Q(TDR_DATA_BF)
 
 Q(TEMPMON)
+
+Q(TMR)
+
+Q(TMR)
 
 Q(TMR1)
 
@@ -2153,6 +2221,10 @@ Q(WDOG2)
 Q(WDT_RESET)
 
 Q(WHITE)
+
+Q(WVGA)
+
+Q(WVGA2)
 
 Q(XBARA1)
 
@@ -2518,6 +2590,12 @@ Q(_star_)
 
 Q(_star_)
 
+Q(a1)
+
+Q(a1)
+
+Q(a1)
+
 Q(a2b_base64)
 
 Q(a_bins)
@@ -2604,11 +2682,17 @@ Q(alloc_extra_fb)
 
 Q(alpha)
 
+Q(alpha)
+
 Q(alt)
 
 Q(and)
 
 Q(and_)
+
+Q(angle)
+
+Q(angle)
 
 Q(any)
 
@@ -2651,6 +2735,8 @@ Q(asinh)
 Q(asm_thumb)
 
 Q(asr)
+
+Q(assign)
 
 Q(atan)
 
@@ -2726,23 +2812,19 @@ Q(bias)
 
 Q(bias)
 
-Q(bias)
-
-Q(bias)
-
-Q(bias)
-
-Q(bias)
-
-Q(bias)
-
-Q(bias)
-
 Q(bilateral)
 
 Q(bin)
 
 Q(binary)
+
+Q(binary_to_grayscale)
+
+Q(binary_to_lab)
+
+Q(binary_to_rgb)
+
+Q(binary_to_yuv)
 
 Q(binascii)
 
@@ -2816,6 +2898,8 @@ Q(border_width)
 
 Q(bound_method)
 
+Q(brightness)
+
 Q(buffer)
 
 Q(buffering)
@@ -2846,7 +2930,17 @@ Q(bytes_at)
 
 Q(calcsize)
 
+Q(calibration)
+
 Q(callable)
+
+Q(callback)
+
+Q(callback)
+
+Q(callback)
+
+Q(callback)
 
 Q(callback)
 
@@ -2859,6 +2953,12 @@ Q(ceil)
 Q(center)
 
 Q(center)
+
+Q(char_hmirror)
+
+Q(char_rotation)
+
+Q(char_vflip)
 
 Q(chdir)
 
@@ -2948,9 +3048,13 @@ Q(color)
 
 Q(color)
 
+Q(color_palette)
+
 Q(color_sigma)
 
 Q(columns)
+
+Q(compactness)
 
 Q(compile)
 
@@ -2972,7 +3076,13 @@ Q(const)
 
 Q(const)
 
+Q(contrast)
+
 Q(contrast_threshold)
+
+Q(convexity)
+
+Q(copy)
 
 Q(copy)
 
@@ -3014,6 +3124,8 @@ Q(corners)
 
 Q(corners)
 
+Q(corners)
+
 Q(cos)
 
 Q(cos)
@@ -3044,13 +3156,17 @@ Q(cpu)
 
 Q(crc)
 
-Q(cx)
+Q(crop)
 
 Q(cx)
 
 Q(cx)
 
 Q(cx)
+
+Q(cx)
+
+Q(cxf)
 
 Q(cy)
 
@@ -3059,6 +3175,8 @@ Q(cy)
 Q(cy)
 
 Q(cy)
+
+Q(cyf)
 
 Q(data)
 
@@ -3087,6 +3205,18 @@ Q(deepsleep)
 Q(default)
 
 Q(degrees)
+
+Q(deinit)
+
+Q(deinit)
+
+Q(deinit)
+
+Q(deinit)
+
+Q(deinit)
+
+Q(deinit)
 
 Q(deinit)
 
@@ -3158,6 +3288,10 @@ Q(draw_circle)
 
 Q(draw_cross)
 
+Q(draw_edges)
+
+Q(draw_ellipse)
+
 Q(draw_image)
 
 Q(draw_keypoints)
@@ -3188,11 +3322,17 @@ Q(elapsed_micros)
 
 Q(elapsed_millis)
 
+Q(elongation)
+
 Q(enable)
 
 Q(enable_irq)
 
 Q(enable_irq)
+
+Q(enclosed_ellipse)
+
+Q(enclosing_circle)
 
 Q(encode)
 
@@ -3220,6 +3360,10 @@ Q(errno)
 
 Q(errno)
 
+Q(erro)
+
+Q(erro)
+
 Q(errorcode)
 
 Q(eval)
@@ -3246,6 +3390,8 @@ Q(extend)
 
 Q(extend)
 
+Q(extent)
+
 Q(fabs)
 
 Q(families)
@@ -3263,6 +3409,10 @@ Q(file)
 Q(file)
 
 Q(file)
+
+Q(fill)
+
+Q(fill)
 
 Q(fill)
 
@@ -3368,6 +3518,10 @@ Q(freq)
 
 Q(freq)
 
+Q(freq)
+
+Q(freq)
+
 Q(frexp)
 
 Q(from_bytes)
@@ -3412,6 +3566,10 @@ Q(gain_db_ceiling)
 
 Q(gamma)
 
+Q(gamma)
+
+Q(gamma_corr)
+
 Q(gaussian)
 
 Q(gaussian_blur)
@@ -3429,6 +3587,16 @@ Q(generator)
 Q(generator)
 
 Q(get)
+
+Q(get_color_palette)
+
+Q(get_count)
+
+Q(get_count)
+
+Q(get_count)
+
+Q(get_count)
 
 Q(get_exposure_us)
 
@@ -3450,11 +3618,19 @@ Q(get_pixel)
 
 Q(get_pixel_physical)
 
+Q(get_pps)
+
 Q(get_regression)
 
 Q(get_rgb_gain_db)
 
+Q(get_rpm)
+
 Q(get_similarity)
+
+Q(get_spps)
+
+Q(get_srpm)
 
 Q(get_statistics)
 
@@ -3465,6 +3641,10 @@ Q(get_stats)
 Q(get_stats)
 
 Q(get_threshold)
+
+Q(get_ticks)
+
+Q(get_ticks)
 
 Q(get_xy)
 
@@ -3494,7 +3674,13 @@ Q(goodness)
 
 Q(gpio)
 
+Q(grayscale_to_binary)
+
+Q(grayscale_to_lab)
+
 Q(grayscale_to_rgb)
+
+Q(grayscale_to_yuv)
 
 Q(group)
 
@@ -3638,6 +3824,16 @@ Q(init)
 
 Q(init)
 
+Q(init)
+
+Q(init)
+
+Q(init)
+
+Q(init)
+
+Q(init)
+
 Q(input)
 
 Q(insert)
@@ -3661,6 +3857,10 @@ Q(intersection)
 Q(intersection)
 
 Q(intersection_update)
+
+Q(interval)
+
+Q(interval)
 
 Q(invert)
 
@@ -3702,7 +3902,13 @@ Q(invert)
 
 Q(inverted)
 
+Q(inverted)
+
+Q(inverted)
+
 Q(io)
+
+Q(ioctl)
 
 Q(ioctl)
 
@@ -3838,7 +4044,13 @@ Q(l_value)
 
 Q(l_value)
 
+Q(lab_to_binary)
+
+Q(lab_to_grayscale)
+
 Q(lab_to_rgb)
+
+Q(lab_to_yuv)
 
 Q(label)
 
@@ -3948,6 +4160,8 @@ Q(magnitude)
 
 Q(main)
 
+Q(major_axis_line)
+
 Q(map)
 
 Q(map)
@@ -3959,6 +4173,12 @@ Q(margin)
 Q(mask)
 
 Q(mask)
+
+Q(mask_circle)
+
+Q(mask_ellipse)
+
+Q(mask_rectangle)
 
 Q(match)
 
@@ -4074,7 +4294,11 @@ Q(min)
 
 Q(min)
 
+Q(min_corners)
+
 Q(min_scale)
+
+Q(minor_axis_line)
 
 Q(miso)
 
@@ -4097,6 +4321,8 @@ Q(mkfs)
 Q(mkfs)
 
 Q(mktime)
+
+Q(mod)
 
 Q(mode)
 
@@ -4296,6 +4522,16 @@ Q(percentile)
 
 Q(percentile)
 
+Q(perimeter)
+
+Q(period)
+
+Q(period)
+
+Q(period)
+
+Q(period)
+
 Q(phase)
 
 Q(phase)
@@ -4362,6 +4598,14 @@ Q(pow)
 
 Q(power)
 
+Q(pprparam)
+
+Q(pprparam)
+
+Q(prescale)
+
+Q(prescale)
+
 Q(prescaler)
 
 Q(present)
@@ -4400,6 +4644,8 @@ Q(ptr8)
 
 Q(pull)
 
+Q(pulse_width)
+
 Q(push)
 
 Q(push)
@@ -4425,10 +4671,6 @@ Q(put_pixel_physical)
 Q(put_text)
 
 Q(put_text_xy)
-
-Q(pwm)
-
-Q(pwm)
 
 Q(pwm_freq)
 
@@ -4678,11 +4920,23 @@ Q(rfind)
 
 Q(rfind)
 
+Q(rgb_channel)
+
+Q(rgb_channel)
+
+Q(rgb_channel)
+
+Q(rgb_channel)
+
 Q(rgb_gain_db)
+
+Q(rgb_to_binary)
 
 Q(rgb_to_grayscale)
 
 Q(rgb_to_lab)
+
+Q(rgb_to_yuv)
 
 Q(rgbtuple)
 
@@ -4720,7 +4974,13 @@ Q(rotation)
 
 Q(rotation_corr)
 
+Q(rotation_deg)
+
+Q(rotation_rad)
+
 Q(round)
+
+Q(roundness)
 
 Q(rows)
 
@@ -4748,6 +5008,8 @@ Q(scale)
 
 Q(scale)
 
+Q(scale)
+
 Q(scale_factor)
 
 Q(scale_factor)
@@ -4757,6 +5019,8 @@ Q(scale_mul)
 Q(scan)
 
 Q(scan)
+
+Q(schedule)
 
 Q(sck)
 
@@ -4792,6 +5056,8 @@ Q(select)
 
 Q(select)
 
+Q(selective_search)
+
 Q(send)
 
 Q(send)
@@ -4826,6 +5092,8 @@ Q(set)
 
 Q(set)
 
+Q(set)
+
 Q(set_auto_exposure)
 
 Q(set_auto_gain)
@@ -4835,6 +5103,8 @@ Q(set_auto_whitebal)
 Q(set_bkg_color)
 
 Q(set_brightness)
+
+Q(set_color_palette)
 
 Q(set_colorbar)
 
@@ -4892,6 +5162,8 @@ Q(sha256)
 
 Q(sharpen)
 
+Q(shutdown)
+
 Q(similarity)
 
 Q(sin)
@@ -4901,6 +5173,10 @@ Q(sin)
 Q(single)
 
 Q(sinh)
+
+Q(size)
+
+Q(size)
 
 Q(size)
 
@@ -4948,11 +5224,15 @@ Q(softmax)
 
 Q(softmax)
 
+Q(solidity)
+
 Q(sort)
 
 Q(sorted)
 
 Q(space_sigma)
+
+Q(speed)
 
 Q(split)
 
@@ -5050,6 +5330,12 @@ Q(strex)
 
 Q(strh)
 
+Q(string_hmirror)
+
+Q(string_rotation)
+
+Q(string_vflip)
+
 Q(strip)
 
 Q(strip)
@@ -5119,6 +5405,12 @@ Q(thickness)
 Q(thickness)
 
 Q(thickness)
+
+Q(thickness)
+
+Q(thickness)
+
+Q(threshold)
 
 Q(threshold)
 
@@ -5239,6 +5531,8 @@ Q(to_rgb565)
 Q(toggle)
 
 Q(top_hat)
+
+Q(transpose)
 
 Q(trunc)
 
@@ -5498,6 +5792,10 @@ Q(width)
 
 Q(width)
 
+Q(width)
+
+Q(width)
+
 Q(window_close)
 
 Q(window_open)
@@ -5560,6 +5858,10 @@ Q(x1)
 
 Q(x2)
 
+Q(x_hist_bins)
+
+Q(x_hist_bins_max)
+
 Q(x_margin)
 
 Q(x_overlap)
@@ -5567,6 +5869,8 @@ Q(x_overlap)
 Q(x_rotation)
 
 Q(x_rotation)
+
+Q(x_scale)
 
 Q(x_scale)
 
@@ -5616,6 +5920,10 @@ Q(y1)
 
 Q(y2)
 
+Q(y_hist_bins)
+
+Q(y_hist_bins_max)
+
 Q(y_margin)
 
 Q(y_overlap)
@@ -5623,6 +5931,8 @@ Q(y_overlap)
 Q(y_rotation)
 
 Q(y_rotation)
+
+Q(y_scale)
 
 Q(y_scale)
 
@@ -5641,6 +5951,14 @@ Q(y_translation)
 Q(y_translation)
 
 Q(y_translation)
+
+Q(yuv_to_binary)
+
+Q(yuv_to_grayscale)
+
+Q(yuv_to_lab)
+
+Q(yuv_to_rgb)
 
 Q(ywin_max)
 

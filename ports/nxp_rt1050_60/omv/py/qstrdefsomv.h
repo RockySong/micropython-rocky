@@ -7,13 +7,38 @@
  *
  */
 
+// OMV Module
+Q(omv)
+Q(version_major)
+Q(version_minor)
+Q(version_patch)
+Q(version_string)
+Q(arch)
+Q(board_type)
+Q(board_id)
+
 // Image module
 Q(image)
-Q(Image)
-Q(rgb_to_lab)
-Q(lab_to_rgb)
-Q(rgb_to_grayscale)
+Q(binary_to_grayscale)
+Q(binary_to_rgb)
+Q(binary_to_lab)
+Q(binary_to_yuv)
+Q(grayscale_to_binary)
 Q(grayscale_to_rgb)
+Q(grayscale_to_lab)
+Q(grayscale_to_yuv)
+Q(rgb_to_binary)
+Q(rgb_to_grayscale)
+Q(rgb_to_lab)
+Q(rgb_to_yuv)
+Q(lab_to_binary)
+Q(lab_to_grayscale)
+Q(lab_to_rgb)
+Q(lab_to_yuv)
+Q(yuv_to_binary)
+Q(yuv_to_grayscale)
+Q(yuv_to_rgb)
+Q(yuv_to_lab)
 Q(HaarCascade)
 Q(search)
 Q(SEARCH_EX)
@@ -27,82 +52,27 @@ Q(save_descriptor)
 Q(match_descriptor)
 
 // Image class
-Q(copy)
-Q(copy_to_fb)
-Q(save)
-Q(compress)
-Q(compress_for_ide)
-Q(compressed)
-Q(compressed_for_ide)
-Q(width)
-Q(height)
-Q(format)
-Q(size)
-Q(get_pixel)
-Q(set_pixel)
-Q(draw_line)
-Q(draw_rectangle)
-Q(draw_circle)
-Q(draw_string)
-Q(draw_cross)
-Q(draw_keypoints)
-Q(binary)
-Q(invert)
-Q(and)
-Q(b_and)
-Q(nand)
-Q(b_nand)
-Q(or)
-Q(b_or)
-Q(nor)
-Q(b_nor)
-Q(xor)
-Q(b_xor)
-Q(xnor)
-Q(b_xnor)
-Q(erode)
-Q(dilate)
-Q(negate)
-Q(difference)
-Q(replace)
-Q(blend)
-Q(morph)
-Q(midpoint)
-Q(mean)
-Q(mode)
-Q(median)
-Q(gaussian)
-Q(midpoint_pool)
-Q(midpoint_pooled)
-Q(mean_pool)
-Q(mean_pooled)
 Q(find_template)
 Q(kp_desc)
 Q(lbp_desc)
 Q(Cascade)
-Q(mask_ellipse)
+Q(cmp_lbp)
 Q(find_features)
 Q(find_keypoints)
 Q(find_lbp)
 Q(find_eye)
 Q(find_edges)
 Q(find_hog)
-Q(cmp_lbp)
-Q(quality)
-Q(color)
-Q(roi)
-Q(offset)
-Q(threshold)
-Q(mul)
-Q(add)
-Q(bias)
-Q(percentile)
 Q(normalized)
 Q(filter_outliers)
 Q(scale_factor)
 Q(max_keypoints)
 Q(corner_detector)
 Q(kptmatch)
+Q(selective_search)
+Q(a1)
+Q(a2)
+Q(a3)
 
 // Lcd Module
 Q(lcd)
@@ -112,16 +82,12 @@ Q(get_backlight)
 Q(display)
 Q(clear)
 
-// FIR Module
-Q(fir)
-Q(read_ta)
-Q(read_ir)
-Q(draw_ta)
-Q(draw_ir)
-Q(alpha)
-Q(scale)
-Q(refresh)
-Q(resolution)
+// tv Module
+Q(tv)
+Q(channel)
+Q(type)
+Q(display)
+Q(palettes)
 
 // Gif module
 Q(gif)
@@ -158,17 +124,49 @@ Q(avg)
 
 //Sensor Module
 Q(sensor)
-Q(BAYER)
+Q(BINARY)
+Q(GRAYSCALE)
 Q(RGB565)
 Q(YUV422)
-Q(GRAYSCALE)
+Q(BAYER)
 Q(JPEG)
 Q(OV9650)
 Q(OV2640)
 Q(OV7725)
 Q(MT9V034)
-Q(line_filter)
+Q(LEPTON)
 Q(value)
+Q(shutdown)
+
+// NN Module
+Q(load)
+
+// Net
+Q(Net)
+
+// Forward
+Q(forward)
+Q(dry_run)
+Q(softmax)
+
+// Search
+// duplicate Q(search)
+// duplicate Q(roi)
+// duplicate Q(threshold)
+Q(min_scale)
+Q(scale_mul)
+Q(x_overlap)
+Q(y_overlap)
+Q(contrast_threshold)
+// duplicate Q(softmax)
+// NN Class
+Q(nn_class)
+// duplicate Q(x)
+// duplicate Q(y)
+// duplicate Q(w)
+// duplicate Q(h)
+// duplicate Q(index)
+// duplicate Q(value)
 
 // C/SIF Resolutions
 Q(QQCIF)
@@ -194,6 +192,8 @@ Q(B128X128)
 // Other
 Q(LCD)
 Q(QQVGA2)
+Q(WVGA)
+Q(WVGA2)
 Q(SVGA)
 Q(SXGA)
 Q(UXGA)
@@ -201,6 +201,28 @@ Q(UXGA)
 //SDE
 Q(NORMAL)
 Q(NEGATIVE)
+
+//IOCTLs
+Q(IOCTL_SET_TRIGGERED_MODE)
+Q(IOCTL_GET_TRIGGERED_MODE)
+Q(IOCTL_LEPTON_GET_WIDTH)
+Q(IOCTL_LEPTON_GET_HEIGHT)
+Q(IOCTL_LEPTON_GET_RADIOMETRY)
+Q(IOCTL_LEPTON_GET_REFRESH)
+Q(IOCTL_LEPTON_GET_RESOLUTION)
+Q(IOCTL_LEPTON_RUN_COMMAND)
+Q(IOCTL_LEPTON_SET_ATTRIBUTE)
+Q(IOCTL_LEPTON_GET_ATTRIBUTE)
+Q(IOCTL_LEPTON_GET_FPA_TEMPERATURE)
+Q(IOCTL_LEPTON_GET_AUX_TEMPERATURE)
+Q(IOCTL_LEPTON_SET_MEASUREMENT_MODE)
+Q(IOCTL_LEPTON_GET_MEASUREMENT_MODE)
+Q(IOCTL_LEPTON_SET_MEASUREMENT_RANGE)
+Q(IOCTL_LEPTON_GET_MEASUREMENT_RANGE)
+
+// Color Palettes
+Q(PALETTE_RAINBOW)
+Q(PALETTE_IRONBOW)
 
 Q(reset)
 Q(flush)
@@ -236,6 +258,9 @@ Q(set_hmirror)
 Q(set_vflip)
 Q(set_special_effect)
 Q(set_lens_correction)
+Q(ioctl)
+Q(set_color_palette)
+Q(get_color_palette)
 Q(__write_reg)
 Q(__read_reg)
 
@@ -341,30 +366,399 @@ Q(bssid)
 
 // cpufreq Module
 Q(cpufreq)
-Q(CPUFREQ_120MHZ)
-Q(CPUFREQ_144MHZ)
-Q(CPUFREQ_168MHZ)
-Q(CPUFREQ_192MHZ)
-Q(CPUFREQ_216MHZ)
-Q(get_frequency)
 Q(set_frequency)
+Q(get_current_frequencies)
+Q(get_supported_frequencies)
 
-// Max
-// duplicate Q(max)
+// Image Class
+Q(Image)
+Q(copy_to_fb)
+
+// Width
+Q(width)
+
+// Height
+Q(height)
+
+// Format
+Q(format)
+
+// Size
+Q(size)
+
+// Get Pixel
+Q(get_pixel)
+Q(rgbtuple)
+
+// Set Pixel
+Q(set_pixel)
+Q(color)
+
+// Mean Pool
+Q(mean_pool)
+
+// Mean Pooled
+Q(mean_pooled)
+
+// Midpoint Pool
+Q(midpoint_pool)
+Q(bias)
+
+// Midpoint Pooled
+Q(midpoint_pooled)
+// duplicate Q(bias)
+
+// To Bitmap
+Q(to_bitmap)
+Q(copy)
+Q(rgb_channel)
+
+// To Grayscale
+Q(to_grayscale)
+// duplicate Q(copy)
+// duplicate Q(rgb_channel)
+
+// To RGB565
+Q(to_rgb565)
+// duplicate Q(copy)
+// duplicate Q(rgb_channel)
+
+// To Rainbow
+Q(to_rainbow)
+// duplicate Q(copy)
+// duplicate Q(rgb_channel)
+Q(color_palette)
+
+// Compress (in place)
+Q(compress)
+Q(quality)
+
+// Compress for IDE (in place)
+Q(compress_for_ide)
+// duplicate Q(quality)
+
+// Compressed (out of place)
+Q(compressed)
+// duplicate Q(quality)
+
+// Compressed for IDE (out of place)
+Q(compressed_for_ide)
+// duplicate Q(quality)
+
+// Copy
+// duplicate Q(copy)
+Q(crop)
+Q(scale)
+Q(roi)
+Q(x_scale)
+Q(y_scale)
+// duplicate Q(copy_to_fb)
+
+// Save
+Q(save)
+
+// Clear
+Q(clear)
+Q(mask)
+
+// Draw Line
+Q(draw_line)
+// duplicate Q(color)
+Q(thickness)
+
+// Draw Rectangle
+Q(draw_rectangle)
+// duplicate Q(color)
+// duplicate Q(thickness)
+Q(fill)
+
+// Draw Circle
+Q(draw_circle)
+// duplicate Q(color)
+// duplicate Q(thickness)
+// duplicate Q(fill)
+
+// Draw Ellipse
+Q(draw_ellipse)
+// duplicate Q(color)
+// duplicate Q(thickness)
+// duplicate Q(fill)
+
+// Draw String
+Q(draw_string)
+// duplicate Q(color)
+// duplicate Q(scale)
+Q(x_spacing)
+Q(y_spacing)
+Q(mono_space)
+Q(char_rotation)
+Q(char_hmirror)
+Q(char_vflip)
+Q(string_rotation)
+Q(string_hmirror)
+Q(string_vflip)
+
+// Draw Cross
+Q(draw_cross)
+// duplicate Q(color)
+// duplicate Q(size)
+// duplicate Q(thickness)
+
+// Draw Arrow
+Q(draw_arrow)
+// duplicate Q(color)
+// duplicate Q(size)
+// duplicate Q(thickness)
+
+// Draw Edges
+Q(draw_edges)
+// duplicate Q(color)
+// duplicate Q(size)
+// duplicate Q(thickness)
+// duplicate Q(fill)
+
+// Draw Image
+Q(draw_image)
+// duplicate Q(x_scale)
+// duplicate Q(y_scale)
+Q(alpha)
+// duplicate Q(mask)
+
+// Draw Keypoints
+Q(draw_keypoints)
+// duplicate Q(color)
+// duplicate Q(size)
+// duplicate Q(thickness)
+// duplicate Q(fill)
+
+// Flood Fill
+Q(flood_fill)
+Q(seed_threshold)
+Q(floating_threshold)
+// duplicate Q(color)
+Q(invert)
+Q(clear_background)
+// duplicate Q(mask)
+
+// Mask Rectangle
+Q(mask_rectangle)
+
+// Mask Circle
+Q(mask_circle)
+
+// Mask Ellipse
+Q(mask_ellipse)
+
+// Binary
+Q(binary)
+// duplicate Q(invert)
+Q(zero)
+// duplicate Q(mask)
+// duplciate Q(to_bitmap)
+// duplicate Q(copy)
+
+// Invert
+// duplicate Q(invert)
+
+// And
+Q(and)
+Q(b_and)
+// duplicate Q(mask)
+
+// Nand
+Q(nand)
+Q(b_nand)
+// duplicate Q(mask)
+
+// Or
+Q(or)
+Q(b_or)
+// duplicate Q(mask)
+
+// Nor
+Q(nor)
+Q(b_nor)
+// duplicate Q(mask)
+
+// Xor
+Q(xor)
+Q(b_xor)
+// duplicate Q(mask)
+
+// Xnor
+Q(xnor)
+Q(b_xnor)
+// duplicate Q(mask)
+
+// Erode
+Q(erode)
+// duplicate Q(threshold)
+// duplicate Q(mask)
+
+// Dilate
+Q(dilate)
+Q(threshold)
+// duplicate Q(mask)
+
+// Open
+// duplicate Q(open)
+// duplicate Q(threshold)
+// duplicate Q(mask)
+
+// Close
+// duplicate Q(close)
+// duplicate Q(threshold)
+// duplicate Q(mask)
+
+// Top Hat
+Q(top_hat)
+// duplicate Q(threshold)
+// duplicate Q(mask)
+
+// Black Hat
+Q(black_hat)
+// duplicate Q(threshold)
+// duplicate Q(mask)
+
+// Gamma Correct
+Q(gamma_corr)
+Q(gamma)
+Q(contrast)
+Q(brightness)
+
+// Negate
+Q(negate)
+
+// Assign/Replace/Set
+Q(assign)
+Q(replace)
+Q(set)
+Q(hmirror)
+Q(vflip)
+Q(transpose)
+// duplicate Q(mask)
+
+// Add Op
+Q(add)
+// duplicate Q(mask)
+
+// Sub Op
+Q(sub)
+Q(reverse)
+// duplicate Q(mask)
+
+// Mul Op
+Q(mul)
+// duplicate Q(invert)
+// duplicate Q(mask)
+
+// Div Op
+Q(div)
+// duplicate Q(invert)
+Q(mod)
+// duplicate Q(mask)
 
 // Min
 // duplicate Q(min)
+// duplicate Q(mask)
+
+// Max
+// duplicate Q(max)
+// duplicate Q(mask)
+
+// Difference
+Q(difference)
+// duplicate Q(mask)
+
+// Blend
+Q(blend)
+// duplicate Q(alpha)
+// duplicate Q(mask)
+
+// Histogram Equalization
+Q(histeq)
+Q(adaptive)
+Q(clip_limit)
+// duplicate Q(mask)
+
+// Mean
+Q(mean)
+// duplicate Q(threshold)
+Q(offset)
+// duplicate Q(invert)
+// duplicate Q(mask)
+
+// Median
+Q(median)
+Q(percentile)
+// duplicate Q(threshold)
+// duplicate Q(offset)
+// duplicate Q(invert)
+// duplicate Q(mask)
+
+// Mode
+Q(mode)
+// duplicate Q(threshold)
+// duplicate Q(offset)
+// duplicate Q(invert)
+// duplicate Q(mask)
+
+// Midpoint
+Q(midpoint)
+// duplicate Q(bias)
+// duplicate Q(threshold)
+// duplicate Q(offset)
+// duplicate Q(invert)
+// duplicate Q(mask)
+
+// Moprh
+Q(morph)
+// duplicate Q(mul)
+// duplicate Q(add)
+// duplicate Q(threshold)
+// duplicate Q(offset)
+// duplicate Q(invert)
+// duplicate Q(mask)
+
+// Gaussian Blur
+Q(blur)
+Q(gaussian)
+Q(gaussian_blur)
+Q(unsharp)
+// duplicate Q(mul)
+// duplicate Q(add)
+// duplicate Q(threshold)
+// duplicate Q(offset)
+// duplicate Q(invert)
+// duplicate Q(mask)
+
+// Laplacian
+Q(laplacian)
+Q(sharpen)
+// duplicate Q(mul)
+// duplicate Q(add)
+// duplicate Q(threshold)
+// duplicate Q(offset)
+// duplicate Q(invert)
+// duplicate Q(mask)
+
+// Bilateral
+Q(bilateral)
+Q(color_sigma)
+Q(space_sigma)
+// duplicate Q(threshold)
+// duplicate Q(offset)
+// duplicate Q(invert)
+// duplicate Q(mask)
+
+// Cartoon
+Q(cartoon)
+// duplicate Q(seed_threshold)
+// duplicate Q(floating_threshold)
+Q(mask)
 
 // Shadow Removal
 Q(remove_shadows)
-
-// Linear Polar
-Q(linpolar)
-Q(reverse)
-
-// Log Polar
-Q(logpolar)
-// duplicate Q(reverse)
 
 // Chromination Invariant
 Q(chrominvar)
@@ -372,8 +766,13 @@ Q(chrominvar)
 // Illumination Invariant
 Q(illuminvar)
 
-// Histogram Equalization
-Q(histeq)
+// Linear Polar
+Q(linpolar)
+// duplicate Q(reverse)
+
+// Log Polar
+Q(logpolar)
+// duplicate Q(reverse)
 
 // Lens Correction
 Q(lens_corr)
@@ -406,6 +805,8 @@ Q(bins)
 Q(l_bins)
 Q(a_bins)
 Q(b_bins)
+Q(thresholds)
+// duplicate Q(invert)
 // Histogram Object
 Q(histogram)
 // duplicate Q(bins)
@@ -413,6 +814,7 @@ Q(histogram)
 // duplicate Q(a_bins)
 // duplicate Q(b_bins)
 Q(get_percentile)
+Q(get_threshold)
 Q(get_stats)
 Q(get_statistics)
 Q(statistics)
@@ -422,6 +824,12 @@ Q(value)
 Q(l_value)
 Q(a_value)
 Q(b_value)
+// Threshold Object
+// duplicate Q(threshold)
+// duplicate Q(value)
+// duplicate Q(l_value)
+// duplicate Q(a_value)
+// duplicate Q(b_value)
 
 // Get Statistics
 // duplicate Q(get_stats)
@@ -431,6 +839,8 @@ Q(b_value)
 // duplicate Q(l_bins)
 // duplicate Q(a_bins)
 // duplicate Q(b_bins)
+// duplicate Q(thresholds)
+// duplicate Q(invert)
 // Statistics Object
 // duplicate Q(statistics)
 // duplicate Q(mean)
@@ -499,8 +909,12 @@ Q(merge)
 Q(margin)
 Q(threshold_cb)
 Q(merge_cb)
+Q(x_hist_bins_max)
+Q(y_hist_bins_max)
 // Blob Object
 Q(blob)
+Q(corners)
+Q(min_corners)
 Q(rect)
 Q(x)
 Q(y)
@@ -508,12 +922,29 @@ Q(w)
 Q(h)
 Q(pixels)
 Q(cx)
+Q(cxf)
 Q(cy)
+Q(cyf)
 Q(rotation)
+Q(rotation_deg)
+Q(rotation_rad)
 Q(code)
 Q(count)
+Q(perimeter)
+Q(roundness)
+Q(elongation)
 Q(area)
 Q(density)
+Q(extent)
+Q(compactness)
+Q(solidity)
+Q(convexity)
+Q(x_hist_bins)
+Q(y_hist_bins)
+Q(major_axis_line)
+Q(minor_axis_line)
+Q(enclosing_circle)
+Q(enclosed_ellipse)
 
 // Find Lines
 Q(find_lines)
@@ -539,6 +970,9 @@ Q(find_circles)
 Q(x_margin)
 Q(y_margin)
 Q(r_margin)
+Q(r_min)
+Q(r_max)
+Q(r_step)
 // Circle Object
 Q(circle)
 // duplicate Q(circle)
@@ -553,7 +987,7 @@ Q(find_rects)
 // duplicate Q(threshold)
 // Rect Object
 // duplicate Q(rect)
-Q(corners)
+// duplicate Q(corners)
 // duplicate Q(rect)
 // duplicate Q(x)
 // duplicate Q(y)
@@ -684,9 +1118,6 @@ Q(displacement)
 // duplicate Q(scale)
 Q(response)
 
-// LENET
-Q(find_number)
-
 // Image Writer
 Q(ImageWriter)
 // Image Writer Object
@@ -704,3 +1135,32 @@ Q(next_frame)
 // duplicate Q(copy_to_fb)
 // duplicate Q(loop)
 // duplicate Q(close)
+
+// FIR Module
+Q(fir)
+// duplicate Q(init)
+Q(FIR_NONE)
+Q(FIR_SHIELD)
+Q(FIR_MLX90620)
+Q(FIR_MLX90621)
+Q(FIR_MLX90640)
+Q(FIR_AMG8833)
+Q(refresh)
+Q(resolution)
+// duplicate Q(deinit)
+// duplicate Q(width)
+// duplicate Q(height)
+// duplicate Q(type)
+Q(read_ta)
+Q(read_ir)
+Q(draw_ta)
+// duplicate Q(alpha)
+// duplicate Q(scale)
+Q(draw_ir)
+// duplicate Q(alpha)
+// duplicate Q(scale)
+// duplicate Q(snapshot)
+// duplicate Q(alpha)
+// duplicate Q(scale)
+Q(pixformat)
+// duplciate Q(copy_to_fb)

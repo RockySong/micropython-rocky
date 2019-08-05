@@ -195,10 +195,10 @@ typedef union _McuPinMuxReg_t
 
 
 #define IOPAD_OUT_SPEED_50M		(0<<6)
-#define IOPAD_OUT_SPEED_100M		(2<<6)
-#define IOPAD_OUT_SPEED_200M		(3<<6)
+#define IOPAD_OUT_SPEED_100M	(2<<6)
+#define IOPAD_OUT_SPEED_200M	(3<<6)
 
-#define IOPAD_OUT_OD				(1<<11)
+#define IOPAD_OUT_OD			(IOPAD_OUT_STRENGTH_3X | 1<<11)
 
 #define IOPAD_IN_HIZ			(0<<12)
 

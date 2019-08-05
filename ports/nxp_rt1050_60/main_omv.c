@@ -121,7 +121,6 @@ static bool ini_handler_callback_is_true(const char *value)
     return true;
 }
 
-
 FRESULT exec_boot_script(const char *path, bool selftest, bool interruptible)
 {
     nlr_buf_t nlr;
@@ -233,6 +232,46 @@ static int ini_handler_callback(void *user, const char *section, const char *nam
 
     #undef MATCH
 }
+#else
+	
+int ini_handler_callback(void *user, const char *section, const char *name, const char *value)
+{
+    user = user;
+
+    #define MATCH(s, n) ((strcmp(section, (s)) == 0) && (strcmp(name, (n)) == 0))
+
+    if (MATCH("BootSettings", "REPLUart")) {
+        if (ini_handler_callback_is_true(value)) {
+            mp_obj_t args[2] = {
+                MP_OBJ_NEW_SMALL_INT(3), // UART Port
+                MP_OBJ_NEW_SMALL_INT(115200) // Baud Rate
+            };
+
+            MP_STATE_PORT(pyb_stdio_uart) = pyb_uart_type.make_new((mp_obj_t) &pyb_uart_type, MP_ARRAY_SIZE(args), 0, args);
+        }
+    } else {
+        return 0;
+    }
+
+    return 1;
+
+    #undef MATCH
+}
+
+FRESULT apply_settings(const char *path)
+{
+    nlr_buf_t nlr;
+    FRESULT f_res = f_stat(&vfs_fat->fatfs, path, NULL);
+
+    if (f_res == FR_OK) {
+        if (nlr_push(&nlr) == 0) {
+            ini_parse(&vfs_fat->fatfs, path, ini_handler_callback, NULL);
+            nlr_pop();
+        }
+    }
+
+    return f_res;
+}
 #endif
 
 #define SCnSCB_ACTLR_DISDEFWBUF_Pos         1U                                         /*!< ACTLR: DISDEFWBUF Position */
@@ -242,9 +281,6 @@ int OpenMV_Main(uint32_t first_soft_reset)
 	int ret = 0;
 	PRINTF("Enter OpenMV main\r\n");
 	// SCnSCB->ACTLR |= SCnSCB_ACTLR_DISDEFWBUF_Msk;
-
-	OverlaySwitch(OVLY_YUV_TAB);
-
 /*    
 	extint_init0();
     timer_init0();
@@ -259,7 +295,7 @@ int OpenMV_Main(uint32_t first_soft_reset)
     sensor_init0();
 */
 	#ifndef OMV_MPY_ONLY
-    fb_alloc_init0();
+	fb_alloc_init0();
 	#endif
     file_buffer_init0();
     // py_lcd_init0();
@@ -270,79 +306,59 @@ int OpenMV_Main(uint32_t first_soft_reset)
 #endif
  MainLoop:
     // Run boot script(s)
-    if (first_soft_reset) {
-		first_soft_reset = 0;
-        exec_boot_script("/selftest.py", true, false);
-
-		// rocky: pyb's main uses different method to access file system from omv
-        mp_import_stat_t stat = mp_import_stat("main.py");
-        if (stat == MP_IMPORT_STAT_FILE) {
-			nlr_buf_t nlr;
-			if (nlr_push(&nlr) == 0) {
-				int ret = pyexec_file("main.py");
-				if (ret & PYEXEC_FORCED_EXIT) {
-					ret = 1;
-				}
-				if (!ret) {
-					flash_error(3);
-				}
-				nlr_pop();
+	if (!usbdbg_script_ready()) {
+		if (first_soft_reset) {
+			first_soft_reset = 0;
+			exec_boot_script("/selftest.py", true, false);
+	#if MICROPY_HW_WIFIDBG_EN        
+			memset(&openmv_config, 0, sizeof(openmv_config));
+		#if MICROPY_HW_HAS_SDCARD
+			const char *path_out;
+			mp_vfs_mount_t *vfs = mp_vfs_lookup_path("openmv.config", &path_out);
+			if (vfs != NULL){
+				fs_user_mount_t *vfs_fat = MP_OBJ_TO_PTR(vfs->obj);
+				// Parse config, and init wifi if enabled.
+				ini_parse(&vfs_fat->fatfs, "openmv.config", ini_handler_callback, &openmv_config);
 			}
-        }
-        // exec_boot_script("/sd/main.py", false, true);
-        
-        usbdbg_set_irq_enabled(true);
-#if MICROPY_HW_WIFIDBG_EN        
-        memset(&openmv_config, 0, sizeof(openmv_config));
-#if MICROPY_HW_HAS_SDCARD
-		const char *path_out;
-        mp_vfs_mount_t *vfs = mp_vfs_lookup_path("openmv.config", &path_out);
-        if (vfs != NULL){
-        	fs_user_mount_t *vfs_fat = MP_OBJ_TO_PTR(vfs->obj);
-    		// Parse config, and init wifi if enabled.
-    		ini_parse(&vfs_fat->fatfs, "openmv.config", ini_handler_callback, &openmv_config);
-    	}
-#else
-		openmv_config.wifidbg = true;
-		strcpy(openmv_config.wifidbg_config.client_ssid , "mi_t");
-		strcpy(openmv_config.wifidbg_config.client_key, "1234567890");
-		//strcpy(openmv_config.wifidbg_config.client_ssid , "MICR_WIFI");
-		//strcpy(openmv_config.wifidbg_config.client_key, "52062561");
-		openmv_config.wifidbg_config.mode = 0;
-		openmv_config.wifidbg_config.client_security = 0;
-		strcpy(openmv_config.wifidbg_config.board_name, "openmv_rt");	
-#endif		
-#ifndef BOARD_OMVRT1
-//test only
-		openmv_config.wifidbg = true;
-		strcpy(openmv_config.wifidbg_config.client_ssid , "mi_t");
-		strcpy(openmv_config.wifidbg_config.client_key, "1234567890");
-		//strcpy(openmv_config.wifidbg_config.client_ssid , "MICR_WIFI");
-		//strcpy(openmv_config.wifidbg_config.client_key, "52062561");
-		openmv_config.wifidbg_config.mode = 0;
-		openmv_config.wifidbg_config.client_security = 0;
-		strcpy(openmv_config.wifidbg_config.board_name, "openmv_rt");
-//test 		
-#endif
-		
-    	if ((openmv_config.wifidbg == true) &&(wifidbg_init(&openmv_config.wifidbg_config) == 0)) {
-        		//openmv_config.wifidbg = false;
-				usbdbg_set_irq_enabled(false);
-			
-				if(openmv_config.wifidbg_config.dbg_mode == 1)
-				{
-					wifidbg_enter_dbg_mode();
-				}
-    	}
-		else
-		{
+		#else
+			openmv_config.wifidbg = true;
+			strcpy(openmv_config.wifidbg_config.client_ssid , "mi_t");
+			strcpy(openmv_config.wifidbg_config.client_key, "1234567890");
+			//strcpy(openmv_config.wifidbg_config.client_ssid , "MICR_WIFI");
+			//strcpy(openmv_config.wifidbg_config.client_key, "52062561");
+			openmv_config.wifidbg_config.mode = 0;
+			openmv_config.wifidbg_config.client_security = 0;
+			strcpy(openmv_config.wifidbg_config.board_name, "openmv_rt");	
+		#endif
+	#else
+			apply_settings("/openmv.config");
+	#endif	
 			usbdbg_set_irq_enabled(true);
+			// rocky: pyb's main uses different method to access file system from omv
+			mp_import_stat_t stat = mp_import_stat("main.py");
+			if (stat == MP_IMPORT_STAT_FILE) {
+				nlr_buf_t nlr;
+				if (nlr_push(&nlr) == 0) {
+					int ret = pyexec_file("main.py");
+					if (ret & PYEXEC_FORCED_EXIT) {
+						ret = 1;
+					}
+					if (!ret) {
+						flash_error(3);
+					}
+					nlr_pop();
+				}
+				else {
+					// 2019.03.27 19:52 rocky: if main.py is interrupted by running another script, 
+					// we have to do soft reset, otherwise fb alloc logic may fail and led to hard fault
+					// In this case, it makes user have to press start button twice to start the script in OpenMV IDE
+					goto cleanup;
+				}
+			}		
+    		// exec_boot_script("/sd/main.py", false, true);
 		}
-    	
-    	
-    }
-
-
+	}
+#if MICROPY_HW_WIFIDBG_EN 	
 	while ((openmv_config.wifidbg == true) && (wifidbg_AP_connected() == true)&& (wifidbg_isconnected() == 0))
 	{
 		wifidbg_connect_IDE();
@@ -389,9 +405,8 @@ int OpenMV_Main(uint32_t first_soft_reset)
 		return 0;
     }    
 #else
-	}
-#endif	
 	
+#endif	
 
     // If there's no script ready, just re-exec REPL
     while (!usbdbg_script_ready()) {
@@ -422,7 +437,10 @@ int OpenMV_Main(uint32_t first_soft_reset)
 		PRINTF("script ready!\r\n");
         // execute the script
         if (nlr_push(&nlr) == 0) {
-			// __set_BASEPRI_MAX(((1 << __NVIC_PRIO_BITS) - 1) << (8 - __NVIC_PRIO_BITS));	// disable pendSV
+			// rocky: 2019.03.27 19:00 reset fb alloc memory for new script
+			#ifndef OMV_MPY_ONLY
+			fb_alloc_init0();
+			#endif
 #if 0
 			vstr_t *buf = usbdbg_get_script();
 			mp_obj_t code = pyexec_compile_str(buf);	
@@ -438,6 +456,7 @@ int OpenMV_Main(uint32_t first_soft_reset)
             mp_obj_print_exception(&mp_plat_print, (mp_obj_t)nlr.ret_val);
         }
     }
+cleanup:
 	usbdbg_set_irq_enabled(true);
     // Disable all other IRQs except Systick and Flash IRQs
     // Note: FS IRQ is disable, since we're going for a soft-reset.

@@ -62,6 +62,7 @@ typedef struct {
 typedef struct {
   mp_obj_base_t base;
   qstr name;
+  qstr board_name;	
   uint32_t port   : 4;
   uint32_t pin    : 5;      // Some ARM processors use 32 bits/PORT
   uint32_t num_af : 4;
