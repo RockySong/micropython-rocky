@@ -44,7 +44,7 @@
 #define WIFI_DBG_USE_TIMER_LOOP 1
 
 #define WIFIDBG_PIT_INTERVAL_US			(20000U)
-#define WIFIDBG_PIT_TIMEOUT_5S_COUNT	(5*1000*1000/WIFIDBG_PIT_INTERVAL_US)
+#define WIFIDBG_PIT_TIMEOUT_5S_COUNT	(8*1000*1000/WIFIDBG_PIT_INTERVAL_US)
 #define close_all_sockets()             \
     do {                                \
     	wifidbg_disable_connection_loop();	\
@@ -372,7 +372,7 @@ rx_loop:
         if (request & 0x80) {
             // Device-to-host data phase
             bytes = MIN(xfer_length, BUFFER_SIZE);
-            M8266_DBG_IO_Toggle(2);
+            
 			wifidbg_data_in(buf, bytes);
 			
 		#if 1

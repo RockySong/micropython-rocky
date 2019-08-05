@@ -310,8 +310,12 @@ int M8266_socket_sendblock(int fd, const uint8_t *buf, uint32_t len,uint32_t blo
 		return -1;
 
    // for(sent=0, loops=0; (sent<len)&&(loops<= 1000); loops++)
-    {		
-		sent = M8266WIFI_SPI_Send_Data_Block((uint8_t *)buf, len,block_size,gSockets_client[fd].linkno, &status);
+    {
+	#if 0		
+		sent = M8266WIFI_SPI_Send_Data_Block((uint8_t *)buf, len,block_size,gSockets_client[fd].linkno,&status);
+	#else
+		sent = M8266WIFI_SPI_Send_BlockData((uint8_t *)buf, len,block_size,gSockets_client[fd].linkno,NULL,0, &status);
+	#endif
 		error_status = status;
         if(sent>=len)  return sent;
 		if((status&0xFF) == 0x00)
