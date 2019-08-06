@@ -971,13 +971,13 @@ soft_reset:
     // MMA accel: init and reset
     accel_init();
 #endif
-pwm_init0();
+
 rpm_init0();
 dcmc_init0();
 srpm_init0();
 #if MICROPY_HW_ENABLE_SERVO
     // servo
-	
+	pwm_init0();	
     servo_init0();
 #endif
 

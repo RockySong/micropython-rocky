@@ -184,132 +184,6 @@ Q(DMA0)
 
 Q(DMAMUX)
 
-Q(DMA_ATTR)
-
-Q(DMA_BITER_ELINKNO)
-
-Q(DMA_BITER_ELINKYES)
-
-Q(DMA_CDNE)
-
-Q(DMA_CEEI)
-
-Q(DMA_CERQ)
-
-Q(DMA_CERR)
-
-Q(DMA_CINT)
-
-Q(DMA_CITER_ELINKNO)
-
-Q(DMA_CITER_ELINKYES)
-
-Q(DMA_CR)
-
-Q(DMA_CSR)
-
-Q(DMA_DADDR)
-
-Q(DMA_DCHPRI0)
-
-Q(DMA_DCHPRI1)
-
-Q(DMA_DCHPRI10)
-
-Q(DMA_DCHPRI11)
-
-Q(DMA_DCHPRI12)
-
-Q(DMA_DCHPRI13)
-
-Q(DMA_DCHPRI14)
-
-Q(DMA_DCHPRI15)
-
-Q(DMA_DCHPRI16)
-
-Q(DMA_DCHPRI17)
-
-Q(DMA_DCHPRI18)
-
-Q(DMA_DCHPRI19)
-
-Q(DMA_DCHPRI2)
-
-Q(DMA_DCHPRI20)
-
-Q(DMA_DCHPRI21)
-
-Q(DMA_DCHPRI22)
-
-Q(DMA_DCHPRI23)
-
-Q(DMA_DCHPRI24)
-
-Q(DMA_DCHPRI25)
-
-Q(DMA_DCHPRI26)
-
-Q(DMA_DCHPRI27)
-
-Q(DMA_DCHPRI28)
-
-Q(DMA_DCHPRI29)
-
-Q(DMA_DCHPRI3)
-
-Q(DMA_DCHPRI30)
-
-Q(DMA_DCHPRI31)
-
-Q(DMA_DCHPRI4)
-
-Q(DMA_DCHPRI5)
-
-Q(DMA_DCHPRI6)
-
-Q(DMA_DCHPRI7)
-
-Q(DMA_DCHPRI8)
-
-Q(DMA_DCHPRI9)
-
-Q(DMA_DLAST_SGA)
-
-Q(DMA_DOFF)
-
-Q(DMA_EARS)
-
-Q(DMA_EEI)
-
-Q(DMA_ERQ)
-
-Q(DMA_ERR)
-
-Q(DMA_ES)
-
-Q(DMA_HRS)
-
-Q(DMA_INT)
-
-Q(DMA_NBYTES_MLNO)
-
-Q(DMA_NBYTES_MLOFFNO)
-
-Q(DMA_NBYTES_MLOFFYES)
-
-Q(DMA_SADDR)
-
-Q(DMA_SEEI)
-
-Q(DMA_SERQ)
-
-Q(DMA_SLAST)
-
-Q(DMA_SOFF)
-
-Q(DMA_SSRT)
-
 Q(DecompIO)
 
 Q(DecompIO)
@@ -528,6 +402,8 @@ Q(I25)
 
 Q(I2C)
 
+Q(I2C)
+
 Q(IN)
 
 Q(INT16)
@@ -606,6 +482,62 @@ Q(LPI2C3)
 
 Q(LPI2C4)
 
+Q(LPI2C_MCCR0)
+
+Q(LPI2C_MCCR1)
+
+Q(LPI2C_MCFGR0)
+
+Q(LPI2C_MCFGR1)
+
+Q(LPI2C_MCFGR2)
+
+Q(LPI2C_MCFGR3)
+
+Q(LPI2C_MCR)
+
+Q(LPI2C_MDER)
+
+Q(LPI2C_MDMR)
+
+Q(LPI2C_MFCR)
+
+Q(LPI2C_MFSR)
+
+Q(LPI2C_MIER)
+
+Q(LPI2C_MRDR)
+
+Q(LPI2C_MSR)
+
+Q(LPI2C_MTDR)
+
+Q(LPI2C_PARAM)
+
+Q(LPI2C_SAMR)
+
+Q(LPI2C_SASR)
+
+Q(LPI2C_SCFGR1)
+
+Q(LPI2C_SCFGR2)
+
+Q(LPI2C_SCR)
+
+Q(LPI2C_SDER)
+
+Q(LPI2C_SIER)
+
+Q(LPI2C_SRDR)
+
+Q(LPI2C_SSR)
+
+Q(LPI2C_STAR)
+
+Q(LPI2C_STDR)
+
+Q(LPI2C_VERID)
+
 Q(LPSPI1)
 
 Q(LPSPI2)
@@ -613,6 +545,40 @@ Q(LPSPI2)
 Q(LPSPI3)
 
 Q(LPSPI4)
+
+Q(LPSPI_CCR)
+
+Q(LPSPI_CFGR0)
+
+Q(LPSPI_CFGR1)
+
+Q(LPSPI_CR)
+
+Q(LPSPI_DER)
+
+Q(LPSPI_DMR0)
+
+Q(LPSPI_DMR1)
+
+Q(LPSPI_FCR)
+
+Q(LPSPI_FSR)
+
+Q(LPSPI_IER)
+
+Q(LPSPI_PARAM)
+
+Q(LPSPI_RDR)
+
+Q(LPSPI_RSR)
+
+Q(LPSPI_SR)
+
+Q(LPSPI_TCR)
+
+Q(LPSPI_TDR)
+
+Q(LPSPI_VERID)
 
 Q(LPUART1)
 
@@ -632,9 +598,17 @@ Q(LPUART8)
 
 Q(LSB)
 
+Q(LSB)
+
 Q(LookupError)
 
 Q(LookupError)
+
+Q(MASTER)
+
+Q(MASTER)
+
+Q(MSB)
 
 Q(MSB)
 
@@ -726,6 +700,114 @@ Q(PWM3)
 
 Q(PWM4)
 
+Q(PWM_CAPTCOMPA)
+
+Q(PWM_CAPTCOMPB)
+
+Q(PWM_CAPTCOMPX)
+
+Q(PWM_CAPTCTRLA)
+
+Q(PWM_CAPTCTRLB)
+
+Q(PWM_CAPTCTRLX)
+
+Q(PWM_CNT)
+
+Q(PWM_CTRL)
+
+Q(PWM_CTRL2)
+
+Q(PWM_CVAL0)
+
+Q(PWM_CVAL0CYC)
+
+Q(PWM_CVAL1)
+
+Q(PWM_CVAL1CYC)
+
+Q(PWM_CVAL2)
+
+Q(PWM_CVAL2CYC)
+
+Q(PWM_CVAL3)
+
+Q(PWM_CVAL3CYC)
+
+Q(PWM_CVAL4)
+
+Q(PWM_CVAL4CYC)
+
+Q(PWM_CVAL5)
+
+Q(PWM_CVAL5CYC)
+
+Q(PWM_DISMAP0)
+
+Q(PWM_DISMAP1)
+
+Q(PWM_DMAEN)
+
+Q(PWM_DTCNT0)
+
+Q(PWM_DTCNT1)
+
+Q(PWM_DTSRCSEL)
+
+Q(PWM_FCTRL)
+
+Q(PWM_FCTRL2)
+
+Q(PWM_FFILT)
+
+Q(PWM_FRACVAL1)
+
+Q(PWM_FRACVAL2)
+
+Q(PWM_FRACVAL3)
+
+Q(PWM_FRACVAL4)
+
+Q(PWM_FRACVAL5)
+
+Q(PWM_FRCTRL)
+
+Q(PWM_FSTS)
+
+Q(PWM_FTST)
+
+Q(PWM_INIT)
+
+Q(PWM_INTEN)
+
+Q(PWM_MASK)
+
+Q(PWM_MCTRL)
+
+Q(PWM_MCTRL2)
+
+Q(PWM_OCTRL)
+
+Q(PWM_OUTEN)
+
+Q(PWM_STS)
+
+Q(PWM_SWCOUT)
+
+Q(PWM_TCTRL)
+
+Q(PWM_VAL0)
+
+Q(PWM_VAL1)
+
+Q(PWM_VAL2)
+
+Q(PWM_VAL3)
+
+Q(PWM_VAL4)
+
+Q(PWM_VAL5)
+
 Q(PWRON_RESET)
 
 Q(PXP)
@@ -774,12 +856,6 @@ Q(SAI2)
 
 Q(SAI3)
 
-Q(SD)
-
-Q(SDCard)
-
-Q(SDCard)
-
 Q(SEARCH_DS)
 
 Q(SEARCH_EX)
@@ -788,6 +864,10 @@ Q(SEMC)
 
 Q(SIF)
 
+Q(SLAVE)
+
+Q(SLAVE)
+
 Q(SLEW_FAST)
 
 Q(SNVS)
@@ -795,6 +875,10 @@ Q(SNVS)
 Q(SOFT_RESET)
 
 Q(SPDIF)
+
+Q(SPI)
+
+Q(SPI)
 
 Q(SRC)
 
@@ -824,6 +908,10 @@ Q(StringIO)
 
 Q(StringIO)
 
+Q(Switch)
+
+Q(Switch)
+
 Q(SyntaxError)
 
 Q(SyntaxError)
@@ -851,6 +939,34 @@ Q(TMR2)
 Q(TMR3)
 
 Q(TMR4)
+
+Q(TMR_CAPT)
+
+Q(TMR_CMPLD1)
+
+Q(TMR_CMPLD2)
+
+Q(TMR_CNTR)
+
+Q(TMR_COMP1)
+
+Q(TMR_COMP2)
+
+Q(TMR_CSCTRL)
+
+Q(TMR_CTRL)
+
+Q(TMR_DMA)
+
+Q(TMR_ENBL)
+
+Q(TMR_FILT)
+
+Q(TMR_HOLD)
+
+Q(TMR_LOAD)
+
+Q(TMR_SCTRL)
 
 Q(TRNG)
 
@@ -1364,6 +1480,16 @@ Q(add_frame)
 
 Q(addr)
 
+Q(addr)
+
+Q(addr)
+
+Q(addr)
+
+Q(addr)
+
+Q(addr_size)
+
 Q(addressof)
 
 Q(addrsize)
@@ -1490,6 +1616,14 @@ Q(baudrate)
 
 Q(baudrate)
 
+Q(baudrate)
+
+Q(baudrate)
+
+Q(baudrate)
+
+Q(baudrate)
+
 Q(bias)
 
 Q(bias)
@@ -1537,6 +1671,12 @@ Q(bins)
 Q(bins)
 
 Q(bins)
+
+Q(bits)
+
+Q(bits)
+
+Q(bits)
 
 Q(bits)
 
@@ -1611,6 +1751,8 @@ Q(bytes_at)
 Q(calcsize)
 
 Q(callable)
+
+Q(callback)
 
 Q(capacity)
 
@@ -1804,6 +1946,8 @@ Q(cpu)
 
 Q(cpu)
 
+Q(crc)
+
 Q(cx)
 
 Q(cx)
@@ -1819,6 +1963,8 @@ Q(cy)
 Q(cy)
 
 Q(cy)
+
+Q(data)
 
 Q(data)
 
@@ -1845,6 +1991,12 @@ Q(deepsleep)
 Q(default)
 
 Q(degrees)
+
+Q(deinit)
+
+Q(deinit)
+
+Q(deinit)
 
 Q(deinit)
 
@@ -1884,6 +2036,8 @@ Q(dilate)
 
 Q(dir)
 
+Q(dir)
+
 Q(disable)
 
 Q(disable_irq)
@@ -1897,6 +2051,8 @@ Q(displacement)
 Q(div)
 
 Q(divmod)
+
+Q(dma)
 
 Q(doc)
 
@@ -2064,6 +2220,12 @@ Q(find_template)
 
 Q(firstbit)
 
+Q(firstbit)
+
+Q(firstbit)
+
+Q(firstbit)
+
 Q(fix_rotation_scale)
 
 Q(float)
@@ -2101,6 +2263,8 @@ Q(format)
 Q(forward)
 
 Q(fps)
+
+Q(freq)
 
 Q(freq)
 
@@ -2160,6 +2324,8 @@ Q(gc)
 
 Q(gc)
 
+Q(gencall)
+
 Q(generator)
 
 Q(generator)
@@ -2218,7 +2384,11 @@ Q(getrandbits)
 
 Q(getter)
 
+Q(gettime)
+
 Q(getvalue)
+
+Q(gif)
 
 Q(gif)
 
@@ -2247,6 +2417,8 @@ Q(h)
 Q(h)
 
 Q(h)
+
+Q(halfduplex)
 
 Q(hamming)
 
@@ -2308,6 +2480,8 @@ Q(id)
 
 Q(id)
 
+Q(id)
+
 Q(idle)
 
 Q(ilistdir)
@@ -2349,6 +2523,12 @@ Q(info)
 Q(info)
 
 Q(info)
+
+Q(init)
+
+Q(init)
+
+Q(init)
 
 Q(init)
 
@@ -2422,9 +2602,9 @@ Q(invert)
 
 Q(invert)
 
-Q(io)
+Q(inverted)
 
-Q(ioctl)
+Q(io)
 
 Q(ioctl)
 
@@ -2712,6 +2892,8 @@ Q(mcu)
 
 Q(mcu)
 
+Q(mcu)
+
 Q(mean)
 
 Q(mean)
@@ -2745,6 +2927,12 @@ Q(mem_alloc)
 Q(mem_free)
 
 Q(mem_info)
+
+Q(mem_read)
+
+Q(mem_write)
+
+Q(memaddr)
 
 Q(memaddr)
 
@@ -2790,6 +2978,8 @@ Q(miso)
 
 Q(miso)
 
+Q(miso)
+
 Q(mjpeg)
 
 Q(mjpeg)
@@ -2822,6 +3012,10 @@ Q(mode)
 
 Q(mode)
 
+Q(mode)
+
+Q(mode)
+
 Q(modf)
 
 Q(modify)
@@ -2835,6 +3029,8 @@ Q(modules)
 Q(mono_space)
 
 Q(morph)
+
+Q(mosi)
 
 Q(mosi)
 
@@ -2903,6 +3099,8 @@ Q(nop)
 Q(nor)
 
 Q(normalized)
+
+Q(nss)
 
 Q(object)
 
@@ -3002,6 +3200,12 @@ Q(phase)
 
 Q(phase)
 
+Q(phase)
+
+Q(phase)
+
+Q(phase)
+
 Q(pi)
 
 Q(pi)
@@ -3019,6 +3223,12 @@ Q(pixels_threshold)
 Q(platform)
 
 Q(polar)
+
+Q(polarity)
+
+Q(polarity)
+
+Q(polarity)
 
 Q(polarity)
 
@@ -3048,9 +3258,7 @@ Q(pow)
 
 Q(pow)
 
-Q(power)
-
-Q(present)
+Q(prescaler)
 
 Q(print)
 
@@ -3111,6 +3319,14 @@ Q(put_pixel_physical)
 Q(put_text)
 
 Q(put_text_xy)
+
+Q(pwm)
+
+Q(pwm_freq)
+
+Q(pwm_inverted)
+
+Q(pwm_width)
 
 Q(pyb)
 
@@ -3192,11 +3408,11 @@ Q(read)
 
 Q(read)
 
+Q(readID)
+
 Q(read_buf_len)
 
 Q(read_channel)
-
-Q(readblocks)
 
 Q(readblocks)
 
@@ -3211,6 +3427,8 @@ Q(readfrom_into)
 Q(readfrom_mem)
 
 Q(readfrom_mem_into)
+
+Q(readinto)
 
 Q(readinto)
 
@@ -3269,6 +3487,16 @@ Q(rect)
 Q(rect)
 
 Q(rect)
+
+Q(recv)
+
+Q(recv)
+
+Q(recv)
+
+Q(recv)
+
+Q(recv)
 
 Q(recv)
 
@@ -3360,6 +3588,10 @@ Q(rmdir)
 
 Q(rmdir)
 
+Q(rng)
+
+Q(rng)
+
 Q(robust)
 
 Q(roi)
@@ -3392,6 +3624,10 @@ Q(rstrip)
 
 Q(rstrip)
 
+Q(rtc)
+
+Q(rtc)
+
 Q(save)
 
 Q(save_descriptor)
@@ -3407,6 +3643,10 @@ Q(scale_factor)
 Q(scale_mul)
 
 Q(scan)
+
+Q(scan)
+
+Q(sck)
 
 Q(sck)
 
@@ -3447,6 +3687,18 @@ Q(send)
 Q(send)
 
 Q(send)
+
+Q(send)
+
+Q(send)
+
+Q(send)
+
+Q(send)
+
+Q(send)
+
+Q(send_recv)
 
 Q(sendbreak)
 
@@ -3658,8 +3910,6 @@ Q(step)
 
 Q(step)
 
-Q(stm)
-
 Q(stop)
 
 Q(stop)
@@ -3738,6 +3988,8 @@ Q(tell)
 
 Q(template_roi)
 
+Q(test)
+
 Q(theta)
 
 Q(theta)
@@ -3812,6 +4064,8 @@ Q(throw)
 
 Q(throw)
 
+Q(ti)
+
 Q(tick)
 
 Q(ticks)
@@ -3835,6 +4089,18 @@ Q(time)
 Q(time)
 
 Q(time)
+
+Q(timeout)
+
+Q(timeout)
+
+Q(timeout)
+
+Q(timeout)
+
+Q(timeout)
+
+Q(timeout)
 
 Q(timeout)
 
@@ -3944,6 +4210,10 @@ Q(union)
 
 Q(union)
 
+Q(uniqueID)
+
+Q(uniqueID)
+
 Q(unique_id)
 
 Q(unique_id)
@@ -3975,6 +4245,8 @@ Q(upper)
 Q(upper)
 
 Q(uq)
+
+Q(urandom)
 
 Q(urandom)
 
@@ -4112,6 +4384,8 @@ Q(width)
 
 Q(width)
 
+Q(width)
+
 Q(window_close)
 
 Q(window_open)
@@ -4136,7 +4410,7 @@ Q(write)
 
 Q(write_readinto)
 
-Q(writeblocks)
+Q(write_readinto)
 
 Q(writeblocks)
 

@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/micropython/micropython.png?branch=master)](https://travis-ci.org/micropython/micropython) [![Coverage Status](https://coveralls.io/repos/micropython/micropython/badge.png?branch=master)](https://coveralls.io/r/micropython/micropython?branch=master)
+﻿[![Build Status](https://travis-ci.org/micropython/micropython.png?branch=master)](https://travis-ci.org/micropython/micropython) [![Coverage Status](https://coveralls.io/repos/micropython/micropython/badge.png?branch=master)](https://coveralls.io/r/micropython/micropython?branch=master)
 
 OpenMV port to i.MX RT1050/1060
 =======================
@@ -165,6 +165,11 @@ http://cloud.eeworld.com.cn///courselesson/4928/2019130042104-tlk9jm.mp4.mp4
     默认的启动方式是”Internal Boot(NormalBoot)”, 补救时改用”Serial Download(Bootloader)”。
     请勿尝试其它启动方式！ 
 	
+WIFI Debug Module:
+    1. Use "prj_keil_rt1060" project, select "debug_rt1060_flexspi_wifidbg" as target
+    2. WIFI Module daughter board is needed
+    3. Modify "openmv.config" file and copy it to SDCard.
+		
 
 Contributing
 ------------

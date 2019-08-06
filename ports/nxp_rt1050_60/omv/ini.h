@@ -17,6 +17,9 @@ https://github.com/benhoyt/inih
 
 int ini_atoi(const char *string);
 
+unsigned char ini_is_true(const char *value);
+
+
 /* Make this header file easier to include in C++ code */
 #ifdef __cplusplus
 extern "C" {

@@ -110,7 +110,7 @@
 // RAW buffer size
 #define OMV_RAW_BUF_SIZE        (OMV_FB_SIZE)
 
-#ifndef MCU_SERIES_RT105
+#if !(defined(MCU_SERIES_RT105) ||defined(MCU_SERIES_RT106))
 #define OMV_LINE_BUF_SIZE   (3K)    // Image line buffer round(640 * 2BPP * 2 buffers).
 #define OMV_MSC_BUF_SIZE    (2K)    // USB MSC bot data
 #define OMV_VFS_BUF_SIZE    (1K)    // VFS sturct + FATFS file buffer (624 bytes)

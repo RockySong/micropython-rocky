@@ -137,6 +137,9 @@ MP_DECLARE_CONST_FUN_OBJ_0(pyb_irq_stats_obj);
 
 #define IRQ_PRI_RTC_WKUP        14
 #define IRQ_SUBPRI_RTC_WKUP                 0
+
+#define IRQ_PRI_PIT_TIMER		14
+#define IRQ_SUBPRI_PIT_TIMER				0
 // PENDSV should be at the lowst priority so that other interrupts complete
 // before exception is raised.
 #define IRQ_PRI_PENDSV          15

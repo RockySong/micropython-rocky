@@ -24,7 +24,7 @@
 #include "fmath.h"
 #include "collections.h"
 #include "imlib_config.h"
-#ifdef MCU_SERIES_RT105
+#if (defined(MCU_SERIES_RT105) ||defined(MCU_SERIES_RT106))
 #include "overlay_manager.h"
 #endif
 #define IM_LOG2_2(x)    (((x) &                0x2ULL) ? ( 2                        ) :             1) // NO ({ ... }) !

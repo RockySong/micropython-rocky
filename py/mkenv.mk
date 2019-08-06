@@ -59,7 +59,11 @@ LD += -m32
 endif
 
 MAKE_FROZEN = $(TOP)/tools/make-frozen.py
+ifeq ($(shell uname -o),Cygwin)
+MPY_CROSS = $(TOP)/mpy-cross/mpy-cross.exe
+else
 MPY_CROSS = $(TOP)/mpy-cross/mpy-cross
+endif
 MPY_TOOL = $(TOP)/tools/mpy-tool.py
 
 all:
