@@ -332,15 +332,10 @@ mp_uint_t sdcard_read_blocks(uint8_t *dest, uint32_t block_num, uint32_t num_blo
 	uint32_t usbIrqEn = MyNVIC_GetEnabledIRQ(USB_OTG1_IRQn);
 	if (usbIrqEn)
 		NVIC_DisableIRQ(USB_OTG1_IRQn);
-
-	uint32_t pitIrqEn = MyNVIC_GetEnabledIRQ(PIT_IRQn);
-	if (pitIrqEn)
-		NVIC_DisableIRQ(PIT_IRQn);
+	
 	ret = SD_ReadBlocks(&g_sd, dest, block_num, num_blocks);
 	if (usbIrqEn)
 		NVIC_EnableIRQ(USB_OTG1_IRQn);
-	if (pitIrqEn)
-		NVIC_EnableIRQ(PIT_IRQn);	
     return ret;
 }
 
@@ -354,14 +349,10 @@ mp_uint_t sdcard_write_blocks(const uint8_t *src, uint32_t block_num, uint32_t n
 	uint32_t usbIrqEn = MyNVIC_GetEnabledIRQ(USB_OTG1_IRQn);
 	if (usbIrqEn)
 		NVIC_DisableIRQ(USB_OTG1_IRQn);
-	uint32_t pitIrqEn = MyNVIC_GetEnabledIRQ(PIT_IRQn);
-	if (pitIrqEn)
-		NVIC_DisableIRQ(PIT_IRQn);
+	
 	ret = SD_WriteBlocks(&g_sd, src, block_num, num_blocks);
 	if (usbIrqEn)
 		NVIC_EnableIRQ(USB_OTG1_IRQn);
-	if (pitIrqEn)
-		NVIC_EnableIRQ(PIT_IRQn);	
     return ret;
 }
 

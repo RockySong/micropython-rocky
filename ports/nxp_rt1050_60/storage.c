@@ -77,11 +77,9 @@
 	static void flash_cache_flush(void) {
 		if (flash_flags & FLASH_FLAG_DIRTY) {
 			flash_flags |= FLASH_FLAG_FORCE_WRITE;
-		#if (MCU_SERIES_RT105)	
 			while (flash_flags & FLASH_FLAG_DIRTY) {
 			   TRIGGER_FLASH_IRQ();
 			}
-		#endif	
 		}
 
 	}
@@ -126,9 +124,7 @@ void storage_init(void) {
         #endif
         flash_is_initialised = true;
     }
-#if (MCU_SERIES_RT105)	
 	NVIC_EnableIRQ(Reserved168_IRQn);  // reserved IRQ is borrowed to trigger flash cache flush
-#endif
     #if USE_INTERNAL
 	#if 0
     // Enable the flash IRQ, which is used to also call our storage IRQ handler

@@ -18,7 +18,6 @@
 #include "compile.h"
 #include "runtime.h"
 #include "omv_boardconfig.h"
-#include "mpconfigboard.h"
 #include "virtual_com.h"
 #include "fsl_debug_console.h"
 static int xfer_bytes;
@@ -59,11 +58,6 @@ vstr_t *usbdbg_get_script()
 void usbdbg_set_script_running(bool running)
 {
     script_running = running;
-}
-
-bool usbdbg_script_running()
-{
-	return script_running;
 }
 
 inline void usbdbg_set_irq_enabled(bool enabled)
@@ -304,241 +298,6 @@ void usbdbg_data_out(void *buffer, int length)
 }
 
 __WEAK void QTimer_StopAll(void) {}
-#if 1//MICROPY_HW_WIFIDBG_EN
-void wifidbg_data_out(void *buffer, int length)
-{
-    switch (cmd) {
-        case USBDBG_SCRIPT_EXEC:
-            // check if GC is locked before allocating memory for vstr. If GC was locked
-            // at least once before the script is fully uploaded xfer_bytes will be less
-            // than the total length (xfer_length) and the script will Not be executed.
-            if (!script_running && !gc_is_locked()) {
-                vstr_add_strn(&script_buf, buffer, length);
-                xfer_bytes += length;
-                if (xfer_bytes == xfer_length) {
-                    // Set script ready flag
-                    script_ready = true;
-                    // Set script running flag
-                    script_running = true;
-
-                    // Disable IDE IRQ (re-enabled by pyexec or main).
-                    usbdbg_set_irq_enabled(false);
-                    wifidbg_set_irq_enabled(false);
-					#if 0
-                    // Clear interrupt traceback
-                    mp_obj_exception_clear_traceback(mp_const_ide_interrupt);
-                    // Interrupt running REPL
-                    // Note: setting pendsv explicitly here because the VM is probably
-                    // waiting in REPL and the soft interrupt flag will not be checked.
-                    PRINTF("nlr jumping to execute script\r\n");
-					ProfReset();
-                    pendsv_nlr_jump_hard(mp_const_ide_interrupt);
-					#else
-					
-					#endif
-                }
-            }
-			else {
-				if (gc_is_locked()) {
-					printf("GC locked!\r\n");
-				}
-			}
-            break;
-
-        case USBDBG_TEMPLATE_SAVE: {
-			#ifndef OMV_MPY_ONLY
-            image_t image ={
-                .w = MAIN_FB()->w,
-                .h = MAIN_FB()->h,
-                .bpp = MAIN_FB()->bpp,
-                .pixels = MAIN_FB()->pixels
-            };
-
-            // null terminate the path
-            length = (length == 64) ? 63:length;
-            ((char*)buffer)[length] = 0;
-
-            rectangle_t *roi = (rectangle_t*)buffer;
-            char *path = (char*)buffer+sizeof(rectangle_t);
-
-            imlib_save_image(&image, path, roi, 50);
-            // raise a flash IRQ to flush image
-            //NVIC->STIR = FLASH_IRQn;
-			#endif
-            break;
-        }
-
-        case USBDBG_DESCRIPTOR_SAVE: {
-			#ifndef OMV_MPY_ONLY
-            image_t image ={
-                .w = MAIN_FB()->w,
-                .h = MAIN_FB()->h,
-                .bpp = MAIN_FB()->bpp,
-                .pixels = MAIN_FB()->pixels
-            };
-
-            // null terminate the path
-            length = (length == 64) ? 63:length;
-            ((char*)buffer)[length] = 0;
-
-            rectangle_t *roi = (rectangle_t*)buffer;
-            char *path = (char*)buffer+sizeof(rectangle_t);
-
-            py_image_descriptor_from_roi(&image, path, roi);
-			#endif
-            break;
-        }
-        default: /* error */
-            break;
-    }
-}
-
-
-void wifidbg_data_in(void *buffer, int length)
-{
-	logout("usbdbg_data_in: cmd=%x, buffer=0x%08x, bytes=%d\r\n", cmd, buffer, length);
-    switch (cmd) {
-        case USBDBG_FW_VERSION: {
-			g_omvIdeConnecting = 1;
-			wifidbg_FlushTxBuffer();
-            uint32_t *ver_buf = buffer;
-            ver_buf[0] = FIRMWARE_VERSION_MAJOR;
-            ver_buf[1] = FIRMWARE_VERSION_MINOR;
-            ver_buf[2] = 0; //FIRMWARE_VERSION_PATCH;
-            cmd = USBDBG_NONE;
-            break;
-        }
-
-        case USBDBG_TX_BUF_LEN: {
-			uint32_t *p = (uint32_t*)buffer;
-            p[0] = wifidbg_TxBufGetFilledBytes();
-            cmd = USBDBG_NONE;
-            break;
-        }
-
-        case USBDBG_TX_BUF: {
-			int n = wifidbg_ReadLogTxBlk(buffer, length);
-			if (n < 0) {
-				cmd = USBDBG_NONE;
-			} else if (n == 0) {
-				cmd = USBDBG_NONE;
-			} else {
-				xfer_bytes += n;
-				if (xfer_bytes == xfer_length) {
-					cmd = USBDBG_NONE;
-				}
-			}
-			
-            break;
-        }
-
-        case USBDBG_FRAME_SIZE:
-			g_omvIdeConnecting = 0;
-		#ifdef OMV_MPY_ONLY
-			((uint32_t*)buffer)[0] = 0;
-			((uint32_t*)buffer)[1] = 0;
-			((uint32_t*)buffer)[2] = 0; // MAIN_FB()->w * MAIN_FB()->h * MAIN_FB()->bpp;			
-		#else
-			#ifdef DUMP_RAW
-				((uint32_t*)buffer)[0] = MAIN_FB()->w;
-				((uint32_t*)buffer)[1] = MAIN_FB()->h;
-				((uint32_t*)buffer)[2] = MAIN_FB()->bpp; // MAIN_FB()->w * MAIN_FB()->h * MAIN_FB()->bpp;		
-			#else
-				// Return 0 if FB is locked or not ready.
-				((uint32_t*)buffer)[0] = 0;
-				
-				// Try to lock FB. If header size == 0 frame is not ready
-				if (mutex_try_lock(&JPEG_FB()->lock, MUTEX_TID_IDE)) {
-					// If header size == 0 frame is not ready
-					if (JPEG_FB()->size == 0) {
-						// unlock FB
-						mutex_unlock(&JPEG_FB()->lock, MUTEX_TID_IDE);
-						
-					} else {
-						// Return header w, h and size/bpp
-						((uint32_t*)buffer)[0] = JPEG_FB()->w;
-						((uint32_t*)buffer)[1] = JPEG_FB()->h;
-						((uint32_t*)buffer)[2] = JPEG_FB()->size;
-					}
-				}
-			#endif
-		#endif
-            cmd = USBDBG_NONE;
-            break;
-
-        case USBDBG_FRAME_DUMP:
-        	
-			#ifdef OMV_MPY_ONLY
-				cmd = USBDBG_NONE;
-			#else
-				if (xfer_bytes < xfer_length) {
-				#ifdef DUMP_RAW
-					memcpy(buffer, MAIN_FB()->pixels+xfer_bytes, length);
-					xfer_bytes += length;
-					if (xfer_bytes == xfer_length) {
-						cmd = USBDBG_NONE;
-					}			
-				#else
-					memcpy(buffer, JPEG_FB()->pixels+xfer_bytes, length);
-					xfer_bytes += length;
-					if (xfer_bytes == xfer_length) {
-						cmd = USBDBG_NONE;
-						JPEG_FB()->w = 0; JPEG_FB()->h = 0; JPEG_FB()->size = 0;
-						mutex_unlock(&JPEG_FB()->lock, MUTEX_TID_IDE);
-					}
-					
-				#endif
-            }
-			#endif
-			
-            break;
-
-        case USBDBG_ARCH_STR: {
-			// Note: this is not official OpenMV Cam board, thank 
-			// openmv llc who supported openMV i.MX RT porting!
-			// This board and code is not for commercial purpose!
-			// please support openMV by buying genuine OpenMV Cam!
-			#if 0
-            snprintf((char *) buffer, 64, "%s [%s:%08X%08X%08X]",
-                    OMV_ARCH_STR/*OpenMV i.MX RT1050/60 port*/, OMV_BOARD_TYPE /* M7 */,
-                    0x4B4E4854,
-                    0x564D4F20,
-                    0x434C4C20);	
-			#else
-            snprintf((char *) buffer, 64, "%s [%s:%08X%08X%08X]",
-                    OMV_ARCH_STR/*OpenMV i.MX RT1050/60 port*/, OMV_BOARD_TYPE /* M7 */,
-                    0x35383236 /*0x4B4E4854*/,
-                    0x3436510f /*0x564D4F20*/,
-                    0x0041001E /*0x434C4C20*/);	
-			#endif
-            cmd = USBDBG_NONE;
-            break;
-        }
-
-        case USBDBG_SCRIPT_RUNNING: {
-            uint32_t *buf = buffer;
-            buf[0] = (uint32_t) script_running;
-            cmd = USBDBG_NONE;
-			//if (script_running)
-			///	M8266_DBG_IO_Toggle(1);
-			//else
-            break;
-        }
-        case 0x8b:{
-        	if (xfer_bytes < xfer_length) {
-				memset(buffer,0xf1,length);
-        		xfer_bytes += length;
-
-        		if (xfer_bytes == xfer_length) 
-						cmd = USBDBG_NONE;
-        	}
-        	break;
-        }
-        default: /* error */
-            break;
-    }
-}
-#endif
 void usbdbg_control(void *buffer, uint8_t request, uint32_t length)
 {
     cmd = (enum usbdbg_cmd) request;
@@ -579,7 +338,7 @@ void usbdbg_control(void *buffer, uint8_t request, uint32_t length)
 
                 // Disable IDE IRQ (re-enabled by pyexec or main).
                 usbdbg_set_irq_enabled(false);
-				wifidbg_set_irq_enabled(false);
+
                 // interrupt running code by raising an exception
                 // pendsv_kbd_intr();
                 mp_obj_exception_clear_traceback(mp_const_ide_interrupt);

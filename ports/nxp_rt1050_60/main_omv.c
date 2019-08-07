@@ -70,9 +70,6 @@
 
 #include "ini.h"
 #include "overlay_manager.h"
-#if MICROPY_HW_WIFIDBG_EN
-#include "wifidbg.h"
-#endif
 void NORETURN __fatal_error(const char *msg);
 void flash_error(int n);
 
@@ -119,6 +116,45 @@ static bool ini_handler_callback_is_true(const char *value)
     if ((value[2] != 'U') && (value[2] != 'u')) return false;
     if ((value[3] != 'E') && (value[3] != 'e')) return false;
     return true;
+}
+
+int ini_handler_callback(void *user, const char *section, const char *name, const char *value)
+{
+    user = user;
+
+    #define MATCH(s, n) ((strcmp(section, (s)) == 0) && (strcmp(name, (n)) == 0))
+
+    if (MATCH("BootSettings", "REPLUart")) {
+        if (ini_handler_callback_is_true(value)) {
+            mp_obj_t args[2] = {
+                MP_OBJ_NEW_SMALL_INT(3), // UART Port
+                MP_OBJ_NEW_SMALL_INT(115200) // Baud Rate
+            };
+
+            MP_STATE_PORT(pyb_stdio_uart) = pyb_uart_type.make_new((mp_obj_t) &pyb_uart_type, MP_ARRAY_SIZE(args), 0, args);
+        }
+    } else {
+        return 0;
+    }
+
+    return 1;
+
+    #undef MATCH
+}
+
+FRESULT apply_settings(const char *path)
+{
+    nlr_buf_t nlr;
+    FRESULT f_res = f_stat(&vfs_fat->fatfs, path, NULL);
+
+    if (f_res == FR_OK) {
+        if (nlr_push(&nlr) == 0) {
+            ini_parse(&vfs_fat->fatfs, path, ini_handler_callback, NULL);
+            nlr_pop();
+        }
+    }
+
+    return f_res;
 }
 
 FRESULT exec_boot_script(const char *path, bool selftest, bool interruptible)
@@ -179,100 +215,6 @@ FRESULT exec_boot_script(const char *path, bool selftest, bool interruptible)
 extern void ProfReset(void);
 __WEAK int OverlaySwitch(uint8_t ovlyNdx) {return 0;}
 __WEAK int OverlaySetToDefault(void) {return 0;}
-#if MICROPY_HW_WIFIDBG_EN
-typedef struct openmv_config {
-    bool wifidbg;
-    wifidbg_config_t wifidbg_config;
-} openmv_config_t;
-
-static int ini_handler_callback(void *user, const char *section, const char *name, const char *value)
-{
-    openmv_config_t *openmv_config = (openmv_config_t *) user;
-
-    #define MATCH(s, n) ((strcmp(section, (s)) == 0) && (strcmp(name, (n)) == 0))
-
-    if (MATCH("BootSettings", "REPLUart")) {
-        if (ini_handler_callback_is_true(value)) {
-            mp_obj_t args[2] = {
-                MP_OBJ_NEW_SMALL_INT(3), // UART Port
-                MP_OBJ_NEW_SMALL_INT(115200) // Baud Rate
-            };
-
-            MP_STATE_PORT(pyb_stdio_uart) = pyb_uart_type.make_new((mp_obj_t) &pyb_uart_type, MP_ARRAY_SIZE(args), 0, args);
-        }
-    } else if (MATCH("BoardConfig", "WiFiDebug")) {
-        openmv_config->wifidbg = ini_is_true(value);
-    } else if (MATCH("WiFiConfig", "Mode")) {
-        openmv_config->wifidbg_config.mode = ini_atoi(value);
-    } else if (MATCH("WiFiConfig", "ClientSSID")) {
-        strncpy(openmv_config->wifidbg_config.client_ssid, value, WINC_MAX_SSID_LEN);
-    } else if (MATCH("WiFiConfig", "ClientKey")) {
-        strncpy(openmv_config->wifidbg_config.client_key,  value, WINC_MAX_PSK_LEN);
-    } else if (MATCH("WiFiConfig", "ClientSecurity")) {
-        openmv_config->wifidbg_config.client_security = ini_atoi(value);
-    } else if (MATCH("WiFiConfig", "ClientChannel")) {
-        openmv_config->wifidbg_config.client_channel = ini_atoi(value);
-    } else if (MATCH("WiFiConfig", "AccessPointSSID")) {
-        strncpy(openmv_config->wifidbg_config.access_point_ssid, value, WINC_MAX_SSID_LEN);
-    } else if (MATCH("WiFiConfig", "AccessPointKey")) {
-        strncpy(openmv_config->wifidbg_config.access_point_key,  value, WINC_MAX_PSK_LEN);
-    } else if (MATCH("WiFiConfig", "AccessPointSecurity")) {
-        openmv_config->wifidbg_config.access_point_security = ini_atoi(value);
-    } else if (MATCH("WiFiConfig", "AccessPointChannel")) {
-        openmv_config->wifidbg_config.access_point_channel = ini_atoi(value);
-    } else if (MATCH("WiFiConfig", "BoardName")) {
-        strncpy(openmv_config->wifidbg_config.board_name,  value, WINC_MAX_BOARD_NAME_LEN);
-    } else if (MATCH("WiFiConfig", "DBGMODE")) {
-        openmv_config->wifidbg_config.dbg_mode= ini_atoi(value);
-    }else {
-        return 0;
-    }
-
-    return 1;
-
-    #undef MATCH
-}
-#else
-	
-int ini_handler_callback(void *user, const char *section, const char *name, const char *value)
-{
-    user = user;
-
-    #define MATCH(s, n) ((strcmp(section, (s)) == 0) && (strcmp(name, (n)) == 0))
-
-    if (MATCH("BootSettings", "REPLUart")) {
-        if (ini_handler_callback_is_true(value)) {
-            mp_obj_t args[2] = {
-                MP_OBJ_NEW_SMALL_INT(3), // UART Port
-                MP_OBJ_NEW_SMALL_INT(115200) // Baud Rate
-            };
-
-            MP_STATE_PORT(pyb_stdio_uart) = pyb_uart_type.make_new((mp_obj_t) &pyb_uart_type, MP_ARRAY_SIZE(args), 0, args);
-        }
-    } else {
-        return 0;
-    }
-
-    return 1;
-
-    #undef MATCH
-}
-
-FRESULT apply_settings(const char *path)
-{
-    nlr_buf_t nlr;
-    FRESULT f_res = f_stat(&vfs_fat->fatfs, path, NULL);
-
-    if (f_res == FR_OK) {
-        if (nlr_push(&nlr) == 0) {
-            ini_parse(&vfs_fat->fatfs, path, ini_handler_callback, NULL);
-            nlr_pop();
-        }
-    }
-
-    return f_res;
-}
-#endif
 
 #define SCnSCB_ACTLR_DISDEFWBUF_Pos         1U                                         /*!< ACTLR: DISDEFWBUF Position */
 #define SCnSCB_ACTLR_DISDEFWBUF_Msk        (1UL << SCnSCB_ACTLR_DISDEFWBUF_Pos)        /*!< ACTLR: DISDEFWBUF Mask */
@@ -301,38 +243,14 @@ int OpenMV_Main(uint32_t first_soft_reset)
     // py_lcd_init0();
     // far InfraRed sensor py_fir_init0();
 //    servo_init();
-#if MICROPY_HW_WIFIDBG_EN
-	static openmv_config_t openmv_config;
-#endif
+
  MainLoop:
     // Run boot script(s)
 	if (!usbdbg_script_ready()) {
 		if (first_soft_reset) {
 			first_soft_reset = 0;
 			exec_boot_script("/selftest.py", true, false);
-	#if MICROPY_HW_WIFIDBG_EN        
-			memset(&openmv_config, 0, sizeof(openmv_config));
-		#if MICROPY_HW_HAS_SDCARD
-			const char *path_out;
-			mp_vfs_mount_t *vfs = mp_vfs_lookup_path("openmv.config", &path_out);
-			if (vfs != NULL){
-				fs_user_mount_t *vfs_fat = MP_OBJ_TO_PTR(vfs->obj);
-				// Parse config, and init wifi if enabled.
-				ini_parse(&vfs_fat->fatfs, "openmv.config", ini_handler_callback, &openmv_config);
-			}
-		#else
-			openmv_config.wifidbg = true;
-			strcpy(openmv_config.wifidbg_config.client_ssid , "mi_t");
-			strcpy(openmv_config.wifidbg_config.client_key, "1234567890");
-			//strcpy(openmv_config.wifidbg_config.client_ssid , "MICR_WIFI");
-			//strcpy(openmv_config.wifidbg_config.client_key, "52062561");
-			openmv_config.wifidbg_config.mode = 0;
-			openmv_config.wifidbg_config.client_security = 0;
-			strcpy(openmv_config.wifidbg_config.board_name, "openmv_rt");	
-		#endif
-	#else
 			apply_settings("/openmv.config");
-	#endif	
 			usbdbg_set_irq_enabled(true);
 			// rocky: pyb's main uses different method to access file system from omv
 			mp_import_stat_t stat = mp_import_stat("main.py");
@@ -354,59 +272,10 @@ int OpenMV_Main(uint32_t first_soft_reset)
 					// In this case, it makes user have to press start button twice to start the script in OpenMV IDE
 					goto cleanup;
 				}
-			}		
-    		// exec_boot_script("/sd/main.py", false, true);
+			}
+			// exec_boot_script("/sd/main.py", false, true);
 		}
 	}
-#if MICROPY_HW_WIFIDBG_EN 	
-	while ((openmv_config.wifidbg == true) && (wifidbg_AP_connected() == true)&& (wifidbg_isconnected() == 0))
-	{
-		wifidbg_connect_IDE();
-		
-	}
-
-	while((openmv_config.wifidbg == true) && (!usbdbg_script_ready()))
-	{
-		if (wifidbg_isconnected() == 0)
-		{
-			ProfReset();
-			wifidbg_init(&openmv_config.wifidbg_config);
-			
-			return 0;
-		}
-	}
-
-	if ((openmv_config.wifidbg == true) && usbdbg_script_ready()) {
-        nlr_buf_t nlr;
-		PRINTF("script ready!\r\n");
-        // execute the script
-        if (nlr_push(&nlr) == 0) {
-			// __set_BASEPRI_MAX(((1 << __NVIC_PRIO_BITS) - 1) << (8 - __NVIC_PRIO_BITS));	// disable pendSV
-#if 0
-			vstr_t *buf = usbdbg_get_script();
-			mp_obj_t code = pyexec_compile_str(buf);	
-            // enable IDE interrupt
-            usbdbg_set_irq_enabled(true);
-            pyexec_exec_code(code);
-#else
-			wifidbg_set_irq_enabled(true);
-			pyexec_str(usbdbg_get_script());
-#endif
-            nlr_pop();
-        } else {
-            mp_obj_print_exception(&mp_plat_print, (mp_obj_t)nlr.ret_val);
-      	}
-	}
-	
-	if (openmv_config.wifidbg == true)
-	{
-		wifidbg_set_irq_enabled(true);
-		ProfReset();
-		return 0;
-    }    
-#else
-	
-#endif	
 
     // If there's no script ready, just re-exec REPL
     while (!usbdbg_script_ready()) {

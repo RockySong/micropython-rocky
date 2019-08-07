@@ -50,7 +50,6 @@ INC += -I$(BUILD)
 INC += -I$(TOP)/lib/cmsis/inc
 INC += -I$(HAL_DIR)
 INC += -I$(HAL_DIR)/drivers
-INC += -I$(TOP)/drivers/m8266
 INC += -I$(HAL_DIR)/utilities
 INC += -I$(HAL_DIR)/utilities/io
 INC += -I$(HAL_DIR)/utilities/log
