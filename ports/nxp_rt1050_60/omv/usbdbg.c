@@ -307,6 +307,7 @@ __WEAK void QTimer_StopAll(void) {}
 #if 1//MICROPY_HW_WIFIDBG_EN
 void wifidbg_data_out(void *buffer, int length)
 {
+#if MICROPY_HW_WIFIDBG_EN	
     switch (cmd) {
         case USBDBG_SCRIPT_EXEC:
             // check if GC is locked before allocating memory for vstr. If GC was locked
@@ -391,16 +392,19 @@ void wifidbg_data_out(void *buffer, int length)
         default: /* error */
             break;
     }
+#endif	
 }
 
 
 void wifidbg_data_in(void *buffer, int length)
 {
+#if MICROPY_HW_WIFIDBG_EN
 	logout("usbdbg_data_in: cmd=%x, buffer=0x%08x, bytes=%d\r\n", cmd, buffer, length);
     switch (cmd) {
         case USBDBG_FW_VERSION: {
 			g_omvIdeConnecting = 1;
 			wifidbg_FlushTxBuffer();
+		
             uint32_t *ver_buf = buffer;
             ver_buf[0] = FIRMWARE_VERSION_MAJOR;
             ver_buf[1] = FIRMWARE_VERSION_MINOR;
@@ -411,6 +415,7 @@ void wifidbg_data_in(void *buffer, int length)
 
         case USBDBG_TX_BUF_LEN: {
 			uint32_t *p = (uint32_t*)buffer;
+			
             p[0] = wifidbg_TxBufGetFilledBytes();
             cmd = USBDBG_NONE;
             break;
@@ -537,6 +542,7 @@ void wifidbg_data_in(void *buffer, int length)
         default: /* error */
             break;
     }
+#endif
 }
 #endif
 void usbdbg_control(void *buffer, uint8_t request, uint32_t length)
@@ -579,7 +585,9 @@ void usbdbg_control(void *buffer, uint8_t request, uint32_t length)
 
                 // Disable IDE IRQ (re-enabled by pyexec or main).
                 usbdbg_set_irq_enabled(false);
+			#if MICROPY_HW_WIFIDBG_EN	
 				wifidbg_set_irq_enabled(false);
+			#endif	
                 // interrupt running code by raising an exception
                 // pendsv_kbd_intr();
                 mp_obj_exception_clear_traceback(mp_const_ide_interrupt);

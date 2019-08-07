@@ -240,7 +240,7 @@
 #define USB_DEVICE_SUBCLASS (0x02)
 #define USB_DEVICE_PROTOCOL (0x01)
 
-#define USB_DEVICE_MAX_POWER (0x32)
+#define USB_DEVICE_MAX_POWER (250)
 
 #define WBVAL(x) ((x) & 0xFF),(((x) >> 8) & 0xFF)
 
