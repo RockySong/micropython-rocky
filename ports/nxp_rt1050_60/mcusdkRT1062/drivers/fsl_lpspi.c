@@ -291,6 +291,9 @@ void LPSPI_SlaveInit(LPSPI_Type *base, const lpspi_slave_config_t *slaveConfig)
 
 #endif /* FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL */
 
+    /* Reset to known status */
+    LPSPI_Reset(base);
+
     LPSPI_SetMasterSlaveMode(base, kLPSPI_Slave);
 
     LPSPI_SetOnePcsPolarity(base, slaveConfig->whichPcs, slaveConfig->pcsActiveHighOrLow);
@@ -930,10 +933,16 @@ status_t LPSPI_MasterTransferBlocking(LPSPI_Type *base, lpspi_transfer_t *transf
     }
     else
     {
+		#if 0 // rocky: this will cause SPI LCD panel get messed
         /* If no RX buffer, then transfer is not complete until transfer complete flag sets */
         while (!(LPSPI_GetStatusFlags(base) & kLPSPI_TransferCompleteFlag))
         {
         }
+		#else
+        while ((LPSPI_GetStatusFlags(base) & kLPSPI_ModuleBusyFlag))
+        {
+        }		
+		#endif
     }
 
     return kStatus_Success;

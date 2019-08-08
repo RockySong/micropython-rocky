@@ -69,6 +69,7 @@
 #define SPI_BaudRatePrescaler_8         ((uint32_t)0x00000006U)
 #define SPI_BaudRatePrescaler_12        ((uint32_t)0x0000000AU)
 #define SPI_BaudRatePrescaler_16        ((uint32_t)0x0000000EU)
+#define SPI_BaudRatePrescaler_24        ((uint32_t)0x00000016U)
 #define SPI_BaudRatePrescaler_32        ((uint32_t)0x0000001EU)
 #define SPI_BaudRatePrescaler_64        ((uint32_t)0x0000003EU)
 #define SPI_BaudRatePrescaler_128       ((uint32_t)0x0000007EU)
@@ -122,8 +123,8 @@ void M8266_pin_init()
 
     IOMUXC_SetPinConfig(M8266WIFI_SPI_CLK_MUX,0x3069);  //0x3069=b0| 00|11| 0|000 01|10 1|00|1 -> Hysteresis Disabled, 100KOhm Pulldown, pull enabled, 100MHz, R0/5=52, Fast Slew Rate
     IOMUXC_SetPinConfig(M8266WIFI_SPI_MOSI_MUX,0x3069);                                                                              
-    IOMUXC_SetPinConfig(M8266WIFI_SPI_MISO_MUX,0x10B0u);
-	
+    IOMUXC_SetPinConfig(M8266WIFI_SPI_MISO_MUX,0x3069);
+	IOMUXC_SetPinConfig(M8266WIFI_SPI_MISO_MUX,0x10B0u);
 #endif
 
 #ifdef BOARD_OMVRT1
@@ -294,9 +295,9 @@ void M8266_host_interface_init()
     lpspi_config.direction											=	kLPSPI_MsbFirst;
     lpspi_config.pinCfg													=	kLPSPI_SdiInSdoOut;
     lpspi_config.dataOutConfig									= kLpspiDataOutRetained;					// kLpspiDataOutTristate;
-    lpspi_config.pcsToSckDelayInNanoSec					=  5; // The delay is (SCKPCS+1)cycles of lpspi_clk. Therefore, at least 5.02ns @ 192MHz
-    lpspi_config.lastSckToPcsDelayInNanoSec			=  5; // The delay is (PCSSCK+1)cycles of lpspi_clk. Therefore, at least 5.02ns @ 192MHz
-    lpspi_config.betweenTransferDelayInNanoSec	= 10; // The delya is (DBT   +2)cycles of lpspi_clk. Therefore, at least 5.02ns @ 192MHz 
+    lpspi_config.pcsToSckDelayInNanoSec					=  160;//5; // The delay is (SCKPCS+1)cycles of lpspi_clk. Therefore, at least 5.02ns @ 192MHz
+    lpspi_config.lastSckToPcsDelayInNanoSec			=  160;//5; // The delay is (PCSSCK+1)cycles of lpspi_clk. Therefore, at least 5.02ns @ 192MHz
+    lpspi_config.betweenTransferDelayInNanoSec	= 160;//10; // The delya is (DBT   +2)cycles of lpspi_clk. Therefore, at least 5.02ns @ 192MHz 
 
     LPSPI_MasterInit(M8266WIFI_INTERFACE_SPI, &lpspi_config, lpspi_clk);
     LPSPI_Enable(M8266WIFI_INTERFACE_SPI, true);
