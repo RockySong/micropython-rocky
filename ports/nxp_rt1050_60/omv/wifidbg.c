@@ -103,7 +103,8 @@ int wifidbg_init(wifidbg_config_t *config)
         if (winc_init(WINC_MODE_STA) != 0) {
             return -1;
         }
-
+		if (M8266_socket_enter_ota(config->client_ssid,config->client_key))
+			return -2;
         // Connect to network.
         if (winc_connect(config->client_ssid,
                          config->client_security,
@@ -123,6 +124,7 @@ int wifidbg_init(wifidbg_config_t *config)
         memcpy(ip_addr, ifconfig.ip_addr, WINC_IP_ADDR_LEN);
         wifidbg_ap_connected = true;
 		LED_DBG_STATE(1);
+		
     } else { // AP Mode
 
         // Initialize WiFi in AP mode.
@@ -476,6 +478,7 @@ void PIT_IRQHandler(void)
     	//if (winc_socket_is_connected() == 0)
     	{
     		close_all_sockets();
+			wd_count = 0;
     		if(usbdbg_script_running())
     		{
     			mp_obj_exception_clear_traceback(MP_STATE_PORT(omv_ide_irq));

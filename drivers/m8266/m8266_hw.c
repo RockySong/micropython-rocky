@@ -16,21 +16,21 @@
 #define M8266WIFI_SPI_nCS_GPIO_PIN								30
 
 
-#define M8266WIFI_nRESET_PORT_MUX								IOMUXC_GPIO_B1_08_GPIO2_IO24
-#define M8266WIFI_nRESET_GPIO									GPIO2
-#define M8266WIFI_nRESET_GPIO_PIN								24
+#define M8266WIFI_nRESET_PORT_MUX								IOMUXC_GPIO_AD_B0_13_GPIO1_IO13
+#define M8266WIFI_nRESET_GPIO									GPIO1
+#define M8266WIFI_nRESET_GPIO_PIN								13
 
 #define M8266WIFI_DBG_IO_PORT_MUX								IOMUXC_GPIO_B1_09_GPIO2_IO25
 #define M8266WIFI_DBG_IO_GPIO									GPIO2
 #define M8266WIFI_DBG_IO_PIN									25
 
-#define M8266WIFI_DBG_IO_PORT_MUX1								IOMUXC_GPIO_AD_B0_13_GPIO1_IO13
-#define M8266WIFI_DBG_IO_GPIO1									GPIO1
-#define M8266WIFI_DBG_IO_PIN1									13
+#define M8266WIFI_DBG_IO_PORT_MUX1								IOMUXC_GPIO_B1_08_GPIO2_IO24
+#define M8266WIFI_DBG_IO_GPIO1									GPIO2
+#define M8266WIFI_DBG_IO_PIN1									24
 
-#define M8266WIFI_INT_IO_PORT_MUX								IOMUXC_GPIO_AD_B0_13_GPIO1_IO13
-#define M8266WIFI_INT_IO_GPIO									GPIO1
-#define M8266WIFI_INT_IO_PIN									13
+#define M8266WIFI_INT_IO_PORT_MUX								IOMUXC_GPIO_B1_08_GPIO2_IO24
+#define M8266WIFI_INT_IO_GPIO									GPIO2
+#define M8266WIFI_INT_IO_PIN									24
 
 
 #else
@@ -123,7 +123,7 @@ void M8266_pin_init()
 
     IOMUXC_SetPinConfig(M8266WIFI_SPI_CLK_MUX,0x3069);  //0x3069=b0| 00|11| 0|000 01|10 1|00|1 -> Hysteresis Disabled, 100KOhm Pulldown, pull enabled, 100MHz, R0/5=52, Fast Slew Rate
     IOMUXC_SetPinConfig(M8266WIFI_SPI_MOSI_MUX,0x3069);                                                                              
-    IOMUXC_SetPinConfig(M8266WIFI_SPI_MISO_MUX,0x3069);
+    //IOMUXC_SetPinConfig(M8266WIFI_SPI_MISO_MUX,0x3069);
 	IOMUXC_SetPinConfig(M8266WIFI_SPI_MISO_MUX,0x10B0u);
 #endif
 
@@ -299,6 +299,10 @@ void M8266_host_interface_init()
     lpspi_config.lastSckToPcsDelayInNanoSec			=  160;//5; // The delay is (PCSSCK+1)cycles of lpspi_clk. Therefore, at least 5.02ns @ 192MHz
     lpspi_config.betweenTransferDelayInNanoSec	= 160;//10; // The delya is (DBT   +2)cycles of lpspi_clk. Therefore, at least 5.02ns @ 192MHz 
 
+	lpspi_config.pcsToSckDelayInNanoSec = 1000000000 / 12000000 * 2;
+    lpspi_config.lastSckToPcsDelayInNanoSec = 1000000000 / 12000000 * 2;
+    lpspi_config.betweenTransferDelayInNanoSec = 1000000000 / 12000000 * 2;
+    
     LPSPI_MasterInit(M8266WIFI_INTERFACE_SPI, &lpspi_config, lpspi_clk);
     LPSPI_Enable(M8266WIFI_INTERFACE_SPI, true);
 	

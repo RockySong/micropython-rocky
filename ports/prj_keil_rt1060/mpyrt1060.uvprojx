@@ -22339,7 +22339,7 @@
               <MiscControls>--diag_suppress=1,39,61,66,68,111,546,188,1035,144,1211,1295,1296 --no_inline</MiscControls>
               <Define>BOARD_OMVRT1,__FPU_PRESENT=1,USB_DEVICE_CONFIG_BUFFER_PROPERTY_CACHEABLE=1,ARM_MATH_CM7,N_THUMB,NDEBUG,CPU_MIMXRT1052DVL6A,MCU_SERIES_RT106,USB_STACK_BM,__BYTE_ORDER__=__ORDER_LITTLE_ENDIAN__,MICROPY_QSTR_EXTRA_POOL=mp_qstr_frozen_const_pool,MICROPY_MODULE_FROZEN_MPY,FFCONF_H='\"oofatfs/ffconf.h\"',HARD_FP,FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL=1,XIP_EXTERNAL_FLASH,MICROPY_HW_WIFIDBG_EN=1</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\;..\..\py;..\..\extmod;..\..\lib;..\..\lib\cmsis\inc;..\nxp_rt1050_60;..\nxp_rt1050_60\boards\omvrt1;..\nxp_rt1050_60\mcusdkRT1062\;..\nxp_rt1050_60\mcusdkRT1062\drivers;..\nxp_rt1050_60\mcusdkRT1062\utilities;..\nxp_rt1050_60\mcusdkRT1062\utilities\io;..\nxp_rt1050_60\cmsis;..\nxp_rt1050_60\build-omvrt1;..\nxp_rt1050_60\usb_cdc_msc;..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\include;..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\osa;..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\device;..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\phy;..\nxp_rt1050_60\sdmmc;..\nxp_rt1050_60\omv;..\nxp_rt1050_60\omv\py;..\nxp_rt1050_60\omv\img;..\nxp_rt1050_60\omv\nn;..\..\lib\oofatfs;..\..\lib\mp-readline;..\..\drivers\m8266;..\..\drivers\m8266\lib;..\nxp_rt1050_60\mcusdkRT1062\utilities\log;..\nxp_rt1050_60\mcusdkRT1062\utilities\str</IncludePath>
+              <IncludePath>..\..\;..\..\py;..\..\extmod;..\..\lib;..\..\lib\cmsis\inc;..\nxp_rt1050_60;..\nxp_rt1050_60\boards\omvrt1;..\nxp_rt1050_60\mcusdkRT1062\;..\nxp_rt1050_60\mcusdkRT1062\drivers;..\nxp_rt1050_60\mcusdkRT1062\utilities;..\nxp_rt1050_60\mcusdkRT1062\utilities\io;..\nxp_rt1050_60\cmsis;..\nxp_rt1050_60\build-omvrt1;..\nxp_rt1050_60\usb_cdc_msc;..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\include;..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\osa;..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\device;..\nxp_rt1050_60\mcusdkRT1062\middleware\sdkusb\phy;..\nxp_rt1050_60\sdmmc;..\nxp_rt1050_60\omv;..\nxp_rt1050_60\omv\py;..\nxp_rt1050_60\omv\img;..\nxp_rt1050_60\omv\nn;..\..\lib\oofatfs;..\..\lib\mp-readline;..\..\drivers\m8266;..\..\drivers\m8266\lib_new;..\nxp_rt1050_60\mcusdkRT1062\utilities\log;..\nxp_rt1050_60\mcusdkRT1062\utilities\str</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -30296,7 +30296,7 @@
                   <RVCTZI>0</RVCTZI>
                   <RVCTOtherData>0</RVCTOtherData>
                   <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>0</IncludeInBuild>
+                  <IncludeInBuild>1</IncludeInBuild>
                   <AlwaysBuild>2</AlwaysBuild>
                   <GenerateAssemblyFile>2</GenerateAssemblyFile>
                   <AssembleAssemblyFile>2</AssembleAssemblyFile>
@@ -30318,6 +30318,25 @@
               <FileName>M8266WIFIDrv_iMXRT10xx.lib</FileName>
               <FileType>4</FileType>
               <FilePath>..\..\drivers\m8266\lib\M8266WIFIDrv_iMXRT10xx.lib</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>0</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds/>
+              </FileOption>
             </File>
           </Files>
         </Group>
