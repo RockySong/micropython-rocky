@@ -13,12 +13,17 @@ How To build:
 ------------
 
     Build consists of C part and micropython part, both are straightforward.
-    (C part) open KEIL project (./ports/prj_keil_omvnndemo/mpyrt1060_evk.uvprojx), build and download.
+    (C part) open KEIL project (./ports/prj_keil_omvnndemo/mpyrt1060_evk.uvprojx), build and download. 
+      If you don't have dev tool, you can also work directly with the pre-built firmware:
+      extract the ./firmware/mpyrt_mfn_qspi.7z to get a hex file, then use NXP-MCUBootUtility
+      （https://github.com/JayHeng/NXP-MCUBootUtility）. If you use it, you need to put SW7 to "0001"
     (Micropython part) Get a TF card, copy "./ports/prj_keil_omvnndemo/nndemo/main.py" to the ROOT directory 
     of TF card, insert TF card into the i.mx RT1060 EVK board. Power on the board, wait for about 3-5 seconds, 
     then the demo GUI shows, you can play with it now :)
     Remark: Keil version should >= 5.20, and install cmsis-pack for i.mx rt1060.
-    
+Work directly with prebuilt firmware:
+------------
+    extract the ./firmware/mpyrt_mfn_qspi.7z
 Contents of "main.py":
 ------------
 
@@ -63,6 +68,10 @@ How to play with the demo GUI
     After the face is added, the demo returns to recognization mode. If your face is detected again, the demo 
     runs MobileFaceNet model to get the feature vector, calculate the vector angles among all saved vectors, 
     find the nearest one and if it lies within the sensitivity threshold, treat it as the recognized result.
+    
+    (new from 2019.11.06) You can switch face tracking mode and fixed face box mode. Default is the face tracking
+    mode: detects the face then recognize the detected area; fixed box mode: a box is shown in the center, you 
+    need to put your face inside the box.
     
     To improve detection rate, keep reasonable ambient lighting and distance to the lens, so your face is not
     too big or too small, nor too bright or too dark. You don't have to put your face in the center of the lens.
