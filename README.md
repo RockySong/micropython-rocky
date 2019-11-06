@@ -11,7 +11,7 @@ There is a video for the demo: http://bbs.eeworld.com.cn/huodong/NXP_iMXVideo_20
 
 How To setup
 ------------
-
+    Clone or download zip. If you clone, please check out branch "mfn_demo"
     Setup consists of C part and micropython part, both are straightforward.
     (C part) extract the ./firmware/mpyrt_mfn_qspi.7z to get a hex file, then use a programming tool, such as
     NXP-MCUBootUtility（https://github.com/JayHeng/NXP-MCUBootUtility）. If you use it, you need to put SW7 
@@ -22,8 +22,9 @@ How To setup
     Remark: Keil version should >= 5.20, and install cmsis-pack for i.mx rt1060.
 Build from source code with KEIL
 ------------
-    open KEIL project (./ports/prj_keil_omvnndemo/mpyrt1060_evk.uvprojx), build and download. 
-      If you don't have dev tool, you can also work directly with the pre-built firmware:
+    open KEIL project (./ports/prj_keil_omvnndemo/mpyrt1060_evk.uvprojx), build and download (defaults to J-Link). 
+    Make sure you've installed i.MX RT1060 pack in KEIL.
+    If you don't have dev tool, you can also work directly with the pre-built firmware, see "How to setup"
       
 Contents of "main.py"
 ------------
