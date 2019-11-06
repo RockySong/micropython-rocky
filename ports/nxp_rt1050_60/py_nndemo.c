@@ -109,7 +109,7 @@ uint8_t *ResizeRgb888(uint8_t *pIn, int w0, int h0, int w1, int h1) {
 }
 
 
-
+extern uint16_t MakeOmvCol(uint32_t r, uint32_t g, uint32_t b);
 extern void ShowIcons(void);
 extern int mfn_main(void);
 extern void RunMfn(void *pPix);
@@ -151,14 +151,23 @@ mp_obj_t RunMFN(uint8_t isFixed) {
 	
 	if (isFixed)
 	{
-		y = (pImg->h - 128) / 2 , x = (pImg->w - 128) / 2;
+		int boxW = 96;
+		uint32_t col;
+		y = (pImg->h - boxW) / 2 , x = (pImg->w - boxW) / 2;
 		uint16_t *pIn = (uint16_t*)pImg->pixels + y * pImg->w + x;
 		uint8_t *pOut = (uint8_t*) s_gray.ary;
-		CSI2Image(pOut, 128, 128, pIn, pImg->w, pImg->h, 1);
-		pOut = ResizeRgb888(pOut, 128, 128, 64, 64);
+		CSI2Image(pOut, boxW, boxW, pIn, pImg->w, pImg->h, 1);
+		if (boxW != 64)
+			pOut = ResizeRgb888(pOut, boxW, boxW, 64, 64);
 		RunMfn(pOut);
-		m_free(pOut);
-		imlib_draw_rectangle(pImg, x - 2, y - 2, 128 + 4, 128 + 4, 0xFFFFFFFF, 2, 0);
+		if (boxW != 64)
+			m_free(pOut);
+		if (cnt & 1)
+			col = MakeOmvCol(64, 64, 64);
+		else
+			col = MakeOmvCol(192, 192, 192);
+		imlib_draw_string(pImg, x - 2, y - 20, "FACE HERE", col, 2, 1/*x_spacing*/, 1/*y_spacing*/, 0);
+		imlib_draw_rectangle(pImg, x - 2, y - 2, boxW + 4, boxW + 4, col, 2, 0);
 	} else {
 		uint8_t isRGB565 = 0;
 		
@@ -196,10 +205,11 @@ mp_obj_t RunMFN(uint8_t isFixed) {
 		int objCnt = array_length(objects_array);
 		if (objCnt > 0) {
 			rectangle_t *r = array_at(objects_array, 0);
+			r->y -= 2;
 			mp_printf(&mp_plat_print, "x=%d,y=%d,w=%d,h=%d\r\n", r->x, r->y, r->w, r->h);
 			if (isRGB565) {
 				// clip image
-				int dD = (r->w + r->h) * 5 / 100 / 2;
+				int dD = (r->w + r->h) * 10 / 100 / 2;
 				if (r->x >= dD && r->x + dD < pImg->w && r->h >= dD && r->y + dD < pImg->h) {
 					int clipW = r->w + 2 *dD, tmp;
 					uint16_t *pIn = (uint16_t*)pImg->pixels + (r->y - dD) * pImg->w + (r->x - dD);
@@ -216,6 +226,7 @@ mp_obj_t RunMFN(uint8_t isFixed) {
 		array_free(objects_array);
 	}
 	DrawMfnOSD(pImg, &roi);
+	cnt++;
 	return image;
 }
 
@@ -245,7 +256,7 @@ STATIC const mp_arg_t nndemo_show_allowed_args[] = {
     { MP_QSTR_index,   MP_ARG_INT, {.u_int = 0} },
     { MP_QSTR_data,    MP_ARG_INT, {.u_int = 0} },
 };
-
+extern volatile uint8_t g_isFixed;
 STATIC mp_obj_t nndemo_show(mp_uint_t n_args, const mp_obj_t *pos_args, mp_map_t *kw_args) {
     // parse args
     mp_arg_val_t args[MP_ARRAY_SIZE(nndemo_show_allowed_args)];
@@ -253,7 +264,7 @@ STATIC mp_obj_t nndemo_show(mp_uint_t n_args, const mp_obj_t *pos_args, mp_map_t
 	
 	switch(args[0].u_int) {
 		case 0:
-			RunMFN(args[1].u_int != 0);
+			RunMFN(g_isFixed/*args[1].u_int != 0*/);
 			if (args[1].u_int == 1) {
 				ShowIcons();
 			}

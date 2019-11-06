@@ -170,6 +170,7 @@ volatile uint32_t msTicks;
 uint32_t LcdRotateWidth = 320;
 uint32_t LcdRotateHeight = 240;
 uint32_t g_status;	// 0=normal, 1=to add, 2 = to del
+volatile uint8_t g_isFixed;
 
 uint8_t g_borderRGB[3] = {255, 255, 255};
 extern void SysTick_Handler(void);
@@ -242,6 +243,9 @@ void Reserved169_IRQHandler(void)
 					g_dThsld -= 2.0f;
 				else if (cmd == 11)
 					g_dThsld = 0;
+				else if (cmd == 13) {
+					g_isFixed = !g_isFixed;
+				}
 				if (g_dThsld > 20)
 					g_dThsld = 20;
 				else if (g_dThsld < -18)
@@ -258,7 +262,7 @@ void Reserved169_IRQHandler(void)
 			}
 			else if (cmd == 3) {
 				if (g_status == 1) {
-					g_vtToEnroll = 4000;
+					g_vtToEnroll = 3200;
 					g_isToEnroll = 1;
 				}
 				else if (g_status == 2)
@@ -403,14 +407,16 @@ void AppendFace(void *pvImg)
 void ShowIcons(void)
 {
 	int i;
-	for (int i=0; i<4; i++) {
+	for (i=0; i<4; i++) {
 		CopyImage2LCD((uint16_t *)s_frameBuffer[0], 2, 2 + i * 68, 64, 64, (uint8_t*)cg_btns[i], 1);
 		CopyImage2LCD((uint16_t *)s_frameBuffer[1], 2, 2 + i * 68, 64, 64, (uint8_t*)cg_btns[i], 1);	
 	}
-	for (int i=4; i<7; i++) {
+	for (i=4; i<7; i++) {
 		CopyImage2LCD((uint16_t *)s_frameBuffer[0], 479 - 68, 2 + (i - 4) * 68, 64, 64, (uint8_t*)cg_btns[i], 1);
 		CopyImage2LCD((uint16_t *)s_frameBuffer[1], 479 - 68, 2 + (i - 4) * 68, 64, 64, (uint8_t*)cg_btns[i], 1);	
-	}		
+	}
+	CopyImage2LCD((uint16_t *)s_frameBuffer[0], 479 - 68, 2 + (i - 4) * 68, 64, 64, (uint8_t*)cg_btns[i + !g_isFixed], 1);
+	CopyImage2LCD((uint16_t *)s_frameBuffer[1], 479 - 68, 2 + (i - 4) * 68, 64, 64, (uint8_t*)cg_btns[i + !g_isFixed], 1);
 }
 
 extern const unsigned char cg_btns[][64*64*3];
@@ -423,7 +429,8 @@ void RunMfn(void *pPix)
 		g_isToEnroll = 0;
 	}
 	
-
+	if (g_vtToEnroll)
+		return;
 	
 	signed char *pRet;
 	pRet = (signed char *) RunModel(pPix, 128);
@@ -434,7 +441,7 @@ void RunMfn(void *pPix)
 		if (g_db[i].tagWord == -1)
 			continue;
 		float min_temp = GetAngle((signed char*)pRet,(signed char*)g_db[i].vec);
-		if(min >= min_temp && min_temp <= 45 + g_dThsld)
+		if(min >= min_temp && min_temp <= 51 - 6 * g_isFixed + g_dThsld)
 		{
 			min = min_temp;
 			g_label = i;

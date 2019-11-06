@@ -57,9 +57,9 @@ def DumpWt(a, wordLen, shfLeft, sublineLen = 5, sublineSep = [' ', '\n']):
 
 
 def MakeButtons():
-    sPrefix = r'D:\BL_MICR\_sdk2\180714_SDK241_RT1050\boards\evkbimxrt1050\demo_apps\mfn_cmsisnn\btn_'
+    sPrefix = r'.\btn_'
     lst = [sPrefix + 'Add', sPrefix + 'Del', sPrefix + 'Yes', sPrefix + 'No', sPrefix + 'SnsAdd', sPrefix + 'SnsZero', \
-           sPrefix + 'SnsSub']
+           sPrefix + 'SnsSub', sPrefix + 'Track', sPrefix + 'TrackOn']
     sOut = 'const unsigned char cg_btns[%d][64*64*3] = {\n\t' % len(lst)
     for i, sFile in enumerate(lst):
         img = Image.open(sFile + '.bmp')
