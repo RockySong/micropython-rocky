@@ -9,22 +9,23 @@ There is a video for the demo: http://bbs.eeworld.com.cn/huodong/NXP_iMXVideo_20
 "基于恩智浦i.MX RT运行的现代大型神经网络：面部识别系统", or directly to http://cloud.eeworld.com.cn///courselesson/4928/2019222035909-ob54pd.mp4.mp4
 
 
-How To build:
+How To setup
 ------------
 
-    Build consists of C part and micropython part, both are straightforward.
-    (C part) open KEIL project (./ports/prj_keil_omvnndemo/mpyrt1060_evk.uvprojx), build and download. 
-      If you don't have dev tool, you can also work directly with the pre-built firmware:
-      extract the ./firmware/mpyrt_mfn_qspi.7z to get a hex file, then use NXP-MCUBootUtility
-      （https://github.com/JayHeng/NXP-MCUBootUtility）. If you use it, you need to put SW7 to "0001"
+    Setup consists of C part and micropython part, both are straightforward.
+    (C part) extract the ./firmware/mpyrt_mfn_qspi.7z to get a hex file, then use a programming tool, such as
+    NXP-MCUBootUtility（https://github.com/JayHeng/NXP-MCUBootUtility）. If you use it, you need to put SW7 
+    to "0001". Also note that if you've used KEIL/IAR to flashed your board, MAKE SURE to ERASE them.
     (Micropython part) Get a TF card, copy "./ports/prj_keil_omvnndemo/nndemo/main.py" to the ROOT directory 
     of TF card, insert TF card into the i.mx RT1060 EVK board. Power on the board, wait for about 3-5 seconds, 
     then the demo GUI shows, you can play with it now :)
     Remark: Keil version should >= 5.20, and install cmsis-pack for i.mx rt1060.
-Work directly with prebuilt firmware:
+Build from source code with KEIL
 ------------
-    extract the ./firmware/mpyrt_mfn_qspi.7z
-Contents of "main.py":
+    open KEIL project (./ports/prj_keil_omvnndemo/mpyrt1060_evk.uvprojx), build and download. 
+      If you don't have dev tool, you can also work directly with the pre-built firmware:
+      
+Contents of "main.py"
 ------------
 
     import sensor, time, image, nndemo
