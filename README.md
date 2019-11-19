@@ -13,22 +13,21 @@ How To setup
 ------------
     Clone or download zip. If you clone, please check out branch "mfn_demo"
     Setup consists of C part and micropython part, both are straightforward.
-    (C part) extract the ./firmware/mpyrt_mfn_qspi.7z to get a hex file, then use a programming tool, such as
+    (C part) extract the ./ports/prj_keil_omvnndemo/firmware/mpyrt_mfn_qspi.7z to get a hex file, 
+    then use a programming tool, such as
     NXP-MCUBootUtility（https://github.com/JayHeng/NXP-MCUBootUtility）. If you use it, you need to put SW7 
     to "0001". Also note that if you've used KEIL/IAR to flashed your board, MAKE SURE to ERASE them.
     (Micropython part) Get a TF card, copy "./ports/prj_keil_omvnndemo/nndemo/main.py" to the ROOT directory 
     of TF card, insert TF card into the i.mx RT1060 EVK board. Power on the board, wait for about 3-5 seconds, 
     then the demo GUI shows, you can play with it now :)
-    Remark: Keil version should >= 5.20, and install cmsis-pack for i.mx rt1060.
 Build from source code with KEIL
 ------------
     open KEIL project (./ports/prj_keil_omvnndemo/mpyrt1060_evk.uvprojx), build and download (defaults to J-Link). 
     Make sure you've installed i.MX RT1060 pack in KEIL.
     If you don't have dev tool, you can also work directly with the pre-built firmware, see "How to setup"
-      
+    Remark: Keil version should >= 5.20, and install cmsis-pack for i.mx rt1060.
 Contents of "main.py"
 ------------
-
     import sensor, time, image, nndemo
     sensor.reset()
     # Sensor settings
