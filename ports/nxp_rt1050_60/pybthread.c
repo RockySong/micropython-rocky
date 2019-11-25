@@ -110,6 +110,7 @@ STATIC void pyb_thread_terminate(void) {
     }
     // thread switch will occur after we enable irqs
     SCB->ICSR = SCB_ICSR_PENDSVSET_Msk;
+	MPPORT_SEND_SIGNAL(mpportsignal_longjmp);
     enable_irq(irq_state);
     // should not return
     __fatal_error("could not terminate");

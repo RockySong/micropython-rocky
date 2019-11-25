@@ -1,10 +1,15 @@
 #! armcc -E
 
 #define STACK_SIZE 0x2000
-#define ROM_BASE	0x20200000
-#define IVT_BASE	0x20201000
+#define ROM_BASE	0x60000000
+#define IVT_BASE	0x60001000
 #define ITCM_SIZE	32*1024
 #define DTCM_SIZE	(512-32)*1024
+#define OCRAM_SIZE	512*1024
+
+#define OMV_MAIN_FB_SIZE	601*1024 //301*1024
+#define OMV_FB_ALLOC_SIZE	423*1024 //83*1024
+#define OMV_JPEG_FB_SIZE    48*1024
 
 ; must use "VECTOR_RAM", "RW_m_data", "VECTOR_ROM" as names to work with "InstallIRQHandler()" API
 
@@ -27,7 +32,7 @@ LR_XIP_FLASH_IVT IVT_BASE {
 	}
 }
 
-LR_XIP_FLASH ROM_BASE + 0x2000 512*1024-0x2000{
+LR_XIP_FLASH ROM_BASE + 0x2000 {
 	VECTOR_ROM +0 0x400 { ; vector table
 		* (RESET,+FIRST)
 		* (InRoot$$Section)
@@ -35,10 +40,6 @@ LR_XIP_FLASH ROM_BASE + 0x2000 512*1024-0x2000{
 	
 	TEXT_ROM +0  { ; load address = execution address
 		.ANY (+RO)
-		__*.o (+RO)
-		anon*.o (+RO)
-		startup*.o (+RO)
-		system_*.o (+RO)
 	}
 
 	VECTOR_RAM 0 EMPTY 1*1024 { ; RAM vector region (in RAMX)
@@ -48,6 +49,9 @@ LR_XIP_FLASH ROM_BASE + 0x2000 512*1024-0x2000{
 		// nlrthumb.o (+RO)
 		// framebuffer.o fb_alloc.o (+RO)
 		gc.o rt_mem*.o (+RO)
+		collections.o array.o xalloc.o (+RO)
+		arm_nn_mat*.o (+RO)
+
 		// obj.o objarray.o objfloat.o objlist.o objobject.o  (+RO)
 		// objfun.o  nativeglue.o malloc.o (+RO)	
 		// objdict.o  modmath.o modarray.o modbuiltins.o modmicropython.o map.o (+RO)
@@ -60,24 +64,71 @@ LR_XIP_FLASH ROM_BASE + 0x2000 512*1024-0x2000{
 	}
 	ARM_LIB_STACK 0x6000 - STACK_SIZE EMPTY STACK_SIZE {}
 	
+	OVERLAY_CODE_Start 0x6000 EMPTY 0 {}
+	
+	OVERLAY_CODE_BLOB +0 OVERLAY 8*1024 {
+		blob.o (+RO)
+	}
+	
+	OVERLAY_CODE_JPEG +0 OVERLAY 8*1024 {
+		jpeg.o (+RO)
+	}
+	
     DTCM_START_PLACEHOLDER 0x20000000 EMPTY 0 {}
 	
 	QH_BUFFER_LAYOUT +0 {
 		* (.qh_buffer_2kalign)
 	}
-
-	ER_DTCM +0 {
-		.ANY (+RW, +ZI)
-		sincos_tab.o (+RO)
+	
+	OVERLAY_HAAR +0 OVERLAY {
+		haar.o integral_mw.o (+RO)
+	}
+	
+	
+	OVERLAY_LAB_TAB +0  OVERLAY {
+		lab_tab.o (+RO)
+		xyz_tab.o (+RO)
+	}	
+	
+	OVERLAY_YUV_TAB +0 OVERLAY 196*1024 {
+		yuv_tab.o  (+RO)
+		* (.jpeg_tab)
+	}	
+	
+	
+	OVERLAY_FLASHPGM +0 OVERLAY 8*1024 {
 		fsl_flexspi.o flash_hyper.o (+RO)
-		* (.ram_const)
+	}	
+	
+	ER_DTCM +0 {
+		fsl_sd*.o (+RW, +ZI)
+		usb*.o (+RW, +ZI)
+		virtual_com.o (+RW, +ZI)
+		sensor.o (+RW, +ZI)
 	}
 	
 	ARM_LIB_HEAP +0 EMPTY 0x100 {} ; Heap region growing up
-	
 	MPY_HEAP_START +0 EMPTY 4 {}
 	
 	DTCM_END 0x20078000 EMPTY 4 {}
 	
+	SDRAM_RW_START_PLACEHOLDER 0x80400000 EMPTY 0 {}
+	OMV_MAIN_FB +0 EMPTY OMV_MAIN_FB_SIZE + OMV_FB_ALLOC_SIZE{}
+	OMV_FB_END +0 EMPTY 16 {}	
+	ER_MAIN_RW +0 {
+		.ANY (+RW, +ZI)
+		* (.jpeg_buf)
+		sincos_tab.o (+RO)
+		usbd_msc_storage.o (+RW, +ZI)
+		* (.ram_const)
+	}
+	SDRAM_RW_END 0x80540000 EMPTY 4 {}
+	; <<<
+	
+	; >>> SDRAM NCACHAE >>>
+	SDRAM_NC_START 0x81C00000 EMPTY 0 {}
+	ER_LCD_FB +0 UNINIT 1024*1024  {
+		* (.lcd_fb)
+	}
 }
 

@@ -1,8 +1,8 @@
 #! armcc -E
 
 #define STACK_SIZE 0x2000
-#define ROM_BASE	0x60000000
-#define IVT_BASE	0x60001000
+#define ROM_BASE	0x80000000
+#define IVT_BASE	0x80001000
 #define ITCM_SIZE	32*1024
 #define DTCM_SIZE	(512-32)*1024
 #define OCRAM_SIZE	0
@@ -68,11 +68,11 @@ LR_XIP_FLASH ROM_BASE + 0x2000 {
 	OVERLAY_CODE_BLOB +0 OVERLAY 8*1024 {
 		blob.o (+RO)
 	}
-	
+
 	OVERLAY_CODE_JPEG +0 OVERLAY 8*1024 {
 		jpeg.o (+RO)
-	}
-	
+	}	
+
     DTCM_START_PLACEHOLDER 0x20000000 EMPTY 0 {}
 	
 	QH_BUFFER_LAYOUT +0 {
@@ -88,22 +88,16 @@ LR_XIP_FLASH ROM_BASE + 0x2000 {
 		lab_tab.o (+RO)
 		xyz_tab.o (+RO)
 	}	
-	
+
 	OVERLAY_YUV_TAB +0 OVERLAY 196*1024 {
 		yuv_tab.o  (+RO)
 		* (.jpeg_tab)
 	}	
-	
-	
-	OVERLAY_FLASHPGM +0 OVERLAY 8*1024 {
-		fsl_flexspi.o flash_hyper.o (+RO)
-	}	
-	
+
 	ER_DTCM +0 {
 		.ANY (+RW, +ZI)
 		* (.jpeg_buf)
 		sincos_tab.o (+RO)
-		virtual_com.o (+RW +ZI)
 		* (.ram_const)
 	}
 	
@@ -113,8 +107,8 @@ LR_XIP_FLASH ROM_BASE + 0x2000 {
 	OMV_MAIN_FB +0 EMPTY OMV_MAIN_FB_SIZE  + OMV_FB_ALLOC_SIZE {}
 //	OMV_FB_ALLOC +0 EMPTY OMV_FB_ALLOC_SIZE {}
 	OMV_FB_END +0 EMPTY 16 {}	
-
-	MPY_HEAP_START +0 EMPTY 4 {
+	
+	MPY_HEAP_START 0x80200000 EMPTY 4 {
 	}	
 
 	; <<<
@@ -123,16 +117,9 @@ LR_XIP_FLASH ROM_BASE + 0x2000 {
 	ER_LCD_FB 0x81C00000 UNINIT 1024*1024  {
 		* (.lcd_fb)
 	}
-		
+	
 
 	;RW_SDRAM 0xA0100000 EMPTY UNINIT (32-1)*1024*1024  {
 	;}
 	; <<<
-}
-
-LR_TABs IVT_BASE+0x160000
-{
-	ER_TABS +0 {
-		rgb2rgb*.o (+RO)
-	}
 }

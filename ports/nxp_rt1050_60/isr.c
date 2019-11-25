@@ -64,7 +64,7 @@
   *
   ******************************************************************************
   */
-
+#define _ISR_C_
 #include <stdio.h>
 
 #include "py/mpstate.h"
@@ -551,8 +551,10 @@ void SysTick_C_Handler(ExceptionRegisters_t *regs) {
 	#endif	
 
     uwTick += 1;
+	#ifdef OMVRT1
 	RPM_TickHandler();
 	SRPM_TickHandler();
+	#endif
 	SwTimerHandler();
 	
 	SDMMC_Tick_Handler();
@@ -580,7 +582,7 @@ void SysTick_C_Handler(ExceptionRegisters_t *regs) {
     if (pyb_thread_enabled) {
         if (pyb_thread_cur->timeslice == 0) {
             if (pyb_thread_cur->run_next != pyb_thread_cur) {
-                SCB->ICSR = SCB_ICSR_PENDSVSET_Msk;
+				MPPORT_SEND_SIGNAL(mpportsignal_longjmp);
             }
         } else {
             --pyb_thread_cur->timeslice;

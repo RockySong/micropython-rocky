@@ -701,6 +701,13 @@ int TestCacheBug(void)
 }	
 extern uint16_t g_uid[4];	
 
+__WEAK void dcmc_init0(void){}
+__WEAK void i2c_init0(void){}
+__WEAK void pwm_init0(void){}
+__WEAK void rpm_init0(void){}
+__WEAK void spi_init0(void){}
+__WEAK void srpm_init0(void){}
+
 int main(void) {
 	snvs_hp_rtc_config_t snvsRtcConfig;
 	snvs_hp_rtc_datetime_t rtcDate;
@@ -966,15 +973,15 @@ soft_reset:
 	    }
     }
 #endif
-
+	
 #if MICROPY_HW_HAS_MMA7660
     // MMA accel: init and reset
     accel_init();
 #endif
-pwm_init0();
-rpm_init0();
-dcmc_init0();
-srpm_init0();
+	pwm_init0();
+	rpm_init0();
+	dcmc_init0();
+	srpm_init0();
 #if MICROPY_HW_ENABLE_SERVO
     // servo
 	

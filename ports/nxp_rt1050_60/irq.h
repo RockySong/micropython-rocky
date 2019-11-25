@@ -142,6 +142,19 @@ MP_DECLARE_CONST_FUN_OBJ_0(pyb_irq_stats_obj);
 #define IRQ_PRI_PENDSV          15
 #define IRQ_SUBPRI_PENDSV                   0
 
+#ifndef _ISR_C_
+extern 
+#endif
+volatile uint32_t s_mpySignalCode;
 
-
+#define MPPORT_SIGNAL_IRQn  Reserved86_IRQn
+#define MPPORT_SIGNAL_HANDLER Reserved86_IRQHandler
+typedef enum {
+	mpportsignal_tick = 0,
+	mpportsignal_longjmp = 1,
+}MpPortSignalCode_t;
+#define MPPORT_SEND_SIGNAL(signalCode) do {\
+	s_mpySignalCode = (signalCode) ;  \
+	NVIC->STIR = MPPORT_SIGNAL_IRQn; \
+}while(0)
 

@@ -43,6 +43,8 @@ void *pendsv_object;
 void pendsv_init(void) {
     // set PendSV interrupt at lowest priority
     HAL_NVIC_SetPriority(PendSV_IRQn, IRQ_PRI_PENDSV, IRQ_SUBPRI_PENDSV);
+	HAL_NVIC_SetPriority(MPPORT_SIGNAL_IRQn, IRQ_PRI_PENDSV - 1, IRQ_SUBPRI_PENDSV);
+	NVIC_EnableIRQ(MPPORT_SIGNAL_IRQn);
 }
 
 // Call this function to raise a pending exception during an interrupt.
@@ -64,7 +66,7 @@ void pendsv_kbd_intr(void) {
     } else {
         MP_STATE_VM(mp_pending_exception) = MP_OBJ_NULL;
         pendsv_object = &MP_STATE_VM(mp_kbd_exception);
-        SCB->ICSR = SCB_ICSR_PENDSVSET_Msk;
+		MPPORT_SEND_SIGNAL(mpportsignal_longjmp);
     }
 }
 
@@ -79,7 +81,7 @@ void pendsv_intr(void *pException) {
     } else {
         MP_STATE_VM(mp_pending_exception) = MP_OBJ_NULL;
         pendsv_object = &MP_STATE_VM(mp_kbd_exception);
-        SCB->ICSR = SCB_ICSR_PENDSVSET_Msk;
+        MPPORT_SEND_SIGNAL(mpportsignal_longjmp);
     }
 }
 
@@ -101,7 +103,7 @@ void pendsv_nlr_jump(void *o) {
     } else {
         MP_STATE_VM(mp_pending_exception) = MP_OBJ_NULL;
         pendsv_object = o;
-        SCB->ICSR = SCB_ICSR_PENDSVSET_Msk;
+		MPPORT_SEND_SIGNAL(mpportsignal_longjmp);
     }
 }
 
@@ -109,12 +111,12 @@ void pendsv_nlr_jump(void *o) {
 void pendsv_nlr_jump_hard(void *o) {
     MP_STATE_VM(mp_pending_exception) = MP_OBJ_NULL;
     pendsv_object = o;
-    SCB->ICSR = SCB_ICSR_PENDSVSET_Msk;
+	MPPORT_SEND_SIGNAL(mpportsignal_longjmp);
 }
 
 
 #if defined (__CC_ARM)
-__asm void PendSV_Handler(void) {
+__asm void NativeNLR(void) {
     // re-jig the stack so that when we return from this interrupt handler
     // it returns instead to nlr_jump with argument pendsv_object
     // note that stack has a different layout if DEBUG is enabled
@@ -202,7 +204,7 @@ no_obj                    // pendsv_object==NULL
 #elif defined (__ICCARM__)
 	// implemented in pendsv_iar.S
 #else
-__attribute__((naked)) void PendSV_Handler(void) {
+__attribute__((naked)) void NativeNLR(void) {
     // re-jig the stack so that when we return from this interrupt handler
     // it returns instead to nlr_jump with argument pendsv_object
     // note that stack has a different layout if DEBUG is enabled
@@ -293,3 +295,24 @@ __attribute__((naked)) void PendSV_Handler(void) {
     */
 }
 #endif	// #ifdef __CC_ARM
+
+typedef void(*pfnIrqHandler_t)(void);
+extern void SysTick_Handler(void);
+const pfnIrqHandler_t cs_signalMap[] = {
+	SysTick_Handler,
+	NativeNLR,
+};
+
+#ifdef __CC_ARM
+// "Borrow" this reserved IRQ slot to dispatch nlr_jump and other async signals
+__asm void MPPORT_SIGNAL_HANDLER(void) /* naked */
+{
+	IMPORT s_mpySignalCode
+	IMPORT cs_signalMap
+	LDR   R0, =s_mpySignalCode
+	LDR   R1, =cs_signalMap
+	LDR   R0,  [R0]
+	LDR   R1, [R1, R0, LSL #2]
+	BX	  R1
+}
+#endif

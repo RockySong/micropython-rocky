@@ -214,6 +214,7 @@ extern const struct _mp_obj_module_t gif_module;
 #endif
 
 #if defined(OMV_MPY_ONLY)
+	#ifdef BOARD_OMVRT1
 	#define MICROPY_PORT_BUILTIN_MODULES \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_umachine), (mp_obj_t)&machine_module }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_pyb), (mp_obj_t)&pyb_module }, \
@@ -222,6 +223,15 @@ extern const struct _mp_obj_module_t gif_module;
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_utime), (mp_obj_t)&mp_module_utime }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_time), (mp_obj_t)&time_module }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_lcd),  (mp_obj_t)&lcd_module },
+	#else
+	#define MICROPY_PORT_BUILTIN_MODULES \
+	{ MP_OBJ_NEW_QSTR(MP_QSTR_umachine), (mp_obj_t)&machine_module }, \
+	{ MP_OBJ_NEW_QSTR(MP_QSTR_pyb), (mp_obj_t)&pyb_module }, \
+	{ MP_OBJ_NEW_QSTR(MP_QSTR_mcu), (mp_obj_t)&mcu_module }, \
+	{ MP_OBJ_NEW_QSTR(MP_QSTR_uos), (mp_obj_t)&mp_module_uos }, \
+	{ MP_OBJ_NEW_QSTR(MP_QSTR_utime), (mp_obj_t)&mp_module_utime }, \
+	{ MP_OBJ_NEW_QSTR(MP_QSTR_time), (mp_obj_t)&time_module },
+	#endif
 #elif defined(OMV_SENSOR_ONLY)
 	#define MICROPY_PORT_BUILTIN_MODULES \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_umachine), (mp_obj_t)&machine_module }, \
@@ -238,6 +248,7 @@ extern const struct _mp_obj_module_t gif_module;
 	SOCKET_BUILTIN_MODULE \
 	NETWORK_BUILTIN_MODULE
 #else
+	#ifdef BOARD_OMVRT1
 	#define MICROPY_PORT_BUILTIN_MODULES \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_umachine), (mp_obj_t)&machine_module }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_pyb), (mp_obj_t)&pyb_module }, \
@@ -246,13 +257,29 @@ extern const struct _mp_obj_module_t gif_module;
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_utime), (mp_obj_t)&mp_module_utime }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_time), (mp_obj_t)&time_module }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_sensor),  (mp_obj_t)&sensor_module }, \
-	{ MP_OBJ_NEW_QSTR(MP_QSTR_lcd),  (mp_obj_t)&lcd_module }, \
+	{ MP_OBJ_NEW_QSTR(MP_QSTR_image),  (mp_obj_t)&image_module }, \
+	{ MP_OBJ_NEW_QSTR(MP_QSTR_mjpeg),  (mp_obj_t)&mjpeg_module }, \
+	{ MP_OBJ_NEW_QSTR(MP_QSTR_gif),  (mp_obj_t)&gif_module }, \
+	{ MP_OBJ_NEW_QSTR(MP_QSTR_nn),  (mp_obj_t)&nn_module }, \
+	{ MP_OBJ_NEW_QSTR(MP_QSTR_lcd),  (mp_obj_t)&lcd_module },	
+	SOCKET_BUILTIN_MODULE \
+	NETWORK_BUILTIN_MODULE
+	#else
+	#define MICROPY_PORT_BUILTIN_MODULES \
+	{ MP_OBJ_NEW_QSTR(MP_QSTR_umachine), (mp_obj_t)&machine_module }, \
+	{ MP_OBJ_NEW_QSTR(MP_QSTR_pyb), (mp_obj_t)&pyb_module }, \
+	{ MP_OBJ_NEW_QSTR(MP_QSTR_mcu), (mp_obj_t)&mcu_module }, \
+	{ MP_OBJ_NEW_QSTR(MP_QSTR_uos), (mp_obj_t)&mp_module_uos }, \
+	{ MP_OBJ_NEW_QSTR(MP_QSTR_utime), (mp_obj_t)&mp_module_utime }, \
+	{ MP_OBJ_NEW_QSTR(MP_QSTR_time), (mp_obj_t)&time_module }, \
+	{ MP_OBJ_NEW_QSTR(MP_QSTR_sensor),  (mp_obj_t)&sensor_module }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_image),  (mp_obj_t)&image_module }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_mjpeg),  (mp_obj_t)&mjpeg_module }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_gif),  (mp_obj_t)&gif_module }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_nn),  (mp_obj_t)&nn_module }, \
 	SOCKET_BUILTIN_MODULE \
 	NETWORK_BUILTIN_MODULE	
+	#endif
 #endif
 
 
@@ -273,6 +300,7 @@ extern const struct _mp_obj_module_t gif_module;
     { MP_OBJ_NEW_QSTR(MP_QSTR_struct), (mp_obj_t)&mp_module_ustruct }, \
     { MP_OBJ_NEW_QSTR(MP_QSTR_machine), (mp_obj_t)&machine_module }, \
     { MP_OBJ_NEW_QSTR(MP_QSTR_errno), (mp_obj_t)&mp_module_uerrno }, \
+
 
 // extra constants
 #define MICROPY_PORT_CONSTANTS \

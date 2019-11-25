@@ -82,8 +82,8 @@ void fb_alloc_free_till_mark() {}
 void fb_free(void) {}
 void *fb_alloc(uint32_t size) {return m_malloc(size);}
 void fb_alloc_fail(void) {}
-void list_push_back(list_t *ptr, void *data) {}
-void* py_image_cobj(mp_obj_t img_obj) {}
+__WEAK void list_push_back(list_t *ptr, void *data) {}
+__WEAK void* py_image_cobj(mp_obj_t img_obj) {}
 #endif
 
 #ifndef NDEBUG
