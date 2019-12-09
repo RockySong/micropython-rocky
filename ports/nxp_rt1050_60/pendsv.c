@@ -39,7 +39,8 @@
 // traced by GC.  This is okay because we only ever set it to
 // mp_kbd_exception which is in the root-pointer set.
 void *pendsv_object;
-
+static uint32_t sw_irq_count = 0;
+void *sw_count_ptr;
 void pendsv_init(void) {
     // set PendSV interrupt at lowest priority
     HAL_NVIC_SetPriority(PendSV_IRQn, IRQ_PRI_PENDSV, IRQ_SUBPRI_PENDSV);
@@ -104,6 +105,8 @@ void pendsv_nlr_jump(void *o) {
         MP_STATE_VM(mp_pending_exception) = MP_OBJ_NULL;
         pendsv_object = o;
 		MPPORT_SEND_SIGNAL(mpportsignal_longjmp);
+		sw_irq_count = 0;
+		sw_count_ptr = &sw_irq_count;
     }
 }
 
@@ -112,6 +115,8 @@ void pendsv_nlr_jump_hard(void *o) {
     MP_STATE_VM(mp_pending_exception) = MP_OBJ_NULL;
     pendsv_object = o;
 	MPPORT_SEND_SIGNAL(mpportsignal_longjmp);
+	sw_irq_count = 0;
+	sw_count_ptr = &sw_irq_count;
 }
 
 
@@ -144,7 +149,64 @@ __asm void NativeNLR(void) {
     //   sp[0]: ?
 		IMPORT	pendsv_object
 		IMPORT	nlr_jump
+		IMPORT  sw_count_ptr
+#ifdef MICROPY_PY_RTTHREAD
+		ldr r1,  =sw_count_ptr
+		ldr r2,[r1]
+		ldr r1,[r2]
+		add r1, #1
+		str r1, [r2]
+		
+		MRS     r1, psp
+		//mov	r2,	#0x01000000
+		//str r2, [r1, #28]
+		
+#if MICROPY_PY_THREAD
+        ldr r0, =pendsv_object
+        ldr r0, [r0]
+        cmp r0, 0
+        beq no_obj
+        str r0, [sp, #0]            // store to r0 on stack
+        mov r0, #0
+        str r0, [r1]                // clear pendsv_object
+        ldr r0, =nlr_jump
+        str r0, [sp, #24]           // store to pc on stack
+        bx lr                       // return from interrupt; will return to nlr_jump
 
+no_obj                    // pendsv_object==NULL
+        push {r4-r11, lr}
+        vpush {s16-s31}
+        mrs r5, primask             // save PRIMASK in r5
+        cpsid i                     // disable interrupts while we change stacks
+        mov r0, sp                  // pass sp to save
+        mov r4, lr                  // save lr because we are making a call
+        bl pyb_thread_next          // get next thread to execute
+        mov lr, r4                  // restore lr
+        mov sp, r0                  // switch stacks
+        msr primask, r5             // reenable interrupts
+        vpop {s16-s31}
+        pop {r4-r11, lr}
+        bx lr                       // return from interrupt; will return to new thread
+
+#else
+		
+        ldr r0, =pendsv_object
+        ldr r0, [r0]
+		
+#if defined(PENDSV_DEBUG)
+        str r0, [sp, #8]
+#else
+        str r0, [r1, #0]
+#endif
+        ldr r0, =nlr_jump
+#if defined(PENDSV_DEBUG)
+        str r0, [sp, #32]
+#else
+        str r0, [r1, #24]
+#endif
+        bx lr
+#endif
+#else
 		mov	r2,	#0x01000000
 		str r2, [sp, #28]    // reset XPSR, as pendSV may interrupt LDM/STM instructions who saves progress to XPSR
 
@@ -192,7 +254,7 @@ no_obj                    // pendsv_object==NULL
 #endif
         bx lr
 #endif
-
+#endif
     /*
     uint32_t x[2] = {0x424242, 0xdeaddead};
     printf("PendSV: %p\n", x);

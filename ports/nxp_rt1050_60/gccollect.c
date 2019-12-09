@@ -49,6 +49,9 @@ void gc_collect(void) {
     mp_uint_t regs[10];
     mp_uint_t sp = gc_helper_get_regs_and_sp(regs);
 
+	#ifdef MICROPY_PY_RTTHREAD
+	gc_collect_root((void**)sp, ((uint32_t)MP_STATE_THREAD(stack_top) - sp) / sizeof(uint32_t));
+	#else
     // trace the stack, including the registers (since they live on the stack in this function)
     #if MICROPY_PY_THREAD
     gc_collect_root((void**)sp, ((uint32_t)MP_STATE_THREAD(stack_top) - sp) / sizeof(uint32_t));
@@ -59,7 +62,7 @@ void gc_collect(void) {
 		gc_collect_root((void**)sp, ((uint32_t)&_estack - sp) / sizeof(uint32_t));
 		#endif
     #endif
-
+	#endif
     // trace root pointers from any threads
     #if MICROPY_PY_THREAD
     mp_thread_gc_others();

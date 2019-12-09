@@ -8,7 +8,7 @@
 #define OCRAM_SIZE	512*1024
 
 #define OMV_MAIN_FB_SIZE	301*1024 //301*1024
-#define OMV_FB_ALLOC_SIZE	120*1024 //83*1024
+#define OMV_FB_ALLOC_SIZE	90*1024 //83*1024
 
 ; must use "VECTOR_RAM", "RW_m_data", "VECTOR_ROM" as names to work with "InstallIRQHandler()" API
 
@@ -66,7 +66,7 @@ LR_XIP_FLASH ROM_BASE + 0x2000 {
 	OVERLAY_CODE_Start 0x5000 EMPTY 0 {}
 	
 	OVERLAY_CODE_BLOB +0 OVERLAY 12*1024 {
-		blob.o (+RO)
+		;blob.o (+RO)
 	}
 	
     DTCM_START_PLACEHOLDER 0x20000000 EMPTY 0 {}
@@ -96,26 +96,35 @@ LR_XIP_FLASH ROM_BASE + 0x2000 {
 	}
 	
 	ARM_LIB_HEAP +0 EMPTY 0x100 {} ; Heap region growing up
+	
+	#define RTT_HEAP_SIZE 64*1024	
+	RTT_HEAP +0 EMPTY RTT_HEAP_SIZE{}
+	
 	MPY_HEAP_START +0 EMPTY 4 {}
 	
 	DTCM_END 0x20078000 EMPTY 4 {}
 	
 	MAIN_RW_START_PLACEHOLDER 0x20200000 EMPTY 0 {}
+	JPGEN_BUF +0{
+		* (.jpeg_buf)
+	}
 	OMV_MAIN_FB +0 EMPTY OMV_MAIN_FB_SIZE + OMV_FB_ALLOC_SIZE{}
 	OMV_FB_END +0 EMPTY 16 {}	
 	ER_MAIN_RW +0 {
+		
 		.ANY (+RW, +ZI)
-		* (.jpeg_buf)
 		sincos_tab.o (+RO)
 		usbd_msc_storage.o (+RW, +ZI)
 		* (.ram_const)
 	}
-	MAIN_RW_END 0x20280000 EMPTY 4 {}
+	MAIN_RW_END 0x20280000 EMPTY 4 {
+	}
 	; <<<
 	
 	; >>> SDRAM NCACHAE >>>
 	SDRAM_NC_START 0x81C00000 EMPTY 0 {}
 	ER_LCD_FB +0 UNINIT 1024*1024  {
+		
 		* (.lcd_fb)
 	}
 }

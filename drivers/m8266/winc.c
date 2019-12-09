@@ -35,7 +35,6 @@ static volatile uint8_t spi_none_intterrupt_flag = false;
 	do {									\
 		spi_none_intterrupt_flag = false;	\
 		if (spi_interrupt_flag == true) { 	\
-			wifidbg_dispatch();				\
 			winc_write_spi_int_flag(0);		\
 		}									\
 		}while(0);							\
@@ -394,16 +393,16 @@ int winc_socket_send(int fd, const uint8_t *buf, uint32_t len, uint32_t timeout)
     return bytes;
 }
 
-int winc_socket_recv(int fd, uint8_t *buf, uint32_t len, winc_socket_buf_t *sockbuf, uint32_t timeout)
+int winc_socket_recv(int fd, uint8_t *buf, uint32_t len, winc_socket_buf_t *sockbuf, uint32_t timeout,uint8_t *md)
 {
-	uint8_t md;
+	
     if (sockbuf->size == 0) { // No buffered data.
         sockbuf->idx = 0; // Reset sockbuf index.
 
         int recv_bytes;
         // Set recv to the maximum possible packet size.
         SPI_NON_INT_CONTEXT_ENTER();
-        recv_bytes = M8266_socket_recv(fd, sockbuf->buf, SOCKET_BUFFER_MAX_LENGTH, timeout,&md);
+        recv_bytes = M8266_socket_recv(fd, sockbuf->buf, SOCKET_BUFFER_MAX_LENGTH, timeout,md);
         SPI_NON_INT_CONTEXT_LEAVE();
         if (recv_bytes < 0) {
             // Do async request
@@ -454,7 +453,16 @@ int winc_socket_sendblock_in_int(int fd, const uint8_t *buf, uint32_t len, uint3
     return bytes;
 }
 
+int winc_socket_sendblock(int fd, const uint8_t *buf, uint32_t len, uint32_t timeout)
+{
+    int bytes = 0;
 
+    bytes = M8266_socket_sendblock(fd, (uint8_t*)buf, len,1024, timeout);
+    if (bytes < 0) {
+    	return -1;
+    }
+    return bytes;
+}
 
 
 

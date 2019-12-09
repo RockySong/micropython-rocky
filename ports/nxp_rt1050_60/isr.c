@@ -256,6 +256,7 @@ void HardFault_C_Handler(ExceptionRegisters_t *regs, uint32_t *pXtraRegs, uint32
 // Naked functions have no compiler generated gunk, so are the best thing to
 // use for asm functions.
 #ifdef __CC_ARM
+#ifndef MICROPY_PY_RTTHREAD
 __asm void HardFault_Handler(void) {
 
     // From the ARMv7M Architecture Reference Manual, section B.1.5.6
@@ -276,6 +277,7 @@ __asm void HardFault_Handler(void) {
 	 pop	{r4-r11, lr}
 	 bx		lr	// give a chance to see LR's value
 }
+#endif
 #else
 __attribute__((naked))
 void HardFault_Handler(void) {
@@ -315,6 +317,7 @@ void NMI_Handler(void) {
   * @retval None
   */
 #ifdef __CC_ARM
+#ifndef MICROPY_PY_RTTHREAD
 __asm void MemManage_Handler(void) {
 
     // From the ARMv7M Architecture Reference Manual, section B.1.5.6
@@ -336,6 +339,7 @@ __asm void MemManage_Handler(void) {
 	 pop	{r4-r11}
 	 bx		lr
 }
+#endif
 #else
 __attribute__((naked))
 void MemManage_Handler(void) {
@@ -589,6 +593,9 @@ void SysTick_C_Handler(ExceptionRegisters_t *regs) {
         }
     }
     #endif
+	#ifdef MICROPY_PY_RTTHREAD	
+	RT_SysTick_Handler();
+	#endif	
 	__DSB();
 }
 

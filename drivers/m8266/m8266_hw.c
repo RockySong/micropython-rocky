@@ -16,21 +16,18 @@
 #define M8266WIFI_SPI_nCS_GPIO_PIN								30
 
 
-#define M8266WIFI_nRESET_PORT_MUX								IOMUXC_GPIO_B1_08_GPIO2_IO24
-#define M8266WIFI_nRESET_GPIO									GPIO2
-#define M8266WIFI_nRESET_GPIO_PIN								24
+#define M8266WIFI_nRESET_PORT_MUX								IOMUXC_GPIO_AD_B0_13_GPIO1_IO13
+#define M8266WIFI_nRESET_GPIO									GPIO1
+#define M8266WIFI_nRESET_GPIO_PIN								13
 
 #define M8266WIFI_DBG_IO_PORT_MUX								IOMUXC_GPIO_B1_09_GPIO2_IO25
 #define M8266WIFI_DBG_IO_GPIO									GPIO2
 #define M8266WIFI_DBG_IO_PIN									25
 
-#define M8266WIFI_DBG_IO_PORT_MUX1								IOMUXC_GPIO_AD_B0_13_GPIO1_IO13
-#define M8266WIFI_DBG_IO_GPIO1									GPIO1
-#define M8266WIFI_DBG_IO_PIN1									13
+#define M8266WIFI_DBG_IO_PORT_MUX1								IOMUXC_GPIO_B1_08_GPIO2_IO24
+#define M8266WIFI_DBG_IO_GPIO1									GPIO2
+#define M8266WIFI_DBG_IO_PIN1									24
 
-#define M8266WIFI_INT_IO_PORT_MUX								IOMUXC_GPIO_AD_B0_13_GPIO1_IO13
-#define M8266WIFI_INT_IO_GPIO									GPIO1
-#define M8266WIFI_INT_IO_PIN									13
 
 
 #else
@@ -41,24 +38,27 @@
 #define M8266WIFI_SPI_MOSI_MUX									IOMUXC_GPIO_SD_B0_02_LPSPI1_SDO
 #define M8266WIFI_SPI_MISO_MUX									IOMUXC_GPIO_SD_B0_03_LPSPI1_SDI
 
-#define M8266WIFI_SPI_nCS_PORT_MUX								IOMUXC_GPIO_AD_B1_01_GPIO1_IO17
+#define M8266WIFI_SPI_nCS_PORT_MUX								IOMUXC_GPIO_AD_B1_02_GPIO1_IO18
 #define M8266WIFI_SPI_nCS_GPIO									GPIO1
-#define M8266WIFI_SPI_nCS_GPIO_PIN								17
+#define M8266WIFI_SPI_nCS_GPIO_PIN								18
 
 
-#define M8266WIFI_nRESET_PORT_MUX									IOMUXC_GPIO_B1_08_GPIO2_IO24
-#define M8266WIFI_nRESET_GPIO										GPIO2
-#define M8266WIFI_nRESET_GPIO_PIN									24
+#define M8266WIFI_nRESET_PORT_MUX									IOMUXC_GPIO_AD_B1_03_GPIO1_IO19
+#define M8266WIFI_nRESET_GPIO										GPIO1
+#define M8266WIFI_nRESET_GPIO_PIN									19
 
-#define M8266WIFI_DBG_IO_PORT_MUX								IOMUXC_GPIO_AD_B0_03_GPIO1_IO03
+#define M8266WIFI_DBG_IO_PORT_MUX								IOMUXC_GPIO_AD_B0_10_GPIO1_IO10
 #define M8266WIFI_DBG_IO_GPIO									GPIO1
-#define M8266WIFI_DBG_IO_PIN									03
+#define M8266WIFI_DBG_IO_PIN									10
 
-#define M8266WIFI_INT_IO_PORT_MUX								IOMUXC_GPIO_AD_B0_02_GPIO1_IO02
-#define M8266WIFI_INT_IO_GPIO									GPIO1
-#define M8266WIFI_INT_IO_PIN									02
+#define M8266WIFI_DBG_IO_PORT_MUX1								IOMUXC_GPIO_AD_B0_09_GPIO1_IO09
+#define M8266WIFI_DBG_IO_GPIO1									GPIO1
+#define M8266WIFI_DBG_IO_PIN1									9
 
 
+#define M8266WIFI_DBG_IO_PORT_MUX2								IOMUXC_GPIO_AD_B1_08_GPIO1_IO24
+#define M8266WIFI_DBG_IO_GPIO2									GPIO1
+#define M8266WIFI_DBG_IO_PIN2									24
 #endif
 
 
@@ -69,6 +69,7 @@
 #define SPI_BaudRatePrescaler_8         ((uint32_t)0x00000006U)
 #define SPI_BaudRatePrescaler_12        ((uint32_t)0x0000000AU)
 #define SPI_BaudRatePrescaler_16        ((uint32_t)0x0000000EU)
+#define SPI_BaudRatePrescaler_24        ((uint32_t)0x00000016U)
 #define SPI_BaudRatePrescaler_32        ((uint32_t)0x0000001EU)
 #define SPI_BaudRatePrescaler_64        ((uint32_t)0x0000003EU)
 #define SPI_BaudRatePrescaler_128       ((uint32_t)0x0000007EU)
@@ -122,8 +123,8 @@ void M8266_pin_init()
 
     IOMUXC_SetPinConfig(M8266WIFI_SPI_CLK_MUX,0x3069);  //0x3069=b0| 00|11| 0|000 01|10 1|00|1 -> Hysteresis Disabled, 100KOhm Pulldown, pull enabled, 100MHz, R0/5=52, Fast Slew Rate
     IOMUXC_SetPinConfig(M8266WIFI_SPI_MOSI_MUX,0x3069);                                                                              
-    IOMUXC_SetPinConfig(M8266WIFI_SPI_MISO_MUX,0x10B0u);
-	
+    //IOMUXC_SetPinConfig(M8266WIFI_SPI_MISO_MUX,0x3069);
+	IOMUXC_SetPinConfig(M8266WIFI_SPI_MISO_MUX,0x10B0u);
 #endif
 
 #ifdef BOARD_OMVRT1
@@ -194,8 +195,8 @@ void M8266_DBG_IO_Write(int idx, uint8_t value)
 			gpio_config.interruptMode	=	kGPIO_NoIntmode;							// NO Interrupt														// Initially High
 			GPIO_PinInit(GPIO4, 19, &gpio_config);
 #endif			
-			break;
 			default:
+				break;
 	}
 			
 }
@@ -221,7 +222,7 @@ void M8266_DBG_IO_Toggle(int idx)
 			
 		
 	}
-#ifdef BOARD_OMVRT1		
+
 	else if (idx == 1)
 	{
 		if(((M8266WIFI_DBG_IO_GPIO1->DR) >> M8266WIFI_DBG_IO_PIN1) & 0x1U)
@@ -240,31 +241,21 @@ void M8266_DBG_IO_Toggle(int idx)
 
 	else if (idx == 2)
 	{
-		if(((GPIO4->DR) >> 19) & 0x1U)
+#ifndef BOARD_OMVRT1		
+		if(((M8266WIFI_DBG_IO_GPIO2->DR) >> M8266WIFI_DBG_IO_PIN2) & 0x1U)
 			gpio_config.outputLogic = 0;
 		else
 			gpio_config.outputLogic =	1;
 		
-		IOMUXC_SetPinMux(IOMUXC_GPIO_EMC_19_GPIO4_IO19, 0);			
-		IOMUXC_SetPinConfig(IOMUXC_GPIO_EMC_19_GPIO4_IO19, 0xB069);   // 0xB069=b0| 10|11 0|000 01|10 1|00|1 -> Hysteresis Disabled, 100KOhm Pullup, pull enabled, 100MHz, R0/5=52, Fast Slew Rate 
+		IOMUXC_SetPinMux(M8266WIFI_DBG_IO_PORT_MUX2, 0);			
+		IOMUXC_SetPinConfig(M8266WIFI_DBG_IO_PORT_MUX2, 0xB069);   // 0xB069=b0| 10|11 0|000 01|10 1|00|1 -> Hysteresis Disabled, 100KOhm Pullup, pull enabled, 100MHz, R0/5=52, Fast Slew Rate 
 		gpio_config.direction			= kGPIO_DigitalOutput;				// Output
 		gpio_config.interruptMode	=	kGPIO_NoIntmode;							// NO Interrupt														// Initially High
-		GPIO_PinInit(GPIO4, 19, &gpio_config);
+		GPIO_PinInit(M8266WIFI_DBG_IO_GPIO2, M8266WIFI_DBG_IO_PIN2, &gpio_config);
+#endif	
 	}
-	else if (idx == 3)
-	{
-		if(((GPIO4->DR) >> 20) & 0x1U)
-			gpio_config.outputLogic = 0;
-		else
-			gpio_config.outputLogic =	1;
-		
-		IOMUXC_SetPinMux(IOMUXC_GPIO_EMC_20_GPIO4_IO20, 0);			
-		IOMUXC_SetPinConfig(IOMUXC_GPIO_EMC_20_GPIO4_IO20, 0xB069);   // 0xB069=b0| 10|11 0|000 01|10 1|00|1 -> Hysteresis Disabled, 100KOhm Pullup, pull enabled, 100MHz, R0/5=52, Fast Slew Rate 
-		gpio_config.direction			= kGPIO_DigitalOutput;				// Output
-		gpio_config.interruptMode	=	kGPIO_NoIntmode;							// NO Interrupt														// Initially High
-		GPIO_PinInit(GPIO4, 20, &gpio_config);
-	}
-#endif		
+	
+	
 }
 
 void M8266_host_interface_init()
@@ -294,10 +285,14 @@ void M8266_host_interface_init()
     lpspi_config.direction											=	kLPSPI_MsbFirst;
     lpspi_config.pinCfg													=	kLPSPI_SdiInSdoOut;
     lpspi_config.dataOutConfig									= kLpspiDataOutRetained;					// kLpspiDataOutTristate;
-    lpspi_config.pcsToSckDelayInNanoSec					=  5; // The delay is (SCKPCS+1)cycles of lpspi_clk. Therefore, at least 5.02ns @ 192MHz
-    lpspi_config.lastSckToPcsDelayInNanoSec			=  5; // The delay is (PCSSCK+1)cycles of lpspi_clk. Therefore, at least 5.02ns @ 192MHz
-    lpspi_config.betweenTransferDelayInNanoSec	= 10; // The delya is (DBT   +2)cycles of lpspi_clk. Therefore, at least 5.02ns @ 192MHz 
+    lpspi_config.pcsToSckDelayInNanoSec					=  160;//5; // The delay is (SCKPCS+1)cycles of lpspi_clk. Therefore, at least 5.02ns @ 192MHz
+    lpspi_config.lastSckToPcsDelayInNanoSec			=  160;//5; // The delay is (PCSSCK+1)cycles of lpspi_clk. Therefore, at least 5.02ns @ 192MHz
+    lpspi_config.betweenTransferDelayInNanoSec	= 160;//10; // The delya is (DBT   +2)cycles of lpspi_clk. Therefore, at least 5.02ns @ 192MHz 
 
+	lpspi_config.pcsToSckDelayInNanoSec = 1000000000 / 12000000 * 2;
+    lpspi_config.lastSckToPcsDelayInNanoSec = 1000000000 / 12000000 * 2;
+    lpspi_config.betweenTransferDelayInNanoSec = 1000000000 / 12000000 * 2;
+    
     LPSPI_MasterInit(M8266WIFI_INTERFACE_SPI, &lpspi_config, lpspi_clk);
     LPSPI_Enable(M8266WIFI_INTERFACE_SPI, true);
 	

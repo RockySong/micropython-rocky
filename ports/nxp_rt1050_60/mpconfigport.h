@@ -155,6 +155,8 @@
 #define MICROPY_PY_NETWORK          (0)
 #endif
 
+//#define MICROPY_PY_RTTHREAD
+
 // fatfs configuration used in ffconf.h
 #define MICROPY_FATFS_ENABLE_LFN       (1)
 #define MICROPY_FATFS_LFN_CODE_PAGE    (437) /* 1=SFN/ANSI 437=LFN/U.S.(OEM) */

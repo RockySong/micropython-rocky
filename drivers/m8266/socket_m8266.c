@@ -62,15 +62,13 @@ uint8_t socket_out_count = 0;
 int M8266_wifi_init(uint8_t mode)
 {
 	M8266_drv_init();
-	M8266_setup(mode);
-
-	return 0;
+	return M8266_setup(mode);
 }
 
 void M8266_wifi_deinit()
 {
 }
-
+ 
 void socketInit()
 {
 	memset(gSockets, 0x0, sizeof(gSockets));
@@ -204,7 +202,7 @@ int M8266_socket_accept(int fd, sockaddr *addr, int *fd_out, uint32_t timeout)
 			PRINTF("%s Query COnnection State failed:x%x\r\n",__func__,status);
 		}
 		
-	    mp_hal_delay_us(500);
+	    systick_sleep(2);
     }
 
     return SOCK_ERR_TIMEOUT;
@@ -283,12 +281,12 @@ int M8266_socket_send(int fd, const uint8_t *buf, uint32_t len, uint32_t timeout
 	            else if(   ((status&0xFF) == 0x11)
 	            		||((status&0xFF) == 0x12)||((status&0xFF) == 0x10)  )
 	            {
-					mp_hal_delay_us(200);
+					systick_sleep(2);
 	            	return sent;
 	            }
 	            else
 	            {
-	               mp_hal_delay_us(100);
+	               systick_sleep(2);
 	            }
 		}
 
@@ -313,7 +311,7 @@ int M8266_socket_sendblock(int fd, const uint8_t *buf, uint32_t len,uint32_t blo
     {
 	#if 0		
 		sent = M8266WIFI_SPI_Send_Data_Block((uint8_t *)buf, len,block_size,gSockets_client[fd].linkno,&status);
-	#else
+	#else //new lib
 		sent = M8266WIFI_SPI_Send_BlockData((uint8_t *)buf, len,block_size,gSockets_client[fd].linkno,NULL,0, &status);
 	#endif
 		error_status = status;
@@ -335,12 +333,12 @@ int M8266_socket_sendblock(int fd, const uint8_t *buf, uint32_t len,uint32_t blo
 	            else if( ((status&0xFF) == 0x11)
 	            		||((status&0xFF) == 0x12)||((status&0xFF) == 0x10)  )
 	            {
-					mp_hal_delay_us(200);
+					systick_sleep(2);
 	            	return sent;
 	            }
 	            else
 	            {
-	               mp_hal_delay_us(100);
+	               systick_sleep(2);
 	            }
 		}
 
@@ -432,7 +430,7 @@ int M8266_socket_sendto(int fd, const uint8_t *buf, uint32_t len, sockaddr *addr
 			PRINTF("UDP Send to (%s)Data sent:%d len%d status:0x%x\r\n",ip_str,sent,len,status);
             if ((status & 0xFF) == 0x12)
             {
-               mp_hal_delay_us(100);
+               systick_sleep(2);
             }
             else 
             	return sent;
@@ -483,8 +481,38 @@ int M8266_socket_recvfrom(int fd, uint8_t *buf, uint32_t len, sockaddr *addr, ui
 	
 }
 
+int M8266_socket_enter_ota(char *ssid, char *password)
+{
+    static u8 start_ota = 0;		
+	uint16_t status;
+	char sta_ip[64];
+	
+	if(start_ota==1)	
+    {
+		if(M8266WIFI_SPI_Set_Opmode(3, 0, &status)==0)  
+			return 0;
+		if(M8266WIFI_SPI_STA_Connect_Ap(ssid, password, 0, 20, &status)==0 )   
+			return 1;
+ 
+    //if(M8266WIFI_SPI_wait_sta_connecting_to_ap_and_get_ip(sta_ip, 10)==0)  
+	//	return 0;                                                          
+                                                                           
+  
+      //u8 M8266WIFI_SPI_Module_OTA(u8 timeout_in_s, u16* status)
+		if( M8266WIFI_SPI_Module_OTA(30, &status)==0)	
+           return 1;			                
+    
+		start_ota = 0;
+		return 1;
+	}                                                   
+                                                        
+    return 0;                                            
+
+}
+
 void M8266_socket_dbg_mode()
 {
+#if 0
 #define DBG_PORT		4321
 #define DBG_BUF_SIZE	2501
 #define LOOP_CNT		1024
@@ -577,5 +605,6 @@ void M8266_socket_dbg_mode()
 	}
 
 	winc_socket_close(server_fd);
-#endif        
+#endif    
+#endif
 }

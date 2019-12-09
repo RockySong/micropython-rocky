@@ -109,11 +109,15 @@ mp_uint_t mp_hal_ticks_ms(void) {
 
 void systick_sleep(volatile uint32_t ms)
 {
+#ifdef MICROPY_PY_RTTHREAD
+	rt_thread_mdelay(ms);
+#else	
     volatile uint32_t curr_ticks = HAL_GetTick();
     while ((HAL_GetTick() - curr_ticks) < ms) {
         // rocky: it shouldn't be, but WFI makes J-Link debug session broken on OMVRT1 board
 		HAL_WFI();
     }
+#endif	
 }
 
 // The SysTick timer counts down at 168 MHz, so we can use that knowledge
