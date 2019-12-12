@@ -360,7 +360,7 @@ rx_loop:
 	if(!xfer_length)
 	{//new cmd from IDE	
 		//M8266_DBG_IO_Toggle(0);
-		if ((ret = winc_socket_recv(client_fd, buf, 10, &sockbuf, 100,&md)) < 0) {
+		if ((ret = winc_socket_recv(client_fd, buf, 6, &sockbuf, 100,&md)) < 0) {
 			M8266_DBG_IO_Write(0,0);
 			return -2;
 		}
@@ -379,6 +379,8 @@ rx_loop:
 		request = buf[1];
 		xfer_length = *((uint32_t*)(buf+2));
 		wifidbg_control(buf+6, request, xfer_length);
+		if(xfer_length == 0 && sockbuf.size != 0)
+			sockbuf.size = 0;
 	}
 	//PRINTF("request:0x%x,cmd len:%d\r\n",request,xfer_length);
 
@@ -397,7 +399,7 @@ rx_loop:
             M8266_DBG_IO_Toggle(3);
 			xfer_length -= ret;
 			if(xfer_length)
-				mp_hal_delay_us(100);
+				systick_sleep(2);
             //PRINTF("Socket sent:%d,%d\r\n",bytes,ret);
         }
         else {
