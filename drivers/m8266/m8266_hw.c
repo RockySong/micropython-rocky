@@ -28,7 +28,13 @@
 #define M8266WIFI_DBG_IO_GPIO1									GPIO2
 #define M8266WIFI_DBG_IO_PIN1									24
 
+#define M8266WIFI_DBG_IO_PORT_MUX2								IOMUXC_GPIO_EMC_20_GPIO4_IO20
+#define M8266WIFI_DBG_IO_GPIO2									GPIO4
+#define M8266WIFI_DBG_IO_PIN2									20
 
+#define M8266WIFI_DBG_IO_PORT_MUX3								IOMUXC_GPIO_EMC_19_GPIO4_IO19
+#define M8266WIFI_DBG_IO_GPIO3									GPIO4
+#define M8266WIFI_DBG_IO_PIN3									19
 
 #else
 // default board is i.MX RT1050/60 EVK
@@ -241,7 +247,6 @@ void M8266_DBG_IO_Toggle(int idx)
 
 	else if (idx == 2)
 	{
-#ifndef BOARD_OMVRT1		
 		if(((M8266WIFI_DBG_IO_GPIO2->DR) >> M8266WIFI_DBG_IO_PIN2) & 0x1U)
 			gpio_config.outputLogic = 0;
 		else
@@ -252,9 +257,20 @@ void M8266_DBG_IO_Toggle(int idx)
 		gpio_config.direction			= kGPIO_DigitalOutput;				// Output
 		gpio_config.interruptMode	=	kGPIO_NoIntmode;							// NO Interrupt														// Initially High
 		GPIO_PinInit(M8266WIFI_DBG_IO_GPIO2, M8266WIFI_DBG_IO_PIN2, &gpio_config);
-#endif	
 	}
-	
+	else if (idx == 3)
+	{
+		if(((M8266WIFI_DBG_IO_GPIO3->DR) >> M8266WIFI_DBG_IO_PIN3) & 0x1U)
+			gpio_config.outputLogic = 0;
+		else
+			gpio_config.outputLogic =	1;
+		
+		IOMUXC_SetPinMux(M8266WIFI_DBG_IO_PORT_MUX3, 0);			
+		IOMUXC_SetPinConfig(M8266WIFI_DBG_IO_PORT_MUX3, 0xB069);   // 0xB069=b0| 10|11 0|000 01|10 1|00|1 -> Hysteresis Disabled, 100KOhm Pullup, pull enabled, 100MHz, R0/5=52, Fast Slew Rate 
+		gpio_config.direction			= kGPIO_DigitalOutput;				// Output
+		gpio_config.interruptMode	=	kGPIO_NoIntmode;							// NO Interrupt														// Initially High
+		GPIO_PinInit(M8266WIFI_DBG_IO_GPIO3, M8266WIFI_DBG_IO_PIN3, &gpio_config);
+	}
 	
 }
 
@@ -419,8 +435,8 @@ int M8266_setup(uint8_t mode)
 	M8266WIFI_Module_Hardware_Reset();
 
 	M8266WIFI_Module_delay_ms(1);
-	M8266HostIf_SPI_SetSpeed(SPI_BaudRatePrescaler_16);					// Setup SPI Clock. Here 192/8 = 24 MHz for for iMXRT10xx.
-	spi_clk = 12000000;
+	M8266HostIf_SPI_SetSpeed(SPI_BaudRatePrescaler_8);					// Setup SPI Clock. Here 192/8 = 24 MHz for for iMXRT10xx.
+	spi_clk = 24000000;
 
 	//It is very important to call M8266HostIf_SPI_Select() to tell the driver which SPI you used
  	 //and how faster the SPI clock you used. The function must be called before SPI access

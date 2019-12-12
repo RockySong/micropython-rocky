@@ -343,7 +343,7 @@ int wifidbg_dispatch()
     uint8_t *buf = socket_buf;
 	static uint8_t request = 0;
 	static uint32_t xfer_length = 0;
-	uint8_t md;
+	uint8_t md = 0;
     sockaddr client_sockaddr,udpbcast_sockaddr,server_sockaddr;
     static uint32_t dbg_tx_len =0;
     static uint32_t dbg_tx_rt =0;
@@ -354,24 +354,25 @@ int wifidbg_dispatch()
 	if ((sockbuf.size == 0)&&(winc_socket_has_rev(client_fd) == 0)){
 		return -1;
 	}
+	
 	M8266_DBG_IO_Write(0,1);
 rx_loop:
 	if(!xfer_length)
 	{//new cmd from IDE	
 		//M8266_DBG_IO_Toggle(0);
-		if ((ret = winc_socket_recv(client_fd, buf, 6, &sockbuf, 100,&md)) < 0) {
-			if (TIMEDOUT(ret)) {
-				
-				return -1;
-			} else {
-				close_all_sockets();
-				
-				return -2;
-			}
+		if ((ret = winc_socket_recv(client_fd, buf, 10, &sockbuf, 100,&md)) < 0) {
+			M8266_DBG_IO_Write(0,0);
+			return -2;
 		}
-
-		if (ret != 6 || buf[0] != 0x30) {
-			
+		if(ret == 0 && md !=0)
+			goto rx_loop;
+		
+		if (buf[0] != 0x30) {
+			M8266_DBG_IO_Write(0,0);
+			systick_sleep(1);
+			M8266_DBG_IO_Write(0,1);
+			systick_sleep(1);
+			M8266_DBG_IO_Write(0,0);
 			return -1;
 		}
 		//M8266_DBG_IO_Toggle(0);
@@ -387,17 +388,16 @@ rx_loop:
             bytes = MIN(xfer_length, BUFFER_SIZE);
             
 			wifidbg_data_in(buf, bytes);
-			
-		
-			M8266_DBG_IO_Write(1,1);
+			M8266_DBG_IO_Toggle(3);
 			if ((ret = winc_socket_sendblock(client_fd, (uint8_t *)buf,bytes, 100)) < 0) {
                 	close_all_sockets();
 					M8266_DBG_IO_Write(0,0);
                 	return -2;
             }
-            M8266_DBG_IO_Write(1,0);
+            M8266_DBG_IO_Toggle(3);
 			xfer_length -= ret;
-
+			if(xfer_length)
+				mp_hal_delay_us(100);
             //PRINTF("Socket sent:%d,%d\r\n",bytes,ret);
         }
         else {
@@ -406,6 +406,7 @@ rx_loop:
 				M8266_DBG_IO_Write(0,0);
 				return -1;
 			}
+			
 			//M8266_DBG_IO_Toggle(1);
 			// Host-to-device data phase
 			md = 0;
@@ -414,7 +415,7 @@ rx_loop:
 	            if ((ret = winc_socket_recv(client_fd, buf, xfer_length, &sockbuf, 200,&md)) < 0) {
 	                //close_all_sockets();
 	                M8266_DBG_IO_Write(0,0);
-	                return -1;
+	                return -2;
 	            }
 	            xfer_length -= ret;
 				
@@ -468,6 +469,7 @@ void rt_wifidbg_timeout(void *parameter)
 
 		if ((wd_count >= WIFIDBG_PIT_TIMEOUT_5S_COUNT) || (ret == -2))//5 sec no data from IDE,disconnect
 		{
+			M8266_DBG_IO_Toggle(1);
 			PRINTF("6 sec no data from IDE, disconnect...\r\n");
 			//if (winc_socket_is_connected() == 0)
 			{

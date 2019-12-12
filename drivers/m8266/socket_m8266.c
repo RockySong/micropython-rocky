@@ -327,6 +327,7 @@ int M8266_socket_sendblock(int fd, const uint8_t *buf, uint32_t len,uint32_t blo
                  || ((status&0xFF) == 0x18))  // 0x18 = TCP server in listening states and no tcp clients connecting to so far
 	            {
                  // add some failure process here
+					M8266_DBG_IO_Toggle(1);
                  	PRINTF("%s sent:%d len:%d, status:0x%x\r\n",__func__,sent,len,status);
                  	return -1;
 	            }
@@ -361,6 +362,7 @@ int M8266_socket_recv(int fd, uint8_t *buf, uint32_t len, uint32_t timeout_ms, u
 	
 	status = status & 0xff;
 	if (status == 0x2f){
+		M8266_DBG_IO_Toggle(1);
 		PRINTF("M8266_socket_recv error:0x%x\r\n",status);
 		*md = 0;
 		return -1;
@@ -381,6 +383,9 @@ int M8266_socket_recv(int fd, uint8_t *buf, uint32_t len, uint32_t timeout_ms, u
 	{
 		*md = 0;
 	}
+	else
+		*md = 0;
+	
 	//PRINTF("TCP Recieved:%d status:0x%x at link %d\r\n",read_len, status,linkno);
 	return read_len;
 }
