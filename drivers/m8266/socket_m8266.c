@@ -171,6 +171,9 @@ int M8266_socket_accept(int fd, sockaddr *addr, int *fd_out, uint32_t timeout)
     
 	PRINTF("%s TCP Server accept at local port%d linkno 0x%x\r\n",__func__,gSockets[fd].local_port,gSockets[fd].linkno);
 	
+	if (M8266WIFI_SPI_Config_Tcp_Retran_Max(gSockets[fd].linkno, 3, &status) == 0)
+		return -2;
+	
 	volatile uint32_t us_start = mp_hal_ticks_us();
     while(mp_hal_ticks_us() - us_start < timeout*1000*1000)
     {
@@ -378,6 +381,11 @@ int M8266_socket_recv(int fd, uint8_t *buf, uint32_t len, uint32_t timeout_ms, u
 	else if ( status == 0x22)
 	{
 		*md = 0;
+	}
+	else if (status == 0x20)
+	{
+		*md = 0;
+		return -1;
 	}
 	else if (status == 0)
 	{

@@ -18,7 +18,7 @@
 #define IDLE_THREAD_STACK_SIZE 256
 #define RT_USING_TIMER_SOFT
 #define RT_TIMER_THREAD_PRIO 4
-#define RT_TIMER_THREAD_STACK_SIZE 4096
+#define RT_TIMER_THREAD_STACK_SIZE (4096*4)
 #define RT_DEBUG
 
 /* Inter-Thread communication */

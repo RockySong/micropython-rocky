@@ -58,7 +58,6 @@
         udpbcast_fd = -1;               \
         udpbcast_time = 0;				\
         wifidbg_ready = 0;				\
-		wifidbg_ap_connected = false;\
     } while (0);							\
 
 #define close_server_socket()           \
@@ -87,6 +86,9 @@ static winc_socket_buf_t sockbuf;
 #define WIFI_DBG_BUF_CNT	4
 static uint8_t s_SendBuf[WIFI_DBG_BUF_CNT][WIFI_DBG_BUF_SIZE];
 static uint8_t socket_buf[1024];
+//static uint8_t cmd_buf[32];
+static uint8_t request = 0;
+static int32_t xfer_length = 0;
 static ring_block_t s_txRB;
 static uint8_t *s_pCurTxBuf, *s_pCurRxBuf;
 static bool wifidbg_ready = false;
@@ -341,8 +343,7 @@ int wifidbg_dispatch()
 	int ret = 0;
 	int bytes = 0;
     uint8_t *buf = socket_buf;
-	static uint8_t request = 0;
-	static uint32_t xfer_length = 0;
+	static uint8_t dbg_cmd[64] = {0};
 	uint8_t md = 0;
     sockaddr client_sockaddr,udpbcast_sockaddr,server_sockaddr;
     static uint32_t dbg_tx_len =0;
@@ -357,7 +358,7 @@ int wifidbg_dispatch()
 	
 	M8266_DBG_IO_Write(0,1);
 rx_loop:
-	if(!xfer_length)
+	if(xfer_length == 0)
 	{//new cmd from IDE	
 		//M8266_DBG_IO_Toggle(0);
 		if ((ret = winc_socket_recv(client_fd, buf, 6, &sockbuf, 100,&md)) < 0) {
@@ -368,19 +369,43 @@ rx_loop:
 			goto rx_loop;
 		
 		if (buf[0] != 0x30) {
+			memcpy(dbg_cmd,buf,6);
+			memcpy(dbg_cmd+6,&sockbuf,32);
 			M8266_DBG_IO_Write(0,0);
 			systick_sleep(1);
 			M8266_DBG_IO_Write(0,1);
 			systick_sleep(1);
 			M8266_DBG_IO_Write(0,0);
-			return -1;
+			//send empty package
+			bytes = 4;
+			*((int *)buf) = 0x1;
+			M8266_DBG_IO_Toggle(3);
+			if ((ret = winc_socket_sendblock(client_fd, (uint8_t *)buf,bytes, 100)) < 0) {
+                	close_all_sockets();
+					M8266_DBG_IO_Write(0,0);
+                	return -2;
+            }
+            M8266_DBG_IO_Toggle(3);
+			return 0;
 		}
 		//M8266_DBG_IO_Toggle(0);
 		request = buf[1];
 		xfer_length = *((uint32_t*)(buf+2));
 		wifidbg_control(buf+6, request, xfer_length);
 		if(xfer_length == 0 && sockbuf.size != 0)
+		{
 			sockbuf.size = 0;
+			//send empty package
+			bytes = 4;
+			*((int *)buf) = 0x0;
+			M8266_DBG_IO_Toggle(3);
+			if ((ret = winc_socket_sendblock(client_fd, (uint8_t *)buf,bytes, 100)) < 0) {
+                	close_all_sockets();
+					M8266_DBG_IO_Write(0,0);
+                	return -2;
+            }
+            M8266_DBG_IO_Toggle(3);
+		}
 	}
 	//PRINTF("request:0x%x,cmd len:%d\r\n",request,xfer_length);
 
@@ -400,6 +425,11 @@ rx_loop:
 			xfer_length -= ret;
 			if(xfer_length)
 				systick_sleep(2);
+			else if (xfer_length < 0)
+			{
+				return -2;
+			}
+				
             //PRINTF("Socket sent:%d,%d\r\n",bytes,ret);
         }
         else {
@@ -422,6 +452,10 @@ rx_loop:
 	            xfer_length -= ret;
 				
 				wifidbg_data_out(buf, ret);
+				if (xfer_length < 0)
+				{
+					return -2;
+				}
 			}while(md);
             //M8266_DBG_IO_Toggle(1);
         }
