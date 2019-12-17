@@ -435,8 +435,8 @@ int M8266_setup(uint8_t mode)
 	M8266WIFI_Module_Hardware_Reset();
 
 	M8266WIFI_Module_delay_ms(1);
-	M8266HostIf_SPI_SetSpeed(SPI_BaudRatePrescaler_8);					// Setup SPI Clock. Here 192/8 = 24 MHz for for iMXRT10xx.
-	spi_clk = 24000000;
+	M8266HostIf_SPI_SetSpeed(SPI_BaudRatePrescaler_32);					// Setup SPI Clock. Here 192/8 = 24 MHz for for iMXRT10xx.
+	spi_clk = 6000000;
 
 	//It is very important to call M8266HostIf_SPI_Select() to tell the driver which SPI you used
  	 //and how faster the SPI clock you used. The function must be called before SPI access
@@ -457,7 +457,7 @@ int M8266_setup(uint8_t mode)
    
 	i = 100000;
 	j = M8266WIFI_SPI_Interface_Communication_Stress_Test(i);
-	if( (j<i)&&(i-j>5)) 		//  if SPI Communication stress test failed
+	if( (j<i)&&(i-j>10)) 		//  if SPI Communication stress test failed
 	{
 	   return -1;
 	}

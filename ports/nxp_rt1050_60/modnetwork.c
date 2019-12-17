@@ -80,7 +80,7 @@ STATIC const mp_rom_map_elem_t mp_module_network_globals_table[] = {
     #if MICROPY_PY_CC3K
     { MP_ROM_QSTR(MP_QSTR_CC3K), MP_ROM_PTR(&mod_network_nic_type_cc3k) },
     #endif
-
+	{ MP_ROM_QSTR(MP_QSTR_WINC), MP_ROM_PTR(&mod_network_nic_type_winc) },
     { MP_ROM_QSTR(MP_QSTR_route), MP_ROM_PTR(&network_route_obj) },
 };
 

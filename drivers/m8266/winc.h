@@ -17,6 +17,7 @@
 #define WINC_SOCKBUF_SIZE       (1024)
 
 #define MAKE_SOCKADDR(addr, ip, port) \
+	struct sockaddr addr; \
     addr.sa_family = AF_INET; \
     addr.sa_data[0] = (uint8_t)(port >> 8); \
     addr.sa_data[1] = (uint8_t)(port); \

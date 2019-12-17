@@ -82,7 +82,7 @@
 #include "dma.h"
 #include "i2c.h"
 #include "usb_app.h"
-
+#include "mpconfigboard.h"
 extern void __fatal_error(const char*);
 // extern PCD_HandleTypeDef pcd_fs_handle;
 // extern PCD_HandleTypeDef pcd_hs_handle;
@@ -526,6 +526,7 @@ void Profiling(uint32_t pc)
 }
 #endif
 
+__WEAK void SwTimerHandler(void) {}
 extern void RPM_TickHandler();
 extern void SRPM_TickHandler(void);
 extern void SwTimerHandler(void);

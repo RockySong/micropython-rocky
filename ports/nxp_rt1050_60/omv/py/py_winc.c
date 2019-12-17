@@ -25,8 +25,7 @@
 #include "ff_wrapper.h"
 
 #include "winc.h"
-#include "socket/include/socket.h"
-#include "driver/include/m2m_wifi.h"
+#include "socket.h"
 
 typedef struct _winc_obj_t {
     mp_obj_base_t base;
@@ -84,7 +83,7 @@ static mp_obj_t py_winc_connect(mp_uint_t n_args, const mp_obj_t *pos_args, mp_m
     static const mp_arg_t allowed_args[] = {
         { MP_QSTR_ssid, MP_ARG_REQUIRED | MP_ARG_OBJ, {.u_obj = MP_OBJ_NULL} },
         { MP_QSTR_key, MP_ARG_OBJ, {.u_obj = mp_const_none} },
-        { MP_QSTR_security, MP_ARG_KW_ONLY | MP_ARG_INT, {.u_int = M2M_WIFI_SEC_WPA_PSK} },
+        { MP_QSTR_security, MP_ARG_KW_ONLY | MP_ARG_INT, {.u_int = WIFI_SEC_WPA_PSK} },
     };
 
     // parse args
@@ -96,7 +95,7 @@ static mp_obj_t py_winc_connect(mp_uint_t n_args, const mp_obj_t *pos_args, mp_m
 
     // get key and sec
     const char *key = NULL;
-    mp_uint_t security = M2M_WIFI_SEC_OPEN;
+    mp_uint_t security = WIFI_SEC_OPEN;
 
     if (args[1].u_obj != mp_const_none) {
         key = mp_obj_str_get_str(args[1].u_obj);
@@ -104,7 +103,7 @@ static mp_obj_t py_winc_connect(mp_uint_t n_args, const mp_obj_t *pos_args, mp_m
     }
 
     // connect to AP
-    if (winc_connect(ssid, security, key, M2M_WIFI_CH_ALL) != 0) {
+    if (winc_connect(ssid, security, key, WIFI_CH_ALL) != 0) {
         nlr_raise(mp_obj_new_exception_msg_varg(&mp_type_OSError,
                     "could not connect to ssid=%s, sec=%d, key=%s\n", ssid, security, key));
     }
@@ -118,7 +117,7 @@ static mp_obj_t py_winc_start_ap(mp_uint_t n_args, const mp_obj_t *pos_args, mp_
     static const mp_arg_t allowed_args[] = {
         { MP_QSTR_ssid,     MP_ARG_REQUIRED| MP_ARG_OBJ, {.u_obj = MP_OBJ_NULL} },
         { MP_QSTR_key,      MP_ARG_KW_ONLY | MP_ARG_OBJ, {.u_obj = MP_OBJ_NULL} },
-        { MP_QSTR_security, MP_ARG_KW_ONLY | MP_ARG_INT, {.u_int = M2M_WIFI_SEC_OPEN } }, //M2M_WIFI_SEC_WPA_PSK
+        { MP_QSTR_security, MP_ARG_KW_ONLY | MP_ARG_INT, {.u_int = WIFI_SEC_OPEN } }, //M2M_WIFI_SEC_WPA_PSK
         { MP_QSTR_channel,  MP_ARG_KW_ONLY | MP_ARG_INT, {.u_int = 1} },
     };
 
@@ -133,11 +132,11 @@ static mp_obj_t py_winc_start_ap(mp_uint_t n_args, const mp_obj_t *pos_args, mp_
     const char *key = NULL;
     mp_uint_t security = args[2].u_int;
 
-    if (security != M2M_WIFI_SEC_OPEN && security != M2M_WIFI_SEC_WEP) {
+    if (security != WIFI_SEC_OPEN && security != WIFI_SEC_WEP) {
         nlr_raise(mp_obj_new_exception_msg(&mp_type_OSError, "AP mode supports WEP security only."));
     }
 
-    if (security == M2M_WIFI_SEC_WEP && args[1].u_obj == MP_OBJ_NULL) {
+    if (security == WIFI_SEC_WEP && args[1].u_obj == MP_OBJ_NULL) {
         nlr_raise(mp_obj_new_exception_msg(&mp_type_OSError, "Missing WEP key!"));
     }
 
@@ -216,9 +215,9 @@ static mp_obj_t py_winc_ifconfig(mp_obj_t self_in)
     // Add connection info
     mp_obj_list_append(ifconfig_list, mp_obj_new_int(ifconfig.rssi));
     mp_obj_list_append(ifconfig_list, mp_obj_new_int(ifconfig.security));
-    mp_obj_list_append(ifconfig_list, mp_obj_new_str(ifconfig.ssid, strlen(ifconfig.ssid)));
-    mp_obj_list_append(ifconfig_list, mp_obj_new_str(mac_vstr.buf, mac_vstr.len));
-    mp_obj_list_append(ifconfig_list, mp_obj_new_str(ip_vstr.buf, ip_vstr.len));
+    mp_obj_list_append(ifconfig_list, mp_obj_new_str(ifconfig.ssid, strlen(ifconfig.ssid),false));
+    mp_obj_list_append(ifconfig_list, mp_obj_new_str(mac_vstr.buf, mac_vstr.len,false));
+    mp_obj_list_append(ifconfig_list, mp_obj_new_str(ip_vstr.buf, ip_vstr.len,false));
 
     return ifconfig_list;
 }
@@ -237,8 +236,8 @@ static int winc_scan_callback(winc_scan_result_t *scan_result, void *arg)
         mp_obj_new_int(scan_result->channel),
         mp_obj_new_int(scan_result->rssi),
         mp_obj_new_int(scan_result->security),
-        mp_obj_new_str(mac_vstr.buf, mac_vstr.len),
-        mp_obj_new_str(scan_result->ssid, strlen(scan_result->ssid)),
+        mp_obj_new_str(mac_vstr.buf, mac_vstr.len,false),
+        mp_obj_new_str(scan_result->ssid, strlen(scan_result->ssid),false),
     };
 
     mp_obj_list_append(scan_list, mp_obj_new_tuple(MP_ARRAY_SIZE(ap), ap));
@@ -330,7 +329,7 @@ static int py_winc_socket_socket(mod_network_socket_obj_t *socket, int *_errno)
     uint8_t type;
 
     if (socket->u_param.domain != MOD_NETWORK_AF_INET) {
-        *_errno = EAFNOSUPPORT;
+        *_errno = 106;
         return -1;
     }
 
@@ -439,7 +438,8 @@ static mp_uint_t py_winc_socket_send(mod_network_socket_obj_t *socket, const byt
 
 static mp_uint_t py_winc_socket_recv(mod_network_socket_obj_t *socket, byte *buf, mp_uint_t len, int *_errno)
 {
-    int ret = winc_socket_recv(socket->fd, buf, len, &socket->sockbuf, socket->timeout);
+	uint8_t md = 0;
+    int ret = winc_socket_recv(socket->fd, buf, len, &socket->sockbuf, socket->timeout,&md);
     if (ret < 0) {
         *_errno = ret;
         py_winc_socket_close(socket);
@@ -520,10 +520,10 @@ static const mp_map_elem_t winc_locals_dict_table[] = {
     { MP_OBJ_NEW_QSTR(MP_QSTR_fw_dump),       (mp_obj_t)&py_winc_fw_dump_obj },
     { MP_OBJ_NEW_QSTR(MP_QSTR_fw_update),     (mp_obj_t)&py_winc_fw_update_obj },
 
-    { MP_OBJ_NEW_QSTR(MP_QSTR_OPEN),            MP_OBJ_NEW_SMALL_INT(M2M_WIFI_SEC_OPEN) },      // Network is not secured.
-    { MP_OBJ_NEW_QSTR(MP_QSTR_WEP),             MP_OBJ_NEW_SMALL_INT(M2M_WIFI_SEC_WEP) },       // Security type WEP (40 or 104) OPEN OR SHARED.
-    { MP_OBJ_NEW_QSTR(MP_QSTR_WPA_PSK),       MP_OBJ_NEW_SMALL_INT(M2M_WIFI_SEC_WPA_PSK) },// Network secured with WPA/WPA2 personal(PSK).
-    { MP_OBJ_NEW_QSTR(MP_QSTR_802_1X),          MP_OBJ_NEW_SMALL_INT(M2M_WIFI_SEC_802_1X) },    // Network is secured with WPA/WPA2 Enterprise.
+    { MP_OBJ_NEW_QSTR(MP_QSTR_OPEN),            MP_OBJ_NEW_SMALL_INT(WIFI_SEC_OPEN) },      // Network is not secured.
+    { MP_OBJ_NEW_QSTR(MP_QSTR_WEP),             MP_OBJ_NEW_SMALL_INT(WIFI_SEC_WEP) },       // Security type WEP (40 or 104) OPEN OR SHARED.
+    { MP_OBJ_NEW_QSTR(MP_QSTR_WPA_PSK),       MP_OBJ_NEW_SMALL_INT(WIFI_SEC_WPA_PSK) },// Network secured with WPA/WPA2 personal(PSK).
+    { MP_OBJ_NEW_QSTR(MP_QSTR_802_1X),          MP_OBJ_NEW_SMALL_INT(WIFI_SEC_802_1X) },    // Network is secured with WPA/WPA2 Enterprise.
     { MP_OBJ_NEW_QSTR(MP_QSTR_MODE_STA),        MP_OBJ_NEW_SMALL_INT(WINC_MODE_STA) },          // Start in Staion mode.
     { MP_OBJ_NEW_QSTR(MP_QSTR_MODE_AP),         MP_OBJ_NEW_SMALL_INT(WINC_MODE_AP) },           // Start in Access Point mode.
     { MP_OBJ_NEW_QSTR(MP_QSTR_MODE_P2P),        MP_OBJ_NEW_SMALL_INT(WINC_MODE_P2P) },          // Start in P2P (WiFi Direct) mode.

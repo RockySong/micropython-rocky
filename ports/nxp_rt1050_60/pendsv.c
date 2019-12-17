@@ -32,7 +32,7 @@
 #include "lib/utils/interrupt_char.h"
 #include "pendsv.h"
 #include "irq.h"
-
+#include "mpconfigboard.h"
 // This variable is used to save the exception object between a ctrl-C and the
 // PENDSV call that actually raises the exception.  It must be non-static
 // otherwise gcc-5 optimises it away.  It can point to the heap but is not

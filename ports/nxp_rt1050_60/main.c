@@ -710,7 +710,7 @@ __WEAK void pwm_init0(void){}
 __WEAK void rpm_init0(void){}
 __WEAK void spi_init0(void){}
 __WEAK void srpm_init0(void){}
-
+__WEAK void servo_init0(void){}
 int main(void) {
 	snvs_hp_rtc_config_t snvsRtcConfig;
 	snvs_hp_rtc_datetime_t rtcDate;

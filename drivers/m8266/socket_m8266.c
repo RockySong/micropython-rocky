@@ -261,12 +261,16 @@ int M8266_socket_send(int fd, const uint8_t *buf, uint32_t len, uint32_t timeout
 	
 	if (fd > socket_out_count)
 		return -1;
-
+	M8266_DBG_IO_Toggle(0);
 	volatile uint32_t us_start = mp_hal_ticks_us();
     for(sent=0, loops=0; (sent<len)&&(loops<= 1000); loops++)
     {		
 		sent += M8266WIFI_SPI_Send_Data((uint8_t *)buf+sent, ((len-sent)>tcp_packet_size)?tcp_packet_size:(len-sent),gSockets_client[fd].linkno, &status);
-        if(sent>=len)  return sent;
+        if(sent>=len)
+		{
+			M8266_DBG_IO_Toggle(0);
+			return sent;
+		}
 		if((status&0xFF) == 0x00)
     	{
       	}
@@ -279,23 +283,30 @@ int M8266_socket_send(int fd, const uint8_t *buf, uint32_t len, uint32_t timeout
 	            {
                  // add some failure process here
                  	PRINTF("%s sent:%d len:%d, status:0x%x\r\n",__func__,sent,len,status);
-                 	return -1;
+                 	//M8266_DBG_IO_Toggle(2);
+					
+					return -1;
 	            }
 	            else if(   ((status&0xFF) == 0x11)
-	            		||((status&0xFF) == 0x12)||((status&0xFF) == 0x10)  )
+	            		||((status&0xFF) == 0x10))  
 	            {
 					systick_sleep(2);
-	            	return sent;
+					//M8266_DBG_IO_Toggle(2);
+	            	//return sent;
 	            }
-	            else
+	            else if((status&0xFF) == 0x12)
 	            {
-	               systick_sleep(2);
+	               systick_sleep(4);
 	            }
 		}
 
 		if(mp_hal_ticks_us() - us_start >= timeout_ms*1000)
+		{
+			M8266_DBG_IO_Toggle(2);
 			return sent;
+		}
     } // end of for(...
+	M8266_DBG_IO_Toggle(0);
 	return sent;
 }
 

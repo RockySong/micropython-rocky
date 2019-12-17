@@ -24,7 +24,7 @@
 #include "Ring_buffer.h"
 #include "Fsl_pit.h"
 #include "Fsl_qtmr.h"
-#ifdef MICROPY_HW_WIFIDBG_EN
+#if MICROPY_HW_WIFIDBG_EN
 #include "winc.h"
 #include "socket.h"
 #include "wifidbg.h"

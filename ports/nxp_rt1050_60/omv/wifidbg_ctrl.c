@@ -17,7 +17,7 @@ static int xfer_bytes;
 static int xfer_length;
 static enum usbdbg_cmd cmd;
 
-#ifdef MICROPY_HW_WIFIDBG_EN
+#if MICROPY_HW_WIFIDBG_EN
 extern volatile bool script_running;
 extern vstr_t script_buf;
 

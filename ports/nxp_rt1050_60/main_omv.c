@@ -70,7 +70,7 @@
 
 #include "ini.h"
 #include "overlay_manager.h"
-#ifdef MICROPY_HW_WIFIDBG_EN
+#if MICROPY_HW_WIFIDBG_EN
 #include "wifidbg.h"
 typedef struct openmv_config {
     bool wifidbg;
@@ -142,7 +142,7 @@ static int ini_handler_callback(void *user, const char *section, const char *nam
 {
 	#define MATCH(s, n) ((strcmp(section, (s)) == 0) && (strcmp(name, (n)) == 0))
 	
-#ifdef MICROPY_HW_WIFIDBG_EN	
+#if MICROPY_HW_WIFIDBG_EN	
     openmv_config_t *openmv_config = (openmv_config_t *) user;
 
     
@@ -293,7 +293,7 @@ int OpenMV_Main(uint32_t first_soft_reset)
     // py_lcd_init0();
     // far InfraRed sensor py_fir_init0();
 //    servo_init();
-#ifdef MICROPY_HW_WIFIDBG_EN
+#if MICROPY_HW_WIFIDBG_EN
 	static openmv_config_t openmv_config;
 	
 	memset(&openmv_config, 0, sizeof(openmv_config));
@@ -304,7 +304,7 @@ int OpenMV_Main(uint32_t first_soft_reset)
 		if (first_soft_reset) {
 			first_soft_reset = 0;
 			exec_boot_script("/selftest.py", true, false);
-		#ifdef MICROPY_HW_WIFIDBG_EN
+		#if MICROPY_HW_WIFIDBG_EN
 			const char *path_out;
 			mp_vfs_mount_t *vfs = mp_vfs_lookup_path("openmv.config", &path_out);
 			if (vfs != NULL){
@@ -349,7 +349,7 @@ int OpenMV_Main(uint32_t first_soft_reset)
 				}
 			}
 			// exec_boot_script("/sd/main.py", false, true);
-			#if (defined MICROPY_HW_WIFIDBG_EN && defined MICROPY_PY_RTTHREAD)
+			#if (MICROPY_HW_WIFIDBG_EN && MICROPY_PY_RTTHREAD)
 			if(openmv_config.wifidbg == true)
 			{
 				rtt_wifidbg_start(&openmv_config.wifidbg_config);

@@ -311,16 +311,10 @@ void gc_collect_start(void) {
     void **ptrs = (void**)(void*)&mp_state_ctx;
     gc_collect_root(ptrs, offsetof(mp_state_ctx_t, vm.qstr_last_chunk) / sizeof(void*));
 }
-volatile int gc_dbg_len = 0;
-volatile int gc_dbg_i = 0;
+
 void gc_collect_root(void **ptrs, size_t len) {
-	gc_dbg_len= len;
-	gc_dbg_i = ptrs;
     for (size_t i = 0; i < len; i++) {
-		
-        if(ptrs[i] == 0x20078000)
-			HAL_GetTick();
-		void *ptr = ptrs[i];
+        void *ptr = ptrs[i];
         VERIFY_MARK_AND_PUSH(ptr);
         gc_drain_stack();
     }

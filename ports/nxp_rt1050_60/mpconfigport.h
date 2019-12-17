@@ -34,7 +34,7 @@
 #pragma anon_unions
 #endif
 // board specific definitions
-// #include "mpconfigboard.h"
+#include "mpconfigboard.h"
 #include "fsl_common.h"
 // memory allocation policies
 #define MICROPY_ALLOC_PATH_MAX      (128)
@@ -88,6 +88,8 @@
 #define MICROPY_VFS                 (1)
 #define MICROPY_VFS_FAT             (1)
 
+#define MICROPY_PY_NETWORK			(1)
+#define MICROPY_PY_USOCKET			(1)
 // control over Python builtins
 #define MICROPY_PY_FUNCTION_ATTRS   (1)
 #define MICROPY_PY_BUILTINS_STR_UNICODE (1)
@@ -263,7 +265,7 @@ extern const struct _mp_obj_module_t gif_module;
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_mjpeg),  (mp_obj_t)&mjpeg_module }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_gif),  (mp_obj_t)&gif_module }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_nn),  (mp_obj_t)&nn_module }, \
-	{ MP_OBJ_NEW_QSTR(MP_QSTR_lcd),  (mp_obj_t)&lcd_module },	
+	{ MP_OBJ_NEW_QSTR(MP_QSTR_lcd),  (mp_obj_t)&lcd_module }, \
 	SOCKET_BUILTIN_MODULE \
 	NETWORK_BUILTIN_MODULE
 	#else
