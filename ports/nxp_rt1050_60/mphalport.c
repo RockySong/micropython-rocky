@@ -59,6 +59,9 @@ void mp_hal_stdout_tx_strn(const char *str, size_t len) {
 		// will no longer accept data from us!
 		usb_vcp_send_strn(str, len);
 	}
+#if MICROPY_HW_WIFIDBG_EN
+	wifidbg_send_strn(str, len);
+#endif	
 
 }
 
@@ -75,6 +78,10 @@ void mp_hal_stdout_tx_strn_cooked(const char *str, size_t len) {
     } else {
 
     }
+	
+	#if MICROPY_HW_WIFIDBG_EN
+	wifidbg_send_strn(str, len);
+	#endif	
 
 }
 

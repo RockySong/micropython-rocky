@@ -70,6 +70,9 @@
 #include "modnetwork.h"
 #include "virtual_com.h"
 #include "fsl_cache.h"
+#ifdef MICROPY_PY_RTTHREAD	
+#include "rtthread.h"
+#endif
 void UnalignTest(void);
 void SystemClock_Config(void);
 
@@ -546,7 +549,7 @@ HAL_StatusTypeDef HAL_Init(void)
 	PRINTF("Debug console inited!\r\n");
 	/* Set Interrupt Group Priority */
 	NVIC_SetPriorityGrouping(3);
-	
+#ifndef	MICROPY_PY_RTTHREAD
 	/* Use systick as time base source and configure 1ms tick (default clock after Reset is HSI) */
 	HAL_InitTick(IRQ_PRI_SYSTICK);
 
@@ -559,7 +562,7 @@ HAL_StatusTypeDef HAL_Init(void)
 		HAL_WFI();
 	}
 	#endif
-	
+#endif	
 	return HAL_OK;
 }
 
@@ -707,7 +710,7 @@ __WEAK void pwm_init0(void){}
 __WEAK void rpm_init0(void){}
 __WEAK void spi_init0(void){}
 __WEAK void srpm_init0(void){}
-
+__WEAK void servo_init0(void){}
 int main(void) {
 	snvs_hp_rtc_config_t snvsRtcConfig;
 	snvs_hp_rtc_datetime_t rtcDate;
@@ -734,7 +737,7 @@ int main(void) {
          - Global MSP (MCU Support Package) initialization
        */
     HAL_Init();
-	TestCacheBug();
+	//TestCacheBug();
     #if defined(MICROPY_BOARD_EARLY_INIT)
     MICROPY_BOARD_EARLY_INIT();
     #endif
@@ -753,7 +756,12 @@ int main(void) {
     // default to internal flash being the usb medium
     pyb_usb_storage_medium = PYB_USB_STORAGE_MEDIUM_FLASH;
 #endif
-
+#ifdef MICROPY_PY_RTTHREAD	
+	PRINTF("Start RT-Therad\n");
+	rtthread_startup();
+	
+	return 0;//Never reach here
+#else
     bool first_soft_reset = true;
 	retCode = true;
 soft_reset:
@@ -1027,8 +1035,377 @@ soft_reset_exit:
 
     first_soft_reset = false;
     goto soft_reset;
-	
+#endif	
 }
+
+
+#ifdef MICROPY_PY_RTTHREAD	
+void usr_app_thread_entry(void *parameter);
+void openmv_main_rtt_entry(void *parameter, void *stack_top, uint32_t stack_size);
+static rt_thread_t omv_thread;
+
+void main_thread_signal_handler(int sig)
+{
+	//restore thread sp point
+	omv_thread->sp = omv_thread->sig_ret;
+    omv_thread->sig_ret = RT_NULL;
+	//clear thread sig stat
+	omv_thread->stat &= ~RT_THREAD_STAT_SIGNAL;
+	//hardjump
+	pendsv_nlr_jump_hard(MP_STATE_PORT(omv_ide_irq));
+}
+
+/* the system main thread */
+void main_thread_entry(void *parameter)
+{
+    extern int main(void);
+    extern int $Super$$main(void);
+    
+#ifdef RT_USING_COMPONENTS_INIT
+    /* RT-Thread components initialization */
+    rt_components_init();
+#endif    
+#ifdef RT_USING_SMP
+    rt_hw_secondary_cpu_up();
+#endif
+	
+	rt_signal_install(SIGUSR1, main_thread_signal_handler);
+	rt_signal_mask(SIGUSR1);
+	uint32_t stack_top = (uint32_t)(rt_thread_self()->stack_addr);
+	stack_top += rt_thread_self()->stack_size;
+	
+    openmv_main_rtt_entry(parameter,(void*)(stack_top),
+							rt_thread_self()->stack_size); /* for ARMCC. */
+}
+
+void rt_application_init(void)
+{
+    rt_thread_t tid;
+
+
+	omv_thread = rt_thread_create("main", main_thread_entry, RT_NULL,
+                           RT_MAIN_THREAD_STACK_SIZE*4, RT_MAIN_THREAD_PRIORITY, 100);
+    RT_ASSERT(omv_thread != RT_NULL);
+	rt_thread_startup(omv_thread);
+
+	
+	tid = rt_thread_create("app", usr_app_thread_entry, RT_NULL,
+                           RT_MAIN_THREAD_STACK_SIZE, RT_MAIN_THREAD_PRIORITY, 10);
+    RT_ASSERT(tid != RT_NULL);
+	rt_thread_startup(tid);
+}
+
+void rtt_send_sig_to_main()
+{
+	rt_thread_kill(omv_thread, SIGUSR1);
+}
+
+void rtt_main_thread_enable_sig(bool enable)
+{
+	if(enable)
+	{
+		PRINTF("unmask main sig\r\n");
+		rt_signal_unmask(SIGUSR1);
+	}
+	else
+	{
+		PRINTF("mask main sig\r\n");
+		rt_signal_mask(SIGUSR1);
+	}
+}
+
+void usr_app_thread_entry(void *parameter)
+{
+	while(1)
+	{
+		led_state(1, 1);
+		rt_thread_mdelay(500);
+		led_state(1, 0);
+		rt_thread_mdelay(500);
+		//PRINTF("User Application Thread..\r\n");
+	}
+}
+
+void openmv_main_rtt_entry(void *parameter, void *stack_top, uint32_t stack_size)
+{
+	bool first_soft_reset = true;
+	int8_t retCode = true;
+soft_reset:
+	{
+		uint32_t wait;
+		uint32_t i = 0;
+		for (wait = HAL_GetTick(); wait < 1001; wait = HAL_GetTick()) {
+			if (wait % 125 == 0) {
+				led_state(1, (++i) & 1);
+			}
+			// __WFI();
+		}
+		led_state(1, 0);
+	}
+	
+    led_state(1, 1);
+	#if defined(MICROPY_HW_LED2)
+	led_state(2, 1);
+	led_state(2, 0);
+	#endif
+	#if defined(MICROPY_HW_LED3)
+	led_state(3, 1);
+    led_state(3, 0);
+	#endif
+	#if defined(MICROPY_HW_LED4)
+	led_state(4, 0);
+    led_state(4, 1);
+	#endif
+    uint reset_mode = update_reset_mode(1);
+    machine_init();
+
+#if MICROPY_HW_ENABLE_RTC
+		rtc_info_init();
+        rtc_init_start();
+#endif
+
+    // more sub-system init
+#if MICROPY_HW_HAS_SDCARD
+    if (first_soft_reset) {
+        sdcard_init();
+		#ifndef __CC_ARM
+		{
+			volatile uint32_t t1, t2;
+			t1 = HAL_GetTick();
+			t2 = t1 + 2000;
+			while (HAL_GetTick() < t2) {HAL_WFI();}
+		}
+		#endif
+    }
+#endif
+    if (first_soft_reset) {
+		// rocky: OMVRT1 uses GD32 flash, not yet supported internal file system
+        #if defined(EVK1050_60_HYPER)
+        storage_init();
+		#endif
+    }
+
+    // Python threading init
+    #if MICROPY_PY_THREAD
+    mp_thread_init();
+    #endif
+    // GC init
+#if defined(__CC_ARM) || defined(__ICCARM__)
+    // Stack limit should be less than real stack size, so we have a chance
+    // to recover from limit hit.  (Limit is measured in bytes.)
+    // Note: stack control relies on main thread being initialised above
+    mp_stack_set_top((void*) stack_top);
+    mp_stack_set_limit(stack_size);
+	
+	PRINTF("mp stack top:0x%x,size:%dkb\r\n",stack_top,stack_size/1024);
+	if (_heap_start >= 0x80000000) {
+		// heap is in SDRAM region, we assume there is at least 1MB heap!
+		_heap_end = _heap_start + 1024 * 1024;
+	} else if (_heap_start >= 0x20200000)
+	{
+		_heap_end = OCRAM_END;
+	} else {
+		_heap_end = DTCM_END;
+	}
+    gc_init((void*) _heap_start, (void*) _heap_end);
+	PRINTF("PY heap:0x%x, size:%dKb\r\n",_heap_start,(_heap_end-_heap_start)/1024);
+#elif defined(__GNUC__)
+    // Stack limit should be less than real stack size, so we have a chance
+    // to recover from limit hit.  (Limit is measured in bytes.)
+    // Note: stack control relies on main thread being initialised above
+    mp_stack_set_top(&_estack);
+    mp_stack_set_limit(&_stack_size);
+    gc_init(&_heap_start, &_heap_end);	
+#endif
+	MP_STATE_PORT(omv_ide_irq) = 0;
+
+    // Micro Python init
+    mp_init();
+    mp_obj_list_init(mp_sys_path, 0);
+    mp_obj_list_append(mp_sys_path, MP_OBJ_NEW_QSTR(MP_QSTR_)); // current dir (or base dir of the script)
+    mp_obj_list_init(mp_sys_argv, 0);
+
+    // Initialise low-level sub-systems.  Here we need to very basic things like
+    // zeroing out memory and resetting any of the sub-systems.  Following this
+    // we can run Python scripts (eg boot.py), but anything that is configurable
+    // by boot.py must be set after boot.py is run.
+
+    // sensor_init0();
+    readline_init0();
+    pin_init0();
+    // rocky ignore: extint_init0();
+    // rocky ignore: timer_init0();
+    uart_init0();
+
+    // Define MICROPY_HW_UART_REPL to be PYB_UART_6 and define
+    // MICROPY_HW_UART_REPL_BAUD in your mpconfigboard.h file if you want a
+    // REPL on a hardware UART as well as on USB VCP
+#if defined(MICROPY_HW_UART_REPL)
+    {
+
+        mp_obj_t args[2] = {
+            MP_OBJ_NEW_SMALL_INT(MICROPY_HW_UART_REPL),
+            MP_OBJ_NEW_SMALL_INT(115200),
+        };
+        MP_STATE_PORT(pyb_stdio_uart) = pyb_uart_type.make_new((mp_obj_t)&pyb_uart_type, MP_ARRAY_SIZE(args), 0, args);
+    }
+#else
+    MP_STATE_PORT(pyb_stdio_uart) = NULL;
+#endif
+
+#if MICROPY_HW_ENABLE_CAN
+    can_init0();
+#endif
+
+#if MICROPY_HW_ENABLE_RNG
+	rng_get();
+#endif
+	usbdbg_init();	// must be after mpy's heap init, as it uses mpy's heap
+	i2c_init0();
+	spi_init0();
+
+	pyb_usb_init0();
+
+    // Initialise the local flash filesystem.
+    // Create it if needed, mount in on /flash, and set it as current dir.
+	bool mounted_flash;
+	#if !defined(XIP_EXTERNAL_FLASH) && defined(EVK1050_60_HYPER) 
+    mounted_flash = init_flash_fs(reset_mode);
+	#else
+	mounted_flash = 0;
+	#endif
+
+    bool mounted_sdcard = false;
+#if MICROPY_HW_HAS_SDCARD
+    // if an SD card is present then mount it on /sd/
+    if (sdcard_is_present()) {
+        // if there is a file in the flash called "SKIPSD", then we don't mount the SD card
+        if (!mounted_flash || f_stat(&fs_user_mount_flash.fatfs, "/SKIPSD", NULL) != FR_OK) {
+			int retry = 16;
+			while (retry--) {
+				mounted_sdcard = init_sdcard_fs(first_soft_reset);
+				if (mounted_sdcard)
+					break;
+				else
+				{
+					uint32_t t0;
+					PRINTF("can't mount SD card FS!\r\n");
+					t0 = HAL_GetTick();
+					while (HAL_GetTick() - t0 < 250) {}
+				}
+			}
+        }
+    } else {
+		 
+	}
+#endif
+
+    // set sys.path based on mounted filesystems (/sd is first so it can override /flash)
+    if (mounted_sdcard) {
+        mp_obj_list_append(mp_sys_path, MP_OBJ_NEW_QSTR(MP_QSTR__slash_sd));
+        mp_obj_list_append(mp_sys_path, MP_OBJ_NEW_QSTR(MP_QSTR__slash_sd_slash_lib));
+    }
+    if (mounted_flash) {
+        mp_obj_list_append(mp_sys_path, MP_OBJ_NEW_QSTR(MP_QSTR__slash_flash));
+        mp_obj_list_append(mp_sys_path, MP_OBJ_NEW_QSTR(MP_QSTR__slash_flash_slash_lib));
+    }
+
+    // reset config variables; they should be set by boot.py
+    MP_STATE_PORT(pyb_config_main) = MP_OBJ_NULL;
+
+	#if 1 //#ifdef __CC_ARM
+    // run boot.py, if it exists
+    // TODO perhaps have pyb.reboot([bootpy]) function to soft-reboot and execute custom boot.py
+    if (reset_mode == 1 || reset_mode == 3) {
+        const char *boot_py = "boot.py";
+        mp_import_stat_t stat = mp_import_stat(boot_py);
+        if (stat == MP_IMPORT_STAT_FILE) {
+			PRINTF("Executing boot.py\r\n");
+            int ret = pyexec_file(boot_py);
+            if (ret & PYEXEC_FORCED_EXIT) {
+                goto soft_reset_exit;
+            }
+            if (!ret) {
+                flash_error(4);
+            }
+        }
+    }
+	#endif
+
+    led_state(1, 0);
+    led_state(2, 0);
+    led_state(3, 0);
+    led_state(4, 0);
+
+    // Now we initialise sub-systems that need configuration from boot.py,
+    // or whose initialisation can be safely deferred until after running
+    // boot.py.
+
+#if defined(USE_DEVICE_MODE)
+    // init USB device to default setting if it was not already configured
+    if (first_soft_reset) {
+	    if (!(pyb_usb_flags & PYB_USB_FLAG_USB_MODE_CALLED)) {
+	        pyb_usb_dev_init(USBD_VID, USBD_PID_CDC_MSC, USBD_MODE_CDC_MSC, NULL);
+			// NVIC_SetPriority(USB_OTG1_IRQn, 0);
+	    }
+    }
+#endif
+	
+#if MICROPY_HW_HAS_MMA7660
+    // MMA accel: init and reset
+    accel_init();
+#endif
+	pwm_init0();
+	rpm_init0();
+	dcmc_init0();
+	srpm_init0();
+#if MICROPY_HW_ENABLE_SERVO
+    // servo
+	
+    servo_init0();
+#endif
+
+#if MICROPY_HW_ENABLE_DAC
+    // DAC
+    dac_init();
+#endif
+
+#if MICROPY_PY_NETWORK
+    mod_network_init();
+#endif
+
+//PRINTF("%x%x\n",g_uid[1],g_uid[0]);
+
+
+    // At this point everything is fully configured and initialised.
+
+ 	VCOM_Open();
+	mp_printf(&mp_plat_print, "Unique ID: %04x %04x %04x %04x\n",g_uid[0],g_uid[1], g_uid[2], g_uid[3]);
+	retCode = OpenMV_Main(retCode);
+	
+soft_reset_exit:
+
+    // soft reset
+
+    printf("PYB: sync filesystems\n");
+    storage_flush();
+
+    printf("PYB: soft reboot\n");
+    // rocky ignore: timer_deinit();
+    
+	// rocky ignore: uart_deinit();
+#if MICROPY_HW_ENABLE_CAN
+    // rocky ignore: can_deinit();
+#endif
+
+    #if MICROPY_PY_THREAD
+    pyb_thread_deinit();
+    #endif
+
+    first_soft_reset = false;
+    goto soft_reset;
+}
+#endif
 
 void _exit(int x) {
 	printf("main() exit!\r\n");

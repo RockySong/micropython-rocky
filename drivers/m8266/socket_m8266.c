@@ -62,15 +62,13 @@ uint8_t socket_out_count = 0;
 int M8266_wifi_init(uint8_t mode)
 {
 	M8266_drv_init();
-	M8266_setup(mode);
-
-	return 0;
+	return M8266_setup(mode);
 }
 
 void M8266_wifi_deinit()
 {
 }
-
+ 
 void socketInit()
 {
 	memset(gSockets, 0x0, sizeof(gSockets));
@@ -173,6 +171,9 @@ int M8266_socket_accept(int fd, sockaddr *addr, int *fd_out, uint32_t timeout)
     
 	PRINTF("%s TCP Server accept at local port%d linkno 0x%x\r\n",__func__,gSockets[fd].local_port,gSockets[fd].linkno);
 	
+	if (M8266WIFI_SPI_Config_Tcp_Retran_Max(gSockets[fd].linkno, 3, &status) == 0)
+		return -2;
+	
 	volatile uint32_t us_start = mp_hal_ticks_us();
     while(mp_hal_ticks_us() - us_start < timeout*1000*1000)
     {
@@ -204,7 +205,7 @@ int M8266_socket_accept(int fd, sockaddr *addr, int *fd_out, uint32_t timeout)
 			PRINTF("%s Query COnnection State failed:x%x\r\n",__func__,status);
 		}
 		
-	    mp_hal_delay_us(500);
+	    systick_sleep(2);
     }
 
     return SOCK_ERR_TIMEOUT;
@@ -260,12 +261,16 @@ int M8266_socket_send(int fd, const uint8_t *buf, uint32_t len, uint32_t timeout
 	
 	if (fd > socket_out_count)
 		return -1;
-
+	M8266_DBG_IO_Toggle(0);
 	volatile uint32_t us_start = mp_hal_ticks_us();
     for(sent=0, loops=0; (sent<len)&&(loops<= 1000); loops++)
     {		
 		sent += M8266WIFI_SPI_Send_Data((uint8_t *)buf+sent, ((len-sent)>tcp_packet_size)?tcp_packet_size:(len-sent),gSockets_client[fd].linkno, &status);
-        if(sent>=len)  return sent;
+        if(sent>=len)
+		{
+			M8266_DBG_IO_Toggle(0);
+			return sent;
+		}
 		if((status&0xFF) == 0x00)
     	{
       	}
@@ -278,23 +283,30 @@ int M8266_socket_send(int fd, const uint8_t *buf, uint32_t len, uint32_t timeout
 	            {
                  // add some failure process here
                  	PRINTF("%s sent:%d len:%d, status:0x%x\r\n",__func__,sent,len,status);
-                 	return -1;
+                 	//M8266_DBG_IO_Toggle(2);
+					
+					return -1;
 	            }
 	            else if(   ((status&0xFF) == 0x11)
-	            		||((status&0xFF) == 0x12)||((status&0xFF) == 0x10)  )
+	            		||((status&0xFF) == 0x10))  
 	            {
-					mp_hal_delay_us(200);
-	            	return sent;
+					systick_sleep(2);
+					//M8266_DBG_IO_Toggle(2);
+	            	//return sent;
 	            }
-	            else
+	            else if((status&0xFF) == 0x12)
 	            {
-	               mp_hal_delay_us(100);
+	               systick_sleep(4);
 	            }
 		}
 
 		if(mp_hal_ticks_us() - us_start >= timeout_ms*1000)
+		{
+			M8266_DBG_IO_Toggle(2);
 			return sent;
+		}
     } // end of for(...
+	M8266_DBG_IO_Toggle(0);
 	return sent;
 }
 
@@ -313,7 +325,7 @@ int M8266_socket_sendblock(int fd, const uint8_t *buf, uint32_t len,uint32_t blo
     {
 	#if 0		
 		sent = M8266WIFI_SPI_Send_Data_Block((uint8_t *)buf, len,block_size,gSockets_client[fd].linkno,&status);
-	#else
+	#else //new lib
 		sent = M8266WIFI_SPI_Send_BlockData((uint8_t *)buf, len,block_size,gSockets_client[fd].linkno,NULL,0, &status);
 	#endif
 		error_status = status;
@@ -329,18 +341,19 @@ int M8266_socket_sendblock(int fd, const uint8_t *buf, uint32_t len,uint32_t blo
                  || ((status&0xFF) == 0x18))  // 0x18 = TCP server in listening states and no tcp clients connecting to so far
 	            {
                  // add some failure process here
+					M8266_DBG_IO_Toggle(1);
                  	PRINTF("%s sent:%d len:%d, status:0x%x\r\n",__func__,sent,len,status);
                  	return -1;
 	            }
 	            else if( ((status&0xFF) == 0x11)
 	            		||((status&0xFF) == 0x12)||((status&0xFF) == 0x10)  )
 	            {
-					mp_hal_delay_us(200);
+					systick_sleep(2);
 	            	return sent;
 	            }
 	            else
 	            {
-	               mp_hal_delay_us(100);
+	               systick_sleep(2);
 	            }
 		}
 
@@ -363,6 +376,7 @@ int M8266_socket_recv(int fd, uint8_t *buf, uint32_t len, uint32_t timeout_ms, u
 	
 	status = status & 0xff;
 	if (status == 0x2f){
+		M8266_DBG_IO_Toggle(1);
 		PRINTF("M8266_socket_recv error:0x%x\r\n",status);
 		*md = 0;
 		return -1;
@@ -379,10 +393,18 @@ int M8266_socket_recv(int fd, uint8_t *buf, uint32_t len, uint32_t timeout_ms, u
 	{
 		*md = 0;
 	}
+	else if (status == 0x20)
+	{
+		*md = 0;
+		return -1;
+	}
 	else if (status == 0)
 	{
 		*md = 0;
 	}
+	else
+		*md = 0;
+	
 	//PRINTF("TCP Recieved:%d status:0x%x at link %d\r\n",read_len, status,linkno);
 	return read_len;
 }
@@ -432,7 +454,7 @@ int M8266_socket_sendto(int fd, const uint8_t *buf, uint32_t len, sockaddr *addr
 			PRINTF("UDP Send to (%s)Data sent:%d len%d status:0x%x\r\n",ip_str,sent,len,status);
             if ((status & 0xFF) == 0x12)
             {
-               mp_hal_delay_us(100);
+               systick_sleep(2);
             }
             else 
             	return sent;
@@ -483,8 +505,38 @@ int M8266_socket_recvfrom(int fd, uint8_t *buf, uint32_t len, sockaddr *addr, ui
 	
 }
 
+int M8266_socket_enter_ota(char *ssid, char *password)
+{
+    static u8 start_ota = 0;		
+	uint16_t status;
+	char sta_ip[64];
+	
+	if(start_ota==1)	
+    {
+		if(M8266WIFI_SPI_Set_Opmode(3, 0, &status)==0)  
+			return 0;
+		if(M8266WIFI_SPI_STA_Connect_Ap(ssid, password, 0, 20, &status)==0 )   
+			return 1;
+ 
+    //if(M8266WIFI_SPI_wait_sta_connecting_to_ap_and_get_ip(sta_ip, 10)==0)  
+	//	return 0;                                                          
+                                                                           
+  
+      //u8 M8266WIFI_SPI_Module_OTA(u8 timeout_in_s, u16* status)
+		if( M8266WIFI_SPI_Module_OTA(30, &status)==0)	
+           return 1;			                
+    
+		start_ota = 0;
+		return 1;
+	}                                                   
+                                                        
+    return 0;                                            
+
+}
+
 void M8266_socket_dbg_mode()
 {
+#if 0
 #define DBG_PORT		4321
 #define DBG_BUF_SIZE	2501
 #define LOOP_CNT		1024
@@ -577,5 +629,6 @@ void M8266_socket_dbg_mode()
 	}
 
 	winc_socket_close(server_fd);
-#endif        
+#endif    
+#endif
 }

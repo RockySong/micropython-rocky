@@ -1,5 +1,5 @@
 # 1 "<stdin>"
-# 1 "/media/sf_D/RTOS_MW/mpyrt_omv/ports/nxp_rt1050_60//"
+# 1 "C:\\LocalData\\Project\\MCU\\RT\\openMV\\git\\micropython-rocky\\ports\\nxp_rt1050_60//"
 # 1 "<built-in>"
 # 1 "<command-line>"
 # 1 "<stdin>"
@@ -18,39 +18,39 @@
 
 # 1 "mcusdk/drivers/fsl_common.h" 1
 # 38 "mcusdk/drivers/fsl_common.h"
-# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/assert.h" 1 3
-# 9 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/assert.h" 3
-# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/_ansi.h" 1 3
-# 15 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/_ansi.h" 3
-# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/newlib.h" 1 3
-# 14 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/newlib.h" 3
-# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/_newlib_version.h" 1 3
-# 15 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/newlib.h" 2 3
-# 16 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/_ansi.h" 2 3
-# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/config.h" 1 3
+# 1 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\assert.h" 1 3
+# 9 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\assert.h" 3
+# 1 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\_ansi.h" 1 3
+# 10 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\_ansi.h" 3
+# 1 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\newlib.h" 1 3
+# 14 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\newlib.h" 3
+# 1 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\_newlib_version.h" 1 3
+# 15 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\newlib.h" 2 3
+# 11 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\_ansi.h" 2 3
+# 1 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\config.h" 1 3
 
 
 
-# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/machine/ieeefp.h" 1 3
-# 5 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/config.h" 2 3
-# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/features.h" 1 3
-# 6 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/config.h" 2 3
-# 17 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/_ansi.h" 2 3
-# 10 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/assert.h" 2 3
-# 39 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/assert.h" 3
+# 1 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\machine\\ieeefp.h" 1 3
+# 5 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\config.h" 2 3
+# 1 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\features.h" 1 3
+# 6 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\config.h" 2 3
+# 12 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\_ansi.h" 2 3
+# 10 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\assert.h" 2 3
+# 39 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\assert.h" 3
 
-# 39 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/assert.h" 3
-void __assert (const char *, int, const char *) __attribute__ ((__noreturn__))
-                                 ;
-void __assert_func (const char *, int, const char *, const char *) __attribute__ ((__noreturn__))
-                                 ;
+# 39 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\assert.h" 3
+void __assert (const char *, int, const char *)
+     __attribute__ ((__noreturn__));
+void __assert_func (const char *, int, const char *, const char *)
+     __attribute__ ((__noreturn__));
 # 39 "mcusdk/drivers/fsl_common.h" 2
-# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/lib/gcc/arm-none-eabi/6.3.1/include/stdbool.h" 1 3 4
+# 1 "c:\\gnu\\2018-q4-major\\lib\\gcc\\arm-none-eabi\\8.2.1\\include\\stdbool.h" 1 3 4
 # 40 "mcusdk/drivers/fsl_common.h" 2
-# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/lib/gcc/arm-none-eabi/6.3.1/include/stdint.h" 1 3 4
-# 11 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/lib/gcc/arm-none-eabi/6.3.1/include/stdint.h" 3 4
-# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/lib/gcc/arm-none-eabi/6.3.1/include/stdint-gcc.h" 1 3 4
-# 34 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/lib/gcc/arm-none-eabi/6.3.1/include/stdint-gcc.h" 3 4
+# 1 "c:\\gnu\\2018-q4-major\\lib\\gcc\\arm-none-eabi\\8.2.1\\include\\stdint.h" 1 3 4
+# 11 "c:\\gnu\\2018-q4-major\\lib\\gcc\\arm-none-eabi\\8.2.1\\include\\stdint.h" 3 4
+# 1 "c:\\gnu\\2018-q4-major\\lib\\gcc\\arm-none-eabi\\8.2.1\\include\\stdint-gcc.h" 1 3 4
+# 34 "c:\\gnu\\2018-q4-major\\lib\\gcc\\arm-none-eabi\\8.2.1\\include\\stdint-gcc.h" 3 4
 typedef signed char int8_t;
 
 
@@ -110,65 +110,65 @@ typedef unsigned int uintptr_t;
 
 typedef long long int intmax_t;
 typedef long long unsigned int uintmax_t;
-# 12 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/lib/gcc/arm-none-eabi/6.3.1/include/stdint.h" 2 3 4
+# 12 "c:\\gnu\\2018-q4-major\\lib\\gcc\\arm-none-eabi\\8.2.1\\include\\stdint.h" 2 3 4
 # 41 "mcusdk/drivers/fsl_common.h" 2
-# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/string.h" 1 3
-# 11 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/string.h" 3
-# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/reent.h" 1 3
-# 13 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/reent.h" 3
-# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/_ansi.h" 1 3
-# 14 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/reent.h" 2 3
-# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/lib/gcc/arm-none-eabi/6.3.1/include/stddef.h" 1 3 4
-# 149 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/lib/gcc/arm-none-eabi/6.3.1/include/stddef.h" 3 4
+# 1 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\string.h" 1 3
+# 11 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\string.h" 3
+# 1 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\reent.h" 1 3
+# 13 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\reent.h" 3
+# 1 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\_ansi.h" 1 3
+# 14 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\reent.h" 2 3
+# 1 "c:\\gnu\\2018-q4-major\\lib\\gcc\\arm-none-eabi\\8.2.1\\include\\stddef.h" 1 3 4
+# 149 "c:\\gnu\\2018-q4-major\\lib\\gcc\\arm-none-eabi\\8.2.1\\include\\stddef.h" 3 4
 typedef int ptrdiff_t;
-# 216 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/lib/gcc/arm-none-eabi/6.3.1/include/stddef.h" 3 4
+# 216 "c:\\gnu\\2018-q4-major\\lib\\gcc\\arm-none-eabi\\8.2.1\\include\\stddef.h" 3 4
 typedef unsigned int size_t;
-# 328 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/lib/gcc/arm-none-eabi/6.3.1/include/stddef.h" 3 4
+# 328 "c:\\gnu\\2018-q4-major\\lib\\gcc\\arm-none-eabi\\8.2.1\\include\\stddef.h" 3 4
 typedef unsigned int wchar_t;
-# 15 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/reent.h" 2 3
-# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/_types.h" 1 3
-# 24 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/_types.h" 3
-# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/machine/_types.h" 1 3
+# 15 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\reent.h" 2 3
+# 1 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\_types.h" 1 3
+# 24 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\_types.h" 3
+# 1 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\machine\\_types.h" 1 3
 
 
 
 
 
 
-# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/machine/_default_types.h" 1 3
-# 41 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/machine/_default_types.h" 3
+# 1 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\machine\\_default_types.h" 1 3
+# 41 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\machine\\_default_types.h" 3
 typedef signed char __int8_t;
 
 typedef unsigned char __uint8_t;
-# 55 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/machine/_default_types.h" 3
+# 55 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\machine\\_default_types.h" 3
 typedef short int __int16_t;
 
 typedef short unsigned int __uint16_t;
-# 77 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/machine/_default_types.h" 3
+# 77 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\machine\\_default_types.h" 3
 typedef long int __int32_t;
 
 typedef long unsigned int __uint32_t;
-# 103 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/machine/_default_types.h" 3
+# 103 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\machine\\_default_types.h" 3
 typedef long long int __int64_t;
 
 typedef long long unsigned int __uint64_t;
-# 134 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/machine/_default_types.h" 3
+# 134 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\machine\\_default_types.h" 3
 typedef signed char __int_least8_t;
 
 typedef unsigned char __uint_least8_t;
-# 160 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/machine/_default_types.h" 3
+# 160 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\machine\\_default_types.h" 3
 typedef short int __int_least16_t;
 
 typedef short unsigned int __uint_least16_t;
-# 182 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/machine/_default_types.h" 3
+# 182 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\machine\\_default_types.h" 3
 typedef long int __int_least32_t;
 
 typedef long unsigned int __uint_least32_t;
-# 200 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/machine/_default_types.h" 3
+# 200 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\machine\\_default_types.h" 3
 typedef long long int __int_least64_t;
 
 typedef long long unsigned int __uint_least64_t;
-# 214 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/machine/_default_types.h" 3
+# 214 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\machine\\_default_types.h" 3
 typedef long long int __intmax_t;
 
 
@@ -188,10 +188,10 @@ typedef long long unsigned int __uintmax_t;
 typedef int __intptr_t;
 
 typedef unsigned int __uintptr_t;
-# 8 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/machine/_types.h" 2 3
-# 25 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/_types.h" 2 3
-# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/lock.h" 1 3
-# 33 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/lock.h" 3
+# 8 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\machine\\_types.h" 2 3
+# 25 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\_types.h" 2 3
+# 1 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\lock.h" 1 3
+# 33 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\lock.h" 3
 struct __lock;
 typedef struct __lock * _LOCK_T;
 
@@ -220,7 +220,7 @@ extern int __retarget_lock_try_acquire_recursive(_LOCK_T lock);
 extern void __retarget_lock_release(_LOCK_T lock);
 
 extern void __retarget_lock_release_recursive(_LOCK_T lock);
-# 26 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/_types.h" 2 3
+# 26 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\_types.h" 2 3
 
 
 typedef long __blkcnt_t;
@@ -269,7 +269,7 @@ typedef __uint32_t __id_t;
 
 
 typedef unsigned short __ino_t;
-# 88 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/_types.h" 3
+# 88 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\_types.h" 3
 typedef __uint32_t __mode_t;
 
 
@@ -297,18 +297,18 @@ typedef long __key_t;
 
 
 typedef long _fpos_t;
-# 129 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/_types.h" 3
+# 129 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\_types.h" 3
 typedef unsigned int __size_t;
-# 145 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/_types.h" 3
+# 145 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\_types.h" 3
 typedef signed int _ssize_t;
-# 156 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/_types.h" 3
+# 156 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\_types.h" 3
 typedef _ssize_t __ssize_t;
 
 
-# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/lib/gcc/arm-none-eabi/6.3.1/include/stddef.h" 1 3 4
-# 357 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/lib/gcc/arm-none-eabi/6.3.1/include/stddef.h" 3 4
+# 1 "c:\\gnu\\2018-q4-major\\lib\\gcc\\arm-none-eabi\\8.2.1\\include\\stddef.h" 1 3 4
+# 357 "c:\\gnu\\2018-q4-major\\lib\\gcc\\arm-none-eabi\\8.2.1\\include\\stddef.h" 3 4
 typedef unsigned int wint_t;
-# 160 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/_types.h" 2 3
+# 160 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\_types.h" 2 3
 
 
 
@@ -333,10 +333,20 @@ typedef void *_iconv_t;
 
 
 
+
+
+
 typedef unsigned long __clock_t;
 
 
-typedef long __time_t;
+
+
+
+
+typedef __int_least64_t __time_t;
+
+
+
 
 
 typedef unsigned long __clockid_t;
@@ -352,6 +362,7 @@ typedef __uint8_t __sa_family_t;
 typedef __uint32_t __socklen_t;
 
 
+typedef int __nl_item;
 typedef unsigned short __nlink_t;
 typedef long __suseconds_t;
 typedef unsigned long __useconds_t;
@@ -360,7 +371,7 @@ typedef unsigned long __useconds_t;
 
 
 typedef char * __va_list;
-# 16 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/reent.h" 2 3
+# 16 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\reent.h" 2 3
 
 
 
@@ -368,7 +379,7 @@ typedef char * __va_list;
 
 
 typedef unsigned long __ULong;
-# 38 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/reent.h" 3
+# 38 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\reent.h" 3
 struct _reent;
 
 struct __locale_t;
@@ -414,7 +425,7 @@ struct _on_exit_args {
 
  __ULong _is_cxa;
 };
-# 93 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/reent.h" 3
+# 93 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\reent.h" 3
 struct _atexit {
  struct _atexit *_next;
  int _ind;
@@ -422,12 +433,12 @@ struct _atexit {
  void (*_fns[32])(void);
         struct _on_exit_args _on_exit_args;
 };
-# 117 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/reent.h" 3
+# 117 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\reent.h" 3
 struct __sbuf {
  unsigned char *_base;
  int _size;
 };
-# 181 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/reent.h" 3
+# 181 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\reent.h" 3
 struct __sFILE {
   unsigned char *_p;
   int _r;
@@ -444,13 +455,13 @@ struct __sFILE {
 
   void * _cookie;
 
-  int (* _read) (struct _reent *, void *, char *, int)
-                                          ;
-  int (* _write) (struct _reent *, void *, const char *, int)
-
-                                   ;
-  _fpos_t (* _seek) (struct _reent *, void *, _fpos_t, int);
-  int (* _close) (struct _reent *, void *);
+  int (*_read) (struct _reent *, void *,
+        char *, int);
+  int (*_write) (struct _reent *, void *,
+         const char *,
+         int);
+  _fpos_t (*_seek) (struct _reent *, void *, _fpos_t, int);
+  int (*_close) (struct _reent *, void *);
 
 
   struct __sbuf _ub;
@@ -478,7 +489,7 @@ struct __sFILE {
   _mbstate_t _mbstate;
   int _flags2;
 };
-# 287 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/reent.h" 3
+# 287 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\reent.h" 3
 typedef struct __sFILE __FILE;
 
 
@@ -489,7 +500,7 @@ struct _glue
   int _niobs;
   __FILE *_iobs;
 };
-# 319 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/reent.h" 3
+# 319 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\reent.h" 3
 struct _rand48 {
   unsigned short _seed[3];
   unsigned short _mult[3];
@@ -499,7 +510,7 @@ struct _rand48 {
 
 
 };
-# 569 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/reent.h" 3
+# 608 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\reent.h" 3
 struct _reent
 {
   int _errno;
@@ -518,7 +529,7 @@ struct _reent
 
   int __sdidinit;
 
-  void (* __cleanup) (struct _reent *);
+  void (*__cleanup) (struct _reent *);
 
 
   struct _Bigint *_result;
@@ -578,39 +589,78 @@ struct _reent
 
 
   struct _glue __sglue;
+
   __FILE __sf[3];
+
 };
-# 766 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/reent.h" 3
+# 814 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\reent.h" 3
 extern struct _reent *_impure_ptr ;
 extern struct _reent *const _global_impure_ptr ;
 
 void _reclaim_reent (struct _reent *);
-# 12 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/string.h" 2 3
-# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/cdefs.h" 1 3
-# 45 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/cdefs.h" 3
-# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/lib/gcc/arm-none-eabi/6.3.1/include/stddef.h" 1 3 4
-# 46 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/cdefs.h" 2 3
-# 13 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/string.h" 2 3
+# 12 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\string.h" 2 3
+# 1 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\cdefs.h" 1 3
+# 47 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\cdefs.h" 3
+# 1 "c:\\gnu\\2018-q4-major\\lib\\gcc\\arm-none-eabi\\8.2.1\\include\\stddef.h" 1 3 4
+# 48 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\cdefs.h" 2 3
+# 13 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\string.h" 2 3
 
 
 
 
-# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/lib/gcc/arm-none-eabi/6.3.1/include/stddef.h" 1 3 4
-# 18 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/string.h" 2 3
+# 1 "c:\\gnu\\2018-q4-major\\lib\\gcc\\arm-none-eabi\\8.2.1\\include\\stddef.h" 1 3 4
+# 18 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\string.h" 2 3
 
 
-# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/xlocale.h" 1 3
-# 9 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/xlocale.h" 3
+# 1 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\xlocale.h" 1 3
+# 9 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\xlocale.h" 3
 struct __locale_t;
 typedef struct __locale_t *locale_t;
-# 21 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/string.h" 2 3
+# 21 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\string.h" 2 3
+
+
+
+# 1 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\strings.h" 1 3
+# 44 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\strings.h" 3
+
+
+int bcmp(const void *, const void *, size_t) __attribute__((__pure__));
+void bcopy(const void *, void *, size_t);
+void bzero(void *, size_t);
+
+
+void explicit_bzero(void *, size_t);
+
+
+int ffs(int) __attribute__((__const__));
+
+
+int ffsl(long) __attribute__((__const__));
+int ffsll(long long) __attribute__((__const__));
+int fls(int) __attribute__((__const__));
+int flsl(long) __attribute__((__const__));
+int flsll(long long) __attribute__((__const__));
+
+
+char *index(const char *, int) __attribute__((__pure__));
+char *rindex(const char *, int) __attribute__((__pure__));
+
+int strcasecmp(const char *, const char *) __attribute__((__pure__));
+int strncasecmp(const char *, const char *, size_t) __attribute__((__pure__));
+
+
+int strcasecmp_l (const char *, const char *, locale_t);
+int strncasecmp_l (const char *, const char *, size_t, locale_t);
+
+
+# 25 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\string.h" 2 3
 
 
 
 
 void * memchr (const void *, int, size_t);
 int memcmp (const void *, const void *, size_t);
-void * memcpy (void * restrict, const void * restrict, size_t);
+void * memcpy (void *restrict, const void *restrict, size_t);
 void * memmove (void *, const void *, size_t);
 void * memset (void *, int, size_t);
 char *strcat (char *restrict, const char *restrict);
@@ -639,51 +689,31 @@ char *strerror_l (int, locale_t);
 size_t strxfrm_l (char *restrict, const char *restrict, size_t, locale_t);
 
 
-
-
-
-
 char *strtok_r (char *restrict, const char *restrict, char **restrict);
 
 
-int bcmp (const void *, const void *, size_t);
-void bcopy (const void *, void *, size_t);
-void bzero (void *, size_t);
-
-
-void explicit_bzero (void *, size_t);
 int timingsafe_bcmp (const void *, const void *, size_t);
 int timingsafe_memcmp (const void *, const void *, size_t);
 
 
-int ffs (int);
-char *index (const char *, int);
-
-
-void * memccpy (void * restrict, const void * restrict, int, size_t);
-# 86 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/string.h" 3
-char *rindex (const char *, int);
-
-
+void * memccpy (void *restrict, const void *restrict, int, size_t);
+# 76 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\string.h" 3
 char *stpcpy (char *restrict, const char *restrict);
 char *stpncpy (char *restrict, const char *restrict, size_t);
 
 
-int strcasecmp (const char *, const char *);
 
 
 
 
-
-
-char *strdup (const char *);
+char *strdup (const char *) __attribute__((__malloc__)) __attribute__((__warn_unused_result__));
 
 char *_strdup_r (struct _reent *, const char *);
 
-char *strndup (const char *, size_t);
+char *strndup (const char *, size_t) __attribute__((__malloc__)) __attribute__((__warn_unused_result__));
 
 char *_strndup_r (struct _reent *, const char *, size_t);
-# 121 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/string.h" 3
+# 100 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\string.h" 3
 int strerror_r (int, char *, size_t)
 
              __asm__ ("" "__xpg_strerror_r")
@@ -703,13 +733,13 @@ size_t strlcat (char *, const char *, size_t);
 size_t strlcpy (char *, const char *, size_t);
 
 
-int strncasecmp (const char *, const char *, size_t);
-
-
 size_t strnlen (const char *, size_t);
 
 
 char *strsep (char **, const char *);
+
+
+char *strnstr(const char *, const char *, size_t) __attribute__((__pure__));
 
 
 
@@ -719,32 +749,32 @@ char *strupr (char *);
 
 
 char *strsignal (int __signo);
-# 192 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/string.h" 3
-# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/string.h" 1 3
-# 193 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/string.h" 2 3
+# 175 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\string.h" 3
+# 1 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\string.h" 1 3
+# 176 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\string.h" 2 3
 
 
 # 42 "mcusdk/drivers/fsl_common.h" 2
-# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/stdlib.h" 1 3
-# 10 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/stdlib.h" 3
-# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/machine/ieeefp.h" 1 3
-# 11 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/stdlib.h" 2 3
+# 1 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\stdlib.h" 1 3
+# 10 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\stdlib.h" 3
+# 1 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\machine\\ieeefp.h" 1 3
+# 11 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\stdlib.h" 2 3
 
 
 
 
 
-# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/lib/gcc/arm-none-eabi/6.3.1/include/stddef.h" 1 3 4
-# 17 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/stdlib.h" 2 3
+# 1 "c:\\gnu\\2018-q4-major\\lib\\gcc\\arm-none-eabi\\8.2.1\\include\\stddef.h" 1 3 4
+# 17 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\stdlib.h" 2 3
 
 
 
-# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/machine/stdlib.h" 1 3
-# 21 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/stdlib.h" 2 3
+# 1 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\machine\\stdlib.h" 1 3
+# 21 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\stdlib.h" 2 3
 
-# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/alloca.h" 1 3
-# 23 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/stdlib.h" 2 3
-# 33 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/stdlib.h" 3
+# 1 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\alloca.h" 1 3
+# 23 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\stdlib.h" 2 3
+# 33 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\stdlib.h" 3
 
 
 typedef struct
@@ -797,12 +827,13 @@ int atoi (const char *__nptr);
 int _atoi_r (struct _reent *, const char *__nptr);
 long atol (const char *__nptr);
 long _atol_r (struct _reent *, const char *__nptr);
-void * bsearch (const void * __key, const void * __base, size_t __nmemb, size_t __size, __compar_fn_t _compar)
-
-
-
-                                ;
-void * calloc (size_t __nmemb, size_t __size) ;
+void * bsearch (const void *__key,
+         const void *__base,
+         size_t __nmemb,
+         size_t __size,
+         __compar_fn_t _compar);
+void *calloc(size_t, size_t) __attribute__((__malloc__)) __attribute__((__warn_unused_result__))
+      __attribute__((__alloc_size__(1, 2))) ;
 div_t div (int __numer, int __denom);
 void exit (int __status) __attribute__ ((__noreturn__));
 void free (void *) ;
@@ -816,7 +847,7 @@ int getsubopt (char **, char * const *, char **);
 
 long labs (long);
 ldiv_t ldiv (long __numer, long __denom);
-void * malloc (size_t __size) ;
+void *malloc(size_t) __attribute__((__malloc__)) __attribute__((__warn_unused_result__)) __attribute__((__alloc_size__(1))) ;
 int mblen (const char *, size_t);
 int _mblen_r (struct _reent *, const char *, size_t, _mbstate_t *);
 int mbtowc (wchar_t *restrict, const char *restrict, size_t);
@@ -851,13 +882,12 @@ int _mkostemps_r (struct _reent *, char *, int, int);
 int _mkstemp_r (struct _reent *, char *);
 int _mkstemps_r (struct _reent *, char *, int);
 char * _mktemp_r (struct _reent *, char *) __attribute__ ((__deprecated__("the use of `mktemp' is dangerous; use `mkstemp' instead")));
-void qsort (void * __base, size_t __nmemb, size_t __size, __compar_fn_t _compar);
+void qsort (void *__base, size_t __nmemb, size_t __size, __compar_fn_t _compar);
 int rand (void);
-void * realloc (void * __r, size_t __size) ;
+void *realloc(void *, size_t) __attribute__((__warn_unused_result__)) __attribute__((__alloc_size__(2))) ;
 
-void *reallocarray(void *, size_t, size_t) __attribute__((__warn_unused_result__)) __attribute__((__alloc_size__(2)))
-     __attribute__((__alloc_size__(3)));
-void * reallocf (void * __r, size_t __size);
+void *reallocarray(void *, size_t, size_t) __attribute__((__warn_unused_result__)) __attribute__((__alloc_size__(2, 3)));
+void *reallocf(void *, size_t) __attribute__((__warn_unused_result__)) __attribute__((__alloc_size__(2)));
 
 
 char * realpath (const char *restrict path, char *restrict resolved_path);
@@ -884,7 +914,7 @@ long strtol (const char *restrict __n, char **restrict __end_PTR, int __base);
 long _strtol_r (struct _reent *,const char *restrict __n, char **restrict __end_PTR, int __base);
 unsigned long strtoul (const char *restrict __n, char **restrict __end_PTR, int __base);
 unsigned long _strtoul_r (struct _reent *,const char *restrict __n, char **restrict __end_PTR, int __base);
-# 188 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/stdlib.h" 3
+# 188 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\stdlib.h" 3
 int system (const char *__string);
 
 
@@ -893,7 +923,7 @@ char * l64a (long __input);
 char * _l64a_r (struct _reent *,long __input);
 
 
-int on_exit (void (*__func)(int, void *),void * __arg);
+int on_exit (void (*__func)(int, void *),void *__arg);
 
 
 void _Exit (int __status) __attribute__ ((__noreturn__));
@@ -907,7 +937,7 @@ void * _reallocf_r (struct _reent *, void *, size_t);
 int setenv (const char *__string, const char *__value, int __overwrite);
 
 int _setenv_r (struct _reent *, const char *__string, const char *__value, int __overwrite);
-# 221 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/stdlib.h" 3
+# 221 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\stdlib.h" 3
 char * __itoa (int, char *, int);
 char * __utoa (unsigned, char *, int);
 
@@ -972,7 +1002,8 @@ int _unsetenv_r (struct _reent *, const char *__string);
 
 
 
-int __attribute__((__nonnull__(1))) posix_memalign (void **, size_t, size_t);
+int posix_memalign (void **, size_t, size_t) __attribute__((__nonnull__ (1)))
+     __attribute__((__warn_unused_result__));
 
 
 char * _dtoa_r (struct _reent *, double, int, int, int *, int*, char**);
@@ -986,14 +1017,14 @@ void _mstats_r (struct _reent *, char *);
 int _system_r (struct _reent *, const char *);
 
 void __eprintf (const char *, const char *, unsigned int, const char *);
-# 308 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/stdlib.h" 3
-void qsort_r (void * __base, size_t __nmemb, size_t __size, void * __thunk, int (*_compar)(void *, const void *, const void *))
+# 309 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\stdlib.h" 3
+void qsort_r (void *__base, size_t __nmemb, size_t __size, void *__thunk, int (*_compar)(void *, const void *, const void *))
              __asm__ ("" "__bsd_qsort_r");
-# 318 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/stdlib.h" 3
+# 319 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\stdlib.h" 3
 extern long double _strtold_r (struct _reent *, const char *restrict, char **restrict);
 
 extern long double strtold (const char *restrict, char **restrict);
-# 335 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/stdlib.h" 3
+# 336 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\stdlib.h" 3
 
 # 43 "mcusdk/drivers/fsl_common.h" 2
 
@@ -1418,16 +1449,8 @@ __attribute__((always_inline)) static inline uint32_t __get_FPSCR(void)
 
 
 
-
-
-  uint32_t result;
-
-  __asm volatile ("VMRS %0, fpscr" : "=r" (result) );
-  return(result);
-
-
-
-
+  return __builtin_arm_get_fpscr();
+# 720 "../../lib/cmsis/inc/cmsis_gcc.h"
 }
 
 
@@ -1442,9 +1465,9 @@ __attribute__((always_inline)) static inline void __set_FPSCR(uint32_t fpscr)
 
 
 
+  __builtin_arm_set_fpscr(fpscr);
 
 
-  __asm volatile ("VMSR fpscr, %0" : : "r" (fpscr) : "vfpcc", "memory");
 
 
 
@@ -5867,14 +5890,14 @@ typedef int32_t status_t;
 
 # 1 "mcusdk/drivers/fsl_clock.h" 1
 # 40 "mcusdk/drivers/fsl_clock.h"
-# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/assert.h" 1 3
-# 39 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/assert.h" 3
+# 1 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\assert.h" 1 3
+# 39 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\assert.h" 3
 
-# 39 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/assert.h" 3
-void __assert (const char *, int, const char *) __attribute__ ((__noreturn__))
-                                 ;
-void __assert_func (const char *, int, const char *, const char *) __attribute__ ((__noreturn__))
-                                 ;
+# 39 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\assert.h" 3
+void __assert (const char *, int, const char *)
+     __attribute__ ((__noreturn__));
+void __assert_func (const char *, int, const char *, const char *)
+     __attribute__ ((__noreturn__));
 # 41 "mcusdk/drivers/fsl_clock.h" 2
 # 102 "mcusdk/drivers/fsl_clock.h"
 
@@ -6687,7 +6710,7 @@ void CLOCK_DisableUsbhs1PhyPllClock(void);
 
     void SDK_Free(void *ptr);
 # 39 "./mpconfigport.h" 2
-# 179 "./mpconfigport.h"
+# 183 "./mpconfigport.h"
 extern const struct _mp_obj_module_t machine_module;
 extern const struct _mp_obj_module_t pyb_module;
 extern const struct _mp_obj_module_t mcu_module;
@@ -6709,11 +6732,11 @@ extern const struct _mp_obj_module_t image_module;
 extern const struct _mp_obj_module_t mjpeg_module;
 extern const struct _mp_obj_module_t nn_module;
 extern const struct _mp_obj_module_t gif_module;
-# 330 "./mpconfigport.h"
+# 362 "./mpconfigport.h"
 typedef int mp_int_t;
 typedef unsigned int mp_uint_t;
 typedef long mp_off_t;
-# 345 "./mpconfigport.h"
+# 377 "./mpconfigport.h"
 static inline void enable_irq(mp_uint_t state) {
     __set_PRIMASK(state);
 }
@@ -6723,7 +6746,7 @@ static inline mp_uint_t disable_irq(void) {
     __disable_irq();
     return state;
 }
-# 372 "./mpconfigport.h"
+# 404 "./mpconfigport.h"
 extern void HAL_WFI(void);
 # 46 "../../py/mpconfig.h" 2
 # 554 "../../py/mpconfig.h"
@@ -6866,30 +6889,292 @@ Q(AIPSTZ4)
 Q(AOI1)
 Q(AOI2)
 Q(BEE)
+Q(CAL_CAL_CODE_BF)
 Q(CAN1)
 Q(CAN2)
+Q(CAPTCOMPA_EDGCMPA_BF)
+Q(CAPTCOMPA_EDGCNTA_BF)
+Q(CAPTCOMPB_EDGCMPB_BF)
+Q(CAPTCOMPB_EDGCNTB_BF)
+Q(CAPTCOMPX_EDGCMPX_BF)
+Q(CAPTCOMPX_EDGCNTX_BF)
+Q(CAPTCTRLA_ARMA)
+Q(CAPTCTRLA_CA0CNT_BF)
+Q(CAPTCTRLA_CA1CNT_BF)
+Q(CAPTCTRLA_CFAWM_BF)
+Q(CAPTCTRLA_EDGA0_BF)
+Q(CAPTCTRLA_EDGA1_BF)
+Q(CAPTCTRLA_EDGCNTA_EN)
+Q(CAPTCTRLA_INP_SELA)
+Q(CAPTCTRLA_ONESHOTA)
+Q(CAPTCTRLB_ARMB)
+Q(CAPTCTRLB_CB0CNT_BF)
+Q(CAPTCTRLB_CB1CNT_BF)
+Q(CAPTCTRLB_CFBWM_BF)
+Q(CAPTCTRLB_EDGB0_BF)
+Q(CAPTCTRLB_EDGB1_BF)
+Q(CAPTCTRLB_EDGCNTB_EN)
+Q(CAPTCTRLB_INP_SELB)
+Q(CAPTCTRLB_ONESHOTB)
+Q(CAPTCTRLX_ARMX)
+Q(CAPTCTRLX_CFXWM_BF)
+Q(CAPTCTRLX_CX0CNT_BF)
+Q(CAPTCTRLX_CX1CNT_BF)
+Q(CAPTCTRLX_EDGCNTX_EN)
+Q(CAPTCTRLX_EDGX0_BF)
+Q(CAPTCTRLX_EDGX1_BF)
+Q(CAPTCTRLX_INP_SELX)
+Q(CAPTCTRLX_ONESHOTX)
+Q(CAPT_CAPTURE_BF)
 Q(CCM)
 Q(CCM_ANALOG)
+Q(CCR_DBT_BF)
+Q(CCR_PCSSCK_BF)
+Q(CCR_SCKDIV_BF)
+Q(CCR_SCKPCS_BF)
+Q(CFGR0_CIRFIFO)
+Q(CFGR0_HREN)
+Q(CFGR0_HRPOL)
+Q(CFGR0_HRSEL)
+Q(CFGR0_RDMO)
+Q(CFGR1_AUTOPCS)
+Q(CFGR1_MASTER)
+Q(CFGR1_MATCFG_BF)
+Q(CFGR1_NOSTALL)
+Q(CFGR1_OUTCFG)
+Q(CFGR1_PCSCFG)
+Q(CFGR1_PCSPOL_BF)
+Q(CFGR1_PINCFG_BF)
+Q(CFGR1_SAMPLE)
+Q(CFG_ADHSC)
+Q(CFG_ADICLK_BF)
+Q(CFG_ADIV_BF)
+Q(CFG_ADLPC)
+Q(CFG_ADLSMP)
+Q(CFG_ADSTS_BF)
+Q(CFG_ADTRG)
+Q(CFG_AVGS_BF)
+Q(CFG_MODE_BF)
+Q(CFG_OVWREN)
+Q(CFG_REFSEL_BF)
 Q(CMP1)
 Q(CMP2)
 Q(CMP3)
 Q(CMP4)
+Q(CMPLD1_COMPARATOR_LOAD_1_BF)
+Q(CMPLD2_COMPARATOR_LOAD_2_BF)
+Q(CNTR_COUNTER_BF)
+Q(CNT_CNT_BF)
+Q(COMP1_COMPARISON_1_BF)
+Q(COMP2_COMPARISON_2_BF)
+Q(CR_DBGEN)
+Q(CR_DOZEN)
+Q(CR_MEN)
+Q(CR_RRF)
+Q(CR_RST)
+Q(CR_RTF)
+Q(CSCTRL_ALT_LOAD)
+Q(CSCTRL_CL1_BF)
+Q(CSCTRL_CL2_BF)
+Q(CSCTRL_DBG_EN_BF)
+Q(CSCTRL_FAULT)
+Q(CSCTRL_ROC)
+Q(CSCTRL_TCF1)
+Q(CSCTRL_TCF1EN)
+Q(CSCTRL_TCF2)
+Q(CSCTRL_TCF2EN)
+Q(CSCTRL_TCI)
+Q(CSCTRL_UP)
 Q(CSI)
 Q(CSU)
+Q(CTRL2_CLK_SEL_BF)
+Q(CTRL2_DBGEN)
+Q(CTRL2_FORCE)
+Q(CTRL2_FORCE_SEL_BF)
+Q(CTRL2_FRCEN)
+Q(CTRL2_INDEP)
+Q(CTRL2_INIT_SEL_BF)
+Q(CTRL2_PWM23_INIT)
+Q(CTRL2_PWM45_INIT)
+Q(CTRL2_PWMX_INIT)
+Q(CTRL2_RELOAD_SEL)
+Q(CTRL2_WAITEN)
+Q(CTRL_CM_BF)
+Q(CTRL_COINIT)
+Q(CTRL_COMPMODE)
+Q(CTRL_DBLEN)
+Q(CTRL_DBLX)
+Q(CTRL_DIR)
+Q(CTRL_DMA_MODE_SEL)
+Q(CTRL_DT_BF)
+Q(CTRL_EXT0_TRIG_ENABLE)
+Q(CTRL_EXT0_TRIG_PRIORITY_BF)
+Q(CTRL_EXT1_TRIG_ENABLE)
+Q(CTRL_EXT1_TRIG_PRIORITY_BF)
+Q(CTRL_FULL)
+Q(CTRL_HALF)
+Q(CTRL_LDFQ_BF)
+Q(CTRL_LDMOD)
+Q(CTRL_LENGTH)
+Q(CTRL_ONCE)
+Q(CTRL_OUTMODE_BF)
+Q(CTRL_PCS_BF)
+Q(CTRL_PRE_DIVIDER_BF)
+Q(CTRL_PRSC_BF)
+Q(CTRL_SCS_BF)
+Q(CTRL_SOFTRST)
+Q(CTRL_SPLIT)
+Q(CTRL_TRIG_ENABLE_BF)
+Q(CTRL_TSC_BYPASS)
+Q(CVAL0CYC_CVAL0CYC_BF)
+Q(CVAL0_CAPTVAL0_BF)
+Q(CVAL1CYC_CVAL1CYC_BF)
+Q(CVAL1_CAPTVAL1_BF)
+Q(CVAL2CYC_CVAL2CYC_BF)
+Q(CVAL2_CAPTVAL2_BF)
+Q(CVAL3CYC_CVAL3CYC_BF)
+Q(CVAL3_CAPTVAL3_BF)
+Q(CVAL4CYC_CVAL4CYC_BF)
+Q(CVAL4_CAPTVAL4_BF)
+Q(CVAL5CYC_CVAL5CYC_BF)
+Q(CVAL5_CAPTVAL5_BF)
+Q(CV_CV1_BF)
+Q(CV_CV2_BF)
 Q(DCDC)
 Q(DCP)
+Q(DER_RDDE)
+Q(DER_TDDE)
+Q(DISMAP_DIS0A_BF)
+Q(DISMAP_DIS0B_BF)
+Q(DISMAP_DIS0X_BF)
+Q(DISMAP_DIS1A_BF)
+Q(DISMAP_DIS1B_BF)
+Q(DISMAP_DIS1X_BF)
 Q(DMA0)
+Q(DMAEN_CA0DE)
+Q(DMAEN_CA1DE)
+Q(DMAEN_CAPTDE_BF)
+Q(DMAEN_CB0DE)
+Q(DMAEN_CB1DE)
+Q(DMAEN_CX0DE)
+Q(DMAEN_CX1DE)
+Q(DMAEN_FAND)
+Q(DMAEN_VALDE)
 Q(DMAMUX)
+Q(DMA_CMPLD1DE)
+Q(DMA_CMPLD2DE)
+Q(DMA_CTRL_TRIG0_ENABLE)
+Q(DMA_CTRL_TRIG0_REQ)
+Q(DMA_CTRL_TRIG1_ENABLE)
+Q(DMA_CTRL_TRIG1_REQ)
+Q(DMA_CTRL_TRIG2_ENABLE)
+Q(DMA_CTRL_TRIG2_REQ)
+Q(DMA_CTRL_TRIG3_ENABLE)
+Q(DMA_CTRL_TRIG3_REQ)
+Q(DMA_CTRL_TRIG4_ENABLE)
+Q(DMA_CTRL_TRIG4_REQ)
+Q(DMA_CTRL_TRIG5_ENABLE)
+Q(DMA_CTRL_TRIG5_REQ)
+Q(DMA_CTRL_TRIG6_ENABLE)
+Q(DMA_CTRL_TRIG6_REQ)
+Q(DMA_CTRL_TRIG7_ENABLE)
+Q(DMA_CTRL_TRIG7_REQ)
+Q(DMA_IEFDE)
+Q(DMR0_MATCH0_BF)
+Q(DMR1_MATCH1_BF)
+Q(DONE0_1_IRQ_TRIG0_DONE0)
+Q(DONE0_1_IRQ_TRIG0_DONE1)
+Q(DONE0_1_IRQ_TRIG1_DONE0)
+Q(DONE0_1_IRQ_TRIG1_DONE1)
+Q(DONE0_1_IRQ_TRIG2_DONE0)
+Q(DONE0_1_IRQ_TRIG2_DONE1)
+Q(DONE0_1_IRQ_TRIG3_DONE0)
+Q(DONE0_1_IRQ_TRIG3_DONE1)
+Q(DONE0_1_IRQ_TRIG4_DONE0)
+Q(DONE0_1_IRQ_TRIG4_DONE1)
+Q(DONE0_1_IRQ_TRIG5_DONE0)
+Q(DONE0_1_IRQ_TRIG5_DONE1)
+Q(DONE0_1_IRQ_TRIG6_DONE0)
+Q(DONE0_1_IRQ_TRIG6_DONE1)
+Q(DONE0_1_IRQ_TRIG7_DONE0)
+Q(DONE0_1_IRQ_TRIG7_DONE1)
+Q(DONE2_ERR_IRQ_TRIG0_DONE2)
+Q(DONE2_ERR_IRQ_TRIG0_ERR)
+Q(DONE2_ERR_IRQ_TRIG1_DONE2)
+Q(DONE2_ERR_IRQ_TRIG1_ERR)
+Q(DONE2_ERR_IRQ_TRIG2_DONE2)
+Q(DONE2_ERR_IRQ_TRIG2_ERR)
+Q(DONE2_ERR_IRQ_TRIG3_DONE2)
+Q(DONE2_ERR_IRQ_TRIG3_ERR)
+Q(DONE2_ERR_IRQ_TRIG4_DONE2)
+Q(DONE2_ERR_IRQ_TRIG4_ERR)
+Q(DONE2_ERR_IRQ_TRIG5_DONE2)
+Q(DONE2_ERR_IRQ_TRIG5_ERR)
+Q(DONE2_ERR_IRQ_TRIG6_DONE2)
+Q(DONE2_ERR_IRQ_TRIG6_ERR)
+Q(DONE2_ERR_IRQ_TRIG7_DONE2)
+Q(DONE2_ERR_IRQ_TRIG7_ERR)
+Q(DR_DR_BF)
+Q(DTCNT0_DTCNT0_BF)
+Q(DTCNT1_DTCNT1_BF)
+Q(DTSRCSEL_SM0SEL23_BF)
+Q(DTSRCSEL_SM0SEL45_BF)
+Q(DTSRCSEL_SM1SEL23_BF)
+Q(DTSRCSEL_SM1SEL45_BF)
+Q(DTSRCSEL_SM2SEL23_BF)
+Q(DTSRCSEL_SM2SEL45_BF)
+Q(DTSRCSEL_SM3SEL23_BF)
+Q(DTSRCSEL_SM3SEL45_BF)
+Q(EDGE_SEL_GPIO_EDGE_SEL_BF)
+Q(ENBL_ENBL_BF)
 Q(ENC1)
 Q(ENC2)
 Q(ENC3)
 Q(ENC4)
 Q(ENET)
 Q(EWM)
+Q(FCR_RXWATER_BF)
+Q(FCR_TXWATER_BF)
+Q(FCTRL2_NOCOMB_BF)
+Q(FCTRL_FAUTO_BF)
+Q(FCTRL_FIE_BF)
+Q(FCTRL_FLVL_BF)
+Q(FCTRL_FSAFE_BF)
+Q(FFILT_FILT_CNT_BF)
+Q(FFILT_FILT_PER_BF)
+Q(FFILT_GSTR)
+Q(FILT_FILT_CNT_BF)
+Q(FILT_FILT_PER_BF)
 Q(FLEXIO1)
 Q(FLEXIO2)
 Q(FLEXRAM)
 Q(FLEXSPI)
+Q(FRACVAL1_FRACVAL1_BF)
+Q(FRACVAL2_FRACVAL2_BF)
+Q(FRACVAL3_FRACVAL3_BF)
+Q(FRACVAL4_FRACVAL4_BF)
+Q(FRACVAL5_FRACVAL5_BF)
+Q(FRCTRL_FRAC1_EN)
+Q(FRCTRL_FRAC23_EN)
+Q(FRCTRL_FRAC45_EN)
+Q(FRCTRL_FRAC_PU)
+Q(FRCTRL_TEST)
+Q(FSR_RXCOUNT_BF)
+Q(FSR_TXCOUNT_BF)
+Q(FSTS_FFLAG_BF)
+Q(FSTS_FFPIN_BF)
+Q(FSTS_FFULL_BF)
+Q(FSTS_FHALF_BF)
+Q(FTST_FTEST)
+Q(GC_ACFE)
+Q(GC_ACFGT)
+Q(GC_ACREN)
+Q(GC_ADACKEN)
+Q(GC_ADCO)
+Q(GC_AVGE)
+Q(GC_CAL)
+Q(GC_DMAEN)
+Q(GDIR_GDIR_BF)
 Q(GPC)
 Q(GPIO1)
 Q(GPIO2)
@@ -6906,12 +7191,72 @@ Q(GPIO_ISR)
 Q(GPIO_PSR)
 Q(GPT1)
 Q(GPT2)
+Q(GS_ADACT)
+Q(GS_AWKST)
+Q(GS_CALF)
+Q(HC_ADCH_BF)
+Q(HC_AIEN)
+Q(HOLD_HOLD_BF)
+Q(HS_COCO0)
+Q(ICR1_ICR0_BF)
+Q(ICR1_ICR10_BF)
+Q(ICR1_ICR11_BF)
+Q(ICR1_ICR12_BF)
+Q(ICR1_ICR13_BF)
+Q(ICR1_ICR14_BF)
+Q(ICR1_ICR15_BF)
+Q(ICR1_ICR1_BF)
+Q(ICR1_ICR2_BF)
+Q(ICR1_ICR3_BF)
+Q(ICR1_ICR4_BF)
+Q(ICR1_ICR5_BF)
+Q(ICR1_ICR6_BF)
+Q(ICR1_ICR7_BF)
+Q(ICR1_ICR8_BF)
+Q(ICR1_ICR9_BF)
+Q(ICR2_ICR16_BF)
+Q(ICR2_ICR17_BF)
+Q(ICR2_ICR18_BF)
+Q(ICR2_ICR19_BF)
+Q(ICR2_ICR20_BF)
+Q(ICR2_ICR21_BF)
+Q(ICR2_ICR22_BF)
+Q(ICR2_ICR23_BF)
+Q(ICR2_ICR24_BF)
+Q(ICR2_ICR25_BF)
+Q(ICR2_ICR26_BF)
+Q(ICR2_ICR27_BF)
+Q(ICR2_ICR28_BF)
+Q(ICR2_ICR29_BF)
+Q(ICR2_ICR30_BF)
+Q(ICR2_ICR31_BF)
+Q(IER_DMIE)
+Q(IER_FCIE)
+Q(IER_RDIE)
+Q(IER_REIE)
+Q(IER_TCIE)
+Q(IER_TDIE)
+Q(IER_TEIE)
+Q(IER_WCIE)
+Q(IMR_IMR_BF)
+Q(INIT_INIT_BF)
+Q(INTEN_CA0IE)
+Q(INTEN_CA1IE)
+Q(INTEN_CB0IE)
+Q(INTEN_CB1IE)
+Q(INTEN_CMPIE_BF)
+Q(INTEN_CX0IE)
+Q(INTEN_CX1IE)
+Q(INTEN_REIE)
+Q(INTEN_RIE)
 Q(IOMUXC)
 Q(IOMUXC_GPR)
 Q(IOMUXC_SNVS)
 Q(IOMUXC_SNVS_GPR)
+Q(ISR_ISR_BF)
 Q(KPP)
 Q(LCDIF)
+Q(LOAD_LOAD_BF)
 Q(LPI2C1)
 Q(LPI2C2)
 Q(LPI2C3)
@@ -6973,10 +7318,100 @@ Q(LPUART5)
 Q(LPUART6)
 Q(LPUART7)
 Q(LPUART8)
+Q(MASK_MASKA_BF)
+Q(MASK_MASKB_BF)
+Q(MASK_MASKX_BF)
+Q(MASK_UPDATE_MASK_BF)
+Q(MCCR0_CLKHI_BF)
+Q(MCCR0_CLKLO_BF)
+Q(MCCR0_DATAVD_BF)
+Q(MCCR0_SETHOLD_BF)
+Q(MCCR1_CLKHI_BF)
+Q(MCCR1_CLKLO_BF)
+Q(MCCR1_DATAVD_BF)
+Q(MCCR1_SETHOLD_BF)
+Q(MCFGR0_CIRFIFO)
+Q(MCFGR0_HREN)
+Q(MCFGR0_HRPOL)
+Q(MCFGR0_HRSEL)
+Q(MCFGR0_RDMO)
+Q(MCFGR1_AUTOSTOP)
+Q(MCFGR1_IGNACK)
+Q(MCFGR1_MATCFG_BF)
+Q(MCFGR1_PINCFG_BF)
+Q(MCFGR1_PRESCALE_BF)
+Q(MCFGR1_TIMECFG)
+Q(MCFGR2_BUSIDLE_BF)
+Q(MCFGR2_FILTSCL_BF)
+Q(MCFGR2_FILTSDA_BF)
+Q(MCFGR3_PINLOW_BF)
+Q(MCR_DBGEN)
+Q(MCR_DOZEN)
+Q(MCR_MEN)
+Q(MCR_RRF)
+Q(MCR_RST)
+Q(MCR_RTF)
+Q(MCTRL2_MONPLL_BF)
+Q(MCTRL_CLDOK_BF)
+Q(MCTRL_IPOL_BF)
+Q(MCTRL_LDOK_BF)
+Q(MCTRL_RUN_BF)
+Q(MDER_RDDE)
+Q(MDER_TDDE)
+Q(MDMR_MATCH0_BF)
+Q(MDMR_MATCH1_BF)
+Q(MFCR_RXWATER_BF)
+Q(MFCR_TXWATER_BF)
+Q(MFSR_RXCOUNT_BF)
+Q(MFSR_TXCOUNT_BF)
+Q(MIER_ALIE)
+Q(MIER_DMIE)
+Q(MIER_EPIE)
+Q(MIER_FEIE)
+Q(MIER_NDIE)
+Q(MIER_PLTIE)
+Q(MIER_RDIE)
+Q(MIER_SDIE)
+Q(MIER_TDIE)
+Q(MRDR_DATA_BF)
+Q(MRDR_RXEMPTY)
+Q(MSR_ALF)
+Q(MSR_BBF)
+Q(MSR_DMF)
+Q(MSR_EPF)
+Q(MSR_FEF)
+Q(MSR_MBF)
+Q(MSR_NDF)
+Q(MSR_PLTF)
+Q(MSR_RDF)
+Q(MSR_SDF)
+Q(MSR_TDF)
+Q(MTDR_CMD_BF)
+Q(MTDR_DATA_BF)
 Q(OCOTP)
+Q(OCTRL_POLA)
+Q(OCTRL_POLB)
+Q(OCTRL_POLX)
+Q(OCTRL_PWMAFS_BF)
+Q(OCTRL_PWMA_IN)
+Q(OCTRL_PWMBFS_BF)
+Q(OCTRL_PWMB_IN)
+Q(OCTRL_PWMXFS_BF)
+Q(OCTRL_PWMX_IN)
+Q(OFS_OFS_BF)
+Q(OFS_SIGN)
+Q(OUTEN_PWMA_EN_BF)
+Q(OUTEN_PWMB_EN_BF)
+Q(OUTEN_PWMX_EN_BF)
+Q(PARAM_MRXFIFO_BF)
+Q(PARAM_MTXFIFO_BF)
+Q(PARAM_PCSNUM_BF)
+Q(PARAM_RXFIFO_BF)
+Q(PARAM_TXFIFO_BF)
 Q(PGC)
 Q(PIT)
 Q(PMU)
+Q(PSR_PSR_BF)
 Q(PWM1)
 Q(PWM2)
 Q(PWM3)
@@ -7036,15 +7471,137 @@ Q(PWM_VAL3)
 Q(PWM_VAL4)
 Q(PWM_VAL5)
 Q(PXP)
+Q(RDR_DATA_BF)
 Q(ROMC)
+Q(RSR_RXEMPTY)
+Q(RSR_SOF)
 Q(RTWDOG)
+Q(R_CDATA_BF)
 Q(SAI1)
 Q(SAI2)
 Q(SAI3)
+Q(SAMR_ADDR0_BF)
+Q(SAMR_ADDR1_BF)
+Q(SASR_ANV)
+Q(SASR_RADDR_BF)
+Q(SCFGR1_ACKSTALL)
+Q(SCFGR1_ADDRCFG_BF)
+Q(SCFGR1_ADRSTALL)
+Q(SCFGR1_GCEN)
+Q(SCFGR1_HSMEN)
+Q(SCFGR1_IGNACK)
+Q(SCFGR1_RXCFG)
+Q(SCFGR1_RXSTALL)
+Q(SCFGR1_SAEN)
+Q(SCFGR1_TXCFG)
+Q(SCFGR1_TXDSTALL)
+Q(SCFGR2_CLKHOLD_BF)
+Q(SCFGR2_DATAVD_BF)
+Q(SCFGR2_FILTSCL_BF)
+Q(SCFGR2_FILTSDA_BF)
+Q(SCR_FILTDZ)
+Q(SCR_FILTEN)
+Q(SCR_RRF)
+Q(SCR_RST)
+Q(SCR_RTF)
+Q(SCR_SEN)
+Q(SCTRL_CAPTURE_MODE_BF)
+Q(SCTRL_EEOF)
+Q(SCTRL_FORCE)
+Q(SCTRL_IEF)
+Q(SCTRL_IEFIE)
+Q(SCTRL_INPUT)
+Q(SCTRL_IPS)
+Q(SCTRL_MSTR)
+Q(SCTRL_OEN)
+Q(SCTRL_OPS)
+Q(SCTRL_TCF)
+Q(SCTRL_TCFIE)
+Q(SCTRL_TOF)
+Q(SCTRL_TOFIE)
+Q(SCTRL_VAL)
+Q(SDER_AVDE)
+Q(SDER_RDDE)
+Q(SDER_TDDE)
 Q(SEMC)
+Q(SIER_AM0IE)
+Q(SIER_AM1F)
+Q(SIER_AVIE)
+Q(SIER_BEIE)
+Q(SIER_FEIE)
+Q(SIER_GCIE)
+Q(SIER_RDIE)
+Q(SIER_RSIE)
+Q(SIER_SARIE)
+Q(SIER_SDIE)
+Q(SIER_TAIE)
+Q(SIER_TDIE)
 Q(SNVS)
 Q(SPDIF)
 Q(SRC)
+Q(SRDR_DATA_BF)
+Q(SRDR_RXEMPTY)
+Q(SRDR_SOF)
+Q(SR_DMF)
+Q(SR_FCF)
+Q(SR_MBF)
+Q(SR_RDF)
+Q(SR_REF)
+Q(SR_TCF)
+Q(SR_TDF)
+Q(SR_TEF)
+Q(SR_WCF)
+Q(SSR_AM0F)
+Q(SSR_AM1F)
+Q(SSR_AVF)
+Q(SSR_BBF)
+Q(SSR_BEF)
+Q(SSR_FEF)
+Q(SSR_GCF)
+Q(SSR_RDF)
+Q(SSR_RSF)
+Q(SSR_SARF)
+Q(SSR_SBF)
+Q(SSR_SDF)
+Q(SSR_TAF)
+Q(SSR_TDF)
+Q(STAR_TXNACK)
+Q(STDR_DATA_BF)
+Q(STS_CFA0)
+Q(STS_CFA1)
+Q(STS_CFB0)
+Q(STS_CFB1)
+Q(STS_CFX0)
+Q(STS_CFX1)
+Q(STS_CMPF_BF)
+Q(STS_REF)
+Q(STS_RF)
+Q(STS_RUF)
+Q(SWCOUT_SM0OUT23)
+Q(SWCOUT_SM0OUT45)
+Q(SWCOUT_SM1OUT23)
+Q(SWCOUT_SM1OUT45)
+Q(SWCOUT_SM2OUT23)
+Q(SWCOUT_SM2OUT45)
+Q(SWCOUT_SM3OUT23)
+Q(SWCOUT_SM3OUT45)
+Q(TCR_BYSW)
+Q(TCR_CONT)
+Q(TCR_CONTC)
+Q(TCR_CPHA)
+Q(TCR_CPOL)
+Q(TCR_FRAMESZ_BF)
+Q(TCR_LSBF)
+Q(TCR_PCS_BF)
+Q(TCR_PRESCALE_BF)
+Q(TCR_RXMSK)
+Q(TCR_TXMSK)
+Q(TCR_WIDTH_BF)
+Q(TCTRL_OUT_TRIG_EN_BF)
+Q(TCTRL_PWAOT0)
+Q(TCTRL_PWBOT1)
+Q(TCTRL_TRGFRQ)
+Q(TDR_DATA_BF)
 Q(TEMPMON)
 Q(TMR1)
 Q(TMR2)
@@ -7075,13 +7632,22 @@ Q(USBPHY2)
 Q(USB_ANALOG)
 Q(USDHC1)
 Q(USDHC2)
+Q(VAL0_VAL0_BF)
+Q(VAL1_VAL1_BF)
+Q(VAL2_VAL2_BF)
+Q(VAL3_VAL3_BF)
+Q(VAL4_VAL4_BF)
+Q(VAL5_VAL5_BF)
+Q(VERID_FEATURE_BF)
+Q(VERID_MAJOR_BF)
+Q(VERID_MINOR_BF)
 Q(WDOG1)
 Q(WDOG2)
 Q(XBARA1)
 Q(XBARB2)
 Q(XBARB3)
 Q(XTALOSC24M)
-# 417 "<stdin>"
+# 960 "<stdin>"
 Q(omv)
 Q(version_major)
 Q(version_minor)
@@ -7235,7 +7801,7 @@ Q(contrast_threshold)
 
 
 Q(nn_class)
-# 578 "<stdin>"
+# 1121 "<stdin>"
 Q(QQCIF)
 Q(QCIF)
 Q(CIF)
@@ -7620,7 +8186,7 @@ Q(mask_ellipse)
 Q(binary)
 
 Q(zero)
-# 970 "<stdin>"
+# 1513 "<stdin>"
 Q(and)
 Q(b_and)
 
@@ -7658,7 +8224,7 @@ Q(erode)
 
 Q(dilate)
 Q(threshold)
-# 1020 "<stdin>"
+# 1563 "<stdin>"
 Q(top_hat)
 
 
@@ -7704,7 +8270,7 @@ Q(mul)
 Q(div)
 
 Q(mod)
-# 1076 "<stdin>"
+# 1619 "<stdin>"
 Q(difference)
 
 
@@ -7751,15 +8317,15 @@ Q(midpoint)
 
 
 Q(morph)
-# 1130 "<stdin>"
+# 1673 "<stdin>"
 Q(blur)
 Q(gaussian)
 Q(gaussian_blur)
 Q(unsharp)
-# 1142 "<stdin>"
+# 1685 "<stdin>"
 Q(laplacian)
 Q(sharpen)
-# 1152 "<stdin>"
+# 1695 "<stdin>"
 Q(bilateral)
 Q(color_sigma)
 Q(space_sigma)
@@ -7841,7 +8407,7 @@ Q(value)
 Q(l_value)
 Q(a_value)
 Q(b_value)
-# 1258 "<stdin>"
+# 1801 "<stdin>"
 Q(lq)
 Q(uq)
 Q(l_mean)
@@ -7976,7 +8542,7 @@ Q(r)
 
 
 Q(find_rects)
-# 1405 "<stdin>"
+# 1948 "<stdin>"
 Q(find_qrcodes)
 
 
@@ -8041,7 +8607,7 @@ Q(find_datamatrices)
 Q(effort)
 
 Q(datamatrix)
-# 1477 "<stdin>"
+# 2020 "<stdin>"
 Q(rows)
 Q(columns)
 Q(capacity)
@@ -8052,7 +8618,7 @@ Q(find_barcodes)
 
 
 Q(barcode)
-# 1497 "<stdin>"
+# 2040 "<stdin>"
 Q(EAN2)
 Q(EAN5)
 Q(EAN8)
@@ -8189,6 +8755,10 @@ Q(ADC_R6)
 
 Q(ADC_R7)
 
+Q(AF_INET)
+
+Q(AF_INET6)
+
 Q(AIPSTZ1)
 
 Q(AIPSTZ2)
@@ -8263,13 +8833,141 @@ Q(BytesIO)
 
 Q(BytesIO)
 
+Q(CAL_CAL_CODE_BF)
+
 Q(CAN1)
 
 Q(CAN2)
 
+Q(CAPTCOMPA_EDGCMPA_BF)
+
+Q(CAPTCOMPA_EDGCNTA_BF)
+
+Q(CAPTCOMPB_EDGCMPB_BF)
+
+Q(CAPTCOMPB_EDGCNTB_BF)
+
+Q(CAPTCOMPX_EDGCMPX_BF)
+
+Q(CAPTCOMPX_EDGCNTX_BF)
+
+Q(CAPTCTRLA_ARMA)
+
+Q(CAPTCTRLA_CA0CNT_BF)
+
+Q(CAPTCTRLA_CA1CNT_BF)
+
+Q(CAPTCTRLA_CFAWM_BF)
+
+Q(CAPTCTRLA_EDGA0_BF)
+
+Q(CAPTCTRLA_EDGA1_BF)
+
+Q(CAPTCTRLA_EDGCNTA_EN)
+
+Q(CAPTCTRLA_INP_SELA)
+
+Q(CAPTCTRLA_ONESHOTA)
+
+Q(CAPTCTRLB_ARMB)
+
+Q(CAPTCTRLB_CB0CNT_BF)
+
+Q(CAPTCTRLB_CB1CNT_BF)
+
+Q(CAPTCTRLB_CFBWM_BF)
+
+Q(CAPTCTRLB_EDGB0_BF)
+
+Q(CAPTCTRLB_EDGB1_BF)
+
+Q(CAPTCTRLB_EDGCNTB_EN)
+
+Q(CAPTCTRLB_INP_SELB)
+
+Q(CAPTCTRLB_ONESHOTB)
+
+Q(CAPTCTRLX_ARMX)
+
+Q(CAPTCTRLX_CFXWM_BF)
+
+Q(CAPTCTRLX_CX0CNT_BF)
+
+Q(CAPTCTRLX_CX1CNT_BF)
+
+Q(CAPTCTRLX_EDGCNTX_EN)
+
+Q(CAPTCTRLX_EDGX0_BF)
+
+Q(CAPTCTRLX_EDGX1_BF)
+
+Q(CAPTCTRLX_INP_SELX)
+
+Q(CAPTCTRLX_ONESHOTX)
+
+Q(CAPT_CAPTURE_BF)
+
 Q(CCM)
 
 Q(CCM_ANALOG)
+
+Q(CCR_DBT_BF)
+
+Q(CCR_PCSSCK_BF)
+
+Q(CCR_SCKDIV_BF)
+
+Q(CCR_SCKPCS_BF)
+
+Q(CFGR0_CIRFIFO)
+
+Q(CFGR0_HREN)
+
+Q(CFGR0_HRPOL)
+
+Q(CFGR0_HRSEL)
+
+Q(CFGR0_RDMO)
+
+Q(CFGR1_AUTOPCS)
+
+Q(CFGR1_MASTER)
+
+Q(CFGR1_MATCFG_BF)
+
+Q(CFGR1_NOSTALL)
+
+Q(CFGR1_OUTCFG)
+
+Q(CFGR1_PCSCFG)
+
+Q(CFGR1_PCSPOL_BF)
+
+Q(CFGR1_PINCFG_BF)
+
+Q(CFGR1_SAMPLE)
+
+Q(CFG_ADHSC)
+
+Q(CFG_ADICLK_BF)
+
+Q(CFG_ADIV_BF)
+
+Q(CFG_ADLPC)
+
+Q(CFG_ADLSMP)
+
+Q(CFG_ADSTS_BF)
+
+Q(CFG_ADTRG)
+
+Q(CFG_AVGS_BF)
+
+Q(CFG_MODE_BF)
+
+Q(CFG_OVWREN)
+
+Q(CFG_REFSEL_BF)
 
 Q(CIF)
 
@@ -8281,6 +8979,14 @@ Q(CMP3)
 
 Q(CMP4)
 
+Q(CMPLD1_COMPARATOR_LOAD_1_BF)
+
+Q(CMPLD2_COMPARATOR_LOAD_2_BF)
+
+Q(CNTR_COUNTER_BF)
+
+Q(CNT_CNT_BF)
+
 Q(CODABAR)
 
 Q(CODE128)
@@ -8289,13 +8995,159 @@ Q(CODE39)
 
 Q(CODE93)
 
+Q(COMP1_COMPARISON_1_BF)
+
+Q(COMP2_COMPARISON_2_BF)
+
 Q(CORNER_AGAST)
 
 Q(CORNER_FAST)
 
+Q(CR_DBGEN)
+
+Q(CR_DOZEN)
+
+Q(CR_MEN)
+
+Q(CR_RRF)
+
+Q(CR_RST)
+
+Q(CR_RTF)
+
+Q(CSCTRL_ALT_LOAD)
+
+Q(CSCTRL_CL1_BF)
+
+Q(CSCTRL_CL2_BF)
+
+Q(CSCTRL_DBG_EN_BF)
+
+Q(CSCTRL_FAULT)
+
+Q(CSCTRL_ROC)
+
+Q(CSCTRL_TCF1)
+
+Q(CSCTRL_TCF1EN)
+
+Q(CSCTRL_TCF2)
+
+Q(CSCTRL_TCF2EN)
+
+Q(CSCTRL_TCI)
+
+Q(CSCTRL_UP)
+
 Q(CSI)
 
 Q(CSU)
+
+Q(CTRL2_CLK_SEL_BF)
+
+Q(CTRL2_DBGEN)
+
+Q(CTRL2_FORCE)
+
+Q(CTRL2_FORCE_SEL_BF)
+
+Q(CTRL2_FRCEN)
+
+Q(CTRL2_INDEP)
+
+Q(CTRL2_INIT_SEL_BF)
+
+Q(CTRL2_PWM23_INIT)
+
+Q(CTRL2_PWM45_INIT)
+
+Q(CTRL2_PWMX_INIT)
+
+Q(CTRL2_RELOAD_SEL)
+
+Q(CTRL2_WAITEN)
+
+Q(CTRL_CM_BF)
+
+Q(CTRL_COINIT)
+
+Q(CTRL_COMPMODE)
+
+Q(CTRL_DBLEN)
+
+Q(CTRL_DBLX)
+
+Q(CTRL_DIR)
+
+Q(CTRL_DMA_MODE_SEL)
+
+Q(CTRL_DT_BF)
+
+Q(CTRL_EXT0_TRIG_ENABLE)
+
+Q(CTRL_EXT0_TRIG_PRIORITY_BF)
+
+Q(CTRL_EXT1_TRIG_ENABLE)
+
+Q(CTRL_EXT1_TRIG_PRIORITY_BF)
+
+Q(CTRL_FULL)
+
+Q(CTRL_HALF)
+
+Q(CTRL_LDFQ_BF)
+
+Q(CTRL_LDMOD)
+
+Q(CTRL_LENGTH)
+
+Q(CTRL_ONCE)
+
+Q(CTRL_OUTMODE_BF)
+
+Q(CTRL_PCS_BF)
+
+Q(CTRL_PRE_DIVIDER_BF)
+
+Q(CTRL_PRSC_BF)
+
+Q(CTRL_SCS_BF)
+
+Q(CTRL_SOFTRST)
+
+Q(CTRL_SPLIT)
+
+Q(CTRL_TRIG_ENABLE_BF)
+
+Q(CTRL_TSC_BYPASS)
+
+Q(CVAL0CYC_CVAL0CYC_BF)
+
+Q(CVAL0_CAPTVAL0_BF)
+
+Q(CVAL1CYC_CVAL1CYC_BF)
+
+Q(CVAL1_CAPTVAL1_BF)
+
+Q(CVAL2CYC_CVAL2CYC_BF)
+
+Q(CVAL2_CAPTVAL2_BF)
+
+Q(CVAL3CYC_CVAL3CYC_BF)
+
+Q(CVAL3_CAPTVAL3_BF)
+
+Q(CVAL4CYC_CVAL4CYC_BF)
+
+Q(CVAL4_CAPTVAL4_BF)
+
+Q(CVAL5CYC_CVAL5CYC_BF)
+
+Q(CVAL5_CAPTVAL5_BF)
+
+Q(CV_CV1_BF)
+
+Q(CV_CV2_BF)
 
 Q(Cascade)
 
@@ -8307,19 +9159,177 @@ Q(DATABAR_EXP)
 
 Q(DCDC)
 
-Q(DCMC)
-
-Q(DCMC)
-
 Q(DCP)
 
 Q(DEBUG)
 
 Q(DEEPSLEEP_RESETABC)
 
+Q(DER_RDDE)
+
+Q(DER_TDDE)
+
+Q(DISMAP_DIS0A_BF)
+
+Q(DISMAP_DIS0B_BF)
+
+Q(DISMAP_DIS0X_BF)
+
+Q(DISMAP_DIS1A_BF)
+
+Q(DISMAP_DIS1B_BF)
+
+Q(DISMAP_DIS1X_BF)
+
 Q(DMA0)
 
+Q(DMAEN_CA0DE)
+
+Q(DMAEN_CA1DE)
+
+Q(DMAEN_CAPTDE_BF)
+
+Q(DMAEN_CB0DE)
+
+Q(DMAEN_CB1DE)
+
+Q(DMAEN_CX0DE)
+
+Q(DMAEN_CX1DE)
+
+Q(DMAEN_FAND)
+
+Q(DMAEN_VALDE)
+
 Q(DMAMUX)
+
+Q(DMA_CMPLD1DE)
+
+Q(DMA_CMPLD2DE)
+
+Q(DMA_CTRL_TRIG0_ENABLE)
+
+Q(DMA_CTRL_TRIG0_REQ)
+
+Q(DMA_CTRL_TRIG1_ENABLE)
+
+Q(DMA_CTRL_TRIG1_REQ)
+
+Q(DMA_CTRL_TRIG2_ENABLE)
+
+Q(DMA_CTRL_TRIG2_REQ)
+
+Q(DMA_CTRL_TRIG3_ENABLE)
+
+Q(DMA_CTRL_TRIG3_REQ)
+
+Q(DMA_CTRL_TRIG4_ENABLE)
+
+Q(DMA_CTRL_TRIG4_REQ)
+
+Q(DMA_CTRL_TRIG5_ENABLE)
+
+Q(DMA_CTRL_TRIG5_REQ)
+
+Q(DMA_CTRL_TRIG6_ENABLE)
+
+Q(DMA_CTRL_TRIG6_REQ)
+
+Q(DMA_CTRL_TRIG7_ENABLE)
+
+Q(DMA_CTRL_TRIG7_REQ)
+
+Q(DMA_IEFDE)
+
+Q(DMR0_MATCH0_BF)
+
+Q(DMR1_MATCH1_BF)
+
+Q(DONE0_1_IRQ_TRIG0_DONE0)
+
+Q(DONE0_1_IRQ_TRIG0_DONE1)
+
+Q(DONE0_1_IRQ_TRIG1_DONE0)
+
+Q(DONE0_1_IRQ_TRIG1_DONE1)
+
+Q(DONE0_1_IRQ_TRIG2_DONE0)
+
+Q(DONE0_1_IRQ_TRIG2_DONE1)
+
+Q(DONE0_1_IRQ_TRIG3_DONE0)
+
+Q(DONE0_1_IRQ_TRIG3_DONE1)
+
+Q(DONE0_1_IRQ_TRIG4_DONE0)
+
+Q(DONE0_1_IRQ_TRIG4_DONE1)
+
+Q(DONE0_1_IRQ_TRIG5_DONE0)
+
+Q(DONE0_1_IRQ_TRIG5_DONE1)
+
+Q(DONE0_1_IRQ_TRIG6_DONE0)
+
+Q(DONE0_1_IRQ_TRIG6_DONE1)
+
+Q(DONE0_1_IRQ_TRIG7_DONE0)
+
+Q(DONE0_1_IRQ_TRIG7_DONE1)
+
+Q(DONE2_ERR_IRQ_TRIG0_DONE2)
+
+Q(DONE2_ERR_IRQ_TRIG0_ERR)
+
+Q(DONE2_ERR_IRQ_TRIG1_DONE2)
+
+Q(DONE2_ERR_IRQ_TRIG1_ERR)
+
+Q(DONE2_ERR_IRQ_TRIG2_DONE2)
+
+Q(DONE2_ERR_IRQ_TRIG2_ERR)
+
+Q(DONE2_ERR_IRQ_TRIG3_DONE2)
+
+Q(DONE2_ERR_IRQ_TRIG3_ERR)
+
+Q(DONE2_ERR_IRQ_TRIG4_DONE2)
+
+Q(DONE2_ERR_IRQ_TRIG4_ERR)
+
+Q(DONE2_ERR_IRQ_TRIG5_DONE2)
+
+Q(DONE2_ERR_IRQ_TRIG5_ERR)
+
+Q(DONE2_ERR_IRQ_TRIG6_DONE2)
+
+Q(DONE2_ERR_IRQ_TRIG6_ERR)
+
+Q(DONE2_ERR_IRQ_TRIG7_DONE2)
+
+Q(DONE2_ERR_IRQ_TRIG7_ERR)
+
+Q(DR_DR_BF)
+
+Q(DTCNT0_DTCNT0_BF)
+
+Q(DTCNT1_DTCNT1_BF)
+
+Q(DTSRCSEL_SM0SEL23_BF)
+
+Q(DTSRCSEL_SM0SEL45_BF)
+
+Q(DTSRCSEL_SM1SEL23_BF)
+
+Q(DTSRCSEL_SM1SEL45_BF)
+
+Q(DTSRCSEL_SM2SEL23_BF)
+
+Q(DTSRCSEL_SM2SEL45_BF)
+
+Q(DTSRCSEL_SM3SEL23_BF)
+
+Q(DTSRCSEL_SM3SEL45_BF)
 
 Q(DecompIO)
 
@@ -8367,6 +9377,8 @@ Q(ECONNRESET)
 
 Q(EDGE_CANNY)
 
+Q(EDGE_SEL_GPIO_EDGE_SEL_BF)
+
 Q(EDGE_SIMPLE)
 
 Q(EEXIST)
@@ -8392,6 +9404,8 @@ Q(EIO)
 Q(EISDIR)
 
 Q(EISDIR)
+
+Q(ENBL_ENBL_BF)
 
 Q(ENC1)
 
@@ -8449,6 +9463,30 @@ Q(Exception)
 
 Q(Exception)
 
+Q(FCR_RXWATER_BF)
+
+Q(FCR_TXWATER_BF)
+
+Q(FCTRL2_NOCOMB_BF)
+
+Q(FCTRL_FAUTO_BF)
+
+Q(FCTRL_FIE_BF)
+
+Q(FCTRL_FLVL_BF)
+
+Q(FCTRL_FSAFE_BF)
+
+Q(FFILT_FILT_CNT_BF)
+
+Q(FFILT_FILT_PER_BF)
+
+Q(FFILT_GSTR)
+
+Q(FILT_FILT_CNT_BF)
+
+Q(FILT_FILT_PER_BF)
+
 Q(FLEXIO1)
 
 Q(FLEXIO2)
@@ -8465,6 +9503,40 @@ Q(FONT5x7)
 
 Q(FONT6x13)
 
+Q(FRACVAL1_FRACVAL1_BF)
+
+Q(FRACVAL2_FRACVAL2_BF)
+
+Q(FRACVAL3_FRACVAL3_BF)
+
+Q(FRACVAL4_FRACVAL4_BF)
+
+Q(FRACVAL5_FRACVAL5_BF)
+
+Q(FRCTRL_FRAC1_EN)
+
+Q(FRCTRL_FRAC23_EN)
+
+Q(FRCTRL_FRAC45_EN)
+
+Q(FRCTRL_FRAC_PU)
+
+Q(FRCTRL_TEST)
+
+Q(FSR_RXCOUNT_BF)
+
+Q(FSR_TXCOUNT_BF)
+
+Q(FSTS_FFLAG_BF)
+
+Q(FSTS_FFPIN_BF)
+
+Q(FSTS_FFULL_BF)
+
+Q(FSTS_FHALF_BF)
+
+Q(FTST_FTEST)
+
 Q(FileIO)
 
 Q(FileIO)
@@ -8476,6 +9548,24 @@ Q(FileIO)
 Q(Flash)
 
 Q(Flash)
+
+Q(GC_ACFE)
+
+Q(GC_ACFGT)
+
+Q(GC_ACREN)
+
+Q(GC_ADACKEN)
+
+Q(GC_ADCO)
+
+Q(GC_AVGE)
+
+Q(GC_CAL)
+
+Q(GC_DMAEN)
+
+Q(GDIR_GDIR_BF)
 
 Q(GPC)
 
@@ -8511,6 +9601,12 @@ Q(GPT2)
 
 Q(GRAYSCALE)
 
+Q(GS_ADACT)
+
+Q(GS_AWKST)
+
+Q(GS_CALF)
+
 Q(GeneratorExit)
 
 Q(GeneratorExit)
@@ -8521,15 +9617,23 @@ Q(Gif)
 
 Q(HARD_RESET)
 
+Q(HC_ADCH_BF)
+
+Q(HC_AIEN)
+
 Q(HID)
 
 Q(HIZ)
+
+Q(HOLD_HOLD_BF)
 
 Q(HQQQVGA)
 
 Q(HQQVGA)
 
 Q(HQVGA)
+
+Q(HS_COCO0)
 
 Q(HYS)
 
@@ -8543,7 +9647,91 @@ Q(I2C)
 
 Q(I2C)
 
+Q(ICR1_ICR0_BF)
+
+Q(ICR1_ICR10_BF)
+
+Q(ICR1_ICR11_BF)
+
+Q(ICR1_ICR12_BF)
+
+Q(ICR1_ICR13_BF)
+
+Q(ICR1_ICR14_BF)
+
+Q(ICR1_ICR15_BF)
+
+Q(ICR1_ICR1_BF)
+
+Q(ICR1_ICR2_BF)
+
+Q(ICR1_ICR3_BF)
+
+Q(ICR1_ICR4_BF)
+
+Q(ICR1_ICR5_BF)
+
+Q(ICR1_ICR6_BF)
+
+Q(ICR1_ICR7_BF)
+
+Q(ICR1_ICR8_BF)
+
+Q(ICR1_ICR9_BF)
+
+Q(ICR2_ICR16_BF)
+
+Q(ICR2_ICR17_BF)
+
+Q(ICR2_ICR18_BF)
+
+Q(ICR2_ICR19_BF)
+
+Q(ICR2_ICR20_BF)
+
+Q(ICR2_ICR21_BF)
+
+Q(ICR2_ICR22_BF)
+
+Q(ICR2_ICR23_BF)
+
+Q(ICR2_ICR24_BF)
+
+Q(ICR2_ICR25_BF)
+
+Q(ICR2_ICR26_BF)
+
+Q(ICR2_ICR27_BF)
+
+Q(ICR2_ICR28_BF)
+
+Q(ICR2_ICR29_BF)
+
+Q(ICR2_ICR30_BF)
+
+Q(ICR2_ICR31_BF)
+
+Q(IER_DMIE)
+
+Q(IER_FCIE)
+
+Q(IER_RDIE)
+
+Q(IER_REIE)
+
+Q(IER_TCIE)
+
+Q(IER_TDIE)
+
+Q(IER_TEIE)
+
+Q(IER_WCIE)
+
+Q(IMR_IMR_BF)
+
 Q(IN)
+
+Q(INIT_INIT_BF)
 
 Q(INT16)
 
@@ -8552,6 +9740,24 @@ Q(INT32)
 Q(INT64)
 
 Q(INT8)
+
+Q(INTEN_CA0IE)
+
+Q(INTEN_CA1IE)
+
+Q(INTEN_CB0IE)
+
+Q(INTEN_CB1IE)
+
+Q(INTEN_CMPIE_BF)
+
+Q(INTEN_CX0IE)
+
+Q(INTEN_CX1IE)
+
+Q(INTEN_REIE)
+
+Q(INTEN_RIE)
 
 Q(IN_PDN)
 
@@ -8603,6 +9809,8 @@ Q(ISBN10)
 
 Q(ISBN13)
 
+Q(ISR_ISR_BF)
+
 Q(Image)
 
 Q(Image)
@@ -8646,6 +9854,8 @@ Q(LED)
 Q(LEPTON)
 
 Q(LITTLE_ENDIAN)
+
+Q(LOAD_LOAD_BF)
 
 Q(LPI2C1)
 
@@ -8777,9 +9987,123 @@ Q(LookupError)
 
 Q(LookupError)
 
+Q(MASK_MASKA_BF)
+
+Q(MASK_MASKB_BF)
+
+Q(MASK_MASKX_BF)
+
+Q(MASK_UPDATE_MASK_BF)
+
 Q(MASTER)
 
 Q(MASTER)
+
+Q(MCCR0_CLKHI_BF)
+
+Q(MCCR0_CLKLO_BF)
+
+Q(MCCR0_DATAVD_BF)
+
+Q(MCCR0_SETHOLD_BF)
+
+Q(MCCR1_CLKHI_BF)
+
+Q(MCCR1_CLKLO_BF)
+
+Q(MCCR1_DATAVD_BF)
+
+Q(MCCR1_SETHOLD_BF)
+
+Q(MCFGR0_CIRFIFO)
+
+Q(MCFGR0_HREN)
+
+Q(MCFGR0_HRPOL)
+
+Q(MCFGR0_HRSEL)
+
+Q(MCFGR0_RDMO)
+
+Q(MCFGR1_AUTOSTOP)
+
+Q(MCFGR1_IGNACK)
+
+Q(MCFGR1_MATCFG_BF)
+
+Q(MCFGR1_PINCFG_BF)
+
+Q(MCFGR1_PRESCALE_BF)
+
+Q(MCFGR1_TIMECFG)
+
+Q(MCFGR2_BUSIDLE_BF)
+
+Q(MCFGR2_FILTSCL_BF)
+
+Q(MCFGR2_FILTSDA_BF)
+
+Q(MCFGR3_PINLOW_BF)
+
+Q(MCR_DBGEN)
+
+Q(MCR_DOZEN)
+
+Q(MCR_MEN)
+
+Q(MCR_RRF)
+
+Q(MCR_RST)
+
+Q(MCR_RTF)
+
+Q(MCTRL2_MONPLL_BF)
+
+Q(MCTRL_CLDOK_BF)
+
+Q(MCTRL_IPOL_BF)
+
+Q(MCTRL_LDOK_BF)
+
+Q(MCTRL_RUN_BF)
+
+Q(MDER_RDDE)
+
+Q(MDER_TDDE)
+
+Q(MDMR_MATCH0_BF)
+
+Q(MDMR_MATCH1_BF)
+
+Q(MFCR_RXWATER_BF)
+
+Q(MFCR_TXWATER_BF)
+
+Q(MFSR_RXCOUNT_BF)
+
+Q(MFSR_TXCOUNT_BF)
+
+Q(MIER_ALIE)
+
+Q(MIER_DMIE)
+
+Q(MIER_EPIE)
+
+Q(MIER_FEIE)
+
+Q(MIER_NDIE)
+
+Q(MIER_PLTIE)
+
+Q(MIER_RDIE)
+
+Q(MIER_SDIE)
+
+Q(MIER_TDIE)
+
+Q(MRDR_DATA_BF)
+
+Q(MRDR_RXEMPTY)
 
 Q(MSB)
 
@@ -8789,7 +10113,33 @@ Q(MSC)
 
 Q(MSC_plus_HID)
 
+Q(MSR_ALF)
+
+Q(MSR_BBF)
+
+Q(MSR_DMF)
+
+Q(MSR_EPF)
+
+Q(MSR_FEF)
+
+Q(MSR_MBF)
+
+Q(MSR_NDF)
+
+Q(MSR_PLTF)
+
+Q(MSR_RDF)
+
+Q(MSR_SDF)
+
+Q(MSR_TDF)
+
 Q(MT9V034)
+
+Q(MTDR_CMD_BF)
+
+Q(MTDR_DATA_BF)
 
 Q(MemoryError)
 
@@ -8821,7 +10171,29 @@ Q(NotImplementedError)
 
 Q(OCOTP)
 
+Q(OCTRL_POLA)
+
+Q(OCTRL_POLB)
+
+Q(OCTRL_POLX)
+
+Q(OCTRL_PWMAFS_BF)
+
+Q(OCTRL_PWMA_IN)
+
+Q(OCTRL_PWMBFS_BF)
+
+Q(OCTRL_PWMB_IN)
+
+Q(OCTRL_PWMXFS_BF)
+
+Q(OCTRL_PWMX_IN)
+
 Q(OD_PUP)
+
+Q(OFS_OFS_BF)
+
+Q(OFS_SIGN)
 
 Q(OPEN_DRAIN)
 
@@ -8830,6 +10202,12 @@ Q(OSError)
 Q(OSError)
 
 Q(OUT)
+
+Q(OUTEN_PWMA_EN_BF)
+
+Q(OUTEN_PWMB_EN_BF)
+
+Q(OUTEN_PWMX_EN_BF)
 
 Q(OUT_WEAK)
 
@@ -8851,6 +10229,16 @@ Q(PALETTE_IRONBOW)
 
 Q(PALETTE_RAINBOW)
 
+Q(PARAM_MRXFIFO_BF)
+
+Q(PARAM_MTXFIFO_BF)
+
+Q(PARAM_PCSNUM_BF)
+
+Q(PARAM_RXFIFO_BF)
+
+Q(PARAM_TXFIFO_BF)
+
 Q(PDF417)
 
 Q(PGC)
@@ -8867,11 +10255,9 @@ Q(POLLIN)
 
 Q(POLLOUT)
 
+Q(PSR_PSR_BF)
+
 Q(PTR)
-
-Q(PWM)
-
-Q(PWM)
 
 Q(PWM1)
 
@@ -9019,21 +10405,21 @@ Q(QQVGA2)
 
 Q(QSIF)
 
-Q(QTIMER)
-
-Q(QTIMER)
-
 Q(QVGA)
+
+Q(RDR_DATA_BF)
 
 Q(RGB565)
 
 Q(ROMC)
 
-Q(RPM)
+Q(RSR_RXEMPTY)
 
-Q(RPM)
+Q(RSR_SOF)
 
 Q(RTWDOG)
+
+Q(R_CDATA_BF)
 
 Q(RuntimeError)
 
@@ -9045,17 +10431,127 @@ Q(SAI2)
 
 Q(SAI3)
 
+Q(SAMR_ADDR0_BF)
+
+Q(SAMR_ADDR1_BF)
+
+Q(SASR_ANV)
+
+Q(SASR_RADDR_BF)
+
+Q(SCFGR1_ACKSTALL)
+
+Q(SCFGR1_ADDRCFG_BF)
+
+Q(SCFGR1_ADRSTALL)
+
+Q(SCFGR1_GCEN)
+
+Q(SCFGR1_HSMEN)
+
+Q(SCFGR1_IGNACK)
+
+Q(SCFGR1_RXCFG)
+
+Q(SCFGR1_RXSTALL)
+
+Q(SCFGR1_SAEN)
+
+Q(SCFGR1_TXCFG)
+
+Q(SCFGR1_TXDSTALL)
+
+Q(SCFGR2_CLKHOLD_BF)
+
+Q(SCFGR2_DATAVD_BF)
+
+Q(SCFGR2_FILTSCL_BF)
+
+Q(SCFGR2_FILTSDA_BF)
+
+Q(SCR_FILTDZ)
+
+Q(SCR_FILTEN)
+
+Q(SCR_RRF)
+
+Q(SCR_RST)
+
+Q(SCR_RTF)
+
+Q(SCR_SEN)
+
+Q(SCTRL_CAPTURE_MODE_BF)
+
+Q(SCTRL_EEOF)
+
+Q(SCTRL_FORCE)
+
+Q(SCTRL_IEF)
+
+Q(SCTRL_IEFIE)
+
+Q(SCTRL_INPUT)
+
+Q(SCTRL_IPS)
+
+Q(SCTRL_MSTR)
+
+Q(SCTRL_OEN)
+
+Q(SCTRL_OPS)
+
+Q(SCTRL_TCF)
+
+Q(SCTRL_TCFIE)
+
+Q(SCTRL_TOF)
+
+Q(SCTRL_TOFIE)
+
+Q(SCTRL_VAL)
+
 Q(SD)
 
 Q(SDCard)
 
 Q(SDCard)
 
+Q(SDER_AVDE)
+
+Q(SDER_RDDE)
+
+Q(SDER_TDDE)
+
 Q(SEARCH_DS)
 
 Q(SEARCH_EX)
 
 Q(SEMC)
+
+Q(SIER_AM0IE)
+
+Q(SIER_AM1F)
+
+Q(SIER_AVIE)
+
+Q(SIER_BEIE)
+
+Q(SIER_FEIE)
+
+Q(SIER_GCIE)
+
+Q(SIER_RDIE)
+
+Q(SIER_RSIE)
+
+Q(SIER_SARIE)
+
+Q(SIER_SDIE)
+
+Q(SIER_TAIE)
+
+Q(SIER_TDIE)
 
 Q(SIF)
 
@@ -9066,6 +10562,12 @@ Q(SLAVE)
 Q(SLEW_FAST)
 
 Q(SNVS)
+
+Q(SOCK_DGRAM)
+
+Q(SOCK_RAW)
+
+Q(SOCK_STREAM)
 
 Q(SOFT_RESET)
 
@@ -9079,19 +10581,103 @@ Q(SPI)
 
 Q(SRC)
 
-Q(SRPM)
+Q(SRDR_DATA_BF)
 
-Q(SRPM)
+Q(SRDR_RXEMPTY)
+
+Q(SRDR_SOF)
+
+Q(SR_DMF)
+
+Q(SR_FCF)
+
+Q(SR_MBF)
+
+Q(SR_RDF)
+
+Q(SR_REF)
+
+Q(SR_TCF)
+
+Q(SR_TDF)
+
+Q(SR_TEF)
+
+Q(SR_WCF)
+
+Q(SSR_AM0F)
+
+Q(SSR_AM1F)
+
+Q(SSR_AVF)
+
+Q(SSR_BBF)
+
+Q(SSR_BEF)
+
+Q(SSR_FEF)
+
+Q(SSR_GCF)
+
+Q(SSR_RDF)
+
+Q(SSR_RSF)
+
+Q(SSR_SARF)
+
+Q(SSR_SBF)
+
+Q(SSR_SDF)
+
+Q(SSR_TAF)
+
+Q(SSR_TDF)
+
+Q(STAR_TXNACK)
+
+Q(STDR_DATA_BF)
+
+Q(STS_CFA0)
+
+Q(STS_CFA1)
+
+Q(STS_CFB0)
+
+Q(STS_CFB1)
+
+Q(STS_CFX0)
+
+Q(STS_CFX1)
+
+Q(STS_CMPF_BF)
+
+Q(STS_REF)
+
+Q(STS_RF)
+
+Q(STS_RUF)
 
 Q(SVGA)
+
+Q(SWCOUT_SM0OUT23)
+
+Q(SWCOUT_SM0OUT45)
+
+Q(SWCOUT_SM1OUT23)
+
+Q(SWCOUT_SM1OUT45)
+
+Q(SWCOUT_SM2OUT23)
+
+Q(SWCOUT_SM2OUT45)
+
+Q(SWCOUT_SM3OUT23)
+
+Q(SWCOUT_SM3OUT45)
 
 Q(SWIM)
 
 Q(SXGA)
-
-Q(Servo)
-
-Q(Servo)
 
 Q(Signal)
 
@@ -9135,11 +10721,41 @@ Q(TAG36H10)
 
 Q(TAG36H11)
 
+Q(TCR_BYSW)
+
+Q(TCR_CONT)
+
+Q(TCR_CONTC)
+
+Q(TCR_CPHA)
+
+Q(TCR_CPOL)
+
+Q(TCR_FRAMESZ_BF)
+
+Q(TCR_LSBF)
+
+Q(TCR_PCS_BF)
+
+Q(TCR_PRESCALE_BF)
+
+Q(TCR_RXMSK)
+
+Q(TCR_TXMSK)
+
+Q(TCR_WIDTH_BF)
+
+Q(TCTRL_OUT_TRIG_EN_BF)
+
+Q(TCTRL_PWAOT0)
+
+Q(TCTRL_PWBOT1)
+
+Q(TCTRL_TRGFRQ)
+
+Q(TDR_DATA_BF)
+
 Q(TEMPMON)
-
-Q(TMR)
-
-Q(TMR)
 
 Q(TMR1)
 
@@ -9237,11 +10853,29 @@ Q(UnicodeError)
 
 Q(UnicodeError)
 
+Q(VAL0_VAL0_BF)
+
+Q(VAL1_VAL1_BF)
+
+Q(VAL2_VAL2_BF)
+
+Q(VAL3_VAL3_BF)
+
+Q(VAL4_VAL4_BF)
+
+Q(VAL5_VAL5_BF)
+
 Q(VCP)
 
 Q(VCP_plus_HID)
 
 Q(VCP_plus_MSC)
+
+Q(VERID_FEATURE_BF)
+
+Q(VERID_MAJOR_BF)
+
+Q(VERID_MINOR_BF)
 
 Q(VGA)
 
@@ -9266,6 +10900,8 @@ Q(WDOG2)
 Q(WDT_RESET)
 
 Q(WHITE)
+
+Q(WINC)
 
 Q(WVGA)
 
@@ -9330,6 +10966,8 @@ Q(__contains__)
 Q(__contains__)
 
 Q(__contains__)
+
+Q(__del__)
 
 Q(__del__)
 
@@ -9444,6 +11082,10 @@ Q(__mod__)
 Q(__module__)
 
 Q(__mul__)
+
+Q(__name__)
+
+Q(__name__)
 
 Q(__name__)
 
@@ -9671,6 +11313,8 @@ Q(a_value)
 
 Q(abs)
 
+Q(accept)
+
 Q(acos)
 
 Q(acosh)
@@ -9734,10 +11378,6 @@ Q(alt)
 Q(and)
 
 Q(and_)
-
-Q(angle)
-
-Q(angle)
 
 Q(any)
 
@@ -9873,6 +11513,8 @@ Q(binary_to_yuv)
 
 Q(binascii)
 
+Q(bind)
+
 Q(bins)
 
 Q(bins)
@@ -9975,17 +11617,7 @@ Q(bytes_at)
 
 Q(calcsize)
 
-Q(calibration)
-
 Q(callable)
-
-Q(callback)
-
-Q(callback)
-
-Q(callback)
-
-Q(callback)
 
 Q(callback)
 
@@ -10069,6 +11701,8 @@ Q(close)
 
 Q(close)
 
+Q(close)
+
 Q(closure)
 
 Q(closure)
@@ -10116,6 +11750,8 @@ Q(compress_for_ide)
 Q(compressed)
 
 Q(compressed_for_ide)
+
+Q(connect)
 
 Q(const)
 
@@ -10261,20 +11897,6 @@ Q(deinit)
 
 Q(deinit)
 
-Q(deinit)
-
-Q(deinit)
-
-Q(deinit)
-
-Q(deinit)
-
-Q(deinit)
-
-Q(deinit)
-
-Q(deinit)
-
 Q(delattr)
 
 Q(delay)
@@ -10404,10 +12026,6 @@ Q(erode)
 Q(errno)
 
 Q(errno)
-
-Q(erro)
-
-Q(erro)
 
 Q(errorcode)
 
@@ -10561,12 +12179,6 @@ Q(freq)
 
 Q(freq)
 
-Q(freq)
-
-Q(freq)
-
-Q(freq)
-
 Q(frexp)
 
 Q(from_bytes)
@@ -10635,14 +12247,6 @@ Q(get)
 
 Q(get_color_palette)
 
-Q(get_count)
-
-Q(get_count)
-
-Q(get_count)
-
-Q(get_count)
-
 Q(get_exposure_us)
 
 Q(get_fb)
@@ -10663,19 +12267,11 @@ Q(get_pixel)
 
 Q(get_pixel_physical)
 
-Q(get_pps)
-
 Q(get_regression)
 
 Q(get_rgb_gain_db)
 
-Q(get_rpm)
-
 Q(get_similarity)
-
-Q(get_spps)
-
-Q(get_srpm)
 
 Q(get_statistics)
 
@@ -10687,11 +12283,9 @@ Q(get_stats)
 
 Q(get_threshold)
 
-Q(get_ticks)
-
-Q(get_ticks)
-
 Q(get_xy)
+
+Q(getaddrinfo)
 
 Q(getattr)
 
@@ -10867,18 +12461,6 @@ Q(init)
 
 Q(init)
 
-Q(init)
-
-Q(init)
-
-Q(init)
-
-Q(init)
-
-Q(init)
-
-Q(init)
-
 Q(input)
 
 Q(insert)
@@ -10903,10 +12485,6 @@ Q(intersection)
 
 Q(intersection_update)
 
-Q(interval)
-
-Q(interval)
-
 Q(invert)
 
 Q(invert)
@@ -10944,12 +12522,6 @@ Q(invert)
 Q(invert)
 
 Q(invert)
-
-Q(inverted)
-
-Q(inverted)
-
-Q(inverted)
 
 Q(io)
 
@@ -11134,6 +12706,8 @@ Q(list)
 Q(list)
 
 Q(listdir)
+
+Q(listen)
 
 Q(little)
 
@@ -11455,6 +13029,10 @@ Q(native)
 
 Q(negate)
 
+Q(network)
+
+Q(network)
+
 Q(next)
 
 Q(next_frame)
@@ -11569,14 +13147,6 @@ Q(percentile)
 
 Q(perimeter)
 
-Q(period)
-
-Q(period)
-
-Q(period)
-
-Q(period)
-
 Q(phase)
 
 Q(phase)
@@ -11643,14 +13213,6 @@ Q(pow)
 
 Q(power)
 
-Q(pprparam)
-
-Q(pprparam)
-
-Q(prescale)
-
-Q(prescale)
-
 Q(prescaler)
 
 Q(present)
@@ -11689,8 +13251,6 @@ Q(ptr8)
 
 Q(pull)
 
-Q(pulse_width)
-
 Q(push)
 
 Q(push)
@@ -11716,12 +13276,6 @@ Q(put_pixel_physical)
 Q(put_text)
 
 Q(put_text_xy)
-
-Q(pwm_freq)
-
-Q(pwm_inverted)
-
-Q(pwm_width)
 
 Q(pyb)
 
@@ -11901,6 +13455,10 @@ Q(recv)
 
 Q(recv)
 
+Q(recv)
+
+Q(recvfrom)
+
 Q(reg)
 
 Q(register)
@@ -12027,6 +13585,8 @@ Q(round)
 
 Q(roundness)
 
+Q(route)
+
 Q(rows)
 
 Q(rpartition)
@@ -12121,9 +13681,13 @@ Q(send)
 
 Q(send)
 
+Q(send)
+
 Q(send_recv)
 
 Q(sendbreak)
+
+Q(sendto)
 
 Q(sensor)
 
@@ -12195,11 +13759,17 @@ Q(set_xy)
 
 Q(setattr)
 
+Q(setblocking)
+
 Q(setdefault)
 
 Q(setinterrupt)
 
+Q(setsockopt)
+
 Q(setter)
+
+Q(settimeout)
 
 Q(sha256)
 
@@ -12263,6 +13833,12 @@ Q(slice)
 
 Q(snapshot)
 
+Q(socket)
+
+Q(socket)
+
+Q(socket)
+
 Q(soft_reset)
 
 Q(softmax)
@@ -12276,8 +13852,6 @@ Q(sort)
 Q(sorted)
 
 Q(space_sigma)
-
-Q(speed)
 
 Q(split)
 
@@ -12430,8 +14004,6 @@ Q(tanh)
 Q(tell)
 
 Q(template_roi)
-
-Q(test)
 
 Q(theta)
 
@@ -12715,6 +14287,10 @@ Q(uselect)
 
 Q(uselect)
 
+Q(usocket)
+
+Q(usocket)
+
 Q(ustruct)
 
 Q(ustruct)
@@ -12822,12 +14398,6 @@ Q(w)
 Q(wfi)
 
 Q(wfi)
-
-Q(width)
-
-Q(width)
-
-Q(width)
 
 Q(width)
 

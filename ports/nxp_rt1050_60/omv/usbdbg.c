@@ -50,6 +50,11 @@ bool usbdbg_script_ready()
     return script_ready;
 }
 
+void usbdbg_set_script_ready(bool ready)
+{
+	script_ready = ready;
+}
+
 vstr_t *usbdbg_get_script()
 {
     return &script_buf;
@@ -58,6 +63,11 @@ vstr_t *usbdbg_get_script()
 void usbdbg_set_script_running(bool running)
 {
     script_running = running;
+}
+
+bool usbdbg_script_running()
+{
+	return script_running;
 }
 
 inline void usbdbg_set_irq_enabled(bool enabled)
