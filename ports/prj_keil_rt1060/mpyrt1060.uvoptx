@@ -634,10 +634,6 @@
       <TargetDriverDllRegistry>
         <SetRegEntry>
           <Number>0</Number>
-          <Key>DLGUARM</Key>
-        </SetRegEntry>
-        <SetRegEntry>
-          <Number>0</Number>
           <Key>UL2CM3</Key>
           <Name>UL2CM3(-S0 -C0 -P0 )  -FN1 -FC8000 -FD20000000 -FF0MIMXRT106x_QSPI_4KB_SEC -FL0800000 -FS060000000 -FP0($$Device:MIMXRT1062DVL6A$arm\MIMXRT106x_QSPI_4KB_SEC.FLM)</Name>
         </SetRegEntry>
@@ -654,7 +650,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGTARM</Key>
-          <Name>(1010=934,185,1384,742,0)(6017=105,137,294,473,0)(1008=89,129,465,365,0)(6016=2631,186,2971,989,0)(1012=665,539,1142,854,0)</Name>
+          <Name>(1010=934,185,1384,742,0)(6017=105,137,294,473,0)(1008=89,129,587,418,0)(6016=2631,186,2971,989,0)(1012=665,539,1142,854,0)</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -4329,7 +4325,7 @@
 
   <Group>
     <GroupName>lib_misc</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -4529,7 +4525,7 @@
 
   <Group>
     <GroupName>extmod</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -9409,7 +9405,7 @@
 
   <Group>
     <GroupName>rt_thread</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -9417,7 +9413,7 @@
       <GroupNumber>26</GroupNumber>
       <FileNumber>661</FileNumber>
       <FileType>1</FileType>
-      <tvExp>1</tvExp>
+      <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\extmod\rt_thread\src\clock.c</PathWithFileName>
@@ -9680,8 +9676,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\drivers\m8266\socket_m8266.c</PathWithFileName>
-      <FilenameWithoutPath>socket_m8266.c</FilenameWithoutPath>
+      <PathWithFileName>..\nxp_rt1050_60\omv\wifidbg.c</PathWithFileName>
+      <FilenameWithoutPath>wifidbg.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -9692,8 +9688,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\drivers\m8266\winc.c</PathWithFileName>
-      <FilenameWithoutPath>winc.c</FilenameWithoutPath>
+      <PathWithFileName>..\nxp_rt1050_60\omv\wifidbg_ctrl.c</PathWithFileName>
+      <FilenameWithoutPath>wifidbg_ctrl.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -9704,32 +9700,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\drivers\m8266\lib_new\M8266WIFIDrv_iMXRT10xx.a</PathWithFileName>
-      <FilenameWithoutPath>M8266WIFIDrv_iMXRT10xx.a</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>27</GroupNumber>
-      <FileNumber>685</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\omv\wifidbg.c</PathWithFileName>
-      <FilenameWithoutPath>wifidbg.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>27</GroupNumber>
-      <FileNumber>686</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\nxp_rt1050_60\omv\wifidbg_ctrl.c</PathWithFileName>
-      <FilenameWithoutPath>wifidbg_ctrl.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\drivers\m8266\8266_wifi_lib.lib</PathWithFileName>
+      <FilenameWithoutPath>8266_wifi_lib.lib</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
