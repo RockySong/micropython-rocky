@@ -15,6 +15,10 @@
 #define MICROPY_HW_ENABLE_SERVO     (1)
 #define MICROPY_HW_ENABLE_CAN       (0)
 #define MICROPY_MW_ENABLE_SWIM		(0)
+#define MICROPY_PY_NETWORK			(1)
+#define MICROPY_PY_USOCKET			(1)
+#define MICROPY_PY_RTTHREAD			(1)
+#define MICROPY_HW_WIFIDBG_EN 		(0)
 // XTAL is 12MHz
 
 typedef enum _enum_rootPtrs

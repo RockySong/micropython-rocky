@@ -32,17 +32,20 @@
 #include "lib/utils/interrupt_char.h"
 #include "pendsv.h"
 #include "irq.h"
-
+#include "mpconfigboard.h"
 // This variable is used to save the exception object between a ctrl-C and the
 // PENDSV call that actually raises the exception.  It must be non-static
 // otherwise gcc-5 optimises it away.  It can point to the heap but is not
 // traced by GC.  This is okay because we only ever set it to
 // mp_kbd_exception which is in the root-pointer set.
 void *pendsv_object;
-
+static uint32_t sw_irq_count = 0;
+void *sw_count_ptr;
 void pendsv_init(void) {
     // set PendSV interrupt at lowest priority
     HAL_NVIC_SetPriority(PendSV_IRQn, IRQ_PRI_PENDSV, IRQ_SUBPRI_PENDSV);
+	HAL_NVIC_SetPriority(MPPORT_SIGNAL_IRQn, IRQ_PRI_PENDSV - 1, IRQ_SUBPRI_PENDSV);
+	NVIC_EnableIRQ(MPPORT_SIGNAL_IRQn);
 }
 
 // Call this function to raise a pending exception during an interrupt.
@@ -64,7 +67,7 @@ void pendsv_kbd_intr(void) {
     } else {
         MP_STATE_VM(mp_pending_exception) = MP_OBJ_NULL;
         pendsv_object = &MP_STATE_VM(mp_kbd_exception);
-        SCB->ICSR = SCB_ICSR_PENDSVSET_Msk;
+		MPPORT_SEND_SIGNAL(mpportsignal_longjmp);
     }
 }
 
@@ -79,7 +82,7 @@ void pendsv_intr(void *pException) {
     } else {
         MP_STATE_VM(mp_pending_exception) = MP_OBJ_NULL;
         pendsv_object = &MP_STATE_VM(mp_kbd_exception);
-        SCB->ICSR = SCB_ICSR_PENDSVSET_Msk;
+        MPPORT_SEND_SIGNAL(mpportsignal_longjmp);
     }
 }
 
@@ -101,7 +104,9 @@ void pendsv_nlr_jump(void *o) {
     } else {
         MP_STATE_VM(mp_pending_exception) = MP_OBJ_NULL;
         pendsv_object = o;
-        SCB->ICSR = SCB_ICSR_PENDSVSET_Msk;
+		MPPORT_SEND_SIGNAL(mpportsignal_longjmp);
+		sw_irq_count = 0;
+		sw_count_ptr = &sw_irq_count;
     }
 }
 
@@ -109,12 +114,14 @@ void pendsv_nlr_jump(void *o) {
 void pendsv_nlr_jump_hard(void *o) {
     MP_STATE_VM(mp_pending_exception) = MP_OBJ_NULL;
     pendsv_object = o;
-    SCB->ICSR = SCB_ICSR_PENDSVSET_Msk;
+	MPPORT_SEND_SIGNAL(mpportsignal_longjmp);
+	sw_irq_count = 0;
+	sw_count_ptr = &sw_irq_count;
 }
 
 
 #if defined (__CC_ARM)
-__asm void PendSV_Handler(void) {
+__asm void NativeNLR(void) {
     // re-jig the stack so that when we return from this interrupt handler
     // it returns instead to nlr_jump with argument pendsv_object
     // note that stack has a different layout if DEBUG is enabled
@@ -142,7 +149,64 @@ __asm void PendSV_Handler(void) {
     //   sp[0]: ?
 		IMPORT	pendsv_object
 		IMPORT	nlr_jump
+		IMPORT  sw_count_ptr
+#ifdef MICROPY_PY_RTTHREAD
+		ldr r1,  =sw_count_ptr
+		ldr r2,[r1]
+		ldr r1,[r2]
+		add r1, #1
+		str r1, [r2]
+		
+		MRS     r1, psp
+		//mov	r2,	#0x01000000
+		//str r2, [r1, #28]
+		
+#if MICROPY_PY_THREAD
+        ldr r0, =pendsv_object
+        ldr r0, [r0]
+        cmp r0, 0
+        beq no_obj
+        str r0, [sp, #0]            // store to r0 on stack
+        mov r0, #0
+        str r0, [r1]                // clear pendsv_object
+        ldr r0, =nlr_jump
+        str r0, [sp, #24]           // store to pc on stack
+        bx lr                       // return from interrupt; will return to nlr_jump
 
+no_obj                    // pendsv_object==NULL
+        push {r4-r11, lr}
+        vpush {s16-s31}
+        mrs r5, primask             // save PRIMASK in r5
+        cpsid i                     // disable interrupts while we change stacks
+        mov r0, sp                  // pass sp to save
+        mov r4, lr                  // save lr because we are making a call
+        bl pyb_thread_next          // get next thread to execute
+        mov lr, r4                  // restore lr
+        mov sp, r0                  // switch stacks
+        msr primask, r5             // reenable interrupts
+        vpop {s16-s31}
+        pop {r4-r11, lr}
+        bx lr                       // return from interrupt; will return to new thread
+
+#else
+		
+        ldr r0, =pendsv_object
+        ldr r0, [r0]
+		
+#if defined(PENDSV_DEBUG)
+        str r0, [sp, #8]
+#else
+        str r0, [r1, #0]
+#endif
+        ldr r0, =nlr_jump
+#if defined(PENDSV_DEBUG)
+        str r0, [sp, #32]
+#else
+        str r0, [r1, #24]
+#endif
+        bx lr
+#endif
+#else
 		mov	r2,	#0x01000000
 		str r2, [sp, #28]    // reset XPSR, as pendSV may interrupt LDM/STM instructions who saves progress to XPSR
 
@@ -190,7 +254,7 @@ no_obj                    // pendsv_object==NULL
 #endif
         bx lr
 #endif
-
+#endif
     /*
     uint32_t x[2] = {0x424242, 0xdeaddead};
     printf("PendSV: %p\n", x);
@@ -202,7 +266,7 @@ no_obj                    // pendsv_object==NULL
 #elif defined (__ICCARM__)
 	// implemented in pendsv_iar.S
 #else
-__attribute__((naked)) void PendSV_Handler(void) {
+__attribute__((naked)) void NativeNLR(void) {
     // re-jig the stack so that when we return from this interrupt handler
     // it returns instead to nlr_jump with argument pendsv_object
     // note that stack has a different layout if DEBUG is enabled
@@ -293,3 +357,24 @@ __attribute__((naked)) void PendSV_Handler(void) {
     */
 }
 #endif	// #ifdef __CC_ARM
+
+typedef void(*pfnIrqHandler_t)(void);
+extern void SysTick_Handler(void);
+const pfnIrqHandler_t cs_signalMap[] = {
+	SysTick_Handler,
+	NativeNLR,
+};
+
+#ifdef __CC_ARM
+// "Borrow" this reserved IRQ slot to dispatch nlr_jump and other async signals
+__asm void MPPORT_SIGNAL_HANDLER(void) /* naked */
+{
+	IMPORT s_mpySignalCode
+	IMPORT cs_signalMap
+	LDR   R0, =s_mpySignalCode
+	LDR   R1, =cs_signalMap
+	LDR   R0,  [R0]
+	LDR   R1, [R1, R0, LSL #2]
+	BX	  R1
+}
+#endif

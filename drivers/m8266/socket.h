@@ -408,8 +408,55 @@ DATA TYPES
 */
 typedef signed char SOCKET;
 
+/*!
+@enum	\
+	tenuM2mSecType
 
+@brief
+	Wi-Fi Supported Security types.
+*/
+typedef enum {
+	WIFI_SEC_INVALID = 0,
+	/*!< Invalid security type.
+	*/
+	WIFI_SEC_OPEN,
+	/*!< Wi-Fi network is not secured.
+	*/
+	WIFI_SEC_WPA_PSK,
+	/*!< Wi-Fi network is secured with WPA/WPA2 personal(PSK).
+	*/
+	WIFI_SEC_WEP,
+	/*!< Security type WEP (40 or 104) OPEN OR SHARED.
+	*/
+	WIFI_SEC_802_1X
+	/*!< Wi-Fi network is secured with WPA/WPA2 Enterprise.IEEE802.1x user-name/password authentication.
+	 */
+}tenuSecType;
 
+/*!
+@enum	\
+	tenuM2mScanCh
+
+@brief
+	Wi-Fi RF Channels.
+*/
+typedef enum {
+	WIFI_CH_1 = ((char) 0),
+	WIFI_CH_2,
+	WIFI_CH_3,
+	WIFI_CH_4,
+	WIFI_CH_5,
+	WIFI_CH_6,
+	WIFI_CH_7,
+	WIFI_CH_8,
+	WIFI_CH_9,
+	WIFI_CH_10,
+	WIFI_CH_11,
+	WIFI_CH_12,
+	WIFI_CH_13,
+	WIFI_CH_14,
+	WIFI_CH_ALL = ((char) 255)
+}tenuScanCh;
 /*!
 @struct	\
 	in_addr

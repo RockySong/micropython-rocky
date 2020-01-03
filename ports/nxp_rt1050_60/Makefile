@@ -49,6 +49,10 @@ INC += -I$(TOP)/lib/mp-readline
 INC += -I$(BUILD)
 INC += -I$(TOP)/lib/cmsis/inc
 INC += -I$(HAL_DIR)
+INC += -I$(TOP)/drivers/m8266
+INC += -I$(TOP)/extmod/rt_thread
+INC += -I$(TOP)/extmod/rt_thread/include
+INC += -I$(TOP)/extmod/rt_thread/include/libc
 INC += -I$(HAL_DIR)/drivers
 INC += -I$(HAL_DIR)/utilities
 INC += -I$(HAL_DIR)/utilities/io
@@ -295,6 +299,18 @@ SRC_PY = $(addprefix omv/py/, \
 #	py_fir.c                
 #	py_lcd.c                
 #	py_winc.c           
+SRC_C_evk = 
+SRC_C_omvrt1 = \
+	i2c.c \
+	spi.c \
+    servo.c \
+	rpm.c \
+	qtimer.c \
+    tmr.c \
+	pwm.c  \
+	srpm.c \
+	dcmc.c
+
 SRC_C = \
 	main.c \
 	main_omv.c  \
@@ -338,15 +354,8 @@ SRC_C = \
 	./flegftl/flegftl.c \
 	overlay_manager.c \
 	flash_pgm.c  \
-    servo.c \
-    srpm.c \
 	rtc.c	\
 	rng.c	\
-	pwm.c   \
-	rpm.c \
-	qtimer.c \
-    tmr.c \
-	dcmc.c \
 	uniqueID.c	\
 	$(wildcard boards/$(BOARD)/*.c)
 
@@ -500,6 +509,13 @@ OBJ += $(PY_O)
 OBJ += $(addprefix $(BUILD)/, $(SRC_LIB:.c=.o))
 OBJ += $(addprefix $(BUILD)/, $(DRIVERS_SRC_C:.c=.o))
 OBJ += $(addprefix $(BUILD)/, $(SRC_C:.c=.o))
+
+ifeq ($(BOARD), omvrt1)
+OBJ += $(addprefix $(BUILD)/, $(SRC_C_omvrt1:.c=.o))
+else
+OBJ += $(addprefix $(BUILD)/, $(SRC_C_evk:.c=.o))
+endif
+
 
 OBJ += $(addprefix $(BUILD)/, $(SRC_UTIL:.c=.o))
 OBJ += $(addprefix $(BUILD)/, $(SRC_HAL:.c=.o))

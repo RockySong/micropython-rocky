@@ -17,6 +17,7 @@
 #define WINC_SOCKBUF_SIZE       (1024)
 
 #define MAKE_SOCKADDR(addr, ip, port) \
+	struct sockaddr addr; \
     addr.sa_family = AF_INET; \
     addr.sa_data[0] = (uint8_t)(port >> 8); \
     addr.sa_data[1] = (uint8_t)(port); \
@@ -114,7 +115,7 @@ int winc_socket_listen(int fd, uint32_t backlog);
 int winc_socket_accept(int fd, sockaddr *addr, int *fd_out, uint32_t timeout);
 int winc_socket_connect(int fd, sockaddr *addr, uint32_t timeout);
 int winc_socket_send(int fd, const uint8_t *buf, uint32_t len, uint32_t timeout);
-int winc_socket_recv(int fd, uint8_t *buf, uint32_t len, winc_socket_buf_t *sockbuf, uint32_t timeout);
+int winc_socket_recv(int fd, uint8_t *buf, uint32_t len, winc_socket_buf_t *sockbuf, uint32_t timeout,uint8_t *md);
 int winc_socket_sendto(int fd, const uint8_t *buf, uint32_t len, sockaddr *addr, uint32_t timeout);
 int winc_socket_recvfrom(int fd, uint8_t *buf, uint32_t len, sockaddr *addr, uint32_t timeout);
 int winc_socket_setsockopt(int fd, uint32_t level, uint32_t opt, const void *optval, uint32_t optlen);

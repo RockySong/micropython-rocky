@@ -23,7 +23,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
+#include "winc.h"
 #define MOD_NETWORK_IPADDR_BUF_SIZE (4)
 
 #define MOD_NETWORK_AF_INET (2)
@@ -63,16 +63,22 @@ typedef struct _mod_network_socket_obj_t {
     mod_network_nic_type_t *nic_type;
     union {
         struct {
+            int16_t fd;
+            uint16_t timeout;
+        };
+        struct {
             uint8_t domain;
             uint8_t type;
             int8_t fileno;
         } u_param;
         mp_uint_t u_state;
     };
+    winc_socket_buf_t sockbuf;
 } mod_network_socket_obj_t;
 
 extern const mod_network_nic_type_t mod_network_nic_type_wiznet5k;
 extern const mod_network_nic_type_t mod_network_nic_type_cc3k;
+extern const mod_network_nic_type_t mod_network_nic_type_winc;
 
 void mod_network_init(void);
 void mod_network_register_nic(mp_obj_t nic);

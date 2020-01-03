@@ -29,7 +29,7 @@
 #ifndef _UNISTD_H_
 #define _UNISTD_H_
 
-#if defined(__CC_ARM) || defined(__ICCARM__)
+#if defined(__CC_ARM) || defined(__ICCARM__) || defined(__GNUC__)
 
 #define F_OK 0
 #define W_OK 2

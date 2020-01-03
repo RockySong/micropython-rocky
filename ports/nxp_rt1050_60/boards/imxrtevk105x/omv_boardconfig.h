@@ -109,7 +109,7 @@
 #else
 #define OMV_FB_SIZE         (301 * 1024)  // FB memory: header + VGA/GS image
 #define OMV_FB_ALLOC_SIZE   (83 * 1024)   // minimum fb alloc size
-#define OMV_JPEG_BUF_SIZE   (32 * 1024) // IDE JPEG buffer (header + data).
+#define OMV_JPEG_BUF_SIZE   (48 * 1024) // IDE JPEG buffer (header + data).
 #endif
 // RAW buffer size
 #define OMV_RAW_BUF_SIZE        (OMV_FB_SIZE)
