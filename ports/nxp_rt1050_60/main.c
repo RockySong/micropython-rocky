@@ -1118,9 +1118,9 @@ void usr_app_thread_entry(void *parameter)
 {
 	while(1)
 	{
-		led_state(1, 1);
+		// led_state(1, 1);
 		rt_thread_mdelay(500);
-		led_state(1, 0);
+		// led_state(1, 0);
 		rt_thread_mdelay(500);
 		//PRINTF("User Application Thread..\r\n");
 	}
