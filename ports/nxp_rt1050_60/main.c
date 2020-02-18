@@ -708,6 +708,16 @@ __WEAK void rpm_init0(void){}
 __WEAK void spi_init0(void){}
 __WEAK void srpm_init0(void){}
 
+static inline uint32_t lfs_popc(uint32_t a) {
+#if 0
+    return __builtin_popcount(a);
+#else
+    a = a - ((a >> 1) & 0x55555555);
+    a = (a & 0x33333333) + ((a >> 2) & 0x33333333);
+    return (((a + (a >> 4)) & 0x0f0f0f0f) * 0x01010101) >> 24;
+#endif
+}
+
 int main(void) {
 	snvs_hp_rtc_config_t snvsRtcConfig;
 	snvs_hp_rtc_datetime_t rtcDate;
@@ -722,6 +732,8 @@ int main(void) {
 	SNVS_HP_RTC_SetDatetime(SNVS, &rtcDate);
 	SNVS_HP_RTC_StartTimer(SNVS);
 	uint32_t uid[2];
+	uid[0] = lfs_popc(0x0c);
+	uid[0] = lfs_popc(0x3c);
 	uid[0] = OCOTP->CFG0;
 	uid[1] = OCOTP->CFG1;
 	memcpy(g_uid, uid, sizeof(g_uid));

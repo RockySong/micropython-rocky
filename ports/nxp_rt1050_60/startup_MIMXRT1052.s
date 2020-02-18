@@ -368,7 +368,7 @@ zero_itcm
 				cmp		r0,	r1
 				bne		zero_itcm
 				bx		lr
-				; <<<	
+				
 				ENDP
 
 ConfigFlexRAM_OCRAM	PROC

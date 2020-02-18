@@ -69,7 +69,7 @@ DSTATUS disk_initialize (
         // new protocol with ioctl; call ioctl(INIT, 0)
         vfs->u.ioctl[2] = MP_OBJ_NEW_SMALL_INT(BP_IOCTL_INIT);
         vfs->u.ioctl[3] = MP_OBJ_NEW_SMALL_INT(0); // unused
-        mp_obj_t ret = mp_call_method_n_kw(2, 0, vfs->u.ioctl);
+					mp_obj_t ret = mp_call_method_n_kw(2, 0, vfs->u.ioctl);
         if (ret != mp_const_none && MP_OBJ_SMALL_INT_VALUE(ret) != 0) {
             // error initialising
             return STA_NOINIT;

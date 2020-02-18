@@ -612,7 +612,7 @@ mp_obj_t mp_call_function_2(mp_obj_t fun, mp_obj_t arg1, mp_obj_t arg2) {
 }
 
 // args contains, eg: arg0  arg1  key0  value0  key1  value1
-mp_obj_t mp_call_function_n_kw(mp_obj_t fun_in, size_t n_args, size_t n_kw, const mp_obj_t *args) {
+mp_obj_t mp_call_function_n_kw(mp_obj_t fun_in, size_t n_args, size_t n_kw, const mp_obj_t args[8]) {
     // TODO improve this: fun object can specify its type and we parse here the arguments,
     // passing to the function arrays of fixed and keyword arguments
 
@@ -636,7 +636,7 @@ mp_obj_t mp_call_function_n_kw(mp_obj_t fun_in, size_t n_args, size_t n_kw, cons
 
 // args contains: fun  self/NULL  arg(0)  ...  arg(n_args-2)  arg(n_args-1)  kw_key(0)  kw_val(0)  ... kw_key(n_kw-1)  kw_val(n_kw-1)
 // if n_args==0 and n_kw==0 then there are only fun and self/NULL
-mp_obj_t mp_call_method_n_kw(size_t n_args, size_t n_kw, const mp_obj_t *args) {
+mp_obj_t mp_call_method_n_kw(size_t n_args, size_t n_kw, const mp_obj_t args[8]) {
     DEBUG_OP_printf("call method (fun=%p, self=%p, n_args=" UINT_FMT ", n_kw=" UINT_FMT ", args=%p)\n", args[0], args[1], n_args, n_kw, args);
     int adjust = (args[1] == MP_OBJ_NULL) ? 0 : 1;
     return mp_call_function_n_kw(args[0], n_args + adjust, n_kw, args + 2 - adjust);
