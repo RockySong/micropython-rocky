@@ -31,7 +31,7 @@
 #include "py/misc.h"
 #include "py/asmbase.h"
 
-#if MICROPY_EMIT_NATIVE || MICROPY_EMIT_INLINE_ASM
+#if MICROPY_EMIT_MACHINE_CODE
 
 void mp_asm_base_init(mp_asm_base_t *as, size_t max_num_labels) {
     as->max_num_labels = max_num_labels;
@@ -46,10 +46,10 @@ void mp_asm_base_deinit(mp_asm_base_t *as, bool free_code) {
 }
 
 void mp_asm_base_start_pass(mp_asm_base_t *as, int pass) {
-    if (pass == MP_ASM_PASS_COMPUTE) {
-        // reset all labels
+    if (pass < MP_ASM_PASS_EMIT) {
+        // Reset labels so we can detect backwards jumps (and verify unique assignment)
         memset(as->label_offsets, -1, as->max_num_labels * sizeof(size_t));
-    } else if (pass == MP_ASM_PASS_EMIT) {
+    } else {
         // allocating executable RAM is platform specific
         MP_PLAT_ALLOC_EXEC(as->code_offset, (void**)&as->code_base, &as->code_size);
         assert(as->code_base != NULL);
@@ -99,4 +99,4 @@ void mp_asm_base_data(mp_asm_base_t* as, unsigned int bytesize, uintptr_t val) {
     }
 }
 
-#endif // MICROPY_EMIT_NATIVE || MICROPY_EMIT_INLINE_ASM
+#endif // MICROPY_EMIT_MACHINE_CODE

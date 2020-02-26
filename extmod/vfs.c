@@ -38,6 +38,14 @@
 #include "extmod/vfs_fat.h"
 #endif
 
+#if MICROPY_VFS_LFS1 || MICROPY_VFS_LFS2
+#include "extmod/vfs_lfs.h"
+#endif
+
+#if MICROPY_VFS_POSIX
+#include "extmod/vfs_posix.h"
+#endif
+
 // For mp_vfs_proxy_call, the maximum number of additional args that can be passed.
 // A fixed maximum size is used to avoid the need for a costly variable array.
 #define PROXY_MAX_ARGS (2)
@@ -124,21 +132,77 @@ mp_import_stat_t mp_vfs_import_stat(const char *path) {
     if (vfs == MP_VFS_NONE || vfs == MP_VFS_ROOT) {
         return MP_IMPORT_STAT_NO_EXIST;
     }
-    #if MICROPY_VFS_FAT
-    // fast paths for known VFS types
-    if (mp_obj_get_type(vfs->obj) == &mp_fat_vfs_type) {
-        return fat_vfs_import_stat(MP_OBJ_TO_PTR(vfs->obj), path_out);
+
+    // If the mounted object has the VFS protocol, call its import_stat helper
+    const mp_vfs_proto_t *proto = mp_obj_get_type(vfs->obj)->protocol;
+    if (proto != NULL) {
+        return proto->import_stat(MP_OBJ_TO_PTR(vfs->obj), path_out);
+    }
+
+    // delegate to vfs.stat() method
+    mp_obj_t path_o = mp_obj_new_str(path_out, strlen(path_out));
+    mp_obj_t stat;
+    nlr_buf_t nlr;
+    if (nlr_push(&nlr) == 0) {
+        stat = mp_vfs_proxy_call(vfs, MP_QSTR_stat, 1, &path_o);
+        nlr_pop();
+    } else {
+        // assume an exception means that the path is not found
+        return MP_IMPORT_STAT_NO_EXIST;
+    }
+    mp_obj_t *items;
+    mp_obj_get_array_fixed_n(stat, 10, &items);
+    mp_int_t st_mode = mp_obj_get_int(items[0]);
+    if (st_mode & MP_S_IFDIR) {
+        return MP_IMPORT_STAT_DIR;
+    } else {
+        return MP_IMPORT_STAT_FILE;
+    }
+}
+
+STATIC mp_obj_t mp_vfs_autodetect(mp_obj_t bdev_obj) {
+    #if MICROPY_VFS_LFS1 || MICROPY_VFS_LFS2
+    nlr_buf_t nlr;
+    if (nlr_push(&nlr) == 0) {
+        mp_obj_t vfs = MP_OBJ_NULL;
+        mp_vfs_blockdev_t blockdev;
+        mp_vfs_blockdev_init(&blockdev, bdev_obj);
+        uint8_t buf[44];
+        mp_vfs_blockdev_read_ext(&blockdev, 0, 8, sizeof(buf), buf);
+        #if MICROPY_VFS_LFS1
+        if (memcmp(&buf[32], "littlefs", 8) == 0) {
+            // LFS1
+            vfs = mp_type_vfs_lfs1.make_new(&mp_type_vfs_lfs1, 1, 0, &bdev_obj);
+            nlr_pop();
+            return vfs;
+        }
+        #endif
+        #if MICROPY_VFS_LFS2
+        if (memcmp(&buf[0], "littlefs", 8) == 0) {
+            // LFS2
+            vfs = mp_type_vfs_lfs2.make_new(&mp_type_vfs_lfs2, 1, 0, &bdev_obj);
+            nlr_pop();
+            return vfs;
+        }
+        #endif
+        nlr_pop();
+    } else {
+        // Ignore exception (eg block device doesn't support extended readblocks)
     }
     #endif
-    // TODO delegate to vfs.stat() method
-    return MP_IMPORT_STAT_NO_EXIST;
+
+    #if MICROPY_VFS_FAT
+    return mp_fat_vfs_type.make_new(&mp_fat_vfs_type, 1, 0, &bdev_obj);
+    #endif
+
+    return bdev_obj;
 }
 
 mp_obj_t mp_vfs_mount(size_t n_args, const mp_obj_t *pos_args, mp_map_t *kw_args) {
     enum { ARG_readonly, ARG_mkfs };
     static const mp_arg_t allowed_args[] = {
-        { MP_QSTR_readonly, MP_ARG_KW_ONLY | MP_ARG_OBJ, {.u_obj = mp_const_false} },
-        { MP_QSTR_mkfs, MP_ARG_KW_ONLY | MP_ARG_OBJ, {.u_obj = mp_const_false} },
+        { MP_QSTR_readonly, MP_ARG_KW_ONLY | MP_ARG_OBJ, {.u_rom_obj = MP_ROM_PTR(&mp_const_false_obj)} },
+        { MP_QSTR_mkfs, MP_ARG_KW_ONLY | MP_ARG_OBJ, {.u_rom_obj = MP_ROM_PTR(&mp_const_false_obj)} },
     };
 
     // parse args
@@ -156,10 +220,7 @@ mp_obj_t mp_vfs_mount(size_t n_args, const mp_obj_t *pos_args, mp_map_t *kw_args
     if (dest[0] == MP_OBJ_NULL) {
         // Input object has no mount method, assume it's a block device and try to
         // auto-detect the filesystem and create the corresponding VFS entity.
-        // (At the moment we only support FAT filesystems.)
-        #if MICROPY_VFS_FAT
-        vfs_obj = mp_fat_vfs_type.make_new(&mp_fat_vfs_type, 1, 0, &vfs_obj);
-        #endif
+        vfs_obj = mp_vfs_autodetect(vfs_obj);
     }
 
     // create new object
@@ -205,7 +266,7 @@ mp_obj_t mp_vfs_umount(mp_obj_t mnt_in) {
     mp_vfs_mount_t *vfs = NULL;
     size_t mnt_len;
     const char *mnt_str = NULL;
-    if (MP_OBJ_IS_STR(mnt_in)) {
+    if (mp_obj_is_str(mnt_in)) {
         mnt_str = mp_obj_str_get_data(mnt_in, &mnt_len);
     }
     for (mp_vfs_mount_t **vfsp = &MP_STATE_VM(vfs_mount_table); *vfsp != NULL; vfsp = &(*vfsp)->next) {
@@ -246,7 +307,14 @@ mp_obj_t mp_vfs_open(size_t n_args, const mp_obj_t *pos_args, mp_map_t *kw_args)
     mp_arg_val_t args[MP_ARRAY_SIZE(allowed_args)];
     mp_arg_parse_all(n_args, pos_args, kw_args, MP_ARRAY_SIZE(allowed_args), allowed_args, args);
 
-    mp_vfs_mount_t *vfs = lookup_path((mp_obj_t)args[ARG_file].u_rom_obj, &args[ARG_file].u_obj);
+    #if MICROPY_VFS_POSIX
+    // If the file is an integer then delegate straight to the POSIX handler
+    if (mp_obj_is_small_int(args[ARG_file].u_obj)) {
+        return mp_vfs_posix_file_open(&mp_type_textio, args[ARG_file].u_obj, args[ARG_mode].u_obj);
+    }
+    #endif
+
+    mp_vfs_mount_t *vfs = lookup_path(args[ARG_file].u_obj, &args[ARG_file].u_obj);
     return mp_vfs_proxy_call(vfs, MP_QSTR_open, 2, (mp_obj_t*)&args);
 }
 MP_DEFINE_CONST_FUN_OBJ_KW(mp_vfs_open_obj, 0, mp_vfs_open);
@@ -261,7 +329,7 @@ mp_obj_t mp_vfs_chdir(mp_obj_t path_in) {
         // subsequent relative paths begin at the root of that VFS.
         for (vfs = MP_STATE_VM(vfs_mount_table); vfs != NULL; vfs = vfs->next) {
             if (vfs->len == 1) {
-                mp_obj_t root = mp_obj_new_str("/", 1, false);
+                mp_obj_t root = MP_OBJ_NEW_QSTR(MP_QSTR__slash_);
                 mp_vfs_proxy_call(vfs, MP_QSTR_chdir, 1, &root);
                 break;
             }
@@ -318,7 +386,7 @@ STATIC mp_obj_t mp_vfs_ilistdir_it_iternext(mp_obj_t self_in) {
         self->cur.vfs = vfs->next;
         if (vfs->len == 1) {
             // vfs is mounted at root dir, delegate to it
-            mp_obj_t root = mp_obj_new_str("/", 1, false);
+            mp_obj_t root = MP_OBJ_NEW_QSTR(MP_QSTR__slash_);
             self->is_iter = true;
             self->cur.iter = mp_vfs_proxy_call(vfs, MP_QSTR_ilistdir, 1, &root);
             return mp_iternext(self->cur.iter);
@@ -366,9 +434,7 @@ mp_obj_t mp_vfs_listdir(size_t n_args, const mp_obj_t *args) {
     mp_obj_t dir_list = mp_obj_new_list(0, NULL);
     mp_obj_t next;
     while ((next = mp_iternext(iter)) != MP_OBJ_STOP_ITERATION) {
-        mp_obj_t *items;
-        mp_obj_get_array_fixed_n(next, 3, &items);
-        mp_obj_list_append(dir_list, items[0]);
+        mp_obj_list_append(dir_list, mp_obj_subscr(next, MP_OBJ_NEW_SMALL_INT(0), MP_OBJ_SENTINEL));
     }
     return dir_list;
 }

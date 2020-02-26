@@ -1,10 +1,5 @@
-import uerrno
 try:
-    try:
-        import uos_vfs as uos
-        open = uos.vfs_open
-    except ImportError:
-        import uos
+    import uos
 except ImportError:
     print("SKIP")
     raise SystemExit
@@ -35,9 +30,9 @@ class RAMFS:
 
     def ioctl(self, op, arg):
         #print("ioctl(%d, %r)" % (op, arg))
-        if op == 4:  # BP_IOCTL_SEC_COUNT
+        if op == 4:  # MP_BLOCKDEV_IOCTL_BLOCK_COUNT
             return len(self.data) // self.SEC_SIZE
-        if op == 5:  # BP_IOCTL_SEC_SIZE
+        if op == 5:  # MP_BLOCKDEV_IOCTL_BLOCK_SIZE
             return self.SEC_SIZE
 
 
@@ -114,3 +109,11 @@ uos.umount('/')
 print(uos.getcwd())
 print(uos.listdir())
 print(uos.listdir('sys'))
+
+# test importing a file from a mounted FS
+import sys
+sys.path.clear()
+sys.path.append('/sys')
+with open('sys/test_module.py', 'w') as f:
+    f.write('print("test_module!")')
+import test_module

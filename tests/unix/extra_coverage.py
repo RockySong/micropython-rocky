@@ -38,11 +38,7 @@ except OSError:
 stream.set_error(0)
 print(stream.ioctl(0, bytearray(10))) # successful ioctl call
 
-stream2 = data[3] # is textio and sets .write = NULL
-try:
-    print(stream2.write(b'1')) # attempt to call NULL implementation
-except OSError:
-    print('OSError')
+stream2 = data[3] # is textio
 print(stream2.read(1)) # read 1 byte encounters non-blocking error with textio stream
 
 # test BufferedWriter with stream errors
@@ -52,13 +48,15 @@ print(buf.write(bytearray(16)))
 
 # test basic import of frozen scripts
 import frzstr1
+print(frzstr1.__file__)
 import frzmpy1
+print(frzmpy1.__file__)
 
 # test import of frozen packages with __init__.py
 import frzstr_pkg1
-print(frzstr_pkg1.x)
+print(frzstr_pkg1.__file__, frzstr_pkg1.x)
 import frzmpy_pkg1
-print(frzmpy_pkg1.x)
+print(frzmpy_pkg1.__file__, frzmpy_pkg1.x)
 
 # test import of frozen packages without __init__.py
 from frzstr_pkg2.mod import Foo
@@ -71,3 +69,12 @@ try:
     import frzmpy2
 except ZeroDivisionError:
     print('ZeroDivisionError')
+
+# test loading a resource from a frozen string
+import uio
+buf = uio.resource_stream('frzstr_pkg2', 'mod.py')
+print(buf.read(21))
+
+# test for MP_QSTR_NULL regression
+from frzqstr import returns_NULL
+print(returns_NULL())

@@ -9,11 +9,8 @@ from __future__ import print_function
 
 import re
 import sys
+import io
 import os
-
-# Blacklist of qstrings that are specially handled in further
-# processing and should be ignored
-QSTRING_BLACK_LIST = set(['NULL', 'number_of'])
 
 
 def write_out(fname, output):
@@ -24,12 +21,16 @@ def write_out(fname, output):
             f.write("\n".join(output) + "\n")
 
 def process_file(f):
+    re_line = re.compile(r"#[line]*\s\d+\s\"([^\"]+)\"")
+    re_qstr = re.compile(r'MP_QSTR_[_a-zA-Z0-9]+')
     output = []
     last_fname = None
     for line in f:
+        if line.isspace():
+            continue
         # match gcc-like output (# n "file") and msvc-like output (#line n "file")
-        if line and (line[0:2] == "# " or line[0:5] == "#line"):
-            m = re.match(r"#[line]*\s\d+\s\"([^\"]+)\"", line)
+        if line.startswith(('# ', '#line')):
+            m = re_line.match(line)
             assert m is not None
             fname = m.group(1)
             if not fname.endswith(".c"):
@@ -39,10 +40,9 @@ def process_file(f):
                 output = []
                 last_fname = fname
             continue
-        for match in re.findall(r'MP_QSTR_[_a-zA-Z0-9]+', line):
+        for match in re_qstr.findall(line):
             name = match.replace('MP_QSTR_', '')
-            if name not in QSTRING_BLACK_LIST:
-                output.append('Q(' + name + ')')
+            output.append('Q(' + name + ')')
 
     write_out(last_fname, output)
     return ""
@@ -104,7 +104,7 @@ if __name__ == "__main__":
         pass
 
     if args.command == "split":
-        with open(args.input_filename) as infile:
+        with io.open(args.input_filename, encoding='utf-8') as infile:
             process_file(infile)
 
     if args.command == "cat":

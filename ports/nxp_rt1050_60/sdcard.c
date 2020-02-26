@@ -454,24 +454,24 @@ STATIC MP_DEFINE_CONST_FUN_OBJ_3(pyb_sdcard_writeblocks_obj, pyb_sdcard_writeblo
 STATIC mp_obj_t pyb_sdcard_ioctl(mp_obj_t self, mp_obj_t cmd_in, mp_obj_t arg_in) {
     mp_int_t cmd = mp_obj_get_int(cmd_in);
     switch (cmd) {
-        case BP_IOCTL_INIT:
+        case MP_BLOCKDEV_IOCTL_INIT:
             if (!sdcard_power_on()) {
                 return MP_OBJ_NEW_SMALL_INT(-1); // error
             }
             return MP_OBJ_NEW_SMALL_INT(0); // success
 
-        case BP_IOCTL_DEINIT:
+        case MP_BLOCKDEV_IOCTL_DEINIT:
             sdcard_power_off();
             return MP_OBJ_NEW_SMALL_INT(0); // success
 
-        case BP_IOCTL_SYNC:
+        case MP_BLOCKDEV_IOCTL_SYNC:
             // nothing to do
             return MP_OBJ_NEW_SMALL_INT(0); // success
 
-        case BP_IOCTL_SEC_COUNT:
-            return MP_OBJ_NEW_SMALL_INT(0); // TODO
+        case MP_BLOCKDEV_IOCTL_BLOCK_COUNT:
+            return MP_OBJ_NEW_SMALL_INT(sdcard_get_capacity_in_bytes() / SDCARD_BLOCK_SIZE);
 
-        case BP_IOCTL_SEC_SIZE:
+        case MP_BLOCKDEV_IOCTL_BLOCK_SIZE:
             return MP_OBJ_NEW_SMALL_INT(SDCARD_BLOCK_SIZE);
 
         default: // unknown command
@@ -503,17 +503,17 @@ const mp_obj_type_t pyb_sdcard_type = {
 
 void sdcard_init_vfs(fs_user_mount_t *vfs, int part) {
     vfs->base.type = &mp_fat_vfs_type;
-    vfs->flags |= FSUSER_NATIVE | FSUSER_HAVE_IOCTL;
+    vfs->blockdev.flags |= MP_BLOCKDEV_FLAG_NATIVE | MP_BLOCKDEV_FLAG_HAVE_IOCTL;
     vfs->fatfs.drv = vfs;
     vfs->fatfs.part = part;
-    vfs->readblocks[0] = (mp_obj_t)&pyb_sdcard_readblocks_obj;
-    vfs->readblocks[1] = (mp_obj_t)&pyb_sdcard_obj;
-    vfs->readblocks[2] = (mp_obj_t)sdcard_read_blocks; // native version
-    vfs->writeblocks[0] = (mp_obj_t)&pyb_sdcard_writeblocks_obj;
-    vfs->writeblocks[1] = (mp_obj_t)&pyb_sdcard_obj;
-    vfs->writeblocks[2] = (mp_obj_t)sdcard_write_blocks; // native version
-    vfs->u.ioctl[0] = (mp_obj_t)&pyb_sdcard_ioctl_obj;
-    vfs->u.ioctl[1] = (mp_obj_t)&pyb_sdcard_obj;
+    vfs->blockdev.readblocks[0] = MP_OBJ_FROM_PTR(&pyb_sdcard_readblocks_obj);
+    vfs->blockdev.readblocks[1] = MP_OBJ_FROM_PTR(&pyb_sdcard_obj);
+    vfs->blockdev.readblocks[2] = MP_OBJ_FROM_PTR(sdcard_read_blocks); // native version
+    vfs->blockdev.writeblocks[0] = MP_OBJ_FROM_PTR(&pyb_sdcard_writeblocks_obj);
+    vfs->blockdev.writeblocks[1] = MP_OBJ_FROM_PTR(&pyb_sdcard_obj);
+    vfs->blockdev.writeblocks[2] = MP_OBJ_FROM_PTR(sdcard_write_blocks); // native version
+    vfs->blockdev.u.ioctl[0] = MP_OBJ_FROM_PTR(&pyb_sdcard_ioctl_obj);
+    vfs->blockdev.u.ioctl[1] = MP_OBJ_FROM_PTR(&pyb_sdcard_obj);
 }
 
 #endif // MICROPY_HW_HAS_SDCARD

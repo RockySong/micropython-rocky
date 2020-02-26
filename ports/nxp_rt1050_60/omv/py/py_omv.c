@@ -13,21 +13,21 @@ static mp_obj_t py_omv_version_string()
              FIRMWARE_VERSION_MAJOR,
              FIRMWARE_VERSION_MINOR,
              FIRMWARE_VERSION_PATCH);
-    return mp_obj_new_str(str, strlen(str), false);
+    return mp_obj_new_str(str, strlen(str));
 }
 STATIC MP_DEFINE_CONST_FUN_OBJ_0(py_omv_version_string_obj, py_omv_version_string);
 
 static mp_obj_t py_omv_arch()
 {
     char *str = OMV_ARCH_STR;
-    return mp_obj_new_str(str, strlen(str), false);
+    return mp_obj_new_str(str, strlen(str));
 }
 STATIC MP_DEFINE_CONST_FUN_OBJ_0(py_omv_arch_obj, py_omv_arch);
 
 static mp_obj_t py_omv_board_type()
 {
     char *str = OMV_BOARD_TYPE;
-    return mp_obj_new_str(str, strlen(str), false);
+    return mp_obj_new_str(str, strlen(str));
 }
 STATIC MP_DEFINE_CONST_FUN_OBJ_0(py_omv_board_type_obj, py_omv_board_type);
 
@@ -38,7 +38,7 @@ static mp_obj_t py_omv_board_id()
              *((unsigned int *) (OMV_UNIQUE_ID_ADDR + 8)),
              *((unsigned int *) (OMV_UNIQUE_ID_ADDR + 4)),
              *((unsigned int *) (OMV_UNIQUE_ID_ADDR + 0)));
-    return mp_obj_new_str(str, strlen(str), false);
+    return mp_obj_new_str(str, strlen(str));
 }
 STATIC MP_DEFINE_CONST_FUN_OBJ_0(py_omv_board_id_obj, py_omv_board_id);
 

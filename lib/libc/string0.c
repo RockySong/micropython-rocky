@@ -27,11 +27,7 @@
 #include <stdint.h>
 #include <string.h>
 
-#if defined(__ICCARM__)
-	#define likely(x) (x)
-#else
-	#define likely(x) __builtin_expect((x), 1)
-#endif
+#define likely(x) __builtin_expect((x), 1)
 
 void *memcpy(void *dst, const void *src, size_t n) {
     if (likely(!(((uintptr_t)dst) & 3) && !(((uintptr_t)src) & 3))) {
@@ -220,4 +216,20 @@ char *strstr(const char *haystack, const char *needle)
         if (strncmp(haystack, needle, needlelen) == 0)
             return (char *) haystack;
     return 0;
+}
+
+size_t strspn(const char *s, const char *accept) {
+    const char *ss = s;
+    while (*s && strchr(accept, *s) != NULL) {
+        ++s;
+    }
+    return s - ss;
+}
+
+size_t strcspn(const char *s, const char *reject) {
+    const char *ss = s;
+    while (*s && strchr(reject, *s) == NULL) {
+        ++s;
+    }
+    return s - ss;
 }

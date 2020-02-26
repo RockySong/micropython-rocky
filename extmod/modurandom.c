@@ -36,8 +36,10 @@
 // http://www.literatecode.com/yasmarang
 // Public Domain
 
+#if !MICROPY_ENABLE_DYNRUNTIME
 STATIC uint32_t yasmarang_pad = 0xeda4baba, yasmarang_n = 69, yasmarang_d = 233;
 STATIC uint8_t yasmarang_dat = 0;
+#endif
 
 STATIC uint32_t yasmarang(void)
 {
@@ -200,8 +202,20 @@ STATIC MP_DEFINE_CONST_FUN_OBJ_2(mod_urandom_uniform_obj, mod_urandom_uniform);
 
 #endif // MICROPY_PY_URANDOM_EXTRA_FUNCS
 
+#ifdef MICROPY_PY_URANDOM_SEED_INIT_FUNC
+STATIC mp_obj_t mod_urandom___init__() {
+    mod_urandom_seed(MP_OBJ_NEW_SMALL_INT(MICROPY_PY_URANDOM_SEED_INIT_FUNC));
+    return mp_const_none;
+}
+STATIC MP_DEFINE_CONST_FUN_OBJ_0(mod_urandom___init___obj, mod_urandom___init__);
+#endif
+
+#if !MICROPY_ENABLE_DYNRUNTIME
 STATIC const mp_rom_map_elem_t mp_module_urandom_globals_table[] = {
     { MP_ROM_QSTR(MP_QSTR___name__), MP_ROM_QSTR(MP_QSTR_urandom) },
+    #ifdef MICROPY_PY_URANDOM_SEED_INIT_FUNC
+    { MP_ROM_QSTR(MP_QSTR___init__), MP_ROM_PTR(&mod_urandom___init___obj) },
+    #endif
     { MP_ROM_QSTR(MP_QSTR_getrandbits), MP_ROM_PTR(&mod_urandom_getrandbits_obj) },
     { MP_ROM_QSTR(MP_QSTR_seed), MP_ROM_PTR(&mod_urandom_seed_obj) },
     #if MICROPY_PY_URANDOM_EXTRA_FUNCS
@@ -221,5 +235,6 @@ const mp_obj_module_t mp_module_urandom = {
     .base = { &mp_type_module },
     .globals = (mp_obj_dict_t*)&mp_module_urandom_globals,
 };
+#endif
 
 #endif //MICROPY_PY_URANDOM

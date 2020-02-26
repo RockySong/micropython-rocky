@@ -283,7 +283,7 @@ static const char fresh_readme_txt[] __ALIGNED(4) =
 MP_NOINLINE STATIC bool init_flash_fs(uint reset_mode) {
     // init the vfs object
     fs_user_mount_t *vfs_fat = &fs_user_mount_flash;
-    vfs_fat->flags = 0;
+    vfs_fat->blockdev.flags = 0;
     pyb_flash_init_vfs(vfs_fat);
 
     // try to mount the flash
@@ -393,7 +393,7 @@ STATIC bool init_sdcard_fs(bool first_soft_reset) {
         if (vfs == NULL || vfs_fat == NULL) {
             break;
         }
-        vfs_fat->flags = FSUSER_FREE_OBJ;
+        vfs_fat->blockdev.flags = MP_BLOCKDEV_FLAG_FREE_OBJ;
         sdcard_init_vfs(vfs_fat, part_num);
 
         // try to mount the partition
@@ -454,7 +454,7 @@ STATIC bool init_sdcard_fs(bool first_soft_reset) {
     }
 
     if (first_part) {
-        printf("PYB: can't mount SD card\n");
+        printf("MPY: can't mount SD card\n");
         return false;
     } else {
         return true;

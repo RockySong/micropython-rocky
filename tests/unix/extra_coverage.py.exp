@@ -2,6 +2,7 @@
 -123 +123  123
 -0123
 123
+123
 1ABCDEF
 ab abc
 
@@ -12,6 +13,10 @@ false true
 80000000
 80000000
 abc
+%
+# GC
+0
+0
 # vstr
 tests
 sts
@@ -23,21 +28,29 @@ RuntimeError:
 # repl
 ame__
 
-__name__        path            argv            version
-version_info    implementation  platform        byteorder
-maxsize         exit            stdin           stdout
-stderr          modules         exc_info        getsizeof
-print_exception
+__class__       __name__        argv            atexit
+byteorder       exc_info        exit            getsizeof
+implementation  maxsize         modules         path
+platform        print_exception                 stderr
+stdin           stdout          version         version_info
 ementation
 # attrtuple
 (start=1, stop=2, step=3)
 # str
 1
+# bytearray
+data
 # mpz
 1
 12345678
 0
 0
+0
+0
+0
+1
+12345
+6
 # runtime utils
 TypeError: unsupported type for __abs__: 'str'
 TypeError: unsupported types for __divmod__: 'str', 'str'
@@ -47,8 +60,10 @@ Warning: test
 +1e+00
 +1e+00
 # binary
-122
+123
 456
+# VM
+2 1
 # scheduler
 sched(0)=1
 sched(1)=1
@@ -56,10 +71,32 @@ sched(2)=1
 sched(3)=1
 sched(4)=0
 unlocked
-3
-2
-1
 0
+1
+2
+3
+# ringbuf
+99 0
+98 1
+22
+99 0
+97 2
+aa55
+99 0
+0 99
+-1
+1 98
+-1
+2 97
+0
+cc99
+99 0
+0
+11bb
+0
+22ff
+-1
+-1
 0123456789 b'0123456789'
 7300
 7300
@@ -76,17 +113,20 @@ b'123'
 b'123'
 OSError
 0
-OSError
 None
 None
 frzstr1
+frzstr1.py
 frzmpy1
+frzmpy1.py
 frzstr_pkg1.__init__
-1
+frzstr_pkg1/__init__.py 1
 frzmpy_pkg1.__init__
-1
+frzmpy_pkg1/__init__.py 1
 frzstr_pkg2.mod
 1
 frzmpy_pkg2.mod
 1
 ZeroDivisionError
+b'# test frozen package'
+NULL

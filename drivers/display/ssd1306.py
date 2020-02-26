@@ -23,29 +23,16 @@ SET_PRECHARGE       = const(0xd9)
 SET_VCOM_DESEL      = const(0xdb)
 SET_CHARGE_PUMP     = const(0x8d)
 
-
-class SSD1306:
+# Subclassing FrameBuffer provides support for graphics primitives
+# http://docs.micropython.org/en/latest/pyboard/library/framebuf.html
+class SSD1306(framebuf.FrameBuffer):
     def __init__(self, width, height, external_vcc):
         self.width = width
         self.height = height
         self.external_vcc = external_vcc
         self.pages = self.height // 8
         self.buffer = bytearray(self.pages * self.width)
-        fb = framebuf.FrameBuffer(self.buffer, self.width, self.height, framebuf.MONO_VLSB)
-        self.framebuf = fb
-        # Provide methods for accessing FrameBuffer graphics primitives. This is a
-        # workround because inheritance from a native class is currently unsupported.
-        # http://docs.micropython.org/en/latest/pyboard/library/framebuf.html
-        self.fill = fb.fill
-        self.pixel = fb.pixel
-        self.hline = fb.hline
-        self.vline = fb.vline
-        self.line = fb.line
-        self.rect = fb.rect
-        self.fill_rect = fb.fill_rect
-        self.text = fb.text
-        self.scroll = fb.scroll
-        self.blit = fb.blit
+        super().__init__(self.buffer, self.width, self.height, framebuf.MONO_VLSB)
         self.init_display()
 
     def init_display(self):
@@ -109,6 +96,7 @@ class SSD1306_I2C(SSD1306):
         self.i2c = i2c
         self.addr = addr
         self.temp = bytearray(2)
+        self.write_list = [b'\x40', None] # Co=0, D/C#=1
         super().__init__(width, height, external_vcc)
 
     def write_cmd(self, cmd):
@@ -117,12 +105,8 @@ class SSD1306_I2C(SSD1306):
         self.i2c.writeto(self.addr, self.temp)
 
     def write_data(self, buf):
-        self.temp[0] = self.addr << 1
-        self.temp[1] = 0x40 # Co=0, D/C#=1
-        self.i2c.start()
-        self.i2c.write(self.temp)
-        self.i2c.write(buf)
-        self.i2c.stop()
+        self.write_list[1] = buf
+        self.i2c.writevto(self.addr, self.write_list)
 
 
 class SSD1306_SPI(SSD1306):

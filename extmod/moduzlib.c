@@ -48,12 +48,12 @@ typedef struct _mp_obj_decompio_t {
     bool eof;
 } mp_obj_decompio_t;
 
-STATIC unsigned char read_src_stream(TINF_DATA *data) {
+STATIC int read_src_stream(TINF_DATA *data) {
     byte *p = (void*)data;
     p -= offsetof(mp_obj_decompio_t, decomp);
     mp_obj_decompio_t *self = (mp_obj_decompio_t*)p;
 
-    const mp_stream_p_t *stream = mp_get_stream_raise(self->src_stream, MP_STREAM_OP_READ);
+    const mp_stream_p_t *stream = mp_get_stream(self->src_stream);
     int err;
     byte c;
     mp_uint_t out_sz = stream->read(self->src_stream, &c, 1, &err);
@@ -68,6 +68,7 @@ STATIC unsigned char read_src_stream(TINF_DATA *data) {
 
 STATIC mp_obj_t decompio_make_new(const mp_obj_type_t *type, size_t n_args, size_t n_kw, const mp_obj_t *args) {
     mp_arg_check_num(n_args, n_kw, 1, 2, false);
+    mp_get_stream_raise(args[0], MP_STREAM_OP_READ);
     mp_obj_decompio_t *o = m_new_obj(mp_obj_decompio_t);
     o->base.type = type;
     memset(&o->decomp, 0, sizeof(o->decomp));
@@ -109,7 +110,7 @@ STATIC mp_uint_t decompio_read(mp_obj_t o_in, void *buf, mp_uint_t size, int *er
     }
 
     o->decomp.dest = buf;
-    o->decomp.destSize = size;
+    o->decomp.dest_limit = (byte*)buf + size;
     int st = uzlib_uncompress_chksum(&o->decomp);
     if (st == TINF_DONE) {
         o->eof = true;
@@ -121,6 +122,7 @@ STATIC mp_uint_t decompio_read(mp_obj_t o_in, void *buf, mp_uint_t size, int *er
     return o->decomp.dest - (byte*)buf;
 }
 
+#if !MICROPY_ENABLE_DYNRUNTIME
 STATIC const mp_rom_map_elem_t decompio_locals_dict_table[] = {
     { MP_ROM_QSTR(MP_QSTR_read), MP_ROM_PTR(&mp_stream_read_obj) },
     { MP_ROM_QSTR(MP_QSTR_readinto), MP_ROM_PTR(&mp_stream_readinto_obj) },
@@ -128,11 +130,13 @@ STATIC const mp_rom_map_elem_t decompio_locals_dict_table[] = {
 };
 
 STATIC MP_DEFINE_CONST_DICT(decompio_locals_dict, decompio_locals_dict_table);
+#endif
 
 STATIC const mp_stream_p_t decompio_stream_p = {
     .read = decompio_read,
 };
 
+#if !MICROPY_ENABLE_DYNRUNTIME
 STATIC const mp_obj_type_t decompio_type = {
     { &mp_type_type },
     .name = MP_QSTR_DecompIO,
@@ -140,6 +144,7 @@ STATIC const mp_obj_type_t decompio_type = {
     .protocol = &decompio_stream_p,
     .locals_dict = (void*)&decompio_locals_dict,
 };
+#endif
 
 STATIC mp_obj_t mod_uzlib_decompress(size_t n_args, const mp_obj_t *args) {
     mp_obj_t data = args[0];
@@ -154,9 +159,10 @@ STATIC mp_obj_t mod_uzlib_decompress(size_t n_args, const mp_obj_t *args) {
     byte *dest_buf = m_new(byte, dest_buf_size);
 
     decomp->dest = dest_buf;
-    decomp->destSize = dest_buf_size;
-    DEBUG_printf("uzlib: Initial out buffer: " UINT_FMT " bytes\n", decomp->destSize);
+    decomp->dest_limit = dest_buf + dest_buf_size;
+    DEBUG_printf("uzlib: Initial out buffer: " UINT_FMT " bytes\n", dest_buf_size);
     decomp->source = bufinfo.buf;
+    decomp->source_limit = (byte*)bufinfo.buf + bufinfo.len;
 
     int st;
     bool is_zlib = true;
@@ -184,7 +190,7 @@ STATIC mp_obj_t mod_uzlib_decompress(size_t n_args, const mp_obj_t *args) {
         dest_buf = m_renew(byte, dest_buf, dest_buf_size, dest_buf_size + 256);
         dest_buf_size += 256;
         decomp->dest = dest_buf + offset;
-        decomp->destSize = 256;
+        decomp->dest_limit = decomp->dest + 256;
     }
 
     mp_uint_t final_sz = decomp->dest - dest_buf;
@@ -199,6 +205,7 @@ error:
 }
 STATIC MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(mod_uzlib_decompress_obj, 1, 3, mod_uzlib_decompress);
 
+#if !MICROPY_ENABLE_DYNRUNTIME
 STATIC const mp_rom_map_elem_t mp_module_uzlib_globals_table[] = {
     { MP_ROM_QSTR(MP_QSTR___name__), MP_ROM_QSTR(MP_QSTR_uzlib) },
     { MP_ROM_QSTR(MP_QSTR_decompress), MP_ROM_PTR(&mod_uzlib_decompress_obj) },
@@ -211,6 +218,7 @@ const mp_obj_module_t mp_module_uzlib = {
     .base = { &mp_type_module },
     .globals = (mp_obj_dict_t*)&mp_module_uzlib_globals,
 };
+#endif
 
 // Source files #include'd here to make sure they're compiled in
 // only if module is enabled by config setting.

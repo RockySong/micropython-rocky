@@ -165,6 +165,12 @@ STATIC void *thread_entry(void *args_in) {
     mp_stack_set_top(&ts + 1); // need to include ts in root-pointer scan
     mp_stack_set_limit(args->stack_size);
 
+    #if MICROPY_ENABLE_PYSTACK
+    // TODO threading and pystack is not fully supported, for now just make a small stack
+    mp_obj_t mini_pystack[128];
+    mp_pystack_init(mini_pystack, &mini_pystack[128]);
+    #endif
+
     // set locals and globals from the calling context
     mp_locals_set(args->dict_locals);
     mp_globals_set(args->dict_globals);
@@ -236,7 +242,7 @@ STATIC mp_obj_t mod_thread_start_new_thread(size_t n_args, const mp_obj_t *args)
         th_args->n_kw = map->used;
         // copy across the keyword arguments
         for (size_t i = 0, n = pos_args_len; i < map->alloc; ++i) {
-            if (MP_MAP_SLOT_IS_FILLED(map, i)) {
+            if (mp_map_slot_is_filled(map, i)) {
                 th_args->args[n++] = map->table[i].key;
                 th_args->args[n++] = map->table[i].value;
             }

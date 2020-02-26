@@ -1,0 +1,113 @@
+{% extends "layout.html" %}
+{% set title = _('Overview') %}
+{% block body %}
+
+  <h1>MicroPython documentation</h1>
+
+  <p>
+    {{ _('Welcome! This is the documentation for MicroPython') }}
+    v{{ release|e }} on the OpenMV Cam{% if last_updated %}, {{ _('last updated') }} {{ last_updated|e }}{% endif %}.
+  </p>
+
+  <p><strong>General documentation for MicroPython:</strong></p>
+
+  <table class="contentstable"><tr>
+    <td width="40%" style="padding-left:2em;">
+      <p class="biglink">
+        <a class="biglink" href="{{ pathto("openmvcam/quickref") }}">Quick reference for the OpenMV Cam</a><br/>
+        <span class="linkdescr">pinout for the OpenMV Cam and snippets of useful code</span>
+      </p>
+      <p class="biglink">
+        <a class="biglink" href="{{ pathto("openmvcam/general") }}">General information about the OpenMV Cam</a><br/>
+        <span class="linkdescr">read this first for a quick overview</span>
+      </p>
+      <p class="biglink">
+        <a class="biglink" href="{{ pathto("openmvcam/tutorial/index") }}">Tutorials and code examples</a><br/>
+        <span class="linkdescr">start here</span>
+      </p>
+    </td>
+    <td width="40%" style="padding-left:2em;">
+      <p class="biglink">
+        <a class="biglink" href="{{ pathto("library/index") }}">Library Reference</a><br/>
+        <span class="linkdescr">MicroPython libraries and modules</span>
+      </p>
+      <p class="biglink">
+        <a class="biglink" href="{{ pathto("reference/index") }}">Language Reference</a><br/>
+        <span class="linkdescr">information about MicroPython specific language features</span>
+      </p>
+      <p class="biglink">
+        <a class="biglink" href="{{ pathto("genrst/index") }}">MicroPython Differences</a><br/>
+        <span class="linkdescr">MicroPython operations which differ from CPython</span>
+      </p>
+      <p class="biglink">
+        <a class="biglink" href="{{ pathto("license") }}">License</a><br/>
+        <span class="linkdescr">MicroPython license information</span>
+      </p>
+    </td>
+  </tr></table>
+
+  <p><strong>Indices and tables:</strong></p>
+
+  <table class="contentstable"><tr>
+    <td width="40%" style="padding-left:2em;">
+      <p class="biglink">
+        <a class="biglink" href="{{ pathto("py-modindex") }}">Module index</a><br/>
+        <span class="linkdescr">quick access to all modules</span>
+      </p>
+      <p class="biglink">
+        <a class="biglink" href="{{ pathto("genindex") }}">Full index</a><br/>
+        <span class="linkdescr">all functions, classes, constants</span>
+      </p>
+    </td>
+    <td width="40%" style="padding-left:2em;">
+      <p class="biglink">
+        <a class="biglink" href="{{ pathto("reference/glossary") }}">Glossary</a><br/>
+        <span class="linkdescr">MicroPython terms explained</span>
+      </p>
+      <p class="biglink">
+        <a class="biglink" href="{{ pathto("index") }}">Table of contents</a><br/>
+        <span class="linkdescr">a list of all sections and subsections</span>
+      </p>
+    </td></tr>
+  </table>
+
+  <p><strong>External links:</strong></p>
+
+  <table class="contentstable"><tr>
+    <td width="40%" style="padding-left:2em;">
+      <p class="biglink">
+      <a class="biglink" href="https://openmv.io">OpenMV homepage</a><br/>
+        <span class="linkdescr">the official OpenMV site</span>
+      </p>
+      <p class="biglink">
+        <a class="biglink" href="http://forums.openmv.io">OpenMV forum</a><br/>
+        <span class="linkdescr">community discussion for all things related to OpenMV</span>
+      </p>
+    </td>
+    <td width="40%" style="padding-left:2em;">
+      <p class="biglink">
+        <a class="biglink" href="https://github.com/openmv">OpenMV on GitHub</a><br/>
+        <span class="linkdescr">contribute to the source code on GitHub</span>
+      </p>
+    </td>
+  </tr></table>
+  <table class="contentstable"><tr>
+    <td width="40%" style="padding-left:2em;">
+      <p class="biglink">
+      <a class="biglink" href="http://micropython.org">MicroPython homepage</a><br/>
+        <span class="linkdescr">the official MicroPython site</span>
+      </p>
+      <p class="biglink">
+        <a class="biglink" href="http://forum.micropython.org">MicroPython forum</a><br/>
+        <span class="linkdescr">community discussion for all things related to MicroPython</span>
+      </p>
+    </td>
+    <td width="40%" style="padding-left:2em;">
+      <p class="biglink">
+        <a class="biglink" href="https://github.com/micropython">MicroPython on GitHub</a><br/>
+        <span class="linkdescr">contribute to the source code on GitHub</span>
+      </p>
+    </td>
+  </tr></table>
+
+{% endblock %}

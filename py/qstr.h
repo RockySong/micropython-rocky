@@ -35,7 +35,7 @@
 // Note: it would be possible to define MP_QSTR_xxx as qstr_from_str_static("xxx")
 // for qstrs that are referenced this way, but you don't want to have them in ROM.
 
-// first entry in enum will be MP_QSTR_NULL=0, which indicates invalid/no qstr
+// first entry in enum will be MP_QSTRnull=0, which indicates invalid/no qstr
 enum {
 #ifndef NO_QSTR
 #define QDEF(id, str) id,
@@ -56,17 +56,15 @@ typedef struct _qstr_pool_t {
 } qstr_pool_t;
 
 #define QSTR_FROM_STR_STATIC(s) (qstr_from_strn((s), strlen(s)))
+#define QSTR_TOTAL() (MP_STATE_VM(last_pool)->total_prev_len + MP_STATE_VM(last_pool)->len)
 
 void qstr_init(void);
 
 mp_uint_t qstr_compute_hash(const byte *data, size_t len);
-qstr qstr_find_strn(const char *str, size_t str_len); // returns MP_QSTR_NULL if not found
+qstr qstr_find_strn(const char *str, size_t str_len); // returns MP_QSTRnull if not found
 
 qstr qstr_from_str(const char *str);
 qstr qstr_from_strn(const char *str, size_t len);
-
-byte *qstr_build_start(size_t len, byte **q_ptr);
-qstr qstr_build_end(byte *q_ptr);
 
 mp_uint_t qstr_hash(qstr q);
 const char *qstr_str(qstr q);
