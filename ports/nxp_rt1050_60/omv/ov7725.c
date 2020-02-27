@@ -158,8 +158,8 @@ static int reset(sensor_t *sensor)
     // Reset all registers
     cambus_writeb(sensor->slv_addr, COM7, COM7_RESET);
 
-    // Delay 10 ms
-    systick_sleep(10);
+    // Delay 2+ ms
+    systick_sleep(2+1);
 
     // Write default regsiters
     for (i=0, regs = default_regs; regs[i][0]; i++) {
@@ -187,7 +187,7 @@ static int sleep(sensor_t *sensor, int enable)
     return cambus_writeb(sensor->slv_addr, COM2, reg) | ret;
 }
 
-static int read_reg(sensor_t *sensor, uint8_t reg_addr)
+static int read_reg(sensor_t *sensor, uint16_t reg_addr)
 {
     uint8_t reg_data;
     if (cambus_readb(sensor->slv_addr, reg_addr, &reg_data) != 0) {
@@ -196,7 +196,7 @@ static int read_reg(sensor_t *sensor, uint8_t reg_addr)
     return reg_data;
 }
 
-static int write_reg(sensor_t *sensor, uint8_t reg_addr, uint16_t reg_data)
+static int write_reg(sensor_t *sensor, uint16_t reg_addr, uint16_t reg_data)
 {
     return cambus_writeb(sensor->slv_addr, reg_addr, reg_data);
 }
@@ -209,18 +209,17 @@ static int set_pixformat(sensor_t *sensor, pixformat_t pixformat)
     switch (pixformat) {
         case PIXFORMAT_RGB565:
             reg = COM7_SET_FMT(reg, COM7_FMT_RGB);
-            ret = cambus_writeb(sensor->slv_addr, DSP_CTRL4, 0);
+            ret |= cambus_writeb(sensor->slv_addr, DSP_CTRL4, DSP_CTRL4_YUV_RGB);
             break;
         case PIXFORMAT_YUV422:
         case PIXFORMAT_GRAYSCALE:
             reg = COM7_SET_FMT(reg, COM7_FMT_YUV);
-            ret = cambus_writeb(sensor->slv_addr, DSP_CTRL4, 0);
+            ret |= cambus_writeb(sensor->slv_addr, DSP_CTRL4, DSP_CTRL4_YUV_RGB);
             break;
         case PIXFORMAT_BAYER:
             reg = COM7_SET_FMT(reg, COM7_FMT_P_BAYER);
-            ret = cambus_writeb(sensor->slv_addr, DSP_CTRL4, DSP_CTRL4_RAW8);
+            ret |= cambus_writeb(sensor->slv_addr, DSP_CTRL4, DSP_CTRL4_RAW8);
             break;
-
         default:
             return -1;
     }
@@ -254,7 +253,6 @@ static int set_framesize(sensor_t *sensor, framesize_t framesize)
         ret |= cambus_writeb(sensor->slv_addr, HSIZE,  0x50);
         ret |= cambus_writeb(sensor->slv_addr, VSTART, 0x03);
         ret |= cambus_writeb(sensor->slv_addr, VSIZE,  0x78);
-        ret |= cambus_writeb(sensor->slv_addr, HREF,   0x00);
 
         // Enable auto-scaling/zooming factors
         ret |= cambus_writeb(sensor->slv_addr, DSPAUTO, 0xFF);
@@ -270,15 +268,14 @@ static int set_framesize(sensor_t *sensor, framesize_t framesize)
         ret |= cambus_writeb(sensor->slv_addr, HSIZE,  0xA0);
         ret |= cambus_writeb(sensor->slv_addr, VSTART, 0x07);
         ret |= cambus_writeb(sensor->slv_addr, VSIZE,  0xF0);
-        ret |= cambus_writeb(sensor->slv_addr, HREF,   0x00);
 
         // Disable auto-scaling/zooming factors
         ret |= cambus_writeb(sensor->slv_addr, DSPAUTO, 0xF3);
 
         // Clear auto-scaling/zooming factors
         ret |= cambus_writeb(sensor->slv_addr, SCAL0, 0x00);
-        ret |= cambus_writeb(sensor->slv_addr, SCAL1, 0x00);
-        ret |= cambus_writeb(sensor->slv_addr, SCAL2, 0x00);
+        ret |= cambus_writeb(sensor->slv_addr, SCAL1, 0x40);
+        ret |= cambus_writeb(sensor->slv_addr, SCAL2, 0x40);
     }
 
     return ret;
@@ -315,7 +312,6 @@ static int set_brightness(sensor_t *sensor, int level)
 static int set_saturation(sensor_t *sensor, int level)
 {
     int ret=0;
-
     level += (NUM_SATURATION_LEVELS / 2 );
     if (level < 0 || level >= NUM_SATURATION_LEVELS) {
         return -1;
@@ -340,7 +336,7 @@ static int set_colorbar(sensor_t *sensor, int enable)
 {
     uint8_t reg;
     int ret = cambus_readb(sensor->slv_addr, COM3, &reg);
-    
+
     // Enable colorbar test pattern output
     reg = COM3_SET_CBAR(reg, enable);
     ret |= cambus_writeb(sensor->slv_addr, COM3, reg);
@@ -569,7 +565,7 @@ static int set_special_effect(sensor_t *sensor, sde_t sde)
         case SDE_NORMAL:
             ret |= cambus_writeb(sensor->slv_addr, SDE, 0x06);
             ret |= cambus_writeb(sensor->slv_addr, UFIX, 0x80);
-            ret |= cambus_writeb(sensor->slv_addr, UFIX, 0x80);
+            ret |= cambus_writeb(sensor->slv_addr, VFIX, 0x80);
             break;
         default:
             return -1;
@@ -585,6 +581,7 @@ static int set_lens_correction(sensor_t *sensor, int enable, int radi, int coef)
     ret |= cambus_writeb(sensor->slv_addr, LC_CTR, (enable&0x01));
     ret |= cambus_writeb(sensor->slv_addr, LC_RADI, radi);
     ret |= cambus_writeb(sensor->slv_addr, LC_COEF, coef);
+
     return ret;
 }
 
@@ -616,10 +613,10 @@ int ov7725_init(sensor_t *sensor)
     sensor->set_lens_correction = set_lens_correction;
 
     // Set sensor flags
-    SENSOR_HW_FLAGS_SET(sensor, SENSOR_HW_FLAGS_VSYNC, 0);
+    SENSOR_HW_FLAGS_SET(sensor, SENSOR_HW_FLAGS_VSYNC, 1);
     SENSOR_HW_FLAGS_SET(sensor, SENSOR_HW_FLAGS_HSYNC, 0);
-    SENSOR_HW_FLAGS_SET(sensor, SENSOR_HW_FLAGS_PIXCK, 0);
-    SENSOR_HW_FLAGS_SET(sensor, SENSOR_HW_FLAGS_FSYNC, 0);
+    SENSOR_HW_FLAGS_SET(sensor, SENSOR_HW_FLAGS_PIXCK, 1);
+    SENSOR_HW_FLAGS_SET(sensor, SENSOR_HW_FLAGS_FSYNC, 1);
     SENSOR_HW_FLAGS_SET(sensor, SENSOR_HW_FLAGS_JPEGE, 0);
 
     return 0;

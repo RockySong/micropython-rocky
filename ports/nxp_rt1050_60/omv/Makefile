@@ -21,14 +21,19 @@ SRCS += $(addprefix ,   \
    )
 
 SRCS += $(addprefix img/,   \
+	binary.c                \
 	blob.c                  \
+	clahe.c                 \
+	draw.c                  \
 	qrcode.c                \
 	apriltag.c              \
 	dmtx.c                  \
 	zbar.c                  \
 	fmath.c                 \
 	fsort.c                 \
+	qsort.c                 \
 	fft.c                   \
+	filter.c                \
 	haar.c                  \
 	imlib.c                 \
 	collections.c           \
@@ -59,11 +64,13 @@ SRCS += $(addprefix img/,   \
 	orb.c                   \
 	template.c              \
 	phasecorrelation.c      \
+	shadow_removal.c        \
 	font.c                  \
 	jpeg.c                  \
 	lbp.c                   \
 	eye.c                   \
 	hough.c                 \
+	line.c                  \
 	lsd.c                   \
 	sincos_tab.c            \
 	edge.c                  \

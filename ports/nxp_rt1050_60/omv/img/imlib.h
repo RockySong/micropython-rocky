@@ -287,7 +287,7 @@ extern const int8_t yuv_table[196608];
 #endif
 
 #define COLOR_LAB_TO_RGB565(l, a, b) imlib_lab_to_rgb(l, a, b)
-#define COLOR_YUV_TO_RGB565(y, u, v) imlib_yuv_to_rgb(y + 128, u, v)
+#define COLOR_YUV_TO_RGB565(y, u, v) imlib_yuv_to_rgb((y) + 128, u, v)
 
 #define COLOR_BAYER_TO_RGB565(img, x, y, r, g, b)            \
 ({                                                           \
@@ -344,11 +344,11 @@ extern const int8_t yuv_table[196608];
 })
 
 #define COLOR_BINARY_TO_GRAYSCALE(pixel) ((pixel) * COLOR_GRAYSCALE_MAX)
-#define COLOR_BINARY_TO_RGB565(pixel) COLOR_YUV_TO_RGB565((pixel) ? 127 : -128, 0, 0)
+#define COLOR_BINARY_TO_RGB565(pixel) COLOR_YUV_TO_RGB565(((pixel) ? 127 : -128), 0, 0)
 #define COLOR_RGB565_TO_BINARY(pixel) (COLOR_RGB565_TO_Y(pixel) > (((COLOR_Y_MAX - COLOR_Y_MIN) / 2) + COLOR_Y_MIN))
 #define COLOR_RGB565_TO_GRAYSCALE(pixel) (COLOR_RGB565_TO_Y(pixel) + 128)
 #define COLOR_GRAYSCALE_TO_BINARY(pixel) ((pixel) > (((COLOR_GRAYSCALE_MAX - COLOR_GRAYSCALE_MIN) / 2) + COLOR_GRAYSCALE_MIN))
-#define COLOR_GRAYSCALE_TO_RGB565(pixel) COLOR_YUV_TO_RGB565((pixel) - 128, 0, 0)
+#define COLOR_GRAYSCALE_TO_RGB565(pixel) COLOR_YUV_TO_RGB565(((pixel) - 128), 0, 0)
 
 typedef enum {
     COLOR_PALETTE_RAINBOW,
@@ -559,6 +559,8 @@ float IMAGE_Y_RATIO = ((float) _source_rect->s.h) / ((float) _target_rect->s.h);
     _row_ptr + ((_image->w + UINT32_T_MASK) >> UINT32_T_SHIFT); \
 })
 
+#define RGB565_TO_Y_FAST(pixel) \
+  (((pixel & 0x1f00) >> 5) + (pixel & 0xf8) + ((pixel & 0x7) << 6) + ((pixel & 0xe000) >> 10)) / 4;
 #define IMAGE_GET_BINARY_PIXEL_FAST(row_ptr, x) \
 ({ \
     __typeof__ (row_ptr) _row_ptr = (row_ptr); \
@@ -1150,11 +1152,11 @@ void imlib_bayer_to_rgb565(image_t *img, int w, int h, int xoffs, int yoffs, uin
 
 /* Image file functions */
 void ppm_read_geometry(FIL *fp, image_t *img, const char *path, ppm_read_settings_t *rs);
-void ppm_read_pixels(FIL *fp, image_t *img, int line_start, int line_end, ppm_read_settings_t *rs);
+void ppm_read_pixels(FIL *fp, image_t *img, int n_lines, ppm_read_settings_t *rs);
 void ppm_read(image_t *img, const char *path);
 void ppm_write_subimg(image_t *img, const char *path, rectangle_t *r);
 bool bmp_read_geometry(FIL *fp, image_t *img, const char *path, bmp_read_settings_t *rs);
-void bmp_read_pixels(FIL *fp, image_t *img, int line_start, int line_end, bmp_read_settings_t *rs);
+void bmp_read_pixels(FIL *fp, image_t *img, int n_lines, bmp_read_settings_t *rs);
 void bmp_read(image_t *img, const char *path);
 void bmp_write_subimg(image_t *img, const char *path, rectangle_t *r);
 bool jpeg_compress(image_t *src, image_t *dst, int quality, bool realloc);

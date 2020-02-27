@@ -1,9 +1,16 @@
-/* This file is part of the OpenMV project.
- * Copyright (c) 2013-2018 Ibrahim Abdelkader <iabdalkader@openmv.io> & Kwabena W. Agyeman <kwagyeman@openmv.io>
+/*
+ * This file is part of the OpenMV project.
+ *
+ * Copyright (c) 2013-2019 Ibrahim Abdelkader <iabdalkader@openmv.io>
+ * Copyright (c) 2013-2019 Kwabena W. Agyeman <kwagyeman@openmv.io>
+ *
  * This work is licensed under the MIT license, see the file LICENSE for details.
+ *
+ * Initialization file parser.
  */
-
 #include <stddef.h>
+#include <stdbool.h>
+#include <string.h>
 #include "ini.h"
 
 /*-------------------------------------------------------------------------
@@ -109,12 +116,9 @@ ini_atoi(string)
         }
     }
 
-    for ( ; ; string += 1) {
+    for (;*string; string++) {
         digit = *string - '0';
         if ((digit < 0) || (digit > 9)) {
-            if (!ini_isspace(*string)) {
-                result = 0;
-            }
             break;
         }
         result = (10*result) + digit;
@@ -124,6 +128,18 @@ ini_atoi(string)
         return -result;
     }
     return result;
+}
+
+bool ini_is_true(const char *value)
+{
+    int i = ini_atoi(value);
+    if (i) return true;
+    if (strlen(value) != 4) return false;
+    if ((value[0] != 'T') && (value[0] != 't')) return false;
+    if ((value[1] != 'R') && (value[1] != 'r')) return false;
+    if ((value[2] != 'U') && (value[2] != 'u')) return false;
+    if ((value[3] != 'E') && (value[3] != 'e')) return false;
+    return true;
 }
 
 /*-
@@ -260,8 +276,8 @@ ini_fgetc(FIL *fp)
 char *
 ini_fgets(char *dst, int max, FIL *fp)
 {
-    int c;
     char *p;
+    int c=EOF;
 
     /* get max bytes or upto a newline */
 

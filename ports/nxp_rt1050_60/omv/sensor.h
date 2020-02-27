@@ -11,9 +11,18 @@
 #include <stdint.h>
 #include <stdarg.h>
 #include "imlib.h"
+#define OV7725_SLV_ADDR     (0x42)
+#define OV2640_SLV_ADDR     (0x60)
+#define MT9V034_SLV_ADDR    (0xB8)
+#define LEPTON_SLV_ADDR     (0x54)
+#define OV5640_SLV_ADDR     (0x78)
+#define OV_CHIP_ID          (0x0A)
+#define OV5640_CHIP_ID      (0x300A)
+#define ON_CHIP_ID          (0x00)
 #define OV9650_ID       (0x96)
 #define OV2640_ID       (0x26)
 #define OV7725_ID       (0x77)
+#define OV5640_ID           (0x56)
 #define MT9V034_ID      (0x13)
 #define LEPTON_ID       (0x54)
 
@@ -56,8 +65,15 @@ typedef enum {
     FRAMESIZE_WVGA,     // 720x480
     FRAMESIZE_WVGA2,    // 752x480
     FRAMESIZE_SVGA,     // 800x600
+    FRAMESIZE_XGA,      // 1024x768
     FRAMESIZE_SXGA,     // 1280x1024
     FRAMESIZE_UXGA,     // 1600x1200
+    FRAMESIZE_HD,       // 1280x720
+    FRAMESIZE_FHD,      // 1920x1080
+    FRAMESIZE_QHD,      // 2560x1440
+    FRAMESIZE_QXGA,     // 2048x1536
+    FRAMESIZE_WQXGA,    // 2560x1600
+    FRAMESIZE_WQXGA2,   // 2592x1944
 } framesize_t;
 
 typedef enum {
@@ -151,8 +167,8 @@ typedef struct _sensor {
     // Sensor function pointers
     int  (*reset)               (sensor_t *sensor);
     int  (*sleep)               (sensor_t *sensor, int enable);
-    int  (*read_reg)            (sensor_t *sensor, uint8_t reg_addr);
-    int  (*write_reg)           (sensor_t *sensor, uint8_t reg_addr, uint16_t reg_data);
+    int  (*read_reg)            (sensor_t *sensor, uint16_t reg_addr);
+    int  (*write_reg)           (sensor_t *sensor, uint16_t reg_addr, uint16_t reg_data);
     int  (*set_pixformat)       (sensor_t *sensor, pixformat_t pixformat);
     int  (*set_framesize)       (sensor_t *sensor, framesize_t framesize);
     int  (*set_framerate)       (sensor_t *sensor, framerate_t framerate);
@@ -198,10 +214,10 @@ int sensor_sleep(int enable);
 int sensor_shutdown(int enable);
 
 // Read a sensor register.
-int sensor_read_reg(uint8_t reg_addr);
+int sensor_read_reg(uint16_t reg_addr);
 
 // Write a sensor register.
-int sensor_write_reg(uint8_t reg_addr, uint16_t reg_data);
+int sensor_write_reg(uint16_t reg_addr, uint16_t reg_data);
 
 // Set the sensor pixel format.
 int sensor_set_pixformat(pixformat_t pixformat);

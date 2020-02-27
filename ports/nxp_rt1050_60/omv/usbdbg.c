@@ -82,6 +82,9 @@ inline void usbdbg_set_irq_enabled(bool enabled)
 #define DUMP_FB JPEG_FB
 #endif
 volatile uint8_t g_omvIdeConnecting;
+
+__WEAK int sensor_get_id(void) {return 1;}
+
 void usbdbg_data_in(void *buffer, int length)
 {
 	logout("usbdbg_data_in: cmd=%x, buffer=0x%08x, bytes=%d\r\n", cmd, buffer, length);
@@ -100,6 +103,12 @@ void usbdbg_data_in(void *buffer, int length)
         case USBDBG_TX_BUF_LEN: {
 			uint32_t *p = (uint32_t*)buffer;
             p[0] = VCOM_OmvGetLogTxLen();
+            cmd = USBDBG_NONE;
+            break;
+        }
+        case USBDBG_SENSOR_ID: {
+            int sensor_id = sensor_get_id();
+            memcpy(buffer, &sensor_id, 4);
             cmd = USBDBG_NONE;
             break;
         }
@@ -213,6 +222,18 @@ extern void ProfReset(void);
 void usbdbg_data_out(void *buffer, int length)
 {
     switch (cmd) {
+        case USBDBG_FB_ENABLE: {
+            uint32_t enable = *((int32_t*)buffer);
+            JPEG_FB()->enabled = enable;
+            if (enable == 0) {
+                // When disabling framebuffer, the IDE might still be holding FB lock.
+                // If the IDE is not the current lock owner, this operation is ignored.
+                mutex_unlock(&JPEG_FB()->lock, MUTEX_TID_IDE);
+            }
+            cmd = USBDBG_NONE;
+            break;
+        }
+
         case USBDBG_SCRIPT_EXEC:
             // check if GC is locked before allocating memory for vstr. If GC was locked
             // at least once before the script is fully uploaded xfer_bytes will be less
@@ -290,6 +311,29 @@ void usbdbg_data_out(void *buffer, int length)
 
             py_image_descriptor_from_roi(&image, path, roi);
 			#endif
+            break;
+        }
+        case USBDBG_ATTR_WRITE: {
+            /* write sensor attribute */
+            int32_t attr= *((int32_t*)buffer);
+            int32_t val = *((int32_t*)buffer+1);
+            switch (attr) {
+                case ATTR_CONTRAST:
+                    sensor_set_contrast(val);
+                    break;
+                case ATTR_BRIGHTNESS:
+                    sensor_set_brightness(val);
+                    break;
+                case ATTR_SATURATION:
+                    sensor_set_saturation(val);
+                    break;
+                case ATTR_GAINCEILING:
+                    sensor_set_gainceiling(val);
+                    break;
+                default:
+                    break;
+            }
+            cmd = USBDBG_NONE;
             break;
         }
         default: /* error */
