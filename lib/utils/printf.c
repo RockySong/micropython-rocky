@@ -26,6 +26,7 @@
 
 #include "py/mpconfig.h"
 
+#if MICROPY_USE_INTERNAL_PRINTF
 #include <stdint.h>
 #include <string.h>
 #include <stdarg.h>
@@ -41,13 +42,15 @@
 int DEBUG_printf(const char *fmt, ...) {
     va_list ap;
     va_start(ap, fmt);
-    int ret = mp_vprintf(MICROPY_DEBUG_PRINTER, fmt, ap);
+    #ifndef MICROPY_DEBUG_PRINTER_DEST
+    #define MICROPY_DEBUG_PRINTER_DEST mp_plat_print
+    #endif
+    extern const mp_print_t MICROPY_DEBUG_PRINTER_DEST;
+    int ret = mp_vprintf(&MICROPY_DEBUG_PRINTER_DEST, fmt, ap);
     va_end(ap);
     return ret;
 }
 #endif
-
-#if MICROPY_USE_INTERNAL_PRINTF
 
 #undef putchar  // Some stdlibs have a #define for putchar
 int printf(const char *fmt, ...);

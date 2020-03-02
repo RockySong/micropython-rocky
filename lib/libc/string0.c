@@ -27,7 +27,11 @@
 #include <stdint.h>
 #include <string.h>
 
+#if defined(__ICCARM__)
+	#define likely(x) (x)
+#else
 #define likely(x) __builtin_expect((x), 1)
+#endif
 
 void *memcpy(void *dst, const void *src, size_t n) {
     if (likely(!(((uintptr_t)dst) & 3) && !(((uintptr_t)src) & 3))) {

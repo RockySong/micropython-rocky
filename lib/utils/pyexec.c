@@ -38,7 +38,7 @@
 #include "py/mphal.h"
 #if MICROPY_HW_ENABLE_USB
 #include "irq.h"
-#include "usb.h"
+#include "usb_app.h"
 #endif
 #include "lib/mp-readline/readline.h"
 #include "lib/utils/pyexec.h"
