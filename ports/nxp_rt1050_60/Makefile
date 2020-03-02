@@ -290,6 +290,7 @@ SRC_PY = $(addprefix omv/py/, \
 	py_omv.c                \
 	py_sensor.c             \
 	py_image.c              \
+	py_winc.c              \	
 	py_time.c               \
 	py_gif.c                \
 	py_mjpeg.c              \
