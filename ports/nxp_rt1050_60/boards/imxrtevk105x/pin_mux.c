@@ -284,7 +284,7 @@ IOMUXC_SetPinMux(
                                                  Pull / Keep Select Field: Keeper
                                                  Pull Up / Down Config. Field: 22K Ohm Pull Up
                                                  Hyst. Enable Field: Hysteresis Disabled */
-//lcd初始�?
+//lcd初始化
  IOMUXC_SetPinMux(
       IOMUXC_GPIO_AD_B0_02_GPIO1_IO02,        /* GPIO_AD_B0_02 is configured as GPIO1_IO02 */
       0U);                                    /* Software Input On Field: Input Path is determined by functionality */

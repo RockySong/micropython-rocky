@@ -23,7 +23,10 @@
 
 #define TIME_JPEG   (0)
 
-#if defined(OMV_HARDWARE_JPEG)
+const uint32_t u32Expand[16] = {0x0, 0xff, 0xff00, 0xffff, 0xff0000,
+    0xff00ff, 0xffff00, 0xffffff, 0xff000000, 0xff0000ff, 0xff00ff00,
+    0xff00ffff, 0xffff0000, 0xffff00ff, 0xffffff00, 0xffffffff};
+#if (OMV_HARDWARE_JPEG == 1)
 
 #define MCU_W                       (8)
 #define MCU_H                       (8)
@@ -57,57 +60,141 @@ static uint8_t *get_mcu()
     uint8_t *Y0 = mcubuf;
     uint8_t *CB = mcubuf + 64;
     uint8_t *CR = mcubuf + 128;
+    int r, g, b; // to separate RGB565 into R8,G8,B8
+    int dx=MCU_W, dy=MCU_H; // width and height of MCU can be truncated if we're at bottom or right edge
 
     // Copy 8x8 MCUs
     switch (jpeg_enc.img_bpp) {
-        case 0:
-            for (int y=jpeg_enc.y_offset; y<(jpeg_enc.y_offset + MCU_H); y++) {
-                for (int x=jpeg_enc.x_offset; x<(jpeg_enc.x_offset + MCU_W); x++) {
-                    if (x >= jpeg_enc.img_w || y >= jpeg_enc.img_h) {
-                        *Y0++ = 0;
-                    } else {
+        case 0: {
+            if (jpeg_enc.x_offset+dx > jpeg_enc.img_w)
+                dx = jpeg_enc.img_w - jpeg_enc.x_offset; // fewer than 8 wide
+            if (jpeg_enc.y_offset+dy > jpeg_enc.img_h)
+                dy = jpeg_enc.img_h - jpeg_enc.y_offset; // fewer than 8 tall
+            if (dx != MCU_W || dy != MCU_H) { // edge case (bottom or right),
+                memset(Y0, 0, 64); // all empty spots will be 0
+                for (int y=jpeg_enc.y_offset; y<(jpeg_enc.y_offset + dy); y++) {
+                    for (int x=jpeg_enc.x_offset; x<(jpeg_enc.x_offset + dx); x++) {
                         *Y0++ = COLOR_BINARY_TO_GRAYSCALE(IMAGE_GET_BINARY_PIXEL(jpeg_enc.img, x, y));
                     }
                 }
+            } else { // full sized (8x8) MCU
+                int iPitch = ((jpeg_enc.img->w + 31) >> 3) & 0xfffc; // dword align
+                uint8_t u8Pixels;
+                uint32_t *d32 = (uint32_t *)Y0;
+                for (int y=jpeg_enc.y_offset; y<(jpeg_enc.y_offset + 8); y++) {
+                    // read 8 binary pixels in one shot
+                    int index = (y * iPitch) + (jpeg_enc.x_offset>>3); // get byte offset
+                    uint8_t *s = &jpeg_enc.img->data[index];
+                    u8Pixels = s[0]; // get 8 binary pixels (1 byte)
+                    *d32++ = u32Expand[u8Pixels & 0xf]; // first 4 pixels
+                    *d32++ = u32Expand[u8Pixels >> 4];  // second 4 pixels
+                } // for y
+            } // full MCU
             }
             break;
-        case 1:
-            for (int y=jpeg_enc.y_offset; y<(jpeg_enc.y_offset + MCU_H); y++) {
-                for (int x=jpeg_enc.x_offset; x<(jpeg_enc.x_offset + MCU_W); x++) {
-                    if (x >= jpeg_enc.img_w || y >= jpeg_enc.img_h) {
-                        *Y0++ = 0;
-                    } else {
-                    *Y0++ = jpeg_enc.pixels8[y * jpeg_enc.img_w + x];
+        case 1: {
+                uint32_t *s32, *d32;
+                if (jpeg_enc.x_offset+dx > jpeg_enc.img_w)
+                    dx = jpeg_enc.img_w - jpeg_enc.x_offset; // fewer than 8 wide
+                if (jpeg_enc.y_offset+dy > jpeg_enc.img_h)
+                    dy = jpeg_enc.img_h - jpeg_enc.y_offset; // fewer than 8 tall
+                if (dx != MCU_W || dy != MCU_H) // partial MCU, fill with 0's to start
+                    memset(Y0, 0, 64);
+                for (int y=jpeg_enc.y_offset; y<(jpeg_enc.y_offset + dy); y++) {
+                    if (dx != MCU_W) {
+                        for (int x=jpeg_enc.x_offset; x<(jpeg_enc.x_offset + dx); x++) {
+                            *Y0++ = jpeg_enc.pixels8[y * jpeg_enc.img_w + x];
+                        }
+                        Y0 += (MCU_W - dx);
+                    } else { // full 8x8
+                        s32 = (uint32_t *)&jpeg_enc.pixels8[(y * jpeg_enc.img_w) + jpeg_enc.x_offset];
+                        d32 = (uint32_t *)Y0;
+                        d32[0] = s32[0]; d32[1] = s32[1]; // copy 8 pixels
+                        Y0 += 8;
+                    }
                 }
-            }
             }
             break;
         case 2: {
-            for (int y=jpeg_enc.y_offset, idx=0; y<(jpeg_enc.y_offset + MCU_H); y++) {
-                for (int x=jpeg_enc.x_offset; x<(jpeg_enc.x_offset + MCU_W); x++, idx++) {
-                    if (x >= jpeg_enc.img_w || y >= jpeg_enc.img_h) {
-                        Y0[idx] = CB[idx] = CR[idx] = 0;
-                    } else {
-                    int ofs = y * jpeg_enc.img_w + x;
-                        Y0[idx] = COLOR_RGB565_TO_Y(jpeg_enc.pixels16[ofs]) - 128;
-                        CB[idx] = COLOR_RGB565_TO_U(jpeg_enc.pixels16[ofs]) - 128;
-                        CR[idx] = COLOR_RGB565_TO_V(jpeg_enc.pixels16[ofs]) - 128;
-                    }
+            uint16_t *pPixels, pixel;
+            if (jpeg_enc.x_offset+dx > jpeg_enc.img_w)
+                dx = jpeg_enc.img_w - jpeg_enc.x_offset; // fewer than 8 wide
+            if (jpeg_enc.y_offset+dy > jpeg_enc.img_h)
+                dy = jpeg_enc.img_h - jpeg_enc.y_offset; // fewer than 8 tall
+            if (dx != MCU_W || dy != MCU_H) // partial MCU, fill with 0's to start
+                memset(mcubuf, 0, 192); // faster than using a per pixel conditional statement
+            for (int y=jpeg_enc.y_offset, idx=0; y<(jpeg_enc.y_offset + dy); y++) {
+                pPixels = &jpeg_enc.pixels16[(y * jpeg_enc.img_w) + jpeg_enc.x_offset];
+                for (int x=jpeg_enc.x_offset; x<(jpeg_enc.x_offset + dx); x++, idx++) {
+                    pixel = *pPixels++; // get RGB565 pixel
+                    r = rb528_table[(pixel >> 3) & 0x1f]; // extract R8/G8/B8
+                    g = g628_table[((pixel & 7) << 3) | (pixel >> 13)];
+                    b = rb528_table[(pixel >> 8) & 0x1f];
+                    // faster to keep all calculations in integer math with 15-bit fractions
+                    Y0[idx] = (uint8_t)(((r * 9770) + (g * 19182) + (b * 3736)) >> 15); // .299*r + .587*g + .114*b
+                    CB[idx] = (uint8_t)(((b << 14) - (r * 5529) - (g * 10855)) >> 15) -128; // -0.168736*r + -0.331264*g + 0.5*b
+                    CR[idx] = (uint8_t)(((r << 14) - (g * 13682) - (b * 2664)) >> 15) -128; // 0.5*r + -0.418688*g + -0.081312*b
                 }
+                idx += (MCU_W - dx); // increment the dest pointer properly for partial MCUs (output width is always 8)
             }
             break;
         }
         case 3: {
-            uint16_t rgbbuf[64];
+            uint16_t pixel, rgbbuf[64];
+            if (jpeg_enc.x_offset + 8 >= jpeg_enc.img_w || jpeg_enc.y_offset + 8 >= jpeg_enc.img_h || jpeg_enc.x_offset == 0 || jpeg_enc.y_offset == 0) { // use slow method on edges
             // Bayer to rgb565 takes care of zero padding.
             imlib_bayer_to_rgb565(jpeg_enc.img, 8, 8, jpeg_enc.x_offset, jpeg_enc.y_offset, rgbbuf); 
             for (int y=0, idx=0; y<8; y++) {
                 for (int x=0; x<8; x++, idx++) {
-                    Y0[idx] = COLOR_RGB565_TO_Y(rgbbuf[idx]) - 128;
-                    CB[idx] = COLOR_RGB565_TO_U(rgbbuf[idx]) - 128;
-                    CR[idx] = COLOR_RGB565_TO_V(rgbbuf[idx]) - 128;
-                }
-            }
+                    pixel = rgbbuf[idx];
+                    r = rb528_table[(pixel >> 3) & 0x1f];
+                    g = g628_table[((pixel & 7) << 3) | (pixel >> 13)];
+                    b = rb528_table[(pixel >> 8) & 0x1f];
+                    // faster to keep all calculations in integer math with 15-bit fractions
+                    Y0[idx] = (uint8_t)(((r * 9770) + (g * 19182) + (b * 3736)) >> 15); // .299*r + .587*g + .114*b
+                    CB[idx] = (uint8_t)(((b << 14) - (r * 5529) - (g * 10855)) >> 15) -128; // -0.168736*r + -0.331264*g + 0.5*b
+                    CR[idx] = (uint8_t)(((r << 14) - (g * 13682) - (b * 2664)) >> 15) -128; // 0.5*r + -0.418688*g + -0.081312*b
+                } // for x
+            } // for y
+            } else { // use faster method for center part
+            uint8_t *s;
+            int pitch = jpeg_enc.img->w; // keep in local var
+            for (int y=0, idx=0; y<8; y++) {
+                s = (uint8_t*)jpeg_enc.img->pixels;
+                s += (jpeg_enc.y_offset+y)*jpeg_enc.img->w + jpeg_enc.x_offset;
+                for (int x=0; x<8; x++, idx++, s++) {
+                  if ((y & 1) == 0) { // even rows
+                      if ((x & 1) == 0) { // even cols
+                         b = s[0];
+                         g = s[-1] + s[1] + s[-pitch] + s[pitch];
+                         r = s[-1-pitch] + s[1-pitch] + s[pitch-1] + s[pitch+1];
+                         g >>= 2; r >>= 2;
+                      } else { // odd cols
+                         g = s[0];
+                         b = s[-1] + s[1];
+                         r = s[-pitch] + s[pitch];
+                         b >>= 1; r >>= 1;
+                      }
+                  } else { // odd rows
+                      if ((x & 1) == 0) { // even cols
+                         g = s[0];
+                         r = s[-1] + s[1];
+                         b = s[-pitch] + s[pitch];
+                         r >>= 1; b >>= 1;
+                      } else  { // odd cols
+                         r = s[0];
+                         g = s[-1] + s[1] + s[-pitch] + s[pitch];
+                         b = s[-1-pitch] + s[1-pitch] + s[pitch-1] + s[pitch+1];
+                         g >>= 2; b >>= 2;
+                      }
+                  }
+                  // faster to keep all calculations in integer math with 15-bit fractions
+                  Y0[idx] = (uint8_t)(((r * 9770) + (g * 19182) + (b * 3736)) >> 15); // .299*r + .587*g + .114*b
+                  CB[idx] = (uint8_t)(((b << 14) - (r * 5529) - (g * 10855)) >> 15) -128; // -0.168736*r + -0.331264*g + 0.5*b
+                  CR[idx] = (uint8_t)(((r << 14) - (g * 13682) - (b * 2664)) >> 15) -128; // 0.5*r + -0.418688*g + -0.081312*b
+                } // for x
+            } // for y
+            } // fast vs slow method
             break;
         }
     }
@@ -131,11 +218,12 @@ void HAL_JPEG_GetDataCallback(JPEG_HandleTypeDef *hjpeg, uint32_t NbDecodedData)
     } else if (jpeg_enc.y_offset == jpeg_enc.img_h) {
         // Compression is done.
         HAL_JPEG_ConfigInputBuffer(hjpeg, NULL, 0);
+        HAL_JPEG_Resume(hjpeg, JPEG_PAUSE_RESUME_INPUT);
     } else {
         // Set the next MCU.
         HAL_JPEG_ConfigInputBuffer(hjpeg, get_mcu(), jpeg_enc.mcu_size);
+        HAL_JPEG_Resume(hjpeg, JPEG_PAUSE_RESUME_INPUT);
     }
-    HAL_JPEG_Resume(hjpeg, JPEG_PAUSE_RESUME_INPUT);
 }
 
 void HAL_JPEG_DataReadyCallback (JPEG_HandleTypeDef *hjpeg, uint8_t *pDataOut, uint32_t OutDataLength)
@@ -202,7 +290,7 @@ bool jpeg_compress(image_t *src, image_t *dst, int quality, bool realloc)
     }
 
     // NOTE: output buffer size is stored in dst->bpp
-    if (HAL_JPEG_Encode(&JPEG_Handle, get_mcu(), jpeg_enc.mcu_size, dst->pixels, dst->bpp, 100) != HAL_OK) {
+    if (HAL_JPEG_Encode(&JPEG_Handle, get_mcu(), jpeg_enc.mcu_size, dst->pixels, dst->bpp, 3000) != HAL_OK) {
         // Initialization error
         return true;
     }
@@ -721,6 +809,7 @@ void jpeg_get_mcu(image_t *img, int mcu_w, int mcu_h, int x_offs, int y_offs, in
     switch (bpp) {
         case 0: {
             uint8_t *mcu = (uint8_t*) buf;
+            if (y_offs+mcu_h > img->h || x_offs+mcu_w > img->w) { // clipped
             for (int y=y_offs; y<y_offs+mcu_h; y++) {
                 for (int x=x_offs; x<x_offs+mcu_w; x++) {
                     if (x >= img->w || y >= img->h) {
@@ -730,17 +819,41 @@ void jpeg_get_mcu(image_t *img, int mcu_w, int mcu_h, int x_offs, int y_offs, in
                     }
                 }
             }
+            } // clipped
+            else {
+                int iPitch = ((img->w + 31) >> 3) & 0xfffc; // dword align
+                uint8_t u8Pixels;
+                uint32_t *d32 = (uint32_t *)mcu;
+                for (int y=y_offs; y<(y_offs + 8); y++) {
+                    int index = (y * iPitch) + (x_offs>>3); // get byte offset
+                    uint8_t *s = &img->data[index];
+                    u8Pixels = s[0]; // get 8 binary pixels (1 byte)
+                    *d32++ = u32Expand[u8Pixels & 0xf]; // first 4 pixels
+                    *d32++ = u32Expand[u8Pixels >> 4];  // second 4 pixels
+                } // for y
+            } // not clipped
             break;
         }
         case 1: {
             uint8_t *mcu = (uint8_t*) buf;
             //memset(mcu, 0, 64);
+            if (y_offs+mcu_h > img->h || x_offs+mcu_w > img->w) { // truncated MCU
             for (int y=y_offs; y<y_offs+mcu_h; y++) {
                 for (int x=x_offs; x<x_offs+mcu_w; x++) {
                     if (x >= img->w || y >= img->h) {
                         *mcu++ = 0;
                     } else {
                         *mcu++ = IMAGE_GET_GRAYSCALE_PIXEL(img, x, y) - 128;
+                        }
+                    }
+                }
+            } // needs to be clipped
+            else // no need to check bounds per pixel
+            {
+                for (int y=y_offs; y<y_offs+mcu_h; y++) {
+                    uint8_t *pRow = &img->data[(y * img->w) + x_offs];
+                    for (int x=x_offs; x<x_offs+mcu_w; x++) {
+                        *mcu++ = *pRow++ - 128;
                     }
                 }
             }
@@ -833,16 +946,39 @@ bool jpeg_compress(image_t *src, image_t *dst, int quality, bool realloc)
     } else if (src->bpp == 2) {// TODO assuming RGB565
         switch (jpeg_subsample) {
             case JPEG_SUBSAMPLE_1x1: {
-                uint16_t MCU[64];
+                uint16_t pixel, *pRow;;
+                int dx, dy;
+                int r, g, b; // to separate RGB565 into R8,G8,B8
                 int8_t YDU[64], UDU[64], VDU[64];
+                int8_t *pY, *pU, *pV;
                 for (int y=0; y<src->h; y+=8) {
+                    dy = 8;
+                    if (y+8 > src->h) // over bottom edge
+                        dy = src->h - y;
                     for (int x=0; x<src->w; x+=8) {
-                        jpeg_get_mcu(src, 8, 8, x, y, src->bpp, MCU);
-                        for (int ofs=0; ofs<8*8; ofs++) {
-                            YDU[ofs] = COLOR_RGB565_TO_Y(MCU[ofs]);
-                            UDU[ofs] = COLOR_RGB565_TO_U(MCU[ofs]);
-                            VDU[ofs] = COLOR_RGB565_TO_V(MCU[ofs]);
+                        dx = 8;
+                        if (x+8 > src->w) // over right edge, reduce capture size
+                            dx = src->w - x;
+                        if (dx != 8 || dy != 8) { // fill unused portion with 0
+                            memset(YDU,0,sizeof(YDU));
+                            memset(UDU,0,sizeof(UDU));
+                            memset(VDU,0,sizeof(VDU));
                         }
+                        for (int ty=0; ty<dy; ty++) { // rows
+                            pRow = IMAGE_COMPUTE_RGB565_PIXEL_ROW_PTR(src, y+ty);
+                            pRow += x;
+                            pY = &YDU[(ty*8)]; pU = &UDU[ty*8]; pV=&VDU[ty*8];
+                            for (int tx=0; tx<dx; tx++) { // columns
+                                pixel = *pRow++;
+                                r = rb528_table[(pixel >> 3) & 0x1f]; // extract R8/G8/B8
+                                g = g628_table[((pixel & 7) << 3) | (pixel >> 13)];
+                                b = rb528_table[(pixel >> 8) & 0x1f];
+                                // faster to keep all calculations in integer math with 15-bit fractions
+                                *pY++ = (uint8_t)(((r * 9770) + (g * 19182) + (b * 3736)) >> 15) -128; // .299*r + .587*g + .114*b
+                                *pU++ = (uint8_t)(((b << 14) - (r * 5529) - (g * 10855)) >> 15); // -0.168736*r + -0.331264*g + 0.5*b
+                                *pV++ = (uint8_t)(((r << 14) - (g * 13682) - (b * 2664)) >> 15); // 0.5*r + -0.418688*g + -0.081312*b
+                            } // for tx
+                        } // for ty
 
                         DCY = jpeg_processDU(&jpeg_buf, YDU, fdtbl_Y, DCY, YDC_HT, YAC_HT);
                         DCU = jpeg_processDU(&jpeg_buf, UDU, fdtbl_UV, DCU, UVDC_HT, UVAC_HT);
@@ -855,49 +991,45 @@ bool jpeg_compress(image_t *src, image_t *dst, int quality, bool realloc)
                 break;
             }
             case JPEG_SUBSAMPLE_2x1: {
-                uint16_t pixels[128];
+                uint16_t pixel, *pRow;
+                int dx, dy;
+                int r, g, b; // to separate RGB565 into R8,G8,B8
                 int8_t YDU[128], UDU[64], VDU[64];
+                int8_t *pY, *pU, *pV;
                 for (int y=0; y<src->h; y+=8) {
+                    dy = 8;
+                    if (y+8 > src->h) // over bottom edge
+                        dy = src->h - y;
                     for (int x=0; x<src->w; x+=16) {
-                        jpeg_get_mcu(src, 16, 8, x, y, src->bpp, pixels);
-                        for (int idx=0, ofs=0; ofs<128; ofs+=16, idx+=8) {
-                            YDU[idx + 0] = COLOR_RGB565_TO_Y(pixels[ofs + 0]);
-                            YDU[idx + 1] = COLOR_RGB565_TO_Y(pixels[ofs + 1]);
-                            YDU[idx + 2] = COLOR_RGB565_TO_Y(pixels[ofs + 2]);
-                            YDU[idx + 3] = COLOR_RGB565_TO_Y(pixels[ofs + 3]);
-                            YDU[idx + 4] = COLOR_RGB565_TO_Y(pixels[ofs + 4]);
-                            YDU[idx + 5] = COLOR_RGB565_TO_Y(pixels[ofs + 5]);
-                            YDU[idx + 6] = COLOR_RGB565_TO_Y(pixels[ofs + 6]);
-                            YDU[idx + 7] = COLOR_RGB565_TO_Y(pixels[ofs + 7]);
+                        dx = 16;
+                        if (x+16 > src->w) // over right edge
+                        dx = src->w - x;
+                        for (int ty=0; ty<dy; ty++) { // rows
+                            pRow = IMAGE_COMPUTE_RGB565_PIXEL_ROW_PTR(src, y+ty);
+                            pRow += x;
+                            pY = &YDU[(ty*8)]; pU = &UDU[ty*8]; pV=&VDU[ty*8];
+                            for (int tx=0; tx<dx; tx+=2) { // column pairs
+                                if (tx == 8) // second column of Y MCUs
+                                   pY += (64-8);
 
-                            YDU[idx + 0 + 64] = COLOR_RGB565_TO_Y(pixels[ofs + 8 + 0]);
-                            YDU[idx + 1 + 64] = COLOR_RGB565_TO_Y(pixels[ofs + 8 + 1]);
-                            YDU[idx + 2 + 64] = COLOR_RGB565_TO_Y(pixels[ofs + 8 + 2]);
-                            YDU[idx + 3 + 64] = COLOR_RGB565_TO_Y(pixels[ofs + 8 + 3]);
-                            YDU[idx + 4 + 64] = COLOR_RGB565_TO_Y(pixels[ofs + 8 + 4]);
-                            YDU[idx + 5 + 64] = COLOR_RGB565_TO_Y(pixels[ofs + 8 + 5]);
-                            YDU[idx + 6 + 64] = COLOR_RGB565_TO_Y(pixels[ofs + 8 + 6]);
-                            YDU[idx + 7 + 64] = COLOR_RGB565_TO_Y(pixels[ofs + 8 + 7]);
+                                pixel = pRow[0]; // left
+                                r = rb528_table[(pixel >> 3) & 0x1f]; // extract R8/G8/B8
+                                g = g628_table[((pixel & 7) << 3) | (pixel >> 13)];
+                                b = rb528_table[(pixel >> 8) & 0x1f];
+                                // faster to keep all calculations in integer math with 15-bit fractions
+                                pY[0] = (uint8_t)(((r * 9770) + (g * 19182) + (b * 3736)) >> 15) -128; // .299*r + .587*g + .114*b
+                                *pU++ = (uint8_t)(((b << 14) - (r * 5529) - (g * 10855)) >> 15); // -0.168736*r + -0.331264*g + 0.5*b
+                                *pV++ = (uint8_t)(((r << 14) - (g * 13682) - (b * 2664)) >> 15); // 0.5*r + -0.418688*g + -0.081312*b
+                                pixel = pRow[1]; // right
+                                r = rb528_table[(pixel >> 3) & 0x1f]; // extract R8/G8/B8
+                                g = g628_table[((pixel & 7) << 3) | (pixel >> 13)];
+                                b = rb528_table[(pixel >> 8) & 0x1f];
+                                // faster to keep all calculations in integer math with 15-bit fractions
+                                pY[1] = (uint8_t)(((r * 9770) + (g * 19182) + (b * 3736)) >> 15)-128; // .299*r + .587*g + .114*b
 
-                            // Just toss the odd UV pixels (could average for better quality)
-                            UDU[idx + 0] = COLOR_RGB565_TO_U(pixels[ofs + 0]);
-                            UDU[idx + 1] = COLOR_RGB565_TO_U(pixels[ofs + 2]);
-                            UDU[idx + 2] = COLOR_RGB565_TO_U(pixels[ofs + 4]);
-                            UDU[idx + 3] = COLOR_RGB565_TO_U(pixels[ofs + 6]);
-                            UDU[idx + 4] = COLOR_RGB565_TO_U(pixels[ofs + 8]);
-                            UDU[idx + 5] = COLOR_RGB565_TO_U(pixels[ofs +10]);
-                            UDU[idx + 6] = COLOR_RGB565_TO_U(pixels[ofs +12]);
-                            UDU[idx + 7] = COLOR_RGB565_TO_U(pixels[ofs +14]);
-
-                            VDU[idx + 0] = COLOR_RGB565_TO_V(pixels[ofs + 0]);
-                            VDU[idx + 1] = COLOR_RGB565_TO_V(pixels[ofs + 2]);
-                            VDU[idx + 2] = COLOR_RGB565_TO_V(pixels[ofs + 4]);
-                            VDU[idx + 3] = COLOR_RGB565_TO_V(pixels[ofs + 6]);
-                            VDU[idx + 4] = COLOR_RGB565_TO_V(pixels[ofs + 8]);
-                            VDU[idx + 5] = COLOR_RGB565_TO_V(pixels[ofs +10]);
-                            VDU[idx + 6] = COLOR_RGB565_TO_V(pixels[ofs +12]);
-                            VDU[idx + 7] = COLOR_RGB565_TO_V(pixels[ofs +14]);
-                        }
+				pY += 2; pRow += 2;
+                            } // for tx
+                        } // for ty
 
                         DCY = jpeg_processDU(&jpeg_buf, YDU,    fdtbl_Y, DCY, YDC_HT, YAC_HT);
                         DCY = jpeg_processDU(&jpeg_buf, YDU+64, fdtbl_Y, DCY, YDC_HT, YAC_HT);
@@ -911,71 +1043,66 @@ bool jpeg_compress(image_t *src, image_t *dst, int quality, bool realloc)
                 break;
             }
             case JPEG_SUBSAMPLE_2x2: {
-                uint16_t pixels[256];
+                uint16_t pixel, *pRow;
+                int dx, dy;
+                int r, g, b; // to separate RGB565 into R8,G8,B8
                 int8_t YDU[256], UDU[64], VDU[64];
+                int8_t *pY, *pU, *pV;
 
                 for (int y=0; y<src->h; y+=16) {
+                    dy = 16;
+                    if (y+16 > src->h) // over bottom edge
+                        dy = src->h - y;
                     for (int x=0; x<src->w; x+=16) {
-                        jpeg_get_mcu(src, 16, 16, x, y, src->bpp, pixels);
-                        for (int r=0, idx=0; r<8; r++, idx+=8) {
-                            int ofs = r*16;
-                            YDU[idx + 0]       = COLOR_RGB565_TO_Y(pixels[ofs + 0]);
-                            YDU[idx + 1]       = COLOR_RGB565_TO_Y(pixels[ofs + 1]);
-                            YDU[idx + 2]       = COLOR_RGB565_TO_Y(pixels[ofs + 2]);
-                            YDU[idx + 3]       = COLOR_RGB565_TO_Y(pixels[ofs + 3]);
-                            YDU[idx + 4]       = COLOR_RGB565_TO_Y(pixels[ofs + 4]);
-                            YDU[idx + 5]       = COLOR_RGB565_TO_Y(pixels[ofs + 5]);
-                            YDU[idx + 6]       = COLOR_RGB565_TO_Y(pixels[ofs + 6]);
-                            YDU[idx + 7]       = COLOR_RGB565_TO_Y(pixels[ofs + 7]);
-
-                            YDU[idx + 0 + 64]  = COLOR_RGB565_TO_Y(pixels[ofs + 0 + 8]);
-                            YDU[idx + 1 + 64]  = COLOR_RGB565_TO_Y(pixels[ofs + 1 + 8]);
-                            YDU[idx + 2 + 64]  = COLOR_RGB565_TO_Y(pixels[ofs + 2 + 8]);
-                            YDU[idx + 3 + 64]  = COLOR_RGB565_TO_Y(pixels[ofs + 3 + 8]);
-                            YDU[idx + 4 + 64]  = COLOR_RGB565_TO_Y(pixels[ofs + 4 + 8]);
-                            YDU[idx + 5 + 64]  = COLOR_RGB565_TO_Y(pixels[ofs + 5 + 8]);
-                            YDU[idx + 6 + 64]  = COLOR_RGB565_TO_Y(pixels[ofs + 6 + 8]);
-                            YDU[idx + 7 + 64]  = COLOR_RGB565_TO_Y(pixels[ofs + 7 + 8]);
-
-                            ofs = (r+8)*16;
-                            YDU[idx + 0 + 128] = COLOR_RGB565_TO_Y(pixels[ofs + 0]);
-                            YDU[idx + 1 + 128] = COLOR_RGB565_TO_Y(pixels[ofs + 1]);
-                            YDU[idx + 2 + 128] = COLOR_RGB565_TO_Y(pixels[ofs + 2]);
-                            YDU[idx + 3 + 128] = COLOR_RGB565_TO_Y(pixels[ofs + 3]);
-                            YDU[idx + 4 + 128] = COLOR_RGB565_TO_Y(pixels[ofs + 4]);
-                            YDU[idx + 5 + 128] = COLOR_RGB565_TO_Y(pixels[ofs + 5]);
-                            YDU[idx + 6 + 128] = COLOR_RGB565_TO_Y(pixels[ofs + 6]);
-                            YDU[idx + 7 + 128] = COLOR_RGB565_TO_Y(pixels[ofs + 7]);
-
-                            YDU[idx + 0 + 192] = COLOR_RGB565_TO_Y(pixels[ofs + 0 + 8]);
-                            YDU[idx + 1 + 192] = COLOR_RGB565_TO_Y(pixels[ofs + 1 + 8]);
-                            YDU[idx + 2 + 192] = COLOR_RGB565_TO_Y(pixels[ofs + 2 + 8]);
-                            YDU[idx + 3 + 192] = COLOR_RGB565_TO_Y(pixels[ofs + 3 + 8]);
-                            YDU[idx + 4 + 192] = COLOR_RGB565_TO_Y(pixels[ofs + 4 + 8]);
-                            YDU[idx + 5 + 192] = COLOR_RGB565_TO_Y(pixels[ofs + 5 + 8]);
-                            YDU[idx + 6 + 192] = COLOR_RGB565_TO_Y(pixels[ofs + 6 + 8]);
-                            YDU[idx + 7 + 192] = COLOR_RGB565_TO_Y(pixels[ofs + 7 + 8]);
-
-                            ofs = (r*2)*16;
-                            // Just toss the odd U/V pixels (could average for better quality)
-                            UDU[idx + 0] = COLOR_RGB565_TO_U(pixels[ofs + 0]);
-                            UDU[idx + 1] = COLOR_RGB565_TO_U(pixels[ofs + 2]);
-                            UDU[idx + 2] = COLOR_RGB565_TO_U(pixels[ofs + 4]);
-                            UDU[idx + 3] = COLOR_RGB565_TO_U(pixels[ofs + 6]);
-                            UDU[idx + 4] = COLOR_RGB565_TO_U(pixels[ofs + 8]);
-                            UDU[idx + 5] = COLOR_RGB565_TO_U(pixels[ofs +10]);
-                            UDU[idx + 6] = COLOR_RGB565_TO_U(pixels[ofs +12]);
-                            UDU[idx + 7] = COLOR_RGB565_TO_U(pixels[ofs +14]);
-
-                            VDU[idx + 0] = COLOR_RGB565_TO_V(pixels[ofs + 0]);
-                            VDU[idx + 1] = COLOR_RGB565_TO_V(pixels[ofs + 2]);
-                            VDU[idx + 2] = COLOR_RGB565_TO_V(pixels[ofs + 4]);
-                            VDU[idx + 3] = COLOR_RGB565_TO_V(pixels[ofs + 6]);
-                            VDU[idx + 4] = COLOR_RGB565_TO_V(pixels[ofs + 8]);
-                            VDU[idx + 5] = COLOR_RGB565_TO_V(pixels[ofs +10]);
-                            VDU[idx + 6] = COLOR_RGB565_TO_V(pixels[ofs +12]);
-                            VDU[idx + 7] = COLOR_RGB565_TO_V(pixels[ofs +14]);
+                        dx = 16;
+                        if (x+16 > src->w) // over right edge, reduce capture size
+                            dx = src->w - x;
+                        if (dx != 16 || dy != 16) { // fill unused portion with 0
+                            memset(YDU,0,sizeof(YDU));
+                            memset(UDU,0,sizeof(UDU));
+                            memset(VDU,0,sizeof(VDU));
                         }
+                        for (int ty=0; ty<dy; ty+=2) { // row pairs
+                            pRow = IMAGE_COMPUTE_RGB565_PIXEL_ROW_PTR(src, y+ty);
+                            pRow += x;
+                            pY = &YDU[(ty*8)]; pU = &UDU[ty*4]; pV=&VDU[ty*4];
+                            if (ty >= 8) // second row of Y MCUs
+                                pY += (128 - 64);
+                            for (int tx=0; tx<dx; tx+=2) { // column pairs
+                                if (tx == 8) // second column of Y MCUs
+                                   pY += (64-8);
+
+                                pixel = pRow[0]; // top left
+                                r = rb528_table[(pixel >> 3) & 0x1f]; // extract R8/G8/B8
+                                g = g628_table[((pixel & 7) << 3) | (pixel >> 13)];
+                                b = rb528_table[(pixel >> 8) & 0x1f];
+                                // faster to keep all calculations in integer math with 15-bit fractions
+                                pY[0] = (uint8_t)(((r * 9770) + (g * 19182) + (b * 3736)) >> 15) -128; // .299*r + .587*g + .114*b
+                                pU[0] = (uint8_t)(((b << 14) - (r * 5529) - (g * 10855)) >> 15); // -0.168736*r + -0.331264*g + 0.5*b
+                                pV[0] = (uint8_t)(((r << 14) - (g * 13682) - (b * 2664)) >> 15); // 0.5*r + -0.418688*g + -0.081312*b
+                                pixel = pRow[1]; // top right
+                                r = rb528_table[(pixel >> 3) & 0x1f]; // extract R8/G8/B8
+                                g = g628_table[((pixel & 7) << 3) | (pixel >> 13)];
+                                b = rb528_table[(pixel >> 8) & 0x1f];
+                                // faster to keep all calculations in integer math with 15-bit fractions
+                                pY[1] = (uint8_t)(((r * 9770) + (g * 19182) + (b * 3736)) >> 15)-128; // .299*r + .587*g + .114*b
+
+                                pixel = pRow[src->w]; // bottom left
+                                r = rb528_table[(pixel >> 3) & 0x1f]; // extract R8/G8/B8
+                                g = g628_table[((pixel & 7) << 3) | (pixel >> 13)];
+                                b = rb528_table[(pixel >> 8) & 0x1f];
+                                // faster to keep all calculations in integer math with 15-bit fractions
+                                pY[8] = (uint8_t)(((r * 9770) + (g * 19182) + (b * 3736)) >> 15)-128; // .299*r + .587*g + .114*b
+                                
+                                pixel = pRow[1+src->w]; // bottom right
+                                r = rb528_table[(pixel >> 3) & 0x1f]; // extract R8/G8/B8
+                                g = g628_table[((pixel & 7) << 3) | (pixel >> 13)];
+                                b = rb528_table[(pixel >> 8) & 0x1f];
+                                // faster to keep all calculations in integer math with 15-bit fractions
+                                pY[9] = (uint8_t)(((r * 9770) + (g * 19182) + (b * 3736)) >> 15)-128; // .299*r + .587*g + .114*b
+				pY += 2; pU++; pV++; pRow += 2;
+                            } // for tx
+                        } // for ty
 
                         DCY = jpeg_processDU(&jpeg_buf, YDU,     fdtbl_Y, DCY, YDC_HT, YAC_HT);
                         DCY = jpeg_processDU(&jpeg_buf, YDU+64,  fdtbl_Y, DCY, YDC_HT, YAC_HT);
@@ -995,43 +1122,23 @@ bool jpeg_compress(image_t *src, image_t *dst, int quality, bool realloc)
         switch (jpeg_subsample) {
             case JPEG_SUBSAMPLE_1x1: {
                 int8_t YDU[64], UDU[64], VDU[64];
-                uint16_t rgbbuf[64];
+                uint16_t pixel, rgbbuf[64];
+                int r, g, b;
                 for (int y=0; y<src->h; y+=8) {
                     for (int x=0; x<src->w; x+=8) {
                         imlib_bayer_to_rgb565(src, 8, 8, x, y, rgbbuf);
-                        for (int r=0, idx=0; r<8; r++, idx+=8) {
-                            YDU[idx + 0] = COLOR_RGB565_TO_Y(rgbbuf[idx + 0]);
-                            UDU[idx + 0] = COLOR_RGB565_TO_U(rgbbuf[idx + 0]);
-                            VDU[idx + 0] = COLOR_RGB565_TO_V(rgbbuf[idx + 0]);
-
-                            YDU[idx + 1] = COLOR_RGB565_TO_Y(rgbbuf[idx + 1]);
-                            UDU[idx + 1] = COLOR_RGB565_TO_U(rgbbuf[idx + 1]);
-                            VDU[idx + 1] = COLOR_RGB565_TO_V(rgbbuf[idx + 1]);
-
-                            YDU[idx + 2] = COLOR_RGB565_TO_Y(rgbbuf[idx + 2]);
-                            UDU[idx + 2] = COLOR_RGB565_TO_U(rgbbuf[idx + 2]);
-                            VDU[idx + 2] = COLOR_RGB565_TO_V(rgbbuf[idx + 2]);
-
-                            YDU[idx + 3] = COLOR_RGB565_TO_Y(rgbbuf[idx + 3]);
-                            UDU[idx + 3] = COLOR_RGB565_TO_U(rgbbuf[idx + 3]);
-                            VDU[idx + 3] = COLOR_RGB565_TO_V(rgbbuf[idx + 3]);
-
-                            YDU[idx + 4] = COLOR_RGB565_TO_Y(rgbbuf[idx + 4]);
-                            UDU[idx + 4] = COLOR_RGB565_TO_U(rgbbuf[idx + 4]);
-                            VDU[idx + 4] = COLOR_RGB565_TO_V(rgbbuf[idx + 4]);
-
-                            YDU[idx + 5] = COLOR_RGB565_TO_Y(rgbbuf[idx + 5]);
-                            UDU[idx + 5] = COLOR_RGB565_TO_U(rgbbuf[idx + 5]);
-                            VDU[idx + 5] = COLOR_RGB565_TO_V(rgbbuf[idx + 5]);
-
-                            YDU[idx + 6] = COLOR_RGB565_TO_Y(rgbbuf[idx + 6]);
-                            UDU[idx + 6] = COLOR_RGB565_TO_U(rgbbuf[idx + 6]);
-                            VDU[idx + 6] = COLOR_RGB565_TO_V(rgbbuf[idx + 6]);
-
-                            YDU[idx + 7] = COLOR_RGB565_TO_Y(rgbbuf[idx + 7]);
-                            UDU[idx + 7] = COLOR_RGB565_TO_U(rgbbuf[idx + 7]);
-                            VDU[idx + 7] = COLOR_RGB565_TO_V(rgbbuf[idx + 7]);
-                        }
+                        for (int ty=0, idx=0; ty<8; ty++, idx+=8) {
+                            for (int tx=0; tx<8; tx++) {
+                                pixel = rgbbuf[idx+tx];
+                                r = rb528_table[(pixel >> 3) & 0x1f]; // extract R8/G8/B8
+                                g = g628_table[((pixel & 7) << 3) | (pixel >> 13)];
+                                b = rb528_table[(pixel >> 8) & 0x1f];
+                                // faster to keep all calculations in integer math with 15-bit fractions
+                                YDU[idx+tx] = (uint8_t)(((r * 9770) + (g * 19182) + (b * 3736)) >> 15) -128; // .299*r + .587*g + .114*b
+                                UDU[idx+tx] = (uint8_t)(((b << 14) - (r * 5529) - (g * 10855)) >> 15); // -0.168736*r + -0.331264*g + 0.5*b
+                                VDU[idx+tx] = (uint8_t)(((r << 14) - (g * 13682) - (b * 2664)) >> 15); // 0.5*r + -0.418688*g + -0.081312*b
+                            } // for tx
+                        } // for ty
 
                         DCY = jpeg_processDU(&jpeg_buf, YDU, fdtbl_Y, DCY, YDC_HT, YAC_HT);
                         DCU = jpeg_processDU(&jpeg_buf, UDU, fdtbl_UV, DCU, UVDC_HT, UVAC_HT);
@@ -1044,50 +1151,33 @@ bool jpeg_compress(image_t *src, image_t *dst, int quality, bool realloc)
                 break;
             }
             case JPEG_SUBSAMPLE_2x1: {
-                uint16_t rgbbuf[128];
+                uint16_t pixel, rgbbuf[128];
                 int8_t YDU[128], UDU[64], VDU[64];
-
+                int r, g, b, idx, ofs;
                 for (int y=0; y<src->h; y+=8) {
                     for (int x=0; x<src->w; x+=16) {
                         imlib_bayer_to_rgb565(src, 16, 8, x, y, rgbbuf);
-                        for (int r=0, idx=0, ofs=0; r<8; r++, idx+=8, ofs+=16) {
-                            YDU[idx + 0]      = COLOR_RGB565_TO_Y(rgbbuf[ofs + 0]);
-                            YDU[idx + 1]      = COLOR_RGB565_TO_Y(rgbbuf[ofs + 1]);
-                            YDU[idx + 2]      = COLOR_RGB565_TO_Y(rgbbuf[ofs + 2]);
-                            YDU[idx + 3]      = COLOR_RGB565_TO_Y(rgbbuf[ofs + 3]);
-                            YDU[idx + 4]      = COLOR_RGB565_TO_Y(rgbbuf[ofs + 4]);
-                            YDU[idx + 5]      = COLOR_RGB565_TO_Y(rgbbuf[ofs + 5]);
-                            YDU[idx + 6]      = COLOR_RGB565_TO_Y(rgbbuf[ofs + 6]);
-                            YDU[idx + 7]      = COLOR_RGB565_TO_Y(rgbbuf[ofs + 7]);
+                        for (int ty=0; ty<8; ty++) {
+                            idx = ty*8; ofs = ty*16;
+                            for (int tx=0; tx<8; tx++) {
+                                if (tx == 4) idx += (64-8); // right MCU
+                                pixel = rgbbuf[ofs+tx*2];
+                                r = rb528_table[(pixel >> 3) & 0x1f]; // extract R8/G8/B8
+                                g = g628_table[((pixel & 7) << 3) | (pixel >> 13)];
+                                b = rb528_table[(pixel >> 8) & 0x1f];
+                                // faster to keep all calculations in integer math with 15-bit fractions
+                                YDU[idx+tx*2] = (uint8_t)(((r * 9770) + (g * 19182) + (b * 3736)) >> 15) -128; // .299*r + .587*g + .114*b
+                                UDU[(ty*8)+tx] = (uint8_t)(((b << 14) - (r * 5529) - (g * 10855)) >> 15); // -0.168736*r + -0.331264*g + 0.5*b
+                                VDU[(ty*8)+tx] = (uint8_t)(((r << 14) - (g * 13682) - (b * 2664)) >> 15); // 0.5*r + -0.418688*g + -0.081312*b
 
-                            YDU[idx + 0 + 64] = COLOR_RGB565_TO_Y(rgbbuf[ofs + 8]);
-                            YDU[idx + 1 + 64] = COLOR_RGB565_TO_Y(rgbbuf[ofs + 9]);
-                            YDU[idx + 2 + 64] = COLOR_RGB565_TO_Y(rgbbuf[ofs +10]);
-                            YDU[idx + 3 + 64] = COLOR_RGB565_TO_Y(rgbbuf[ofs +11]);
-                            YDU[idx + 4 + 64] = COLOR_RGB565_TO_Y(rgbbuf[ofs +12]);
-                            YDU[idx + 5 + 64] = COLOR_RGB565_TO_Y(rgbbuf[ofs +13]);
-                            YDU[idx + 6 + 64] = COLOR_RGB565_TO_Y(rgbbuf[ofs +14]);
-                            YDU[idx + 7 + 64] = COLOR_RGB565_TO_Y(rgbbuf[ofs +15]);
-
-                            // Just toss the old UV pixels (could average for better quality)
-                            UDU[idx + 0]      = COLOR_RGB565_TO_U(rgbbuf[ofs + 0]);
-                            UDU[idx + 1]      = COLOR_RGB565_TO_U(rgbbuf[ofs + 2]);
-                            UDU[idx + 2]      = COLOR_RGB565_TO_U(rgbbuf[ofs + 4]);
-                            UDU[idx + 3]      = COLOR_RGB565_TO_U(rgbbuf[ofs + 6]);
-                            UDU[idx + 4]      = COLOR_RGB565_TO_U(rgbbuf[ofs + 8]);
-                            UDU[idx + 5]      = COLOR_RGB565_TO_U(rgbbuf[ofs +10]);
-                            UDU[idx + 6]      = COLOR_RGB565_TO_U(rgbbuf[ofs +12]);
-                            UDU[idx + 7]      = COLOR_RGB565_TO_U(rgbbuf[ofs +14]);
-
-                            VDU[idx + 0]      = COLOR_RGB565_TO_V(rgbbuf[ofs + 0]);
-                            VDU[idx + 1]      = COLOR_RGB565_TO_V(rgbbuf[ofs + 2]);
-                            VDU[idx + 2]      = COLOR_RGB565_TO_V(rgbbuf[ofs + 4]);
-                            VDU[idx + 3]      = COLOR_RGB565_TO_V(rgbbuf[ofs + 6]);
-                            VDU[idx + 4]      = COLOR_RGB565_TO_V(rgbbuf[ofs + 8]);
-                            VDU[idx + 5]      = COLOR_RGB565_TO_V(rgbbuf[ofs +10]);
-                            VDU[idx + 6]      = COLOR_RGB565_TO_V(rgbbuf[ofs +12]);
-                            VDU[idx + 7]      = COLOR_RGB565_TO_V(rgbbuf[ofs +14]);
-                        }
+                                pixel = rgbbuf[ofs+tx*2+1];
+                                r = rb528_table[(pixel >> 3) & 0x1f]; // extract R8/G8/B8
+                                g = g628_table[((pixel & 7) << 3) | (pixel >> 13)];
+                                b = rb528_table[(pixel >> 8) & 0x1f];
+                                // faster to keep all calculations in integer math with 15-bit fractions
+                                YDU[idx+tx*2+1] = (uint8_t)(((r * 9770) + (g * 19182) + (b * 3736)) >> 15) -128; // .299*r + .587*g + .114*b
+                            } // for tx
+                        } // for ty
 
                         DCY = jpeg_processDU(&jpeg_buf, YDU,    fdtbl_Y, DCY, YDC_HT, YAC_HT);
                         DCY = jpeg_processDU(&jpeg_buf, YDU+64, fdtbl_Y, DCY, YDC_HT, YAC_HT);
@@ -1101,71 +1191,53 @@ bool jpeg_compress(image_t *src, image_t *dst, int quality, bool realloc)
                 break;
             }
             case JPEG_SUBSAMPLE_2x2: {
-                uint16_t rgbbuf[256];
+                uint16_t pixel, *pRow, rgbbuf[256];
                 int8_t YDU[256], UDU[64], VDU[64];
-
+                int8_t *pY, *pU, *pV;
+                int r, g, b;
                 for (int y=0; y<src->h; y+=16) {
                     for (int x=0; x<src->w; x+=16) {
                         imlib_bayer_to_rgb565(src, 16, 16, x, y, rgbbuf);
-                        for (int r=0, idx=0; r<8; r++, idx+=8) {
-                            int ofs = r*16;
-                            YDU[idx + 0]       = COLOR_RGB565_TO_Y(rgbbuf[ofs + 0]);
-                            YDU[idx + 1]       = COLOR_RGB565_TO_Y(rgbbuf[ofs + 1]);
-                            YDU[idx + 2]       = COLOR_RGB565_TO_Y(rgbbuf[ofs + 2]);
-                            YDU[idx + 3]       = COLOR_RGB565_TO_Y(rgbbuf[ofs + 3]);
-                            YDU[idx + 4]       = COLOR_RGB565_TO_Y(rgbbuf[ofs + 4]);
-                            YDU[idx + 5]       = COLOR_RGB565_TO_Y(rgbbuf[ofs + 5]);
-                            YDU[idx + 6]       = COLOR_RGB565_TO_Y(rgbbuf[ofs + 6]);
-                            YDU[idx + 7]       = COLOR_RGB565_TO_Y(rgbbuf[ofs + 7]);
+                        for (int ty=0; ty<16; ty+=2) { // row pairs
+                            pRow = &rgbbuf[ty*16];
+                            pY = &YDU[(ty*8)]; pU = &UDU[ty*4]; pV=&VDU[ty*4];
+                            if (ty >= 8) // second row of Y MCUs
+                                pY += (128 - 64);
+                            for (int tx=0; tx<16; tx+=2) { // column pairs
+                                if (tx == 8) // second column of Y MCUs
+                                   pY += (64-8);
 
-                            YDU[idx + 0 + 64]  = COLOR_RGB565_TO_Y(rgbbuf[ofs + 8]);
-                            YDU[idx + 1 + 64]  = COLOR_RGB565_TO_Y(rgbbuf[ofs + 9]);
-                            YDU[idx + 2 + 64]  = COLOR_RGB565_TO_Y(rgbbuf[ofs +10]);
-                            YDU[idx + 3 + 64]  = COLOR_RGB565_TO_Y(rgbbuf[ofs +11]);
-                            YDU[idx + 4 + 64]  = COLOR_RGB565_TO_Y(rgbbuf[ofs +12]);
-                            YDU[idx + 5 + 64]  = COLOR_RGB565_TO_Y(rgbbuf[ofs +13]);
-                            YDU[idx + 6 + 64]  = COLOR_RGB565_TO_Y(rgbbuf[ofs +14]);
-                            YDU[idx + 7 + 64]  = COLOR_RGB565_TO_Y(rgbbuf[ofs +15]);
+                                pixel = pRow[0]; // top left
+                                r = rb528_table[(pixel >> 3) & 0x1f]; // extract R8/G8/B8
+                                g = g628_table[((pixel & 7) << 3) | (pixel >> 13)];
+                                b = rb528_table[(pixel >> 8) & 0x1f];
+                                // faster to keep all calculations in integer math with 15-bit fractions
+                                pY[0] = (uint8_t)(((r * 9770) + (g * 19182) + (b * 3736)) >> 15) -128; // .299*r + .587*g + .114*b
+                                pU[0] = (uint8_t)(((b << 14) - (r * 5529) - (g * 10855)) >> 15); // -0.168736*r + -0.331264*g + 0.5*b
+                                pV[0] = (uint8_t)(((r << 14) - (g * 13682) - (b * 2664)) >> 15); // 0.5*r + -0.418688*g + -0.081312*b
+                                pixel = pRow[1]; // top right
+                                r = rb528_table[(pixel >> 3) & 0x1f]; // extract R8/G8/B8
+                                g = g628_table[((pixel & 7) << 3) | (pixel >> 13)];
+                                b = rb528_table[(pixel >> 8) & 0x1f];
+                                // faster to keep all calculations in integer math with 15-bit fractions
+                                pY[1] = (uint8_t)(((r * 9770) + (g * 19182) + (b * 3736)) >> 15)-128; // .299*r + .587*g + .114*b
 
-                            ofs = (r+8)*16;
-                            YDU[idx + 0 + 128] = COLOR_RGB565_TO_Y(rgbbuf[ofs + 0]);
-                            YDU[idx + 1 + 128] = COLOR_RGB565_TO_Y(rgbbuf[ofs + 1]);
-                            YDU[idx + 2 + 128] = COLOR_RGB565_TO_Y(rgbbuf[ofs + 2]);
-                            YDU[idx + 3 + 128] = COLOR_RGB565_TO_Y(rgbbuf[ofs + 3]);
-                            YDU[idx + 4 + 128] = COLOR_RGB565_TO_Y(rgbbuf[ofs + 4]);
-                            YDU[idx + 5 + 128] = COLOR_RGB565_TO_Y(rgbbuf[ofs + 5]);
-                            YDU[idx + 6 + 128] = COLOR_RGB565_TO_Y(rgbbuf[ofs + 6]);
-                            YDU[idx + 7 + 128] = COLOR_RGB565_TO_Y(rgbbuf[ofs + 7]);
+                                pixel = pRow[16]; // bottom left
+                                r = rb528_table[(pixel >> 3) & 0x1f]; // extract R8/G8/B8
+                                g = g628_table[((pixel & 7) << 3) | (pixel >> 13)];
+                                b = rb528_table[(pixel >> 8) & 0x1f];
+                                // faster to keep all calculations in integer math with 15-bit fractions
+                                pY[8] = (uint8_t)(((r * 9770) + (g * 19182) + (b * 3736)) >> 15)-128; // .299*r + .587*g + .114*b
 
-                            YDU[idx + 0 + 192] = COLOR_RGB565_TO_Y(rgbbuf[ofs + 8]);
-                            YDU[idx + 1 + 192] = COLOR_RGB565_TO_Y(rgbbuf[ofs + 9]);
-                            YDU[idx + 2 + 192] = COLOR_RGB565_TO_Y(rgbbuf[ofs +10]);
-                            YDU[idx + 3 + 192] = COLOR_RGB565_TO_Y(rgbbuf[ofs +11]);
-                            YDU[idx + 4 + 192] = COLOR_RGB565_TO_Y(rgbbuf[ofs +12]);
-                            YDU[idx + 5 + 192] = COLOR_RGB565_TO_Y(rgbbuf[ofs +13]);
-                            YDU[idx + 6 + 192] = COLOR_RGB565_TO_Y(rgbbuf[ofs +14]);
-                            YDU[idx + 7 + 192] = COLOR_RGB565_TO_Y(rgbbuf[ofs +15]);
-
-                            ofs = (r*2)*16;
-                            // Just toss the odd U/V pixels (could average for better quality)
-                            UDU[idx + 0]       = COLOR_RGB565_TO_U(rgbbuf[ofs + 0]);
-                            UDU[idx + 1]       = COLOR_RGB565_TO_U(rgbbuf[ofs + 2]);
-                            UDU[idx + 2]       = COLOR_RGB565_TO_U(rgbbuf[ofs + 4]);
-                            UDU[idx + 3]       = COLOR_RGB565_TO_U(rgbbuf[ofs + 6]);
-                            UDU[idx + 4]       = COLOR_RGB565_TO_U(rgbbuf[ofs + 8]);
-                            UDU[idx + 5]       = COLOR_RGB565_TO_U(rgbbuf[ofs +10]);
-                            UDU[idx + 6]       = COLOR_RGB565_TO_U(rgbbuf[ofs +12]);
-                            UDU[idx + 7]       = COLOR_RGB565_TO_U(rgbbuf[ofs +14]);
-
-                            VDU[idx + 0]       = COLOR_RGB565_TO_V(rgbbuf[ofs + 0]);
-                            VDU[idx + 1]       = COLOR_RGB565_TO_V(rgbbuf[ofs + 2]);
-                            VDU[idx + 2]       = COLOR_RGB565_TO_V(rgbbuf[ofs + 4]);
-                            VDU[idx + 3]       = COLOR_RGB565_TO_V(rgbbuf[ofs + 6]);
-                            VDU[idx + 4]       = COLOR_RGB565_TO_V(rgbbuf[ofs + 8]);
-                            VDU[idx + 5]       = COLOR_RGB565_TO_V(rgbbuf[ofs +10]);
-                            VDU[idx + 6]       = COLOR_RGB565_TO_V(rgbbuf[ofs +12]);
-                            VDU[idx + 7]       = COLOR_RGB565_TO_V(rgbbuf[ofs +14]);
-                        }
+                                pixel = pRow[17]; // bottom right
+                                r = rb528_table[(pixel >> 3) & 0x1f]; // extract R8/G8/B8
+                                g = g628_table[((pixel & 7) << 3) | (pixel >> 13)];
+                                b = rb528_table[(pixel >> 8) & 0x1f];
+                                // faster to keep all calculations in integer math with 15-bit fractions
+                                pY[9] = (uint8_t)(((r * 9770) + (g * 19182) + (b * 3736)) >> 15)-128; // .299*r + .587*g + .114*b
+                                pY += 2; pU++; pV++; pRow += 2;
+                            } // for tx
+                        } // for ty
 
                         DCY = jpeg_processDU(&jpeg_buf, YDU,     fdtbl_Y, DCY, YDC_HT, YAC_HT);
                         DCY = jpeg_processDU(&jpeg_buf, YDU+64,  fdtbl_Y, DCY, YDC_HT, YAC_HT);
@@ -1273,7 +1345,7 @@ void jpeg_write(image_t *img, const char *path, int quality)
         write_data(&fp, img->pixels, img->bpp);
     } else {
         uint32_t size;
-        uint8_t *buffer = fb_alloc_all(&size);
+        uint8_t *buffer = fb_alloc_all(&size, FB_ALLOC_PREFER_SIZE);
         image_t out = { .w=img->w, .h=img->h, .bpp=size, .pixels=buffer };
         // When jpeg_compress needs more memory than in currently allocated it
         // will try to realloc. MP will detect that the pointer is outside of

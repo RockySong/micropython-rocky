@@ -122,17 +122,17 @@ MP_DECLARE_CONST_FUN_OBJ_0(pyb_irq_stats_obj);
 #define IRQ_SUBPRI_CAN                      0
 
 // Interrupt priority for non-special timers.
-#define IRQ_PRI_TIMX            13
+#define IRQ_PRI_TIMX            10
 #define IRQ_SUBPRI_TIMX                     0
 
-#define IRQ_PRI_EXTINT          13
+#define IRQ_PRI_EXTINT          10
 #define IRQ_SUBPRI_EXTINT                   0
 
-#define IRQ_PRI_UART            13
+#define IRQ_PRI_UART            10
 #define IRQ_SUBPRI_UART                     0
 
 // USB IRQ can take long time to complete, so make priority low
-#define IRQ_PRI_USB_OTG1        14
+#define IRQ_PRI_USB_OTG1        12
 #define IRQ_SUBPRI_OTG_FS                   0
 
 #define IRQ_PRI_RTC_WKUP        14

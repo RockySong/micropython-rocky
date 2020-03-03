@@ -52,7 +52,7 @@ static int height = 0;
 static enum { LCD_NONE, LCD_SHIELD } type = LCD_NONE;
 static bool s_backlight_init = false;
 
-__WEAK void* fb_alloc0(uint32_t size) {
+__WEAK void* fb_alloc0(uint32_t size, int hints) {
 	return m_malloc0(size);
 }
 
@@ -369,8 +369,8 @@ static mp_obj_t py_lcd_display(uint n_args, const mp_obj_t *args, mp_map_t *kw_a
             return mp_const_none;
         case LCD_SHIELD:
             lcd_write_command_byte(0x2C);
-            uint8_t *zero = fb_alloc0(s_width*2);
-            uint16_t *line = fb_alloc(s_width*2);
+            uint8_t *zero = fb_alloc0(s_width*2, FB_ALLOC_NO_HINT);
+            uint16_t *line = fb_alloc(s_width*2, FB_ALLOC_NO_HINT);
             for (int i=0; i<t_pad; i++) {
                 lcd_write_data(s_width*2, zero);
             }
@@ -412,7 +412,7 @@ static mp_obj_t py_lcd_clear()
             return mp_const_none;
         case LCD_SHIELD:
             lcd_write_command_byte(0x2C);
-            uint8_t* zero = fb_alloc0(s_width*2);
+            uint8_t* zero = fb_alloc0(s_width*2, FB_ALLOC_NO_HINT);
             for (int i=0; i<height; i++) {
                 lcd_write_data(s_width*2, zero);
             }

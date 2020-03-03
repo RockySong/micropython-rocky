@@ -932,7 +932,7 @@ int sensor_sleep(int enable)
     return 0;
 }
 
-int sensor_read_reg(uint8_t reg_addr)
+int sensor_read_reg(uint16_t reg_addr)
 {
     if (s_sensor.read_reg == NULL) {
         // Operation not supported
@@ -941,7 +941,7 @@ int sensor_read_reg(uint8_t reg_addr)
     return s_sensor.read_reg(&s_sensor, reg_addr);
 }
 
-int sensor_write_reg(uint8_t reg_addr, uint16_t reg_data)
+int sensor_write_reg(uint16_t reg_addr, uint16_t reg_data)
 {
     if (s_sensor.write_reg == NULL) {
         // Operation not supported
@@ -1426,7 +1426,7 @@ void LCDMonitor_Update(uint32_t fbNdx)
 	if (s_irq.isGray) {
 		pFBGray += (h - 1) * s_sensor.wndW;
 		for (y=0; y< h; y++, pFBGray -= s_sensor.wndW) {
-			LCDMonitor_UpdateLineGray(pLcd, pFBGray, t1);
+			LCDMonitor_UpdateLineGray(pLcd, (uint16_t*)pFBGray, t1);
 			pLcd += 480;
 		}
 		ELCDIF_SetNextBufferAddr(LCDIF, (uint32_t) pLcdBkup);		

@@ -4,16 +4,10 @@
 
 #include "re1.5.h"
 
+#define INSERT_CODE(at, num, pc) \
+    ((code ? memmove(code + at + num, code + at, pc - at) : 0), pc += num)
 #define REL(at, to) (to - at - 2)
-
-#if defined(__ICCARM__)
-#define EMIT(at, byte) do {if (code) code[at] = byte ; else at;} while(0)
-#define INSERT_CODE(at, num, pc) do {if (code) memmove(code + at + num, code + at, pc - at) ; else pc += num;} while(0)
-#else
- #define EMIT(at, byte) (code ? (code[at] = byte) : (void)(at))
- #define INSERT_CODE(at, num, pc) ((code ? memmove(code + at + num, code + at, pc - at) : (void)0), pc += num)
-#endif
-
+#define EMIT(at, byte) (code ? (code[at] = byte) : (at))
 #define PC (prog->bytelen)
 
 static const char *_compilecode(const char *re, ByteProg *prog, int sizecode)
@@ -59,6 +53,9 @@ static const char *_compilecode(const char *re, ByteProg *prog, int sizecode)
             PC++; // Skip # of pair byte
             prog->len++;
             for (cnt = 0; *re != ']'; re++, cnt++) {
+                if (*re == '\\') {
+                    ++re;
+                }
                 if (!*re) return NULL;
                 EMIT(PC++, *re);
                 if (re[1] == '-' && re[2] != ']') {

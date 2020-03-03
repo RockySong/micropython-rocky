@@ -156,7 +156,7 @@ static mp_obj_t py_sensor_alloc_extra_fb(mp_obj_t w_obj, mp_obj_t h_obj, mp_obj_
     // Alloc image first (could fail) then alloc RAM so that there's no leak on failure.
     mp_obj_t r = py_image_from_struct(&img);
     // Don't mark before on purpose.
-    ((image_t *) py_image_cobj(r))->pixels = fb_alloc0(image_size(&img));
+    ((image_t *) py_image_cobj(r))->pixels = fb_alloc0(image_size(&img), FB_ALLOC_NO_HINT);
     return r;
 }
 
@@ -688,8 +688,15 @@ STATIC const mp_map_elem_t globals_dict_table[] = {
     { MP_OBJ_NEW_QSTR(MP_QSTR_WVGA),                MP_OBJ_NEW_SMALL_INT(FRAMESIZE_WVGA)},     /* 720x480   */
     { MP_OBJ_NEW_QSTR(MP_QSTR_WVGA2),               MP_OBJ_NEW_SMALL_INT(FRAMESIZE_WVGA2)},    /* 752x480   */
     { MP_OBJ_NEW_QSTR(MP_QSTR_SVGA),                MP_OBJ_NEW_SMALL_INT(FRAMESIZE_SVGA)},     /* 800x600   */
+    { MP_OBJ_NEW_QSTR(MP_QSTR_XGA),                 MP_OBJ_NEW_SMALL_INT(FRAMESIZE_XGA)},      /* 1024x768  */
     { MP_OBJ_NEW_QSTR(MP_QSTR_SXGA),                MP_OBJ_NEW_SMALL_INT(FRAMESIZE_SXGA)},     /* 1280x1024 */
     { MP_OBJ_NEW_QSTR(MP_QSTR_UXGA),                MP_OBJ_NEW_SMALL_INT(FRAMESIZE_UXGA)},     /* 1600x1200 */
+    { MP_OBJ_NEW_QSTR(MP_QSTR_HD),                  MP_OBJ_NEW_SMALL_INT(FRAMESIZE_HD)},       /* 1280x720  */
+    { MP_OBJ_NEW_QSTR(MP_QSTR_FHD),                 MP_OBJ_NEW_SMALL_INT(FRAMESIZE_FHD)},      /* 1920x1080 */
+    { MP_OBJ_NEW_QSTR(MP_QSTR_QHD),                 MP_OBJ_NEW_SMALL_INT(FRAMESIZE_QHD)},      /* 2560x1440 */
+    { MP_OBJ_NEW_QSTR(MP_QSTR_QXGA),                MP_OBJ_NEW_SMALL_INT(FRAMESIZE_QXGA)},     /* 2048x1536 */
+    { MP_OBJ_NEW_QSTR(MP_QSTR_WQXGA),               MP_OBJ_NEW_SMALL_INT(FRAMESIZE_WQXGA)},    /* 2560x1600 */
+    { MP_OBJ_NEW_QSTR(MP_QSTR_WQXGA2),              MP_OBJ_NEW_SMALL_INT(FRAMESIZE_WQXGA2)},   /* 2592x1944 */
 
     // Color Palettes
     { MP_OBJ_NEW_QSTR(MP_QSTR_PALETTE_RAINBOW),     MP_OBJ_NEW_SMALL_INT(COLOR_PALETTE_RAINBOW)},

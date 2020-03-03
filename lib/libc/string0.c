@@ -30,7 +30,7 @@
 #if defined(__ICCARM__)
 	#define likely(x) (x)
 #else
-	#define likely(x) __builtin_expect((x), 1)
+#define likely(x) __builtin_expect((x), 1)
 #endif
 
 void *memcpy(void *dst, const void *src, size_t n) {
@@ -220,4 +220,20 @@ char *strstr(const char *haystack, const char *needle)
         if (strncmp(haystack, needle, needlelen) == 0)
             return (char *) haystack;
     return 0;
+}
+
+size_t strspn(const char *s, const char *accept) {
+    const char *ss = s;
+    while (*s && strchr(accept, *s) != NULL) {
+        ++s;
+    }
+    return s - ss;
+}
+
+size_t strcspn(const char *s, const char *reject) {
+    const char *ss = s;
+    while (*s && strchr(reject, *s) == NULL) {
+        ++s;
+    }
+    return s - ss;
 }

@@ -59,7 +59,7 @@ STATIC mp_obj_t enumerate_make_new(const mp_obj_type_t *type, size_t n_args, siz
     o->iter = mp_getiter(arg_vals.iterable.u_obj, NULL);
     o->cur = arg_vals.start.u_int;
 #else
-    (void)n_kw;
+    mp_arg_check_num(n_args, n_kw, 1, 2, false);
     mp_obj_enumerate_t *o = m_new_obj(mp_obj_enumerate_t);
     o->base.type = type;
     o->iter = mp_getiter(args[0], NULL);
@@ -78,7 +78,7 @@ const mp_obj_type_t mp_type_enumerate = {
 };
 
 STATIC mp_obj_t enumerate_iternext(mp_obj_t self_in) {
-    assert(MP_OBJ_IS_TYPE(self_in, &mp_type_enumerate));
+    assert(mp_obj_is_type(self_in, &mp_type_enumerate));
     mp_obj_enumerate_t *self = MP_OBJ_TO_PTR(self_in);
     mp_obj_t next = mp_iternext(self->iter);
     if (next == MP_OBJ_STOP_ITERATION) {

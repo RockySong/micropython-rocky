@@ -1,11 +1,11 @@
 # 1 "<stdin>"
-# 1 "C:\\LocalData\\Project\\MCU\\RT\\openMV\\git\\micropython-rocky\\ports\\nxp_rt1050_60//"
+# 1 "/media/sf_D/gitrepos/mpyrt_omv/ports/nxp_rt1050_60//"
 # 1 "<built-in>"
 # 1 "<command-line>"
 # 1 "<stdin>"
 # 27 "<stdin>"
 # 1 "../../py/mpconfig.h" 1
-# 45 "../../py/mpconfig.h"
+# 62 "../../py/mpconfig.h"
 # 1 "./mpconfigport.h" 1
 # 30 "./mpconfigport.h"
        
@@ -16,41 +16,48 @@
 
 
 
+# 1 "./boards/omvrt1/mpconfigboard.h" 1
+# 24 "./boards/omvrt1/mpconfigboard.h"
+typedef enum _enum_rootPtrs
+{
+ rootptr_oledfb = 0,
+}enum_rootPtrs;
+# 39 "./mpconfigport.h" 2
 # 1 "mcusdk/drivers/fsl_common.h" 1
 # 38 "mcusdk/drivers/fsl_common.h"
-# 1 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\assert.h" 1 3
-# 9 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\assert.h" 3
-# 1 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\_ansi.h" 1 3
-# 10 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\_ansi.h" 3
-# 1 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\newlib.h" 1 3
-# 14 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\newlib.h" 3
-# 1 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\_newlib_version.h" 1 3
-# 15 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\newlib.h" 2 3
-# 11 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\_ansi.h" 2 3
-# 1 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\config.h" 1 3
+# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/assert.h" 1 3
+# 9 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/assert.h" 3
+# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/_ansi.h" 1 3
+# 15 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/_ansi.h" 3
+# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/newlib.h" 1 3
+# 14 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/newlib.h" 3
+# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/_newlib_version.h" 1 3
+# 15 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/newlib.h" 2 3
+# 16 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/_ansi.h" 2 3
+# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/config.h" 1 3
 
 
 
-# 1 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\machine\\ieeefp.h" 1 3
-# 5 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\config.h" 2 3
-# 1 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\features.h" 1 3
-# 6 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\config.h" 2 3
-# 12 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\_ansi.h" 2 3
-# 10 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\assert.h" 2 3
-# 39 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\assert.h" 3
+# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/machine/ieeefp.h" 1 3
+# 5 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/config.h" 2 3
+# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/features.h" 1 3
+# 6 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/config.h" 2 3
+# 17 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/_ansi.h" 2 3
+# 10 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/assert.h" 2 3
+# 39 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/assert.h" 3
 
-# 39 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\assert.h" 3
-void __assert (const char *, int, const char *)
-     __attribute__ ((__noreturn__));
-void __assert_func (const char *, int, const char *, const char *)
-     __attribute__ ((__noreturn__));
+# 39 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/assert.h" 3
+void __assert (const char *, int, const char *) __attribute__ ((__noreturn__))
+                                 ;
+void __assert_func (const char *, int, const char *, const char *) __attribute__ ((__noreturn__))
+                                 ;
 # 39 "mcusdk/drivers/fsl_common.h" 2
-# 1 "c:\\gnu\\2018-q4-major\\lib\\gcc\\arm-none-eabi\\8.2.1\\include\\stdbool.h" 1 3 4
+# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/lib/gcc/arm-none-eabi/6.3.1/include/stdbool.h" 1 3 4
 # 40 "mcusdk/drivers/fsl_common.h" 2
-# 1 "c:\\gnu\\2018-q4-major\\lib\\gcc\\arm-none-eabi\\8.2.1\\include\\stdint.h" 1 3 4
-# 11 "c:\\gnu\\2018-q4-major\\lib\\gcc\\arm-none-eabi\\8.2.1\\include\\stdint.h" 3 4
-# 1 "c:\\gnu\\2018-q4-major\\lib\\gcc\\arm-none-eabi\\8.2.1\\include\\stdint-gcc.h" 1 3 4
-# 34 "c:\\gnu\\2018-q4-major\\lib\\gcc\\arm-none-eabi\\8.2.1\\include\\stdint-gcc.h" 3 4
+# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/lib/gcc/arm-none-eabi/6.3.1/include/stdint.h" 1 3 4
+# 11 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/lib/gcc/arm-none-eabi/6.3.1/include/stdint.h" 3 4
+# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/lib/gcc/arm-none-eabi/6.3.1/include/stdint-gcc.h" 1 3 4
+# 34 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/lib/gcc/arm-none-eabi/6.3.1/include/stdint-gcc.h" 3 4
 typedef signed char int8_t;
 
 
@@ -110,65 +117,65 @@ typedef unsigned int uintptr_t;
 
 typedef long long int intmax_t;
 typedef long long unsigned int uintmax_t;
-# 12 "c:\\gnu\\2018-q4-major\\lib\\gcc\\arm-none-eabi\\8.2.1\\include\\stdint.h" 2 3 4
+# 12 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/lib/gcc/arm-none-eabi/6.3.1/include/stdint.h" 2 3 4
 # 41 "mcusdk/drivers/fsl_common.h" 2
-# 1 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\string.h" 1 3
-# 11 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\string.h" 3
-# 1 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\reent.h" 1 3
-# 13 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\reent.h" 3
-# 1 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\_ansi.h" 1 3
-# 14 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\reent.h" 2 3
-# 1 "c:\\gnu\\2018-q4-major\\lib\\gcc\\arm-none-eabi\\8.2.1\\include\\stddef.h" 1 3 4
-# 149 "c:\\gnu\\2018-q4-major\\lib\\gcc\\arm-none-eabi\\8.2.1\\include\\stddef.h" 3 4
+# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/string.h" 1 3
+# 11 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/string.h" 3
+# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/reent.h" 1 3
+# 13 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/reent.h" 3
+# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/_ansi.h" 1 3
+# 14 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/reent.h" 2 3
+# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/lib/gcc/arm-none-eabi/6.3.1/include/stddef.h" 1 3 4
+# 149 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/lib/gcc/arm-none-eabi/6.3.1/include/stddef.h" 3 4
 typedef int ptrdiff_t;
-# 216 "c:\\gnu\\2018-q4-major\\lib\\gcc\\arm-none-eabi\\8.2.1\\include\\stddef.h" 3 4
+# 216 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/lib/gcc/arm-none-eabi/6.3.1/include/stddef.h" 3 4
 typedef unsigned int size_t;
-# 328 "c:\\gnu\\2018-q4-major\\lib\\gcc\\arm-none-eabi\\8.2.1\\include\\stddef.h" 3 4
+# 328 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/lib/gcc/arm-none-eabi/6.3.1/include/stddef.h" 3 4
 typedef unsigned int wchar_t;
-# 15 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\reent.h" 2 3
-# 1 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\_types.h" 1 3
-# 24 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\_types.h" 3
-# 1 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\machine\\_types.h" 1 3
+# 15 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/reent.h" 2 3
+# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/_types.h" 1 3
+# 24 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/_types.h" 3
+# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/machine/_types.h" 1 3
 
 
 
 
 
 
-# 1 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\machine\\_default_types.h" 1 3
-# 41 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\machine\\_default_types.h" 3
+# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/machine/_default_types.h" 1 3
+# 41 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/machine/_default_types.h" 3
 typedef signed char __int8_t;
 
 typedef unsigned char __uint8_t;
-# 55 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\machine\\_default_types.h" 3
+# 55 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/machine/_default_types.h" 3
 typedef short int __int16_t;
 
 typedef short unsigned int __uint16_t;
-# 77 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\machine\\_default_types.h" 3
+# 77 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/machine/_default_types.h" 3
 typedef long int __int32_t;
 
 typedef long unsigned int __uint32_t;
-# 103 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\machine\\_default_types.h" 3
+# 103 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/machine/_default_types.h" 3
 typedef long long int __int64_t;
 
 typedef long long unsigned int __uint64_t;
-# 134 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\machine\\_default_types.h" 3
+# 134 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/machine/_default_types.h" 3
 typedef signed char __int_least8_t;
 
 typedef unsigned char __uint_least8_t;
-# 160 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\machine\\_default_types.h" 3
+# 160 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/machine/_default_types.h" 3
 typedef short int __int_least16_t;
 
 typedef short unsigned int __uint_least16_t;
-# 182 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\machine\\_default_types.h" 3
+# 182 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/machine/_default_types.h" 3
 typedef long int __int_least32_t;
 
 typedef long unsigned int __uint_least32_t;
-# 200 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\machine\\_default_types.h" 3
+# 200 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/machine/_default_types.h" 3
 typedef long long int __int_least64_t;
 
 typedef long long unsigned int __uint_least64_t;
-# 214 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\machine\\_default_types.h" 3
+# 214 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/machine/_default_types.h" 3
 typedef long long int __intmax_t;
 
 
@@ -188,10 +195,10 @@ typedef long long unsigned int __uintmax_t;
 typedef int __intptr_t;
 
 typedef unsigned int __uintptr_t;
-# 8 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\machine\\_types.h" 2 3
-# 25 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\_types.h" 2 3
-# 1 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\lock.h" 1 3
-# 33 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\lock.h" 3
+# 8 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/machine/_types.h" 2 3
+# 25 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/_types.h" 2 3
+# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/lock.h" 1 3
+# 33 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/lock.h" 3
 struct __lock;
 typedef struct __lock * _LOCK_T;
 
@@ -220,7 +227,7 @@ extern int __retarget_lock_try_acquire_recursive(_LOCK_T lock);
 extern void __retarget_lock_release(_LOCK_T lock);
 
 extern void __retarget_lock_release_recursive(_LOCK_T lock);
-# 26 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\_types.h" 2 3
+# 26 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/_types.h" 2 3
 
 
 typedef long __blkcnt_t;
@@ -269,7 +276,7 @@ typedef __uint32_t __id_t;
 
 
 typedef unsigned short __ino_t;
-# 88 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\_types.h" 3
+# 88 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/_types.h" 3
 typedef __uint32_t __mode_t;
 
 
@@ -297,18 +304,18 @@ typedef long __key_t;
 
 
 typedef long _fpos_t;
-# 129 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\_types.h" 3
+# 129 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/_types.h" 3
 typedef unsigned int __size_t;
-# 145 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\_types.h" 3
+# 145 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/_types.h" 3
 typedef signed int _ssize_t;
-# 156 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\_types.h" 3
+# 156 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/_types.h" 3
 typedef _ssize_t __ssize_t;
 
 
-# 1 "c:\\gnu\\2018-q4-major\\lib\\gcc\\arm-none-eabi\\8.2.1\\include\\stddef.h" 1 3 4
-# 357 "c:\\gnu\\2018-q4-major\\lib\\gcc\\arm-none-eabi\\8.2.1\\include\\stddef.h" 3 4
+# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/lib/gcc/arm-none-eabi/6.3.1/include/stddef.h" 1 3 4
+# 357 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/lib/gcc/arm-none-eabi/6.3.1/include/stddef.h" 3 4
 typedef unsigned int wint_t;
-# 160 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\_types.h" 2 3
+# 160 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/_types.h" 2 3
 
 
 
@@ -333,20 +340,10 @@ typedef void *_iconv_t;
 
 
 
-
-
-
 typedef unsigned long __clock_t;
 
 
-
-
-
-
-typedef __int_least64_t __time_t;
-
-
-
+typedef long __time_t;
 
 
 typedef unsigned long __clockid_t;
@@ -362,7 +359,6 @@ typedef __uint8_t __sa_family_t;
 typedef __uint32_t __socklen_t;
 
 
-typedef int __nl_item;
 typedef unsigned short __nlink_t;
 typedef long __suseconds_t;
 typedef unsigned long __useconds_t;
@@ -371,7 +367,7 @@ typedef unsigned long __useconds_t;
 
 
 typedef char * __va_list;
-# 16 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\reent.h" 2 3
+# 16 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/reent.h" 2 3
 
 
 
@@ -379,7 +375,7 @@ typedef char * __va_list;
 
 
 typedef unsigned long __ULong;
-# 38 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\reent.h" 3
+# 38 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/reent.h" 3
 struct _reent;
 
 struct __locale_t;
@@ -425,7 +421,7 @@ struct _on_exit_args {
 
  __ULong _is_cxa;
 };
-# 93 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\reent.h" 3
+# 93 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/reent.h" 3
 struct _atexit {
  struct _atexit *_next;
  int _ind;
@@ -433,12 +429,12 @@ struct _atexit {
  void (*_fns[32])(void);
         struct _on_exit_args _on_exit_args;
 };
-# 117 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\reent.h" 3
+# 117 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/reent.h" 3
 struct __sbuf {
  unsigned char *_base;
  int _size;
 };
-# 181 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\reent.h" 3
+# 181 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/reent.h" 3
 struct __sFILE {
   unsigned char *_p;
   int _r;
@@ -455,13 +451,13 @@ struct __sFILE {
 
   void * _cookie;
 
-  int (*_read) (struct _reent *, void *,
-        char *, int);
-  int (*_write) (struct _reent *, void *,
-         const char *,
-         int);
-  _fpos_t (*_seek) (struct _reent *, void *, _fpos_t, int);
-  int (*_close) (struct _reent *, void *);
+  int (* _read) (struct _reent *, void *, char *, int)
+                                          ;
+  int (* _write) (struct _reent *, void *, const char *, int)
+
+                                   ;
+  _fpos_t (* _seek) (struct _reent *, void *, _fpos_t, int);
+  int (* _close) (struct _reent *, void *);
 
 
   struct __sbuf _ub;
@@ -489,7 +485,7 @@ struct __sFILE {
   _mbstate_t _mbstate;
   int _flags2;
 };
-# 287 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\reent.h" 3
+# 287 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/reent.h" 3
 typedef struct __sFILE __FILE;
 
 
@@ -500,7 +496,7 @@ struct _glue
   int _niobs;
   __FILE *_iobs;
 };
-# 319 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\reent.h" 3
+# 319 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/reent.h" 3
 struct _rand48 {
   unsigned short _seed[3];
   unsigned short _mult[3];
@@ -510,7 +506,7 @@ struct _rand48 {
 
 
 };
-# 608 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\reent.h" 3
+# 569 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/reent.h" 3
 struct _reent
 {
   int _errno;
@@ -529,7 +525,7 @@ struct _reent
 
   int __sdidinit;
 
-  void (*__cleanup) (struct _reent *);
+  void (* __cleanup) (struct _reent *);
 
 
   struct _Bigint *_result;
@@ -589,78 +585,39 @@ struct _reent
 
 
   struct _glue __sglue;
-
   __FILE __sf[3];
-
 };
-# 814 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\reent.h" 3
+# 766 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/reent.h" 3
 extern struct _reent *_impure_ptr ;
 extern struct _reent *const _global_impure_ptr ;
 
 void _reclaim_reent (struct _reent *);
-# 12 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\string.h" 2 3
-# 1 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\cdefs.h" 1 3
-# 47 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\cdefs.h" 3
-# 1 "c:\\gnu\\2018-q4-major\\lib\\gcc\\arm-none-eabi\\8.2.1\\include\\stddef.h" 1 3 4
-# 48 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\cdefs.h" 2 3
-# 13 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\string.h" 2 3
+# 12 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/string.h" 2 3
+# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/cdefs.h" 1 3
+# 45 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/cdefs.h" 3
+# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/lib/gcc/arm-none-eabi/6.3.1/include/stddef.h" 1 3 4
+# 46 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/cdefs.h" 2 3
+# 13 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/string.h" 2 3
 
 
 
 
-# 1 "c:\\gnu\\2018-q4-major\\lib\\gcc\\arm-none-eabi\\8.2.1\\include\\stddef.h" 1 3 4
-# 18 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\string.h" 2 3
+# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/lib/gcc/arm-none-eabi/6.3.1/include/stddef.h" 1 3 4
+# 18 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/string.h" 2 3
 
 
-# 1 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\xlocale.h" 1 3
-# 9 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\xlocale.h" 3
+# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/xlocale.h" 1 3
+# 9 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/xlocale.h" 3
 struct __locale_t;
 typedef struct __locale_t *locale_t;
-# 21 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\string.h" 2 3
-
-
-
-# 1 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\strings.h" 1 3
-# 44 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\strings.h" 3
-
-
-int bcmp(const void *, const void *, size_t) __attribute__((__pure__));
-void bcopy(const void *, void *, size_t);
-void bzero(void *, size_t);
-
-
-void explicit_bzero(void *, size_t);
-
-
-int ffs(int) __attribute__((__const__));
-
-
-int ffsl(long) __attribute__((__const__));
-int ffsll(long long) __attribute__((__const__));
-int fls(int) __attribute__((__const__));
-int flsl(long) __attribute__((__const__));
-int flsll(long long) __attribute__((__const__));
-
-
-char *index(const char *, int) __attribute__((__pure__));
-char *rindex(const char *, int) __attribute__((__pure__));
-
-int strcasecmp(const char *, const char *) __attribute__((__pure__));
-int strncasecmp(const char *, const char *, size_t) __attribute__((__pure__));
-
-
-int strcasecmp_l (const char *, const char *, locale_t);
-int strncasecmp_l (const char *, const char *, size_t, locale_t);
-
-
-# 25 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\string.h" 2 3
+# 21 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/string.h" 2 3
 
 
 
 
 void * memchr (const void *, int, size_t);
 int memcmp (const void *, const void *, size_t);
-void * memcpy (void *restrict, const void *restrict, size_t);
+void * memcpy (void * restrict, const void * restrict, size_t);
 void * memmove (void *, const void *, size_t);
 void * memset (void *, int, size_t);
 char *strcat (char *restrict, const char *restrict);
@@ -689,31 +646,51 @@ char *strerror_l (int, locale_t);
 size_t strxfrm_l (char *restrict, const char *restrict, size_t, locale_t);
 
 
+
+
+
+
 char *strtok_r (char *restrict, const char *restrict, char **restrict);
 
 
+int bcmp (const void *, const void *, size_t);
+void bcopy (const void *, void *, size_t);
+void bzero (void *, size_t);
+
+
+void explicit_bzero (void *, size_t);
 int timingsafe_bcmp (const void *, const void *, size_t);
 int timingsafe_memcmp (const void *, const void *, size_t);
 
 
-void * memccpy (void *restrict, const void *restrict, int, size_t);
-# 76 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\string.h" 3
+int ffs (int);
+char *index (const char *, int);
+
+
+void * memccpy (void * restrict, const void * restrict, int, size_t);
+# 86 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/string.h" 3
+char *rindex (const char *, int);
+
+
 char *stpcpy (char *restrict, const char *restrict);
 char *stpncpy (char *restrict, const char *restrict, size_t);
 
 
+int strcasecmp (const char *, const char *);
 
 
 
 
-char *strdup (const char *) __attribute__((__malloc__)) __attribute__((__warn_unused_result__));
+
+
+char *strdup (const char *);
 
 char *_strdup_r (struct _reent *, const char *);
 
-char *strndup (const char *, size_t) __attribute__((__malloc__)) __attribute__((__warn_unused_result__));
+char *strndup (const char *, size_t);
 
 char *_strndup_r (struct _reent *, const char *, size_t);
-# 100 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\string.h" 3
+# 121 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/string.h" 3
 int strerror_r (int, char *, size_t)
 
              __asm__ ("" "__xpg_strerror_r")
@@ -733,13 +710,13 @@ size_t strlcat (char *, const char *, size_t);
 size_t strlcpy (char *, const char *, size_t);
 
 
+int strncasecmp (const char *, const char *, size_t);
+
+
 size_t strnlen (const char *, size_t);
 
 
 char *strsep (char **, const char *);
-
-
-char *strnstr(const char *, const char *, size_t) __attribute__((__pure__));
 
 
 
@@ -749,32 +726,32 @@ char *strupr (char *);
 
 
 char *strsignal (int __signo);
-# 175 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\string.h" 3
-# 1 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\sys\\string.h" 1 3
-# 176 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\string.h" 2 3
+# 192 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/string.h" 3
+# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/sys/string.h" 1 3
+# 193 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/string.h" 2 3
 
 
 # 42 "mcusdk/drivers/fsl_common.h" 2
-# 1 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\stdlib.h" 1 3
-# 10 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\stdlib.h" 3
-# 1 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\machine\\ieeefp.h" 1 3
-# 11 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\stdlib.h" 2 3
+# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/stdlib.h" 1 3
+# 10 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/stdlib.h" 3
+# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/machine/ieeefp.h" 1 3
+# 11 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/stdlib.h" 2 3
 
 
 
 
 
-# 1 "c:\\gnu\\2018-q4-major\\lib\\gcc\\arm-none-eabi\\8.2.1\\include\\stddef.h" 1 3 4
-# 17 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\stdlib.h" 2 3
+# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/lib/gcc/arm-none-eabi/6.3.1/include/stddef.h" 1 3 4
+# 17 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/stdlib.h" 2 3
 
 
 
-# 1 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\machine\\stdlib.h" 1 3
-# 21 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\stdlib.h" 2 3
+# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/machine/stdlib.h" 1 3
+# 21 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/stdlib.h" 2 3
 
-# 1 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\alloca.h" 1 3
-# 23 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\stdlib.h" 2 3
-# 33 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\stdlib.h" 3
+# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/alloca.h" 1 3
+# 23 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/stdlib.h" 2 3
+# 33 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/stdlib.h" 3
 
 
 typedef struct
@@ -827,13 +804,12 @@ int atoi (const char *__nptr);
 int _atoi_r (struct _reent *, const char *__nptr);
 long atol (const char *__nptr);
 long _atol_r (struct _reent *, const char *__nptr);
-void * bsearch (const void *__key,
-         const void *__base,
-         size_t __nmemb,
-         size_t __size,
-         __compar_fn_t _compar);
-void *calloc(size_t, size_t) __attribute__((__malloc__)) __attribute__((__warn_unused_result__))
-      __attribute__((__alloc_size__(1, 2))) ;
+void * bsearch (const void * __key, const void * __base, size_t __nmemb, size_t __size, __compar_fn_t _compar)
+
+
+
+                                ;
+void * calloc (size_t __nmemb, size_t __size) ;
 div_t div (int __numer, int __denom);
 void exit (int __status) __attribute__ ((__noreturn__));
 void free (void *) ;
@@ -847,7 +823,7 @@ int getsubopt (char **, char * const *, char **);
 
 long labs (long);
 ldiv_t ldiv (long __numer, long __denom);
-void *malloc(size_t) __attribute__((__malloc__)) __attribute__((__warn_unused_result__)) __attribute__((__alloc_size__(1))) ;
+void * malloc (size_t __size) ;
 int mblen (const char *, size_t);
 int _mblen_r (struct _reent *, const char *, size_t, _mbstate_t *);
 int mbtowc (wchar_t *restrict, const char *restrict, size_t);
@@ -882,12 +858,13 @@ int _mkostemps_r (struct _reent *, char *, int, int);
 int _mkstemp_r (struct _reent *, char *);
 int _mkstemps_r (struct _reent *, char *, int);
 char * _mktemp_r (struct _reent *, char *) __attribute__ ((__deprecated__("the use of `mktemp' is dangerous; use `mkstemp' instead")));
-void qsort (void *__base, size_t __nmemb, size_t __size, __compar_fn_t _compar);
+void qsort (void * __base, size_t __nmemb, size_t __size, __compar_fn_t _compar);
 int rand (void);
-void *realloc(void *, size_t) __attribute__((__warn_unused_result__)) __attribute__((__alloc_size__(2))) ;
+void * realloc (void * __r, size_t __size) ;
 
-void *reallocarray(void *, size_t, size_t) __attribute__((__warn_unused_result__)) __attribute__((__alloc_size__(2, 3)));
-void *reallocf(void *, size_t) __attribute__((__warn_unused_result__)) __attribute__((__alloc_size__(2)));
+void *reallocarray(void *, size_t, size_t) __attribute__((__warn_unused_result__)) __attribute__((__alloc_size__(2)))
+     __attribute__((__alloc_size__(3)));
+void * reallocf (void * __r, size_t __size);
 
 
 char * realpath (const char *restrict path, char *restrict resolved_path);
@@ -914,7 +891,7 @@ long strtol (const char *restrict __n, char **restrict __end_PTR, int __base);
 long _strtol_r (struct _reent *,const char *restrict __n, char **restrict __end_PTR, int __base);
 unsigned long strtoul (const char *restrict __n, char **restrict __end_PTR, int __base);
 unsigned long _strtoul_r (struct _reent *,const char *restrict __n, char **restrict __end_PTR, int __base);
-# 188 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\stdlib.h" 3
+# 188 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/stdlib.h" 3
 int system (const char *__string);
 
 
@@ -923,7 +900,7 @@ char * l64a (long __input);
 char * _l64a_r (struct _reent *,long __input);
 
 
-int on_exit (void (*__func)(int, void *),void *__arg);
+int on_exit (void (*__func)(int, void *),void * __arg);
 
 
 void _Exit (int __status) __attribute__ ((__noreturn__));
@@ -937,7 +914,7 @@ void * _reallocf_r (struct _reent *, void *, size_t);
 int setenv (const char *__string, const char *__value, int __overwrite);
 
 int _setenv_r (struct _reent *, const char *__string, const char *__value, int __overwrite);
-# 221 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\stdlib.h" 3
+# 221 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/stdlib.h" 3
 char * __itoa (int, char *, int);
 char * __utoa (unsigned, char *, int);
 
@@ -1002,8 +979,7 @@ int _unsetenv_r (struct _reent *, const char *__string);
 
 
 
-int posix_memalign (void **, size_t, size_t) __attribute__((__nonnull__ (1)))
-     __attribute__((__warn_unused_result__));
+int __attribute__((__nonnull__(1))) posix_memalign (void **, size_t, size_t);
 
 
 char * _dtoa_r (struct _reent *, double, int, int, int *, int*, char**);
@@ -1017,14 +993,14 @@ void _mstats_r (struct _reent *, char *);
 int _system_r (struct _reent *, const char *);
 
 void __eprintf (const char *, const char *, unsigned int, const char *);
-# 309 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\stdlib.h" 3
-void qsort_r (void *__base, size_t __nmemb, size_t __size, void *__thunk, int (*_compar)(void *, const void *, const void *))
+# 308 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/stdlib.h" 3
+void qsort_r (void * __base, size_t __nmemb, size_t __size, void * __thunk, int (*_compar)(void *, const void *, const void *))
              __asm__ ("" "__bsd_qsort_r");
-# 319 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\stdlib.h" 3
+# 318 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/stdlib.h" 3
 extern long double _strtold_r (struct _reent *, const char *restrict, char **restrict);
 
 extern long double strtold (const char *restrict, char **restrict);
-# 336 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\stdlib.h" 3
+# 335 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/stdlib.h" 3
 
 # 43 "mcusdk/drivers/fsl_common.h" 2
 
@@ -1449,8 +1425,16 @@ __attribute__((always_inline)) static inline uint32_t __get_FPSCR(void)
 
 
 
-  return __builtin_arm_get_fpscr();
-# 720 "../../lib/cmsis/inc/cmsis_gcc.h"
+
+
+  uint32_t result;
+
+  __asm volatile ("VMRS %0, fpscr" : "=r" (result) );
+  return(result);
+
+
+
+
 }
 
 
@@ -1465,9 +1449,9 @@ __attribute__((always_inline)) static inline void __set_FPSCR(uint32_t fpscr)
 
 
 
-  __builtin_arm_set_fpscr(fpscr);
 
 
+  __asm volatile ("VMSR fpscr, %0" : : "r" (fpscr) : "vfpcc", "memory");
 
 
 
@@ -5890,14 +5874,14 @@ typedef int32_t status_t;
 
 # 1 "mcusdk/drivers/fsl_clock.h" 1
 # 40 "mcusdk/drivers/fsl_clock.h"
-# 1 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\assert.h" 1 3
-# 39 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\assert.h" 3
+# 1 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/assert.h" 1 3
+# 39 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/assert.h" 3
 
-# 39 "c:\\gnu\\2018-q4-major\\arm-none-eabi\\include\\assert.h" 3
-void __assert (const char *, int, const char *)
-     __attribute__ ((__noreturn__));
-void __assert_func (const char *, int, const char *, const char *)
-     __attribute__ ((__noreturn__));
+# 39 "/home/rocky/gcc-arm-none-eabi-6-2017-q2-update/arm-none-eabi/include/assert.h" 3
+void __assert (const char *, int, const char *) __attribute__ ((__noreturn__))
+                                 ;
+void __assert_func (const char *, int, const char *, const char *) __attribute__ ((__noreturn__))
+                                 ;
 # 41 "mcusdk/drivers/fsl_clock.h" 2
 # 102 "mcusdk/drivers/fsl_clock.h"
 
@@ -6709,8 +6693,8 @@ void CLOCK_DisableUsbhs1PhyPllClock(void);
 
 
     void SDK_Free(void *ptr);
-# 39 "./mpconfigport.h" 2
-# 183 "./mpconfigport.h"
+# 40 "./mpconfigport.h" 2
+# 184 "./mpconfigport.h"
 extern const struct _mp_obj_module_t machine_module;
 extern const struct _mp_obj_module_t pyb_module;
 extern const struct _mp_obj_module_t mcu_module;
@@ -6732,11 +6716,11 @@ extern const struct _mp_obj_module_t image_module;
 extern const struct _mp_obj_module_t mjpeg_module;
 extern const struct _mp_obj_module_t nn_module;
 extern const struct _mp_obj_module_t gif_module;
-# 362 "./mpconfigport.h"
+# 363 "./mpconfigport.h"
 typedef int mp_int_t;
 typedef unsigned int mp_uint_t;
 typedef long mp_off_t;
-# 377 "./mpconfigport.h"
+# 378 "./mpconfigport.h"
 static inline void enable_irq(mp_uint_t state) {
     __set_PRIMASK(state);
 }
@@ -6746,10 +6730,10 @@ static inline mp_uint_t disable_irq(void) {
     __disable_irq();
     return state;
 }
-# 404 "./mpconfigport.h"
+# 405 "./mpconfigport.h"
 extern void HAL_WFI(void);
-# 46 "../../py/mpconfig.h" 2
-# 554 "../../py/mpconfig.h"
+# 63 "../../py/mpconfig.h" 2
+# 646 "../../py/mpconfig.h"
 typedef float mp_float_t;
 # 28 "<stdin>" 2
 
@@ -6764,9 +6748,15 @@ Q()
 Q(*)
 Q(_)
 Q(/)
+
 Q(%#o)
 Q(%#x)
+
+
+
+
 Q({:#b})
+Q( )
 Q(\n)
 Q(maximum recursion depth exceeded)
 Q(<module>)
@@ -6778,7 +6768,7 @@ Q(<genexpr>)
 Q(<string>)
 Q(<stdin>)
 Q(utf-8)
-# 82 "<stdin>"
+# 92 "<stdin>"
 Q(boot.py)
 Q(main.py)
 
@@ -7647,7 +7637,7 @@ Q(XBARA1)
 Q(XBARB2)
 Q(XBARB3)
 Q(XTALOSC24M)
-# 960 "<stdin>"
+# 972 "<stdin>"
 Q(omv)
 Q(version_major)
 Q(version_minor)
@@ -7801,7 +7791,7 @@ Q(contrast_threshold)
 
 
 Q(nn_class)
-# 1121 "<stdin>"
+# 1133 "<stdin>"
 Q(QQCIF)
 Q(QCIF)
 Q(CIF)
@@ -7828,8 +7818,15 @@ Q(QQVGA2)
 Q(WVGA)
 Q(WVGA2)
 Q(SVGA)
+Q(XGA)
 Q(SXGA)
 Q(UXGA)
+Q(HD)
+Q(FHD)
+Q(QHD)
+Q(QXGA)
+Q(WQXGA)
+Q(WQXGA2)
 
 
 Q(NORMAL)
@@ -7978,6 +7975,7 @@ Q(isconnected)
 Q(connected_sta)
 Q(wait_for_sta)
 Q(ifconfig)
+Q(netinfo)
 Q(fw_version)
 Q(fw_dump)
 Q(fw_update)
@@ -8077,6 +8075,12 @@ Q(compressed)
 
 Q(compressed_for_ide)
 
+
+
+Q(jpeg_encode_for_ide)
+
+
+Q(jpeg_encoded_for_ide)
 
 
 
@@ -8186,7 +8190,7 @@ Q(mask_ellipse)
 Q(binary)
 
 Q(zero)
-# 1513 "<stdin>"
+# 1539 "<stdin>"
 Q(and)
 Q(b_and)
 
@@ -8224,7 +8228,7 @@ Q(erode)
 
 Q(dilate)
 Q(threshold)
-# 1563 "<stdin>"
+# 1589 "<stdin>"
 Q(top_hat)
 
 
@@ -8270,7 +8274,7 @@ Q(mul)
 Q(div)
 
 Q(mod)
-# 1619 "<stdin>"
+# 1645 "<stdin>"
 Q(difference)
 
 
@@ -8317,15 +8321,15 @@ Q(midpoint)
 
 
 Q(morph)
-# 1673 "<stdin>"
+# 1699 "<stdin>"
 Q(blur)
 Q(gaussian)
 Q(gaussian_blur)
 Q(unsharp)
-# 1685 "<stdin>"
+# 1711 "<stdin>"
 Q(laplacian)
 Q(sharpen)
-# 1695 "<stdin>"
+# 1721 "<stdin>"
 Q(bilateral)
 Q(color_sigma)
 Q(space_sigma)
@@ -8407,7 +8411,7 @@ Q(value)
 Q(l_value)
 Q(a_value)
 Q(b_value)
-# 1801 "<stdin>"
+# 1827 "<stdin>"
 Q(lq)
 Q(uq)
 Q(l_mean)
@@ -8542,7 +8546,7 @@ Q(r)
 
 
 Q(find_rects)
-# 1948 "<stdin>"
+# 1974 "<stdin>"
 Q(find_qrcodes)
 
 
@@ -8607,7 +8611,7 @@ Q(find_datamatrices)
 Q(effort)
 
 Q(datamatrix)
-# 2020 "<stdin>"
+# 2046 "<stdin>"
 Q(rows)
 Q(columns)
 Q(capacity)
@@ -8618,7 +8622,7 @@ Q(find_barcodes)
 
 
 Q(barcode)
-# 2040 "<stdin>"
+# 2066 "<stdin>"
 Q(EAN2)
 Q(EAN5)
 Q(EAN8)
@@ -8694,6 +8698,34 @@ Q(draw_ir)
 
 
 Q(pixformat)
+
+
+
+Q(tf)
+
+Q(load_to_fb)
+Q(free_from_fb)
+Q(classify)
+Q(segment)
+
+
+Q(tf_model)
+
+
+
+Q(channels)
+# 2167 "<stdin>"
+Q(tf_classification)
+
+
+
+
+Q(output)
+
+
+
+
+Q(802_1X)
 
 Q(ADC)
 
@@ -8824,6 +8856,8 @@ Q(BIG_ENDIAN)
 Q(BINARY)
 
 Q(BLACK)
+
+Q(BaseException)
 
 Q(BaseException)
 
@@ -9159,9 +9193,11 @@ Q(DATABAR_EXP)
 
 Q(DCDC)
 
-Q(DCP)
+Q(DCMC)
 
-Q(DEBUG)
+Q(DCMC)
+
+Q(DCP)
 
 Q(DEEPSLEEP_RESETABC)
 
@@ -9483,6 +9519,8 @@ Q(FFILT_FILT_PER_BF)
 
 Q(FFILT_GSTR)
 
+Q(FHD)
+
 Q(FILT_FILT_CNT_BF)
 
 Q(FILT_FILT_PER_BF)
@@ -9621,6 +9659,8 @@ Q(HC_ADCH_BF)
 
 Q(HC_AIEN)
 
+Q(HD)
+
 Q(HID)
 
 Q(HIZ)
@@ -9732,6 +9772,8 @@ Q(IMR_IMR_BF)
 Q(IN)
 
 Q(INIT_INIT_BF)
+
+Q(INT)
 
 Q(INT16)
 
@@ -9856,6 +9898,10 @@ Q(LEPTON)
 Q(LITTLE_ENDIAN)
 
 Q(LOAD_LOAD_BF)
+
+Q(LONG)
+
+Q(LONGLONG)
 
 Q(LPI2C1)
 
@@ -10101,6 +10147,16 @@ Q(MIER_SDIE)
 
 Q(MIER_TDIE)
 
+Q(MODE_AP)
+
+Q(MODE_BSP)
+
+Q(MODE_FIRMWARE)
+
+Q(MODE_P2P)
+
+Q(MODE_STA)
+
 Q(MRDR_DATA_BF)
 
 Q(MRDR_RXEMPTY)
@@ -10195,6 +10251,8 @@ Q(OFS_OFS_BF)
 
 Q(OFS_SIGN)
 
+Q(OPEN)
+
 Q(OPEN_DRAIN)
 
 Q(OSError)
@@ -10216,6 +10274,8 @@ Q(OV2640)
 Q(OV7725)
 
 Q(OV9650)
+
+Q(OrderedDict)
 
 Q(OrderedDict)
 
@@ -10258,6 +10318,10 @@ Q(POLLOUT)
 Q(PSR_PSR_BF)
 
 Q(PTR)
+
+Q(PWM)
+
+Q(PWM)
 
 Q(PWM1)
 
@@ -10391,6 +10455,8 @@ Q(PinBase)
 
 Q(QCIF)
 
+Q(QHD)
+
 Q(QQCIF)
 
 Q(QQQQVGA)
@@ -10405,13 +10471,23 @@ Q(QQVGA2)
 
 Q(QSIF)
 
+Q(QTIMER)
+
+Q(QTIMER)
+
 Q(QVGA)
+
+Q(QXGA)
 
 Q(RDR_DATA_BF)
 
 Q(RGB565)
 
 Q(ROMC)
+
+Q(RPM)
+
+Q(RPM)
 
 Q(RSR_RXEMPTY)
 
@@ -10529,6 +10605,8 @@ Q(SEARCH_EX)
 
 Q(SEMC)
 
+Q(SHORT)
+
 Q(SIER_AM0IE)
 
 Q(SIER_AM1F)
@@ -10586,6 +10664,10 @@ Q(SRDR_DATA_BF)
 Q(SRDR_RXEMPTY)
 
 Q(SRDR_SOF)
+
+Q(SRPM)
+
+Q(SRPM)
 
 Q(SR_DMF)
 
@@ -10679,6 +10761,10 @@ Q(SWIM)
 
 Q(SXGA)
 
+Q(Servo)
+
+Q(Servo)
+
 Q(Signal)
 
 Q(Signal)
@@ -10757,6 +10843,10 @@ Q(TDR_DATA_BF)
 
 Q(TEMPMON)
 
+Q(TMR)
+
+Q(TMR)
+
 Q(TMR1)
 
 Q(TMR2)
@@ -10811,6 +10901,8 @@ Q(UART)
 
 Q(UART)
 
+Q(UINT)
+
 Q(UINT16)
 
 Q(UINT32)
@@ -10818,6 +10910,10 @@ Q(UINT32)
 Q(UINT64)
 
 Q(UINT8)
+
+Q(ULONG)
+
+Q(ULONGLONG)
 
 Q(UPCA)
 
@@ -10846,6 +10942,8 @@ Q(USB_VCP)
 Q(USDHC1)
 
 Q(USDHC2)
+
+Q(USHORT)
 
 Q(UXGA)
 
@@ -10899,9 +10997,19 @@ Q(WDOG2)
 
 Q(WDT_RESET)
 
+Q(WEP)
+
 Q(WHITE)
 
 Q(WINC)
+
+Q(WINC)
+
+Q(WPA_PSK)
+
+Q(WQXGA)
+
+Q(WQXGA2)
 
 Q(WVGA)
 
@@ -10913,6 +11021,8 @@ Q(XBARB2)
 
 Q(XBARB3)
 
+Q(XGA)
+
 Q(XTALOSC24M)
 
 Q(YUV422)
@@ -10922,6 +11032,8 @@ Q(ZeroDivisionError)
 Q(ZeroDivisionError)
 
 Q(_)
+
+Q(_0x0a_)
 
 Q(__abs__)
 
@@ -10933,11 +11045,15 @@ Q(__aenter__)
 
 Q(__aexit__)
 
+Q(__aexit__)
+
 Q(__aiter__)
 
 Q(__and__)
 
 Q(__anext__)
+
+Q(__bases__)
 
 Q(__bool__)
 
@@ -10983,6 +11099,8 @@ Q(__delitem__)
 
 Q(__dict__)
 
+Q(__dir__)
+
 Q(__divmod__)
 
 Q(__enter__)
@@ -11017,6 +11135,8 @@ Q(__file__)
 
 Q(__file__)
 
+Q(__file__)
+
 Q(__floordiv__)
 
 Q(__ge__)
@@ -11041,13 +11161,15 @@ Q(__iadd__)
 
 Q(__import__)
 
-Q(__init__)
+Q(__import__)
 
 Q(__init__)
 
 Q(__init__)
 
 Q(__init__)
+
+Q(__int__)
 
 Q(__invert__)
 
@@ -11077,13 +11199,13 @@ Q(__main__)
 
 Q(__main__)
 
+Q(__matmul__)
+
 Q(__mod__)
 
 Q(__module__)
 
 Q(__mul__)
-
-Q(__name__)
 
 Q(__name__)
 
@@ -11249,13 +11371,15 @@ Q(_lt_setcomp_gt_)
 
 Q(_lt_stdin_gt_)
 
-Q(_lt_stdin_gt_)
-
 Q(_lt_string_gt_)
 
 Q(_percent__hash_o)
 
 Q(_percent__hash_x)
+
+Q(_slash_)
+
+Q(_slash_)
 
 Q(_slash_)
 
@@ -11270,6 +11394,8 @@ Q(_slash_flash_slash_lib)
 Q(_slash_sd)
 
 Q(_slash_sd_slash_lib)
+
+Q(_space_)
 
 Q(_star_)
 
@@ -11379,6 +11505,10 @@ Q(and)
 
 Q(and_)
 
+Q(angle)
+
+Q(angle)
+
 Q(any)
 
 Q(any)
@@ -11404,10 +11534,6 @@ Q(arg)
 Q(args)
 
 Q(argv)
-
-Q(array)
-
-Q(array)
 
 Q(array)
 
@@ -11510,8 +11636,6 @@ Q(binary_to_lab)
 Q(binary_to_rgb)
 
 Q(binary_to_yuv)
-
-Q(binascii)
 
 Q(bind)
 
@@ -11617,7 +11741,17 @@ Q(bytes_at)
 
 Q(calcsize)
 
+Q(calibration)
+
 Q(callable)
+
+Q(callback)
+
+Q(callback)
+
+Q(callback)
+
+Q(callback)
 
 Q(callback)
 
@@ -11630,6 +11764,8 @@ Q(ceil)
 Q(center)
 
 Q(center)
+
+Q(channel)
 
 Q(char_hmirror)
 
@@ -11701,8 +11837,6 @@ Q(close)
 
 Q(close)
 
-Q(close)
-
 Q(closure)
 
 Q(closure)
@@ -11720,8 +11854,6 @@ Q(code)
 Q(code)
 
 Q(collect)
-
-Q(collections)
 
 Q(color)
 
@@ -11752,6 +11884,10 @@ Q(compressed)
 Q(compressed_for_ide)
 
 Q(connect)
+
+Q(connect)
+
+Q(connected_sta)
 
 Q(const)
 
@@ -11879,6 +12015,8 @@ Q(decision_margin)
 
 Q(decode)
 
+Q(decode)
+
 Q(decompress)
 
 Q(deepsleep)
@@ -11886,6 +12024,20 @@ Q(deepsleep)
 Q(default)
 
 Q(degrees)
+
+Q(deinit)
+
+Q(deinit)
+
+Q(deinit)
+
+Q(deinit)
+
+Q(deinit)
+
+Q(deinit)
+
+Q(deinit)
 
 Q(deinit)
 
@@ -11939,6 +12091,8 @@ Q(disable_irq)
 
 Q(discard)
 
+Q(disconnect)
+
 Q(displacement)
 
 Q(div)
@@ -11970,6 +12124,8 @@ Q(draw_rectangle)
 Q(draw_string)
 
 Q(dry_run)
+
+Q(dump)
 
 Q(dumps)
 
@@ -12025,7 +12181,9 @@ Q(erode)
 
 Q(errno)
 
-Q(errno)
+Q(erro)
+
+Q(erro)
 
 Q(errorcode)
 
@@ -12179,6 +12337,12 @@ Q(freq)
 
 Q(freq)
 
+Q(freq)
+
+Q(freq)
+
+Q(freq)
+
 Q(frexp)
 
 Q(from_bytes)
@@ -12211,7 +12375,11 @@ Q(function)
 
 Q(function)
 
-Q(function)
+Q(fw_dump)
+
+Q(fw_update)
+
+Q(fw_version)
 
 Q(fx)
 
@@ -12243,9 +12411,19 @@ Q(generator)
 
 Q(generator)
 
+Q(generator)
+
 Q(get)
 
 Q(get_color_palette)
+
+Q(get_count)
+
+Q(get_count)
+
+Q(get_count)
+
+Q(get_count)
 
 Q(get_exposure_us)
 
@@ -12267,11 +12445,19 @@ Q(get_pixel)
 
 Q(get_pixel_physical)
 
+Q(get_pps)
+
 Q(get_regression)
 
 Q(get_rgb_gain_db)
 
+Q(get_rpm)
+
 Q(get_similarity)
+
+Q(get_spps)
+
+Q(get_srpm)
 
 Q(get_statistics)
 
@@ -12282,6 +12468,10 @@ Q(get_stats)
 Q(get_stats)
 
 Q(get_threshold)
+
+Q(get_ticks)
+
+Q(get_ticks)
 
 Q(get_xy)
 
@@ -12349,8 +12539,6 @@ Q(hasattr)
 
 Q(hash)
 
-Q(hashlib)
-
 Q(have_cdc)
 
 Q(heap_lock)
@@ -12362,8 +12550,6 @@ Q(heapify)
 Q(heappop)
 
 Q(heappush)
-
-Q(heapq)
 
 Q(height)
 
@@ -12404,6 +12590,8 @@ Q(id)
 Q(id)
 
 Q(idle)
+
+Q(ifconfig)
 
 Q(ilistdir)
 
@@ -12461,11 +12649,21 @@ Q(init)
 
 Q(init)
 
+Q(init)
+
+Q(init)
+
+Q(init)
+
+Q(init)
+
+Q(init)
+
+Q(init)
+
 Q(input)
 
 Q(insert)
-
-Q(int)
 
 Q(int)
 
@@ -12485,7 +12683,9 @@ Q(intersection)
 
 Q(intersection_update)
 
-Q(invert)
+Q(interval)
+
+Q(interval)
 
 Q(invert)
 
@@ -12523,7 +12723,13 @@ Q(invert)
 
 Q(invert)
 
-Q(io)
+Q(invert)
+
+Q(inverted)
+
+Q(inverted)
+
+Q(inverted)
 
 Q(ioctl)
 
@@ -12546,6 +12752,8 @@ Q(is_numeric)
 Q(isalpha)
 
 Q(isalpha)
+
+Q(isconnected)
 
 Q(isconnected)
 
@@ -12609,11 +12817,17 @@ Q(join)
 
 Q(join)
 
-Q(json)
+Q(jpeg_encode_for_ide)
+
+Q(jpeg_encoded_for_ide)
 
 Q(kbd_intr)
 
 Q(keepends)
+
+Q(key)
+
+Q(key)
 
 Q(key)
 
@@ -12764,8 +12978,6 @@ Q(lsr)
 Q(lstrip)
 
 Q(lstrip)
-
-Q(machine)
 
 Q(machine)
 
@@ -12963,6 +13175,8 @@ Q(mode)
 
 Q(mode)
 
+Q(mode)
+
 Q(modf)
 
 Q(modify)
@@ -13002,6 +13216,8 @@ Q(movt)
 Q(movw)
 
 Q(movwt)
+
+Q(mpy)
 
 Q(mrs)
 
@@ -13113,8 +13329,6 @@ Q(or)
 
 Q(ord)
 
-Q(os)
-
 Q(pack)
 
 Q(pack_into)
@@ -13141,11 +13355,21 @@ Q(pcolor)
 
 Q(peektime)
 
+Q(pend_throw)
+
 Q(percentile)
 
 Q(percentile)
 
 Q(perimeter)
+
+Q(period)
+
+Q(period)
+
+Q(period)
+
+Q(period)
 
 Q(phase)
 
@@ -13213,6 +13437,14 @@ Q(pow)
 
 Q(power)
 
+Q(pprparam)
+
+Q(pprparam)
+
+Q(prescale)
+
+Q(prescale)
+
 Q(prescaler)
 
 Q(present)
@@ -13229,10 +13461,6 @@ Q(ptr)
 
 Q(ptr)
 
-Q(ptr)
-
-Q(ptr16)
-
 Q(ptr16)
 
 Q(ptr16)
@@ -13240,16 +13468,14 @@ Q(ptr16)
 Q(ptr32)
 
 Q(ptr32)
-
-Q(ptr32)
-
-Q(ptr8)
 
 Q(ptr8)
 
 Q(ptr8)
 
 Q(pull)
+
+Q(pulse_width)
 
 Q(push)
 
@@ -13276,6 +13502,12 @@ Q(put_pixel_physical)
 Q(put_text)
 
 Q(put_text_xy)
+
+Q(pwm_freq)
+
+Q(pwm_inverted)
+
+Q(pwm_width)
 
 Q(pyb)
 
@@ -13325,8 +13557,6 @@ Q(randint)
 
 Q(random)
 
-Q(random)
-
 Q(randrange)
 
 Q(range)
@@ -13336,8 +13566,6 @@ Q(range)
 Q(range)
 
 Q(rbit)
-
-Q(re)
 
 Q(read)
 
@@ -13597,6 +13825,8 @@ Q(rsplit)
 
 Q(rsplit)
 
+Q(rssi)
+
 Q(rstrip)
 
 Q(rstrip)
@@ -13625,6 +13855,8 @@ Q(scan)
 
 Q(scan)
 
+Q(scan)
+
 Q(schedule)
 
 Q(sck)
@@ -13647,6 +13879,10 @@ Q(search)
 
 Q(search)
 
+Q(security)
+
+Q(security)
+
 Q(seed)
 
 Q(seed_threshold)
@@ -13656,8 +13892,6 @@ Q(seed_threshold)
 Q(seek)
 
 Q(seek)
-
-Q(select)
 
 Q(select)
 
@@ -13837,8 +14071,6 @@ Q(socket)
 
 Q(socket)
 
-Q(socket)
-
 Q(soft_reset)
 
 Q(softmax)
@@ -13853,6 +14085,8 @@ Q(sorted)
 
 Q(space_sigma)
 
+Q(speed)
+
 Q(split)
 
 Q(split)
@@ -13866,6 +14100,10 @@ Q(splitlines)
 Q(sqrt)
 
 Q(sqrt)
+
+Q(ssid)
+
+Q(ssid)
 
 Q(stack_use)
 
@@ -13879,9 +14117,13 @@ Q(start)
 
 Q(start)
 
+Q(start_ap)
+
 Q(startswith)
 
 Q(startswith)
+
+Q(stat)
 
 Q(stat)
 
@@ -13963,8 +14205,6 @@ Q(struct)
 
 Q(struct)
 
-Q(struct)
-
 Q(sub)
 
 Q(sub)
@@ -14004,6 +14244,8 @@ Q(tanh)
 Q(tell)
 
 Q(template_roi)
+
+Q(test)
 
 Q(theta)
 
@@ -14109,8 +14351,6 @@ Q(time)
 
 Q(time)
 
-Q(time)
-
 Q(timeout)
 
 Q(timeout)
@@ -14165,6 +14405,10 @@ Q(type)
 
 Q(type)
 
+Q(uarray)
+
+Q(uarray)
+
 Q(ubinascii)
 
 Q(ubinascii)
@@ -14201,8 +14445,6 @@ Q(uint)
 
 Q(uint)
 
-Q(uint)
-
 Q(uio)
 
 Q(uio)
@@ -14216,8 +14458,6 @@ Q(umachine)
 Q(umachine)
 
 Q(umachine)
-
-Q(umount)
 
 Q(umount)
 
@@ -14395,9 +14635,17 @@ Q(w)
 
 Q(w)
 
+Q(wait_for_sta)
+
 Q(wfi)
 
 Q(wfi)
+
+Q(width)
+
+Q(width)
+
+Q(width)
 
 Q(width)
 
@@ -14450,6 +14698,8 @@ Q(writechar)
 Q(writeto)
 
 Q(writeto_mem)
+
+Q(writevto)
 
 Q(x)
 
@@ -14590,8 +14840,6 @@ Q(zero)
 Q(zip)
 
 Q(zip)
-
-Q(zlib)
 
 Q(zoom)
 

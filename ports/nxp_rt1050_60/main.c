@@ -103,11 +103,11 @@ void NORETURN __fatal_error(const char *msg) {
     led_state(4, 1);
     mp_hal_stdout_tx_strn("\nFATAL ERROR:\n", 14);
     mp_hal_stdout_tx_strn(msg, strlen(msg));
-    for (uint i = 0;i<1000;i++) 
+    for (uint i = 0;i<100000;i++) 
 	{
         // led_toggle(((i++) & 3) + 1);
 		led_toggle(0);
-        for (volatile uint delay = 0; delay < 10000000; delay++) {
+        for (volatile uint delay = 0; delay < 10000; delay++) {
         }
         if (i >= 16) {
             // to conserve power
@@ -286,7 +286,7 @@ static const char fresh_readme_txt[] __ALIGNED(4) =
 MP_NOINLINE STATIC bool init_flash_fs(uint reset_mode) {
     // init the vfs object
     fs_user_mount_t *vfs_fat = &fs_user_mount_flash;
-    vfs_fat->flags = 0;
+    vfs_fat->blockdev.flags = 0;
     pyb_flash_init_vfs(vfs_fat);
 
     // try to mount the flash
@@ -396,7 +396,7 @@ STATIC bool init_sdcard_fs(bool first_soft_reset) {
         if (vfs == NULL || vfs_fat == NULL) {
             break;
         }
-        vfs_fat->flags = FSUSER_FREE_OBJ;
+        vfs_fat->blockdev.flags = MP_BLOCKDEV_FLAG_FREE_OBJ;
         sdcard_init_vfs(vfs_fat, part_num);
 
         // try to mount the partition
@@ -457,7 +457,7 @@ STATIC bool init_sdcard_fs(bool first_soft_reset) {
     }
 
     if (first_part) {
-        printf("PYB: can't mount SD card\n");
+        printf("MPY: can't mount SD card\n");
         return false;
     } else {
         return true;
@@ -566,7 +566,7 @@ HAL_StatusTypeDef HAL_Init(void)
 	return HAL_OK;
 }
 
-#define DTCM_END  0x20074000  // leave 16kB, letnet can makes openmv access out of range.
+#define DTCM_END  0x20078000 // 0x20074000  // leave 16kB, letnet can makes openmv access out of range.
 #define OCRAM_END 0x20280000
 #ifdef USE_OCRAM
 #define RAM_START 0x20200000
@@ -711,6 +711,15 @@ __WEAK void rpm_init0(void){}
 __WEAK void spi_init0(void){}
 __WEAK void srpm_init0(void){}
 __WEAK void servo_init0(void){}
+inline uint32_t lfs_popc(uint32_t a) {
+#if 0
+    return __builtin_popcount(a);
+#else
+    a = a - ((a >> 1) & 0x55555555);
+    a = (a & 0x33333333) + ((a >> 2) & 0x33333333);
+    return (((a + (a >> 4)) & 0x0f0f0f0f) * 0x01010101) >> 24;
+#endif
+}
 int main(void) {
 	snvs_hp_rtc_config_t snvsRtcConfig;
 	snvs_hp_rtc_datetime_t rtcDate;
@@ -1044,6 +1053,12 @@ void usr_app_thread_entry(void *parameter);
 void openmv_main_rtt_entry(void *parameter, void *stack_top, uint32_t stack_size);
 static rt_thread_t omv_thread;
 
+#ifndef SIGUSR1
+#define SIGUSR1     25
+#endif
+#ifndef SIGUSR2
+#define SIGUSR2     26
+#endif
 void main_thread_signal_handler(int sig)
 {
 	//restore thread sp point

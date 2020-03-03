@@ -40,16 +40,15 @@
 
 typedef struct {
   mp_obj_base_t base;
-  qstr name;	// MP_QSTR_AF<复用号><功能(也就是外设名)><unit(外设编号)>
-  uint8_t idx;   // 复用号
-  uint8_t fn;    // 复用功能名，会被 AF_FN_ ##         宏连接成预定义的枚举常量(pin_defs_mcu.h)
+  qstr name;
+  uint8_t idx;
+  uint8_t fn;
   uint8_t unit;
   uint8_t type;
   // >>> i.mx RT uses 2 levels of muxing (DAISYCHAIN, 'INPUT_SELECT' registers)
   uint32_t inSelReg;
   uint32_t inSelVal;
   // <<<
-
 
   union {
     void          *reg;

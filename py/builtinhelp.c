@@ -58,7 +58,7 @@ STATIC void mp_help_print_info_about_object(mp_obj_t name_o, mp_obj_t value) {
 #if MICROPY_PY_BUILTINS_HELP_MODULES
 STATIC void mp_help_add_from_map(mp_obj_t list, const mp_map_t *map) {
     for (size_t i = 0; i < map->alloc; i++) {
-        if (MP_MAP_SLOT_IS_FILLED(map, i)) {
+        if (mp_map_slot_is_filled(map, i)) {
             mp_obj_list_append(list, map->table[i].key);
         }
     }
@@ -69,7 +69,7 @@ STATIC void mp_help_add_from_names(mp_obj_t list, const char *name) {
     while (*name) {
         size_t l = strlen(name);
         // name should end in '.py' and we strip it off
-        mp_obj_list_append(list, mp_obj_new_str(name, l - 3, false));
+        mp_obj_list_append(list, mp_obj_new_str(name, l - 3));
         name += l + 1;
     }
 }
@@ -79,10 +79,6 @@ STATIC void mp_help_print_modules(void) {
     mp_obj_t list = mp_obj_new_list(0, NULL);
 
     mp_help_add_from_map(list, &mp_builtin_module_map);
-
-    #if MICROPY_MODULE_WEAK_LINKS
-    mp_help_add_from_map(list, &mp_builtin_module_weak_links_map);
-    #endif
 
     #if MICROPY_MODULE_FROZEN_STR
     extern const char mp_frozen_str_names[];
@@ -100,7 +96,7 @@ STATIC void mp_help_print_modules(void) {
     // print the list of modules in a column-first order
     #define NUM_COLUMNS (4)
     #define COLUMN_WIDTH (18)
-    mp_uint_t len;
+    size_t len;
     mp_obj_t *items;
     mp_obj_list_get(list, &len, &items);
     unsigned int num_rows = (len + NUM_COLUMNS - 1) / NUM_COLUMNS;
@@ -123,8 +119,10 @@ STATIC void mp_help_print_modules(void) {
         mp_print_str(MP_PYTHON_PRINTER, "\n");
     }
 
+    #if MICROPY_ENABLE_EXTERNAL_IMPORT
     // let the user know there may be other modules available from the filesystem
     mp_print_str(MP_PYTHON_PRINTER, "Plus any modules on the filesystem\n");
+    #endif
 }
 #endif
 
@@ -145,13 +143,13 @@ STATIC void mp_help_print_obj(const mp_obj_t obj) {
 
     mp_map_t *map = NULL;
     if (type == &mp_type_module) {
-        map = mp_obj_dict_get_map(mp_obj_module_get_globals(obj));
+        map = &mp_obj_module_get_globals(obj)->map;
     } else {
         if (type == &mp_type_type) {
             type = MP_OBJ_TO_PTR(obj);
         }
-        if (type->locals_dict != MP_OBJ_NULL && MP_OBJ_IS_TYPE(type->locals_dict, &mp_type_dict)) {
-            map = mp_obj_dict_get_map(type->locals_dict);
+        if (type->locals_dict != NULL) {
+            map = &type->locals_dict->map;
         }
     }
     if (map != NULL) {

@@ -407,7 +407,10 @@ int StrFormatPrintf(const char *fmt, va_list ap, char *buf, printfCb cb)
          */
         if (c != '%')
         {
-            cb(buf, &count, c, 1);
+					  if (c == '\n' && p[-1] != '\r') {
+							  cb(buf, &count, '\r', 1);
+						}
+            cb(buf, &count, c, 1);					  
             /* By using 'continue', the next iteration of the loop is used, skipping the code that follows. */
             continue;
         }

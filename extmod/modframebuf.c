@@ -54,7 +54,9 @@ typedef struct _mp_framebuf_p_t {
 // constants for formats
 #define FRAMEBUF_MVLSB    (0)
 #define FRAMEBUF_RGB565   (1)
+#define FRAMEBUF_GS2_HMSB (5)
 #define FRAMEBUF_GS4_HMSB (2)
+#define FRAMEBUF_GS8      (6)
 #define FRAMEBUF_MHLSB    (3)
 #define FRAMEBUF_MHMSB    (4)
 
@@ -130,6 +132,30 @@ STATIC void rgb565_fill_rect(const mp_obj_framebuf_t *fb, int x, int y, int w, i
     }
 }
 
+// Functions for GS2_HMSB format
+
+STATIC void gs2_hmsb_setpixel(const mp_obj_framebuf_t *fb, int x, int y, uint32_t col) {
+    uint8_t *pixel = &((uint8_t*)fb->buf)[(x + y * fb->stride) >> 2];
+    uint8_t shift = (x & 0x3) << 1;
+    uint8_t mask = 0x3 << shift;
+    uint8_t color = (col & 0x3) << shift;
+    *pixel = color | (*pixel & (~mask));
+}
+
+STATIC uint32_t gs2_hmsb_getpixel(const mp_obj_framebuf_t *fb, int x, int y) {
+    uint8_t pixel = ((uint8_t*)fb->buf)[(x + y * fb->stride) >> 2];
+    uint8_t shift = (x & 0x3) << 1;
+    return (pixel >> shift) & 0x3;
+}
+
+STATIC void gs2_hmsb_fill_rect(const mp_obj_framebuf_t *fb, int x, int y, int w, int h, uint32_t col) {
+    for (int xx=x; xx < x+w; xx++) {
+        for (int yy=y; yy < y+h; yy++) {
+            gs2_hmsb_setpixel(fb, xx, yy, col);
+        }
+    }
+}
+
 // Functions for GS4_HMSB format
 
 STATIC void gs4_hmsb_setpixel(const mp_obj_framebuf_t *fb, int x, int y, uint32_t col) {
@@ -181,10 +207,31 @@ STATIC void gs4_hmsb_fill_rect(const mp_obj_framebuf_t *fb, int x, int y, int w,
     }
 }
 
+// Functions for GS8 format
+
+STATIC void gs8_setpixel(const mp_obj_framebuf_t *fb, int x, int y, uint32_t col) {
+    uint8_t *pixel = &((uint8_t*)fb->buf)[(x + y * fb->stride)];
+    *pixel = col & 0xff;
+}
+
+STATIC uint32_t gs8_getpixel(const mp_obj_framebuf_t *fb, int x, int y) {
+    return ((uint8_t*)fb->buf)[(x + y * fb->stride)];
+}
+
+STATIC void gs8_fill_rect(const mp_obj_framebuf_t *fb, int x, int y, int w, int h, uint32_t col) {
+    uint8_t *pixel = &((uint8_t*)fb->buf)[(x + y * fb->stride)];
+    while (h--) {
+        memset(pixel, col, w);
+        pixel += fb->stride;
+    }
+}
+
 STATIC mp_framebuf_p_t formats[] = {
     [FRAMEBUF_MVLSB] = {mvlsb_setpixel, mvlsb_getpixel, mvlsb_fill_rect},
     [FRAMEBUF_RGB565] = {rgb565_setpixel, rgb565_getpixel, rgb565_fill_rect},
+    [FRAMEBUF_GS2_HMSB] = {gs2_hmsb_setpixel, gs2_hmsb_getpixel, gs2_hmsb_fill_rect},
     [FRAMEBUF_GS4_HMSB] = {gs4_hmsb_setpixel, gs4_hmsb_getpixel, gs4_hmsb_fill_rect},
+    [FRAMEBUF_GS8] = {gs8_setpixel, gs8_getpixel, gs8_fill_rect},
     [FRAMEBUF_MHLSB] = {mono_horiz_setpixel, mono_horiz_getpixel, mono_horiz_fill_rect},
     [FRAMEBUF_MHMSB] = {mono_horiz_setpixel, mono_horiz_getpixel, mono_horiz_fill_rect},
 };
@@ -240,8 +287,13 @@ STATIC mp_obj_t framebuf_make_new(const mp_obj_type_t *type, size_t n_args, size
         case FRAMEBUF_MHMSB:
             o->stride = (o->stride + 7) & ~7;
             break;
+        case FRAMEBUF_GS2_HMSB:
+            o->stride = (o->stride + 3) & ~3;
+            break;
         case FRAMEBUF_GS4_HMSB:
             o->stride = (o->stride + 1) & ~1;
+            break;
+        case FRAMEBUF_GS8:
             break;
         default:
             mp_raise_ValueError("invalid format");
@@ -528,6 +580,7 @@ STATIC mp_obj_t framebuf_text(size_t n_args, const mp_obj_t *args) {
 }
 STATIC MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(framebuf_text_obj, 4, 5, framebuf_text);
 
+#if !MICROPY_ENABLE_DYNRUNTIME
 STATIC const mp_rom_map_elem_t framebuf_locals_dict_table[] = {
     { MP_ROM_QSTR(MP_QSTR_fill), MP_ROM_PTR(&framebuf_fill_obj) },
     { MP_ROM_QSTR(MP_QSTR_fill_rect), MP_ROM_PTR(&framebuf_fill_rect_obj) },
@@ -549,6 +602,7 @@ STATIC const mp_obj_type_t mp_type_framebuf = {
     .buffer_p = { .get_buffer = framebuf_get_buffer },
     .locals_dict = (mp_obj_dict_t*)&framebuf_locals_dict,
 };
+#endif
 
 // this factory function is provided for backwards compatibility with old FrameBuffer1 class
 STATIC mp_obj_t legacy_framebuffer1(size_t n_args, const mp_obj_t *args) {
@@ -572,6 +626,7 @@ STATIC mp_obj_t legacy_framebuffer1(size_t n_args, const mp_obj_t *args) {
 }
 STATIC MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(legacy_framebuffer1_obj, 3, 4, legacy_framebuffer1);
 
+#if !MICROPY_ENABLE_DYNRUNTIME
 STATIC const mp_rom_map_elem_t framebuf_module_globals_table[] = {
     { MP_ROM_QSTR(MP_QSTR___name__), MP_ROM_QSTR(MP_QSTR_framebuf) },
     { MP_ROM_QSTR(MP_QSTR_FrameBuffer), MP_ROM_PTR(&mp_type_framebuf) },
@@ -579,7 +634,9 @@ STATIC const mp_rom_map_elem_t framebuf_module_globals_table[] = {
     { MP_ROM_QSTR(MP_QSTR_MVLSB), MP_ROM_INT(FRAMEBUF_MVLSB) },
     { MP_ROM_QSTR(MP_QSTR_MONO_VLSB), MP_ROM_INT(FRAMEBUF_MVLSB) },
     { MP_ROM_QSTR(MP_QSTR_RGB565), MP_ROM_INT(FRAMEBUF_RGB565) },
+    { MP_ROM_QSTR(MP_QSTR_GS2_HMSB), MP_ROM_INT(FRAMEBUF_GS2_HMSB) },
     { MP_ROM_QSTR(MP_QSTR_GS4_HMSB), MP_ROM_INT(FRAMEBUF_GS4_HMSB) },
+    { MP_ROM_QSTR(MP_QSTR_GS8), MP_ROM_INT(FRAMEBUF_GS8) },
     { MP_ROM_QSTR(MP_QSTR_MONO_HLSB), MP_ROM_INT(FRAMEBUF_MHLSB) },
     { MP_ROM_QSTR(MP_QSTR_MONO_HMSB), MP_ROM_INT(FRAMEBUF_MHMSB) },
 };
@@ -590,5 +647,6 @@ const mp_obj_module_t mp_module_framebuf = {
     .base = { &mp_type_module },
     .globals = (mp_obj_dict_t*)&framebuf_module_globals,
 };
+#endif
 
 #endif // MICROPY_PY_FRAMEBUF

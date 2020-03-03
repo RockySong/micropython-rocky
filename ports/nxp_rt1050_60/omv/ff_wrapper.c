@@ -238,7 +238,7 @@ void file_buffer_on(FIL *fp)
 {
 	#ifndef OMV_MPY_ONLY
     file_buffer_offset = f_tell(fp) % 4;
-    file_buffer_pointer = fb_alloc_all(&file_buffer_size) + file_buffer_offset;
+    file_buffer_pointer = fb_alloc_all(&file_buffer_size, FB_ALLOC_PREFER_SIZE) + file_buffer_offset;
     if (!file_buffer_size) {
         nlr_raise(mp_obj_new_exception_msg(&mp_type_MemoryError, "No memory!"));
     }

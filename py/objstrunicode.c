@@ -4,7 +4,7 @@
  * The MIT License (MIT)
  *
  * Copyright (c) 2013, 2014 Damien P. George
- * Copyright (c) 2014 Paul Sokolovsky
+ * Copyright (c) 2014-2016 Paul Sokolovsky
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -104,7 +104,7 @@ STATIC mp_obj_t uni_unary_op(mp_unary_op_t op, mp_obj_t self_in) {
         case MP_UNARY_OP_BOOL:
             return mp_obj_new_bool(str_len != 0);
         case MP_UNARY_OP_LEN:
-            return MP_OBJ_NEW_SMALL_INT(unichar_charlen((const char *)str_data, str_len));
+            return MP_OBJ_NEW_SMALL_INT(utf8_charlen(str_data, str_len));
         default:
             return MP_OBJ_NULL; // op not supported
     }
@@ -126,7 +126,7 @@ const byte *str_index_to_ptr(const mp_obj_type_t *type, const byte *self_data, s
     // Copied from mp_get_index; I don't want bounds checking, just give me
     // the integer as-is. (I can't bounds-check without scanning the whole
     // string; an out-of-bounds index will be caught in the loops below.)
-    if (MP_OBJ_IS_SMALL_INT(index)) {
+    if (mp_obj_is_small_int(index)) {
         i = MP_OBJ_SMALL_INT_VALUE(index);
     } else if (!mp_obj_get_int_maybe(index, &i)) {
         nlr_raise(mp_obj_new_exception_msg_varg(&mp_type_TypeError, "string indices must be integers, not %s", mp_obj_get_type_str(index)));
@@ -182,7 +182,7 @@ STATIC mp_obj_t str_subscr(mp_obj_t self_in, mp_obj_t index, mp_obj_t value) {
     if (value == MP_OBJ_SENTINEL) {
         // load
 #if MICROPY_PY_BUILTINS_SLICE
-        if (MP_OBJ_IS_TYPE(index, &mp_type_slice)) {
+        if (mp_obj_is_type(index, &mp_type_slice)) {
             mp_obj_t ostart, ostop, ostep;
             mp_obj_slice_get(index, &ostart, &ostop, &ostep);
             if (ostep != mp_const_none && ostep != MP_OBJ_NEW_SMALL_INT(1)) {
@@ -216,7 +216,7 @@ STATIC mp_obj_t str_subscr(mp_obj_t self_in, mp_obj_t index, mp_obj_t value) {
                 ++len;
             }
         }
-        return mp_obj_new_str((const char*)s, len, true); // This will create a one-character string
+        return mp_obj_new_str_via_qstr((const char*)s, len); // This will create a one-character string
     } else {
         return MP_OBJ_NULL; // op not supported
     }
@@ -243,7 +243,9 @@ STATIC const mp_rom_map_elem_t struni_locals_dict_table[] = {
     { MP_ROM_QSTR(MP_QSTR_rstrip), MP_ROM_PTR(&str_rstrip_obj) },
     { MP_ROM_QSTR(MP_QSTR_format), MP_ROM_PTR(&str_format_obj) },
     { MP_ROM_QSTR(MP_QSTR_replace), MP_ROM_PTR(&str_replace_obj) },
+    #if MICROPY_PY_BUILTINS_STR_COUNT
     { MP_ROM_QSTR(MP_QSTR_count), MP_ROM_PTR(&str_count_obj) },
+    #endif
     #if MICROPY_PY_BUILTINS_STR_PARTITION
     { MP_ROM_QSTR(MP_QSTR_partition), MP_ROM_PTR(&str_partition_obj) },
     { MP_ROM_QSTR(MP_QSTR_rpartition), MP_ROM_PTR(&str_rpartition_obj) },
@@ -291,7 +293,7 @@ STATIC mp_obj_t str_it_iternext(mp_obj_t self_in) {
     if (self->cur < len) {
         const byte *cur = str + self->cur;
         const byte *end = utf8_next_char(str + self->cur);
-        mp_obj_t o_out = mp_obj_new_str((const char*)cur, end - cur, true);
+        mp_obj_t o_out = mp_obj_new_str_via_qstr((const char*)cur, end - cur);
         self->cur += end - cur;
         return o_out;
     } else {

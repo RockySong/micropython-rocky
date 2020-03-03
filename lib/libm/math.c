@@ -1,5 +1,5 @@
 /*
- * This file is part of the MicroPython project, http://micropython.org/
+ * This file is part of the Micro Python project, http://micropython.org/
  *
  * The MIT License (MIT)
  *
@@ -27,14 +27,20 @@
 #include "libm.h"
 
 typedef float float_t;
+
 typedef union {
     float f;
     struct {
-        uint64_t m : 23;
-        uint64_t e : 8;
-        uint64_t s : 1;
+        uint32_t m : 23;
+        uint32_t e : 8;
+        uint32_t s : 1;
     };
 } float_s_t;
+
+int __signbitf(float f) {
+    float_s_t u = {.f = f};
+    return u.s;
+}
 
 #ifndef NDEBUG
 float copysignf(float x, float y) {
@@ -52,10 +58,14 @@ static const float _M_LN10 = 2.30258509299404; // 0x40135d8e
 float log10f(float x) { return logf(x) / (float)_M_LN10; }
 
 float tanhf(float x) {
-    if (isinf(x)) {
-        return copysignf(1, x);
+    int sign = 0;
+    if (x < 0) {
+        sign = 1;
+        x = -x;
     }
-    return sinhf(x) / coshf(x);
+    x = expm1f(-2 * x);
+    x = x / (x + 2);
+    return sign ? x : -x;
 }
 
 /*****************************************************************************/

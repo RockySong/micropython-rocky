@@ -79,6 +79,9 @@
 #define OMV_ENABLE_FIND_DISPLACEMENT
 #endif
 
+// enable SDRAM fb alloc region
+#define OMV_FB_OVERLAY_MEMORY 1
+
 // Enable LENET (200+ KB).
 #define OMV_ENABLE_LENET
 
@@ -93,7 +96,7 @@
 // Low and high JPEG QS.
 #define JPEG_QUALITY_LOW        35
 #define JPEG_QUALITY_HIGH       80
-
+#define OMV_UMM_BLOCK_SIZE      256
 // Linker script constants (see the linker script template stm32fxxx.ld.S).
 // Note: fb_alloc is a stack-based, dynamically allocated memory on FB.
 // The maximum available fb_alloc memory = FB_ALLOC_SIZE + FB_SIZE - (w*h*bpp).
@@ -109,7 +112,7 @@
 #else
 #define OMV_FB_SIZE         (301 * 1024)  // FB memory: header + VGA/GS image
 #define OMV_FB_ALLOC_SIZE   (83 * 1024)   // minimum fb alloc size
-#define OMV_JPEG_BUF_SIZE   (48 * 1024) // IDE JPEG buffer (header + data).
+#define OMV_JPEG_BUF_SIZE   (32 * 1024) // IDE JPEG buffer (header + data).
 #endif
 // RAW buffer size
 #define OMV_RAW_BUF_SIZE        (OMV_FB_SIZE)

@@ -24,6 +24,7 @@
  * THE SOFTWARE.
  */
 
+
 #include <stdio.h>
 #include <string.h>
 
@@ -32,9 +33,9 @@
 #include "py/objlist.h"
 #include "py/runtime.h"
 #include "py/mperrno.h"
+#include "py/stream.h"
 #include "lib/netutils/netutils.h"
 #include "modnetwork.h"
-
 #if MICROPY_PY_USOCKET
 
 /******************************************************************************/

@@ -5,6 +5,7 @@
 
 #include <float.h>
 #include "fmath.h"
+#include <stdio.h>
 #include "imlib.h"
 #ifdef IMLIB_ENABLE_DATAMATRICES
 #pragma GCC diagnostic push
@@ -17,18 +18,11 @@
 
 #define perror(str)
 #define fprintf(stream, format, ...)
-#define fputc(character, stream)
-#define snprintf(s, c, format, ...) 0
 #define free(ptr) ({ umm_free(ptr); })
 #define malloc(size) ({ void *_r = umm_malloc(size); if(!_r) fb_alloc_fail(); _r; })
 #define realloc(ptr, size) ({ void *_r = umm_realloc((ptr), (size)); if(!_r) fb_alloc_fail(); _r; })
 #define calloc(num, item_size) ({ void *_r = umm_calloc((num), (item_size)); if(!_r) fb_alloc_fail(); _r; })
 #define assert(expression)
-#define double float
-#undef DBL_MIN
-#define DBL_MIN FLT_MIN
-#undef DBL_MAX
-#define DBL_MAX FLT_MAX
 #define sqrt(x) fast_sqrtf(x)
 #define sqrtf(x) fast_sqrtf(x)
 #define floor(x) fast_floorf(x)
@@ -254,7 +248,7 @@ typedef enum {
   DmtxFlipY                  = 0x01 << 1
 } DmtxFlip;
 
-typedef double DmtxMatrix3[3][3];
+typedef float DmtxMatrix3[3][3];
 
 /**
  * @struct DmtxPixelLoc
@@ -270,8 +264,8 @@ typedef struct DmtxPixelLoc_struct {
  * @brief DmtxVector2
  */
 typedef struct DmtxVector2_struct {
-   double          X;
-   double          Y;
+   float          X;
+   float          Y;
 } DmtxVector2;
 
 /**
@@ -279,8 +273,8 @@ typedef struct DmtxVector2_struct {
  * @brief DmtxRay2
  */
 typedef struct DmtxRay2_struct {
-   double          tMin;
-   double          tMax;
+   float          tMin;
+   float          tMax;
    DmtxVector2     p;
    DmtxVector2     v;
 } DmtxRay2;
@@ -344,7 +338,7 @@ typedef struct DmtxBestLine_struct {
    int             stepPos;
    int             stepNeg;
    int             distSq;
-   double          devn;
+   float          devn;
    DmtxPixelLoc    locBeg;
    DmtxPixelLoc    locPos;
    DmtxPixelLoc    locNeg;
@@ -455,7 +449,7 @@ typedef struct DmtxDecode_struct {
    int             edgeMin;
    int             edgeMax;
    int             scanGap;
-   double          squareDevn;
+   float          squareDevn;
    int             sizeIdxExpected;
    int             edgeThresh;
 
@@ -506,35 +500,35 @@ extern int dmtxImageGetByteOffset(DmtxImage *img, int x, int y);
 extern DmtxPassFail dmtxImageGetPixelValue(DmtxImage *img, int x, int y, int channel, /*@out@*/ int *value);
 extern DmtxPassFail dmtxImageSetPixelValue(DmtxImage *img, int x, int y, int channel, int value);
 extern DmtxBoolean dmtxImageContainsInt(DmtxImage *img, int margin, int x, int y);
-extern DmtxBoolean dmtxImageContainsFloat(DmtxImage *img, double x, double y);
+extern DmtxBoolean dmtxImageContainsFloat(DmtxImage *img, float x, float y);
 
 /* dmtxvector2.c */
 extern DmtxVector2 *dmtxVector2AddTo(DmtxVector2 *v1, const DmtxVector2 *v2);
 extern DmtxVector2 *dmtxVector2Add(/*@out@*/ DmtxVector2 *vOut, const DmtxVector2 *v1, const DmtxVector2 *v2);
 extern DmtxVector2 *dmtxVector2SubFrom(DmtxVector2 *v1, const DmtxVector2 *v2);
 extern DmtxVector2 *dmtxVector2Sub(/*@out@*/ DmtxVector2 *vOut, const DmtxVector2 *v1, const DmtxVector2 *v2);
-extern DmtxVector2 *dmtxVector2ScaleBy(DmtxVector2 *v, double s);
-extern DmtxVector2 *dmtxVector2Scale(/*@out@*/ DmtxVector2 *vOut, const DmtxVector2 *v, double s);
-extern double dmtxVector2Cross(const DmtxVector2 *v1, const DmtxVector2 *v2);
-extern double dmtxVector2Norm(DmtxVector2 *v);
-extern double dmtxVector2Dot(const DmtxVector2 *v1, const DmtxVector2 *v2);
-extern double dmtxVector2Mag(const DmtxVector2 *v);
-extern double dmtxDistanceFromRay2(const DmtxRay2 *r, const DmtxVector2 *q);
-extern double dmtxDistanceAlongRay2(const DmtxRay2 *r, const DmtxVector2 *q);
+extern DmtxVector2 *dmtxVector2ScaleBy(DmtxVector2 *v, float s);
+extern DmtxVector2 *dmtxVector2Scale(/*@out@*/ DmtxVector2 *vOut, const DmtxVector2 *v, float s);
+extern float dmtxVector2Cross(const DmtxVector2 *v1, const DmtxVector2 *v2);
+extern float dmtxVector2Norm(DmtxVector2 *v);
+extern float dmtxVector2Dot(const DmtxVector2 *v1, const DmtxVector2 *v2);
+extern float dmtxVector2Mag(const DmtxVector2 *v);
+extern float dmtxDistanceFromRay2(const DmtxRay2 *r, const DmtxVector2 *q);
+extern float dmtxDistanceAlongRay2(const DmtxRay2 *r, const DmtxVector2 *q);
 extern DmtxPassFail dmtxRay2Intersect(/*@out@*/ DmtxVector2 *point, const DmtxRay2 *p0, const DmtxRay2 *p1);
-extern DmtxPassFail dmtxPointAlongRay2(/*@out@*/ DmtxVector2 *point, const DmtxRay2 *r, double t);
+extern DmtxPassFail dmtxPointAlongRay2(/*@out@*/ DmtxVector2 *point, const DmtxRay2 *r, float t);
 
 /* dmtxmatrix3.c */
 extern void dmtxMatrix3Copy(/*@out@*/ DmtxMatrix3 m0, DmtxMatrix3 m1);
 extern void dmtxMatrix3Identity(/*@out@*/ DmtxMatrix3 m);
-extern void dmtxMatrix3Translate(/*@out@*/ DmtxMatrix3 m, double tx, double ty);
-extern void dmtxMatrix3Rotate(/*@out@*/ DmtxMatrix3 m, double angle);
-extern void dmtxMatrix3Scale(/*@out@*/ DmtxMatrix3 m, double sx, double sy);
-extern void dmtxMatrix3Shear(/*@out@*/ DmtxMatrix3 m, double shx, double shy);
-extern void dmtxMatrix3LineSkewTop(/*@out@*/ DmtxMatrix3 m, double b0, double b1, double sz);
-extern void dmtxMatrix3LineSkewTopInv(/*@out@*/ DmtxMatrix3 m, double b0, double b1, double sz);
-extern void dmtxMatrix3LineSkewSide(/*@out@*/ DmtxMatrix3 m, double b0, double b1, double sz);
-extern void dmtxMatrix3LineSkewSideInv(/*@out@*/ DmtxMatrix3 m, double b0, double b1, double sz);
+extern void dmtxMatrix3Translate(/*@out@*/ DmtxMatrix3 m, float tx, float ty);
+extern void dmtxMatrix3Rotate(/*@out@*/ DmtxMatrix3 m, float angle);
+extern void dmtxMatrix3Scale(/*@out@*/ DmtxMatrix3 m, float sx, float sy);
+extern void dmtxMatrix3Shear(/*@out@*/ DmtxMatrix3 m, float shx, float shy);
+extern void dmtxMatrix3LineSkewTop(/*@out@*/ DmtxMatrix3 m, float b0, float b1, float sz);
+extern void dmtxMatrix3LineSkewTopInv(/*@out@*/ DmtxMatrix3 m, float b0, float b1, float sz);
+extern void dmtxMatrix3LineSkewSide(/*@out@*/ DmtxMatrix3 m, float b0, float b1, float sz);
+extern void dmtxMatrix3LineSkewSideInv(/*@out@*/ DmtxMatrix3 m, float b0, float b1, float sz);
 extern void dmtxMatrix3Multiply(/*@out@*/ DmtxMatrix3 mOut, DmtxMatrix3 m0, DmtxMatrix3 m1);
 extern void dmtxMatrix3MultiplyBy(DmtxMatrix3 m0, DmtxMatrix3 m1);
 extern int dmtxMatrix3VMultiply(/*@out@*/ DmtxVector2 *vOut, DmtxVector2 *vIn, DmtxMatrix3 m);
@@ -677,7 +671,7 @@ typedef struct C40TextState_struct {
 } C40TextState;
 
 /* dmtxregion.c */
-static double RightAngleTrueness(DmtxVector2 c0, DmtxVector2 c1, DmtxVector2 c2, double angle);
+static float RightAngleTrueness(DmtxVector2 c0, DmtxVector2 c1, DmtxVector2 c2, float angle);
 static DmtxPointFlow MatrixRegionSeekEdge(DmtxDecode *dec, DmtxPixelLoc loc0);
 static DmtxPassFail MatrixRegionOrientation(DmtxDecode *dec, DmtxRegion *reg, DmtxPointFlow flowBegin);
 static long DistanceSquared(DmtxPixelLoc a, DmtxPixelLoc b);
@@ -1318,7 +1312,7 @@ dmtxDecodeCreateDiagnostic(DmtxDecode *dec, int *totalBytes, int *headerBytes, i
    int widthDigits, heightDigits;
    int count, channelCount;
    int rgb[3];
-   double shade;
+   float shade;
    unsigned char *pnm, *output, *cache;
 
    width = dmtxDecodeGetProp(dec, DmtxPropWidth);
@@ -1375,7 +1369,7 @@ dmtxDecodeCreateDiagnostic(DmtxDecode *dec, int *totalBytes, int *headerBytes, i
                else
                   dmtxDecodeGetPixelValue(dec, col, row, 0, &rgb[i]);
 
-               rgb[i] += (int)(shade * (double)(255 - rgb[i]) + 0.5);
+               rgb[i] += (int)(shade * (float)(255 - rgb[i]) + 0.5);
                if(rgb[i] > 255)
                   rgb[i] = 255;
             }
@@ -1560,7 +1554,7 @@ PopulateArrayFromMatrix(DmtxDecode *dec, DmtxRegion *reg, DmtxMessage *msg)
                colTmp = (xRegionCount * mapWidth) + mapCol;
                idx = (rowTmp * xRegionTotal * mapWidth) + colTmp;
 
-               if(tally[mapRow][mapCol]/(double)weightFactor >= 0.5)
+               if(tally[mapRow][mapCol]/(float)weightFactor >= 0.5)
                   msg->array[idx] = DmtxModuleOnRGB;
                else
                   msg->array[idx] = DmtxModuleOff;
@@ -2438,7 +2432,7 @@ MatrixRegionOrientation(DmtxDecode *dec, DmtxRegion *reg, DmtxPointFlow begin)
    }
 
    err = FindTravelLimits(dec, reg, &line1x);
-   if(line1x.distSq < 100 || line1x.devn * 10 >= sqrt((double)line1x.distSq)) {
+   if(line1x.distSq < 100 || line1x.devn * 10 >= sqrt((float)line1x.distSq)) {
       TrailClear(dec, reg, 0x40);
       return DmtxFail;
    }
@@ -2455,7 +2449,7 @@ MatrixRegionOrientation(DmtxDecode *dec, DmtxRegion *reg, DmtxPointFlow begin)
    if(line2p.mag > line2n.mag) {
       line2x = line2p;
       err = FindTravelLimits(dec, reg, &line2x);
-      if(line2x.distSq < 100 || line2x.devn * 10 >= sqrt((double)line2x.distSq))
+      if(line2x.distSq < 100 || line2x.devn * 10 >= sqrt((float)line2x.distSq))
          return DmtxFail;
 
       cross = ((line1x.locPos.X - line1x.locNeg.X) * (line2x.locPos.Y - line2x.locNeg.Y)) -
@@ -2492,7 +2486,7 @@ MatrixRegionOrientation(DmtxDecode *dec, DmtxRegion *reg, DmtxPointFlow begin)
    else {
       line2x = line2n;
       err = FindTravelLimits(dec, reg, &line2x);
-      if(line2x.distSq < 100 || line2x.devn / sqrt((double)line2x.distSq) >= 0.1)
+      if(line2x.distSq < 100 || line2x.devn / sqrt((float)line2x.distSq) >= 0.1)
          return DmtxFail;
 
       cross = ((line1x.locNeg.X - line1x.locPos.X) * (line2x.locNeg.Y - line2x.locPos.Y)) -
@@ -2557,14 +2551,14 @@ extern DmtxPassFail
 dmtxRegionUpdateCorners(DmtxDecode *dec, DmtxRegion *reg, DmtxVector2 p00,
       DmtxVector2 p10, DmtxVector2 p11, DmtxVector2 p01)
 {
-   double xMax, yMax;
-   double tx, ty, phi, shx, scx, scy, skx, sky;
-   double dimOT, dimOR, dimTX, dimRX, ratio;
+   float xMax, yMax;
+   float tx, ty, phi, shx, scx, scy, skx, sky;
+   float dimOT, dimOR, dimTX, dimRX, ratio;
    DmtxVector2 vOT, vOR, vTX, vRX, vTmp;
    DmtxMatrix3 m, mtxy, mphi, mshx, mscx, mscy, mscxy, msky, mskx;
 
-   xMax = (double)(dmtxDecodeGetProp(dec, DmtxPropWidth) - 1);
-   yMax = (double)(dmtxDecodeGetProp(dec, DmtxPropHeight) - 1);
+   xMax = (float)(dmtxDecodeGetProp(dec, DmtxPropWidth) - 1);
+   yMax = (float)(dmtxDecodeGetProp(dec, DmtxPropHeight) - 1);
 
    if(p00.X < 0.0 || p00.Y < 0.0 || p00.X > xMax || p00.Y > yMax ||
          p01.X < 0.0 || p01.Y < 0.0 || p01.X > xMax || p01.Y > yMax ||
@@ -2659,15 +2653,15 @@ dmtxRegionUpdateCorners(DmtxDecode *dec, DmtxRegion *reg, DmtxVector2 p00,
 extern DmtxPassFail
 dmtxRegionUpdateXfrms(DmtxDecode *dec, DmtxRegion *reg)
 {
-   double radians;
+   float radians;
    DmtxRay2 rLeft, rBottom, rTop, rRight;
    DmtxVector2 p00, p10, p11, p01;
 
    assert(reg->leftKnown != 0 && reg->bottomKnown != 0);
 
    /* Build ray representing left edge */
-   rLeft.p.X = (double)reg->leftLoc.X;
-   rLeft.p.Y = (double)reg->leftLoc.Y;
+   rLeft.p.X = (float)reg->leftLoc.X;
+   rLeft.p.Y = (float)reg->leftLoc.Y;
    radians = reg->leftAngle * (M_PI/DMTX_HOUGH_RES);
    rLeft.v.X = cos(radians);
    rLeft.v.Y = sin(radians);
@@ -2675,8 +2669,8 @@ dmtxRegionUpdateXfrms(DmtxDecode *dec, DmtxRegion *reg)
    rLeft.tMax = dmtxVector2Norm(&rLeft.v);
 
    /* Build ray representing bottom edge */
-   rBottom.p.X = (double)reg->bottomLoc.X;
-   rBottom.p.Y = (double)reg->bottomLoc.Y;
+   rBottom.p.X = (float)reg->bottomLoc.X;
+   rBottom.p.Y = (float)reg->bottomLoc.Y;
    radians = reg->bottomAngle * (M_PI/DMTX_HOUGH_RES);
    rBottom.v.X = cos(radians);
    rBottom.v.Y = sin(radians);
@@ -2685,8 +2679,8 @@ dmtxRegionUpdateXfrms(DmtxDecode *dec, DmtxRegion *reg)
 
    /* Build ray representing top edge */
    if(reg->topKnown != 0) {
-      rTop.p.X = (double)reg->topLoc.X;
-      rTop.p.Y = (double)reg->topLoc.Y;
+      rTop.p.X = (float)reg->topLoc.X;
+      rTop.p.Y = (float)reg->topLoc.Y;
       radians = reg->topAngle * (M_PI/DMTX_HOUGH_RES);
       rTop.v.X = cos(radians);
       rTop.v.Y = sin(radians);
@@ -2694,8 +2688,8 @@ dmtxRegionUpdateXfrms(DmtxDecode *dec, DmtxRegion *reg)
       rTop.tMax = dmtxVector2Norm(&rTop.v);
    }
    else {
-      rTop.p.X = (double)reg->locT.X;
-      rTop.p.Y = (double)reg->locT.Y;
+      rTop.p.X = (float)reg->locT.X;
+      rTop.p.Y = (float)reg->locT.Y;
       radians = reg->bottomAngle * (M_PI/DMTX_HOUGH_RES);
       rTop.v.X = cos(radians);
       rTop.v.Y = sin(radians);
@@ -2705,8 +2699,8 @@ dmtxRegionUpdateXfrms(DmtxDecode *dec, DmtxRegion *reg)
 
    /* Build ray representing right edge */
    if(reg->rightKnown != 0) {
-      rRight.p.X = (double)reg->rightLoc.X;
-      rRight.p.Y = (double)reg->rightLoc.Y;
+      rRight.p.X = (float)reg->rightLoc.X;
+      rRight.p.Y = (float)reg->rightLoc.Y;
       radians = reg->rightAngle * (M_PI/DMTX_HOUGH_RES);
       rRight.v.X = cos(radians);
       rRight.v.Y = sin(radians);
@@ -2714,8 +2708,8 @@ dmtxRegionUpdateXfrms(DmtxDecode *dec, DmtxRegion *reg)
       rRight.tMax = dmtxVector2Norm(&rRight.v);
    }
    else {
-      rRight.p.X = (double)reg->locR.X;
-      rRight.p.Y = (double)reg->locR.Y;
+      rRight.p.X = (float)reg->locR.X;
+      rRight.p.Y = (float)reg->locR.Y;
       radians = reg->leftAngle * (M_PI/DMTX_HOUGH_RES);
       rRight.v.X = cos(radians);
       rRight.v.Y = sin(radians);
@@ -2746,8 +2740,8 @@ dmtxRegionUpdateXfrms(DmtxDecode *dec, DmtxRegion *reg)
  *
  *
  */
-static double
-RightAngleTrueness(DmtxVector2 c0, DmtxVector2 c1, DmtxVector2 c2, double angle)
+static float
+RightAngleTrueness(DmtxVector2 c0, DmtxVector2 c1, DmtxVector2 c2, float angle)
 {
    DmtxVector2 vA, vB;
    DmtxMatrix3 m;
@@ -2778,8 +2772,8 @@ ReadModuleColor(DmtxDecode *dec, DmtxRegion *reg, int symbolRow, int symbolCol,
    int i;
    int symbolRows, symbolCols;
    int color, colorTmp;
-   double sampleX[] = { 0.5, 0.4, 0.5, 0.6, 0.5 };
-   double sampleY[] = { 0.5, 0.5, 0.4, 0.5, 0.6 };
+   float sampleX[] = { 0.5, 0.4, 0.5, 0.6, 0.5 };
+   float sampleY[] = { 0.5, 0.5, 0.4, 0.5, 0.6 };
    DmtxVector2 p;
 
    symbolRows = dmtxGetSymbolAttribute(DmtxSymAttribSymbolRows, sizeIdx);
@@ -5502,11 +5496,11 @@ dmtxImageContainsInt(DmtxImage *img, int margin, int x, int y)
  * \return DmtxTrue | DmtxFalse
  */
 extern DmtxBoolean
-dmtxImageContainsFloat(DmtxImage *img, double x, double y)
+dmtxImageContainsFloat(DmtxImage *img, float x, float y)
 {
    assert(img != NULL);
 
-   if(x >= 0.0 && x < (double)img->width && y >= 0.0 && y < (double)img->height)
+   if(x >= 0.0 && x < (float)img->width && y >= 0.0 && y < (float)img->height)
       return DmtxTrue;
 
    return DmtxFalse;
@@ -5765,7 +5759,7 @@ dmtxVector2Sub(DmtxVector2 *vOut, const DmtxVector2 *v1, const DmtxVector2 *v2)
 *
 */
 extern DmtxVector2 *
-dmtxVector2ScaleBy(DmtxVector2 *v, double s)
+dmtxVector2ScaleBy(DmtxVector2 *v, float s)
 {
   v->X *= s;
   v->Y *= s;
@@ -5778,7 +5772,7 @@ dmtxVector2ScaleBy(DmtxVector2 *v, double s)
 *
 */
 extern DmtxVector2 *
-dmtxVector2Scale(DmtxVector2 *vOut, const DmtxVector2 *v, double s)
+dmtxVector2Scale(DmtxVector2 *vOut, const DmtxVector2 *v, float s)
 {
   *vOut = *v;
 
@@ -5789,7 +5783,7 @@ dmtxVector2Scale(DmtxVector2 *vOut, const DmtxVector2 *v, double s)
 *
 *
 */
-extern double
+extern float
 dmtxVector2Cross(const DmtxVector2 *v1, const DmtxVector2 *v2)
 {
   return (v1->X * v2->Y) - (v1->Y * v2->X);
@@ -5799,10 +5793,10 @@ dmtxVector2Cross(const DmtxVector2 *v1, const DmtxVector2 *v2)
 *
 *
 */
-extern double
+extern float
 dmtxVector2Norm(DmtxVector2 *v)
 {
-  double mag;
+  float mag;
 
   mag = dmtxVector2Mag(v);
 
@@ -5818,7 +5812,7 @@ dmtxVector2Norm(DmtxVector2 *v)
 *
 *
 */
-extern double
+extern float
 dmtxVector2Dot(const DmtxVector2 *v1, const DmtxVector2 *v2)
 {
   return (v1->X * v2->X) + (v1->Y * v2->Y);
@@ -5828,7 +5822,7 @@ dmtxVector2Dot(const DmtxVector2 *v1, const DmtxVector2 *v2)
 *
 *
 */
-extern double
+extern float
 dmtxVector2Mag(const DmtxVector2 *v)
 {
   return sqrt(v->X * v->X + v->Y * v->Y);
@@ -5838,7 +5832,7 @@ dmtxVector2Mag(const DmtxVector2 *v)
 *
 *
 */
-extern double
+extern float
 dmtxDistanceFromRay2(const DmtxRay2 *r, const DmtxVector2 *q)
 {
   DmtxVector2 vSubTmp;
@@ -5853,7 +5847,7 @@ dmtxDistanceFromRay2(const DmtxRay2 *r, const DmtxVector2 *q)
 *
 *
 */
-extern double
+extern float
 dmtxDistanceAlongRay2(const DmtxRay2 *r, const DmtxVector2 *q)
 {
   DmtxVector2 vSubTmp;
@@ -5875,7 +5869,7 @@ dmtxDistanceAlongRay2(const DmtxRay2 *r, const DmtxVector2 *q)
 extern DmtxPassFail
 dmtxRay2Intersect(DmtxVector2 *point, const DmtxRay2 *p0, const DmtxRay2 *p1)
 {
-  double numer, denom;
+  float numer, denom;
   DmtxVector2 w;
 
   denom = dmtxVector2Cross(&(p1->v), &(p0->v));
@@ -5893,7 +5887,7 @@ dmtxRay2Intersect(DmtxVector2 *point, const DmtxRay2 *p0, const DmtxRay2 *p1)
 *
 */
 extern DmtxPassFail
-dmtxPointAlongRay2(DmtxVector2 *point, const DmtxRay2 *r, double t)
+dmtxPointAlongRay2(DmtxVector2 *point, const DmtxRay2 *r, float t)
 {
   DmtxVector2 vTmp;
 
@@ -5984,7 +5978,7 @@ dmtxMatrix3Identity(DmtxMatrix3 m)
  *  (0,0)     (1,0)                (0,0)     (1,0)
  *
  */
-void dmtxMatrix3Translate(DmtxMatrix3 m, double tx, double ty)
+void dmtxMatrix3Translate(DmtxMatrix3 m, float tx, float ty)
 {
    dmtxMatrix3Identity(m);
    m[2][0] = tx;
@@ -6011,9 +6005,9 @@ void dmtxMatrix3Translate(DmtxMatrix3 m, double tx, double ty)
  *
  */
 extern void
-dmtxMatrix3Rotate(DmtxMatrix3 m, double angle)
+dmtxMatrix3Rotate(DmtxMatrix3 m, float angle)
 {
-   double sinAngle, cosAngle;
+   float sinAngle, cosAngle;
 
    sinAngle = sin(angle);
    cosAngle = cos(angle);
@@ -6047,7 +6041,7 @@ dmtxMatrix3Rotate(DmtxMatrix3 m, double angle)
  *
  */
 extern void
-dmtxMatrix3Scale(DmtxMatrix3 m, double sx, double sy)
+dmtxMatrix3Scale(DmtxMatrix3 m, float sx, float sy)
 {
    dmtxMatrix3Identity(m);
    m[0][0] = sx;
@@ -6066,7 +6060,7 @@ dmtxMatrix3Scale(DmtxMatrix3 m, double sx, double sy)
  *     | 0    0    1 |
  */
 extern void
-dmtxMatrix3Shear(DmtxMatrix3 m, double shx, double shy)
+dmtxMatrix3Shear(DmtxMatrix3 m, float shx, float shy)
 {
    dmtxMatrix3Identity(m);
    m[1][0] = shx;
@@ -6100,7 +6094,7 @@ dmtxMatrix3Shear(DmtxMatrix3 m, double shx, double shy)
  *
  */
 extern void
-dmtxMatrix3LineSkewTop(DmtxMatrix3 m, double b0, double b1, double sz)
+dmtxMatrix3LineSkewTop(DmtxMatrix3 m, float b0, float b1, float sz)
 {
    assert(b0 >= DmtxAlmostZero);
 
@@ -6119,7 +6113,7 @@ dmtxMatrix3LineSkewTop(DmtxMatrix3 m, double b0, double b1, double sz)
  * \return void
  */
 extern void
-dmtxMatrix3LineSkewTopInv(DmtxMatrix3 m, double b0, double b1, double sz)
+dmtxMatrix3LineSkewTopInv(DmtxMatrix3 m, float b0, float b1, float sz)
 {
    assert(b1 >= DmtxAlmostZero);
 
@@ -6138,7 +6132,7 @@ dmtxMatrix3LineSkewTopInv(DmtxMatrix3 m, double b0, double b1, double sz)
  * \return void
  */
 extern void
-dmtxMatrix3LineSkewSide(DmtxMatrix3 m, double b0, double b1, double sz)
+dmtxMatrix3LineSkewSide(DmtxMatrix3 m, float b0, float b1, float sz)
 {
    assert(b0 >= DmtxAlmostZero);
 
@@ -6157,7 +6151,7 @@ dmtxMatrix3LineSkewSide(DmtxMatrix3 m, double b0, double b1, double sz)
  * \return void
  */
 extern void
-dmtxMatrix3LineSkewSideInv(DmtxMatrix3 m, double b0, double b1, double sz)
+dmtxMatrix3LineSkewSideInv(DmtxMatrix3 m, float b0, float b1, float sz)
 {
    assert(b1 >= DmtxAlmostZero);
 
@@ -6178,7 +6172,7 @@ extern void
 dmtxMatrix3Multiply(DmtxMatrix3 mOut, DmtxMatrix3 m0, DmtxMatrix3 m1)
 {
    int i, j, k;
-   double val;
+   float val;
 
    for(i = 0; i < 3; i++) {
       for(j = 0; j < 3; j++) {
@@ -6216,7 +6210,7 @@ dmtxMatrix3MultiplyBy(DmtxMatrix3 m0, DmtxMatrix3 m1)
 extern int
 dmtxMatrix3VMultiply(DmtxVector2 *vOut, DmtxVector2 *vIn, DmtxMatrix3 m)
 {
-   double w;
+   float w;
 
    w = vIn->X*m[0][2] + vIn->Y*m[1][2] + m[2][2];
    if(fabs(w) <= DmtxAlmostZero) {
@@ -6269,7 +6263,7 @@ dmtxMatrix3Print(DmtxMatrix3 m)
 
 void imlib_find_datamatrices(list_t *out, image_t *ptr, rectangle_t *roi, int effort)
 {
-    uint8_t *grayscale_image = (ptr->bpp == IMAGE_BPP_GRAYSCALE) ? ptr->data : fb_alloc(roi->w * roi->h);
+    uint8_t *grayscale_image = (ptr->bpp == IMAGE_BPP_GRAYSCALE) ? ptr->data : fb_alloc(roi->w * roi->h, FB_ALLOC_NO_HINT);
     umm_init_x(fb_avail());
 
     DmtxImage *image = dmtxImageCreate(grayscale_image,

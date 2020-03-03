@@ -290,7 +290,7 @@ SRC_PY = $(addprefix omv/py/, \
 	py_omv.c                \
 	py_sensor.c             \
 	py_image.c              \
-	py_winc.c              \	
+	py_winc.c               \
 	py_time.c               \
 	py_gif.c                \
 	py_mjpeg.c              \
@@ -310,7 +310,7 @@ SRC_C_omvrt1 = \
     tmr.c \
 	pwm.c  \
 	srpm.c \
-	dcmc.c
+	dcmc.c \
 
 SRC_C = \
 	main.c \
@@ -358,7 +358,7 @@ SRC_C = \
 	rtc.c	\
 	rng.c	\
 	uniqueID.c	\
-	$(wildcard boards/$(BOARD)/*.c)
+	$(wildcard boards/$(BOARD)/*.c) \
 
 SRC_C_BKUP = \
 	main.c \
@@ -505,18 +505,17 @@ SRC_MOD += $(addprefix $(CC3000_DIR)/src/,\
 	)
 endif
 
+ifeq ($(BOARD),omvrt1)
+SRC_C += $(SRC_C_omvrt1)
+else
+SRC_C += $(SRC_C_evk)
+endif
+
 OBJ =
 OBJ += $(PY_O)
 OBJ += $(addprefix $(BUILD)/, $(SRC_LIB:.c=.o))
 OBJ += $(addprefix $(BUILD)/, $(DRIVERS_SRC_C:.c=.o))
 OBJ += $(addprefix $(BUILD)/, $(SRC_C:.c=.o))
-
-ifeq ($(BOARD), omvrt1)
-OBJ += $(addprefix $(BUILD)/, $(SRC_C_omvrt1:.c=.o))
-else
-OBJ += $(addprefix $(BUILD)/, $(SRC_C_evk:.c=.o))
-endif
-
 
 OBJ += $(addprefix $(BUILD)/, $(SRC_UTIL:.c=.o))
 OBJ += $(addprefix $(BUILD)/, $(SRC_HAL:.c=.o))
@@ -525,7 +524,6 @@ OBJ += $(addprefix $(BUILD)/, $(SRC_USBD:.c=.o))
 OBJ += $(addprefix $(BUILD)/, $(SRC_PHY:.c=.o))
 OBJ += $(addprefix $(BUILD)/, $(SRC_SD:.c=.o))
 OBJ += $(addprefix $(BUILD)/, $(SRC_OSA:.c=.o))
-
 OBJ += $(addprefix $(BUILD)/, $(SRC_OMV:.c=.o))
 OBJ += $(addprefix $(BUILD)/, $(SRC_PY:.c=.o))
 OBJ += $(addprefix $(BUILD)/, $(SRC_NN:.c=.o))
@@ -546,7 +544,9 @@ $(PY_BUILD)/parsenum.o: COPT += -Os
 $(PY_BUILD)/mpprint.o: COPT += -Os
 
 all: $(BUILD)/firmware.dfu $(BUILD)/firmware.hex
-
+ifeq ($(BOARD),omvrt1)
+	$(ECHO) "build for OMVRT1"
+endif
 ifneq ($(FROZEN_DIR),)
 # To use frozen source modules, put your .py files in a subdirectory (eg scripts/)
 # and then invoke make with FROZEN_DIR=scripts (be sure to build from scratch).
@@ -594,7 +594,7 @@ $(BUILD)/firmware.hex: $(BUILD)/firmware.elf
 	$(Q)$(OBJCOPY) -O ihex $< $@
 
 $(BUILD)/firmware.elf: $(OBJ)
-#	$(ECHO) "LINK $@"
+	$(ECHO) $(OBJ)
 #	$(Q)$(LD) $(LDFLAGS) -o $@ $^ $(LIBS)
 #	$(Q)$(SIZE) $@
 	$(ECHO) "LINK $@"

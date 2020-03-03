@@ -20,12 +20,12 @@ endif
 # can be located. By following this scheme, it allows a single build rule
 # to be used to compile all .c files.
 
-vpath %.S . $(TOP)
+vpath %.S . $(TOP) $(USER_C_MODULES)
 $(BUILD)/%.o: %.S
 	$(ECHO) "CC $<"
 	$(Q)$(CC) $(CFLAGS) -c -o $@ $<
 
-vpath %.s . $(TOP)
+vpath %.s . $(TOP) $(USER_C_MODULES)
 $(BUILD)/%.o: %.s
 	$(ECHO) "AS $<"
 	$(Q)$(AS) -o $@ $<
@@ -42,21 +42,18 @@ $(Q)$(CC) $(CFLAGS) -c -MD -o $@ $<
   $(RM) -f $(@:.o=.d)
 endef
 
-vpath %.c . $(TOP)
+vpath %.c . $(TOP) $(USER_C_MODULES)
 $(BUILD)/%.o: %.c
 	$(call compile_c)
 
-# List all native flags since the current build system doesn't have
-# the MicroPython configuration available. However, these flags are
-# needed to extract all qstrings
-QSTR_GEN_EXTRA_CFLAGS += -DNO_QSTR -DN_X64 -DN_X86 -DN_THUMB -DN_ARM -DN_XTENSA
+QSTR_GEN_EXTRA_CFLAGS += -DNO_QSTR
 QSTR_GEN_EXTRA_CFLAGS += -I$(BUILD)/tmp
 
-vpath %.c . $(TOP)
+vpath %.c . $(TOP) $(USER_C_MODULES)
 
 $(BUILD)/%.pp: %.c
 	$(ECHO) "PreProcess $<"
-	$(Q)$(CC) $(CFLAGS) -E -Wp,-C,-dD,-dI -o $@ $<
+	$(Q)$(CPP) $(CFLAGS) -Wp,-C,-dD,-dI -o $@ $<
 
 # The following rule uses | to create an order only prerequisite. Order only
 # prerequisites only get built if they don't exist. They don't cause timestamp
@@ -69,14 +66,19 @@ $(BUILD)/%.pp: %.c
 # to get built before we try to compile any of them.
 $(OBJ): | $(HEADER_BUILD)/qstrdefs.generated.h $(HEADER_BUILD)/mpversion.h
 
-$(HEADER_BUILD)/qstr.i.last: $(SRC_QSTR) | $(HEADER_BUILD)/mpversion.h
+# The logic for qstr regeneration is:
+# - if anything in QSTR_GLOBAL_DEPENDENCIES is newer, then process all source files ($^)
+# - else, if list of newer prerequisites ($?) is not empty, then process just these ($?)
+# - else, process all source files ($^) [this covers "make -B" which can set $? to empty]
+# See more information about this process in docs/develop/qstr.rst.
+$(HEADER_BUILD)/qstr.i.last: $(SRC_QSTR) $(QSTR_GLOBAL_DEPENDENCIES) | $(QSTR_GLOBAL_REQUIREMENTS)
 	$(ECHO) "GEN $@"
-	$(Q)$(CPP) $(QSTR_GEN_EXTRA_CFLAGS) $(CFLAGS) $(if $?,$?,$^) >$(HEADER_BUILD)/qstr.i.last;
+	$(Q)$(CPP) $(QSTR_GEN_EXTRA_CFLAGS) $(CFLAGS) $(if $(filter $?,$(QSTR_GLOBAL_DEPENDENCIES)),$^,$(if $?,$?,$^)) >$(HEADER_BUILD)/qstr.i.last
 
 $(HEADER_BUILD)/qstr.split: $(HEADER_BUILD)/qstr.i.last
 	$(ECHO) "GEN $@"
 	$(Q)$(PYTHON) $(PY_SRC)/makeqstrdefs.py split $(HEADER_BUILD)/qstr.i.last $(HEADER_BUILD)/qstr $(QSTR_DEFS_COLLECTED)
-	$(Q)touch $@
+	$(Q)$(TOUCH) $@
 
 $(QSTR_DEFS_COLLECTED): $(HEADER_BUILD)/qstr.split
 	$(ECHO) "GEN $@"
@@ -95,31 +97,43 @@ $(OBJ_DIRS):
 $(HEADER_BUILD):
 	$(MKDIR) -p $@
 
+ifneq ($(FROZEN_MANIFEST),)
+# to build frozen_content.c from a manifest
+$(BUILD)/frozen_content.c: FORCE $(BUILD)/genhdr/qstrdefs.generated.h
+	$(Q)$(MAKE_MANIFEST) -o $@ -v "MPY_DIR=$(TOP)" -v "MPY_LIB_DIR=$(MPY_LIB_DIR)" -v "PORT_DIR=$(shell pwd)" -v "BOARD_DIR=$(BOARD_DIR)" -b "$(BUILD)" $(if $(MPY_CROSS_FLAGS),-f"$(MPY_CROSS_FLAGS)",) $(FROZEN_MANIFEST)
+
 ifneq ($(FROZEN_DIR),)
+$(error FROZEN_DIR cannot be used in conjunction with FROZEN_MANIFEST)
+endif
+
+ifneq ($(FROZEN_MPY_DIR),)
+$(error FROZEN_MPY_DIR cannot be used in conjunction with FROZEN_MANIFEST)
+endif
+endif
+
+ifneq ($(FROZEN_DIR),)
+$(info Warning: FROZEN_DIR is deprecated in favour of FROZEN_MANIFEST)
 $(BUILD)/frozen.c: $(wildcard $(FROZEN_DIR)/*) $(HEADER_BUILD) $(FROZEN_EXTRA_DEPS)
-	$(ECHO) "Generating $@"
+	$(ECHO) "GEN $@"
 	$(Q)$(MAKE_FROZEN) $(FROZEN_DIR) > $@
 endif
 
 ifneq ($(FROZEN_MPY_DIR),)
-# to build the MicroPython cross compiler
-$(TOP)/mpy-cross/mpy-cross: $(TOP)/py/*.[ch] $(TOP)/mpy-cross/*.[ch] $(TOP)/ports/windows/fmode.c
-	$(Q)$(MAKE) -C $(TOP)/mpy-cross
-
+$(info Warning: FROZEN_MPY_DIR is deprecated in favour of FROZEN_MANIFEST)
 # make a list of all the .py files that need compiling and freezing
 FROZEN_MPY_PY_FILES := $(shell find -L $(FROZEN_MPY_DIR) -type f -name '*.py' | $(SED) -e 's=^$(FROZEN_MPY_DIR)/==')
 FROZEN_MPY_MPY_FILES := $(addprefix $(BUILD)/frozen_mpy/,$(FROZEN_MPY_PY_FILES:.py=.mpy))
 
 # to build .mpy files from .py files
-$(BUILD)/frozen_mpy/%.mpy: $(FROZEN_MPY_DIR)/%.py $(TOP)/mpy-cross/mpy-cross
+$(BUILD)/frozen_mpy/%.mpy: $(FROZEN_MPY_DIR)/%.py
 	@$(ECHO) "MPY $<"
 	$(Q)$(MKDIR) -p $(dir $@)
 	$(Q)$(MPY_CROSS) -o $@ -s $(<:$(FROZEN_MPY_DIR)/%=%) $(MPY_CROSS_FLAGS) $<
 
 # to build frozen_mpy.c from all .mpy files
 $(BUILD)/frozen_mpy.c: $(FROZEN_MPY_MPY_FILES) $(BUILD)/genhdr/qstrdefs.generated.h
-	@$(ECHO) "Creating $@"
-	$(Q)$(PYTHON) $(MPY_TOOL) -f -q $(BUILD)/genhdr/qstrdefs.preprocessed.h $(FROZEN_MPY_MPY_FILES) > $@
+	@$(ECHO) "GEN $@"
+	$(Q)$(MPY_TOOL) -f -q $(BUILD)/genhdr/qstrdefs.preprocessed.h $(FROZEN_MPY_MPY_FILES) > $@
 endif
 
 ifneq ($(PROG),)
@@ -145,6 +159,13 @@ clean-prog:
 .PHONY: clean-prog
 endif
 
+submodules:
+	$(ECHO) "Updating submodules: $(GIT_SUBMODULES)"
+ifneq ($(GIT_SUBMODULES),)
+	$(Q)git submodule update --init $(addprefix $(TOP)/,$(GIT_SUBMODULES))
+endif
+.PHONY: submodules
+
 LIBMICROPYTHON = libmicropython.a
 
 # We can execute extra commands after library creation using
@@ -160,6 +181,27 @@ clean:
 	$(RM) -rf $(BUILD) $(CLEAN_EXTRA)
 .PHONY: clean
 
+# Clean every non-git file from FROZEN_DIR/FROZEN_MPY_DIR, but making a backup.
+# We run rmdir below to avoid empty backup dir (it will silently fail if backup
+# is non-empty).
+clean-frozen:
+	if [ -n "$(FROZEN_MPY_DIR)" ]; then \
+	backup_dir=$(FROZEN_MPY_DIR).$$(date +%Y%m%dT%H%M%S); mkdir $$backup_dir; \
+	cd $(FROZEN_MPY_DIR); git status --ignored -u all -s . | awk ' {print $$2}' \
+	| xargs --no-run-if-empty cp --parents -t ../$$backup_dir; \
+	rmdir ../$$backup_dir 2>/dev/null || true; \
+	git clean -d -f .; \
+	fi
+
+	if [ -n "$(FROZEN_DIR)" ]; then \
+	backup_dir=$(FROZEN_DIR).$$(date +%Y%m%dT%H%M%S); mkdir $$backup_dir; \
+	cd $(FROZEN_DIR); git status --ignored -u all -s . | awk ' {print $$2}' \
+	| xargs --no-run-if-empty cp --parents -t ../$$backup_dir; \
+	rmdir ../$$backup_dir 2>/dev/null || true; \
+	git clean -d -f .; \
+	fi
+.PHONY: clean-frozen
+
 print-cfg:
 	$(ECHO) "PY_SRC = $(PY_SRC)"
 	$(ECHO) "BUILD  = $(BUILD)"
@@ -168,7 +210,7 @@ print-cfg:
 
 print-def:
 	@$(ECHO) "The following defines are built into the $(CC) compiler"
-	touch __empty__.c
+	$(TOUCH) __empty__.c
 	@$(CC) -E -Wp,-dM __empty__.c
 	@$(RM) -f __empty__.c
 

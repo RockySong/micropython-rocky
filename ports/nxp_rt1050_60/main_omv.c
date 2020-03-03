@@ -126,7 +126,7 @@ static bool ini_handler_callback_is_true(const char *value)
     return true;
 }
 
-unsigned char ini_is_true(const char *value)
+__WEAK bool ini_is_true(const char *value)
 {
     int i = ini_atoi(value);
     if (i) return true;
@@ -349,7 +349,7 @@ int OpenMV_Main(uint32_t first_soft_reset)
 				}
 			}
 			// exec_boot_script("/sd/main.py", false, true);
-			#if (MICROPY_HW_WIFIDBG_EN && MICROPY_PY_RTTHREAD)
+			#if (MICROPY_HW_WIFIDBG_EN==1) && defined(MICROPY_PY_RTTHREAD)
 			if(openmv_config.wifidbg == true)
 			{
 				rtt_wifidbg_start(&openmv_config.wifidbg_config);

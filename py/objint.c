@@ -49,10 +49,10 @@ STATIC mp_obj_t mp_obj_int_make_new(const mp_obj_type_t *type_in, size_t n_args,
             return MP_OBJ_NEW_SMALL_INT(0);
 
         case 1:
-            if (MP_OBJ_IS_INT(args[0])) {
+            if (mp_obj_is_int(args[0])) {
                 // already an int (small or long), just return it
                 return args[0];
-            } else if (MP_OBJ_IS_STR_OR_BYTES(args[0])) {
+            } else if (mp_obj_is_str_or_bytes(args[0])) {
                 // a string, parse it
                 size_t l;
                 const char *s = mp_obj_str_get_data(args[0], &l);
@@ -62,14 +62,12 @@ STATIC mp_obj_t mp_obj_int_make_new(const mp_obj_type_t *type_in, size_t n_args,
                 return mp_obj_new_int_from_float(mp_obj_float_get(args[0]));
 #endif
             } else {
-                // try to convert to small int (eg from bool)
-                return MP_OBJ_NEW_SMALL_INT(mp_obj_get_int(args[0]));
+                return mp_unary_op(MP_UNARY_OP_INT, args[0]);
             }
 
         case 2:
         default: {
             // should be a string, parse it
-            // TODO proper error checking of argument types
             size_t l;
             const char *s = mp_obj_str_get_data(args[0], &l);
             return mp_parse_num_integer(s, l, mp_obj_get_int(args[1]), NULL);
@@ -139,7 +137,7 @@ STATIC mp_fp_as_int_class_t mp_classify_fp_as_int(mp_float_t val) {
 mp_obj_t mp_obj_new_int_from_float(mp_float_t val) {
     int cl = fpclassify(val);
     if (cl == FP_INFINITE) {
-        nlr_raise(mp_obj_new_exception_msg(&mp_type_OverflowError, "can't convert inf to int"));
+        mp_raise_msg(&mp_type_OverflowError, "can't convert inf to int");
     } else if (cl == FP_NAN) {
         mp_raise_ValueError("can't convert NaN to int");
     } else {
@@ -222,27 +220,26 @@ size_t mp_int_format_size(size_t num_bits, int base, const char *prefix, char co
 char *mp_obj_int_formatted(char **buf, size_t *buf_size, size_t *fmt_size, mp_const_obj_t self_in,
                            int base, const char *prefix, char base_char, char comma) {
     fmt_int_t num;
-    if (MP_OBJ_IS_SMALL_INT(self_in)) {
+    #if MICROPY_LONGINT_IMPL == MICROPY_LONGINT_IMPL_NONE
+    // Only have small ints; get the integer value to format.
+    num = MP_OBJ_SMALL_INT_VALUE(self_in);
+    #else
+    if (mp_obj_is_small_int(self_in)) {
         // A small int; get the integer value to format.
         num = MP_OBJ_SMALL_INT_VALUE(self_in);
-#if MICROPY_LONGINT_IMPL != MICROPY_LONGINT_IMPL_NONE
-    } else if (MP_OBJ_IS_TYPE(self_in, &mp_type_int)) {
+    } else {
+        assert(mp_obj_is_type(self_in, &mp_type_int));
         // Not a small int.
-#if MICROPY_LONGINT_IMPL == MICROPY_LONGINT_IMPL_LONGLONG
+        #if MICROPY_LONGINT_IMPL == MICROPY_LONGINT_IMPL_LONGLONG
         const mp_obj_int_t *self = self_in;
         // Get the value to format; mp_obj_get_int truncates to mp_int_t.
         num = self->val;
-#else
+        #else
         // Delegate to the implementation for the long int.
         return mp_obj_int_formatted_impl(buf, buf_size, fmt_size, self_in, base, prefix, base_char, comma);
-#endif
-#endif
-    } else {
-        // Not an int.
-        **buf = '\0';
-        *fmt_size = 0;
-        return *buf;
+        #endif
     }
+    #endif
 
     char sign = '\0';
     if (num < 0) {
@@ -378,7 +375,7 @@ mp_obj_t mp_obj_int_binary_op_extra_cases(mp_binary_op_t op, mp_obj_t lhs_in, mp
         // true acts as 0
         return mp_binary_op(op, lhs_in, MP_OBJ_NEW_SMALL_INT(1));
     } else if (op == MP_BINARY_OP_MULTIPLY) {
-        if (MP_OBJ_IS_STR(rhs_in) || MP_OBJ_IS_TYPE(rhs_in, &mp_type_bytes) || MP_OBJ_IS_TYPE(rhs_in, &mp_type_tuple) || MP_OBJ_IS_TYPE(rhs_in, &mp_type_list)) {
+        if (mp_obj_is_str_or_bytes(rhs_in) || mp_obj_is_type(rhs_in, &mp_type_tuple) || mp_obj_is_type(rhs_in, &mp_type_list)) {
             // multiply is commutative for these types, so delegate to them
             return mp_binary_op(op, rhs_in, lhs_in);
         }
@@ -435,7 +432,7 @@ STATIC mp_obj_t int_to_bytes(size_t n_args, const mp_obj_t *args) {
     memset(data, 0, len);
 
     #if MICROPY_LONGINT_IMPL != MICROPY_LONGINT_IMPL_NONE
-    if (!MP_OBJ_IS_SMALL_INT(args[0])) {
+    if (!mp_obj_is_small_int(args[0])) {
         mp_obj_int_to_bytes_impl(args[0], big_endian, len, data);
     } else
     #endif

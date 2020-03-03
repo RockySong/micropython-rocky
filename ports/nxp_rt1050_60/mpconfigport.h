@@ -32,6 +32,7 @@
 #define __INCLUDED_MPCONFIGPORT_H
 #ifdef __CC_ARM
 #pragma anon_unions
+typedef signed int ssize_t;
 #endif
 // board specific definitions
 #include "mpconfigboard.h"
@@ -167,8 +168,8 @@
 #define MICROPY_FATFS_MULTI_PARTITION  (1)
 
 // TODO these should be generic, not bound to fatfs
-#define mp_type_fileio fatfs_type_fileio
-#define mp_type_textio fatfs_type_textio
+#define mp_type_fileio mp_type_vfs_fat_fileio
+#define mp_type_textio mp_type_vfs_fat_textio
 
 // use vfs's functions for import stat and builtin open
 #define mp_import_stat mp_vfs_import_stat

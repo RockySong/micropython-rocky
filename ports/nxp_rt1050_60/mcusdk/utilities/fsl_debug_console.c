@@ -141,6 +141,25 @@ int DbgConsole_Printf(const char *fmt_s, ...)
     return result;
 }
 
+
+__WEAK int DEBUG_printf(const char *fmt_s, ...)
+{
+    va_list ap;
+    int logLength = 0U, result = 0U;
+    char printBuf[DEBUG_CONSOLE_PRINTF_MAX_LOG_LEN] = {0U};
+
+    va_start(ap, fmt_s);
+    /* format print log first */
+    logLength = StrFormatPrintf(fmt_s, ap, printBuf, DbgConsole_RelocateLog);
+    /* print log */
+    result = LOG_Push((uint8_t *)printBuf, logLength);
+
+    va_end(ap);
+
+    return result;
+}
+
+
 /* See fsl_debug_console.h for documentation of this function. */
 int DbgConsole_Putchar(int ch)
 {

@@ -1,3 +1,5 @@
+Q(802_1X)
+
 Q(ADC)
 
 Q(ADC)
@@ -127,6 +129,8 @@ Q(BIG_ENDIAN)
 Q(BINARY)
 
 Q(BLACK)
+
+Q(BaseException)
 
 Q(BaseException)
 
@@ -462,9 +466,11 @@ Q(DATABAR_EXP)
 
 Q(DCDC)
 
-Q(DCP)
+Q(DCMC)
 
-Q(DEBUG)
+Q(DCMC)
+
+Q(DCP)
 
 Q(DEEPSLEEP_RESETABC)
 
@@ -786,6 +792,8 @@ Q(FFILT_FILT_PER_BF)
 
 Q(FFILT_GSTR)
 
+Q(FHD)
+
 Q(FILT_FILT_CNT_BF)
 
 Q(FILT_FILT_PER_BF)
@@ -924,6 +932,8 @@ Q(HC_ADCH_BF)
 
 Q(HC_AIEN)
 
+Q(HD)
+
 Q(HID)
 
 Q(HIZ)
@@ -1035,6 +1045,8 @@ Q(IMR_IMR_BF)
 Q(IN)
 
 Q(INIT_INIT_BF)
+
+Q(INT)
 
 Q(INT16)
 
@@ -1159,6 +1171,10 @@ Q(LEPTON)
 Q(LITTLE_ENDIAN)
 
 Q(LOAD_LOAD_BF)
+
+Q(LONG)
+
+Q(LONGLONG)
 
 Q(LPI2C1)
 
@@ -1404,6 +1420,16 @@ Q(MIER_SDIE)
 
 Q(MIER_TDIE)
 
+Q(MODE_AP)
+
+Q(MODE_BSP)
+
+Q(MODE_FIRMWARE)
+
+Q(MODE_P2P)
+
+Q(MODE_STA)
+
 Q(MRDR_DATA_BF)
 
 Q(MRDR_RXEMPTY)
@@ -1498,6 +1524,8 @@ Q(OFS_OFS_BF)
 
 Q(OFS_SIGN)
 
+Q(OPEN)
+
 Q(OPEN_DRAIN)
 
 Q(OSError)
@@ -1519,6 +1547,8 @@ Q(OV2640)
 Q(OV7725)
 
 Q(OV9650)
+
+Q(OrderedDict)
 
 Q(OrderedDict)
 
@@ -1561,6 +1591,10 @@ Q(POLLOUT)
 Q(PSR_PSR_BF)
 
 Q(PTR)
+
+Q(PWM)
+
+Q(PWM)
 
 Q(PWM1)
 
@@ -1694,6 +1728,8 @@ Q(PinBase)
 
 Q(QCIF)
 
+Q(QHD)
+
 Q(QQCIF)
 
 Q(QQQQVGA)
@@ -1708,13 +1744,23 @@ Q(QQVGA2)
 
 Q(QSIF)
 
+Q(QTIMER)
+
+Q(QTIMER)
+
 Q(QVGA)
+
+Q(QXGA)
 
 Q(RDR_DATA_BF)
 
 Q(RGB565)
 
 Q(ROMC)
+
+Q(RPM)
+
+Q(RPM)
 
 Q(RSR_RXEMPTY)
 
@@ -1832,6 +1878,8 @@ Q(SEARCH_EX)
 
 Q(SEMC)
 
+Q(SHORT)
+
 Q(SIER_AM0IE)
 
 Q(SIER_AM1F)
@@ -1889,6 +1937,10 @@ Q(SRDR_DATA_BF)
 Q(SRDR_RXEMPTY)
 
 Q(SRDR_SOF)
+
+Q(SRPM)
+
+Q(SRPM)
 
 Q(SR_DMF)
 
@@ -1982,6 +2034,10 @@ Q(SWIM)
 
 Q(SXGA)
 
+Q(Servo)
+
+Q(Servo)
+
 Q(Signal)
 
 Q(Signal)
@@ -2060,6 +2116,10 @@ Q(TDR_DATA_BF)
 
 Q(TEMPMON)
 
+Q(TMR)
+
+Q(TMR)
+
 Q(TMR1)
 
 Q(TMR2)
@@ -2114,6 +2174,8 @@ Q(UART)
 
 Q(UART)
 
+Q(UINT)
+
 Q(UINT16)
 
 Q(UINT32)
@@ -2121,6 +2183,10 @@ Q(UINT32)
 Q(UINT64)
 
 Q(UINT8)
+
+Q(ULONG)
+
+Q(ULONGLONG)
 
 Q(UPCA)
 
@@ -2149,6 +2215,8 @@ Q(USB_VCP)
 Q(USDHC1)
 
 Q(USDHC2)
+
+Q(USHORT)
 
 Q(UXGA)
 
@@ -2202,9 +2270,19 @@ Q(WDOG2)
 
 Q(WDT_RESET)
 
+Q(WEP)
+
 Q(WHITE)
 
 Q(WINC)
+
+Q(WINC)
+
+Q(WPA_PSK)
+
+Q(WQXGA)
+
+Q(WQXGA2)
 
 Q(WVGA)
 
@@ -2216,6 +2294,8 @@ Q(XBARB2)
 
 Q(XBARB3)
 
+Q(XGA)
+
 Q(XTALOSC24M)
 
 Q(YUV422)
@@ -2225,6 +2305,8 @@ Q(ZeroDivisionError)
 Q(ZeroDivisionError)
 
 Q(_)
+
+Q(_0x0a_)
 
 Q(__abs__)
 
@@ -2236,11 +2318,15 @@ Q(__aenter__)
 
 Q(__aexit__)
 
+Q(__aexit__)
+
 Q(__aiter__)
 
 Q(__and__)
 
 Q(__anext__)
+
+Q(__bases__)
 
 Q(__bool__)
 
@@ -2286,6 +2372,8 @@ Q(__delitem__)
 
 Q(__dict__)
 
+Q(__dir__)
+
 Q(__divmod__)
 
 Q(__enter__)
@@ -2320,6 +2408,8 @@ Q(__file__)
 
 Q(__file__)
 
+Q(__file__)
+
 Q(__floordiv__)
 
 Q(__ge__)
@@ -2344,13 +2434,15 @@ Q(__iadd__)
 
 Q(__import__)
 
-Q(__init__)
+Q(__import__)
 
 Q(__init__)
 
 Q(__init__)
 
 Q(__init__)
+
+Q(__int__)
 
 Q(__invert__)
 
@@ -2380,13 +2472,13 @@ Q(__main__)
 
 Q(__main__)
 
+Q(__matmul__)
+
 Q(__mod__)
 
 Q(__module__)
 
 Q(__mul__)
-
-Q(__name__)
 
 Q(__name__)
 
@@ -2552,13 +2644,15 @@ Q(_lt_setcomp_gt_)
 
 Q(_lt_stdin_gt_)
 
-Q(_lt_stdin_gt_)
-
 Q(_lt_string_gt_)
 
 Q(_percent__hash_o)
 
 Q(_percent__hash_x)
+
+Q(_slash_)
+
+Q(_slash_)
 
 Q(_slash_)
 
@@ -2573,6 +2667,8 @@ Q(_slash_flash_slash_lib)
 Q(_slash_sd)
 
 Q(_slash_sd_slash_lib)
+
+Q(_space_)
 
 Q(_star_)
 
@@ -2682,6 +2778,10 @@ Q(and)
 
 Q(and_)
 
+Q(angle)
+
+Q(angle)
+
 Q(any)
 
 Q(any)
@@ -2707,10 +2807,6 @@ Q(arg)
 Q(args)
 
 Q(argv)
-
-Q(array)
-
-Q(array)
 
 Q(array)
 
@@ -2813,8 +2909,6 @@ Q(binary_to_lab)
 Q(binary_to_rgb)
 
 Q(binary_to_yuv)
-
-Q(binascii)
 
 Q(bind)
 
@@ -2920,7 +3014,17 @@ Q(bytes_at)
 
 Q(calcsize)
 
+Q(calibration)
+
 Q(callable)
+
+Q(callback)
+
+Q(callback)
+
+Q(callback)
+
+Q(callback)
 
 Q(callback)
 
@@ -2933,6 +3037,8 @@ Q(ceil)
 Q(center)
 
 Q(center)
+
+Q(channel)
 
 Q(char_hmirror)
 
@@ -3004,8 +3110,6 @@ Q(close)
 
 Q(close)
 
-Q(close)
-
 Q(closure)
 
 Q(closure)
@@ -3023,8 +3127,6 @@ Q(code)
 Q(code)
 
 Q(collect)
-
-Q(collections)
 
 Q(color)
 
@@ -3055,6 +3157,10 @@ Q(compressed)
 Q(compressed_for_ide)
 
 Q(connect)
+
+Q(connect)
+
+Q(connected_sta)
 
 Q(const)
 
@@ -3182,6 +3288,8 @@ Q(decision_margin)
 
 Q(decode)
 
+Q(decode)
+
 Q(decompress)
 
 Q(deepsleep)
@@ -3189,6 +3297,20 @@ Q(deepsleep)
 Q(default)
 
 Q(degrees)
+
+Q(deinit)
+
+Q(deinit)
+
+Q(deinit)
+
+Q(deinit)
+
+Q(deinit)
+
+Q(deinit)
+
+Q(deinit)
 
 Q(deinit)
 
@@ -3242,6 +3364,8 @@ Q(disable_irq)
 
 Q(discard)
 
+Q(disconnect)
+
 Q(displacement)
 
 Q(div)
@@ -3273,6 +3397,8 @@ Q(draw_rectangle)
 Q(draw_string)
 
 Q(dry_run)
+
+Q(dump)
 
 Q(dumps)
 
@@ -3328,7 +3454,9 @@ Q(erode)
 
 Q(errno)
 
-Q(errno)
+Q(erro)
+
+Q(erro)
 
 Q(errorcode)
 
@@ -3482,6 +3610,12 @@ Q(freq)
 
 Q(freq)
 
+Q(freq)
+
+Q(freq)
+
+Q(freq)
+
 Q(frexp)
 
 Q(from_bytes)
@@ -3514,7 +3648,11 @@ Q(function)
 
 Q(function)
 
-Q(function)
+Q(fw_dump)
+
+Q(fw_update)
+
+Q(fw_version)
 
 Q(fx)
 
@@ -3546,9 +3684,19 @@ Q(generator)
 
 Q(generator)
 
+Q(generator)
+
 Q(get)
 
 Q(get_color_palette)
+
+Q(get_count)
+
+Q(get_count)
+
+Q(get_count)
+
+Q(get_count)
 
 Q(get_exposure_us)
 
@@ -3570,11 +3718,19 @@ Q(get_pixel)
 
 Q(get_pixel_physical)
 
+Q(get_pps)
+
 Q(get_regression)
 
 Q(get_rgb_gain_db)
 
+Q(get_rpm)
+
 Q(get_similarity)
+
+Q(get_spps)
+
+Q(get_srpm)
 
 Q(get_statistics)
 
@@ -3585,6 +3741,10 @@ Q(get_stats)
 Q(get_stats)
 
 Q(get_threshold)
+
+Q(get_ticks)
+
+Q(get_ticks)
 
 Q(get_xy)
 
@@ -3652,8 +3812,6 @@ Q(hasattr)
 
 Q(hash)
 
-Q(hashlib)
-
 Q(have_cdc)
 
 Q(heap_lock)
@@ -3665,8 +3823,6 @@ Q(heapify)
 Q(heappop)
 
 Q(heappush)
-
-Q(heapq)
 
 Q(height)
 
@@ -3707,6 +3863,8 @@ Q(id)
 Q(id)
 
 Q(idle)
+
+Q(ifconfig)
 
 Q(ilistdir)
 
@@ -3764,11 +3922,21 @@ Q(init)
 
 Q(init)
 
+Q(init)
+
+Q(init)
+
+Q(init)
+
+Q(init)
+
+Q(init)
+
+Q(init)
+
 Q(input)
 
 Q(insert)
-
-Q(int)
 
 Q(int)
 
@@ -3788,7 +3956,9 @@ Q(intersection)
 
 Q(intersection_update)
 
-Q(invert)
+Q(interval)
+
+Q(interval)
 
 Q(invert)
 
@@ -3826,7 +3996,13 @@ Q(invert)
 
 Q(invert)
 
-Q(io)
+Q(invert)
+
+Q(inverted)
+
+Q(inverted)
+
+Q(inverted)
 
 Q(ioctl)
 
@@ -3849,6 +4025,8 @@ Q(is_numeric)
 Q(isalpha)
 
 Q(isalpha)
+
+Q(isconnected)
 
 Q(isconnected)
 
@@ -3912,11 +4090,17 @@ Q(join)
 
 Q(join)
 
-Q(json)
+Q(jpeg_encode_for_ide)
+
+Q(jpeg_encoded_for_ide)
 
 Q(kbd_intr)
 
 Q(keepends)
+
+Q(key)
+
+Q(key)
 
 Q(key)
 
@@ -4067,8 +4251,6 @@ Q(lsr)
 Q(lstrip)
 
 Q(lstrip)
-
-Q(machine)
 
 Q(machine)
 
@@ -4266,6 +4448,8 @@ Q(mode)
 
 Q(mode)
 
+Q(mode)
+
 Q(modf)
 
 Q(modify)
@@ -4305,6 +4489,8 @@ Q(movt)
 Q(movw)
 
 Q(movwt)
+
+Q(mpy)
 
 Q(mrs)
 
@@ -4416,8 +4602,6 @@ Q(or)
 
 Q(ord)
 
-Q(os)
-
 Q(pack)
 
 Q(pack_into)
@@ -4444,11 +4628,21 @@ Q(pcolor)
 
 Q(peektime)
 
+Q(pend_throw)
+
 Q(percentile)
 
 Q(percentile)
 
 Q(perimeter)
+
+Q(period)
+
+Q(period)
+
+Q(period)
+
+Q(period)
 
 Q(phase)
 
@@ -4516,6 +4710,14 @@ Q(pow)
 
 Q(power)
 
+Q(pprparam)
+
+Q(pprparam)
+
+Q(prescale)
+
+Q(prescale)
+
 Q(prescaler)
 
 Q(present)
@@ -4532,10 +4734,6 @@ Q(ptr)
 
 Q(ptr)
 
-Q(ptr)
-
-Q(ptr16)
-
 Q(ptr16)
 
 Q(ptr16)
@@ -4543,16 +4741,14 @@ Q(ptr16)
 Q(ptr32)
 
 Q(ptr32)
-
-Q(ptr32)
-
-Q(ptr8)
 
 Q(ptr8)
 
 Q(ptr8)
 
 Q(pull)
+
+Q(pulse_width)
 
 Q(push)
 
@@ -4579,6 +4775,12 @@ Q(put_pixel_physical)
 Q(put_text)
 
 Q(put_text_xy)
+
+Q(pwm_freq)
+
+Q(pwm_inverted)
+
+Q(pwm_width)
 
 Q(pyb)
 
@@ -4628,8 +4830,6 @@ Q(randint)
 
 Q(random)
 
-Q(random)
-
 Q(randrange)
 
 Q(range)
@@ -4639,8 +4839,6 @@ Q(range)
 Q(range)
 
 Q(rbit)
-
-Q(re)
 
 Q(read)
 
@@ -4900,6 +5098,8 @@ Q(rsplit)
 
 Q(rsplit)
 
+Q(rssi)
+
 Q(rstrip)
 
 Q(rstrip)
@@ -4928,6 +5128,8 @@ Q(scan)
 
 Q(scan)
 
+Q(scan)
+
 Q(schedule)
 
 Q(sck)
@@ -4950,6 +5152,10 @@ Q(search)
 
 Q(search)
 
+Q(security)
+
+Q(security)
+
 Q(seed)
 
 Q(seed_threshold)
@@ -4959,8 +5165,6 @@ Q(seed_threshold)
 Q(seek)
 
 Q(seek)
-
-Q(select)
 
 Q(select)
 
@@ -5140,8 +5344,6 @@ Q(socket)
 
 Q(socket)
 
-Q(socket)
-
 Q(soft_reset)
 
 Q(softmax)
@@ -5156,6 +5358,8 @@ Q(sorted)
 
 Q(space_sigma)
 
+Q(speed)
+
 Q(split)
 
 Q(split)
@@ -5169,6 +5373,10 @@ Q(splitlines)
 Q(sqrt)
 
 Q(sqrt)
+
+Q(ssid)
+
+Q(ssid)
 
 Q(stack_use)
 
@@ -5182,9 +5390,13 @@ Q(start)
 
 Q(start)
 
+Q(start_ap)
+
 Q(startswith)
 
 Q(startswith)
+
+Q(stat)
 
 Q(stat)
 
@@ -5266,8 +5478,6 @@ Q(struct)
 
 Q(struct)
 
-Q(struct)
-
 Q(sub)
 
 Q(sub)
@@ -5307,6 +5517,8 @@ Q(tanh)
 Q(tell)
 
 Q(template_roi)
+
+Q(test)
 
 Q(theta)
 
@@ -5412,8 +5624,6 @@ Q(time)
 
 Q(time)
 
-Q(time)
-
 Q(timeout)
 
 Q(timeout)
@@ -5468,6 +5678,10 @@ Q(type)
 
 Q(type)
 
+Q(uarray)
+
+Q(uarray)
+
 Q(ubinascii)
 
 Q(ubinascii)
@@ -5504,8 +5718,6 @@ Q(uint)
 
 Q(uint)
 
-Q(uint)
-
 Q(uio)
 
 Q(uio)
@@ -5519,8 +5731,6 @@ Q(umachine)
 Q(umachine)
 
 Q(umachine)
-
-Q(umount)
 
 Q(umount)
 
@@ -5698,9 +5908,17 @@ Q(w)
 
 Q(w)
 
+Q(wait_for_sta)
+
 Q(wfi)
 
 Q(wfi)
+
+Q(width)
+
+Q(width)
+
+Q(width)
 
 Q(width)
 
@@ -5753,6 +5971,8 @@ Q(writechar)
 Q(writeto)
 
 Q(writeto_mem)
+
+Q(writevto)
 
 Q(x)
 
@@ -5893,8 +6113,6 @@ Q(zero)
 Q(zip)
 
 Q(zip)
-
-Q(zlib)
 
 Q(zoom)
 
