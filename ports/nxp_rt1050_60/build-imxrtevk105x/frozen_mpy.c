@@ -97,7 +97,6 @@ enum {
     MP_QSTR_4,
     MP_QSTR_C,
     MP_QSTR_A7,
-    MP_QSTR_SPI,
     MP_QSTR_buf16,
     MP_QSTR_buf19,
     MP_QSTR_buf,
@@ -168,7 +167,7 @@ const qstr_pool_t mp_qstr_frozen_const_pool = {
     (qstr_pool_t*)&mp_qstr_const_pool, // previous pool
     MP_QSTRnumber_of, // previous pool size
     10, // allocated entries
-    129, // used entries
+    128, // used entries
     {
         (const byte*)"\xcf\xa5\x0b" "lcd160cr.py",
         (const byte*)"\xf2\xcd\x08" "PORTRAIT",
@@ -235,7 +234,6 @@ const qstr_pool_t mp_qstr_frozen_const_pool = {
         (const byte*)"\x91\xb5\x01" "4",
         (const byte*)"\xe6\xb5\x01" "C",
         (const byte*)"\x53\x72\x02" "A7",
-        (const byte*)"\xef\x11\x03" "SPI",
         (const byte*)"\x53\x70\x05" "buf16",
         (const byte*)"\x5c\x70\x05" "buf19",
         (const byte*)"\x74\x49\x03" "buf",
@@ -384,7 +382,7 @@ STATIC const byte fun_data_lcd160cr__lt_module_gt__LCD160CR___init__[390] = {
     0xde, 
     0x44, 0x1b, 0x80, 
     0x12, MP_QSTR_machine & 0xff, MP_QSTR_machine >> 8, 
-    0x14, MP_QSTR_SPI & 0xff, MP_QSTR_SPI >> 8, 
+    0x14, MP_QSTR_spi & 0xff, MP_QSTR_spi >> 8, 
     0xb7, 
     0x10, MP_QSTR_baudrate & 0xff, MP_QSTR_baudrate >> 8, 
     0x22, 0x86, 0xb7, 0xfc, 0x60, 

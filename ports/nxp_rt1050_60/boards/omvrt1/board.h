@@ -130,7 +130,8 @@
 
 #define BOARD_USDHC_SDCARD_POWER_CONTROL_INIT()
 #define BOARD_USDHC_SDCARD_POWER_CONTROL(state)
-
+#include "fsl_gpio.h"
+#define BOARD_USDHC_MMCCARD_POWER_CONTROL_INIT() 
 #define BOARD_USDHC1_CLK_FREQ (CLOCK_GetSysPfdFreq(kCLOCK_Pfd0) / (CLOCK_GetDiv(kCLOCK_Usdhc1Div) + 1U))
 #define BOARD_USDHC2_CLK_FREQ (CLOCK_GetSysPfdFreq(kCLOCK_Pfd0) / (CLOCK_GetDiv(kCLOCK_Usdhc2Div) + 1U))
 
@@ -141,6 +142,7 @@
 #define BOARD_SD_HOST_SUPPORT_SDR104_FREQ (200000000U)
 #define BOARD_SD_HOST_SUPPORT_HS200_FREQ (180000000U)
 /* define for SD/MMC config IO driver strength dynamic */
+#include "fsl_iomuxc.h"
 #define BOARD_SD_PIN_CONFIG(speed, strength)                                                      \
     {                                                                                             \
         IOMUXC_SetPinConfig(IOMUXC_GPIO_SD_B0_00_USDHC1_CMD,                                      \

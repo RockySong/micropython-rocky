@@ -7,7 +7,7 @@
 #define MICROPY_HW_UART_REPL    	(repl_uart_id)	// uart ID of REPL uart, must be the same as repl_uart_id in uart.h
 #endif
 #define MICROPY_HW_HAS_SWITCH       (1)
-#define MICROPY_HW_HAS_FLASH        (1)
+#define MICROPY_HW_HAS_FLASH        (0)
 #define MICROPY_HW_HAS_SDCARD       (1)
 #define MICROPY_HW_HAS_LCD          (0)
 #define MICROPY_HW_ENABLE_RNG       (1)

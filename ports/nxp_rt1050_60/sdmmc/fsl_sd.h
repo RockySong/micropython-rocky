@@ -1,35 +1,9 @@
 /*
- * The Clear BSD License
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2018 NXP
  * All rights reserved.
- * 
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided
- *  that the following conditions are met:
  *
- * o Redistributions of source code must retain the above copyright notice, this list
- *   of conditions and the following disclaimer.
- *
- * o Redistributions in binary form must reproduce the above copyright notice, this
- *   list of conditions and the following disclaimer in the documentation and/or
- *   other materials provided with the distribution.
- *
- * o Neither the name of the copyright holder nor the names of its
- *   contributors may be used to endorse or promote products derived from this
- *   software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * SPDX-License-Identifier: BSD-3-Clause
  */
 
 #ifndef _FSL_SD_H_
@@ -56,13 +30,6 @@ enum _sd_card_flag
     kSD_SupportSpeedClassControlCmd = (1U << 7U), /*!< card support speed class control flag */
 };
 
-/*! @brief card user parameter, user can define the parameter according the board, card capability */
-typedef struct _sdcard_usr_param
-{
-    const sdmmchost_detect_card_t *cd; /*!< card detect type */
-    const sdmmchost_pwr_card_t *pwr;   /*!< power control configuration */
-} sdcard_usr_param_t;
-
 /*!
  * @brief SD card state
  *
@@ -87,6 +54,7 @@ typedef struct _sd_card
     sd_cid_t cid;                   /*!< CID */
     sd_csd_t csd;                   /*!< CSD */
     sd_scr_t scr;                   /*!< SCR */
+    sd_status_t stat;               /*!< sd 512 bit status */
     uint32_t blockCount;            /*!< Card total block number */
     uint32_t blockSize;             /*!< Card block size */
     sd_timing_mode_t currentTiming; /*!< current timing mode */
@@ -210,7 +178,7 @@ void SD_HostReset(SDMMCHOST_CONFIG *host);
 void SD_PowerOnCard(SDMMCHOST_TYPE *base, const sdmmchost_pwr_card_t *pwr);
 
 /*!
- * @brief power on card.
+ * @brief power off card.
  *
  * The power off operation depend on host or the user define power on function.
  * @param base host base address.
@@ -246,6 +214,26 @@ bool SD_IsCardPresent(sd_card_t *card);
  * @retval false Card isn't read only.
  */
 bool SD_CheckReadOnly(sd_card_t *card);
+
+/*!
+ * @brief Send SELECT_CARD command to set the card to be transfer state or not.
+ *
+ * @param card Card descriptor.
+ * @param isSelected True to set the card into transfer state, false to disselect.
+ * @retval kStatus_SDMMC_TransferFailed Transfer failed.
+ * @retval kStatus_Success Operate successfully.
+ */
+status_t SD_SelectCard(sd_card_t *card, bool isSelected);
+
+/*!
+ * @brief Send ACMD13 to get the card current status.
+ *
+ * @param card Card descriptor.
+ * @retval kStatus_SDMMC_TransferFailed Transfer failed.
+ * @retval kStatus_SDMMC_SendApplicationCommandFailed send application command failed.
+ * @retval kStatus_Success Operate successfully.
+ */
+status_t SD_ReadStatus(sd_card_t *card);
 
 /*!
  * @brief Reads blocks from the specific card.
@@ -301,6 +289,22 @@ status_t SD_WriteBlocks(sd_card_t *card, const uint8_t *buffer, uint32_t startBl
  * @retval kStatus_Success Operate successfully.
  */
 status_t SD_EraseBlocks(sd_card_t *card, uint32_t startBlock, uint32_t blockCount);
+
+/*!
+ * @brief select card driver strength
+ * select card driver strength
+ * @param card Card descriptor.
+ * @param driverStrength Driver strength
+ */
+status_t SD_SetDriverStrength(sd_card_t *card, sd_driver_strength_t driverStrength);
+
+/*!
+ * @brief select max current
+ * select max operation current
+ * @param card Card descriptor.
+ * @param maxCurrent Max current
+ */
+status_t SD_SetMaxCurrent(sd_card_t *card, sd_max_current_t maxCurrent);
 
 /* @} */
 

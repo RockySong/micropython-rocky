@@ -50,6 +50,9 @@
 #include "lib/utils/interrupt_char.h"
 #include "pendsv.h"
 
+// Most variables here are shared with USB DMA, strongly recommend to put ALL data/bss
+// in this file to NON-CACHABLE regions!!!
+
 /*******************************************************************************
 * Definitions
 ******************************************************************************/

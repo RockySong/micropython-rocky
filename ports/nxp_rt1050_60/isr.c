@@ -642,8 +642,10 @@ void Reserved168_IRQHandler(void) {
     }
     */
     // This call the storage IRQ handler, to check if the flash cache needs flushing
-    storage_irq_handler();
-    IRQ_EXIT(Reserved168_IRQn);
+	#if MICROPY_HW_HAS_FLASH
+	storage_irq_handler();
+	#endif
+	IRQ_EXIT(Reserved168_IRQn);
 	__DSB();
 }
 

@@ -170,6 +170,7 @@
 #define BOARD_SD_HOST_SUPPORT_SDR104_FREQ (200000000U)
 #define BOARD_SD_HOST_SUPPORT_HS200_FREQ (180000000U)
 /* define for SD/MMC config IO driver strength dynamic */
+#include "fsl_iomuxc.h"
 #define BOARD_SD_PIN_CONFIG(speed, strength)                                                      \
     {                                                                                             \
         IOMUXC_SetPinConfig(IOMUXC_GPIO_SD_B0_00_USDHC1_CMD,                                      \

@@ -1,37 +1,10 @@
 /*
- * The Clear BSD License
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2018 NXP
  * All rights reserved.
- * 
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided
- *  that the following conditions are met:
  *
- * o Redistributions of source code must retain the above copyright notice, this list
- *   of conditions and the following disclaimer.
- *
- * o Redistributions in binary form must reproduce the above copyright notice, this
- *   list of conditions and the following disclaimer in the documentation and/or
- *   other materials provided with the distribution.
- *
- * o Neither the name of the copyright holder nor the names of its
- *   contributors may be used to endorse or promote products derived from this
- *   software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * SPDX-License-Identifier: BSD-3-Clause
  */
-
 #ifndef _FSL_SDIO_H_
 #define _FSL_SDIO_H_
 
@@ -45,41 +18,62 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
-/*! @brief card user parameter, user can define the parameter according the board, card capability */
-typedef struct _sdiocard_usr_param
+/*! @brief Middleware version. */
+#define FSL_SDIO_DRIVER_VERSION (MAKE_VERSION(2U, 2U, 13U)) /*2.2.13*/
+
+/*!@brief sdio device support maximum IO number */
+#ifndef FSL_SDIO_MAX_IO_NUMS
+#define FSL_SDIO_MAX_IO_NUMS (7U)
+#endif
+/*!@brief sdio card descriptor */
+typedef struct _sdio_card sdio_card_t;
+/*!@brief sdio io handler */
+typedef void (*sdio_io_irq_handler_t)(sdio_card_t *card, uint32_t func);
+/*! @brief sdio io read/write direction */
+typedef enum _sdio_io_direction
 {
-    const sdmmchost_detect_card_t *cd; /*!< card detect type */
-    const sdmmchost_pwr_card_t *pwr;   /*!< power control configuration */
-} sdiocard_usr_param_t;
+    kSDIO_IORead  = 0U, /*!< io read */
+    kSDIO_IOWrite = 1U, /*!< io write */
+} sdio_io_direction_t;
 
 /*!
  * @brief SDIO card state
  *
  * Define the card structure including the necessary fields to identify and describe the card.
  */
-typedef struct _sdio_card
+struct _sdio_card
 {
     SDMMCHOST_CONFIG host;         /*!< Host information */
     sdiocard_usr_param_t usrParam; /*!< user parameter */
+    bool noInternalAlign;          /*!< use this flag to disable sdmmc align. If disable, sdmmc will not make sure the
+                                  data buffer address is word align, otherwise all the transfer are align to low level driver */
     bool isHostReady;              /*!< use this flag to indicate if need host re-init or not*/
     bool memPresentFlag;           /*!< indicate if memory present */
-    uint32_t busClock_Hz;          /*!< SD bus clock frequency united in Hz */
-    uint32_t relativeAddress;      /*!< Relative address of the card */
-    uint8_t sdVersion;             /*!< SD version */
-    uint8_t sdioVersion;           /*!< SDIO version */
-    uint8_t cccrVersioin;          /*!< CCCR version */
-    uint8_t ioTotalNumber;         /*!< total number of IO function */
-    uint32_t cccrflags;            /*!< Flags in _sd_card_flag */
-    uint32_t io0blockSize;         /*!< record the io0 block size*/
-    uint32_t ocr;                  /*!< Raw OCR content, only 24bit avalible for SDIO card */
-    uint32_t commonCISPointer;     /*!< point to common CIS */
 
-    sdio_fbr_t ioFBR[7U]; /*!< FBR table */
+    uint32_t busClock_Hz;                       /*!< SD bus clock frequency united in Hz */
+    uint32_t relativeAddress;                   /*!< Relative address of the card */
+    uint8_t sdVersion;                          /*!< SD version */
+    sd_timing_mode_t currentTiming;             /*!< current timing mode */
+    sd_driver_strength_t driverStrength;        /*!< driver strength */
+    sd_max_current_t maxCurrent;                /*!< card current limit */
+    sdmmc_operation_voltage_t operationVoltage; /*!< card operation voltage */
 
+    uint8_t sdioVersion;         /*!< SDIO version */
+    uint8_t cccrVersioin;        /*!< CCCR version */
+    uint8_t ioTotalNumber;       /*!< total number of IO function */
+    uint32_t cccrflags;          /*!< Flags in _sd_card_flag */
+    uint32_t io0blockSize;       /*!< record the io0 block size*/
+    uint32_t ocr;                /*!< Raw OCR content, only 24bit avalible for SDIO card */
+    uint32_t commonCISPointer;   /*!< point to common CIS */
     sdio_common_cis_t commonCIS; /*!< CIS table */
-    sdio_func_cis_t funcCIS[7U]; /*!< function CIS table*/
 
-} sdio_card_t;
+    /* io registers/IRQ handler */
+    sdio_fbr_t ioFBR[FSL_SDIO_MAX_IO_NUMS];                   /*!< FBR table */
+    sdio_func_cis_t funcCIS[FSL_SDIO_MAX_IO_NUMS];            /*!< function CIS table*/
+    sdio_io_irq_handler_t ioIRQHandler[FSL_SDIO_MAX_IO_NUMS]; /*!< io IRQ handler */
+    uint8_t ioIntIndex;                                       /*!< used to record current enabled io interrupt index */
+    uint8_t ioIntNums;                                        /*!< used to record total enabled io interrupt numbers  */
+};
 
 /*************************************************************************************************
  * API
@@ -88,7 +82,7 @@ typedef struct _sdio_card
 extern "C" {
 #endif
 /*!
- * @name SDIOCARD Function
+ * @name Initialization and deinitialization
  * @{
  */
 
@@ -203,61 +197,6 @@ void SDIO_PowerOffCard(SDMMCHOST_TYPE *base, const sdmmchost_pwr_card_t *pwr);
 status_t SDIO_CardInActive(sdio_card_t *card);
 
 /*!
- * @brief IO direct write transfer function
- *
- * @param card Card descriptor.
- * @param function IO numner
- * @param register address
- * @param the data pinter to write
- * @param raw flag, indicate read after write or write only
- * @retval kStatus_SDMMC_TransferFailed
- * @retval kStatus_Success
- */
-status_t SDIO_IO_Write_Direct(sdio_card_t *card, sdio_func_num_t func, uint32_t regAddr, uint8_t *data, bool raw);
-
-/*!
- * @brief IO direct read transfer function
- *
- * @param card Card descriptor.
- * @param function IO number
- * @param register address
- * @param data pointer to read
- * @retval kStatus_SDMMC_TransferFailed
- * @retval kStatus_Success
- */
-status_t SDIO_IO_Read_Direct(sdio_card_t *card, sdio_func_num_t func, uint32_t regAddr, uint8_t *data);
-
-/*!
- * @brief IO extended write transfer function
- *
- * @param card Card descriptor.
- * @param function IO number
- * @param register address
- * @param data buffer to write
- * @param data count
- * @param write flags
- * @retval kStatus_SDMMC_TransferFailed
- * @retval kStatus_SDMMC_SDIO_InvalidArgument
- * @retval kStatus_Success
- */
-status_t SDIO_IO_Write_Extended(
-    sdio_card_t *card, sdio_func_num_t func, uint32_t regAddr, uint8_t *buffer, uint32_t count, uint32_t flags);
-/*!
- * @brief IO extended read transfer function
- *
- * @param card Card descriptor.
- * @param function IO number
- * @param register address
- * @param data buffer to read
- * @param data count
- * @param write flags
- * @retval kStatus_SDMMC_TransferFailed
- * @retval kStatus_SDMMC_SDIO_InvalidArgument
- * @retval kStatus_Success
- */
-status_t SDIO_IO_Read_Extended(
-    sdio_card_t *card, sdio_func_num_t func, uint32_t regAddr, uint8_t *buffer, uint32_t count, uint32_t flags);
-/*!
  * @brief get SDIO card capability
  *
  * @param card Card descriptor.
@@ -322,6 +261,107 @@ status_t SDIO_SwitchToHighSpeed(sdio_card_t *card);
 status_t SDIO_ReadCIS(sdio_card_t *card, sdio_func_num_t func, const uint32_t *tupleList, uint32_t tupleNum);
 
 /*!
+ * @brief sdio wait card detect function.
+ *
+ * Detect card through GPIO, CD, DATA3.
+ *
+ * @param card card descriptor.
+ * @param card detect configuration
+ * @param waitCardStatus wait card detect status
+ */
+status_t SDIO_WaitCardDetectStatus(SDMMCHOST_TYPE *hostBase, const sdmmchost_detect_card_t *cd, bool waitCardStatus);
+
+/*!
+ * @brief sdio card present check function.
+ *
+ * @param card card descriptor.
+ */
+bool SDIO_IsCardPresent(sdio_card_t *card);
+
+/* @} */
+
+/*!
+ * @name IO operations
+ * @{
+ */
+
+/*!
+ * @brief IO direct write transfer function
+ *
+ * @param card Card descriptor.
+ * @param function IO numner
+ * @param register address
+ * @param the data pinter to write
+ * @param raw flag, indicate read after write or write only
+ * @retval kStatus_SDMMC_TransferFailed
+ * @retval kStatus_Success
+ */
+status_t SDIO_IO_Write_Direct(sdio_card_t *card, sdio_func_num_t func, uint32_t regAddr, uint8_t *data, bool raw);
+
+/*!
+ * @brief IO direct read transfer function
+ *
+ * @param card Card descriptor.
+ * @param function IO number
+ * @param register address
+ * @param data pointer to read
+ * @retval kStatus_SDMMC_TransferFailed
+ * @retval kStatus_Success
+ */
+status_t SDIO_IO_Read_Direct(sdio_card_t *card, sdio_func_num_t func, uint32_t regAddr, uint8_t *data);
+
+/*!
+ * @brief IO direct read/write transfer function
+ *
+ * @param card Card descriptor.
+ * @param direction io access direction, please reference sdio_io_direction_t.
+ * @param function IO number
+ * @param register address
+ * @param dataIn data to write
+ * @param dataOut data pointer for readback data, support both for read and write, when application want readback
+ * the data after write command, dataOut should not be NULL.
+ * @retval kStatus_SDMMC_TransferFailed
+ * @retval kStatus_Success
+ */
+
+status_t SDIO_IO_RW_Direct(sdio_card_t *card,
+                           sdio_io_direction_t direction,
+                           sdio_func_num_t func,
+                           uint32_t regAddr,
+                           uint8_t dataIn,
+                           uint8_t *dataOut);
+
+/*!
+ * @brief IO extended write transfer function
+ *
+ * @param card Card descriptor.
+ * @param function IO number
+ * @param register address
+ * @param data buffer to write
+ * @param data count
+ * @param write flags
+ * @retval kStatus_SDMMC_TransferFailed
+ * @retval kStatus_SDMMC_SDIO_InvalidArgument
+ * @retval kStatus_Success
+ */
+status_t SDIO_IO_Write_Extended(
+    sdio_card_t *card, sdio_func_num_t func, uint32_t regAddr, uint8_t *buffer, uint32_t count, uint32_t flags);
+/*!
+ * @brief IO extended read transfer function
+ *
+ * @param card Card descriptor.
+ * @param function IO number
+ * @param register address
+ * @param data buffer to read
+ * @param data count
+ * @param write flags
+ * @retval kStatus_SDMMC_TransferFailed
+ * @retval kStatus_SDMMC_SDIO_InvalidArgument
+ * @retval kStatus_Success
+ */
+status_t SDIO_IO_Read_Extended(
+    sdio_card_t *card, sdio_func_num_t func, uint32_t regAddr, uint8_t *buffer, uint32_t count, uint32_t flags);
+/*!
  * @brief enable IO interrupt
  *
  * @param card Card descriptor.
@@ -364,22 +404,96 @@ status_t SDIO_SelectIO(sdio_card_t *card, sdio_func_num_t func);
 status_t SDIO_AbortIO(sdio_card_t *card, sdio_func_num_t func);
 
 /*!
- * @brief sdio wait card detect function.
+ * @brief Set driver strength.
  *
- * Detect card through GPIO, CD, DATA3.
- *
- * @param card card descriptor.
- * @param card detect configuration
- * @param waitCardStatus wait card detect status
+ * @param card Card descriptor.
+ * @param driverStrength target driver strength.
+ * @retval kStatus_SDMMC_TransferFailed
+ * @retval kStatus_Success
  */
-status_t SDIO_WaitCardDetectStatus(SDMMCHOST_TYPE *hostBase, const sdmmchost_detect_card_t *cd, bool waitCardStatus);
+status_t SDIO_SetDriverStrength(sdio_card_t *card, sd_driver_strength_t driverStrength);
 
 /*!
- * @brief sdio card present check function.
+ * @brief Enable/Disable Async interrupt.
+ *
+ * @param card Card descriptor.
+ * @param func function io number.
+ * @param enable true is enable, false is disable.
+ * @retval kStatus_SDMMC_TransferFailed
+ * @retval kStatus_Success
+ */
+status_t SDIO_EnableAsyncInterrupt(sdio_card_t *card, bool enable);
+
+/*!
+ * @brief Get pending interrupt.
+ *
+ * @param card Card descriptor.
+ * @param pendingInt pointer store pending interrupt
+ * @retval kStatus_SDMMC_TransferFailed
+ * @retval kStatus_Success
+ */
+status_t SDIO_GetPendingInterrupt(sdio_card_t *card, uint8_t *pendingInt);
+
+/*!
+ * @brief sdio card io transfer function.
+ * This function can be used for trnansfer direct/extend command.
+ * Please pay attention to the non-align data buffer address transfer,
+ * if data buffer address can not meet host controller internal DMA requirement, sdio driver will try to use
+ internal align buffer if data size is not bigger than internal buffer size,
+ * Align address transfer always can get a better performance, so if application want sdio driver make sure buffer
+ address align,
+ * please redefine the SDMMC_GLOBAL_BUFFER_SIZE macro to a value which is big enough for your application.
  *
  * @param card card descriptor.
+ * @param cmd command to transfer
+ * @param argument argument to transfer
+ * @param blockSize used for block mode.
+ * @param txData tx buffer pointer or NULL
+ * @param rxData rx buffer pointer or NULL
+ * @param dataSize transfer data size
+ * @param response reponse pointer, if application want read response back, please set it to a NON-NULL pointer.
+
  */
-bool SDIO_IsCardPresent(sdio_card_t *card);
+status_t SDIO_IO_Transfer(sdio_card_t *card,
+                          sdio_command_t cmd,
+                          uint32_t argument,
+                          uint32_t blockSize,
+                          uint8_t *txData,
+                          uint8_t *rxData,
+                          uint16_t dataSize,
+                          uint32_t *response);
+
+/*!
+ * @brief sdio set io IRQ handler.
+ *
+ * @param card card descriptor.
+ * @param func function io number.
+ * @param handler,  io IRQ handler.
+ */
+void SDIO_SetIOIRQHandler(sdio_card_t *card, sdio_func_num_t func, sdio_io_irq_handler_t handler);
+
+/*!
+ * @brief sdio card io pending interrupt handle function.
+ * This function is used to handle the pending io interrupt.
+ * To reigster a IO IRQ handler,
+ * @code
+ * //initialization
+ * SDIO_EnableIOInterrupt(card, 0, true);
+ * SDIO_SetIOIRQHandler(card, 0, func0_handler);
+ * //call it in interrupt callback
+ * SDIO_HandlePendingIOInterrupt(card);
+ * @code
+ * To releae a IO IRQ handler,
+ * @code
+ * SDIO_EnableIOInterrupt(card, 0, false);
+ * SDIO_SetIOIRQHandler(card, 0, NULL);
+ * @code
+ * @param card card descriptor.
+ *
+ * @retval kStatus_SDMMC_TransferFailed
+ * @retval kStatus_Success
+ */
+status_t SDIO_HandlePendingIOInterrupt(sdio_card_t *card);
 
 /* @} */
 

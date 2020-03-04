@@ -336,6 +336,21 @@ _Pragma("diag_suppress=Pm120")
 #endif
 /* @} */
 
+/*! @name Suppress fallthrough warning macro */
+/* For switch case code block, if case section ends without "break;" statement, there wil be
+ fallthrough warning with compiler flag -Wextra or -Wimplicit-fallthrough=n when using armgcc.
+ To suppress this warning, "SUPPRESS_FALL_THROUGH_WARNING();" need to be added at the end of each
+ case section which misses "break;"statement.
+ */
+/* @{ */
+#if defined(__GNUC__) && !defined(__ARMCC_VERSION)
+#define SUPPRESS_FALL_THROUGH_WARNING() __attribute__ ((fallthrough))
+#else
+#define SUPPRESS_FALL_THROUGH_WARNING()
+#endif
+/* @} */
+
+
 /*******************************************************************************
  * API
  ******************************************************************************/

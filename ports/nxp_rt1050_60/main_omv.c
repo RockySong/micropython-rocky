@@ -251,7 +251,9 @@ FRESULT exec_boot_script(const char *path, bool selftest, bool interruptible)
     if (selftest && f_res == FR_OK) {
         // Remove self tests script and flush cache
         f_unlink(&vfs_fat->fatfs, path);
+		#if MICROPY_HW_HAS_FLASH
         storage_flush();
+		#endif
 
         // Set flag for SWD debugger.
         // Note: main.py does not use the frame buffer.

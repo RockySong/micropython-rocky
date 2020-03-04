@@ -283,6 +283,7 @@ static const char fresh_readme_txt[] __ALIGNED(4) =
 ;
 
 // avoid inlining to avoid stack usage within main()
+#if MICROPY_HW_HAS_FLASH
 MP_NOINLINE STATIC bool init_flash_fs(uint reset_mode) {
     // init the vfs object
     fs_user_mount_t *vfs_fat = &fs_user_mount_flash;
@@ -385,7 +386,7 @@ MP_NOINLINE STATIC bool init_flash_fs(uint reset_mode) {
 
     return true;
 }
-
+#endif
 #if MICROPY_HW_HAS_SDCARD
 STATIC bool init_sdcard_fs(bool first_soft_reset) {
     bool first_part = true;
@@ -909,7 +910,7 @@ soft_reset:
     // Initialise the local flash filesystem.
     // Create it if needed, mount in on /flash, and set it as current dir.
 	bool mounted_flash;
-	#if !defined(XIP_EXTERNAL_FLASH) && defined(EVK1050_60_HYPER) 
+	#if MICROPY_HW_HAS_FLASH && !defined(XIP_EXTERNAL_FLASH) && defined(EVK1050_60_HYPER) 
     mounted_flash = init_flash_fs(reset_mode);
 	#else
 	mounted_flash = 0;
@@ -1026,10 +1027,10 @@ soft_reset:
 soft_reset_exit:
 
     // soft reset
-
+	#if MICROPY_HW_HAS_FLASH
     printf("PYB: sync filesystems\n");
     storage_flush();
-
+	#endif
     printf("PYB: soft reboot\n");
     // rocky ignore: timer_deinit();
     

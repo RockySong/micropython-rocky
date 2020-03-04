@@ -2232,3 +2232,9 @@ QDEF(MP_QSTR_FRAMESIZE_WQXGA2, (const byte*)"\x68\x62\x10" "FRAMESIZE_WQXGA2")
 QDEF(MP_QSTR_usocket, (const byte*)"\x75\x00\x07" "usocket")
 QDEF(MP_QSTR_network, (const byte*)"\x5b\x28\x07" "network")
 QDEF(MP_QSTR_route, (const byte*)"\x3c\x28\x05" "route")
+QDEF(MP_QSTR_recvfrom, (const byte*)"\x91\x90\x08" "recvfrom")
+QDEF(MP_QSTR_sendto, (const byte*)"\x22\x03\x06" "sendto")
+QDEF(MP_QSTR_setsockopt, (const byte*)"\x38\xe8\x0a" "setsockopt")
+QDEF(MP_QSTR_getaddrinfo, (const byte*)"\x6e\x18\x0b" "getaddrinfo")
+
+

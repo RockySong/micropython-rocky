@@ -91,9 +91,9 @@ USB_DATA_ALIGNMENT usb_device_mode_parameters_header_struct_t g_ModeParametersHe
     {0x00, 0x00, 0x00, 0x00} /*!<This bit should be set to zero*/
 };
 
-uint32_t g_mscReadRequestBuffer[USB_DEVICE_MSC_READ_BUFF_SIZE >> 2];
+uint32_t g_mscReadRequestBuffer[USB_DEVICE_MSC_READ_BUFF_SIZE >> 2] __attribute__((aligned(16)));
 
-uint32_t g_mscWriteRequestBuffer[USB_DEVICE_MSC_WRITE_BUFF_SIZE >> 2];
+uint32_t g_mscWriteRequestBuffer[USB_DEVICE_MSC_WRITE_BUFF_SIZE >> 2] __attribute__((aligned(16))) ;
 
 
 /*******************************************************************************
@@ -125,9 +125,11 @@ void _ConfigLBA(usb_device_lba_information_struct_t *lbaInf)
 		s_isUseSDCard = 1; //1;
 		lbaInf->totalLbaNumberSupports = sdcard_get_lba_count();
 	}
-	else
+	else {
+		#if MICROPY_HW_HAS_FLASH
 		lbaInf->totalLbaNumberSupports = storage_get_block_count();
-
+		#endif
+	}
 	lbaInf->lengthOfEachLba = 512;
 	lbaInf->bulkInBufferSize = sizeof(g_mscReadRequestBuffer);
 	lbaInf->bulkOutBufferSize = sizeof(g_mscWriteRequestBuffer);
@@ -154,7 +156,9 @@ usb_status_t USB_DeviceMscCallback2(class_handle_t handle, uint32_t event, void 
 					if (sdcard_is_present())
 						t1 = sdcard_write_blocks(lba->buffer,lba->offset, lba->size >> USB_MSC_BLOCK_SIZE_LOG2);
 				} else {
+					#if MICROPY_HW_HAS_FLASH
 					t1 = storage_write_blocks(lba->buffer,lba->offset + storage_get_block_offset(), lba->size >> USB_MSC_BLOCK_SIZE_LOG2);
+					#endif
 				}
 				
 				if (0 != t1)
@@ -179,7 +183,9 @@ usb_status_t USB_DeviceMscCallback2(class_handle_t handle, uint32_t event, void 
 				if (sdcard_is_present())
 					t1 = sdcard_read_blocks(lba->buffer,lba->offset, lba->size >> USB_MSC_BLOCK_SIZE_LOG2);
 			} else {
+			#if MICROPY_HW_HAS_FLASH
 				t1 = storage_read_blocks(lba->buffer,lba->offset + storage_get_block_offset(), lba->size >> USB_MSC_BLOCK_SIZE_LOG2);
+			#endif
 			}
 
 			if (0 != t1)
@@ -267,7 +273,9 @@ usb_status_t USB_DeviceMscCallback(class_handle_t handle, uint32_t event, void *
 					if (sdcard_is_present())
 						t1 = sdcard_write_blocks(lba->buffer,lba->offset, lba->size >> USB_MSC_BLOCK_SIZE_LOG2);
 				} else {
+				#if MICROPY_HW_HAS_FLASH
 					t1 = storage_write_blocks(lba->buffer,lba->offset + storage_get_block_offset(), lba->size >> USB_MSC_BLOCK_SIZE_LOG2);
+				#endif
 				}
 				
 				if (0 != t1)
@@ -310,7 +318,9 @@ usb_status_t USB_DeviceMscCallback(class_handle_t handle, uint32_t event, void *
 				if (sdcard_is_present())
 					t1 = sdcard_read_blocks(lba->buffer,lba->offset, lba->size >> USB_MSC_BLOCK_SIZE_LOG2);
 			} else {
+			#if MICROPY_HW_HAS_FLASH
 				t1 = storage_read_blocks(lba->buffer,lba->offset + storage_get_block_offset(), lba->size >> USB_MSC_BLOCK_SIZE_LOG2);
+			#endif
 			}
 
 			if (0 != t1)
