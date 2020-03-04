@@ -92,7 +92,7 @@ void fb_update_jpeg_buffer()
 {
     static int overflow_count = 0;
 
-    if ((MAIN_FB()->bpp > 3) && JPEG_FB()->enabled) {
+    if ((MAIN_FB()->bpp > 3) && JPEG_FB()->enabled && JPEG_FB()->size == 0) {
         bool does_not_fit = false;
         // Lock FB
         if (mutex_try_lock(&JPEG_FB()->lock, MUTEX_TID_OMV)) {
@@ -117,7 +117,7 @@ void fb_update_jpeg_buffer()
             // (MP_PYTHON_PRINTER)->print_strn((MP_PYTHON_PRINTER)->data, (const char *) temp, new_size);
             fb_alloc_free_till_mark();
         }
-    } else if ((MAIN_FB()->bpp >= 0) && JPEG_FB()->enabled) {
+    } else if ((MAIN_FB()->bpp >= 0) && JPEG_FB()->enabled && JPEG_FB()->size == 0) {
         // Lock FB
         if (mutex_try_lock(&JPEG_FB()->lock, MUTEX_TID_OMV)) {
             // Set JPEG src and dst images.

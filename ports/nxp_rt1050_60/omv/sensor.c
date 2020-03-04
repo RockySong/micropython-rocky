@@ -1448,8 +1448,10 @@ void LCDMonitor_Update(uint32_t fbNdx)
 // The JPEG offset allows JPEG compression of the framebuffer without overwriting the pixels.
 // The offset size may need to be adjusted depending on the quality, otherwise JPEG data may
 // overwrite image pixels before they are compressed.
+volatile uint32_t s_minProcessTicks = 10, s_jpegEncTicks;
 int sensor_snapshot(sensor_t *sensor, image_t *pImg, streaming_cb_t streaming_cb)
 {
+    static uint32_t ls_prevTick;
  //   uint32_t activeADDR;//, length;
   //  uint32_t inactiveADDR;
   	sensor = sensor , streaming_cb = streaming_cb;	// keep compatible with original openMV
@@ -1470,29 +1472,34 @@ int sensor_snapshot(sensor_t *sensor, image_t *pImg, streaming_cb_t streaming_cb
             // Read the number of data items transferred
             // MAIN_FB()->bpp = (MAX_XFER_SIZE - __HAL_DMA_GET_COUNTER(&DMAHandle))*4;
             break;
-    }
-
+    }    
 	static uint8_t n;
     {
-		uint32_t t1, t2;
-		if (JPEG_FB()->enabled) {
-			
-			t1 = HAL_GetTick();
-			fb_update_jpeg_buffer();
-			t2 = HAL_GetTick() - t1;
-			t2 = t2;
-		}
+		uint32_t t1;
 		#ifndef NO_LCD_MONITOR // #ifdef __CC_ARM
 		LCDMonitor_Update(n);
-		#endif
-		#if 1
-		
-		CAMERA_TAKE_SNAPSHOT();
+		#endif        
+		if (JPEG_FB()->enabled) {
+            // if OpenMV IDE enables JPEG uploading, then we suppress the new frame rate
+            // so USB have enough time to upload previous jpeg frame
+            // note: we disable USB IRQ during taking new snapshot, otherwise,
+            // even if CSI IRQ priority is higher than USB and can be preempted,
+            // sometimes CSI IRQ handler misses deadline and picture tearing happens
+            while (HAL_GetTick() - ls_prevTick < s_minProcessTicks) {
+                s_minProcessTicks = s_minProcessTicks;
+            }
+			t1 = HAL_GetTick();
+			fb_update_jpeg_buffer();
+			s_jpegEncTicks = HAL_GetTick() - t1;
+		}
+		#if 1        
+        CAMERA_TAKE_SNAPSHOT();
 		if (!s_isEnUsbIrqForSnapshot)
 			NVIC_DisableIRQ(USB_OTG1_IRQn);
 		CAMERA_WAIT_FOR_SNAPSHOT();
 		if (!s_isEnUsbIrqForSnapshot)
 			NVIC_EnableIRQ(USB_OTG1_IRQn);
+        ls_prevTick = HAL_GetTick();
 		#else
 		/*
 		uint32_t i;
