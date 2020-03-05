@@ -15,7 +15,7 @@ __WEAK bool jpeg_compress(image_t *src, image_t *dst, int quality, bool realloc)
 extern unsigned int Image$$OMV_MAIN_FB$$Base;
 
 #define JPEG_BUF	__attribute__((section(".jpeg_buf")))
-JPEG_BUF uint8_t s_jpegBuf[OMV_JPEG_BUF_SIZE];
+JPEG_BUF uint32_t s_jpegBuf[OMV_JPEG_BUF_SIZE / 4];
 
 framebuffer_t *fb_framebuffer = (framebuffer_t*) &Image$$OMV_MAIN_FB$$Base;
 jpegbuffer_t *jpeg_fb_framebuffer = (jpegbuffer_t*) &s_jpegBuf;

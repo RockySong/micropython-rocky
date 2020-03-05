@@ -228,6 +228,7 @@ void usbdbg_data_in(void *buffer, int length)
 
 extern int py_image_descriptor_from_roi(image_t *image, const char *path, rectangle_t *roi);
 extern void ProfReset(void);
+__WEAK void Hook_OnUsbDbgScriptExec(void) {}
 void usbdbg_data_out(void *buffer, int length)
 {
     switch (cmd) {
@@ -249,6 +250,7 @@ void usbdbg_data_out(void *buffer, int length)
             // than the total length (xfer_length) and the script will Not be executed.
             if (!script_running && !gc_is_locked()) {
                 vstr_add_strn(&script_buf, buffer, length);
+                Hook_OnUsbDbgScriptExec();
                 xfer_bytes += length;
                 if (xfer_bytes == xfer_length) {
                     // Set script ready flag

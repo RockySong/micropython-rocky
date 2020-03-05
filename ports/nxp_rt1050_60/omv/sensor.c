@@ -411,10 +411,6 @@ void LCDMonitor_InitFB(void)
 
 void LCDMonitor_Init(void)
 {
-	static uint8_t isInited;
-	if (isInited)
-		return;
-	isInited = 1;
     // Initialize the camera bus.
     BOARD_InitLcdifPixClock();
    // BOARD_InitDebugConsole();
@@ -441,6 +437,9 @@ void LCDMonitor_Init(void)
     ELCDIF_SetNextBufferAddr(APP_ELCDIF, (uint32_t)s_frameBuffer);
     ELCDIF_RgbModeStart(APP_ELCDIF);  	
 
+}
+void UnHook_OnUsbDbgScriptExec(void) {
+    LCDMonitor_Init();
 }
 #endif
 
@@ -1480,13 +1479,15 @@ int sensor_snapshot(sensor_t *sensor, image_t *pImg, streaming_cb_t streaming_cb
 		LCDMonitor_Update(n);
 		#endif        
 		if (JPEG_FB()->enabled) {
-            // if OpenMV IDE enables JPEG uploading, then we suppress the new frame rate
-            // so USB have enough time to upload previous jpeg frame
-            // note: we disable USB IRQ during taking new snapshot, otherwise,
-            // even if CSI IRQ priority is higher than USB and can be preempted,
-            // sometimes CSI IRQ handler misses deadline and picture tearing happens
-            while (HAL_GetTick() - ls_prevTick < s_minProcessTicks) {
-                s_minProcessTicks = s_minProcessTicks;
+            if (!s_isEnUsbIrqForSnapshot) {
+                // if OpenMV IDE enables JPEG uploading, then we suppress the new frame rate
+                // so USB have enough time to upload previous jpeg frame
+                // note: we disable USB IRQ during taking new snapshot, otherwise,
+                // even if CSI IRQ priority is higher than USB and can be preempted,
+                // sometimes CSI IRQ handler misses deadline and picture tearing happen
+                while (HAL_GetTick() - ls_prevTick < s_minProcessTicks) {
+                    s_minProcessTicks = s_minProcessTicks;
+                }
             }
 			t1 = HAL_GetTick();
 			fb_update_jpeg_buffer();

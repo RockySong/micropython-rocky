@@ -4872,7 +4872,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Board</GroupName>
+          <GroupName>board_omvrt1</GroupName>
           <Files>
             <File>
               <FileName>board.c</FileName>
@@ -4903,6 +4903,120 @@
               <FileName>pin_mux.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\nxp_rt1050_60\boards\omvrt1\pin_mux.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>board_evk1050</GroupName>
+          <GroupOption>
+            <CommonProperty>
+              <UseCPPCompiler>0</UseCPPCompiler>
+              <RVCTCodeConst>0</RVCTCodeConst>
+              <RVCTZI>0</RVCTZI>
+              <RVCTOtherData>0</RVCTOtherData>
+              <ModuleSelection>0</ModuleSelection>
+              <IncludeInBuild>0</IncludeInBuild>
+              <AlwaysBuild>2</AlwaysBuild>
+              <GenerateAssemblyFile>2</GenerateAssemblyFile>
+              <AssembleAssemblyFile>2</AssembleAssemblyFile>
+              <PublicsOnly>2</PublicsOnly>
+              <StopOnExitCode>11</StopOnExitCode>
+              <CustomArgument></CustomArgument>
+              <IncludeLibraryModules></IncludeLibraryModules>
+              <ComprImg>1</ComprImg>
+            </CommonProperty>
+            <GroupArmAds>
+              <Cads>
+                <interw>2</interw>
+                <Optim>0</Optim>
+                <oTime>2</oTime>
+                <SplitLS>2</SplitLS>
+                <OneElfS>2</OneElfS>
+                <Strict>2</Strict>
+                <EnumInt>2</EnumInt>
+                <PlainCh>2</PlainCh>
+                <Ropi>2</Ropi>
+                <Rwpi>2</Rwpi>
+                <wLevel>0</wLevel>
+                <uThumb>2</uThumb>
+                <uSurpInc>2</uSurpInc>
+                <uC99>2</uC99>
+                <uGnu>2</uGnu>
+                <useXO>2</useXO>
+                <v6Lang>0</v6Lang>
+                <v6LangP>0</v6LangP>
+                <vShortEn>2</vShortEn>
+                <vShortWch>2</vShortWch>
+                <v6Lto>2</v6Lto>
+                <v6WtE>2</v6WtE>
+                <v6Rtti>2</v6Rtti>
+                <VariousControls>
+                  <MiscControls></MiscControls>
+                  <Define></Define>
+                  <Undefine></Undefine>
+                  <IncludePath></IncludePath>
+                </VariousControls>
+              </Cads>
+              <Aads>
+                <interw>2</interw>
+                <Ropi>2</Ropi>
+                <Rwpi>2</Rwpi>
+                <thumb>2</thumb>
+                <SplitLS>2</SplitLS>
+                <SwStkChk>2</SwStkChk>
+                <NoWarn>2</NoWarn>
+                <uSurpInc>2</uSurpInc>
+                <useXO>2</useXO>
+                <uClangAs>2</uClangAs>
+                <VariousControls>
+                  <MiscControls></MiscControls>
+                  <Define></Define>
+                  <Undefine></Undefine>
+                  <IncludePath></IncludePath>
+                </VariousControls>
+              </Aads>
+            </GroupArmAds>
+          </GroupOption>
+          <Files>
+            <File>
+              <FileName>board.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt1050_60\boards\imxrtevk105x\board.c</FilePath>
+            </File>
+            <File>
+              <FileName>clock_config.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt1050_60\boards\imxrtevk105x\clock_config.c</FilePath>
+            </File>
+            <File>
+              <FileName>pin_mux.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt1050_60\boards\imxrtevk105x\pin_mux.c</FilePath>
+            </File>
+            <File>
+              <FileName>board.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\nxp_rt1050_60\boards\imxrtevk105x\board.h</FilePath>
+            </File>
+            <File>
+              <FileName>clock_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\nxp_rt1050_60\boards\imxrtevk105x\clock_config.h</FilePath>
+            </File>
+            <File>
+              <FileName>mpconfigboard.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\nxp_rt1050_60\boards\imxrtevk105x\mpconfigboard.h</FilePath>
+            </File>
+            <File>
+              <FileName>omv_boardconfig.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\nxp_rt1050_60\boards\imxrtevk105x\omv_boardconfig.h</FilePath>
+            </File>
+            <File>
+              <FileName>pin_mux.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\nxp_rt1050_60\boards\imxrtevk105x\pin_mux.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -12652,7 +12766,76 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Board</GroupName>
+          <GroupName>board_omvrt1</GroupName>
+          <GroupOption>
+            <CommonProperty>
+              <UseCPPCompiler>0</UseCPPCompiler>
+              <RVCTCodeConst>0</RVCTCodeConst>
+              <RVCTZI>0</RVCTZI>
+              <RVCTOtherData>0</RVCTOtherData>
+              <ModuleSelection>0</ModuleSelection>
+              <IncludeInBuild>0</IncludeInBuild>
+              <AlwaysBuild>2</AlwaysBuild>
+              <GenerateAssemblyFile>2</GenerateAssemblyFile>
+              <AssembleAssemblyFile>2</AssembleAssemblyFile>
+              <PublicsOnly>2</PublicsOnly>
+              <StopOnExitCode>11</StopOnExitCode>
+              <CustomArgument></CustomArgument>
+              <IncludeLibraryModules></IncludeLibraryModules>
+              <ComprImg>1</ComprImg>
+            </CommonProperty>
+            <GroupArmAds>
+              <Cads>
+                <interw>2</interw>
+                <Optim>0</Optim>
+                <oTime>2</oTime>
+                <SplitLS>2</SplitLS>
+                <OneElfS>2</OneElfS>
+                <Strict>2</Strict>
+                <EnumInt>2</EnumInt>
+                <PlainCh>2</PlainCh>
+                <Ropi>2</Ropi>
+                <Rwpi>2</Rwpi>
+                <wLevel>0</wLevel>
+                <uThumb>2</uThumb>
+                <uSurpInc>2</uSurpInc>
+                <uC99>2</uC99>
+                <uGnu>2</uGnu>
+                <useXO>2</useXO>
+                <v6Lang>0</v6Lang>
+                <v6LangP>0</v6LangP>
+                <vShortEn>2</vShortEn>
+                <vShortWch>2</vShortWch>
+                <v6Lto>2</v6Lto>
+                <v6WtE>2</v6WtE>
+                <v6Rtti>2</v6Rtti>
+                <VariousControls>
+                  <MiscControls></MiscControls>
+                  <Define></Define>
+                  <Undefine></Undefine>
+                  <IncludePath></IncludePath>
+                </VariousControls>
+              </Cads>
+              <Aads>
+                <interw>2</interw>
+                <Ropi>2</Ropi>
+                <Rwpi>2</Rwpi>
+                <thumb>2</thumb>
+                <SplitLS>2</SplitLS>
+                <SwStkChk>2</SwStkChk>
+                <NoWarn>2</NoWarn>
+                <uSurpInc>2</uSurpInc>
+                <useXO>2</useXO>
+                <uClangAs>2</uClangAs>
+                <VariousControls>
+                  <MiscControls></MiscControls>
+                  <Define></Define>
+                  <Undefine></Undefine>
+                  <IncludePath></IncludePath>
+                </VariousControls>
+              </Aads>
+            </GroupArmAds>
+          </GroupOption>
           <Files>
             <File>
               <FileName>board.c</FileName>
@@ -12683,6 +12866,51 @@
               <FileName>pin_mux.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\nxp_rt1050_60\boards\omvrt1\pin_mux.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>board_evk1050</GroupName>
+          <Files>
+            <File>
+              <FileName>board.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt1050_60\boards\imxrtevk105x\board.c</FilePath>
+            </File>
+            <File>
+              <FileName>clock_config.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt1050_60\boards\imxrtevk105x\clock_config.c</FilePath>
+            </File>
+            <File>
+              <FileName>pin_mux.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\nxp_rt1050_60\boards\imxrtevk105x\pin_mux.c</FilePath>
+            </File>
+            <File>
+              <FileName>board.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\nxp_rt1050_60\boards\imxrtevk105x\board.h</FilePath>
+            </File>
+            <File>
+              <FileName>clock_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\nxp_rt1050_60\boards\imxrtevk105x\clock_config.h</FilePath>
+            </File>
+            <File>
+              <FileName>mpconfigboard.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\nxp_rt1050_60\boards\imxrtevk105x\mpconfigboard.h</FilePath>
+            </File>
+            <File>
+              <FileName>omv_boardconfig.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\nxp_rt1050_60\boards\imxrtevk105x\omv_boardconfig.h</FilePath>
+            </File>
+            <File>
+              <FileName>pin_mux.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\nxp_rt1050_60\boards\imxrtevk105x\pin_mux.h</FilePath>
             </File>
           </Files>
         </Group>
