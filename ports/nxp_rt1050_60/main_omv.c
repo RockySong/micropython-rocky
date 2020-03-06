@@ -361,6 +361,7 @@ int OpenMV_Main(uint32_t first_soft_reset)
 	}
 	
     // If there's no script ready, just re-exec REPL
+RunREPL:
     while (!usbdbg_script_ready()) {
         nlr_buf_t nlr;
 
@@ -415,6 +416,8 @@ int OpenMV_Main(uint32_t first_soft_reset)
             nlr_pop();
         } else {
             mp_obj_print_exception(&mp_plat_print, (mp_obj_t)nlr.ret_val);
+            usbdbg_stop_script();
+            goto RunREPL;   // rocky: script is stopped, waiting for next script
         }
 		
 		#ifdef MICROPY_PY_RTTHREAD

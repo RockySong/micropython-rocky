@@ -458,7 +458,7 @@ Reset_Handler   PROC
 				SUB		R0,	 R0, R1
 				MOV		R2,	 #0x20000000
 				CMP		R0,	R2
-				; BLE		.
+				; BLE		.  ; just in case a buggy image make the chip out of debug control
 				IF :DEF:USE_OCRAM
 				BL		ConfigFlexRAM_OCRAM
 				ELSE

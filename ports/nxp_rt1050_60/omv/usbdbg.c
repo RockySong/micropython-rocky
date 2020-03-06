@@ -85,7 +85,7 @@ inline void usbdbg_set_irq_enabled(bool enabled)
 #else
 #define logout printf
 #endif
-// #define DUMP_RAW
+// #define DUMP_RAW  // dump uncompressed framebuffer, slow but clear
 #ifdef DUMP_RAW
 #define DUMP_FB	MAIN_FB
 #else
@@ -229,11 +229,35 @@ void usbdbg_data_in(void *buffer, int length)
 extern int py_image_descriptor_from_roi(image_t *image, const char *path, rectangle_t *roi);
 extern void ProfReset(void);
 __WEAK void Hook_OnUsbDbgScriptExec(void) {}
+volatile uint8_t s_UsbDbgIsToRunScript;
+void usbdbg_try_run_script(void)
+{
+    if (!s_UsbDbgIsToRunScript)
+        return;
+    // Disable IDE IRQ (re-enabled by pyexec or main).
+    usbdbg_set_irq_enabled(false);
+    s_UsbDbgIsToRunScript = 0;
+    // Set script ready flag
+    script_ready = true;
+    // Set script running flag
+    script_running = true;
+    // Clear interrupt traceback
+    mp_obj_exception_clear_traceback(mp_const_ide_interrupt);
+    // Interrupt running REPL
+    // Note: setting pendsv explicitly here because the VM is probably
+    // waiting in REPL and the soft interrupt flag will not be checked.
+    // PRINTF("nlr jumping to execute script\r\n");
+    ProfReset();
+    pendsv_nlr_jump_hard(mp_const_ide_interrupt);
+}
 void usbdbg_data_out(void *buffer, int length)
 {
     switch (cmd) {
         case USBDBG_FB_ENABLE: {
             uint32_t enable = *((int32_t*)buffer);
+            #ifdef DUMP_RAW
+            enable = 0;
+            #endif
             JPEG_FB()->enabled = enable;
             if (enable == 0) {
                 // When disabling framebuffer, the IDE might still be holding FB lock.
@@ -253,25 +277,7 @@ void usbdbg_data_out(void *buffer, int length)
                 Hook_OnUsbDbgScriptExec();
                 xfer_bytes += length;
                 if (xfer_bytes == xfer_length) {
-                    // Set script ready flag
-                    script_ready = true;
-                    // Set script running flag
-                    script_running = true;
-
-                    // Disable IDE IRQ (re-enabled by pyexec or main).
-                    usbdbg_set_irq_enabled(false);
-					#if 1
-                    // Clear interrupt traceback
-                    mp_obj_exception_clear_traceback(mp_const_ide_interrupt);
-                    // Interrupt running REPL
-                    // Note: setting pendsv explicitly here because the VM is probably
-                    // waiting in REPL and the soft interrupt flag will not be checked.
-                    // PRINTF("nlr jumping to execute script\r\n");
-					ProfReset();
-                    pendsv_nlr_jump_hard(mp_const_ide_interrupt);
-					#else
-					
-					#endif
+                    s_UsbDbgIsToRunScript = 1;
                 }
             }
 			else {
@@ -352,6 +358,19 @@ void usbdbg_data_out(void *buffer, int length)
     }
 }
 
+void usbdbg_stop_script(void) {
+    // Set script running flag
+    logout("stop running script\r\n");
+    script_running = false;
+    script_ready = false;
+
+
+    // interrupt running code by raising an exception
+    // pendsv_kbd_intr();
+    mp_obj_exception_clear_traceback(mp_const_ide_interrupt);
+    QTimer_StopAll();    
+}
+
 __WEAK void QTimer_StopAll(void) {}
 void usbdbg_control(void *buffer, uint8_t request, uint32_t length)
 {
@@ -386,18 +405,9 @@ void usbdbg_control(void *buffer, uint8_t request, uint32_t length)
 
         case USBDBG_SCRIPT_STOP:
             if (script_running) {
-                // Set script running flag
-                logout("stop running script\r\n");
-                script_running = false;
-				script_ready = false;
-
                 // Disable IDE IRQ (re-enabled by pyexec or main).
                 usbdbg_set_irq_enabled(false);
-
-                // interrupt running code by raising an exception
-                // pendsv_kbd_intr();
-                mp_obj_exception_clear_traceback(mp_const_ide_interrupt);
-				QTimer_StopAll();
+                usbdbg_stop_script();
                 pendsv_nlr_jump(mp_const_ide_interrupt);
             } else {
 				logout("no script running!\r\n");

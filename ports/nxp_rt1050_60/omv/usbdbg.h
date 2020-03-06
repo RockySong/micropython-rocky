@@ -51,6 +51,7 @@ enum usbdbg_cmd {
 };
 void usbdbg_init();
 bool usbdbg_script_ready();
+void usbdbg_stop_script(void);
 vstr_t *usbdbg_get_script();
 bool usbdbg_get_irq_enabled();
 void usbdbg_set_irq_enabled(bool enabled);

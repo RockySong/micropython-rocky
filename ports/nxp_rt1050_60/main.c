@@ -1403,8 +1403,10 @@ soft_reset_exit:
 
     // soft reset
 
+	#if MICROPY_HW_HAS_FLASH
     printf("PYB: sync filesystems\n");
     storage_flush();
+	#endif
 
     printf("PYB: soft reboot\n");
     // rocky ignore: timer_deinit();

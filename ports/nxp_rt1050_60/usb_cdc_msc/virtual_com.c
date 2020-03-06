@@ -115,7 +115,7 @@ volatile static usb_device_composite_struct_t *g_deviceComposite;
 #define ALIGN32 __ALIGNED(32)
 
 ring_block_t s_omvRB;
-USB_ALIGN static uint8_t s_omvTxBuf[8][VCP_RINGBLK_SIZE];
+USB_ALIGN static uint8_t s_omvTxBuf[4][VCP_RINGBLK_SIZE];
 
 #define IDE_BAUDRATE_SLOW    (921600)
 #define IDE_BAUDRATE_FAST    (12000000)

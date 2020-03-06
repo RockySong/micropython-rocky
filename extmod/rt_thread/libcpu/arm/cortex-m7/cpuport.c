@@ -422,7 +422,7 @@ void rt_hw_hard_fault_exception(struct exception_info *exception_info)
     hard_fault_track();
 #endif /* RT_USING_FINSH */
 
-    while (1);
+    __BKPT(0);
 }
 
 /**
