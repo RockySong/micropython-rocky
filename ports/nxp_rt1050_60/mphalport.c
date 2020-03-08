@@ -22,6 +22,20 @@ const byte mp_hal_status_to_errno_table[4] = {
 NORETURN void mp_hal_raise(HAL_StatusTypeDef status) {
     mp_raise_OSError(mp_hal_status_to_errno_table[status]);
 }
+__WEAK void usbdbg_try_run_script(void) {}
+extern void mp_handle_pending(void); 
+void EventPollHook(void) {
+    mp_handle_pending(); 
+    usbdbg_try_run_script();
+#if MICROPY_PY_THREAD
+    if (pyb_thread_enabled) { 
+        MP_THREAD_GIL_EXIT(); 
+        pyb_thread_yield(); 
+        MP_THREAD_GIL_ENTER(); 
+    } 
+#endif
+    HAL_WFI();
+}
 
 int mp_hal_stdin_rx_chr(void) {
 	int c;

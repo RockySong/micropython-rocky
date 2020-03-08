@@ -93,7 +93,8 @@ inline void usbdbg_set_irq_enabled(bool enabled)
 #endif
 volatile uint8_t g_omvIdeConnecting;
 __WEAK int sensor_get_id(void) {return 1;}
-
+__WEAK void Hook_OnUsbDbgScriptExec(void) {}
+volatile uint8_t s_UsbDbgIsToRunScript;
 void usbdbg_data_in(void *buffer, int length)
 {
 	logout("usbdbg_data_in: cmd=%x, buffer=0x%08x, bytes=%d\r\n", cmd, buffer, length);
@@ -217,7 +218,9 @@ void usbdbg_data_in(void *buffer, int length)
 
         case USBDBG_SCRIPT_RUNNING: {
             uint32_t *buf = buffer;
-            buf[0] = (uint32_t) script_running;
+             // rocky: though may not run yet, set running flag in case openmv ide get not running
+             // flag before script get run.
+            buf[0] = (uint32_t) (s_UsbDbgIsToRunScript || script_running);
             cmd = USBDBG_NONE;
             break;
         }
@@ -228,8 +231,7 @@ void usbdbg_data_in(void *buffer, int length)
 
 extern int py_image_descriptor_from_roi(image_t *image, const char *path, rectangle_t *roi);
 extern void ProfReset(void);
-__WEAK void Hook_OnUsbDbgScriptExec(void) {}
-volatile uint8_t s_UsbDbgIsToRunScript;
+
 void usbdbg_try_run_script(void)
 {
     if (!s_UsbDbgIsToRunScript)
@@ -237,10 +239,6 @@ void usbdbg_try_run_script(void)
     // Disable IDE IRQ (re-enabled by pyexec or main).
     usbdbg_set_irq_enabled(false);
     s_UsbDbgIsToRunScript = 0;
-    // Set script ready flag
-    script_ready = true;
-    // Set script running flag
-    script_running = true;
     // Clear interrupt traceback
     mp_obj_exception_clear_traceback(mp_const_ide_interrupt);
     // Interrupt running REPL
@@ -250,6 +248,7 @@ void usbdbg_try_run_script(void)
     ProfReset();
     pendsv_nlr_jump_hard(mp_const_ide_interrupt);
 }
+extern uint8_t g_isMainDotPyRunning;
 void usbdbg_data_out(void *buffer, int length)
 {
     switch (cmd) {
@@ -278,6 +277,11 @@ void usbdbg_data_out(void *buffer, int length)
                 xfer_bytes += length;
                 if (xfer_bytes == xfer_length) {
                     s_UsbDbgIsToRunScript = 1;
+                    script_ready = true;
+                    script_running = true;            
+                    // in case main.py is running just after system reset, notify the VM to stop it.
+                    if (g_isMainDotPyRunning)
+                        pendsv_nlr_jump(mp_const_ide_interrupt);
                 }
             }
 			else {

@@ -173,7 +173,7 @@ STATIC mp_obj_t select_select(size_t n_args, const mp_obj_t *args) {
             mp_map_deinit(&poll_map);
             return mp_obj_new_tuple(3, list_array);
         }
-        MICROPY_EVENT_POLL_HOOK
+        do {EventPollHook();} while(0);
     }
 }
 MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(mp_select_select_obj, 3, 4, select_select);

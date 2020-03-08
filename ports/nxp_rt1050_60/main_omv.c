@@ -270,6 +270,7 @@ __WEAK int OverlaySetToDefault(void) {return 0;}
 
 #define SCnSCB_ACTLR_DISDEFWBUF_Pos         1U                                         /*!< ACTLR: DISDEFWBUF Position */
 #define SCnSCB_ACTLR_DISDEFWBUF_Msk        (1UL << SCnSCB_ACTLR_DISDEFWBUF_Pos)        /*!< ACTLR: DISDEFWBUF Mask */
+volatile uint8_t g_isMainDotPyRunning;
 int OpenMV_Main(uint32_t first_soft_reset)
 {
 	int ret = 0;
@@ -300,7 +301,6 @@ int OpenMV_Main(uint32_t first_soft_reset)
 	
 	memset(&openmv_config, 0, sizeof(openmv_config));
 #endif
- MainLoop:
     // Run boot script(s)
 	if (!usbdbg_script_ready()) {
 		if (first_soft_reset) {
@@ -334,7 +334,9 @@ int OpenMV_Main(uint32_t first_soft_reset)
 			if (stat == MP_IMPORT_STAT_FILE) {
 				nlr_buf_t nlr;
 				if (nlr_push(&nlr) == 0) {
+                    g_isMainDotPyRunning = 1;
 					int ret = pyexec_file("main.py");
+                    g_isMainDotPyRunning = 0;
 					if (ret & PYEXEC_FORCED_EXIT) {
 						ret = 1;
 					}
@@ -344,10 +346,15 @@ int OpenMV_Main(uint32_t first_soft_reset)
 					nlr_pop();
 				}
 				else {
+                    g_isMainDotPyRunning = 0;
+                    #if 0
 					// 2019.03.27 19:52 rocky: if main.py is interrupted by running another script, 
 					// we have to do soft reset, otherwise fb alloc logic may fail and led to hard fault
 					// In this case, it makes user have to press start button twice to start the script in OpenMV IDE
 					goto cleanup;
+                    #else
+                    fb_free_all();
+                    #endif                    
 				}
 			}
 			// exec_boot_script("/sd/main.py", false, true);

@@ -17,14 +17,13 @@ __weak HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
   return HAL_OK;
 }
 
-__WEAK void usbdbg_try_run_script(void) {}
 void HAL_WFI(void)
 {
 //	#ifndef MCU_SERIES_RT106
 //	__WFI();
 //	#else
 //	#endif
-    usbdbg_try_run_script();
+    
 }
 
 __weak void HAL_IncTick(void)

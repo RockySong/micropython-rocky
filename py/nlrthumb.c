@@ -182,9 +182,9 @@ __asm unsigned int nlr_jump_asm(nlr_buf_t *nlr)
     vldr   d10, [r0, #64]       // load s20-s21 from nlr_buf
     #endif	
 #endif
-	mov	   r0,	#0x01000000
-	msr	   xpsr, r0
-    movs   r0, #1               // return 1, non-local return
+	mov	   r1,	#0x01000000
+	msr	   xpsr, r1
+    ldr    r0,  [r0,  #4]       // set return value to nlr->ret_val
     bx     lr                   // return	
 }
 #else
@@ -239,6 +239,7 @@ NORETURN void nlr_jump(void *val) {
     if (top == NULL) {
         nlr_jump_fail(val);
     }
+    if (0 == val) val = 1;
     top->ret_val = val;
     *top_ptr = top->prev;
 	nlr_jump_asm(top);

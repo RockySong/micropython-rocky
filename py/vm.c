@@ -1373,7 +1373,10 @@ pending_exception_check:
                             MP_STATE_VM(sched_state) = MP_SCHED_IDLE;
                         }
                         MICROPY_END_ATOMIC_SECTION(atomic_state);
-                        RAISE(obj);
+                        // RAISE(obj);
+                        nlr_pop(); 
+                        nlr.ret_val = MP_OBJ_TO_PTR(obj); 
+                        goto exception_handler;                        
                     }
                     mp_handle_pending_tail(atomic_state);
                 }
