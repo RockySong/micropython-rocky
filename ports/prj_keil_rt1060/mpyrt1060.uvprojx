@@ -717,57 +717,6 @@
               <FileName>arm_convolve_HWC_q7_fast_nonsquare.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\lib\cmsis\nn\ConvolutionFunctions\arm_convolve_HWC_q7_fast_nonsquare.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>0</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>0</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <uGnu>2</uGnu>
-                    <useXO>2</useXO>
-                    <v6Lang>0</v6Lang>
-                    <v6LangP>0</v6LangP>
-                    <vShortEn>2</vShortEn>
-                    <vShortWch>2</vShortWch>
-                    <v6Lto>2</v6Lto>
-                    <v6WtE>2</v6WtE>
-                    <v6Rtti>2</v6Rtti>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
             </File>
             <File>
               <FileName>arm_convolve_HWC_q7_RGB.c</FileName>
@@ -783,57 +732,6 @@
               <FileName>arm_convolve_HWC_q15_fast.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\lib\cmsis\nn\ConvolutionFunctions\arm_convolve_HWC_q15_fast.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>0</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>0</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <uGnu>2</uGnu>
-                    <useXO>2</useXO>
-                    <v6Lang>0</v6Lang>
-                    <v6LangP>0</v6LangP>
-                    <vShortEn>2</vShortEn>
-                    <vShortWch>2</vShortWch>
-                    <v6Lto>2</v6Lto>
-                    <v6WtE>2</v6WtE>
-                    <v6Rtti>2</v6Rtti>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
             </File>
             <File>
               <FileName>arm_depthwise_separable_conv_HWC_q7.c</FileName>
@@ -1072,6 +970,57 @@
               <FileName>argcheck.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\py\argcheck.c</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>2</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Cads>
+                    <interw>2</interw>
+                    <Optim>2</Optim>
+                    <oTime>2</oTime>
+                    <SplitLS>2</SplitLS>
+                    <OneElfS>2</OneElfS>
+                    <Strict>2</Strict>
+                    <EnumInt>2</EnumInt>
+                    <PlainCh>2</PlainCh>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <wLevel>0</wLevel>
+                    <uThumb>2</uThumb>
+                    <uSurpInc>2</uSurpInc>
+                    <uC99>2</uC99>
+                    <uGnu>2</uGnu>
+                    <useXO>2</useXO>
+                    <v6Lang>0</v6Lang>
+                    <v6LangP>0</v6LangP>
+                    <vShortEn>2</vShortEn>
+                    <vShortWch>2</vShortWch>
+                    <v6Lto>2</v6Lto>
+                    <v6WtE>2</v6WtE>
+                    <v6Rtti>2</v6Rtti>
+                    <VariousControls>
+                      <MiscControls></MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Cads>
+                </FileArmAds>
+              </FileOption>
             </File>
             <File>
               <FileName>asmbase.c</FileName>
@@ -2516,6 +2465,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\drivers\bus\softspi.c</FilePath>
             </File>
+            <File>
+              <FileName>cfg_mux_mgr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\lib\aia_cmm\cfg_mux_mgr.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2594,6 +2548,57 @@
               <FileName>machine_i2c.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\extmod\machine_i2c.c</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>0</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Cads>
+                    <interw>2</interw>
+                    <Optim>0</Optim>
+                    <oTime>2</oTime>
+                    <SplitLS>2</SplitLS>
+                    <OneElfS>2</OneElfS>
+                    <Strict>2</Strict>
+                    <EnumInt>2</EnumInt>
+                    <PlainCh>2</PlainCh>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <wLevel>0</wLevel>
+                    <uThumb>2</uThumb>
+                    <uSurpInc>2</uSurpInc>
+                    <uC99>2</uC99>
+                    <uGnu>2</uGnu>
+                    <useXO>2</useXO>
+                    <v6Lang>0</v6Lang>
+                    <v6LangP>0</v6LangP>
+                    <vShortEn>2</vShortEn>
+                    <vShortWch>2</vShortWch>
+                    <v6Lto>2</v6Lto>
+                    <v6WtE>2</v6WtE>
+                    <v6Rtti>2</v6Rtti>
+                    <VariousControls>
+                      <MiscControls></MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Cads>
+                </FileArmAds>
+              </FileOption>
             </File>
             <File>
               <FileName>machine_mem.c</FileName>
@@ -7588,9 +7593,6 @@
               <FilePath>..\..\drivers\m8266\8266_wifi_lib.lib</FilePath>
             </File>
           </Files>
-        </Group>
-        <Group>
-          <GroupName>::Compiler</GroupName>
         </Group>
       </Groups>
     </Target>
@@ -10104,6 +10106,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\drivers\bus\softspi.c</FilePath>
             </File>
+            <File>
+              <FileName>cfg_mux_mgr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\lib\aia_cmm\cfg_mux_mgr.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -15534,9 +15541,6 @@
             </File>
           </Files>
         </Group>
-        <Group>
-          <GroupName>::Compiler</GroupName>
-        </Group>
       </Groups>
     </Target>
     <Target>
@@ -15870,7 +15874,7 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls>--diag_suppress=1,39,61,66,68,111,546,188,1035,144,1211,1295,1296 --no_inline</MiscControls>
-              <Define>MICROPY_PY_RTTHREAD=1,__FPU_PRESENT=1,USB_DEVICE_CONFIG_BUFFER_PROPERTY_CACHEABLE=1,ARM_MATH_CM7,N_THUMB,NDEBUG,CPU_MIMXRT1052DVL6A,MCU_SERIES_RT105,MCU_SERIES_RT106,USB_STACK_BM,__BYTE_ORDER__=__ORDER_LITTLE_ENDIAN__,MICROPY_QSTR_EXTRA_POOL=mp_qstr_frozen_const_pool,MICROPY_MODULE_FROZEN_MPY,FFCONF_H='\"oofatfs/ffconf.h\"',HARD_FP,FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL=1,XIP_EXTERNAL_FLASH</Define>
+              <Define>MICROPY_PY_RTTHREAD=1,__FPU_PRESENT=1,USB_DEVICE_CONFIG_BUFFER_PROPERTY_CACHEABLE=1,ARM_MATH_CM7,N_THUMB,NDEBUG,CPU_MIMXRT1052DVL6A,MCU_SERIES_RT105,MCU_SERIES_RT106,USB_STACK_BM,__BYTE_ORDER__=__ORDER_LITTLE_ENDIAN__,MICROPY_QSTR_EXTRA_POOL=mp_qstr_frozen_const_pool,MICROPY_MODULE_FROZEN_MPY,FFCONF_H='\"oofatfs/ffconf.h\"',HARD_FP,FSL_SDK_ENABLE_DRIVER_CACHE_CONTROL=1</Define>
               <Undefine></Undefine>
               <IncludePath>..\..\;..\..\py;..\..\extmod;..\..\lib;..\..\lib\cmsis\inc;..\nxp_rt1050_60;..\nxp_rt1050_60\boards\imxrtevk105x;..\nxp_rt1050_60\mcusdk\;..\nxp_rt1050_60\mcusdk\drivers;..\nxp_rt1050_60\mcusdk\utilities;..\nxp_rt1050_60\cmsis;..\nxp_rt1050_60\build-imxrtevk105x;..\nxp_rt1050_60\usb_cdc_msc;..\nxp_rt1050_60\mcusdk\middleware\sdkusb\include;..\nxp_rt1050_60\mcusdk\middleware\sdkusb\osa;..\nxp_rt1050_60\mcusdk\middleware\sdkusb\device;..\nxp_rt1050_60\mcusdk\middleware\sdkusb\phy;..\nxp_rt1050_60\sdmmc;..\nxp_rt1050_60\omv;..\nxp_rt1050_60\omv\py;..\nxp_rt1050_60\omv\img;..\nxp_rt1050_60\omv\nn;..\..\lib\oofatfs;..\..\lib\mp-readline;..\..\extmod\rt_thread;..\..\extmod\rt_thread\include\libc;..\..\extmod\rt_thread\include;..\..\drivers\m8266\lib_new;..\..\drivers\m8266</IncludePath>
             </VariousControls>
@@ -18049,6 +18053,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\drivers\bus\softspi.c</FilePath>
             </File>
+            <File>
+              <FileName>cfg_mux_mgr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\lib\aia_cmm\cfg_mux_mgr.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -23409,9 +23418,6 @@
               <FilePath>..\..\drivers\m8266\8266_wifi_lib.lib</FilePath>
             </File>
           </Files>
-        </Group>
-        <Group>
-          <GroupName>::Compiler</GroupName>
         </Group>
       </Groups>
     </Target>
@@ -25925,6 +25931,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\drivers\bus\softspi.c</FilePath>
             </File>
+            <File>
+              <FileName>cfg_mux_mgr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\lib\aia_cmm\cfg_mux_mgr.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -31286,44 +31297,13 @@
             </File>
           </Files>
         </Group>
-        <Group>
-          <GroupName>::Compiler</GroupName>
-        </Group>
       </Groups>
     </Target>
   </Targets>
 
   <RTE>
     <apis/>
-    <components>
-      <component Cbundle="ARM Compiler" Cclass="Compiler" Cgroup="I/O" Csub="STDERR" Cvariant="ITM" Cvendor="Keil" Cversion="1.2.0" condition="ARMCC Cortex-M with ITM">
-        <package name="ARM_Compiler" schemaVersion="1.4.9" url="http://www.keil.com/pack/" vendor="Keil" version="1.6.1"/>
-        <targetInfos>
-          <targetInfo name="dbg_evk1060_rtt_qspi"/>
-          <targetInfo name="dbg_evk1060_rtt_sdram"/>
-          <targetInfo name="dbg_evk1060_sdram"/>
-          <targetInfo name="rel_omvrt1"/>
-        </targetInfos>
-      </component>
-      <component Cbundle="ARM Compiler" Cclass="Compiler" Cgroup="I/O" Csub="STDIN" Cvariant="ITM" Cvendor="Keil" Cversion="1.2.0" condition="ARMCC Cortex-M with ITM">
-        <package name="ARM_Compiler" schemaVersion="1.4.9" url="http://www.keil.com/pack/" vendor="Keil" version="1.6.1"/>
-        <targetInfos>
-          <targetInfo name="dbg_evk1060_rtt_qspi"/>
-          <targetInfo name="dbg_evk1060_rtt_sdram"/>
-          <targetInfo name="dbg_evk1060_sdram"/>
-          <targetInfo name="rel_omvrt1"/>
-        </targetInfos>
-      </component>
-      <component Cbundle="ARM Compiler" Cclass="Compiler" Cgroup="I/O" Csub="STDOUT" Cvariant="ITM" Cvendor="Keil" Cversion="1.2.0" condition="ARMCC Cortex-M with ITM">
-        <package name="ARM_Compiler" schemaVersion="1.4.9" url="http://www.keil.com/pack/" vendor="Keil" version="1.6.1"/>
-        <targetInfos>
-          <targetInfo name="dbg_evk1060_rtt_qspi"/>
-          <targetInfo name="dbg_evk1060_rtt_sdram"/>
-          <targetInfo name="dbg_evk1060_sdram"/>
-          <targetInfo name="rel_omvrt1"/>
-        </targetInfos>
-      </component>
-    </components>
+    <components/>
     <files/>
   </RTE>
 

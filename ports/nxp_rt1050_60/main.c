@@ -721,7 +721,7 @@ inline uint32_t lfs_popc(uint32_t a) {
     return (((a + (a >> 4)) & 0x0f0f0f0f) * 0x01010101) >> 24;
 #endif
 }
-int main(void) {
+int main(void) { // ResetHandler -> __scatterload -> __rt_entry -> main
 	snvs_hp_rtc_config_t snvsRtcConfig;
 	snvs_hp_rtc_datetime_t rtcDate;
 	rtcDate.year = 2019U;
@@ -841,8 +841,8 @@ soft_reset:
     mp_stack_set_top((void*) _estack);
     mp_stack_set_limit(STACK_SIZE);
 	if (_heap_start >= 0x80000000) {
-		// heap is in SDRAM region, we assume there is at least 1MB heap!
-		_heap_end = _heap_start + 1024 * 1024;
+		// heap is in SDRAM region, we assume there is at least 256kB heap!
+		_heap_end = _heap_start + 256 * 1024;
 	} else if (_heap_start >= 0x20200000)
 	{
 		_heap_end = OCRAM_END;
@@ -977,7 +977,6 @@ soft_reset:
     led_state(2, 0);
     led_state(3, 0);
     led_state(4, 0);
-
     // Now we initialise sub-systems that need configuration from boot.py,
     // or whose initialisation can be safely deferred until after running
     // boot.py.

@@ -91,6 +91,7 @@ LR_XIP_FLASH ROM_BASE + 0x2000 {
 		.ANY (+RW, +ZI)
 		* (.jpeg_buf)
 		sincos_tab.o (+RO)
+        virtual_com.o (+RW, +ZI)
 		* (.ram_const)
 	}
 	

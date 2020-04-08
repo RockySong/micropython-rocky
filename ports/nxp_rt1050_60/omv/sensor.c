@@ -557,8 +557,8 @@ RAM_CODE void CSI_IRQHandler(void) {
 		// VSync
 		//               SOF    | FB1    | FB2    irqEn
 		s_pCSI->CSICR1 = 1U<<16 | 1U<<19 | 1U<<20 | CSICR1_INIT_VAL;
-		//				 16 doubleWords| RxFifoDmaReqEn| ReflashRFF|ResetFrmCnt
-		s_pCSI->CSICR3 = 2<<4          | 1<<12         | 1<<14     |1<<15;
+		//				 64 doubleWords| RxFifoDmaReqEn| ReflashRFF|ResetFrmCnt
+		s_pCSI->CSICR3 = 6<<4          | 1<<12         | 1<<14     |1<<15;
 	} else if (csisr & (3<<19))
 	{
 		uint32_t dmaBase, lineNdx = s_irq.dmaFragNdx * s_irq.linePerFrag;
@@ -586,8 +586,8 @@ RAM_CODE void CSI_IRQHandler(void) {
 		if (++s_irq.dmaFragNdx == s_irq.fragCnt || (csisr & (3<<19)) == 3<<19 )
 		{
 			CSI_Stop(CSI);
-			//				 16 doubleWords| ReflashRFF
-			s_pCSI->CSICR3 = 2<<4		   | 1<<14;
+			//				 64 doubleWords| ReflashRFF
+			s_pCSI->CSICR3 = 6<<4		   | 1<<14;
 			NVIC_DisableIRQ(CSI_IRQn);
 			s_isOmvSensorSnapshotReady = 1;	
 			goto Cleanup;

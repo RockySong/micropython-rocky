@@ -283,6 +283,7 @@ int sensor_set_lens_correction(int enable, int radi, int coef);
 int sensor_ioctl(int request, ...);
 
 // Set vsync output pin
+#include "fsl_gpio.h"
 int sensor_set_vsync_output(GPIO_Type *gpio, uint32_t pin);
 
 // Set color palette

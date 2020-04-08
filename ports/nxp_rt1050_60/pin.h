@@ -44,7 +44,7 @@ typedef struct {
   uint8_t idx;
   uint8_t fn;
   uint8_t unit;
-  uint8_t type;
+  uint8_t af_pin_type;
   // >>> i.mx RT uses 2 levels of muxing (DAISYCHAIN, 'INPUT_SELECT' registers)
   uint32_t inSelReg;
   uint32_t inSelVal;

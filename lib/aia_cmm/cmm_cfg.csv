@@ -1,0 +1,9 @@
+fn,unit,signal,hint,pinobj,comments
+pin,-,p1-23,-,AD_B0_03
+pwm,-,ch4,f2.3,PTV.IO4,pwm可由qtmr或flexpwm做
+pwm,-,ch1,q1.1@x1.io14,AD_B0_01,pwm可由qtmr或flexpwm做，并且在这个脚上借助xbar1来配接到qtmr上
+servo,-,ch1,qtmr1.0,B0_00,servo可由qtmr或flexpwm做
+micary,-,mic12,-,B0_12,驱动自己知道mic12对应sai1的哪个信号名
+adc,-,ch6,2,AD_B1_09,ch6可以使用1号ADC或者2号ADC
+spi,1,SCLK,-,AD_B0_00
+pin,-,p2-32,exp.10,-,扩展的IO的10号位

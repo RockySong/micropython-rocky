@@ -36,7 +36,7 @@ typedef signed int ssize_t;
 #endif
 // board specific definitions
 #include "mpconfigboard.h"
-#include "fsl_common.h"
+
 // memory allocation policies
 #define MICROPY_ALLOC_PATH_MAX      (128)
 
@@ -55,11 +55,12 @@ typedef signed int ssize_t;
 // both MDK and GCC supports GCC's gcc-specific extensions of ranged designated
 // initialisers and addresses of labels, which are not part of the C99 standard
 #define MICROPY_OPT_COMPUTED_GOTO   (1)
+#define MICROPY_OBJ_BASE_ALIGNMENT __attribute__((aligned(4)))
 #else
 #define MICROPY_OPT_COMPUTED_GOTO   (0)
 #endif
 
-#define MICROPY_OBJ_BASE_ALIGNMENT __ALIGNED(4)
+
 
 
 #define MICROPY_OPT_CACHE_MAP_LOOKUP_IN_BYTECODE (0)
@@ -203,7 +204,7 @@ extern const struct _mp_obj_module_t mjpeg_module;
 extern const struct _mp_obj_module_t nn_module;
 extern const struct _mp_obj_module_t gif_module;
 #endif
-
+extern const struct _mp_obj_module_t g_cmm_module;
 #if MICROPY_PY_USOCKET
 #define SOCKET_BUILTIN_MODULE               { MP_OBJ_NEW_QSTR(MP_QSTR_usocket), (mp_obj_t)&mp_module_usocket },
 #define SOCKET_BUILTIN_MODULE_WEAK_LINKS    { MP_OBJ_NEW_QSTR(MP_QSTR_socket), (mp_obj_t)&mp_module_usocket },
@@ -227,6 +228,7 @@ extern const struct _mp_obj_module_t gif_module;
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_uos), (mp_obj_t)&mp_module_uos }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_utime), (mp_obj_t)&mp_module_utime }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_time), (mp_obj_t)&time_module }, \
+	{ MP_OBJ_NEW_QSTR(MP_QSTR_cmm), (mp_obj_t)&g_cmm_module }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_lcd),  (mp_obj_t)&lcd_module },
 	#else
 	#define MICROPY_PORT_BUILTIN_MODULES \
@@ -235,6 +237,7 @@ extern const struct _mp_obj_module_t gif_module;
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_mcu), (mp_obj_t)&mcu_module }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_uos), (mp_obj_t)&mp_module_uos }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_utime), (mp_obj_t)&mp_module_utime }, \
+	{ MP_OBJ_NEW_QSTR(MP_QSTR_cmm), (mp_obj_t)&g_cmm_module }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_time), (mp_obj_t)&time_module },
 	#endif
 #elif defined(OMV_SENSOR_ONLY)
@@ -246,6 +249,7 @@ extern const struct _mp_obj_module_t gif_module;
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_utime), (mp_obj_t)&mp_module_utime }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_time), (mp_obj_t)&time_module }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_sensor),  (mp_obj_t)&sensor_module }, \
+	{ MP_OBJ_NEW_QSTR(MP_QSTR_cmm), (mp_obj_t)&g_cmm_module }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_lcd),  (mp_obj_t)&lcd_module }, \
 	/*{ MP_OBJ_NEW_QSTR(MP_QSTR_image),  (mp_obj_t)&image_module }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_mjpeg),  (mp_obj_t)&mjpeg_module }, \
@@ -266,6 +270,7 @@ extern const struct _mp_obj_module_t gif_module;
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_mjpeg),  (mp_obj_t)&mjpeg_module }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_gif),  (mp_obj_t)&gif_module }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_nn),  (mp_obj_t)&nn_module }, \
+	{ MP_OBJ_NEW_QSTR(MP_QSTR_cmm), (mp_obj_t)&g_cmm_module }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_lcd),  (mp_obj_t)&lcd_module }, \
 	SOCKET_BUILTIN_MODULE \
 	NETWORK_BUILTIN_MODULE
@@ -281,6 +286,7 @@ extern const struct _mp_obj_module_t gif_module;
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_image),  (mp_obj_t)&image_module }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_mjpeg),  (mp_obj_t)&mjpeg_module }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_gif),  (mp_obj_t)&gif_module }, \
+	{ MP_OBJ_NEW_QSTR(MP_QSTR_cmm), (mp_obj_t)&g_cmm_module }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_nn),  (mp_obj_t)&nn_module }, \
 	SOCKET_BUILTIN_MODULE \
 	NETWORK_BUILTIN_MODULE	
@@ -375,15 +381,8 @@ typedef long mp_off_t;
 // to know the machine-specific values, see irq.h.
 
 
-static inline void enable_irq(mp_uint_t state) {
-    __set_PRIMASK(state);
-}
-
-static inline mp_uint_t disable_irq(void) {
-    mp_uint_t state = __get_PRIMASK();
-    __disable_irq();
-    return state;
-}
+void enable_irq(mp_uint_t state);
+mp_uint_t disable_irq(void);
 
 #define MICROPY_BEGIN_ATOMIC_SECTION()     disable_irq()
 #define MICROPY_END_ATOMIC_SECTION(state)  enable_irq(state)

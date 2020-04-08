@@ -27,7 +27,7 @@
     .port = PORT_ ## p_port, \
     .pin = (p_pin), \
     .num_af = (sizeof(p_af) / sizeof(pin_af_obj_t)), \
-    .pin_mask = (1 << ((p_pin) & 0x0f)), \
+    .pin_mask = (1UL << ((p_pin) & 0x1f)), \
     .gpio = GPIO ## p_port, \
     .af = p_af, \
     .adc_num = p_adc_num, \

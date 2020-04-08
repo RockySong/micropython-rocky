@@ -147,11 +147,10 @@ typedef struct
 {
 	uint8_t *pBlks;
 	uint16_t blkSize;  // size of one block
-	uint16_t blkRNdx;	// read index within OLDest block. We allow app to consue partial of one block each time
-	// writ index within NEWest block. We allow app to write partial o one block each time
-	// this is USB HW friendly and memory saving: app can keep writing data until USB IP wants a new ep buffer and it
-	// is the only available. When this happens, driver need to RingBlk_Finalize() to finalize this block
-	uint16_t blkWNdx;	
+	uint16_t blkRNdx;	// read index within OLDest block. We allow app to consume partial of one block each time
+	// write index within NEWest block. We allow app to write partial of one block each time
+ 	// this is USB HW friendly and memory saving: app can keep writing data until USB IP wants a new ep buffer 
+	uint16_t blkWNdx;
 	uint16_t cbBlkFillTos[RING_BLOCK_MAX_CNT];	// Max ever filled size for each block
 	uint32_t cbTotUsed;	// total fill size
 	uint8_t blkCnt;   // count of blocks
@@ -181,7 +180,8 @@ int32_t RingBlk_GetFreeBytes(ring_block_t* pRB);
 uint8_t* RingBlk_TakeNextFreeBlk(ring_block_t *pRB);
 // fix the buffer filled count, called in ISR when peripheral has filled the taken buffer
 // if ppNextFreeBlk is not NULL, then automatically take next free block as if RingBlk_TakeNextFreeBlk is called
-// otherwise, MUST first call RingBlk_Take1Blk, then after the taken block is filled call this API to fix the filled count
+// otherwise, MUST first call RingBlk_TakeNextFreeBlk, then after the taken block is filled,
+// call this API to fix the filled count
 int32_t RingBlk_FixBlkFillCnt(ring_block_t *pRB, uint32_t cbFill, uint8_t **ppNextFreeBlk);
 // reuse the previous taken block, used in USB VCOM RX handler, if received info is to be discarded, such as some control, e.g., CTRL-C
 int32_t RingBlk_ReuseTakenBlk(ring_block_t *pRB, uint8_t **ppBlk);

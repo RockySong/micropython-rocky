@@ -34,7 +34,7 @@ def parse_port_pin(gpio_str):
         raise ValueError("Expecting pin name to be at least 3 charcters.")
     
     if gpio_str[0] != 'O':
-        raise ValueError("Expecting pin name to start with P")
+        raise ValueError("Expecting pin name to start with O")
     if gpio_str[1] < '0' or gpio_str[1] > '9':
         raise ValueError("Expecting pin port to be between 0 and 9")
     port = ord(gpio_str[1]) - ord('0')
@@ -104,11 +104,11 @@ class AlternateFunction(object):
         self.func, self.fn_num = split_name_num(af_words[0])
         if len(af_words) > 1:
             self.pin_type = af_words[1]
-        # for pwm, we do not list all pwm_types (PWMX1,PWMX2,PWMA1,PWMA2,PWMB1....)
+        # for pwm, we use below code to wildcard match signals (PWMX1,PWMX2,PWMA1,PWMA2,PWMB1....)
         if self.func == 'FLEXPWM':
             if self.pin_type[:3] == 'PWM' and self.pin_type[4:].isdigit():
                 self.supported = True
-		# for GPIO, we do not list all pin_types (PIN0, PIN1, .., PIN31)
+		# for GPIO, we use below code to wildcard match signals (PIN0 to PIN31)
         if self.func == 'GPIO':
             if self.pin_type[:3] == 'PIN' and self.pin_type[3:].isdigit():
                 self.supported = True

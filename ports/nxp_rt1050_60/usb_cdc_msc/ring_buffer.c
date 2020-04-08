@@ -435,7 +435,7 @@ beginwork:
 			// if (pRB->usedCnt == pRB->blkCnt - 1)
 			//	break;	// leave one free block
 			if (--maxBlks == 0)
-				break;	// if we've read max allowed blocks then break. if maxBlks = 0 then treat as no limit			
+				break;	// if we've written max allowed blocks then break. if maxBlks = 0 then treat as no limit			
 		}
 	}
 	pRB->wNdx = blkNdx , pRB->blkWNdx = byteNdx;

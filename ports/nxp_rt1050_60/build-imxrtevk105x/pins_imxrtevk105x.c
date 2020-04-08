@@ -21,7 +21,7 @@
     .idx = (af_idx), \
     .fn = AF_FN_ ## af_fn, \
     .unit = (af_unit), \
-    .type = AF_PIN_TYPE_ ## af_fn ## _ ## af_type, \
+    .af_pin_type = AF_PIN_TYPE_ ## af_fn ## _ ## af_type, \
     .reg = (af_ptr), \
     .inSelReg = (af_inSelReg), \
     .inSelVal = (af_inSelVal), \

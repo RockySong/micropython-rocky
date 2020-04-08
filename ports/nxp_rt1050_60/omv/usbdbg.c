@@ -199,9 +199,9 @@ void usbdbg_data_in(void *buffer, int length)
 			// openmv llc who supported openMV i.MX RT porting!
 			// This board and code is not for commercial purpose!
 			// please support openMV by buying genuine OpenMV Cam!
-			#if 0
+			#if 1
             snprintf((char *) buffer, 64, "%s [%s:%08X%08X%08X]",
-                    OMV_ARCH_STR/*OpenMV i.MX RT1050/60 port*/, OMV_BOARD_TYPE /* M7 */,
+                    OMV_ARCH_STR/*OpenMV i.MX RT1050/60 port*/, "H7" /* M7 */,
                     0x4B4E4854,
                     0x564D4F20,
                     0x434C4C20);	

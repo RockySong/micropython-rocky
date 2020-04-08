@@ -14,7 +14,7 @@
 #include "array.h"
 #include "xalloc.h"
 
-
+#include "fsl_common.h"
 __WEAK uint32_t rng_randint(uint32_t min, uint32_t max) {
     uint32_t r=0;
     if (min==max) {

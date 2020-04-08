@@ -63,7 +63,7 @@ static inline int fast_ceilf(float x)
 {	
     register float fi;
 	register int i;
-    x += 0.99999f;
+    x += 0.99999999f;
     __asm{
 		vcvt.s32.f32 fi, x
 		vmov  i, fi

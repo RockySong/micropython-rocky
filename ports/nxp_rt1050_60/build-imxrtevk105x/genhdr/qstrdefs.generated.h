@@ -2236,5 +2236,4 @@ QDEF(MP_QSTR_recvfrom, (const byte*)"\x91\x90\x08" "recvfrom")
 QDEF(MP_QSTR_sendto, (const byte*)"\x22\x03\x06" "sendto")
 QDEF(MP_QSTR_setsockopt, (const byte*)"\x38\xe8\x0a" "setsockopt")
 QDEF(MP_QSTR_getaddrinfo, (const byte*)"\x6e\x18\x0b" "getaddrinfo")
-
-
+QDEF(MP_QSTR_cmm, (const byte*)"\x26\x4c\x03" "cmm")
