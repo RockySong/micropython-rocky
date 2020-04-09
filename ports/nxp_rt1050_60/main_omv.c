@@ -302,6 +302,22 @@ int OpenMV_Main(uint32_t first_soft_reset)
 	memset(&openmv_config, 0, sizeof(openmv_config));
 #endif
     // Run boot script(s)
+    mp_import_stat_t stat = mp_import_stat("cmm_load.py");
+    if (stat == MP_IMPORT_STAT_FILE) {
+        nlr_buf_t nlr;
+        if (nlr_push(&nlr) == 0) {
+            int ret = pyexec_file("cmm_load.py");
+            if (ret & PYEXEC_FORCED_EXIT) {
+                ret = 1;
+            }
+            if (!ret) {
+                flash_error(3);
+            }
+            nlr_pop();
+        }
+        else {           
+        }
+    }    
 	if (!usbdbg_script_ready()) {
 		if (first_soft_reset) {
 			first_soft_reset = 0;
@@ -329,22 +345,6 @@ int OpenMV_Main(uint32_t first_soft_reset)
 			apply_settings("/openmv.config");
 		#endif
 			usbdbg_set_irq_enabled(true);
-			mp_import_stat_t stat = mp_import_stat("cmm_load.py");
-            if (stat == MP_IMPORT_STAT_FILE) {
-				nlr_buf_t nlr;
-				if (nlr_push(&nlr) == 0) {
-					int ret = pyexec_file("cmm_load.py");
-					if (ret & PYEXEC_FORCED_EXIT) {
-						ret = 1;
-					}
-					if (!ret) {
-						flash_error(3);
-					}
-					nlr_pop();
-				}
-				else {           
-				}
-			}
             // rocky: pyb's main uses different method to access file system from omv
 			stat = mp_import_stat("main.py");
 			if (stat == MP_IMPORT_STAT_FILE) {
@@ -439,13 +439,12 @@ RunREPL:
             nlr_pop();
         } else {
             mp_obj_print_exception(&mp_plat_print, (mp_obj_t)nlr.ret_val);
-            usbdbg_stop_script();
-            goto RunREPL;   // rocky: script is stopped, waiting for next script
         }
-		
 		#ifdef MICROPY_PY_RTTHREAD
 			rtt_main_thread_enable_sig(0);
 		#endif
+        usbdbg_stop_script();
+        goto RunREPL;   // rocky: script is stopped, waiting for next script
     }
 cleanup:
 	usbdbg_set_irq_enabled(true);

@@ -75,7 +75,7 @@
       <OPTFL>
         <tvExp>1</tvExp>
         <tvExpOptDlg>0</tvExpOptDlg>
-        <IsCurrentTarget>1</IsCurrentTarget>
+        <IsCurrentTarget>0</IsCurrentTarget>
       </OPTFL>
       <CpuCode>8</CpuCode>
       <DebugOpt>
@@ -154,16 +154,16 @@
           <Type>0</Type>
           <LineNumber>111</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>4868</Address>
+          <Address>0</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
+          <BreakIfRCount>0</BreakIfRCount>
           <Filename>..\..\py\gc.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\mpyrt_flexspi\../../py/gc.c\111</Expression>
+          <Expression></Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -241,6 +241,11 @@
           <count>14</count>
           <WinNumber>1</WinNumber>
           <ItemText>pin_AD_B0_13</ItemText>
+        </Ww>
+        <Ww>
+          <count>15</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>s_cmm</ItemText>
         </Ww>
       </WatchWindow1>
       <MemoryWindow1>
@@ -365,7 +370,7 @@
       <OPTFL>
         <tvExp>1</tvExp>
         <tvExpOptDlg>0</tvExpOptDlg>
-        <IsCurrentTarget>0</IsCurrentTarget>
+        <IsCurrentTarget>1</IsCurrentTarget>
       </OPTFL>
       <CpuCode>8</CpuCode>
       <DebugOpt>
@@ -410,7 +415,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGUARM</Key>
-          <Name></Name>
+          <Name>d</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -430,7 +435,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGTARM</Key>
-          <Name>(1010=4353,670,4803,1227,0)(6017=105,137,294,473,0)(1008=89,129,587,418,0)(6016=1876,642,2134,1295,0)(1012=889,453,1366,768,0)</Name>
+          <Name>(1010=4353,670,4803,1227,0)(6017=105,137,294,473,0)(1008=89,129,587,418,0)(6016=4807,1026,5065,1679,0)(1012=889,453,1366,768,0)</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -442,18 +447,18 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>615</LineNumber>
+          <LineNumber>95</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>5640</Address>
+          <Address>-2147366460</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\..\py\gc.c</Filename>
+          <Filename>..\..\lib\aia_cmm\cfg_mux_mgr.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\mpyrt_evk1060_sdram\../../py/gc.c\615</Expression>
+          <Expression>\\mpyrt_evk1060_sdram\../../lib/aia_cmm/cfg_mux_mgr.c\95</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -517,7 +522,7 @@
         <Mm>
           <WinNumber>1</WinNumber>
           <SubType>2</SubType>
-          <ItemText>s_cmm.pDict-&gt;table[0].key</ItemText>
+          <ItemText>pTup</ItemText>
           <AccSizeX>0</AccSizeX>
         </Mm>
       </MemoryWindow1>
@@ -525,10 +530,18 @@
         <Mm>
           <WinNumber>2</WinNumber>
           <SubType>2</SubType>
-          <ItemText>s_prof.items</ItemText>
+          <ItemText>0x</ItemText>
           <AccSizeX>0</AccSizeX>
         </Mm>
       </MemoryWindow2>
+      <MemoryWindow3>
+        <Mm>
+          <WinNumber>3</WinNumber>
+          <SubType>8</SubType>
+          <ItemText>0x80402320</ItemText>
+          <AccSizeX>0</AccSizeX>
+        </Mm>
+      </MemoryWindow3>
       <Tracepoint>
         <THDelay>0</THDelay>
       </Tracepoint>
@@ -5641,7 +5654,7 @@
 
   <Group>
     <GroupName>build_omvrt1</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -6149,7 +6162,7 @@
       <GroupNumber>12</GroupNumber>
       <FileNumber>412</FileNumber>
       <FileType>1</FileType>
-      <tvExp>0</tvExp>
+      <tvExp>1</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\nxp_rt1050_60\i2c.c</PathWithFileName>
@@ -8429,7 +8442,7 @@
 
   <Group>
     <GroupName>omv_mini</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
