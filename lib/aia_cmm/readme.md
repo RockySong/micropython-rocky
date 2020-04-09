@@ -63,9 +63,9 @@ CMM需要引脚分配输入文件，采用csv格式：考虑以下情况
 
 借助Python脚本分析CMM输入文件，产生一个dict。key是comboName, 由Fn.Unit.Signal或Fn.Signal(Unit为”-“时)组成。值是一个元组:
 
-当某一行对应了一个引脚对象时，为{comboName: (hint字符串, 引脚对象)}
+当某一行对应了一个引脚对象时，为{comboName: (hint字符串, 引脚名字符串, 引脚对象, 属主对象)}
 
-否则，为为{comboName: (hint字符串, 引脚名字符串)}
+否则，为为{comboName: (hint字符串, 引脚名字符串, None对象, 属主对象)}
 
 这个脚本需要自动执行。可以存放在SD卡根目录的下’cmm_load.py’，在主函数中查找并执行它。
 
