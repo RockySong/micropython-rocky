@@ -1,0 +1,27 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29613.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "prj_vsgdb_rt1060_evk", "prj_vsgdb_rt1060_evk.vcxproj", "{B3B55908-2665-4FCD-931A-E7F7533DE4CF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B3B55908-2665-4FCD-931A-E7F7533DE4CF}.Debug|x64.ActiveCfg = Debug|Win32
+		{B3B55908-2665-4FCD-931A-E7F7533DE4CF}.Debug|x86.ActiveCfg = Debug|Win32
+		{B3B55908-2665-4FCD-931A-E7F7533DE4CF}.Debug|x86.Build.0 = Debug|Win32
+		{B3B55908-2665-4FCD-931A-E7F7533DE4CF}.Release|x64.ActiveCfg = Release|Win32
+		{B3B55908-2665-4FCD-931A-E7F7533DE4CF}.Release|x86.ActiveCfg = Release|Win32
+		{B3B55908-2665-4FCD-931A-E7F7533DE4CF}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DA3DEDA2-9625-4B62-B429-877A8F245C26}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,1831 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source files">
+      <UniqueIdentifier>{fbffb583-061f-4819-9503-645789486a74}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header files">
+      <UniqueIdentifier>{bd5336ee-69a7-4e35-b467-86531fb9ab41}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource files">
+      <UniqueIdentifier>{0047ef49-1c3d-4eec-be76-0d8e92f3567f}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="Source files\cmsis_dsp_nn">
+      <UniqueIdentifier>{c5071198-ac2b-487f-87a8-87fe57bd7c4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\py">
+      <UniqueIdentifier>{f00d677e-b12a-458e-bca7-93962ccb8939}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\lib_libc">
+      <UniqueIdentifier>{d13473dc-16c6-4452-8921-4db99380f434}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\lib_misc">
+      <UniqueIdentifier>{a3ebbac0-2315-44d0-b8a2-434a1e737aee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\extmod">
+      <UniqueIdentifier>{c257bbb9-b90a-4de1-92fb-3f8582d7e98f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\mcusdk">
+      <UniqueIdentifier>{6b212386-1a9d-4aa6-b758-91ebdef057d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\mcusdk_utils">
+      <UniqueIdentifier>{ca8db643-8a5e-4d23-99b2-ea42894e2372}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\build_evk">
+      <UniqueIdentifier>{453cdd44-dfe8-4236-bc83-7b82054523e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\port">
+      <UniqueIdentifier>{76385b5f-0d6b-4b17-b0f9-88126e9b21be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\board_evk1050">
+      <UniqueIdentifier>{555f292a-c534-4f59-a891-0ec360757261}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\sdk_usb">
+      <UniqueIdentifier>{02186560-08c8-472e-b36e-4c4e10b8eb4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\sdk_usb_headers">
+      <UniqueIdentifier>{70584313-3f6d-4dd5-951d-fa1be26b4cc6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\sdmmc">
+      <UniqueIdentifier>{259b221f-e44f-4a80-8c2b-56a068d24121}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\flexspi_xip">
+      <UniqueIdentifier>{c857addf-1feb-419c-9154-79fd522db4d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\fleg_ftl">
+      <UniqueIdentifier>{219c898a-185e-41f4-83d7-2f1b3110d5c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\omv_mini">
+      <UniqueIdentifier>{2f819ab6-308c-47e9-bc9f-66c061c0428f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\omv_py">
+      <UniqueIdentifier>{608ed0d4-3605-49e2-b8a2-ed7d20b1e1de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\omv_img_mini">
+      <UniqueIdentifier>{87cebfd8-3cf5-43c1-a4d6-4e3a43e74a2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\omv_img_en">
+      <UniqueIdentifier>{e0f60701-982f-43af-8566-d3a714f289ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\wifi_debug">
+      <UniqueIdentifier>{7f9df8f8-f460-4030-96d7-9af473cdea3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\Device-specific files">
+      <UniqueIdentifier>{4b9d11fe-3766-4d85-86d9-9cb67e11273a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\cmsis_dsp_nn">
+      <UniqueIdentifier>{5b2caea3-f5df-4175-adb0-d63e6f968843}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\py">
+      <UniqueIdentifier>{617c6ac3-a9e6-4772-b5e8-b6de5740b0d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\lib_libc">
+      <UniqueIdentifier>{fa4d8eea-49b5-472b-951e-d534de12f585}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\lib_misc">
+      <UniqueIdentifier>{fd5db802-2684-48ae-b5af-20f6b5a3afd9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\extmod">
+      <UniqueIdentifier>{58d5780a-1923-4555-b096-6967c5b9d55f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\mcusdk">
+      <UniqueIdentifier>{1f180358-3256-48dd-96b7-8acccdf7b302}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\mcusdk_utils">
+      <UniqueIdentifier>{2a6a4b9a-7887-4814-bf7b-60ec05e45949}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\build_evk">
+      <UniqueIdentifier>{783e29eb-8330-4ebf-ad18-fed09177f3b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\port">
+      <UniqueIdentifier>{8ef79650-6694-407c-a740-f680f1361f15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\board_evk1050">
+      <UniqueIdentifier>{786aa69e-4dfb-4c32-b221-2ee61690a7cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\sdk_usb">
+      <UniqueIdentifier>{5e65c7de-0a21-4bee-bef5-7aa1719014e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\sdk_usb_headers">
+      <UniqueIdentifier>{29c0d270-b850-44d6-9460-60f900a8f0a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\sdmmc">
+      <UniqueIdentifier>{583c9851-3963-4c4f-9eea-aad5fad0d4f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\flexspi_xip">
+      <UniqueIdentifier>{80b641b3-7bc8-45fa-9726-54c627bf5150}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\fleg_ftl">
+      <UniqueIdentifier>{7f53b720-97c6-492e-a075-991b15b07f3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\omv_mini">
+      <UniqueIdentifier>{f2319c8c-29ed-4ea8-817b-dad5bb02b08b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\omv_py">
+      <UniqueIdentifier>{471a76d8-4b98-4803-9578-432494a206b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\omv_img_mini">
+      <UniqueIdentifier>{0cef0b25-705d-4c69-9fd5-f10d04128840}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\omv_img_en">
+      <UniqueIdentifier>{450c0665-329c-4562-87df-46c03e858919}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\wifi_debug">
+      <UniqueIdentifier>{f5d27f41-c297-4852-9376-a56f95238869}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\Device-specific files">
+      <UniqueIdentifier>{e3a3094f-024f-48b3-8f40-0cc4f024e70e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Make files">
+      <UniqueIdentifier>{0d8c284c-743c-4179-a57d-9a6743709210}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="VisualGDB settings">
+      <UniqueIdentifier>{40c3d926-9959-4e16-a205-417ea9f1de15}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Makefile" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\lib\cmsis\dsp\CommonTables\arm_common_tables.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\dsp\FastMathFunctions\arm_cos_f32.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\dsp\FastMathFunctions\arm_cos_q15.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\dsp\FastMathFunctions\arm_cos_q31.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\dsp\FastMathFunctions\arm_sin_f32.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\dsp\FastMathFunctions\arm_sin_q15.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\dsp\FastMathFunctions\arm_sin_q31.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\dsp\FastMathFunctions\arm_sqrt_q15.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\dsp\FastMathFunctions\arm_sqrt_q31.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_add_f32.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_add_q15.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_add_q31.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_cmplx_mult_f32.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_cmplx_mult_q15.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_cmplx_mult_q31.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_init_f32.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_init_q15.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_init_q31.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_inverse_f32.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_inverse_f64.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_mult_f32.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_mult_fast_q15.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_mult_fast_q31.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_mult_q15.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_mult_q31.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_scale_f32.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_scale_q15.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_scale_q31.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_sub_f32.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_sub_q15.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_sub_q31.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_trans_f32.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_trans_q15.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_trans_q31.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\nn\ActivationFunctions\arm_nn_activations_q7.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\nn\ActivationFunctions\arm_nn_activations_q15.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\nn\ActivationFunctions\arm_relu_q7.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\nn\ActivationFunctions\arm_relu_q15.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\nn\ConvolutionFunctions\arm_convolve_1x1_HWC_q7_fast_nonsquare.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\nn\ConvolutionFunctions\arm_convolve_HWC_q7_basic.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\nn\ConvolutionFunctions\arm_convolve_HWC_q7_fast.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\nn\ConvolutionFunctions\arm_convolve_HWC_q7_fast_nonsquare.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\nn\ConvolutionFunctions\arm_convolve_HWC_q7_RGB.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\nn\ConvolutionFunctions\arm_convolve_HWC_q15_basic.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\nn\ConvolutionFunctions\arm_convolve_HWC_q15_fast.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\nn\ConvolutionFunctions\arm_depthwise_separable_conv_HWC_q7.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\nn\ConvolutionFunctions\arm_depthwise_separable_conv_HWC_q7_nonsquare.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\nn\ConvolutionFunctions\arm_nn_mat_mult_kernel_q7_q15.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\nn\ConvolutionFunctions\arm_nn_mat_mult_kernel_q7_q15_reordered.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\nn\FullyConnectedFunctions\arm_fully_connected_mat_q7_vec_q15.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\nn\FullyConnectedFunctions\arm_fully_connected_mat_q7_vec_q15_opt.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\nn\FullyConnectedFunctions\arm_fully_connected_q7.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\nn\FullyConnectedFunctions\arm_fully_connected_q7_opt.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\nn\FullyConnectedFunctions\arm_fully_connected_q15.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\nn\FullyConnectedFunctions\arm_fully_connected_q15_opt.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\nn\NNSupportFunctions\arm_nntables.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\nn\NNSupportFunctions\arm_q7_to_q15_no_shift.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\nn\NNSupportFunctions\arm_q7_to_q15_reordered_no_shift.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\nn\PoolingFunctions\arm_pool_q7_HWC.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\nn\SoftmaxFunctions\arm_softmax_q7.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\cmsis\nn\SoftmaxFunctions\arm_softmax_q15.c">
+      <Filter>Source files\cmsis_dsp_nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\argcheck.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\asmbase.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\asmthumb.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\bc.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\binary.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\builtinevex.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\builtinhelp.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\builtinimport.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\compile.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\emitbc.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\emitcommon.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\emitglue.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\emitinlinethumb.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\formatfloat.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\frozenmod.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\gc.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\lexer.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\malloc.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\map.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\modarray.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\modbuiltins.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\modcmath.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\modcollections.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\modgc.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\modio.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\modmath.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\modmicropython.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\modstruct.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\modsys.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\modthread.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\moduerrno.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\mpprint.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\mpstate.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\mpz.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\nativeglue.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\nlrsetjmp.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\nlrthumb.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\obj.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\objarray.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\objattrtuple.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\objbool.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\objboundmeth.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\objcell.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\objclosure.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\objcomplex.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\objdict.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\objenumerate.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\objexcept.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\objfilter.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\objfloat.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\objfun.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\objgenerator.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\objgetitemiter.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\objint.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\objint_longlong.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\objint_mpz.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\objlist.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\objmap.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\objmodule.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\objnamedtuple.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\objnone.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\objobject.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\objpolyiter.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\objproperty.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\objrange.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\objreversed.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\objset.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\objsingleton.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\objslice.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\objstr.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\objstringio.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\objstrunicode.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\objtuple.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\objtype.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\objzip.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\opmethods.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\parse.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\parsenum.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\parsenumbase.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\persistentcode.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\qstr.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\reader.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\repl.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\runtime.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\runtime_utils.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\scheduler.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\scope.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\sequence.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\showbc.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\smallint.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\stackctrl.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\stream.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\unicode.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\vm.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\vstr.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\warning.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\asmarm.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\nlrxtensa.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\emitinlinextensa.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\emitnarm.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\emitnthumb.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\nlr.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\nlrpowerpc.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\objdeque.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\omvdummy.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\profile.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\pystack.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\py\ringbuf.c">
+      <Filter>Source files\py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\libc\string0.c">
+      <Filter>Source files\lib_libc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\oofatfs\ff.c">
+      <Filter>Source files\lib_misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\mp-readline\readline.c">
+      <Filter>Source files\lib_misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\netutils\netutils.c">
+      <Filter>Source files\lib_misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\timeutils\timeutils.c">
+      <Filter>Source files\lib_misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\utils\interrupt_char.c">
+      <Filter>Source files\lib_misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\utils\pyexec.c">
+      <Filter>Source files\lib_misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\utils\printf.c">
+      <Filter>Source files\lib_misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\drivers\bus\softqspi.c">
+      <Filter>Source files\lib_misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\drivers\bus\softspi.c">
+      <Filter>Source files\lib_misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\aia_cmm\cfg_mux_mgr.c">
+      <Filter>Source files\lib_misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\extmod\machine_i2c.c">
+      <Filter>Source files\extmod</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\extmod\machine_mem.c">
+      <Filter>Source files\extmod</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\extmod\machine_pinbase.c">
+      <Filter>Source files\extmod</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\extmod\machine_pulse.c">
+      <Filter>Source files\extmod</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\extmod\machine_signal.c">
+      <Filter>Source files\extmod</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\extmod\machine_spi.c">
+      <Filter>Source files\extmod</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\extmod\modbtree.c">
+      <Filter>Source files\extmod</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\extmod\modframebuf.c">
+      <Filter>Source files\extmod</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\extmod\modubinascii.c">
+      <Filter>Source files\extmod</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\extmod\moductypes.c">
+      <Filter>Source files\extmod</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\extmod\moduhashlib.c">
+      <Filter>Source files\extmod</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\extmod\moduheapq.c">
+      <Filter>Source files\extmod</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\extmod\modujson.c">
+      <Filter>Source files\extmod</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\extmod\modurandom.c">
+      <Filter>Source files\extmod</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\extmod\modure.c">
+      <Filter>Source files\extmod</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\extmod\moduselect.c">
+      <Filter>Source files\extmod</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\extmod\modussl_axtls.c">
+      <Filter>Source files\extmod</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\extmod\modussl_mbedtls.c">
+      <Filter>Source files\extmod</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\extmod\modutimeq.c">
+      <Filter>Source files\extmod</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\extmod\moduzlib.c">
+      <Filter>Source files\extmod</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\extmod\modwebrepl.c">
+      <Filter>Source files\extmod</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\extmod\modwebsocket.c">
+      <Filter>Source files\extmod</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\extmod\uos_dupterm.c">
+      <Filter>Source files\extmod</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\extmod\utime_mphal.c">
+      <Filter>Source files\extmod</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\extmod\vfs.c">
+      <Filter>Source files\extmod</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\extmod\vfs_fat.c">
+      <Filter>Source files\extmod</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\extmod\vfs_fat_diskio.c">
+      <Filter>Source files\extmod</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\extmod\vfs_fat_file.c">
+      <Filter>Source files\extmod</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\extmod\vfs_reader.c">
+      <Filter>Source files\extmod</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\extmod\virtpin.c">
+      <Filter>Source files\extmod</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\extmod\vfs_blockdev.c">
+      <Filter>Source files\extmod</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_adc.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_adc_etc.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_aipstz.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_aoi.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_bee.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_cache.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_clock.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_cmp.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_common.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_csi.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_dcdc.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_dcp.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_dmamux.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_edma.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_elcdif.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_enc.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_enet.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_ewm.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_flexcan.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_flexram.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_flexspi.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_gpc.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_gpio.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_gpt.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_kpp.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_lpi2c.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_lpi2c_edma.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_lpspi.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_lpspi_edma.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_lpuart.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_lpuart_edma.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_pit.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_pmu.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_pwm.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_pxp.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_qtmr.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_rtwdog.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_sai.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_sai_edma.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_semc.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_snvs_hp.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_snvs_lp.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_spdif.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_spdif_edma.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_src.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_trng.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_tsc.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_usdhc.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_wdog.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_xbara.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_xbarb.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_csi_camera_adapter.c">
+      <Filter>Source files\mcusdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\utilities\fsl_debug_console.c">
+      <Filter>Source files\mcusdk_utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\utilities\log\fsl_log.c">
+      <Filter>Source files\mcusdk_utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\utilities\str\fsl_str.c">
+      <Filter>Source files\mcusdk_utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\utilities\fsl_assert.c">
+      <Filter>Source files\mcusdk_utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\utilities\fsl_shell.c">
+      <Filter>Source files\mcusdk_utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\utilities\io\fsl_io.c">
+      <Filter>Source files\mcusdk_utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\build-imxrtevk105x\frozen_mpy.c">
+      <Filter>Source files\build_evk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\build-imxrtevk105x\pins_imxrtevk105x.c">
+      <Filter>Source files\build_evk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\startup_MIMXRT1052.s">
+      <Filter>Source files\port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\gchelper_armccv5.S">
+      <Filter>Source files\port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\system_MIMXRT1052.c">
+      <Filter>Source files\port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\isr.c">
+      <Filter>Source files\port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\bufhelper.c">
+      <Filter>Source files\port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\dma.c">
+      <Filter>Source files\port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\adc.c">
+      <Filter>Source files\port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\fatfs_port.c">
+      <Filter>Source files\port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\gccollect.c">
+      <Filter>Source files\port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\help.c">
+      <Filter>Source files\port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\irq.c">
+      <Filter>Source files\port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\led.c">
+      <Filter>Source files\port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\main.c">
+      <Filter>Source files\port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\main_omv.c">
+      <Filter>Source files\port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\modmachine.c">
+      <Filter>Source files\port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\modnetwork.c">
+      <Filter>Source files\port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\modpyb.c">
+      <Filter>Source files\port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\modmcu.c">
+      <Filter>Source files\port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\moduos.c">
+      <Filter>Source files\port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\modusocket.c">
+      <Filter>Source files\port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\modutime.c">
+      <Filter>Source files\port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mphalport.c">
+      <Filter>Source files\port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mpthreadport.c">
+      <Filter>Source files\port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\pendsv.c">
+      <Filter>Source files\port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\pin.c">
+      <Filter>Source files\port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\pin_named_pins.c">
+      <Filter>Source files\port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\pybstdio.c">
+      <Filter>Source files\port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\pybthread.c">
+      <Filter>Source files\port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\rng.c">
+      <Filter>Source files\port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\rtc.c">
+      <Filter>Source files\port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\sdcard.c">
+      <Filter>Source files\port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\systick.c">
+      <Filter>Source files\port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\tmr.c">
+      <Filter>Source files\port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\uart.c">
+      <Filter>Source files\port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\uniqueID.c">
+      <Filter>Source files\port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\usb_app.c">
+      <Filter>Source files\port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\usbd_msc_storage.c">
+      <Filter>Source files\port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\usrsw.c">
+      <Filter>Source files\port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\hal_wrapper.c">
+      <Filter>Source files\port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\pin_defs_mcu.c">
+      <Filter>Source files\port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\flash_hyper.c">
+      <Filter>Source files\port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\overlay_manager.c">
+      <Filter>Source files\port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\flash_pgm.c">
+      <Filter>Source files\port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\boards\imxrtevk105x\board.c">
+      <Filter>Source files\board_evk1050</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\boards\imxrtevk105x\clock_config.c">
+      <Filter>Source files\board_evk1050</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\boards\imxrtevk105x\pin_mux.c">
+      <Filter>Source files\board_evk1050</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\middleware\sdkusb\device\usb_device_dci.c">
+      <Filter>Source files\sdk_usb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\middleware\sdkusb\osa\usb_osa_bm.c">
+      <Filter>Source files\sdk_usb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\usb_cdc_msc\composite.c">
+      <Filter>Source files\sdk_usb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\usb_cdc_msc\usb_device_cdc_acm.c">
+      <Filter>Source files\sdk_usb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\usb_cdc_msc\usb_device_ch9.c">
+      <Filter>Source files\sdk_usb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\usb_cdc_msc\usb_device_class.c">
+      <Filter>Source files\sdk_usb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\usb_cdc_msc\usb_device_descriptor.c">
+      <Filter>Source files\sdk_usb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\usb_cdc_msc\usb_device_msc.c">
+      <Filter>Source files\sdk_usb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\usb_cdc_msc\usb_device_msc_ufi.c">
+      <Filter>Source files\sdk_usb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\usb_cdc_msc\virtual_com.c">
+      <Filter>Source files\sdk_usb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\usb_cdc_msc\ring_buffer.c">
+      <Filter>Source files\sdk_usb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\middleware\sdkusb\device\usb_device_ehci.c">
+      <Filter>Source files\sdk_usb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\middleware\sdkusb\phy\usb_phy.c">
+      <Filter>Source files\sdk_usb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\sdmmc\fsl_sd.c">
+      <Filter>Source files\sdmmc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\sdmmc\fsl_sdmmc_common.c">
+      <Filter>Source files\sdmmc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\sdmmc\port_usdhc_irq\fsl_sdmmc_event.c">
+      <Filter>Source files\sdmmc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\sdmmc\port_usdhc_irq\fsl_sdmmc_host.c">
+      <Filter>Source files\sdmmc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\xip\fsl_flexspi_nor_boot.c">
+      <Filter>Source files\flexspi_xip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\xip\fsl_flexspi_nor_flash.c">
+      <Filter>Source files\flexspi_xip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\flegftl\flegftl.c">
+      <Filter>Source files\fleg_ftl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\cambus.c">
+      <Filter>Source files\omv_mini</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\mt9v034.c">
+      <Filter>Source files\omv_mini</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\mutex.c">
+      <Filter>Source files\omv_mini</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\ov2640.c">
+      <Filter>Source files\omv_mini</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\ov7725.c">
+      <Filter>Source files\omv_mini</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\ov9650.c">
+      <Filter>Source files\omv_mini</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\sensor.c">
+      <Filter>Source files\omv_mini</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\xalloc.c">
+      <Filter>Source files\omv_mini</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\usbdbg.c">
+      <Filter>Source files\omv_mini</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\framebuffer.c">
+      <Filter>Source files\omv_mini</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\array.c">
+      <Filter>Source files\omv_mini</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\fb_alloc.c">
+      <Filter>Source files\omv_mini</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\ff_wrapper.c">
+      <Filter>Source files\omv_mini</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\ini.c">
+      <Filter>Source files\omv_mini</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\umm_malloc.c">
+      <Filter>Source files\omv_mini</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\py\py_gif.c">
+      <Filter>Source files\omv_py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\py\py_image.c">
+      <Filter>Source files\omv_py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\py\py_mjpeg.c">
+      <Filter>Source files\omv_py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\py\py_winc.c">
+      <Filter>Source files\omv_py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\py\py_omv.c">
+      <Filter>Source files\omv_py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\py\py_nn.c">
+      <Filter>Source files\omv_py</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\rgb2rgb_tab.c">
+      <Filter>Source files\omv_img_mini</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\fmath.c">
+      <Filter>Source files\omv_img_mini</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\yuv_tab.c">
+      <Filter>Source files\omv_img_mini</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\jpeg.c">
+      <Filter>Source files\omv_img_mini</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\py\py_helper.c">
+      <Filter>Source files\omv_img_mini</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\py\py_time.c">
+      <Filter>Source files\omv_img_mini</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\py\py_sensor.c">
+      <Filter>Source files\omv_img_mini</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\agast.c">
+      <Filter>Source files\omv_img_en</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\apriltag.c">
+      <Filter>Source files\omv_img_en</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\blob.c">
+      <Filter>Source files\omv_img_en</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\bmp.c">
+      <Filter>Source files\omv_img_en</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\collections.c">
+      <Filter>Source files\omv_img_en</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\dmtx.c">
+      <Filter>Source files\omv_img_en</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\edge.c">
+      <Filter>Source files\omv_img_en</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\eye.c">
+      <Filter>Source files\omv_img_en</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\fast.c">
+      <Filter>Source files\omv_img_en</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\fft.c">
+      <Filter>Source files\omv_img_en</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\font.c">
+      <Filter>Source files\omv_img_en</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\fsort.c">
+      <Filter>Source files\omv_img_en</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\gif.c">
+      <Filter>Source files\omv_img_en</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\haar.c">
+      <Filter>Source files\omv_img_en</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\hog.c">
+      <Filter>Source files\omv_img_en</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\hough.c">
+      <Filter>Source files\omv_img_en</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\imlib.c">
+      <Filter>Source files\omv_img_en</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\integral.c">
+      <Filter>Source files\omv_img_en</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\integral_mw.c">
+      <Filter>Source files\omv_img_en</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\invariant_tab.c">
+      <Filter>Source files\omv_img_en</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\kmeans.c">
+      <Filter>Source files\omv_img_en</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\lab_tab.c">
+      <Filter>Source files\omv_img_en</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\lbp.c">
+      <Filter>Source files\omv_img_en</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\lsd.c">
+      <Filter>Source files\omv_img_en</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\mjpeg.c">
+      <Filter>Source files\omv_img_en</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\orb.c">
+      <Filter>Source files\omv_img_en</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\phasecorrelation.c">
+      <Filter>Source files\omv_img_en</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\point.c">
+      <Filter>Source files\omv_img_en</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\pool.c">
+      <Filter>Source files\omv_img_en</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\ppm.c">
+      <Filter>Source files\omv_img_en</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\qrcode.c">
+      <Filter>Source files\omv_img_en</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\rainbow_tab.c">
+      <Filter>Source files\omv_img_en</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\rectangle.c">
+      <Filter>Source files\omv_img_en</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\selective_search.c">
+      <Filter>Source files\omv_img_en</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\shadow_removal.c">
+      <Filter>Source files\omv_img_en</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\sincos_tab.c">
+      <Filter>Source files\omv_img_en</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\stats.c">
+      <Filter>Source files\omv_img_en</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\template.c">
+      <Filter>Source files\omv_img_en</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\xyz_tab.c">
+      <Filter>Source files\omv_img_en</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\zbar.c">
+      <Filter>Source files\omv_img_en</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\clahe.c">
+      <Filter>Source files\omv_img_en</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\draw.c">
+      <Filter>Source files\omv_img_en</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\filter.c">
+      <Filter>Source files\omv_img_en</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\line.c">
+      <Filter>Source files\omv_img_en</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\mathop.c">
+      <Filter>Source files\omv_img_en</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\qsort.c">
+      <Filter>Source files\omv_img_en</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\nn\nn.c">
+      <Filter>Source files\omv_img_en</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\drivers\m8266\m8266_hw.c">
+      <Filter>Source files\wifi_debug</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\wifidbg.c">
+      <Filter>Source files\wifi_debug</Filter>
+    </ClCompile>
+    <ClCompile Include="..\nxp_rt1050_60\omv\wifidbg_ctrl.c">
+      <Filter>Source files\wifi_debug</Filter>
+    </ClCompile>
+    <None Include="mcu.mak">
+      <Filter>Source files\Device-specific files</Filter>
+    </None>
+    <ClInclude Include="..\..\py\asmbase.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\asmthumb.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\bc.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\bc0.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\binary.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\builtin.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\compile.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\emit.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\emitglue.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\formatfloat.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\frozenmod.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\gc.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\grammar.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\lexer.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\misc.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\mpconfig.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\mperrno.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\mphal.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\mpprint.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\mpstate.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\mpthread.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\mpz.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\nlr.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\obj.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\objarray.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\objexcept.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\objfun.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\objgenerator.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\objint.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\objlist.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\objmodule.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\objstr.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\objstringio.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\objtuple.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\objtype.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\parse.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\parsenum.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\parsenumbase.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\persistentcode.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\qstr.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\qstrdefs.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\reader.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\repl.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\ringbuf.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\runtime.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\runtime0.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\scope.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\smallint.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\stackctrl.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\stream.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\unicode.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\py\vmentrytable.h">
+      <Filter>Header files\py</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\oofatfs\ff.h">
+      <Filter>Header files\lib_misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\oofatfs\diskio.h">
+      <Filter>Header files\lib_misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\oofatfs\ffconf.h">
+      <Filter>Header files\lib_misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\netutils\netutils.h">
+      <Filter>Header files\lib_misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\timeutils\timeutils.h">
+      <Filter>Header files\lib_misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\utils\interrupt_char.h">
+      <Filter>Header files\lib_misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\utils\pyexec.h">
+      <Filter>Header files\lib_misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\build-imxrtevk105x\pins_qstr.h">
+      <Filter>Header files\build_evk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\build-imxrtevk105x\genhdr\modmcu_const.h">
+      <Filter>Header files\build_evk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\build-imxrtevk105x\modmcu_qstr.h">
+      <Filter>Header files\build_evk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\build-imxrtevk105x\genhdr\qstrdefs.generated.h">
+      <Filter>Header files\build_evk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\accel.h">
+      <Filter>Header files\port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\adc.h">
+      <Filter>Header files\port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\bufhelper.h">
+      <Filter>Header files\port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\can.h">
+      <Filter>Header files\port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\dac.h">
+      <Filter>Header files\port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\dcmc.h">
+      <Filter>Header files\port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\dma.h">
+      <Filter>Header files\port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\extint.h">
+      <Filter>Header files\port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\flash.h">
+      <Filter>Header files\port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\gccollect.h">
+      <Filter>Header files\port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\i2c.h">
+      <Filter>Header files\port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\irq.h">
+      <Filter>Header files\port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\lcd.h">
+      <Filter>Header files\port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\led.h">
+      <Filter>Header files\port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\modmachine.h">
+      <Filter>Header files\port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\modnetwork.h">
+      <Filter>Header files\port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\mpconfigport.h">
+      <Filter>Header files\port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\mphalport.h">
+      <Filter>Header files\port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\mpthreadport.h">
+      <Filter>Header files\port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\pendsv.h">
+      <Filter>Header files\port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\pin.h">
+      <Filter>Header files\port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\portmodules.h">
+      <Filter>Header files\port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\pybthread.h">
+      <Filter>Header files\port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\qstrdefsport.h">
+      <Filter>Header files\port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\qtimer.h">
+      <Filter>Header files\port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\rng.h">
+      <Filter>Header files\port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\rpm.h">
+      <Filter>Header files\port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\rtc.h">
+      <Filter>Header files\port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\sdcard.h">
+      <Filter>Header files\port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\servo.h">
+      <Filter>Header files\port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\spi.h">
+      <Filter>Header files\port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\storage.h">
+      <Filter>Header files\port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\systick.h">
+      <Filter>Header files\port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\timer.h">
+      <Filter>Header files\port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\uart.h">
+      <Filter>Header files\port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\unistd.h">
+      <Filter>Header files\port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\usb_app.h">
+      <Filter>Header files\port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\usbd_msc_storage.h">
+      <Filter>Header files\port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\usrsw.h">
+      <Filter>Header files\port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\wdt.h">
+      <Filter>Header files\port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\hal_wrapper.h">
+      <Filter>Header files\port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\pin_defs_mcu.h">
+      <Filter>Header files\port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\overlay_manager.h">
+      <Filter>Header files\port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\boards\imxrtevk105x\board.h">
+      <Filter>Header files\board_evk1050</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\boards\imxrtevk105x\clock_config.h">
+      <Filter>Header files\board_evk1050</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\boards\imxrtevk105x\mpconfigboard.h">
+      <Filter>Header files\board_evk1050</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\boards\imxrtevk105x\omv_boardconfig.h">
+      <Filter>Header files\board_evk1050</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\boards\imxrtevk105x\pin_mux.h">
+      <Filter>Header files\board_evk1050</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\mcusdk\middleware\sdkusb\osa\usb_osa_bm.h">
+      <Filter>Header files\sdk_usb_headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\mcusdk\middleware\sdkusb\osa\usb_osa.h">
+      <Filter>Header files\sdk_usb_headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\mcusdk\middleware\sdkusb\device\usb_device_dci.h">
+      <Filter>Header files\sdk_usb_headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\mcusdk\middleware\sdkusb\device\usb_device.h">
+      <Filter>Header files\sdk_usb_headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\mcusdk\middleware\sdkusb\include\usb_spec.h">
+      <Filter>Header files\sdk_usb_headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\mcusdk\middleware\sdkusb\include\usb_misc.h">
+      <Filter>Header files\sdk_usb_headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\usb_cdc_msc\composite.h">
+      <Filter>Header files\sdk_usb_headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\usb_cdc_msc\usb_device_cdc_acm.h">
+      <Filter>Header files\sdk_usb_headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\usb_cdc_msc\usb_device_ch9.h">
+      <Filter>Header files\sdk_usb_headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\usb_cdc_msc\usb_device_class.h">
+      <Filter>Header files\sdk_usb_headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\usb_cdc_msc\usb_device_config.h">
+      <Filter>Header files\sdk_usb_headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\usb_cdc_msc\usb_device_descriptor.h">
+      <Filter>Header files\sdk_usb_headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\usb_cdc_msc\usb_device_msc.h">
+      <Filter>Header files\sdk_usb_headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\usb_cdc_msc\usb_device_msc_ufi.h">
+      <Filter>Header files\sdk_usb_headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\usb_cdc_msc\virtual_com.h">
+      <Filter>Header files\sdk_usb_headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\usb_cdc_msc\ring_buffer.h">
+      <Filter>Header files\sdk_usb_headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\mcusdk\middleware\sdkusb\device\usb_device_ehci.h">
+      <Filter>Header files\sdk_usb_headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\sdmmc\fsl_sd.h">
+      <Filter>Header files\sdmmc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\sdmmc\fsl_sdmmc_common.h">
+      <Filter>Header files\sdmmc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\sdmmc\fsl_sdmmc_event.h">
+      <Filter>Header files\sdmmc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\sdmmc\fsl_sdmmc_host.h">
+      <Filter>Header files\sdmmc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\sdmmc\fsl_sdmmc_spec.h">
+      <Filter>Header files\sdmmc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\mcusdk\xip\fsl_flexspi_nor_boot.h">
+      <Filter>Header files\flexspi_xip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\mcusdk\xip\fsl_flexspi_nor_flash.h">
+      <Filter>Header files\flexspi_xip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\nxp_rt1050_60\boards\omvrt1\omv_boardconfig.h">
+      <Filter>Header files\omv_img_mini</Filter>
+    </ClInclude>
+    <None Include="debug.mak">
+      <Filter>Make files</Filter>
+    </None>
+    <None Include="release.mak">
+      <Filter>Make files</Filter>
+    </None>
+    <None Include="prj_vsgdb_rt1060_evk-Debug.vgdbsettings">
+      <Filter>VisualGDB settings</Filter>
+    </None>
+    <None Include="prj_vsgdb_rt1060_evk-Release.vgdbsettings">
+      <Filter>VisualGDB settings</Filter>
+    </None>
+    <None Include="MCU.xml">
+      <Filter>VisualGDB settings</Filter>
+    </None>
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\omv_binary.c">
+      <Filter>Source files\omv_img_en</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\oofatfs\ffunicode.c">
+      <Filter>Source files\lib_misc</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

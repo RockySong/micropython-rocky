@@ -1,0 +1,643 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <ProjectGuid>{B3B55908-2665-4FCD-931A-E7F7533DE4CF}</ProjectGuid>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Label="VisualGDBPackageDefinitions">
+    <ToolchainID>com.sysprogs.toolchains.nongnu.armcc</ToolchainID>
+    <ToolchainVersion>5.x//r1</ToolchainVersion>
+    <BSP_ID>KEIL:NXP/MIMXRT1062_DFP</BSP_ID>
+    <BSP_VERSION>12.1.0</BSP_VERSION>
+  </PropertyGroup>
+  <ImportGroup Label="VisualGDBFindComponents">
+    <Import Project="$(LOCALAPPDATA)\VisualGDB\FindComponents.props" />
+  </ImportGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <NMakeIncludeSearchPath>..\..;..\..\py;..\..\extmod;..\..\lib;..\..\lib\cmsis\inc;..\nxp_rt1050_60;..\nxp_rt1050_60\boards\imxrtevk105x;..\nxp_rt1050_60\mcusdk;..\nxp_rt1050_60\mcusdk\drivers;..\nxp_rt1050_60\mcusdk\utilities;..\nxp_rt1050_60\cmsis;..\nxp_rt1050_60\build-imxrtevk105x;..\nxp_rt1050_60\usb_cdc_msc;..\nxp_rt1050_60\mcusdk\middleware\sdkusb\include;..\nxp_rt1050_60\mcusdk\middleware\sdkusb\osa;..\nxp_rt1050_60\mcusdk\middleware\sdkusb\device;..\nxp_rt1050_60\mcusdk\middleware\sdkusb\phy;..\nxp_rt1050_60\sdmmc;..\nxp_rt1050_60\omv;..\nxp_rt1050_60\omv\py;..\nxp_rt1050_60\omv\img;..\nxp_rt1050_60\omv\nn;..\..\lib\oofatfs;..\..\lib\mp-readline;..\..\extmod\rt_thread;..\..\extmod\rt_thread\include\libc;..\..\extmod\rt_thread\include;..\..\drivers\m8266\lib_new;..\..\drivers\m8266;..\nxp_rt1050_60\mcusdk\utilities\io;..\nxp_rt1050_60\mcusdk\utilities\log;..\nxp_rt1050_60\mcusdk\utilities\str;..\nxp_rt1050_60\flegftl;..\nxp_rt1050_60\sdmmc;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
+    <NMakeForcedIncludes>$(ProjectDir)\gcc_Debug.h;$(VISUALGDB_DIR)\gcc_compat.h;$(NMakeForcedIncludes)</NMakeForcedIncludes>
+    <NMakeBuildCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /build "$(ProjectPath)" "/solution:$(SolutionPath)"  "/config:$(Configuration)" "/platform:$(Platform)"</NMakeBuildCommandLine>
+    <NMakeCleanCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /clean "$(ProjectPath)" "/solution:$(SolutionPath)"  "/config:$(Configuration)" "/platform:$(Platform)"</NMakeCleanCommandLine>
+    <NMakeReBuildCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /rebuild "$(ProjectPath)" "/solution:$(SolutionPath)"  "/config:$(Configuration)" "/platform:$(Platform)"</NMakeReBuildCommandLine>
+    <NMakeOutput>$(ProjectDir)prj_vsgdb_rt1060_evk-Debug.vgdbsettings</NMakeOutput>
+    <IncludePath />
+    <ReferencePath />
+    <LibraryPath />
+    <NMakePreprocessorDefinitions>__VisualGDB_CFG_Debug;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <NMakeIncludeSearchPath>..\..;..\..\py;..\..\extmod;..\..\lib;..\..\lib\cmsis\inc;..\nxp_rt1050_60;..\nxp_rt1050_60\boards\imxrtevk105x;..\nxp_rt1050_60\mcusdk;..\nxp_rt1050_60\mcusdk\drivers;..\nxp_rt1050_60\mcusdk\utilities;..\nxp_rt1050_60\cmsis;..\nxp_rt1050_60\build-imxrtevk105x;..\nxp_rt1050_60\usb_cdc_msc;..\nxp_rt1050_60\mcusdk\middleware\sdkusb\include;..\nxp_rt1050_60\mcusdk\middleware\sdkusb\osa;..\nxp_rt1050_60\mcusdk\middleware\sdkusb\device;..\nxp_rt1050_60\mcusdk\middleware\sdkusb\phy;..\nxp_rt1050_60\sdmmc;..\nxp_rt1050_60\omv;..\nxp_rt1050_60\omv\py;..\nxp_rt1050_60\omv\img;..\nxp_rt1050_60\omv\nn;..\..\lib\oofatfs;..\..\lib\mp-readline;..\..\extmod\rt_thread;..\..\extmod\rt_thread\include\libc;..\..\extmod\rt_thread\include;..\..\drivers\m8266\lib_new;..\..\drivers\m8266;..\nxp_rt1050_60\mcusdk\utilities\io;..\nxp_rt1050_60\mcusdk\utilities\log;..\nxp_rt1050_60\mcusdk\utilities\str;..\nxp_rt1050_60\flegftl;..\nxp_rt1050_60\sdmmc;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
+    <NMakeForcedIncludes>$(ProjectDir)\gcc_Release.h;$(VISUALGDB_DIR)\gcc_compat.h;$(NMakeForcedIncludes)</NMakeForcedIncludes>
+    <NMakePreprocessorDefinitions>__VisualGDB_CFG_Release;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+    <NMakeBuildCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /build "$(ProjectPath)" "/solution:$(SolutionPath)"  "/config:$(Configuration)" "/platform:$(Platform)"</NMakeBuildCommandLine>
+    <NMakeCleanCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /clean "$(ProjectPath)" "/solution:$(SolutionPath)"  "/config:$(Configuration)" "/platform:$(Platform)"</NMakeCleanCommandLine>
+    <NMakeReBuildCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /rebuild "$(ProjectPath)" "/solution:$(SolutionPath)"  "/config:$(Configuration)" "/platform:$(Platform)"</NMakeReBuildCommandLine>
+    <NMakeOutput>$(ProjectDir)prj_vsgdb_rt1060_evk-Release.vgdbsettings</NMakeOutput>
+    <IncludePath />
+    <ReferencePath />
+    <LibraryPath />
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ClCompile Include="..\..\lib\cmsis\dsp\CommonTables\arm_common_tables.c" />
+    <ClCompile Include="..\..\lib\cmsis\dsp\FastMathFunctions\arm_cos_f32.c" />
+    <ClCompile Include="..\..\lib\cmsis\dsp\FastMathFunctions\arm_cos_q15.c" />
+    <ClCompile Include="..\..\lib\cmsis\dsp\FastMathFunctions\arm_cos_q31.c" />
+    <ClCompile Include="..\..\lib\cmsis\dsp\FastMathFunctions\arm_sin_f32.c" />
+    <ClCompile Include="..\..\lib\cmsis\dsp\FastMathFunctions\arm_sin_q15.c" />
+    <ClCompile Include="..\..\lib\cmsis\dsp\FastMathFunctions\arm_sin_q31.c" />
+    <ClCompile Include="..\..\lib\cmsis\dsp\FastMathFunctions\arm_sqrt_q15.c" />
+    <ClCompile Include="..\..\lib\cmsis\dsp\FastMathFunctions\arm_sqrt_q31.c" />
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_add_f32.c" />
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_add_q15.c" />
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_add_q31.c" />
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_cmplx_mult_f32.c" />
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_cmplx_mult_q15.c" />
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_cmplx_mult_q31.c" />
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_init_f32.c" />
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_init_q15.c" />
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_init_q31.c" />
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_inverse_f32.c" />
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_inverse_f64.c" />
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_mult_f32.c" />
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_mult_fast_q15.c" />
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_mult_fast_q31.c" />
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_mult_q15.c" />
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_mult_q31.c" />
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_scale_f32.c" />
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_scale_q15.c" />
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_scale_q31.c" />
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_sub_f32.c" />
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_sub_q15.c" />
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_sub_q31.c" />
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_trans_f32.c" />
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_trans_q15.c" />
+    <ClCompile Include="..\..\lib\cmsis\dsp\MatrixFunctions\arm_mat_trans_q31.c" />
+    <ClCompile Include="..\..\lib\cmsis\nn\ActivationFunctions\arm_nn_activations_q7.c" />
+    <ClCompile Include="..\..\lib\cmsis\nn\ActivationFunctions\arm_nn_activations_q15.c" />
+    <ClCompile Include="..\..\lib\cmsis\nn\ActivationFunctions\arm_relu_q7.c" />
+    <ClCompile Include="..\..\lib\cmsis\nn\ActivationFunctions\arm_relu_q15.c" />
+    <ClCompile Include="..\..\lib\cmsis\nn\ConvolutionFunctions\arm_convolve_1x1_HWC_q7_fast_nonsquare.c" />
+    <ClCompile Include="..\..\lib\cmsis\nn\ConvolutionFunctions\arm_convolve_HWC_q7_basic.c" />
+    <ClCompile Include="..\..\lib\cmsis\nn\ConvolutionFunctions\arm_convolve_HWC_q7_fast.c" />
+    <ClCompile Include="..\..\lib\cmsis\nn\ConvolutionFunctions\arm_convolve_HWC_q7_fast_nonsquare.c" />
+    <ClCompile Include="..\..\lib\cmsis\nn\ConvolutionFunctions\arm_convolve_HWC_q7_RGB.c" />
+    <ClCompile Include="..\..\lib\cmsis\nn\ConvolutionFunctions\arm_convolve_HWC_q15_basic.c" />
+    <ClCompile Include="..\..\lib\cmsis\nn\ConvolutionFunctions\arm_convolve_HWC_q15_fast.c" />
+    <ClCompile Include="..\..\lib\cmsis\nn\ConvolutionFunctions\arm_depthwise_separable_conv_HWC_q7.c" />
+    <ClCompile Include="..\..\lib\cmsis\nn\ConvolutionFunctions\arm_depthwise_separable_conv_HWC_q7_nonsquare.c" />
+    <ClCompile Include="..\..\lib\cmsis\nn\ConvolutionFunctions\arm_nn_mat_mult_kernel_q7_q15.c" />
+    <ClCompile Include="..\..\lib\cmsis\nn\ConvolutionFunctions\arm_nn_mat_mult_kernel_q7_q15_reordered.c" />
+    <ClCompile Include="..\..\lib\cmsis\nn\FullyConnectedFunctions\arm_fully_connected_mat_q7_vec_q15.c" />
+    <ClCompile Include="..\..\lib\cmsis\nn\FullyConnectedFunctions\arm_fully_connected_mat_q7_vec_q15_opt.c" />
+    <ClCompile Include="..\..\lib\cmsis\nn\FullyConnectedFunctions\arm_fully_connected_q7.c" />
+    <ClCompile Include="..\..\lib\cmsis\nn\FullyConnectedFunctions\arm_fully_connected_q7_opt.c" />
+    <ClCompile Include="..\..\lib\cmsis\nn\FullyConnectedFunctions\arm_fully_connected_q15.c" />
+    <ClCompile Include="..\..\lib\cmsis\nn\FullyConnectedFunctions\arm_fully_connected_q15_opt.c" />
+    <ClCompile Include="..\..\lib\cmsis\nn\NNSupportFunctions\arm_nntables.c" />
+    <ClCompile Include="..\..\lib\cmsis\nn\NNSupportFunctions\arm_q7_to_q15_no_shift.c" />
+    <ClCompile Include="..\..\lib\cmsis\nn\NNSupportFunctions\arm_q7_to_q15_reordered_no_shift.c" />
+    <ClCompile Include="..\..\lib\cmsis\nn\PoolingFunctions\arm_pool_q7_HWC.c" />
+    <ClCompile Include="..\..\lib\cmsis\nn\SoftmaxFunctions\arm_softmax_q7.c" />
+    <ClCompile Include="..\..\lib\cmsis\nn\SoftmaxFunctions\arm_softmax_q15.c" />
+    <ClCompile Include="..\..\lib\oofatfs\ffunicode.c" />
+    <ClCompile Include="..\..\py\argcheck.c" />
+    <ClCompile Include="..\..\py\asmbase.c" />
+    <ClCompile Include="..\..\py\asmthumb.c" />
+    <ClCompile Include="..\..\py\bc.c" />
+    <ClCompile Include="..\..\py\binary.c" />
+    <ClCompile Include="..\..\py\builtinevex.c" />
+    <ClCompile Include="..\..\py\builtinhelp.c" />
+    <ClCompile Include="..\..\py\builtinimport.c" />
+    <ClCompile Include="..\..\py\compile.c" />
+    <ClCompile Include="..\..\py\emitbc.c" />
+    <ClCompile Include="..\..\py\emitcommon.c" />
+    <ClCompile Include="..\..\py\emitglue.c" />
+    <ClCompile Include="..\..\py\emitinlinethumb.c" />
+    <ClCompile Include="..\..\py\formatfloat.c" />
+    <ClCompile Include="..\..\py\frozenmod.c" />
+    <ClCompile Include="..\..\py\gc.c" />
+    <ClCompile Include="..\..\py\lexer.c" />
+    <ClCompile Include="..\..\py\malloc.c" />
+    <ClCompile Include="..\..\py\map.c" />
+    <ClCompile Include="..\..\py\modarray.c" />
+    <ClCompile Include="..\..\py\modbuiltins.c" />
+    <ClCompile Include="..\..\py\modcmath.c" />
+    <ClCompile Include="..\..\py\modcollections.c" />
+    <ClCompile Include="..\..\py\modgc.c" />
+    <ClCompile Include="..\..\py\modio.c" />
+    <ClCompile Include="..\..\py\modmath.c" />
+    <ClCompile Include="..\..\py\modmicropython.c" />
+    <ClCompile Include="..\..\py\modstruct.c" />
+    <ClCompile Include="..\..\py\modsys.c" />
+    <ClCompile Include="..\..\py\modthread.c" />
+    <ClCompile Include="..\..\py\moduerrno.c" />
+    <ClCompile Include="..\..\py\mpprint.c" />
+    <ClCompile Include="..\..\py\mpstate.c" />
+    <ClCompile Include="..\..\py\mpz.c" />
+    <ClCompile Include="..\..\py\nativeglue.c" />
+    <ClCompile Include="..\..\py\nlrsetjmp.c" />
+    <ClCompile Include="..\..\py\nlrthumb.c" />
+    <ClCompile Include="..\..\py\obj.c" />
+    <ClCompile Include="..\..\py\objarray.c" />
+    <ClCompile Include="..\..\py\objattrtuple.c" />
+    <ClCompile Include="..\..\py\objbool.c" />
+    <ClCompile Include="..\..\py\objboundmeth.c" />
+    <ClCompile Include="..\..\py\objcell.c" />
+    <ClCompile Include="..\..\py\objclosure.c" />
+    <ClCompile Include="..\..\py\objcomplex.c" />
+    <ClCompile Include="..\..\py\objdict.c" />
+    <ClCompile Include="..\..\py\objenumerate.c" />
+    <ClCompile Include="..\..\py\objexcept.c" />
+    <ClCompile Include="..\..\py\objfilter.c" />
+    <ClCompile Include="..\..\py\objfloat.c" />
+    <ClCompile Include="..\..\py\objfun.c" />
+    <ClCompile Include="..\..\py\objgenerator.c" />
+    <ClCompile Include="..\..\py\objgetitemiter.c" />
+    <ClCompile Include="..\..\py\objint.c" />
+    <ClCompile Include="..\..\py\objint_longlong.c" />
+    <ClCompile Include="..\..\py\objint_mpz.c" />
+    <ClCompile Include="..\..\py\objlist.c" />
+    <ClCompile Include="..\..\py\objmap.c" />
+    <ClCompile Include="..\..\py\objmodule.c" />
+    <ClCompile Include="..\..\py\objnamedtuple.c" />
+    <ClCompile Include="..\..\py\objnone.c" />
+    <ClCompile Include="..\..\py\objobject.c" />
+    <ClCompile Include="..\..\py\objpolyiter.c" />
+    <ClCompile Include="..\..\py\objproperty.c" />
+    <ClCompile Include="..\..\py\objrange.c" />
+    <ClCompile Include="..\..\py\objreversed.c" />
+    <ClCompile Include="..\..\py\objset.c" />
+    <ClCompile Include="..\..\py\objsingleton.c" />
+    <ClCompile Include="..\..\py\objslice.c" />
+    <ClCompile Include="..\..\py\objstr.c" />
+    <ClCompile Include="..\..\py\objstringio.c" />
+    <ClCompile Include="..\..\py\objstrunicode.c" />
+    <ClCompile Include="..\..\py\objtuple.c" />
+    <ClCompile Include="..\..\py\objtype.c" />
+    <ClCompile Include="..\..\py\objzip.c" />
+    <ClCompile Include="..\..\py\opmethods.c" />
+    <ClCompile Include="..\..\py\parse.c" />
+    <ClCompile Include="..\..\py\parsenum.c" />
+    <ClCompile Include="..\..\py\parsenumbase.c" />
+    <ClCompile Include="..\..\py\persistentcode.c" />
+    <ClCompile Include="..\..\py\qstr.c" />
+    <ClCompile Include="..\..\py\reader.c" />
+    <ClCompile Include="..\..\py\repl.c" />
+    <ClCompile Include="..\..\py\runtime.c" />
+    <ClCompile Include="..\..\py\runtime_utils.c" />
+    <ClCompile Include="..\..\py\scheduler.c" />
+    <ClCompile Include="..\..\py\scope.c" />
+    <ClCompile Include="..\..\py\sequence.c" />
+    <ClCompile Include="..\..\py\showbc.c" />
+    <ClCompile Include="..\..\py\smallint.c" />
+    <ClCompile Include="..\..\py\stackctrl.c" />
+    <ClCompile Include="..\..\py\stream.c" />
+    <ClCompile Include="..\..\py\unicode.c" />
+    <ClCompile Include="..\..\py\vm.c" />
+    <ClCompile Include="..\..\py\vstr.c" />
+    <ClCompile Include="..\..\py\warning.c" />
+    <ClCompile Include="..\..\py\asmarm.c" />
+    <ClCompile Include="..\..\py\nlrxtensa.c" />
+    <ClCompile Include="..\..\py\emitinlinextensa.c" />
+    <ClCompile Include="..\..\py\emitnarm.c" />
+    <ClCompile Include="..\..\py\emitnthumb.c" />
+    <ClCompile Include="..\..\py\nlr.c" />
+    <ClCompile Include="..\..\py\nlrpowerpc.c" />
+    <ClCompile Include="..\..\py\objdeque.c" />
+    <ClCompile Include="..\..\py\omvdummy.c" />
+    <ClCompile Include="..\..\py\profile.c" />
+    <ClCompile Include="..\..\py\pystack.c" />
+    <ClCompile Include="..\..\py\ringbuf.c" />
+    <ClCompile Include="..\..\lib\libc\string0.c" />
+    <ClCompile Include="..\..\lib\oofatfs\ff.c" />
+    <ClCompile Include="..\..\lib\mp-readline\readline.c" />
+    <ClCompile Include="..\..\lib\netutils\netutils.c" />
+    <ClCompile Include="..\..\lib\timeutils\timeutils.c" />
+    <ClCompile Include="..\..\lib\utils\interrupt_char.c" />
+    <ClCompile Include="..\..\lib\utils\pyexec.c" />
+    <ClCompile Include="..\..\lib\utils\printf.c" />
+    <ClCompile Include="..\..\drivers\bus\softqspi.c" />
+    <ClCompile Include="..\..\drivers\bus\softspi.c" />
+    <ClCompile Include="..\..\lib\aia_cmm\cfg_mux_mgr.c" />
+    <ClCompile Include="..\..\extmod\machine_i2c.c" />
+    <ClCompile Include="..\..\extmod\machine_mem.c" />
+    <ClCompile Include="..\..\extmod\machine_pinbase.c" />
+    <ClCompile Include="..\..\extmod\machine_pulse.c" />
+    <ClCompile Include="..\..\extmod\machine_signal.c" />
+    <ClCompile Include="..\..\extmod\machine_spi.c" />
+    <ClCompile Include="..\..\extmod\modbtree.c" />
+    <ClCompile Include="..\..\extmod\modframebuf.c" />
+    <ClCompile Include="..\..\extmod\modubinascii.c" />
+    <ClCompile Include="..\..\extmod\moductypes.c" />
+    <ClCompile Include="..\..\extmod\moduhashlib.c" />
+    <ClCompile Include="..\..\extmod\moduheapq.c" />
+    <ClCompile Include="..\..\extmod\modujson.c" />
+    <ClCompile Include="..\..\extmod\modurandom.c" />
+    <ClCompile Include="..\..\extmod\modure.c" />
+    <ClCompile Include="..\..\extmod\moduselect.c" />
+    <ClCompile Include="..\..\extmod\modussl_axtls.c" />
+    <ClCompile Include="..\..\extmod\modussl_mbedtls.c" />
+    <ClCompile Include="..\..\extmod\modutimeq.c" />
+    <ClCompile Include="..\..\extmod\moduzlib.c" />
+    <ClCompile Include="..\..\extmod\modwebrepl.c" />
+    <ClCompile Include="..\..\extmod\modwebsocket.c" />
+    <ClCompile Include="..\..\extmod\uos_dupterm.c" />
+    <ClCompile Include="..\..\extmod\utime_mphal.c" />
+    <ClCompile Include="..\..\extmod\vfs.c" />
+    <ClCompile Include="..\..\extmod\vfs_fat.c" />
+    <ClCompile Include="..\..\extmod\vfs_fat_diskio.c" />
+    <ClCompile Include="..\..\extmod\vfs_fat_file.c" />
+    <ClCompile Include="..\..\extmod\vfs_reader.c" />
+    <ClCompile Include="..\..\extmod\virtpin.c" />
+    <ClCompile Include="..\..\extmod\vfs_blockdev.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_adc.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_adc_etc.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_aipstz.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_aoi.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_bee.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_cache.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_clock.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_cmp.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_common.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_csi.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_dcdc.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_dcp.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_dmamux.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_edma.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_elcdif.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_enc.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_enet.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_ewm.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_flexcan.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_flexram.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_flexspi.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_gpc.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_gpio.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_gpt.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_kpp.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_lpi2c.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_lpi2c_edma.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_lpspi.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_lpspi_edma.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_lpuart.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_lpuart_edma.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_pit.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_pmu.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_pwm.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_pxp.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_qtmr.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_rtwdog.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_sai.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_sai_edma.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_semc.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_snvs_hp.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_snvs_lp.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_spdif.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_spdif_edma.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_src.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_trng.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_tsc.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_usdhc.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_wdog.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_xbara.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_xbarb.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\drivers\fsl_csi_camera_adapter.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\utilities\fsl_debug_console.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\utilities\log\fsl_log.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\utilities\str\fsl_str.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\utilities\fsl_assert.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\utilities\fsl_shell.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\utilities\io\fsl_io.c" />
+    <ClCompile Include="..\nxp_rt1050_60\build-imxrtevk105x\frozen_mpy.c" />
+    <ClCompile Include="..\nxp_rt1050_60\build-imxrtevk105x\pins_imxrtevk105x.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\omv_binary.c" />
+    <ClCompile Include="..\nxp_rt1050_60\startup_MIMXRT1052.s" />
+    <ClCompile Include="..\nxp_rt1050_60\gchelper_armccv5.S" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\system_MIMXRT1052.c" />
+    <ClCompile Include="..\nxp_rt1050_60\isr.c" />
+    <ClCompile Include="..\nxp_rt1050_60\bufhelper.c" />
+    <ClCompile Include="..\nxp_rt1050_60\dma.c" />
+    <ClCompile Include="..\nxp_rt1050_60\adc.c" />
+    <ClCompile Include="..\nxp_rt1050_60\fatfs_port.c" />
+    <ClCompile Include="..\nxp_rt1050_60\gccollect.c" />
+    <ClCompile Include="..\nxp_rt1050_60\help.c" />
+    <ClCompile Include="..\nxp_rt1050_60\irq.c" />
+    <ClCompile Include="..\nxp_rt1050_60\led.c" />
+    <ClCompile Include="..\nxp_rt1050_60\main.c" />
+    <ClCompile Include="..\nxp_rt1050_60\main_omv.c" />
+    <ClCompile Include="..\nxp_rt1050_60\modmachine.c" />
+    <ClCompile Include="..\nxp_rt1050_60\modnetwork.c" />
+    <ClCompile Include="..\nxp_rt1050_60\modpyb.c" />
+    <ClCompile Include="..\nxp_rt1050_60\modmcu.c" />
+    <ClCompile Include="..\nxp_rt1050_60\moduos.c" />
+    <ClCompile Include="..\nxp_rt1050_60\modusocket.c" />
+    <ClCompile Include="..\nxp_rt1050_60\modutime.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mphalport.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mpthreadport.c" />
+    <ClCompile Include="..\nxp_rt1050_60\pendsv.c" />
+    <ClCompile Include="..\nxp_rt1050_60\pin.c" />
+    <ClCompile Include="..\nxp_rt1050_60\pin_named_pins.c" />
+    <ClCompile Include="..\nxp_rt1050_60\pybstdio.c" />
+    <ClCompile Include="..\nxp_rt1050_60\pybthread.c" />
+    <ClCompile Include="..\nxp_rt1050_60\rng.c" />
+    <ClCompile Include="..\nxp_rt1050_60\rtc.c" />
+    <ClCompile Include="..\nxp_rt1050_60\sdcard.c" />
+    <ClCompile Include="..\nxp_rt1050_60\systick.c" />
+    <ClCompile Include="..\nxp_rt1050_60\tmr.c" />
+    <ClCompile Include="..\nxp_rt1050_60\uart.c" />
+    <ClCompile Include="..\nxp_rt1050_60\uniqueID.c" />
+    <ClCompile Include="..\nxp_rt1050_60\usb_app.c" />
+    <ClCompile Include="..\nxp_rt1050_60\usbd_msc_storage.c" />
+    <ClCompile Include="..\nxp_rt1050_60\usrsw.c" />
+    <ClCompile Include="..\nxp_rt1050_60\hal_wrapper.c" />
+    <ClCompile Include="..\nxp_rt1050_60\pin_defs_mcu.c" />
+    <ClCompile Include="..\nxp_rt1050_60\flash_hyper.c" />
+    <ClCompile Include="..\nxp_rt1050_60\overlay_manager.c" />
+    <ClCompile Include="..\nxp_rt1050_60\flash_pgm.c" />
+    <ClCompile Include="..\nxp_rt1050_60\boards\imxrtevk105x\board.c" />
+    <ClCompile Include="..\nxp_rt1050_60\boards\imxrtevk105x\clock_config.c" />
+    <ClCompile Include="..\nxp_rt1050_60\boards\imxrtevk105x\pin_mux.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\middleware\sdkusb\device\usb_device_dci.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\middleware\sdkusb\osa\usb_osa_bm.c" />
+    <ClCompile Include="..\nxp_rt1050_60\usb_cdc_msc\composite.c" />
+    <ClCompile Include="..\nxp_rt1050_60\usb_cdc_msc\usb_device_cdc_acm.c" />
+    <ClCompile Include="..\nxp_rt1050_60\usb_cdc_msc\usb_device_ch9.c" />
+    <ClCompile Include="..\nxp_rt1050_60\usb_cdc_msc\usb_device_class.c" />
+    <ClCompile Include="..\nxp_rt1050_60\usb_cdc_msc\usb_device_descriptor.c" />
+    <ClCompile Include="..\nxp_rt1050_60\usb_cdc_msc\usb_device_msc.c" />
+    <ClCompile Include="..\nxp_rt1050_60\usb_cdc_msc\usb_device_msc_ufi.c" />
+    <ClCompile Include="..\nxp_rt1050_60\usb_cdc_msc\virtual_com.c" />
+    <ClCompile Include="..\nxp_rt1050_60\usb_cdc_msc\ring_buffer.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\middleware\sdkusb\device\usb_device_ehci.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\middleware\sdkusb\phy\usb_phy.c" />
+    <ClCompile Include="..\nxp_rt1050_60\sdmmc\fsl_sd.c" />
+    <ClCompile Include="..\nxp_rt1050_60\sdmmc\fsl_sdmmc_common.c" />
+    <ClCompile Include="..\nxp_rt1050_60\sdmmc\port_usdhc_irq\fsl_sdmmc_event.c" />
+    <ClCompile Include="..\nxp_rt1050_60\sdmmc\port_usdhc_irq\fsl_sdmmc_host.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\xip\fsl_flexspi_nor_boot.c" />
+    <ClCompile Include="..\nxp_rt1050_60\mcusdk\xip\fsl_flexspi_nor_flash.c" />
+    <ClCompile Include="..\nxp_rt1050_60\flegftl\flegftl.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\cambus.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\mt9v034.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\mutex.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\ov2640.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\ov7725.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\ov9650.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\sensor.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\xalloc.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\usbdbg.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\framebuffer.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\array.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\fb_alloc.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\ff_wrapper.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\ini.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\umm_malloc.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\py\py_gif.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\py\py_image.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\py\py_mjpeg.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\py\py_winc.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\py\py_omv.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\py\py_nn.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\rgb2rgb_tab.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\fmath.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\yuv_tab.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\jpeg.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\py\py_helper.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\py\py_time.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\py\py_sensor.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\agast.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\apriltag.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\blob.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\bmp.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\collections.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\dmtx.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\edge.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\eye.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\fast.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\fft.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\font.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\fsort.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\gif.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\haar.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\hog.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\hough.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\imlib.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\integral.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\integral_mw.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\invariant_tab.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\kmeans.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\lab_tab.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\lbp.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\lsd.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\mjpeg.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\orb.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\phasecorrelation.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\point.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\pool.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\ppm.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\qrcode.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\rainbow_tab.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\rectangle.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\selective_search.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\shadow_removal.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\sincos_tab.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\stats.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\template.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\xyz_tab.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\zbar.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\clahe.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\draw.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\filter.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\line.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\mathop.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\img\qsort.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\nn\nn.c" />
+    <ClCompile Include="..\..\drivers\m8266\m8266_hw.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\wifidbg.c" />
+    <ClCompile Include="..\nxp_rt1050_60\omv\wifidbg_ctrl.c" />
+    <None Include="mcu.mak" />
+    <ClInclude Include="..\..\py\asmbase.h" />
+    <ClInclude Include="..\..\py\asmthumb.h" />
+    <ClInclude Include="..\..\py\bc.h" />
+    <ClInclude Include="..\..\py\bc0.h" />
+    <ClInclude Include="..\..\py\binary.h" />
+    <ClInclude Include="..\..\py\builtin.h" />
+    <ClInclude Include="..\..\py\compile.h" />
+    <ClInclude Include="..\..\py\emit.h" />
+    <ClInclude Include="..\..\py\emitglue.h" />
+    <ClInclude Include="..\..\py\formatfloat.h" />
+    <ClInclude Include="..\..\py\frozenmod.h" />
+    <ClInclude Include="..\..\py\gc.h" />
+    <ClInclude Include="..\..\py\grammar.h" />
+    <ClInclude Include="..\..\py\lexer.h" />
+    <ClInclude Include="..\..\py\misc.h" />
+    <ClInclude Include="..\..\py\mpconfig.h" />
+    <ClInclude Include="..\..\py\mperrno.h" />
+    <ClInclude Include="..\..\py\mphal.h" />
+    <ClInclude Include="..\..\py\mpprint.h" />
+    <ClInclude Include="..\..\py\mpstate.h" />
+    <ClInclude Include="..\..\py\mpthread.h" />
+    <ClInclude Include="..\..\py\mpz.h" />
+    <ClInclude Include="..\..\py\nlr.h" />
+    <ClInclude Include="..\..\py\obj.h" />
+    <ClInclude Include="..\..\py\objarray.h" />
+    <ClInclude Include="..\..\py\objexcept.h" />
+    <ClInclude Include="..\..\py\objfun.h" />
+    <ClInclude Include="..\..\py\objgenerator.h" />
+    <ClInclude Include="..\..\py\objint.h" />
+    <ClInclude Include="..\..\py\objlist.h" />
+    <ClInclude Include="..\..\py\objmodule.h" />
+    <ClInclude Include="..\..\py\objstr.h" />
+    <ClInclude Include="..\..\py\objstringio.h" />
+    <ClInclude Include="..\..\py\objtuple.h" />
+    <ClInclude Include="..\..\py\objtype.h" />
+    <ClInclude Include="..\..\py\parse.h" />
+    <ClInclude Include="..\..\py\parsenum.h" />
+    <ClInclude Include="..\..\py\parsenumbase.h" />
+    <ClInclude Include="..\..\py\persistentcode.h" />
+    <ClInclude Include="..\..\py\qstr.h" />
+    <ClInclude Include="..\..\py\qstrdefs.h" />
+    <ClInclude Include="..\..\py\reader.h" />
+    <ClInclude Include="..\..\py\repl.h" />
+    <ClInclude Include="..\..\py\ringbuf.h" />
+    <ClInclude Include="..\..\py\runtime.h" />
+    <ClInclude Include="..\..\py\runtime0.h" />
+    <ClInclude Include="..\..\py\scope.h" />
+    <ClInclude Include="..\..\py\smallint.h" />
+    <ClInclude Include="..\..\py\stackctrl.h" />
+    <ClInclude Include="..\..\py\stream.h" />
+    <ClInclude Include="..\..\py\unicode.h" />
+    <ClInclude Include="..\..\py\vmentrytable.h" />
+    <ClInclude Include="..\..\lib\oofatfs\ff.h" />
+    <ClInclude Include="..\..\lib\oofatfs\diskio.h" />
+    <ClInclude Include="..\..\lib\oofatfs\ffconf.h" />
+    <ClInclude Include="..\..\lib\netutils\netutils.h" />
+    <ClInclude Include="..\..\lib\timeutils\timeutils.h" />
+    <ClInclude Include="..\..\lib\utils\interrupt_char.h" />
+    <ClInclude Include="..\..\lib\utils\pyexec.h" />
+    <ClInclude Include="..\nxp_rt1050_60\build-imxrtevk105x\pins_qstr.h" />
+    <ClInclude Include="..\nxp_rt1050_60\build-imxrtevk105x\genhdr\modmcu_const.h" />
+    <ClInclude Include="..\nxp_rt1050_60\build-imxrtevk105x\modmcu_qstr.h" />
+    <ClInclude Include="..\nxp_rt1050_60\build-imxrtevk105x\genhdr\qstrdefs.generated.h" />
+    <ClInclude Include="..\nxp_rt1050_60\accel.h" />
+    <ClInclude Include="..\nxp_rt1050_60\adc.h" />
+    <ClInclude Include="..\nxp_rt1050_60\bufhelper.h" />
+    <ClInclude Include="..\nxp_rt1050_60\can.h" />
+    <ClInclude Include="..\nxp_rt1050_60\dac.h" />
+    <ClInclude Include="..\nxp_rt1050_60\dcmc.h" />
+    <ClInclude Include="..\nxp_rt1050_60\dma.h" />
+    <ClInclude Include="..\nxp_rt1050_60\extint.h" />
+    <ClInclude Include="..\nxp_rt1050_60\flash.h" />
+    <ClInclude Include="..\nxp_rt1050_60\gccollect.h" />
+    <ClInclude Include="..\nxp_rt1050_60\i2c.h" />
+    <ClInclude Include="..\nxp_rt1050_60\irq.h" />
+    <ClInclude Include="..\nxp_rt1050_60\lcd.h" />
+    <ClInclude Include="..\nxp_rt1050_60\led.h" />
+    <ClInclude Include="..\nxp_rt1050_60\modmachine.h" />
+    <ClInclude Include="..\nxp_rt1050_60\modnetwork.h" />
+    <ClInclude Include="..\nxp_rt1050_60\mpconfigport.h" />
+    <ClInclude Include="..\nxp_rt1050_60\mphalport.h" />
+    <ClInclude Include="..\nxp_rt1050_60\mpthreadport.h" />
+    <ClInclude Include="..\nxp_rt1050_60\pendsv.h" />
+    <ClInclude Include="..\nxp_rt1050_60\pin.h" />
+    <ClInclude Include="..\nxp_rt1050_60\portmodules.h" />
+    <ClInclude Include="..\nxp_rt1050_60\pybthread.h" />
+    <ClInclude Include="..\nxp_rt1050_60\qstrdefsport.h" />
+    <ClInclude Include="..\nxp_rt1050_60\qtimer.h" />
+    <ClInclude Include="..\nxp_rt1050_60\rng.h" />
+    <ClInclude Include="..\nxp_rt1050_60\rpm.h" />
+    <ClInclude Include="..\nxp_rt1050_60\rtc.h" />
+    <ClInclude Include="..\nxp_rt1050_60\sdcard.h" />
+    <ClInclude Include="..\nxp_rt1050_60\servo.h" />
+    <ClInclude Include="..\nxp_rt1050_60\spi.h" />
+    <ClInclude Include="..\nxp_rt1050_60\storage.h" />
+    <ClInclude Include="..\nxp_rt1050_60\systick.h" />
+    <ClInclude Include="..\nxp_rt1050_60\timer.h" />
+    <ClInclude Include="..\nxp_rt1050_60\uart.h" />
+    <ClInclude Include="..\nxp_rt1050_60\unistd.h" />
+    <ClInclude Include="..\nxp_rt1050_60\usb_app.h" />
+    <ClInclude Include="..\nxp_rt1050_60\usbd_msc_storage.h" />
+    <ClInclude Include="..\nxp_rt1050_60\usrsw.h" />
+    <ClInclude Include="..\nxp_rt1050_60\wdt.h" />
+    <ClInclude Include="..\nxp_rt1050_60\hal_wrapper.h" />
+    <ClInclude Include="..\nxp_rt1050_60\pin_defs_mcu.h" />
+    <ClInclude Include="..\nxp_rt1050_60\overlay_manager.h" />
+    <ClInclude Include="..\nxp_rt1050_60\boards\imxrtevk105x\board.h" />
+    <ClInclude Include="..\nxp_rt1050_60\boards\imxrtevk105x\clock_config.h" />
+    <ClInclude Include="..\nxp_rt1050_60\boards\imxrtevk105x\mpconfigboard.h" />
+    <ClInclude Include="..\nxp_rt1050_60\boards\imxrtevk105x\omv_boardconfig.h" />
+    <ClInclude Include="..\nxp_rt1050_60\boards\imxrtevk105x\pin_mux.h" />
+    <ClInclude Include="..\nxp_rt1050_60\mcusdk\middleware\sdkusb\osa\usb_osa_bm.h" />
+    <ClInclude Include="..\nxp_rt1050_60\mcusdk\middleware\sdkusb\osa\usb_osa.h" />
+    <ClInclude Include="..\nxp_rt1050_60\mcusdk\middleware\sdkusb\device\usb_device_dci.h" />
+    <ClInclude Include="..\nxp_rt1050_60\mcusdk\middleware\sdkusb\device\usb_device.h" />
+    <ClInclude Include="..\nxp_rt1050_60\mcusdk\middleware\sdkusb\include\usb_spec.h" />
+    <ClInclude Include="..\nxp_rt1050_60\mcusdk\middleware\sdkusb\include\usb_misc.h" />
+    <ClInclude Include="..\nxp_rt1050_60\usb_cdc_msc\composite.h" />
+    <ClInclude Include="..\nxp_rt1050_60\usb_cdc_msc\usb_device_cdc_acm.h" />
+    <ClInclude Include="..\nxp_rt1050_60\usb_cdc_msc\usb_device_ch9.h" />
+    <ClInclude Include="..\nxp_rt1050_60\usb_cdc_msc\usb_device_class.h" />
+    <ClInclude Include="..\nxp_rt1050_60\usb_cdc_msc\usb_device_config.h" />
+    <ClInclude Include="..\nxp_rt1050_60\usb_cdc_msc\usb_device_descriptor.h" />
+    <ClInclude Include="..\nxp_rt1050_60\usb_cdc_msc\usb_device_msc.h" />
+    <ClInclude Include="..\nxp_rt1050_60\usb_cdc_msc\usb_device_msc_ufi.h" />
+    <ClInclude Include="..\nxp_rt1050_60\usb_cdc_msc\virtual_com.h" />
+    <ClInclude Include="..\nxp_rt1050_60\usb_cdc_msc\ring_buffer.h" />
+    <ClInclude Include="..\nxp_rt1050_60\mcusdk\middleware\sdkusb\device\usb_device_ehci.h" />
+    <ClInclude Include="..\nxp_rt1050_60\sdmmc\fsl_sd.h" />
+    <ClInclude Include="..\nxp_rt1050_60\sdmmc\fsl_sdmmc_common.h" />
+    <ClInclude Include="..\nxp_rt1050_60\sdmmc\fsl_sdmmc_event.h" />
+    <ClInclude Include="..\nxp_rt1050_60\sdmmc\fsl_sdmmc_host.h" />
+    <ClInclude Include="..\nxp_rt1050_60\sdmmc\fsl_sdmmc_spec.h" />
+    <ClInclude Include="..\nxp_rt1050_60\mcusdk\xip\fsl_flexspi_nor_boot.h" />
+    <ClInclude Include="..\nxp_rt1050_60\mcusdk\xip\fsl_flexspi_nor_flash.h" />
+    <ClInclude Include="..\nxp_rt1050_60\boards\omvrt1\omv_boardconfig.h" />
+    <None Include="Makefile" />
+    <None Include="debug.mak" />
+    <None Include="release.mak" />
+    <None Include="prj_vsgdb_rt1060_evk-Debug.vgdbsettings" />
+    <None Include="prj_vsgdb_rt1060_evk-Release.vgdbsettings" />
+    <None Include="MCU.xml" />
+  </ItemGroup>
+</Project>
