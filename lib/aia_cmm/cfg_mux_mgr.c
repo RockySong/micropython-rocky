@@ -48,8 +48,11 @@ static mp_obj_t _prvMux_Query(mp_obj_t userObj, const char *pszFn, int unit, con
     if (nlr_push(&nlr) == 0)/*try*/ {
         mp_obj_tuple_t *pTup = (mp_obj_tuple_t*) mp_obj_dict_get(s_cmm.pDict, (mp_obj_t)pStrComboKey);
         if (!pMuxData) /* If this is called from Python, we ju st return the tuple data */
-            goto cleanup;
-        /* We got the pin information as a tuple: (hint str, pin str, pin object, owner object) */
+	    {
+		    nlr_pop();
+		    goto cleanup;
+	    }
+	    /* We got the pin information as a tuple: (hint str, pin str, pin object, owner object) */
         mp_obj_t objHint, objPinStr, objPinObj, objOwner;
         objHint = pTup->items[0];
         objPinStr = pTup->items[1];
