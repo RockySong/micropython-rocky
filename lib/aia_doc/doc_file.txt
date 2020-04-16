@@ -1,26 +1,64 @@
-中文帮助
-彩色字符
-帮助的范围
-	模块
-	类型
-	常数
-<-|->help
-欢迎
+<key>welcome
 <lang=eng>
-Welcome to Micropython!
+"Welcome to MicroPython!\n"
+"\n"
+"For online docs please visit http://docs.micropython.org/\n"
+"\n"
+"Control commands:\n"
+"  CTRL-A        -- on a blank line, enter raw REPL mode\n"
+"  CTRL-B        -- on a blank line, enter normal REPL mode\n"
+"  CTRL-C        -- interrupt a running program\n"
+"  CTRL-D        -- on a blank line, exit or do a soft reset\n"
+"  CTRL-E        -- on a blank line, enter paste mode\n"
+"\n"
+"For further help on a specific object, type help(obj)\n"
 </lang>
+
 <lang=chs>
-欢迎使用Micropython!
+欢迎使用Micropython! 完整文档位于 http://docs.micropython.org
+Ctrl-A : 在空行上，进入raw REPL模式
+Ctrl-B : 在空行上，进入正常的REPL模式
+Ctrl-C : 中止一个正在运行的脚本
+Ctrl-D : 在空行上，退出或软复位
+Ctrl-E : 在空行上，进入粘贴模式
 </lang>
-<-|->oart.servo
-type  // type|module|method|const
-<lang=chs> // language
+
+
+<key>oart.servo
+<lang=chs>
 控制舵机的python类型
 支持\旋转
 </lang>
 
-<eng>
-</eng>
+<lang=eng>
+A Python type to control servos
+support rotating
+</lang>
 
-Micropython欢迎您！
-<-|->pyb.Pin.OUT
+<key>ack
+<lang=chs>
+亲爱的你
+王月月
+邵小鹏
+张小岩
+许小鹏
+刘小潮
+高小新
+石小宝
+</lang>
+
+<lang=eng>
+Dear you
+Lucy Wang
+River Shao
+Tony Zhang
+Crist Xu
+Curry Liu
+Xinyi Gao
+Stone Bao
+</lang>
+
+
+<key>duoji
+<link=oart.servo>
+

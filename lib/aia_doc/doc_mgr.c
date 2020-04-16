@@ -23,7 +23,7 @@ DOC_Obj_t s_doc = {0, "help", "eng"};
 #include "lib/utils/pyexec.h"
 mp_obj_t DOC_Find(int arg_cnt, mp_obj_t *args) {
     
-	const char *pszKey = "help";
+	const char *pszKey = "welcome";
 	if (arg_cnt > 0)
 	{
 		if (!mp_obj_is_str(args[0]))
