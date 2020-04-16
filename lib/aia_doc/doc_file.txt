@@ -1,0 +1,26 @@
+中文帮助
+彩色字符
+帮助的范围
+	模块
+	类型
+	常数
+<-|->help
+欢迎
+<lang=eng>
+Welcome to Micropython!
+</lang>
+<lang=chs>
+欢迎使用Micropython!
+</lang>
+<-|->oart.servo
+type  // type|module|method|const
+<lang=chs> // language
+控制舵机的python类型
+支持\旋转
+</lang>
+
+<eng>
+</eng>
+
+Micropython欢迎您！
+<-|->pyb.Pin.OUT

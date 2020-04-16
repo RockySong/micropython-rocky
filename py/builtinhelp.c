@@ -160,18 +160,30 @@ STATIC void mp_help_print_obj(const mp_obj_t obj) {
         }
     }
 }
-
+mp_obj_t DOC_Find(int arg_cnt, mp_obj_t *args);
 STATIC mp_obj_t mp_builtin_help(size_t n_args, const mp_obj_t *args) {
     if (n_args == 0) {
-        // print a general help message
-        mp_print_str(MP_PYTHON_PRINTER, MICROPY_PY_BUILTINS_HELP_TEXT);
+	    // print a general help message
+		if(DOC_Find(0, 0) <= 0)
+	    {
+		    // rocky: if we don't find in doc file then use original help
+		    mp_print_str(MP_PYTHON_PRINTER, MICROPY_PY_BUILTINS_HELP_TEXT);
+	    }
     } else {
-        // try to print something sensible about the given object
-        mp_help_print_obj(args[0]);
+	    
+	    if (mp_obj_is_str(args[0]))
+	    {
+		    DOC_Find(n_args, args);
+	    }
+	    else 
+	    {
+		    // try to print something sensible about the given object
+		    mp_help_print_obj(args[0]);
+	    }
     }
 
     return mp_const_none;
 }
-MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(mp_builtin_help_obj, 0, 1, mp_builtin_help);
+MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(mp_builtin_help_obj, 0, 2, mp_builtin_help);
 
 #endif // MICROPY_PY_BUILTINS_HELP

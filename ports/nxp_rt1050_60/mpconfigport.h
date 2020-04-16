@@ -89,7 +89,7 @@ typedef signed int ssize_t;
 #define MICROPY_SCHEDULER_DEPTH     (8)
 #define MICROPY_VFS                 (1)
 #define MICROPY_VFS_FAT             (1)
-
+#define MICROPY_ENABLE_DOC_STRING (1)
 #define MICROPY_PY_NETWORK			(1)
 #define MICROPY_PY_USOCKET			(1)
 // control over Python builtins
@@ -205,6 +205,7 @@ extern const struct _mp_obj_module_t nn_module;
 extern const struct _mp_obj_module_t gif_module;
 #endif
 extern const struct _mp_obj_module_t g_cmm_module;
+extern const struct _mp_obj_module_t g_doc_module;
 #if MICROPY_PY_USOCKET
 #define SOCKET_BUILTIN_MODULE               { MP_OBJ_NEW_QSTR(MP_QSTR_usocket), (mp_obj_t)&mp_module_usocket },
 #define SOCKET_BUILTIN_MODULE_WEAK_LINKS    { MP_OBJ_NEW_QSTR(MP_QSTR_socket), (mp_obj_t)&mp_module_usocket },
@@ -229,6 +230,7 @@ extern const struct _mp_obj_module_t g_cmm_module;
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_utime), (mp_obj_t)&mp_module_utime }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_time), (mp_obj_t)&time_module }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_cmm), (mp_obj_t)&g_cmm_module }, \
+	{ MP_OBJ_NEW_QSTR(MP_QSTR_doc), (mp_obj_t)&g_doc_module }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_lcd),  (mp_obj_t)&lcd_module },
 	#else
 	#define MICROPY_PORT_BUILTIN_MODULES \
@@ -238,6 +240,7 @@ extern const struct _mp_obj_module_t g_cmm_module;
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_uos), (mp_obj_t)&mp_module_uos }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_utime), (mp_obj_t)&mp_module_utime }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_cmm), (mp_obj_t)&g_cmm_module }, \
+	{ MP_OBJ_NEW_QSTR(MP_QSTR_doc), (mp_obj_t)&g_doc_module }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_time), (mp_obj_t)&time_module },
 	#endif
 #elif defined(OMV_SENSOR_ONLY)
@@ -250,6 +253,7 @@ extern const struct _mp_obj_module_t g_cmm_module;
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_time), (mp_obj_t)&time_module }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_sensor),  (mp_obj_t)&sensor_module }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_cmm), (mp_obj_t)&g_cmm_module }, \
+	{ MP_OBJ_NEW_QSTR(MP_QSTR_doc), (mp_obj_t)&g_doc_module }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_lcd),  (mp_obj_t)&lcd_module }, \
 	/*{ MP_OBJ_NEW_QSTR(MP_QSTR_image),  (mp_obj_t)&image_module }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_mjpeg),  (mp_obj_t)&mjpeg_module }, \
@@ -271,6 +275,7 @@ extern const struct _mp_obj_module_t g_cmm_module;
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_gif),  (mp_obj_t)&gif_module }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_nn),  (mp_obj_t)&nn_module }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_cmm), (mp_obj_t)&g_cmm_module }, \
+	{ MP_OBJ_NEW_QSTR(MP_QSTR_doc), (mp_obj_t)&g_doc_module }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_lcd),  (mp_obj_t)&lcd_module }, \
 	SOCKET_BUILTIN_MODULE \
 	NETWORK_BUILTIN_MODULE
@@ -287,6 +292,7 @@ extern const struct _mp_obj_module_t g_cmm_module;
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_mjpeg),  (mp_obj_t)&mjpeg_module }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_gif),  (mp_obj_t)&gif_module }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_cmm), (mp_obj_t)&g_cmm_module }, \
+	{ MP_OBJ_NEW_QSTR(MP_QSTR_doc), (mp_obj_t)&g_doc_module }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_nn),  (mp_obj_t)&nn_module }, \
 	SOCKET_BUILTIN_MODULE \
 	NETWORK_BUILTIN_MODULE	

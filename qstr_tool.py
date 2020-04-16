@@ -65,6 +65,7 @@ static_qstr_list = [
     "__call__",
     "__class__",
     "__delitem__",
+    "__doc__",
     "__enter__",
     "__exit__",
     "__getattr__",
@@ -351,4 +352,6 @@ def do_work(infiles):
     print_qstr_data(qcfgs, qstrs)
 
 if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        sys.argv.append('.\\qstr_test.txt')
     do_work(sys.argv[1:])

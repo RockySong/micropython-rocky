@@ -2470,6 +2470,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\lib\aia_cmm\cfg_mux_mgr.c</FilePath>
             </File>
+            <File>
+              <FileName>doc_mgr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\lib\aia_doc\doc_mgr.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -10110,6 +10115,11 @@
               <FileName>cfg_mux_mgr.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\lib\aia_cmm\cfg_mux_mgr.c</FilePath>
+            </File>
+            <File>
+              <FileName>doc_mgr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\lib\aia_doc\doc_mgr.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -18058,6 +18068,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\lib\aia_cmm\cfg_mux_mgr.c</FilePath>
             </File>
+            <File>
+              <FileName>doc_mgr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\lib\aia_doc\doc_mgr.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -25935,6 +25950,11 @@
               <FileName>cfg_mux_mgr.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\lib\aia_cmm\cfg_mux_mgr.c</FilePath>
+            </File>
+            <File>
+              <FileName>doc_mgr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\lib\aia_doc\doc_mgr.c</FilePath>
             </File>
           </Files>
         </Group>

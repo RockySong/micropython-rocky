@@ -27,7 +27,7 @@
 #include "py/builtin.h"
 
 const char stmhal_help_text[] =
-"Welcome to MicroPython!\n"
+"Micropython欢迎您！\n"
 "\n"
 "For online help please visit http://micropython.org/help/.\n"
 "\n"

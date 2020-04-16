@@ -26,7 +26,7 @@ void OnProjectLoad (void) {
   Project.AddPathSubstitute ("C:/Users/pearlpig", "$(ProjectDir)");
   Project.AddPathSubstitute ("c:/users/pearlpig", "$(ProjectDir)");
   Project.SetDevice ("MIMXRT1062xxx6A");
-  Project.SetHostIF ("USB", "59402905");
+  Project.SetHostIF ("USB", "0");
   Project.SetTargetIF ("SWD");
   Project.SetTIFSpeed ("4 MHz");
   Project.SetJLinkScript("C:/d\nxp_mcu_sdk/SDK_270_EVK1060/tools/evkmimxrt1060_sdram_init.jlinkscript");
@@ -146,29 +146,7 @@ void OnProjectLoad (void) {
 *                                                                     
 **********************************************************************
 */                                                                    
-void AfterTargetReset (void) {
-  unsigned int SP;                                                
-  unsigned int PC;                                                
-  unsigned int VectorTableAddr;                                   
-                                                                  
-  VectorTableAddr = Elf.GetBaseAddr();                            
-                                                                  
-  if (VectorTableAddr != 0xFFFFFFFF) {                            
-    SP = Target.ReadU32(VectorTableAddr);                         
-    Target.SetReg("SP", SP);                                    
-  } else {                                                        
-    Util.Log("Project file error: failed to get program base"); 
-  }                                                               
-                                                                  
-  PC = Elf.GetEntryPointPC();                                     
-                                                                  
-  if (PC != 0xFFFFFFFF) {                                         
-    Target.SetReg("PC", PC);                                    
-  } else if (VectorTableAddr != 0xFFFFFFFF) {                     
-    PC = Target.ReadU32(VectorTableAddr + 4);                     
-    Target.SetReg("PC", PC);                                    
-  }
-}
+
 
 /*********************************************************************
 *                                                                     
@@ -254,29 +232,20 @@ void AfterTargetReset (void) {
 **********************************************************************
 */                                                                    
 void AfterTargetDownload (void) {
-  unsigned int SP;                                                
-  unsigned int PC;                                                
-  unsigned int VectorTableAddr;                                   
-                                                                  
-  VectorTableAddr = Elf.GetBaseAddr();                            
-                                                                  
-  if (VectorTableAddr != 0xFFFFFFFF) {                            
+  unsigned int SP;
+  unsigned int PC;
+  unsigned int VectorTableAddr;
+  // we use the same layout as QSPI XIP to ease target switching
+  VectorTableAddr = Elf.GetBaseAddr() + 0x2000;          
+  if (VectorTableAddr != 0xFFFFFFFF) {                   
     SP = Target.ReadU32(VectorTableAddr);                         
     Target.SetReg("SP", SP);                                    
+    PC = Target.ReadU32(VectorTableAddr + 4);                     
+    Target.SetReg("PC", PC);
   } else {                                                        
     Util.Log("Project file error: failed to get program base"); 
-  }                                                               
-                                                                  
-  PC = Elf.GetEntryPointPC();                                     
-                                                                  
-  if (PC != 0xFFFFFFFF) {                                         
-    Target.SetReg("PC", PC);                                    
-  } else if (VectorTableAddr != 0xFFFFFFFF) {                     
-    PC = Target.ReadU32(VectorTableAddr + 4);                     
-    Target.SetReg("PC", PC);                                    
-  }
+  }  
 }
-
 /*********************************************************************
 *                                                                     
 *       BeforeTargetDisconnect                                        
