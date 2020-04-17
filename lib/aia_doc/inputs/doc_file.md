@@ -1,17 +1,4 @@
 #### welcome
-<lang=eng>
-Welcome to MicroPython!For online docs please visit http://docs.micropython.org/\n
-type "help('modules') to list the built-in Python modules
-type "help('?') to see how to use this documentation system 
-Control commands:
-+ CTRL-A        -- on a blank line, enter raw REPL mode
-+ CTRL-B        -- on a blank line, enter normal REPL mode
-+ CTRL-C        -- interrupt a running program
-+ CTRL-D        -- on a blank line, exit or do a soft reset
-+ CTRL-E        -- on a blank line, enter paste mode
-** 输入help('?','chs') 以在后续查看中文版
-</lang>
-
 <lang=chs>
 欢迎使用Micropython! 完整文档位于 http://docs.micropython.org
 输入"help('modules')"以查看内建的Python模块
@@ -24,14 +11,25 @@ Control commands:
 + Ctrl-E : 在空行上，进入粘贴模式
 **input help('?','eng') to see English version later**
 </lang>
-
+<lang=dft>
+Welcome to MicroPython!For online docs please visit http://docs.micropython.org/\n
+type "help('modules') to list the built-in Python modules
+type "help('?') to see how to use this documentation system 
+Control commands:
++ CTRL-A        -- on a blank line, enter raw REPL mode
++ CTRL-B        -- on a blank line, enter normal REPL mode
++ CTRL-C        -- interrupt a running program
++ CTRL-D        -- on a blank line, exit or do a soft reset
++ CTRL-E        -- on a blank line, enter paste mode
+** 输入help('?','chs') 以在后续查看中文版
+</lang>
 
 #### oart.servo
 <lang=chs>
 控制舵机的python类型
 支持\旋转
 </lang>
-<lang=eng>
+<lang=dft>
 A Python type to control servos
 support rotating
 </lang>
@@ -48,7 +46,7 @@ support rotating
 石小宝
 </lang>
 
-<lang=eng>
+<lang=dft>
 Dear you
 Lucy Wang
 River Shao
@@ -64,7 +62,6 @@ Stone Bao
 
 #### nazrikom
 <lang=chs>
----- nazrikom ----
 贼一起 恒涅, 扩利达, 
 Oto bin lia, 肯 蔑拾一吧 
 贼一起 恒涅, 扩利达, 
@@ -105,4 +102,23 @@ Hie shie 不了迈斯
 靠阿拉们咩啊
 [土]拉给see, wu gi xi de pen,
 靠阿拉们咩啊
+#### naz
+<link=nazrikom>
+
+#### fuck you
+<lang=chs>
+讲文明，懂礼貌
+</lang>
+<lang=dft>
+please be polite
+#### fuck
+<link=fuck you>
+
+#### value
+<lang=chs>
+富强、民主、文明、和谐
+自由、平等、公正、法治
+爱国、敬业、诚信、友善
+<lang=dft>
+Talk is cheap, show me your code!
 </lang>
