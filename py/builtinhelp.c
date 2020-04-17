@@ -143,7 +143,7 @@ STATIC void mp_help_print_obj(const mp_obj_t obj) {
 
     mp_map_t *map = NULL;
     if (type == &mp_type_module) {
-        map = &mp_obj_module_get_globals(obj)->map;
+        map = &mp_obj_module_get_globals(obj)->map;\
     } else {
         if (type == &mp_type_type) {
             type = MP_OBJ_TO_PTR(obj);
@@ -160,22 +160,17 @@ STATIC void mp_help_print_obj(const mp_obj_t obj) {
         }
     }
 }
-mp_obj_t DOC_Find(int arg_cnt, mp_obj_t *args);
+int DOC_DoWork(int arg_cnt, mp_obj_t *args);
 STATIC mp_obj_t mp_builtin_help(size_t n_args, const mp_obj_t *args) {
     if (n_args == 0) {
 	    // print a general help message
-		if(DOC_Find(0, 0) <= 0)
+		if(DOC_DoWork(0, 0) <= 0)
 	    {
 		    // rocky: if we don't find in doc file then use original help
 		    mp_print_str(MP_PYTHON_PRINTER, MICROPY_PY_BUILTINS_HELP_TEXT);
 	    }
-    } else {
-	    
-	    if (mp_obj_is_str(args[0]))
-	    {
-		    DOC_Find(n_args, args);
-	    }
-	    else 
+    } else {	    
+	    if (!(mp_obj_is_str(args[0]) && DOC_DoWork(n_args, args) > 0))
 	    {
 		    // try to print something sensible about the given object
 		    mp_help_print_obj(args[0]);
