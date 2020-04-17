@@ -27,7 +27,7 @@ typedef struct _DOC_Main_t
 	char szLang[8];
 }DOC_State_t, DOC_Obj_t;
 
-DOC_Obj_t s_doc = {0, 0, kWantKey, "help", "eng"};
+DOC_Obj_t s_doc = {0, 0, kWantKey, "help", "chs"};
 
 typedef enum _DocSearchResult_enum
 {
@@ -72,6 +72,7 @@ mp_obj_t DOC_FastSearch(mp_obj_t strSeg, mp_obj_t objLen)
 		
 		if (s_doc.state == kWantKey)
 		{
+			ProcKey:
 			if (memcmp("#### ", sLine, 5) == 0)
 			{
 				if (memcmp(sLine + 5, s_doc.szKey, keyLen) == 0)
@@ -82,11 +83,13 @@ mp_obj_t DOC_FastSearch(mp_obj_t strSeg, mp_obj_t objLen)
 		}
 		else if (s_doc.state == kWantLang)
 		{
+			ProcLang:
 			if (memcmp("<lang=", sLine, 6) == 0 && sLine[lineLen - 1] == '>')
 			{
-				if (memcmp(sLine + 6, s_doc.szLang, langLen) == 0)
+				if (memcmp(sLine + 6, s_doc.szLang, langLen) == 0 || (memcmp(sLine + 6, "dft", 3) == 0))
 				{
 					s_doc.state = kWantEnd;
+					s_doc.isFound = 1;
 					if (s_doc.lnNum >= 1000)
 						mp_printf(&mp_plat_print, "\r\n");	
 				}
@@ -111,12 +114,20 @@ mp_obj_t DOC_FastSearch(mp_obj_t strSeg, mp_obj_t objLen)
 			{
 				s_doc.state = kWantLang;
 			}
+			else if (memcmp("<lang=", sLine, 6) == 0) {
+				s_doc.state = kWantLang;
+				goto ProcLang;
+			}
+			else if (memcmp("#### ", sLine, 5) == 0) {
+				s_doc.state = kWantKey;
+				goto ProcKey;
+			}			
 		}
 		else if (s_doc.state == kWantEnd)
 		{
-			if (memcmp("</lang>", sLine, 7) == 0)
-			{
-				s_doc.isFound = 1;
+			if (memcmp("</lang>", sLine, 7) == 0 || 
+			    memcmp("<lang=", sLine, 6) == 0 || memcmp("#### ", sLine, 5) == 0)
+			{				
 				ret = kSearchOK;
 				break;
 			}
@@ -145,7 +156,7 @@ int DOC_DoWork(int arg_cnt, mp_obj_t *args) {
 	}
 	snprintf(s_doc.szKey, sizeof(s_doc.szKey), "%s", pszKey);	
 	
-	const char *pszLang = "chs";
+	const char *pszLang = s_doc.szLang;
 	if (arg_cnt > 1)
 	{
 		if (!mp_obj_is_str(args[1]))
@@ -153,8 +164,8 @@ int DOC_DoWork(int arg_cnt, mp_obj_t *args) {
 			mp_raise_TypeError("Language argument must be string type!");
 		}
 		pszLang = mp_obj_str_get_str(args[1]);
-	}
-	snprintf(s_doc.szLang, sizeof(s_doc.szLang), "%s", pszLang);
+        snprintf(s_doc.szLang, sizeof(s_doc.szLang), "%s", pszLang);
+	}	
 	
 	mp_import_stat_t stat = mp_import_stat("/aia_doc/doc_load.py");
 	if (stat == MP_IMPORT_STAT_FILE) {
