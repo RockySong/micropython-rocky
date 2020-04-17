@@ -16,6 +16,7 @@
 
 <lang=chs>
 欢迎使用Micropython! 完整文档位于 http://docs.micropython.org
+输入"help('modules')"以查看内建的Python模块
 Ctrl-A : 在空行上，进入raw REPL模式
 Ctrl-B : 在空行上，进入正常的REPL模式
 Ctrl-C : 中止一个正在运行的脚本

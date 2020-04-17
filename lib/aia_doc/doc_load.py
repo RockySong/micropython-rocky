@@ -1,61 +1,56 @@
 import time
-def load():
-    d0 = time.ticks()
+def compute_hash(key, modulo=100):
+    hash = 5381
+    bKey = key.encode()
+    for b in bKey:
+        hash = (hash * 33) ^ b
+    return hash % modulo
+
+def open_helpfile(key):
+    hash = compute_hash(key)
+    sPath = '/aia_doc/zzhsh_%02d.md' % hash
     try:
-        fd = open('/doc_file.txt', 'r', encodeing='utf-8')
+        fd = open(sPath, 'rb')
     except:
-        fd = open('doc_file.txt', 'r', encoding='utf-8')
+        # not found, open the generic
+        fd = open('/aia_doc/doc_file.md', 'rb')
+    return fd
+
+def modmain():    
+    t0 = time.ticks()    
     try:
         import doc
         blob = doc.doc()  # get the (key, lang) tuple
     except:
-        blob = ('help', 'chs')
+        blob = ('welcome', 'chs')
     key = blob[0]
     lang = blob[1]
-    # 0 = searching key ; 1 = type ; 2 = find lang ; 3 = skip content; 4 = content
-    state = 0
-    lnNum = 0
-    langEndStr = ""
-    sHelp = ''
-    for sLine in fd:
-        if state != 0:
-            sLine = sLine[:-2]  # strip \r\n
-        lnNum += 1
-        if lnNum % 1000 == 0:
-            print('.', end='')
-        if state == 0:  # searching key
-            if sLine[:5] != '<key>':
-                continue
-            if sLine[5:-2] != key:
-                continue
-            state = 2 # found
-        elif state == 2: # search lang
-            if sLine[:6] == '<lang=' and sLine[-1] == '>':
-                foundLang = sLine[6:-1]
-                state = 3
-                if foundLang == lang:
-                    if lnNum >= 1000:
-                        print('\r')
-                    state = 4
-            elif sLine[:6] == '<link=' and sLine[-1] == '>':
-                key = sLine[6:-1]
-                print('-->', key)
-                fd.seek(0)
-                state = 0
-                continue
-        elif state == 3:
-            if sLine == '</lang>':
-                state = 2
-        elif state == 4:
-            if sLine == '</lang>':
-                doc.get(sHelp)
-                break
-            print(sLine)
-            sHelp = sHelp + sLine + '\n'
+    print('='*20, key, '='*20)
+    hash = compute_hash(key, 100)
+    
+    fd = open_helpfile(key)
+    s = fd.read(4096)
+    
+    while len(s) > 1:
+        subLen = len(s)
+        ret = doc.search(s, subLen)
+        if ret == 1:
+            break # found
+        elif ret == 2: # link
+            blob = doc.doc() # get new key 
+            key = blob[0]
+            fd.close()
+            fd = open_helpfile(key)
+            print('-->', key)
+            fd.seek(0)
+        elif ret < 0:
+            fd.seek(ret,1)
+        s = fd.read(4096)
+   
+    t1 = time.ticks()
+    #print('ticks = %d' % (t1 - t0))
     fd.close()
-    d1 = time.ticks()
-    print('%d ticks' % (d1-d0))
-    return lnNum
 
 if __name__ == '__main__':
-    load()
+    #help()
+    modmain()
