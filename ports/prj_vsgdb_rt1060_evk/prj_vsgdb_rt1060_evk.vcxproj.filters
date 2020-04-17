@@ -1827,5 +1827,13 @@
     <ClCompile Include="..\..\lib\oofatfs\ffunicode.c">
       <Filter>Source files\lib_misc</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\lib\aia_doc\doc_mgr.c">
+      <Filter>Source files\lib_misc</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\lib\aia_doc\doc_mgr.h">
+      <Filter>Source files\lib_misc</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

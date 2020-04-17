@@ -47,7 +47,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <NMakeIncludeSearchPath>..\..;..\..\py;..\..\extmod;..\..\lib;..\..\lib\cmsis\inc;..\nxp_rt1050_60;..\nxp_rt1050_60\boards\imxrtevk105x;..\nxp_rt1050_60\mcusdk;..\nxp_rt1050_60\mcusdk\drivers;..\nxp_rt1050_60\mcusdk\utilities;..\nxp_rt1050_60\cmsis;..\nxp_rt1050_60\build-imxrtevk105x;..\nxp_rt1050_60\usb_cdc_msc;..\nxp_rt1050_60\mcusdk\middleware\sdkusb\include;..\nxp_rt1050_60\mcusdk\middleware\sdkusb\osa;..\nxp_rt1050_60\mcusdk\middleware\sdkusb\device;..\nxp_rt1050_60\mcusdk\middleware\sdkusb\phy;..\nxp_rt1050_60\sdmmc;..\nxp_rt1050_60\omv;..\nxp_rt1050_60\omv\py;..\nxp_rt1050_60\omv\img;..\nxp_rt1050_60\omv\nn;..\..\lib\oofatfs;..\..\lib\mp-readline;..\..\extmod\rt_thread;..\..\extmod\rt_thread\include\libc;..\..\extmod\rt_thread\include;..\..\drivers\m8266\lib_new;..\..\drivers\m8266;..\nxp_rt1050_60\mcusdk\utilities\io;..\nxp_rt1050_60\mcusdk\utilities\log;..\nxp_rt1050_60\mcusdk\utilities\str;..\nxp_rt1050_60\flegftl;..\nxp_rt1050_60\sdmmc;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
+    <NMakeIncludeSearchPath>..\..;..\..\py;..\..\extmod;..\..\lib;..\..\lib\cmsis\inc;..\nxp_rt1050_60;..\nxp_rt1050_60\boards\imxrtevk105x;..\nxp_rt1050_60\mcusdk;..\nxp_rt1050_60\mcusdk\drivers;..\nxp_rt1050_60\mcusdk\utilities;..\nxp_rt1050_60\cmsis;..\nxp_rt1050_60\build-imxrtevk105x;..\nxp_rt1050_60\usb_cdc_msc;..\nxp_rt1050_60\mcusdk\middleware\sdkusb\include;..\nxp_rt1050_60\mcusdk\middleware\sdkusb\osa;..\nxp_rt1050_60\mcusdk\middleware\sdkusb\device;..\nxp_rt1050_60\mcusdk\middleware\sdkusb\phy;..\nxp_rt1050_60\sdmmc;..\nxp_rt1050_60\omv;..\nxp_rt1050_60\omv\py;..\nxp_rt1050_60\omv\img;..\nxp_rt1050_60\omv\nn;..\..\lib\oofatfs;..\..\lib\mp-readline;..\..\extmod\rt_thread;..\..\extmod\rt_thread\include\libc;..\..\extmod\rt_thread\include;..\..\drivers\m8266\lib_new;..\..\drivers\m8266;..\nxp_rt1050_60\mcusdk\utilities\io;..\nxp_rt1050_60\mcusdk\utilities\log;..\nxp_rt1050_60\mcusdk\utilities\str;..\nxp_rt1050_60\flegftl;..\nxp_rt1050_60\sdmmc;..\..\lib\berkeley-db-1.xx\PORT\bsdi.1.0\include;$(ToolchainDir)\include;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
     <NMakeForcedIncludes>$(ProjectDir)\gcc_Debug.h;$(VISUALGDB_DIR)\gcc_compat.h;$(NMakeForcedIncludes)</NMakeForcedIncludes>
     <NMakeBuildCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /build "$(ProjectPath)" "/solution:$(SolutionPath)"  "/config:$(Configuration)" "/platform:$(Platform)"</NMakeBuildCommandLine>
     <NMakeCleanCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /clean "$(ProjectPath)" "/solution:$(SolutionPath)"  "/config:$(Configuration)" "/platform:$(Platform)"</NMakeCleanCommandLine>
@@ -79,6 +79,7 @@
   </ImportGroup>
   <ItemGroup />
   <ItemGroup>
+    <ClCompile Include="..\..\lib\aia_doc\doc_mgr.c" />
     <ClCompile Include="..\..\lib\cmsis\dsp\CommonTables\arm_common_tables.c" />
     <ClCompile Include="..\..\lib\cmsis\dsp\FastMathFunctions\arm_cos_f32.c" />
     <ClCompile Include="..\..\lib\cmsis\dsp\FastMathFunctions\arm_cos_q15.c" />
@@ -497,6 +498,7 @@
     <ClCompile Include="..\nxp_rt1050_60\omv\wifidbg.c" />
     <ClCompile Include="..\nxp_rt1050_60\omv\wifidbg_ctrl.c" />
     <None Include="mcu.mak" />
+    <ClInclude Include="..\..\lib\aia_doc\doc_mgr.h" />
     <ClInclude Include="..\..\py\asmbase.h" />
     <ClInclude Include="..\..\py\asmthumb.h" />
     <ClInclude Include="..\..\py\bc.h" />
