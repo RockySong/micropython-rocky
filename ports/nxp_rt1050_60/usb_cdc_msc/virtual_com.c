@@ -96,13 +96,16 @@ USB_DATA_ALIGNMENT static usb_cdc_acm_info_t s_usbCdcAcmInfo = {{0, 0, 0, 0, 0, 
 #endif
 
 #define USB_ALIGN	USB_DMA_NONINIT_DATA_ALIGN(USB_DATA_ALIGN_SIZE)
-
+#if VCP_RINGBLK_SIZE > HS_CDC_VCOM_BULK_OUT_PACKET_SIZE || VCP_RING_BLK_SIZE > HS_CDC_VCOM_BULK_IN_PACKET_SIZE
+#error Ring block size must not exceed endpoint's max packet size!
+#endif
 USB_ALIGN static uint8_t s_RecvBuf[VCP_INEPBUF_CNT][VCP_RINGBLK_SIZE];
 USB_ALIGN static uint8_t s_SendBuf[VCP_OUTEPBUF_CNT][VCP_RINGBLK_SIZE];
 
 ring_block_t s_txRB, s_rxRB;
 uint8_t *s_pCurTxBuf, *s_pCurRxBuf;
 uint8_t s_isTxIdle;
+volatile uint8_t s_isRxOverrun;
 volatile static usb_device_composite_struct_t *g_deviceComposite;
 
 // >>> openMV IDE related 
@@ -281,14 +284,19 @@ usb_status_t USB_DeviceCdcVcomCallback(class_handle_t handle, uint32_t event, vo
 						{
 							pendsv_kbd_intr();
 							RingBlk_ReuseTakenBlk(&s_rxRB, &s_pCurRxBuf);
-						} else {
+						} else if (epCbParam->length == 0) {
+                            RingBlk_ReuseTakenBlk(&s_rxRB, &s_pCurRxBuf);
+                        }
+                        else
+                        {
 							RingBlk_FixBlkFillCnt(&s_rxRB, epCbParam->length, &s_pCurRxBuf);
 						}
 						// provide USBD IP to receive next buffer
 						if (s_pCurRxBuf)
 							error = USB_DeviceCdcAcmRecv(handle, g_cfgFix.roCdcDicEpOutNdx, s_pCurRxBuf, VCP_RINGBLK_SIZE);
 						else {
-							usb_echo("VCOM receive buffer is overrun!\r\n");
+                            s_isRxOverrun = 1;
+							// usb_echo("VCOM receive buffer is overrun!\r\n");
 						}
 					} else {
 						uint8_t Buf[VCP_RINGBLK_SIZE];
@@ -519,6 +527,19 @@ usb_status_t USB_DeviceCdcVcomCallback(class_handle_t handle, uint32_t event, vo
     return error;
 }
 
+int StartOrResumeRecv(void)
+{
+    #ifdef HSRX
+    USB_DeviceCdcAcmRecv(g_deviceComposite->cdcVcom.cdcAcmHandle, g_cfgFix.roCdcDicEpOutNdx, s_hsRx, 64);
+    #else
+    /* Schedule buffer to receive */
+    s_pCurRxBuf = RingBlk_GetTakenBlk(&s_rxRB);
+    if (0 == s_pCurRxBuf)
+        s_pCurRxBuf = RingBlk_TakeNextFreeBlk(&s_rxRB);
+    USB_DeviceCdcAcmRecv(g_deviceComposite->cdcVcom.cdcAcmHandle, g_cfgFix.roCdcDicEpOutNdx, s_pCurRxBuf, VCP_RINGBLK_SIZE);
+    #endif    
+}
+
 /*!
  * @brief Virtual COM device set configuration function.
  *
@@ -534,15 +555,7 @@ usb_status_t USB_DeviceCdcVcomSetConfigure(class_handle_t handle, uint8_t config
     if (USB_COMPOSITE_CONFIGURE_INDEX == configure)
     {
         g_deviceComposite->cdcVcom.attach = 1;	
-		#ifdef HSRX
-		USB_DeviceCdcAcmRecv(g_deviceComposite->cdcVcom.cdcAcmHandle, g_cfgFix.roCdcDicEpOutNdx, s_hsRx, 64);
-		#else
-		/* Schedule buffer to receive */
-		s_pCurRxBuf = RingBlk_GetTakenBlk(&s_rxRB);
-		if (0 == s_pCurRxBuf)
-			s_pCurRxBuf = RingBlk_TakeNextFreeBlk(&s_rxRB);
-		USB_DeviceCdcAcmRecv(g_deviceComposite->cdcVcom.cdcAcmHandle, g_cfgFix.roCdcDicEpOutNdx, s_pCurRxBuf, VCP_RINGBLK_SIZE);
-		#endif
+		StartOrResumeRecv();
 		/* Schedule buffer to send */
 //		if (s_isTxIdle) {
 //		uint32_t cbFill;
@@ -604,6 +617,11 @@ int VCOM_Read(uint8_t *buf, uint32_t len, uint32_t timeout)
         // Wait until we have at least 1 byte to read
         uint32_t start = HAL_GetTick();
         while (RingBlk_GetUsedBytes(&s_rxRB) == 0) {
+//            if (s_isRxOverrun) {
+//                s_isRxOverrun = 0;
+//                RingBlk_Init(&s_rxRB, s_RecvBuf[0], VCP_RINGBLK_SIZE, VCP_INEPBUF_CNT);
+//                StartOrResumeRecv();
+//            }
             // Wraparound of tick is taken care of by 2's complement arithmetic.
             if (0 == timeout || HAL_GetTick() - start >= timeout) {
                 // timeout
@@ -618,6 +636,12 @@ int VCOM_Read(uint8_t *buf, uint32_t len, uint32_t timeout)
 
         // Copy byte from device to user buffer
         cbRead += RingBlk_Read(&s_rxRB, buf, len - cbRead);
+    }
+    if (s_isRxOverrun) {
+        if (RingBlk_GetFreeBlks(&s_rxRB) != 0) {
+                s_isRxOverrun = 0;
+                StartOrResumeRecv();            
+        }
     }
 	return cbRead;
 }

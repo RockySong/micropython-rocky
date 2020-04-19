@@ -201,21 +201,13 @@ int32_t RingBlk_Init(ring_block_t *pRB, uint8_t *pBlksAry, uint32_t blkSize, uin
 
 {
 	uint32_t i;
+    memset(pRB, sizeof(*pRB), 0);
 	if (blkCnt > RING_BLOCK_MAX_CNT) {
 		return -1L;
 	}
 	pRB->pBlks	 	= (uint8_t*)pBlksAry;
 	pRB->blkSize	= blkSize;
 	pRB->blkCnt 	= blkCnt;
-	pRB->rNdx		= 0;
-	pRB->wNdx		= 0;
-	pRB->blkWNdx	= 0;
-	pRB->blkRNdx	= 0;
-	pRB->usedCnt	= 0;
-	pRB->cbTotUsed  = 0;
-	for (i=0; i<blkCnt; i++) {
-		pRB->cbBlkFillTos[i] = 0;
-	}
 	return 0;
 }
 
@@ -266,23 +258,24 @@ beginwork:
 	while (dataBytes && usedCnt) {
 		
 		cb = cbBlkFill0 - byteNdx;
-		if (0 == cb)
-			break;	// no more to read
-		if (cb > dataBytes)
-			cb = dataBytes;
-		if (pBuf) {	// if pBuf is NULL, we simply free blocks
-			if (cb == 1) {
-				*pBuf = pRB->pBlks[pRB->blkSize * blkNdx + byteNdx];
-			} else {
-				memcpy(pBuf, pRB->pBlks + pRB->blkSize * blkNdx + byteNdx, cb);
-			}
-			pBuf += cb;
-		}
-		dataBytes -= cb , byteNdx += cb;
-		if (isUpdt) {
-			pRB->cbTotUsed -= cb;
-			// pRB->cbBlkFillTos[blkNdx] -= cb;	// fillTos is the watermark of even max filled
-		}
+		if (0 != cb) // some blocks may be accidently left blank
+		{
+            if (cb > dataBytes)
+                cb = dataBytes;
+            if (pBuf) {	// if pBuf is NULL, we simply free blocks
+                if (cb == 1) {
+                    *pBuf = pRB->pBlks[pRB->blkSize * blkNdx + byteNdx];
+                } else {
+                    memcpy(pBuf, pRB->pBlks + pRB->blkSize * blkNdx + byteNdx, cb);
+                }
+                pBuf += cb;
+            }
+            dataBytes -= cb , byteNdx += cb;
+            if (isUpdt) {
+                pRB->cbTotUsed -= cb;
+                // pRB->cbBlkFillTos[blkNdx] -= cb;	// fillTos is the watermark of even max filled
+            }
+        }
 		if (byteNdx == cbBlkFill0) {
 			// one block is totally read, go ahead to next block, even if the block is not fully filled
 			byteNdx = 0 , usedCnt--;
@@ -502,6 +495,9 @@ int32_t RingBlk_FixBlkFillCnt(ring_block_t *pRB, uint32_t cbFill, uint8_t **ppNe
 		return -1L;	// must first take one block, then fix its filled count
 	INIT_CRITICAL_RBK();
 	ENTER_CRITICAL_RBK();
+    if (cbFill == 0) {
+        return RingBlk_ReuseTakenBlk(pRB, ppNextFreeBlk);
+    }
 	pRB->cbBlkFillTos[pRB->takenBlkNdx] += cbFill;
 	pRB->cbTotUsed += cbFill;
 	pRB->takenBlkNdx = 0xFF;

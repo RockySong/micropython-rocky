@@ -36,7 +36,7 @@
 
 #define VCP_RINGBLK_SIZE	128
 #define VCP_OUTEPBUF_CNT 	4
-#define VCP_INEPBUF_CNT 	12
+#define VCP_INEPBUF_CNT 	3
 
 /*******************************************************************************
 * Definitions
