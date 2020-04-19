@@ -97,7 +97,7 @@ USB_DATA_ALIGNMENT static usb_cdc_acm_info_t s_usbCdcAcmInfo = {{0, 0, 0, 0, 0, 
 
 #define USB_ALIGN	USB_DMA_NONINIT_DATA_ALIGN(USB_DATA_ALIGN_SIZE)
 #if VCP_RINGBLK_SIZE > HS_CDC_VCOM_BULK_OUT_PACKET_SIZE || VCP_RING_BLK_SIZE > HS_CDC_VCOM_BULK_IN_PACKET_SIZE
-#error Ring block size must not exceed endpoint's max packet size!
+#error Ring block size must NOT exceed endpoint's max packet size!
 #endif
 USB_ALIGN static uint8_t s_RecvBuf[VCP_INEPBUF_CNT][VCP_RINGBLK_SIZE];
 USB_ALIGN static uint8_t s_SendBuf[VCP_OUTEPBUF_CNT][VCP_RINGBLK_SIZE];

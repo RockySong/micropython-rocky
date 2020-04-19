@@ -404,7 +404,7 @@ zero_itcm2
 				cmp		r0,	r1
 				bne		zero_itcm
 				bx		lr
-				; <--
+
 				ENDP
 
 

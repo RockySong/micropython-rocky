@@ -483,7 +483,7 @@ bool image_get_mask_pixel(image_t *ptr, int x, int y);
     ((uint16_t *) _image->data)[(_image->w * _y) + _x] = _v; \
 })
 
-#ifdef __arm__
+#if 1 // #ifdef __arm__
     #define IMAGE_REV_RGB565_PIXEL(pixel) \
     ({ \
         __typeof__ (pixel) _pixel = (pixel); \

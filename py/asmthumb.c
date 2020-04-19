@@ -116,13 +116,15 @@ STATIC void asm_thumb_write_word32(asm_thumb_t *as, int w32) {
 //  l0  l1  l2  ...  l(n-1)
 //  ^                ^
 //  | low address    | high address in RAM
-
+#if defined(__arm__)
+#warning rocky: ARM ac5 ALWAYS define __arm__, most of mp code and its libraries expects __arm__ NOT defined on Cortex-M cores!
+#endif
 void asm_thumb_entry(asm_thumb_t *as, int num_locals) {
     assert(num_locals >= 0);
 
     // If this Thumb machine code is run from ARM state then add a prelude
     // to switch to Thumb state for the duration of the function.
-    #if MICROPY_DYNAMIC_COMPILER || MICROPY_EMIT_ARM || (defined(__arm__) && !defined(__thumb2__))
+    #if MICROPY_DYNAMIC_COMPILER || MICROPY_EMIT_ARM || (defined(__arm__) && !defined(__thumb__/*2 rocky: should remove '2' for AC5*/))
     #if MICROPY_DYNAMIC_COMPILER
     if (mp_dynamic_compiler.native_arch == MP_NATIVE_ARCH_ARMV6)
     #endif

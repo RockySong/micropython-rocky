@@ -178,9 +178,10 @@ int DOC_DoWork(int arg_cnt, mp_obj_t *args) {
 			nlr_pop();
 		}
 		else {
+            mp_printf(&mp_plat_print, "doc script rasied an except!\r\n");
 		}
 	} else {
-        mp_printf(&mp_plat_print, "doc script does not found, please copy it to root folder");
+        mp_printf(&mp_plat_print, "doc script does not found, please copy it to root folder\r\n");
 		return -1;
     }
 	return s_doc.isFound;
