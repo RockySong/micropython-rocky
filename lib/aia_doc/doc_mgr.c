@@ -23,7 +23,7 @@ typedef struct _DOC_Main_t
 	uint8_t isFound;
 	uint32_t lnNum;
 	DocSearch_enum state;
-	char szKey[32];
+	char szKey[64];
 	char szLang[8];
 }DOC_State_t, DOC_Obj_t;
 
@@ -63,10 +63,7 @@ mp_obj_t DOC_FastSearch(mp_obj_t strSeg, mp_obj_t objLen)
 			break;
 		}
 		lineLen = t2 - t - (s[t2 - 1] == '\r' ? 1 : 0); // mp reads as \r\n, strip \r
-		if (++s_doc.lnNum % 1000 == 0)
-		{
-			mp_printf(&mp_plat_print, ".");	
-		}
+		++s_doc.lnNum;
 		
 		sLine = s + t;
 		

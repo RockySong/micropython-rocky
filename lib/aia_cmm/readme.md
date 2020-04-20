@@ -14,9 +14,7 @@ pin object中包含了非常丰富的内容，如下定义：
 | ------------------------------------------------------------ |
 | typedef struct {<br/>  mp_obj_base_t base;<br/>  qstr name;<br/>  qstr board_name;	<br/>  uint32_t port   : 4;	// GPIO端口号<br/>  uint32_t pin    : 5;  // GPIO引脚号<br/>  uint32_t num_af : 4;	// 此引脚支持多少个复用功能<br/>  uint32_t adc_channel : 5; // ADC通道号<br/>  uint32_t adc_num  : 3;  // 连接到了哪些ADC实例上，最多支持3个<br/>  uint32_t pin_mask;	// 未使用<br/>  GPIO_Type *gpio;	// 按gpio使用时对应的gpio寄存器<br/>  // >>> i.MX RT's pin alt_fn mux reg and pin cfg reg are not ordered in GPIO order, have to record the mapping<br/>  uint32_t afReg;	// 选择引脚复用功能的寄存器地址<br/>  uint32_t cfgReg;	// 配置引脚工作方式的寄存器地址<br/>  // <<<<br/>  const pin_af_obj_t *af; // 复用对象表<br/>} pin_obj_t; |
 
- 
-
-pin_af_obj_t类型的对象记录了每个复用功能的信息
+ pin_af_obj_t类型的对象记录了每个复用功能的信息
 
 | pin_af_obj_t                                                 |
 | ------------------------------------------------------------ |
@@ -76,7 +74,7 @@ CMM需要引脚分配输入文件，采用csv格式：考虑以下情况
  
 
 API暂定如下
-
+```c
 /* Give back (Return) a pin to CMM, caller should put the pin to proper state first before give back*/
 
 int **Mux_Give**(MuxItem_t *pMuxData);
@@ -135,12 +133,16 @@ int **Mux_TryTakeMany**(mp_obj_t userObj, const char *pszFn, int unit, const cha
 
 int **Mux_QueryMany**(mp_obj_t userObj, const char *pszFn, int unit, const char **ppszSignals, int signalCnt, MuxItem_t *pMuxData);
 
+```
+
+
  
 
 驱动自己知道需要用哪些信号，具体外设的哪个alt_fn
 
 示例伪码：获取I2S麦克风阵列所使用的引脚并初始化
 
+```c
 MuxItem_t muxes[6];
 
 char *pSignals[6] = {"mic12", "mic34", "mic56", "mic78", "ws", "bclk"};
@@ -152,7 +154,4 @@ for (int i=0; i<6; i++) {
   mp_hal_pin_config_alt(muxes[i].pPinObj, i < 4 ? GPIO_MODE_INPUT : GPIO_MODE_OUTPUT_PP, AF_FN_SAI1);
 
 }
-
- 
-
- 
+```
