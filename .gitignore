@@ -473,7 +473,6 @@ ports/prj_keil_rt1060/Listings/
 ports/prj_keil_rt1060/Objects/
 ports/prj_keil_rt1060/Objects_SDRAM/
 ports/prj_keil_rt1060/RTE/
-ports/prj_keil_rt1060/SDRAM.ini
 ports/prj_keil_rt1060/mpyrt1060 - Copy.uvprojx
 ports/prj_keil_rt1060/mpyrt1060.uvguix.nxa04576
 py/__pycache__/makeqstrdata.cpython-37.pyc
