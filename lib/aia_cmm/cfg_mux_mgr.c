@@ -60,17 +60,20 @@ static mp_obj_t _prvMux_Query(mp_obj_t userObj, const char *pszFn, int unit, con
         objOwner = pTup->items[3];
         pMuxData->pTuple = pTup;
         pMuxData->objOldOwner = pTup->items[3];
-        pMuxData->pPinObj = (mp_obj_is_small_int(objPinObj) || objOwner == mp_const_none) ? 0 : objPinObj;
+        pMuxData->pPinObj = objPinObj;
         GET_STR_DATA_LEN(objHint, s, l);
         pMuxData->pszHint = (const char*) s;
         GET_STR_DATA_LEN(objPinStr, s2, l2);
         pMuxData->pszPin = (const char*) s2;
         if (isTake) {
-            if (isPreempt || mp_obj_is_small_int(objOwner) || objOwner == mp_const_none) {
+            if (isPreempt || mp_obj_is_small_int(objOwner) || objOwner == mp_const_none || objOwner == userObj) {
                 /* free pin object or preempt */
                 pTup->items[3] = userObj; /* well, py tuples are immutable, but we are in C */
+            } else {
+                pMuxData->pPinObj = 0; // failed to take
             }
-        }        
+            
+        }
         nlr_pop();
         objRet = (mp_obj_t)pTup;
     } else /*except*/{
