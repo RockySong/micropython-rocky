@@ -257,7 +257,7 @@ STATIC mp_obj_t led_obj_make_new(const mp_obj_type_t *type, size_t n_args, size_
     if (self->mux.pPinObj == 0) {
         nlr_raise(mp_obj_new_exception_msg_varg(&mp_type_ValueError, "LED(%d) can't take reqruied pin", led_id));
     }
-    mp_hal_pin_config_alt(self->mux.pPinObj, GPIO_MODE_OUTPUT_PP, AF_FN_GPIO);
+    mp_hal_ConfigGPIO(self->mux.pPinObj, GPIO_MODE_OUTPUT_PP, 1);
     self->led_pin = self->mux.pPinObj;
     return self;    
     
