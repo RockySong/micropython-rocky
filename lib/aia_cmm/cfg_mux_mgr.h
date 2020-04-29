@@ -18,7 +18,7 @@ typedef struct _CMM_DescItem
     /* failed to reclaim unused MuxItem_t instances, leaks memory!*/
     char szComboKey[CMM_COMBOKEY_CAP]; /* used to free */
     char szHint[CMM_HINT_CAP];
-	pin_obj_t *pPinObj;	
+	const pin_obj_t *pPinObj;	
 }CMM_DescItem_t, MuxItem_t;
 
 /* Return a pin to CMM, caller should put the pin to proper state according to the board design */

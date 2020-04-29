@@ -120,7 +120,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGUARM</Key>
-          <Name></Name>
+          <Name>d</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -152,34 +152,34 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>171</LineNumber>
+          <LineNumber>50</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>0</Address>
+          <Address>1610723300</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>0</BreakIfRCount>
-          <Filename>..\..\lib\aia_doc\doc_mgr.c</Filename>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>..\..\lib\aia_cmm\cfg_mux_mgr.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression></Expression>
+          <Expression>\\mpyrt_flexspi\../../lib/aia_cmm/cfg_mux_mgr.c\50</Expression>
         </Bp>
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>168</LineNumber>
+          <LineNumber>45</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>0</Address>
+          <Address>1610723282</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>0</BreakIfRCount>
-          <Filename>..\..\lib\aia_doc\doc_mgr.c</Filename>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>..\..\lib\aia_cmm\cfg_mux_mgr.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression></Expression>
+          <Expression>\\mpyrt_flexspi\../../lib/aia_cmm/cfg_mux_mgr.c\45</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -263,6 +263,11 @@
           <WinNumber>1</WinNumber>
           <ItemText>s_cmm</ItemText>
         </Ww>
+        <Ww>
+          <count>16</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>pyb_led_obj</ItemText>
+        </Ww>
       </WatchWindow1>
       <MemoryWindow1>
         <Mm>
@@ -294,7 +299,7 @@
       <DebugFlag>
         <trace>0</trace>
         <periodic>0</periodic>
-        <aLwin>0</aLwin>
+        <aLwin>1</aLwin>
         <aCover>0</aCover>
         <aSer1>0</aSer1>
         <aSer2>0</aSer2>
@@ -459,7 +464,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGTARM</Key>
-          <Name>(1010=4353,670,4803,1227,0)(6017=105,137,294,473,0)(1008=89,129,587,418,0)(6016=4807,1026,5065,1679,0)(1012=889,453,1366,768,0)</Name>
+          <Name>(1010=4353,670,4803,1227,0)(6017=105,137,294,473,0)(1008=89,129,587,418,0)(6016=4807,1026,5105,1776,1)(1012=889,453,1366,768,0)</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -524,20 +529,25 @@
           <WinNumber>1</WinNumber>
           <ItemText>s_doc</ItemText>
         </Ww>
+        <Ww>
+          <count>11</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>s_cmm</ItemText>
+        </Ww>
       </WatchWindow1>
       <MemoryWindow1>
         <Mm>
           <WinNumber>1</WinNumber>
           <SubType>2</SubType>
-          <ItemText>pTup</ItemText>
+          <ItemText>0x2003A360</ItemText>
           <AccSizeX>0</AccSizeX>
         </Mm>
       </MemoryWindow1>
       <MemoryWindow2>
         <Mm>
           <WinNumber>2</WinNumber>
-          <SubType>2</SubType>
-          <ItemText>str</ItemText>
+          <SubType>8</SubType>
+          <ItemText>ptr</ItemText>
           <AccSizeX>0</AccSizeX>
         </Mm>
       </MemoryWindow2>
@@ -545,7 +555,7 @@
         <Mm>
           <WinNumber>3</WinNumber>
           <SubType>8</SubType>
-          <ItemText>str</ItemText>
+          <ItemText>0x80403650</ItemText>
           <AccSizeX>0</AccSizeX>
         </Mm>
       </MemoryWindow3>
@@ -591,6 +601,12 @@
       <pszMrulep></pszMrulep>
       <pSingCmdsp></pSingCmdsp>
       <pMultCmdsp></pMultCmdsp>
+      <SystemViewers>
+        <Entry>
+          <Name>System Viewer\IOMUXC</Name>
+          <WinId>35905</WinId>
+        </Entry>
+      </SystemViewers>
       <DebugDescription>
         <Enable>1</Enable>
         <EnableFlashSeq>1</EnableFlashSeq>
@@ -5753,7 +5769,7 @@
 
   <Group>
     <GroupName>port</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -5833,7 +5849,7 @@
       <GroupNumber>12</GroupNumber>
       <FileNumber>384</FileNumber>
       <FileType>1</FileType>
-      <tvExp>1</tvExp>
+      <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\nxp_rt1050_60\adc.c</PathWithFileName>
@@ -6181,7 +6197,7 @@
       <GroupNumber>12</GroupNumber>
       <FileNumber>413</FileNumber>
       <FileType>1</FileType>
-      <tvExp>1</tvExp>
+      <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\nxp_rt1050_60\i2c.c</PathWithFileName>

@@ -33,7 +33,7 @@
 #include "led.h"
 #include "pin.h"
 #include "genhdr/pins.h"
-#include "cfg_mux_mgr.h"
+#include "aia_cmm/cfg_mux_mgr.h"
 
 #if defined(MICROPY_HW_LED1)
 
@@ -55,7 +55,7 @@ typedef struct _pyb_led_obj_t {
 } pyb_led_obj_t;
 
 pyb_led_obj_t pyb_led_obj[] = {
-    {{&pyb_led_type}, 1, 0},
+    {{&pyb_led_type}, 1, &MICROPY_HW_LED1},
 #if defined(MICROPY_HW_LED2)
     {{&pyb_led_type}, 2, &MICROPY_HW_LED2},
 #if defined(MICROPY_HW_LED3)
@@ -71,8 +71,10 @@ pyb_led_obj_t pyb_led_obj[] = {
 void led_init(void) {
     /* Turn off LEDs and initialize */
     for (int led = 0; led < NUM_LEDS; led++) {
-    }
+        const pin_obj_t *led_pin = pyb_led_obj[led].led_pin;
+		mp_hal_ConfigGPIO(led_pin, GPIO_MODE_OUTPUT_PP, 1);    }
 }
+
 
 #if defined(MICROPY_HW_LED1_PWM) \
     || defined(MICROPY_HW_LED2_PWM) \
@@ -249,18 +251,24 @@ STATIC mp_obj_t led_obj_make_new(const mp_obj_type_t *type, size_t n_args, size_
 
     pyb_led_obj_t* self;
     // create new UART object
-    self =  gc_alloc(sizeof(*self)*4, GC_ALLOC_FLAG_HAS_FINALISER);
-    self->base.type = &pyb_led_type;
-    self->led_id = led_id;
+    
+    self =  gc_alloc(sizeof(*self), GC_ALLOC_FLAG_HAS_FINALISER);
+
 
     Mux_Take(self, "pin", led_id, "led", &self->mux);
     if (self->mux.pPinObj == 0) {
-        nlr_raise(mp_obj_new_exception_msg_varg(&mp_type_ValueError, "LED(%d) can't take reqruied pin", led_id));
+        /* downward compatible with previous hard-coded pin object mapping
+        drop the allocated pyb_led_obj_t instance to GC */
+        self = &pyb_led_obj[led_id - 1];
+        // nlr_raise(mp_obj_new_exception_msg_varg(&mp_type_ValueError, "LED(%d) can't take reqruied pin", led_id));
+        self->mux.pPinObj = self->led_pin;
+        strcpy(self->mux.szComboKey, "-");
+        strcpy(self->mux.szHint, "-");
+        return self;            
     }
-    mp_hal_ConfigGPIO(self->mux.pPinObj, GPIO_MODE_OUTPUT_PP, 1);
+    self->base.type = &pyb_led_type;
+    self->led_id = led_id;    
     self->led_pin = self->mux.pPinObj;
-    return self;    
-    
     // return static led object
     return self;
 }

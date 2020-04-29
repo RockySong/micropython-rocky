@@ -41,7 +41,11 @@ static mp_obj_t _prvMux_Query(mp_obj_t userObj, const char *pszFn, int unit, con
 		snprintf(szCombo, sizeof(szCombo), "%s.%s", pszFn, pszSignal);
 	} else {
         snprintf(szCombo, sizeof(szCombo), "%s.%d.%s", pszFn, unit, pszSignal);
-    }    
+    }
+    if (pMuxData) {
+        memset(pMuxData, 0, sizeof(*pMuxData));
+        strcpy(pMuxData->szComboKey, szCombo);
+    }
     //rocky: do not use qstr nor MP_DEFINE_STR_OBJ!
     mp_obj_str_t *pStrComboKey = mp_obj_new_str(szCombo, strlen(szCombo));
     nlr_buf_t nlr;
@@ -57,7 +61,6 @@ static mp_obj_t _prvMux_Query(mp_obj_t userObj, const char *pszFn, int unit, con
         objHint = pTup->items[0];
         objPinObj = pTup->items[2];
         objOwner = pTup->items[3];
-        strcpy(pMuxData->szComboKey, szCombo);
         pMuxData->pPinObj = objPinObj;
         GET_STR_DATA_LEN(objHint, s, l);
         snprintf(pMuxData->szHint, sizeof(pMuxData->szHint), "%s", s);
@@ -74,7 +77,6 @@ static mp_obj_t _prvMux_Query(mp_obj_t userObj, const char *pszFn, int unit, con
         objRet = (mp_obj_t)pTup;
     } else /*except*/{
         // not found
-        memset(pMuxData, 0, sizeof(*pMuxData));
         objRet = mp_const_none;
     }
 cleanup:
