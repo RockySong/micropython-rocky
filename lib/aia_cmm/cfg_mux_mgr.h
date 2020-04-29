@@ -7,13 +7,18 @@
 #include "py/gc.h"
 #include "py/objstr.h"
 #include "pin.h"
+#define CMM_COMBOKEY_CAP    32
+#define CMM_HINT_CAP        32
 typedef struct _CMM_DescItem 
 {
-    const char *pszPin;
-	const char *pszHint; /* point to a location inside the szDesc */
+    /* deep copy the combo key and hint strings instead of pointing to the dict of CMM. */
+    /* This can eliminate potential cyclic references that can fool the GC's clean logic!*/
+    /* If we point pin object string, hint string, tuple, previous owner to the dict*/
+    /* inside of CMM, and this structure is allocated by GC, cyclic reference happens, and GC*/
+    /* failed to reclaim unused MuxItem_t instances, leaks memory!*/
+    char szComboKey[CMM_COMBOKEY_CAP]; /* used to free */
+    char szHint[CMM_HINT_CAP];
 	pin_obj_t *pPinObj;	
-    mp_obj_tuple_t *pTuple;
-    mp_obj_t objOldOwner;
 }CMM_DescItem_t, MuxItem_t;
 
 /* Return a pin to CMM, caller should put the pin to proper state according to the board design */

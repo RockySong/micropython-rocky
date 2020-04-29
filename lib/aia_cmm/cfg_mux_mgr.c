@@ -34,14 +34,14 @@ mp_obj_t CMM_Deinit(void) {
 static mp_obj_t _prvMux_Query(mp_obj_t userObj, const char *pszFn, int unit, const char *pszSignal, MuxItem_t *pMuxData, 
     bool isTake, bool isPreempt)
 {
-	char szCombo[32];
+	char szCombo[CMM_COMBOKEY_CAP];
     mp_obj_t objRet;
 	if (unit < 0) /* if a function does not have sub units, then unit < 0 */
 	{
 		snprintf(szCombo, sizeof(szCombo), "%s.%s", pszFn, pszSignal);
 	} else {
         snprintf(szCombo, sizeof(szCombo), "%s.%d.%s", pszFn, unit, pszSignal);
-    }
+    }    
     //rocky: do not use qstr nor MP_DEFINE_STR_OBJ!
     mp_obj_str_t *pStrComboKey = mp_obj_new_str(szCombo, strlen(szCombo));
     nlr_buf_t nlr;
@@ -53,18 +53,14 @@ static mp_obj_t _prvMux_Query(mp_obj_t userObj, const char *pszFn, int unit, con
 		    goto cleanup;
 	    }
 	    /* We got the pin information as a tuple: (hint str, pin str, pin object, owner object) */
-        mp_obj_t objHint, objPinStr, objPinObj, objOwner;
+        mp_obj_t objHint, objPinObj, objOwner;
         objHint = pTup->items[0];
-        objPinStr = pTup->items[1];
         objPinObj = pTup->items[2];
         objOwner = pTup->items[3];
-        pMuxData->pTuple = pTup;
-        pMuxData->objOldOwner = pTup->items[3];
+        strcpy(pMuxData->szComboKey, szCombo);
         pMuxData->pPinObj = objPinObj;
         GET_STR_DATA_LEN(objHint, s, l);
-        pMuxData->pszHint = (const char*) s;
-        GET_STR_DATA_LEN(objPinStr, s2, l2);
-        pMuxData->pszPin = (const char*) s2;
+        snprintf(pMuxData->szHint, sizeof(pMuxData->szHint), "%s", s);
         if (isTake) {
             if (isPreempt || mp_obj_is_small_int(objOwner) || objOwner == mp_const_none || objOwner == userObj) {
                 /* free pin object or preempt */
@@ -91,8 +87,16 @@ int Mux_Give(MuxItem_t *pMuxData)
     /* tuple layout: (hint string, pin string, pin object, owner object) */
     assert(pMuxData);
     assert(pMuxData->pTuple);
-    pMuxData->pTuple->items[3] = pMuxData->objOldOwner; 
-    pMuxData->pPinObj = pMuxData->objOldOwner = 0;
+    
+    nlr_buf_t nlr;
+    if (nlr_push(&nlr) == 0)/*try*/ {
+        mp_obj_str_t *pStrComboKey = mp_obj_new_str(pMuxData->szComboKey, strlen(pMuxData->szComboKey));
+        mp_obj_tuple_t *pTup = (mp_obj_tuple_t*) mp_obj_dict_get(s_cmm.pDict, pStrComboKey);
+        pTup->items[3] = 0; // owner cleared
+        nlr_pop();
+    } else /*except*/{
+        // not found
+    }    
     return 1;
 }
 
@@ -107,7 +111,7 @@ int Mux_TryTake(mp_obj_t userObj, const char *pszFn, int unit, const char *pszSi
 {
     assert(pMuxData);
     mp_obj_t obj = _prvMux_Query(userObj, pszFn, unit, pszSignal, pMuxData, TRUE, FALSE);
-    if (mp_obj_is_obj(pMuxData->objOldOwner) && pMuxData->objOldOwner != mp_const_none) 
+    if (pMuxData->pPinObj == 0) 
         return -1L;
     return 1;
 }

@@ -33,6 +33,7 @@
 #include "led.h"
 #include "pin.h"
 #include "genhdr/pins.h"
+#include "cfg_mux_mgr.h"
 
 #if defined(MICROPY_HW_LED1)
 
@@ -50,10 +51,11 @@ typedef struct _pyb_led_obj_t {
     mp_obj_base_t base;
     mp_uint_t led_id;
     const pin_obj_t *led_pin;
+    MuxItem_t mux;
 } pyb_led_obj_t;
 
-STATIC const pyb_led_obj_t pyb_led_obj[] = {
-    {{&pyb_led_type}, 1, &MICROPY_HW_LED1},
+pyb_led_obj_t pyb_led_obj[] = {
+    {{&pyb_led_type}, 1, 0},
 #if defined(MICROPY_HW_LED2)
     {{&pyb_led_type}, 2, &MICROPY_HW_LED2},
 #if defined(MICROPY_HW_LED3)
@@ -69,8 +71,7 @@ STATIC const pyb_led_obj_t pyb_led_obj[] = {
 void led_init(void) {
     /* Turn off LEDs and initialize */
     for (int led = 0; led < NUM_LEDS; led++) {
-        const pin_obj_t *led_pin = pyb_led_obj[led].led_pin;
-		mp_hal_ConfigGPIO(led_pin, GPIO_MODE_OUTPUT_PP, 1);    }
+    }
 }
 
 #if defined(MICROPY_HW_LED1_PWM) \
@@ -246,15 +247,29 @@ STATIC mp_obj_t led_obj_make_new(const mp_obj_type_t *type, size_t n_args, size_
         nlr_raise(mp_obj_new_exception_msg_varg(&mp_type_ValueError, "LED(%d) does not exist", led_id));
     }
 
+    pyb_led_obj_t* self;
+    // create new UART object
+    self =  gc_alloc(sizeof(*self)*4, GC_ALLOC_FLAG_HAS_FINALISER);
+    self->base.type = &pyb_led_type;
+    self->led_id = led_id;
+
+    Mux_Take(self, "pin", led_id, "led", &self->mux);
+    if (self->mux.pPinObj == 0) {
+        nlr_raise(mp_obj_new_exception_msg_varg(&mp_type_ValueError, "LED(%d) can't take reqruied pin", led_id));
+    }
+    mp_hal_pin_config_alt(self->mux.pPinObj, GPIO_MODE_OUTPUT_PP, AF_FN_GPIO);
+    self->led_pin = self->mux.pPinObj;
+    return self;    
+    
     // return static led object
-    return (mp_obj_t)&pyb_led_obj[led_id - 1];
+    return self;
 }
 
 /// \method on()
 /// Turn the LED on.
 mp_obj_t led_obj_on(mp_obj_t self_in) {
     pyb_led_obj_t *self = self_in;
-    led_state(self->led_id, 1);
+    mp_hal_pin_low(self->led_pin);
     return mp_const_none;
 }
 
@@ -262,7 +277,7 @@ mp_obj_t led_obj_on(mp_obj_t self_in) {
 /// Turn the LED off.
 mp_obj_t led_obj_off(mp_obj_t self_in) {
     pyb_led_obj_t *self = self_in;
-    led_state(self->led_id, 0);
+    mp_hal_pin_high(self->led_pin);
     return mp_const_none;
 }
 
@@ -271,6 +286,12 @@ mp_obj_t led_obj_off(mp_obj_t self_in) {
 mp_obj_t led_obj_toggle(mp_obj_t self_in) {
     pyb_led_obj_t *self = self_in;
     led_toggle(self->led_id);
+    return mp_const_none;
+}
+
+mp_obj_t led_obj_del(mp_obj_t self_in) {
+    pyb_led_obj_t *self = self_in;
+    Mux_Give(&self->mux);
     return mp_const_none;
 }
 
@@ -291,11 +312,13 @@ mp_obj_t led_obj_intensity(mp_uint_t n_args, const mp_obj_t *args) {
 STATIC MP_DEFINE_CONST_FUN_OBJ_1(led_obj_on_obj, led_obj_on);
 STATIC MP_DEFINE_CONST_FUN_OBJ_1(led_obj_off_obj, led_obj_off);
 STATIC MP_DEFINE_CONST_FUN_OBJ_1(led_obj_toggle_obj, led_obj_toggle);
+STATIC MP_DEFINE_CONST_FUN_OBJ_1(led_obj_del_obj, led_obj_del);
 STATIC MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(led_obj_intensity_obj, 1, 2, led_obj_intensity);
 
 STATIC const mp_rom_map_elem_t led_locals_dict_table[] = {
     { MP_ROM_QSTR(MP_QSTR_on), MP_ROM_PTR(&led_obj_on_obj) },
     { MP_ROM_QSTR(MP_QSTR_off), MP_ROM_PTR(&led_obj_off_obj) },
+    { MP_ROM_QSTR(MP_QSTR___del__), MP_ROM_PTR(&led_obj_del_obj) },
     { MP_ROM_QSTR(MP_QSTR_toggle), MP_ROM_PTR(&led_obj_toggle_obj) },
     { MP_ROM_QSTR(MP_QSTR_intensity), MP_ROM_PTR(&led_obj_intensity_obj) },
 };
