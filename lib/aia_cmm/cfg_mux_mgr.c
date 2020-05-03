@@ -34,7 +34,7 @@ mp_obj_t CMM_Deinit(void) {
 static mp_obj_t _prvMux_Query(mp_obj_t userObj, const char *pszFn, int unit, const char *pszSignal, MuxItem_t *pMuxData, 
     bool isTake, bool isPreempt)
 {
-	char szCombo[CMM_COMBOKEY_CAP];
+	char szCombo[CMM_COMBOKEY_CAP]; /* must <= the size of pMuxData->szComboKey */
     mp_obj_t objRet;
 	if (unit < 0) /* if a function does not have sub units, then unit < 0 */
 	{

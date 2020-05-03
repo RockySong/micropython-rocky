@@ -88,7 +88,7 @@ static fs_user_mount_t *vfs_fat = (fs_user_mount_t *) _vfs_buf;
 #ifdef OMV_MPY_ONLY
 void fb_alloc_free_till_mark() {}
 void fb_free(void) {}
-void *fb_alloc(uint32_t size) {return m_malloc(size);}
+void *fb_alloc(uint32_t size, int hints) {return m_malloc(size);}
 void fb_alloc_fail(void) {}
 __WEAK void list_push_back(list_t *ptr, void *data) {}
 __WEAK void* py_image_cobj(mp_obj_t img_obj) {}
@@ -361,7 +361,7 @@ int OpenMV_Main(uint32_t first_soft_reset)
 				}
 				else {
                     g_isMainDotPyRunning = 0;
-                    #if 0
+                    #if defined(OMV_MPY_ONLY)
 					// 2019.03.27 19:52 rocky: if main.py is interrupted by running another script, 
 					// we have to do soft reset, otherwise fb alloc logic may fail and led to hard fault
 					// In this case, it makes user have to press start button twice to start the script in OpenMV IDE

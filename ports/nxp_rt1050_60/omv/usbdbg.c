@@ -257,12 +257,14 @@ void usbdbg_data_out(void *buffer, int length)
             #ifdef DUMP_RAW
             enable = 0;
             #endif
-            JPEG_FB()->enabled = enable;
+            #if !defined(OMV_MPY_ONLY)
+            JPEG_FB()->enabled = enable;            
             if (enable == 0) {
                 // When disabling framebuffer, the IDE might still be holding FB lock.
                 // If the IDE is not the current lock owner, this operation is ignored.
                 mutex_unlock(&JPEG_FB()->lock, MUTEX_TID_IDE);
             }
+            #endif
             cmd = USBDBG_NONE;
             break;
         }
@@ -334,7 +336,9 @@ void usbdbg_data_out(void *buffer, int length)
 			#endif
             break;
         }
+        
         case USBDBG_ATTR_WRITE: {
+            #if !defined(OMV_MPY_ONLY)
             /* write sensor attribute */
             int32_t attr= *((int32_t*)buffer);
             int32_t val = *((int32_t*)buffer+1);
@@ -354,6 +358,7 @@ void usbdbg_data_out(void *buffer, int length)
                 default:
                     break;
             }
+            #endif
             cmd = USBDBG_NONE;
             break;
         }
