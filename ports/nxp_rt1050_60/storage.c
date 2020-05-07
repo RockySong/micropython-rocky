@@ -36,125 +36,37 @@
 #include "hal_wrapper.h"
 #include "systick.h"
 #include "flegftl.h"
-#include "flash_pgm.h"
+//#include "flash_pgm.h"
 #include "led.h"
 #include "storage.h"
 
-#if defined(MICROPY_HW_SPIFLASH_SIZE_BITS)
-#define USE_INTERNAL (0)
-#else
-#define USE_INTERNAL (1)
+//#define SDRAM_DISK_TEST
+#ifdef SDRAM_DISK_TEST
+char fake_fs[1024*1024];
 #endif
-
-#if 1 // USE_INTERNAL
-	uint64_t s_c8FlhCache[FLEG_PAGE_SIZE / 8];	
-	FlegDevice_t s_dev;
-	#if 1 // defined(LPC54608) 
-		#define CACHE_MEM_START_ADDR (s_c8FlhCache) // CCM data RAM, 64k
-		#define FLASH_SECTOR_SIZE_MAX SECTOR_USE_SIZE
-		#define FLASH_MEM_SEG1_START_ADDR FLASH_DISK_BASE_ADDR
-		#define FLASH_MEM_SEG1_NUM_BLOCKS (FLASH_DISK_SIZE / FLASH_BLOCK_SIZE)
-	#else
-		#error "no storage support for this MCU"
-	#endif
-
-	#if !defined(FLASH_MEM_SEG2_START_ADDR)
-		#define FLASH_MEM_SEG2_START_ADDR (0) // no second segment
-		#define FLASH_MEM_SEG2_NUM_BLOCKS (0) // no second segment
-	#endif
-
-	#define FLASH_PART1_START_BLOCK 123
-	#define FLASH_PART1_NUM_BLOCKS FLEG_LPU_CNT
-
-	#define FLASH_FLAG_DIRTY        (1)
-	#define FLASH_FLAG_FORCE_WRITE  (2)
-	#define FLASH_FLAG_ERASED       (4)
-	static bool flash_is_initialised = false;
-	static __IO uint8_t flash_flags = 0;
-	static uint32_t flash_cache_lba_id;
-	static uint32_t flash_tick_counter_last_write;
-
-	static void flash_cache_flush(void) {
-		if (flash_flags & FLASH_FLAG_DIRTY) {
-			flash_flags |= FLASH_FLAG_FORCE_WRITE;
-			while (flash_flags & FLASH_FLAG_DIRTY) {
-			   TRIGGER_FLASH_IRQ();
-			}
-		}
-
-	}
-
-#else
-
-	#include "drivers/memory/spiflash.h"
-	#include "genhdr/pins.h"
-
-	#define FLASH_PART1_START_BLOCK (0x100)
-	#define FLASH_PART1_NUM_BLOCKS (MICROPY_HW_SPIFLASH_SIZE_BITS / 8 / FLASH_BLOCK_SIZE)
-
-	static bool flash_is_initialised = false;
-
-	STATIC const mp_spiflash_t spiflash = {
-	    .cs = &MICROPY_HW_SPIFLASH_CS,
-	    .spi = {
-	        .base = {&mp_machine_soft_spi_type},
-	        .delay_half = MICROPY_PY_MACHINE_SPI_MIN_DELAY,
-	        .polarity = 0,
-	        .phase = 0,
-	        .sck = &MICROPY_HW_SPIFLASH_SCK,
-	        .mosi = &MICROPY_HW_SPIFLASH_MOSI,
-	        .miso = &MICROPY_HW_SPIFLASH_MISO,
-	    },
-	};
-
-#endif
-
+static bool flash_is_initialised = false;
 void storage_init(void) {
     if (!flash_is_initialised) {
-        #if USE_INTERNAL
-	        flash_flags = 0;
-	        flash_cache_lba_id = 0;
-	        flash_tick_counter_last_write = 0;			
-			FlashPgmInit();
-			#ifndef XIP_EXTERNAL_FLASH
-				FLEG_Init(&s_dev, 0, HyperErase, HyperPageProgram, Hyper16bitProgram, HyperRead, HyperFlush);
-			#endif
-        #else
-        mp_spiflash_init((mp_spiflash_t*)&spiflash);
-        #endif
+        flexspi_nor_init();
         flash_is_initialised = true;
     }
-	NVIC_EnableIRQ(Reserved168_IRQn);  // reserved IRQ is borrowed to trigger flash cache flush
-    #if USE_INTERNAL
-	#if 0
-    // Enable the flash IRQ, which is used to also call our storage IRQ handler
-    // It needs to go at a higher priority than all those components that rely on
-    // the flash storage (eg higher than USB MSC).
-    HAL_NVIC_SetPriority(FLASH_IRQn, IRQ_PRI_FLASH, IRQ_SUBPRI_FLASH);
-    HAL_NVIC_EnableIRQ(FLASH_IRQn);
-	#endif
-    #endif
 }
 
 uint32_t storage_get_block_size(void) {
-    return FLEG_PAGE_SIZE;
+    return FLASH_BLOCK_SIZE;
 }
 
 uint32_t storage_get_block_count(void) {
-	return FLEG_LPU_CNT;
+	return FLASH_NUM_BLOCKS;
 }
 
 uint32_t storage_get_block_offset(void)
 {
-	return 0;
+	return FLASH_PART1_START_BLOCK;
 }
 
 void storage_flush(void) {
-    #if USE_INTERNAL
-    flash_cache_flush();
-	#else
-	#error "TBI"
-    #endif
+    //flash_cache_flush();
 }
 
 static void build_partition(uint8_t *buf, int boot, int type, uint32_t start_block, uint32_t num_blocks) {
@@ -193,10 +105,6 @@ static void build_partition(uint8_t *buf, int boot, int type, uint32_t start_blo
     buf[15] = num_blocks >> 24;
 }
 
-#if USE_INTERNAL
-
-#endif
-
 bool storage_read_block(uint8_t *dest, uint32_t block) {
     //printf("RD %u\n", block);
     if (block == 0) {
@@ -205,8 +113,9 @@ bool storage_read_block(uint8_t *dest, uint32_t block) {
         for (int i = 0; i < 446; i++) {
             dest[i] = 0;
         }
-
-        build_partition(dest + 446, 0, 0x01 /* FAT12 */, FLASH_PART1_START_BLOCK, FLASH_PART1_NUM_BLOCKS);
+		// must > 0, for 0 is a fake one, return directly. and fatfs.patr=1, means part1, because we have 4 part below, means has 4 part for file-os mounting
+        // then will go to the next loop, when second step in
+		build_partition(dest + 446, 0, 0x01 /* FAT12 */, FLASH_PART1_START_BLOCK, FLASH_PART1_NUM_BLOCKS);
         build_partition(dest + 462, 0, 0, 0, 0);
         build_partition(dest + 478, 0, 0, 0, 0);
         build_partition(dest + 494, 0, 0, 0, 0);
@@ -217,32 +126,41 @@ bool storage_read_block(uint8_t *dest, uint32_t block) {
         return true;
 
     } else {
-        #if USE_INTERNAL
-		int ret = FLEG_PageRead(&s_dev, block, dest);
-      	return ret >= 0 ? true:false;
-        #else
-
-	        // non-MBR block, get data from SPI flash
-
-	        if (block < FLASH_PART1_START_BLOCK || block >= FLASH_PART1_START_BLOCK + FLASH_PART1_NUM_BLOCKS) {
-	            // bad block number
-	            return false;
-	        }
-
-	        // we must disable USB irqs to prevent MSC contention with SPI flash
-	        uint32_t basepri = raise_irq_pri(IRQ_PRI_OTG_FS);
-
-	        mp_spiflash_read((mp_spiflash_t*)&spiflash,
-	            (block - FLASH_PART1_START_BLOCK) * FLASH_BLOCK_SIZE, FLASH_BLOCK_SIZE, dest);
-
-	        restore_irq_pri(basepri);
-
-	        return true;
-
-        #endif
+		uint32_t primask = __get_PRIMASK();
+		__set_PRIMASK(1);
+		// non-MBR block, get data from SPI flash
+		//block += FLASH_PART1_START_BLOCK;
+		if (block < FLASH_PART1_START_BLOCK || block >= FLASH_PART1_START_BLOCK + FLASH_PART1_NUM_BLOCKS) {
+			// bad block number
+			__set_PRIMASK(primask);
+			return false;
+		}
+		// we must disable USB irqs to prevent MSC contention with SPI flash
+		// align to 4096 sector
+		uint32_t addr = block * FLASH_BLOCK_SIZE;
+		uint32_t offset = addr & 0xfff;
+		addr = (addr >> 12) << 12;
+		#ifdef SDRAM_DISK_TEST
+		uint32_t destAdrss = (uint32_t)(&fake_fs[0]) + addr + offset;
+		if(destAdrss > (uint32_t)(&fake_fs[0])){
+			memcpy(dest, (char*)destAdrss, FLASH_BLOCK_SIZE);
+		}else{
+		#endif
+			uint32_t destAdrss = FLASH_MEM_BASE + FLASH_ADDR_OFFSET + addr + offset;
+			FLEXSPI_SoftwareReset(FLEXSPI);
+			memcpy(dest, (char*)destAdrss, FLASH_BLOCK_SIZE);
+			__DSB();		
+		#ifdef SDRAM_DISK_TEST
+		}
+		#endif
+		__set_PRIMASK(primask);
+		return true;
     }
 }
 
+// must has a clean flash && make the fatfs first, in case some error
+// buffer for a mem-pool and disable the cache
+static char buf[SECTOR_SIZE] = {0};
 bool storage_write_block(const uint8_t *src, uint32_t block) {
     //printf("WR %u\n", block);
     if (block == 0) {
@@ -250,65 +168,85 @@ bool storage_write_block(const uint8_t *src, uint32_t block) {
         return true;
 
     } else {
-        #if USE_INTERNAL
-		int ret = FLEG_PageWrite(&s_dev, block, src);
-		return ret >= 0 ? true : false;
-        #else
-	        // non-MBR block, write to SPI flash
-
-	        if (block < FLASH_PART1_START_BLOCK || block >= FLASH_PART1_START_BLOCK + FLASH_PART1_NUM_BLOCKS) {
-	            // bad block number
-	            return false;
-	        }
-
-	        // we must disable USB irqs to prevent MSC contention with SPI flash
-	        uint32_t basepri = raise_irq_pri(IRQ_PRI_OTG_FS);
-
-	        int ret = mp_spiflash_write((mp_spiflash_t*)&spiflash,
-	            (block - FLASH_PART1_START_BLOCK) * FLASH_BLOCK_SIZE, FLASH_BLOCK_SIZE, src);
-
-	        restore_irq_pri(basepri);
-
-	        return ret == 0;
-        #endif
+		uint32_t primask = __get_PRIMASK();
+		__set_PRIMASK(1);
+		// non-MBR block, write to SPI flash
+		//block += FLASH_PART1_START_BLOCK;
+		if (block < FLASH_PART1_START_BLOCK || block >= FLASH_PART1_START_BLOCK + FLASH_PART1_NUM_BLOCKS) {
+			// bad block number
+			__set_PRIMASK(primask);
+			return false;
+		}
+		// align to 4096 sector
+		uint32_t addr = block * FLASH_BLOCK_SIZE;
+		uint32_t offset = addr & 0xfff;
+		addr = (addr >> 12) << 12;
+		// for sdram test, a fake sdram disk
+		#ifdef SDRAM_DISK_TEST
+		uint32_t destAdrss = (uint32_t)(&fake_fs[0])+ addr;
+		if(destAdrss > (uint32_t)(&fake_fs[0])){
+			memcpy((char*)destAdrss + offset, src, FLASH_BLOCK_SIZE);
+		}
+		else{
+		#endif
+			FLEXSPI_SoftwareReset(FLEXSPI);
+			uint32_t destAdrss = FLASH_MEM_BASE + FLASH_ADDR_OFFSET + addr;
+			memcpy(buf, (char*)destAdrss, SECTOR_SIZE);
+			__DSB();
+			// a deadly error,,,, erase a wrong area, cause the flash only be init once
+			// when write someone, then disapear, the falsh not erase before program
+			uint32_t erase_addr = ((addr + FLASH_ADDR_OFFSET) >> 12) << 12;
+			flexspi_nor_flash_erase_sector(FLEXSPI, erase_addr);
+			// copy new block into buffer
+			memcpy(buf + offset, src, FLASH_BLOCK_SIZE);
+			__DSB();
+				// write sector in pages of 256 bytes
+			int result = -1;
+			for (int i = 0; i < SECTOR_SIZE; i += PAGE_SIZE) {
+				result = flexspi_nor_flash_page_program(FLEXSPI, addr + FLASH_ADDR_OFFSET + i, (uint32_t*)(buf+i));	
+				if (result != 0) {
+					__set_PRIMASK(primask);
+					return result;
+				}
+			}
+		#ifdef SDRAM_DISK_TEST
+		}
+		#endif
+		__set_PRIMASK(primask);
+		return true;
     }
 }
 
+// must disable cache under the DMA, in this case, maybe flexspi without the DMA, but USB does, 
+// when CPU transfer the buffer(from USB(DMA) or SDRAM will first into cache, cause the incompatible)
+// will often occurs, when we make a file from console with vfs, but can not disappear in u-disk
 mp_uint_t storage_read_blocks(uint8_t *dest, uint32_t block_num, uint32_t num_blocks) {
+	SCB_CleanInvalidateDCache();
+	SCB_DisableDCache();
     for (size_t i = 0; i < num_blocks; i++) {
         if (!storage_read_block(dest + i * FLASH_BLOCK_SIZE, block_num + i)) {
+			SCB_EnableDCache();
             return 1; // error
         }
     }
+	SCB_EnableDCache();
     return 0; // success
 }
 
 mp_uint_t storage_write_blocks(const uint8_t *src, uint32_t block_num, uint32_t num_blocks) {
+	SCB_CleanInvalidateDCache();
+	SCB_DisableDCache();
     for (size_t i = 0; i < num_blocks; i++) {
         if (!storage_write_block(src + i * FLASH_BLOCK_SIZE, block_num + i)) {
+			SCB_EnableDCache();
             return 1; // error
         }
     }
+	SCB_EnableDCache();
     return 0; // success
 }
 
 void storage_irq_handler(void) {
-    #if USE_INTERNAL
-
-    if (!(flash_flags & FLASH_FLAG_DIRTY)) {
-        return;
-    }
-
-    // If not a forced write, wait at least 5 seconds after last write to flush
-    // On file close and flash unmount we get a forced write, so we can afford to wait a while
-    if ((flash_flags & FLASH_FLAG_FORCE_WRITE) || sys_tick_has_passed(flash_tick_counter_last_write, 5000)) {
-		FLEG_PageWrite(&s_dev, flash_cache_lba_id, s_c8FlhCache);
-        flash_flags = 0;
-        // indicate a clean cache with LED off
-        led_state(PYB_LED_RED, 0);
-    }
-
-    #endif
 }
 
 
@@ -318,7 +256,7 @@ void storage_irq_handler(void) {
 // Expose the flash as an object with the block protocol.
 
 // there is a singleton Flash object
-STATIC const mp_obj_base_t pyb_flash_obj = {&pyb_flash_type};
+const mp_obj_base_t pyb_flash_obj = {&pyb_flash_type};
 
 STATIC mp_obj_t pyb_flash_make_new(const mp_obj_type_t *type, size_t n_args, size_t n_kw, const mp_obj_t *args) {
     // check arguments
@@ -350,16 +288,8 @@ STATIC mp_obj_t pyb_flash_ioctl(mp_obj_t self, mp_obj_t cmd_in, mp_obj_t arg_in)
         case MP_BLOCKDEV_IOCTL_INIT: storage_init(); return MP_OBJ_NEW_SMALL_INT(0);
         case MP_BLOCKDEV_IOCTL_DEINIT: storage_flush(); return MP_OBJ_NEW_SMALL_INT(0); // TODO properly
         case MP_BLOCKDEV_IOCTL_SYNC: storage_flush(); return MP_OBJ_NEW_SMALL_INT(0);
+        case MP_BLOCKDEV_IOCTL_BLOCK_COUNT: return MP_OBJ_NEW_SMALL_INT(storage_get_block_count());
         case MP_BLOCKDEV_IOCTL_BLOCK_SIZE: return MP_OBJ_NEW_SMALL_INT(storage_get_block_size());
-        case MP_BLOCKDEV_IOCTL_BLOCK_ERASE: 
-            int ret = 0;
-            #if defined(SPIFLASH)
-            if (self->use_native_block_size) {
-                mp_int_t block_num = self->start / PYB_FLASH_NATIVE_BLOCK_SIZE + mp_obj_get_int(arg_in);
-                ret = spi_bdev_ioctl(SPIFLASH, BDEV_IOCTL_BLOCK_ERASE, block_num);
-            }
-            #endif
-            return MP_OBJ_NEW_SMALL_INT(ret);
         default: return mp_const_none;
     }
 }
@@ -385,12 +315,14 @@ void pyb_flash_init_vfs(fs_user_mount_t *vfs) {
     vfs->blockdev.flags |= MP_BLOCKDEV_FLAG_NATIVE | MP_BLOCKDEV_FLAG_HAVE_IOCTL;
     vfs->fatfs.drv = vfs;
     vfs->fatfs.part = 1; // flash filesystem lives on first partition
-    vfs->blockdev.readblocks[0] = MP_OBJ_FROM_PTR(&pyb_flash_readblocks_obj);
-    vfs->blockdev.readblocks[1] = MP_OBJ_FROM_PTR(&pyb_flash_obj);
-    vfs->blockdev.readblocks[2] = MP_OBJ_FROM_PTR(storage_read_blocks); // native version
-    vfs->blockdev.writeblocks[0] = MP_OBJ_FROM_PTR(&pyb_flash_writeblocks_obj);
-    vfs->blockdev.writeblocks[1] = MP_OBJ_FROM_PTR(&pyb_flash_obj);
-    vfs->blockdev.writeblocks[2] = MP_OBJ_FROM_PTR(storage_write_blocks); // native version
-    vfs->blockdev.u.ioctl[0] = MP_OBJ_FROM_PTR(&pyb_flash_ioctl_obj);
-    vfs->blockdev.u.ioctl[1] = MP_OBJ_FROM_PTR(&pyb_flash_obj);
+    vfs->blockdev.readblocks[0] = (mp_obj_t)&pyb_flash_readblocks_obj;
+    vfs->blockdev.readblocks[1] = (mp_obj_t)&pyb_flash_obj;
+    vfs->blockdev.readblocks[2] = (mp_obj_t)storage_read_blocks; // native version
+    vfs->blockdev.writeblocks[0] = (mp_obj_t)&pyb_flash_writeblocks_obj;
+    vfs->blockdev.writeblocks[1] = (mp_obj_t)&pyb_flash_obj;
+    vfs->blockdev.writeblocks[2] = (mp_obj_t)storage_write_blocks; // native version
+    vfs->blockdev.u.ioctl[0] = (mp_obj_t)&pyb_flash_ioctl_obj;
+    vfs->blockdev.u.ioctl[1] = (mp_obj_t)&pyb_flash_obj;
 }
+
+

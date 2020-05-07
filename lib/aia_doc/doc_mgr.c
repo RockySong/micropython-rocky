@@ -164,11 +164,17 @@ int DOC_DoWork(int arg_cnt, mp_obj_t *args) {
         snprintf(s_doc.szLang, sizeof(s_doc.szLang), "%s", pszLang);
 	}	
 	
-	mp_import_stat_t stat = mp_import_stat("/aia_doc/doc_load.py");
+	char *path;
+	extern bool flash_mounted, s_cardInserted;
+	if(s_cardInserted)
+		path = "/aia_doc/doc_load.py";
+	else
+		path = "/flash" "/aia_doc/doc_load.py";
+	mp_import_stat_t stat = mp_import_stat(path);
 	if (stat == MP_IMPORT_STAT_FILE) {
 		nlr_buf_t nlr;
 		if (nlr_push(&nlr) == 0) {
-			int ret = pyexec_file("/aia_doc/doc_load.py");
+			int ret = pyexec_file(path);
 			if (ret & PYEXEC_FORCED_EXIT) {
 				ret = 1;
 			}			

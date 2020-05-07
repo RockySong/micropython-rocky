@@ -255,14 +255,19 @@ status_t sdcard_init(void) {
 			break;
 	}
 
-	PRINTF("\r\nCard inserted.\r\n");
-	/* reset host once card re-plug in */
-	SD_HostReset(&(g_sd.host));
-	/* Init card. */
-	if (SD_CardInit(&g_sd))
-	{
-		PRINTF("\r\nSD card init failed.\r\n");
-		return -1;
+	if(s_cardInserted){
+		PRINTF("\r\nCard inserted.\r\n");
+		/* reset host once card re-plug in */
+		SD_HostReset(&(g_sd.host));
+		/* Init card. */
+		if (SD_CardInit(&g_sd))
+		{
+			PRINTF("\r\nSD card init failed.\r\n");
+			return -1;
+		}
+	}
+	else{
+		PRINTF("Without card inserted, booting from flash.\r\n");
 	}
     return error;
 }

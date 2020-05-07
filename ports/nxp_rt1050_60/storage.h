@@ -27,7 +27,24 @@
 #define _STORAGE_H_
 #include "flash.h"
 
-#define FLASH_BLOCK_SIZE (512)	// this is not physical block sie, and must set to 512 for easy FatFS and USB MSC porting
+/* must set the block_size == 1, and sector_size = 4096? why?*/
+#define PAGE_SIZE (256)
+#define SECTOR_SIZE 0x1000 /* 4K */
+#define MAX_FLASH_SIZE (0x800000)
+// 4096 if FF_MAX_SS != FF_MIN_SS; else 512; especially for spi flash
+#define FLASH_BLOCK_SIZE (512) 
+// maybe the MP use more space than the usual fatfs
+#define TOTAL_FLASH_SIZE (FLASH_BLOCK_SIZE * 2048)
+#define SECTOR_OFFSET (MAX_FLASH_SIZE - TOTAL_FLASH_SIZE)    /* 16K */
+// must bigget than 128s, ff.c 5577, so TOTAL_FLASH_SIZE > 0x100000
+#define FLASH_NUM_BLOCKS (TOTAL_FLASH_SIZE / FLASH_BLOCK_SIZE)
+#define FLASH_PART1_NUM_BLOCKS FLASH_NUM_BLOCKS
+#define FLASH_MEM_BASE FlexSPI_AMBA_BASE
+// offset, from the 16k -> end
+#define FLASH_PART1_START_BLOCK 0x100
+#define FLASH_ADDR_OFFSET SECTOR_OFFSET
+#define MICROPY_HW_SPIFLASH_SIZE_BITS (TOTAL_FLASH_SIZE * 8)
+
 #define STORAGE_SYSTICK_MASK    (0x1ff) // 512 ticks
 #define STORAGE_IDLE_TICK(tick) (((tick) & STORAGE_SYSTICK_MASK) == 2)
 #if defined(MICROPY_HW_SPIFLASH_SIZE_BITS)
@@ -65,10 +82,11 @@ bool storage_read_block(uint8_t *dest, uint32_t block);
 bool storage_write_block(const uint8_t *src, uint32_t block);
 
 // these return 0 on success, non-zero on error
-mp_uint_t storage_read_blocks(uint8_t *dest, uint32_t block_num, uint32_t num_blocks);
-mp_uint_t storage_write_blocks(const uint8_t *src, uint32_t block_num, uint32_t num_blocks);
+uint32_t storage_read_blocks(uint8_t *dest, uint32_t block_num, uint32_t num_blocks);
+uint32_t storage_write_blocks(const uint8_t *src, uint32_t block_num, uint32_t num_blocks);
 
 extern const struct _mp_obj_type_t pyb_flash_type;
+extern const struct _mp_obj_base_t pyb_flash_obj;
 
 struct _fs_user_mount_t;
 void pyb_flash_init_vfs(struct _fs_user_mount_t *vfs);

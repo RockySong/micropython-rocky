@@ -1,3 +1,5 @@
+Q(802_1X)
+
 Q(ADC)
 
 Q(ADC)
@@ -57,6 +59,10 @@ Q(ADC_R5)
 Q(ADC_R6)
 
 Q(ADC_R7)
+
+Q(AF_INET)
+
+Q(AF_INET6)
 
 Q(AIPSTZ1)
 
@@ -464,6 +470,8 @@ Q(DCP)
 
 Q(DEEPSLEEP_RESETABC)
 
+Q(DEINIT)
+
 Q(DER_RDDE)
 
 Q(DER_TDDE)
@@ -782,6 +790,8 @@ Q(FFILT_FILT_PER_BF)
 
 Q(FFILT_GSTR)
 
+Q(FHD)
+
 Q(FILT_FILT_CNT_BF)
 
 Q(FILT_FILT_PER_BF)
@@ -920,6 +930,8 @@ Q(HC_ADCH_BF)
 
 Q(HC_AIEN)
 
+Q(HD)
+
 Q(HID)
 
 Q(HIZ)
@@ -939,6 +951,8 @@ Q(HYS)
 Q(HaarCascade)
 
 Q(I25)
+
+Q(I2C)
 
 Q(I2C)
 
@@ -1025,6 +1039,8 @@ Q(IER_WCIE)
 Q(IMR_IMR_BF)
 
 Q(IN)
+
+Q(INIT)
 
 Q(INIT_INIT_BF)
 
@@ -1282,6 +1298,8 @@ Q(LPUART8)
 
 Q(LSB)
 
+Q(LSB)
+
 Q(LookupError)
 
 Q(LookupError)
@@ -1293,6 +1311,10 @@ Q(MASK_MASKB_BF)
 Q(MASK_MASKX_BF)
 
 Q(MASK_UPDATE_MASK_BF)
+
+Q(MASTER)
+
+Q(MASTER)
 
 Q(MCCR0_CLKHI_BF)
 
@@ -1396,9 +1418,21 @@ Q(MIER_SDIE)
 
 Q(MIER_TDIE)
 
+Q(MODE_AP)
+
+Q(MODE_BSP)
+
+Q(MODE_FIRMWARE)
+
+Q(MODE_P2P)
+
+Q(MODE_STA)
+
 Q(MRDR_DATA_BF)
 
 Q(MRDR_RXEMPTY)
+
+Q(MSB)
 
 Q(MSB)
 
@@ -1487,6 +1521,8 @@ Q(OD_PUP)
 Q(OFS_OFS_BF)
 
 Q(OFS_SIGN)
+
+Q(OPEN)
 
 Q(OPEN_DRAIN)
 
@@ -1686,6 +1722,8 @@ Q(PinBase)
 
 Q(QCIF)
 
+Q(QHD)
+
 Q(QQCIF)
 
 Q(QQQQVGA)
@@ -1701,6 +1739,8 @@ Q(QQVGA2)
 Q(QSIF)
 
 Q(QVGA)
+
+Q(QXGA)
 
 Q(RDR_DATA_BF)
 
@@ -1822,6 +1862,10 @@ Q(SEARCH_DS)
 
 Q(SEARCH_EX)
 
+Q(SEC_COUNT)
+
+Q(SEC_SIZE)
+
 Q(SEMC)
 
 Q(SHORT)
@@ -1852,13 +1896,27 @@ Q(SIER_TDIE)
 
 Q(SIF)
 
+Q(SLAVE)
+
+Q(SLAVE)
+
 Q(SLEW_FAST)
 
 Q(SNVS)
 
+Q(SOCK_DGRAM)
+
+Q(SOCK_RAW)
+
+Q(SOCK_STREAM)
+
 Q(SOFT_RESET)
 
 Q(SPDIF)
+
+Q(SPI)
+
+Q(SPI)
 
 Q(SRC)
 
@@ -1959,6 +2017,8 @@ Q(SWCOUT_SM3OUT45)
 Q(SWIM)
 
 Q(SXGA)
+
+Q(SYNC)
 
 Q(Signal)
 
@@ -2188,7 +2248,19 @@ Q(WDOG2)
 
 Q(WDT_RESET)
 
+Q(WEP)
+
 Q(WHITE)
+
+Q(WINC)
+
+Q(WINC)
+
+Q(WPA_PSK)
+
+Q(WQXGA)
+
+Q(WQXGA2)
 
 Q(WVGA)
 
@@ -2199,6 +2271,8 @@ Q(XBARA1)
 Q(XBARB2)
 
 Q(XBARB3)
+
+Q(XGA)
 
 Q(XTALOSC24M)
 
@@ -2268,6 +2342,10 @@ Q(__del__)
 
 Q(__del__)
 
+Q(__del__)
+
+Q(__del__)
+
 Q(__delitem__)
 
 Q(__delitem__)
@@ -2277,6 +2355,8 @@ Q(__dict__)
 Q(__dir__)
 
 Q(__divmod__)
+
+Q(__doc__)
 
 Q(__enter__)
 
@@ -2381,6 +2461,10 @@ Q(__mod__)
 Q(__module__)
 
 Q(__mul__)
+
+Q(__name__)
+
+Q(__name__)
 
 Q(__name__)
 
@@ -2610,6 +2694,8 @@ Q(a_value)
 
 Q(abs)
 
+Q(accept)
+
 Q(acos)
 
 Q(acosh)
@@ -2637,6 +2723,16 @@ Q(add_frame)
 Q(add_frame)
 
 Q(addr)
+
+Q(addr)
+
+Q(addr)
+
+Q(addr)
+
+Q(addr)
+
+Q(addr_size)
 
 Q(addressof)
 
@@ -2764,6 +2860,14 @@ Q(baudrate)
 
 Q(baudrate)
 
+Q(baudrate)
+
+Q(baudrate)
+
+Q(baudrate)
+
+Q(baudrate)
+
 Q(bias)
 
 Q(bias)
@@ -2784,7 +2888,7 @@ Q(binary_to_rgb)
 
 Q(binary_to_yuv)
 
-Q(bins)
+Q(bind)
 
 Q(bins)
 
@@ -2805,6 +2909,14 @@ Q(bins)
 Q(bins)
 
 Q(bins)
+
+Q(bins)
+
+Q(bits)
+
+Q(bits)
+
+Q(bits)
 
 Q(bits)
 
@@ -2894,6 +3006,8 @@ Q(center)
 
 Q(center)
 
+Q(channel)
+
 Q(char_hmirror)
 
 Q(char_rotation)
@@ -2962,6 +3076,8 @@ Q(close)
 
 Q(close)
 
+Q(close)
+
 Q(closure)
 
 Q(closure)
@@ -2971,6 +3087,8 @@ Q(clz)
 Q(cmath)
 
 Q(cmath)
+
+Q(cmm)
 
 Q(cmp)
 
@@ -3007,6 +3125,12 @@ Q(compress_for_ide)
 Q(compressed)
 
 Q(compressed_for_ide)
+
+Q(connect)
+
+Q(connect)
+
+Q(connected_sta)
 
 Q(const)
 
@@ -3090,6 +3214,8 @@ Q(cpu)
 
 Q(cpu)
 
+Q(crc)
+
 Q(crop)
 
 Q(cx)
@@ -3118,6 +3244,8 @@ Q(data)
 
 Q(data)
 
+Q(data)
+
 Q(data_type)
 
 Q(datamatrix)
@@ -3139,6 +3267,10 @@ Q(deepsleep)
 Q(default)
 
 Q(degrees)
+
+Q(deinit)
+
+Q(deinit)
 
 Q(deinit)
 
@@ -3178,6 +3310,8 @@ Q(dilate)
 
 Q(dir)
 
+Q(dir)
+
 Q(disable)
 
 Q(disable_irq)
@@ -3186,11 +3320,17 @@ Q(disable_irq)
 
 Q(discard)
 
+Q(disconnect)
+
 Q(displacement)
 
 Q(div)
 
 Q(divmod)
+
+Q(dma)
+
+Q(doc)
 
 Q(doc)
 
@@ -3374,7 +3514,15 @@ Q(find_template)
 
 Q(firstbit)
 
+Q(firstbit)
+
+Q(firstbit)
+
+Q(firstbit)
+
 Q(fix_rotation_scale)
+
+Q(flash)
 
 Q(float)
 
@@ -3450,6 +3598,12 @@ Q(function)
 
 Q(function)
 
+Q(fw_dump)
+
+Q(fw_update)
+
+Q(fw_version)
+
 Q(fx)
 
 Q(fy)
@@ -3471,6 +3625,8 @@ Q(gaussian_blur)
 Q(gc)
 
 Q(gc)
+
+Q(gencall)
 
 Q(generator)
 
@@ -3521,6 +3677,8 @@ Q(get_stats)
 Q(get_threshold)
 
 Q(get_xy)
+
+Q(getaddrinfo)
 
 Q(getattr)
 
@@ -3573,6 +3731,8 @@ Q(h)
 Q(h)
 
 Q(h)
+
+Q(halfduplex)
 
 Q(hamming)
 
@@ -3630,7 +3790,11 @@ Q(id)
 
 Q(id)
 
+Q(id)
+
 Q(idle)
+
+Q(ifconfig)
 
 Q(ilistdir)
 
@@ -3673,6 +3837,10 @@ Q(info)
 Q(info)
 
 Q(info)
+
+Q(init)
+
+Q(init)
 
 Q(init)
 
@@ -3752,6 +3920,8 @@ Q(ioctl)
 
 Q(ioctl)
 
+Q(ioctl_key)
+
 Q(ipoll)
 
 Q(is_alphanumeric)
@@ -3765,6 +3935,8 @@ Q(is_numeric)
 Q(isalpha)
 
 Q(isalpha)
+
+Q(isconnected)
 
 Q(isconnected)
 
@@ -3828,9 +4000,17 @@ Q(join)
 
 Q(join)
 
+Q(jpeg_encode_for_ide)
+
+Q(jpeg_encoded_for_ide)
+
 Q(kbd_intr)
 
 Q(keepends)
+
+Q(key)
+
+Q(key)
 
 Q(key)
 
@@ -3921,6 +4101,8 @@ Q(list)
 Q(list)
 
 Q(listdir)
+
+Q(listen)
 
 Q(little)
 
@@ -4080,6 +4262,12 @@ Q(mem_free)
 
 Q(mem_info)
 
+Q(mem_read)
+
+Q(mem_write)
+
+Q(memaddr)
+
 Q(memaddr)
 
 Q(memoryview)
@@ -4128,6 +4316,8 @@ Q(miso)
 
 Q(miso)
 
+Q(miso)
+
 Q(mjpeg)
 
 Q(mjpeg)
@@ -4162,6 +4352,12 @@ Q(mode)
 
 Q(mode)
 
+Q(mode)
+
+Q(mode)
+
+Q(mode)
+
 Q(modf)
 
 Q(modify)
@@ -4175,6 +4371,8 @@ Q(modules)
 Q(mono_space)
 
 Q(morph)
+
+Q(mosi)
 
 Q(mosi)
 
@@ -4228,6 +4426,10 @@ Q(native)
 
 Q(negate)
 
+Q(network)
+
+Q(network)
+
 Q(next)
 
 Q(next_frame)
@@ -4245,6 +4447,8 @@ Q(nop)
 Q(nor)
 
 Q(normalized)
+
+Q(nss)
 
 Q(object)
 
@@ -4346,6 +4550,12 @@ Q(phase)
 
 Q(phase)
 
+Q(phase)
+
+Q(phase)
+
+Q(phase)
+
 Q(pi)
 
 Q(pi)
@@ -4363,6 +4573,12 @@ Q(pixels_threshold)
 Q(platform)
 
 Q(polar)
+
+Q(polarity)
+
+Q(polarity)
+
+Q(polarity)
 
 Q(polarity)
 
@@ -4393,6 +4609,8 @@ Q(pow)
 Q(pow)
 
 Q(power)
+
+Q(prescaler)
 
 Q(present)
 
@@ -4524,6 +4742,8 @@ Q(read)
 
 Q(read)
 
+Q(read)
+
 Q(readID)
 
 Q(read_buf_len)
@@ -4545,6 +4765,8 @@ Q(readfrom_into)
 Q(readfrom_mem)
 
 Q(readfrom_mem_into)
+
+Q(readinto)
 
 Q(readinto)
 
@@ -4607,6 +4829,20 @@ Q(rect)
 Q(recv)
 
 Q(recv)
+
+Q(recv)
+
+Q(recv)
+
+Q(recv)
+
+Q(recv)
+
+Q(recv)
+
+Q(recv)
+
+Q(recvfrom)
 
 Q(reg)
 
@@ -4734,6 +4970,8 @@ Q(round)
 
 Q(roundness)
 
+Q(route)
+
 Q(rows)
 
 Q(rpartition)
@@ -4743,6 +4981,8 @@ Q(rpartition)
 Q(rsplit)
 
 Q(rsplit)
+
+Q(rssi)
 
 Q(rstrip)
 
@@ -4770,7 +5010,13 @@ Q(scale_mul)
 
 Q(scan)
 
+Q(scan)
+
+Q(scan)
+
 Q(schedule)
+
+Q(sck)
 
 Q(sck)
 
@@ -4789,6 +5035,10 @@ Q(search)
 Q(search)
 
 Q(search)
+
+Q(security)
+
+Q(security)
 
 Q(seed)
 
@@ -4812,7 +5062,23 @@ Q(send)
 
 Q(send)
 
+Q(send)
+
+Q(send)
+
+Q(send)
+
+Q(send)
+
+Q(send)
+
+Q(send)
+
+Q(send_recv)
+
 Q(sendbreak)
+
+Q(sendto)
 
 Q(sensor)
 
@@ -4884,11 +5150,17 @@ Q(set_xy)
 
 Q(setattr)
 
+Q(setblocking)
+
 Q(setdefault)
 
 Q(setinterrupt)
 
+Q(setsockopt)
+
 Q(setter)
+
+Q(settimeout)
 
 Q(sha256)
 
@@ -4952,6 +5224,10 @@ Q(slice)
 
 Q(snapshot)
 
+Q(socket)
+
+Q(socket)
+
 Q(soft_reset)
 
 Q(softmax)
@@ -4980,6 +5256,10 @@ Q(sqrt)
 
 Q(sqrt)
 
+Q(ssid)
+
+Q(ssid)
+
 Q(stack_use)
 
 Q(standby)
@@ -4991,6 +5271,8 @@ Q(start)
 Q(start)
 
 Q(start)
+
+Q(start_ap)
 
 Q(startswith)
 
@@ -5198,6 +5480,8 @@ Q(throw)
 
 Q(throw)
 
+Q(ti)
+
 Q(tick)
 
 Q(ticks)
@@ -5219,6 +5503,18 @@ Q(time)
 Q(time)
 
 Q(time)
+
+Q(timeout)
+
+Q(timeout)
+
+Q(timeout)
+
+Q(timeout)
+
+Q(timeout)
+
+Q(timeout)
 
 Q(timeout)
 
@@ -5384,6 +5680,10 @@ Q(uselect)
 
 Q(uselect)
 
+Q(usocket)
+
+Q(usocket)
+
 Q(ustruct)
 
 Q(ustruct)
@@ -5488,6 +5788,8 @@ Q(w)
 
 Q(w)
 
+Q(wait_for_sta)
+
 Q(wfi)
 
 Q(wfi)
@@ -5525,6 +5827,10 @@ Q(write)
 Q(write)
 
 Q(write)
+
+Q(write)
+
+Q(write_readinto)
 
 Q(write_readinto)
 

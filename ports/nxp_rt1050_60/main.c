@@ -70,6 +70,7 @@
 #include "modnetwork.h"
 #include "virtual_com.h"
 #include "fsl_cache.h"
+#include "overlay_manager.h" 
 #ifdef MICROPY_PY_RTTHREAD	
 #include "rtthread.h"
 #endif
@@ -721,6 +722,7 @@ inline uint32_t lfs_popc(uint32_t a) {
     return (((a + (a >> 4)) & 0x0f0f0f0f) * 0x01010101) >> 24;
 #endif
 }
+bool flash_mounted = false; 
 int main(void) { // ResetHandler -> __scatterload -> __rt_entry -> main
 	snvs_hp_rtc_config_t snvsRtcConfig;
 	snvs_hp_rtc_datetime_t rtcDate;
@@ -824,7 +826,8 @@ soft_reset:
 #endif
     if (first_soft_reset) {
 		// rocky: OMVRT1 uses GD32 flash, not yet supported internal file system
-        #if defined(EVK1050_60_HYPER)
+        #if MICROPY_HW_HAS_FLASH || defined(EVK1050_60_HYPER)
+		OverlaySwitch(OVLY_FLASH);
         storage_init();
 		#endif
     }
@@ -842,7 +845,7 @@ soft_reset:
     mp_stack_set_limit(STACK_SIZE);
 	if (_heap_start >= 0x80000000) {
 		// heap is in SDRAM region, we assume there is at least 256kB heap!
-		_heap_end = _heap_start + 256 * 1024;
+		_heap_end = _heap_start + 512 * 1024;
 	} else if (_heap_start >= 0x20200000)
 	{
 		_heap_end = OCRAM_END;
@@ -910,7 +913,7 @@ soft_reset:
     // Initialise the local flash filesystem.
     // Create it if needed, mount in on /flash, and set it as current dir.
 	bool mounted_flash;
-	#if MICROPY_HW_HAS_FLASH && !defined(XIP_EXTERNAL_FLASH) && defined(EVK1050_60_HYPER) 
+	#if MICROPY_HW_HAS_FLASH || (!defined(XIP_EXTERNAL_FLASH) && defined(EVK1050_60_HYPER))
     mounted_flash = init_flash_fs(reset_mode);
 	#else
 	mounted_flash = 0;
@@ -947,6 +950,7 @@ soft_reset:
         mp_obj_list_append(mp_sys_path, MP_OBJ_NEW_QSTR(MP_QSTR__slash_sd_slash_lib));
     }
     if (mounted_flash) {
+		flash_mounted = true;
         mp_obj_list_append(mp_sys_path, MP_OBJ_NEW_QSTR(MP_QSTR__slash_flash));
         mp_obj_list_append(mp_sys_path, MP_OBJ_NEW_QSTR(MP_QSTR__slash_flash_slash_lib));
     }
