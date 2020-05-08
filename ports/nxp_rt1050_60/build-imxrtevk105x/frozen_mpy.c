@@ -382,7 +382,7 @@ STATIC const byte fun_data_lcd160cr__lt_module_gt__LCD160CR___init__[390] = {
     0xde, 
     0x44, 0x1b, 0x80, 
     0x12, MP_QSTR_machine & 0xff, MP_QSTR_machine >> 8, 
-    0x14, MP_QSTR_spi & 0xff, MP_QSTR_spi >> 8, 
+    0x14, MP_QSTR_SPI & 0xff, MP_QSTR_SPI >> 8, 
     0xb7, 
     0x10, MP_QSTR_baudrate & 0xff, MP_QSTR_baudrate >> 8, 
     0x22, 0x86, 0xb7, 0xfc, 0x60, 

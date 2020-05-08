@@ -35,7 +35,7 @@
     .port = PORT_ ## p_port, \
     .pin = (p_pin), \
     .num_af = (sizeof(p_af) / sizeof(pin_af_obj_t)), \
-    .pin_mask = (1 << ((p_pin) & 0x0f)), \
+    .pin_mask = (1UL << ((p_pin) & 0x1f)), \
     .gpio = GPIO ## p_port, \
     .af = p_af, \
     .adc_num = p_adc_num, \
@@ -90,9 +90,7 @@ const pin_af_obj_t pin_AD_B0_09_af[] = {
   //( 0, JTAG    ,  0, TDI             , JTAG       , 0          , 0   ), // JTAG_TDI
   AF( 1, PWM     ,  2, PWMA3           , PWM2       , 0x401F8474U, 0x3U), // FLEXPWM2_PWMA3
   //( 2, ENET    ,  0, RDATA2          , ENET       , 0          , 0   ), // ENET_RDATA2
-#if (defined(MICROPY_HW_ENABLE_SAI2) && MICROPY_HW_ENABLE_SAI2)
   AF( 3, SAI     ,  2, TX_DATA         , SAI2       , 0          , 0   ), // SAI2_TX_DATA
-#endif
   //( 4, CSI     ,  0, DATA4           , CSI        , 0x401F8408U, 0x1U), // CSI_DATA4
   AF( 5, GPIO    ,  1, PIN9            , GPIO1      , 0          , 0   ), // GPIO1_PIN9
   //( 6, XBAR    ,  1, XBAR_IN21       , XBAR1      , 0x401F8658U, 0x1U), // XBAR1_XBAR_IN21
@@ -106,9 +104,7 @@ const pin_af_obj_t pin_AD_B0_10_af[] = {
   //( 0, JTAG    ,  0, TDO             , JTAG       , 0          , 0   ), // JTAG_TDO
   AF( 1, PWM     ,  1, PWMA3           , PWM1       , 0x401F8454U, 0x3U), // FLEXPWM1_PWMA3
   //( 2, ENET    ,  0, CRS             , ENET       , 0          , 0   ), // ENET_CRS
-#if (defined(MICROPY_HW_ENABLE_SAI2) && MICROPY_HW_ENABLE_SAI2)
   AF( 3, SAI     ,  2, MCLK            , SAI2       , 0x401F85B0U, 0x1U), // SAI2_MCLK
-#endif
   //( 4, CSI     ,  0, DATA3           , CSI        , 0x401F8404U, 0x1U), // CSI_DATA3
   AF( 5, GPIO    ,  1, PIN10           , GPIO1      , 0          , 0   ), // GPIO1_PIN10
   //( 6, XBAR    ,  1, XBAR_IN22       , XBAR1      , 0x401F8638U, 0x1U), // XBAR1_XBAR_IN22
@@ -172,7 +168,7 @@ const pin_af_obj_t pin_AD_B1_00_af[] = {
   //(15, AD      ,  0, B1_00           , AD         ,            ,     ), // AD_B1_00
 };
 
-const pin_obj_t pin_AD_B1_00 = PIN(AD_B1_00, A5, 1, 16, pin_AD_B1_00_af, PIN_ADC1, 5, 0x401F80FCU, 0x401F82ECU);
+const pin_obj_t pin_AD_B1_00 = PIN(AD_B1_00, A5, 1, 16, pin_AD_B1_00_af, PIN_ADC1 | PIN_ADC2, 5, 0x401F80FCU, 0x401F82ECU);
 
 const pin_af_obj_t pin_AD_B1_01_af[] = {
   //( 0, USB     ,  0, OTG1_PWR        , USB        , 0          , 0   ), // USB_OTG1_PWR
@@ -186,7 +182,7 @@ const pin_af_obj_t pin_AD_B1_01_af[] = {
   //(15, AD      ,  0, B1_01           , AD         ,            ,     ), // AD_B1_01
 };
 
-const pin_obj_t pin_AD_B1_01 = PIN(AD_B1_01, A4, 1, 17, pin_AD_B1_01_af, PIN_ADC1, 6, 0x401F8100U, 0x401F82F0U);
+const pin_obj_t pin_AD_B1_01 = PIN(AD_B1_01, A4, 1, 17, pin_AD_B1_01_af, PIN_ADC1 | PIN_ADC2, 6, 0x401F8100U, 0x401F82F0U);
 
 const pin_af_obj_t pin_AD_B1_02_af[] = {
   //( 0, ANATOP  ,  0, OTG1_ID         , ANATOP     , 0x401F83F4U, 0x1U), // ANATOP_OTG1_ID
@@ -200,7 +196,7 @@ const pin_af_obj_t pin_AD_B1_02_af[] = {
   //(15, AD      ,  0, B1_02           , AD         ,            ,     ), // AD_B1_02
 };
 
-const pin_obj_t pin_AD_B1_02 = PIN(AD_B1_02, D6_PWM2, 1, 18, pin_AD_B1_02_af, PIN_ADC1, 7, 0x401F8104U, 0x401F82F4U);
+const pin_obj_t pin_AD_B1_02 = PIN(AD_B1_02, D6_PWM2, 1, 18, pin_AD_B1_02_af, PIN_ADC1 | PIN_ADC2, 7, 0x401F8104U, 0x401F82F4U);
 
 const pin_af_obj_t pin_AD_B1_03_af[] = {
   //( 0, USB     ,  0, OTG1_OC         , USB        , 0x401F85D0U, 0x1U), // USB_OTG1_OC
@@ -214,7 +210,7 @@ const pin_af_obj_t pin_AD_B1_03_af[] = {
   //(15, AD      ,  0, B1_03           , AD         ,            ,     ), // AD_B1_03
 };
 
-const pin_obj_t pin_AD_B1_03 = PIN(AD_B1_03, D7_PWM3, 1, 19, pin_AD_B1_03_af, PIN_ADC1, 8, 0x401F8108U, 0x401F82F8U);
+const pin_obj_t pin_AD_B1_03 = PIN(AD_B1_03, D7_PWM3, 1, 19, pin_AD_B1_03_af, PIN_ADC1 | PIN_ADC2, 8, 0x401F8108U, 0x401F82F8U);
 
 const pin_af_obj_t pin_AD_B1_04_af[] = {
   //( 0, FLEXSPI ,  0, B_DATA3         , FLEXSPI    , 0x401F84C4U, 0x1U), // FLEXSPI_B_DATA3
@@ -228,7 +224,7 @@ const pin_af_obj_t pin_AD_B1_04_af[] = {
   //(15, AD      ,  0, B1_04           , AD         ,            ,     ), // AD_B1_04
 };
 
-const pin_obj_t pin_AD_B1_04 = PIN(AD_B1_04, A2, 1, 20, pin_AD_B1_04_af, PIN_ADC1, 9, 0x401F810CU, 0x401F82FCU);
+const pin_obj_t pin_AD_B1_04 = PIN(AD_B1_04, A2, 1, 20, pin_AD_B1_04_af, PIN_ADC1 | PIN_ADC2, 9, 0x401F810CU, 0x401F82FCU);
 
 const pin_af_obj_t pin_AD_B1_05_af[] = {
   //( 0, FLEXSPI ,  0, B_DATA2         , FLEXSPI    , 0x401F84C0U, 0x1U), // FLEXSPI_B_DATA2
@@ -242,7 +238,7 @@ const pin_af_obj_t pin_AD_B1_05_af[] = {
   //(15, AD      ,  0, B1_05           , AD         ,            ,     ), // AD_B1_05
 };
 
-const pin_obj_t pin_AD_B1_05 = PIN(AD_B1_05, A3, 1, 21, pin_AD_B1_05_af, PIN_ADC1, 10, 0x401F8110U, 0x401F8300U);
+const pin_obj_t pin_AD_B1_05 = PIN(AD_B1_05, A3, 1, 21, pin_AD_B1_05_af, PIN_ADC1 | PIN_ADC2, 10, 0x401F8110U, 0x401F8300U);
 
 const pin_af_obj_t pin_AD_B1_06_af[] = {
   //( 0, FLEXSPI ,  0, B_DATA1         , FLEXSPI    , 0x401F84BCU, 0x1U), // FLEXSPI_B_DATA1
@@ -256,7 +252,7 @@ const pin_af_obj_t pin_AD_B1_06_af[] = {
   //(15, AD      ,  0, B1_06           , AD         ,            ,     ), // AD_B1_06
 };
 
-const pin_obj_t pin_AD_B1_06 = PIN(AD_B1_06, D1_TX, 1, 22, pin_AD_B1_06_af, PIN_ADC1, 11, 0x401F8114U, 0x401F8304U);
+const pin_obj_t pin_AD_B1_06 = PIN(AD_B1_06, D1_TX, 1, 22, pin_AD_B1_06_af, PIN_ADC1 | PIN_ADC2, 11, 0x401F8114U, 0x401F8304U);
 
 const pin_af_obj_t pin_AD_B1_07_af[] = {
   //( 0, FLEXSPI ,  0, B_DATA0         , FLEXSPI    , 0x401F84B8U, 0x1U), // FLEXSPI_B_DATA0
@@ -270,7 +266,7 @@ const pin_af_obj_t pin_AD_B1_07_af[] = {
   //(15, AD      ,  0, B1_07           , AD         ,            ,     ), // AD_B1_07
 };
 
-const pin_obj_t pin_AD_B1_07 = PIN(AD_B1_07, D0_RX, 1, 23, pin_AD_B1_07_af, PIN_ADC1, 12, 0x401F8118U, 0x401F8308U);
+const pin_obj_t pin_AD_B1_07 = PIN(AD_B1_07, D0_RX, 1, 23, pin_AD_B1_07_af, PIN_ADC1 | PIN_ADC2, 12, 0x401F8118U, 0x401F8308U);
 
 const pin_af_obj_t pin_AD_B1_08_af[] = {
   //( 0, FLEXSPI ,  0, A_SS1_B         , FLEXSPI    , 0          , 0   ), // FLEXSPI_A_SS1_B
@@ -284,15 +280,13 @@ const pin_af_obj_t pin_AD_B1_08_af[] = {
   //(15, AD      ,  0, B1_08           , AD         ,            ,     ), // AD_B1_08
 };
 
-const pin_obj_t pin_AD_B1_08 = PIN(AD_B1_08, D3_INT1, 1, 24, pin_AD_B1_08_af, PIN_ADC1, 13, 0x401F811CU, 0x401F830CU);
+const pin_obj_t pin_AD_B1_08 = PIN(AD_B1_08, D3_INT1, 1, 24, pin_AD_B1_08_af, PIN_ADC1 | PIN_ADC2, 13, 0x401F811CU, 0x401F830CU);
 
 const pin_af_obj_t pin_AD_B1_10_af[] = {
   //( 0, FLEXSPI ,  0, A_DATA3         , FLEXSPI    , 0x401F84B4U, 0x1U), // FLEXSPI_A_DATA3
   //( 1, WDOG    ,  1, WDOG_B          , WDOG1      , 0          , 0   ), // WDOG1_WDOG_B
   AF( 2, LPUART  ,  8, TX              , LPUART8    , 0x401F8564U, 0x1U), // LPUART8_TX
-#if (defined(MICROPY_HW_ENABLE_SAI1) && MICROPY_HW_ENABLE_SAI1)
   AF( 3, SAI     ,  1, RX_SYNC         , SAI1       , 0x401F85A4U, 0x1U), // SAI1_RX_SYNC
-#endif
   //( 4, CSI     ,  0, DATA7           , CSI        , 0x401F8414U, 0x0U), // CSI_DATA7
   AF( 5, GPIO    ,  1, PIN26           , GPIO1      , 0          , 0   ), // GPIO1_PIN26
   //( 6, USDHC   ,  2, WP              , USDHC2     , 0x401F8608U, 0x1U), // USDHC2_WP
@@ -300,15 +294,13 @@ const pin_af_obj_t pin_AD_B1_10_af[] = {
   //(15, AD      ,  0, B1_10           , AD         ,            ,     ), // AD_B1_10
 };
 
-const pin_obj_t pin_AD_B1_10 = PIN(AD_B1_10, A0, 1, 26, pin_AD_B1_10_af, PIN_ADC1, 15, 0x401F8124U, 0x401F8314U);
+const pin_obj_t pin_AD_B1_10 = PIN(AD_B1_10, A0, 1, 26, pin_AD_B1_10_af, PIN_ADC1 | PIN_ADC2, 15, 0x401F8124U, 0x401F8314U);
 
 const pin_af_obj_t pin_AD_B1_11_af[] = {
   //( 0, FLEXSPI ,  0, A_DATA2         , FLEXSPI    , 0x401F84B0U, 0x1U), // FLEXSPI_A_DATA2
   //( 1, EWM     ,  0, EWM_OUT_B       , EWM        , 0          , 0   ), // EWM_EWM_OUT_B
   AF( 2, LPUART  ,  8, RX              , LPUART8    , 0x401F8560U, 0x1U), // LPUART8_RX
-#if (defined(MICROPY_HW_ENABLE_SAI1) && MICROPY_HW_ENABLE_SAI1)
   AF( 3, SAI     ,  1, RX_BCLK         , SAI1       , 0x401F8590U, 0x1U), // SAI1_RX_BCLK
-#endif
   //( 4, CSI     ,  0, DATA6           , CSI        , 0x401F8410U, 0x0U), // CSI_DATA6
   AF( 5, GPIO    ,  1, PIN27           , GPIO1      , 0          , 0   ), // GPIO1_PIN27
   //( 6, USDHC   ,  2, RESET_B         , USDHC2     , 0          , 0   ), // USDHC2_RESET_B
@@ -316,7 +308,7 @@ const pin_af_obj_t pin_AD_B1_11_af[] = {
   //(15, AD      ,  0, B1_11           , AD         ,            ,     ), // AD_B1_11
 };
 
-const pin_obj_t pin_AD_B1_11 = PIN(AD_B1_11, A1, 1, 27, pin_AD_B1_11_af, PIN_ADC1, 0, 0x401F8128U, 0x401F8318U);
+const pin_obj_t pin_AD_B1_11 = PIN(AD_B1_11, A1, 1, 27, pin_AD_B1_11_af, PIN_ADC1 | PIN_ADC2, 0, 0x401F8128U, 0x401F8318U);
 
 const pin_af_obj_t pin_SD_B0_00_af[] = {
   //( 0, USDHC   ,  1, CMD             , USDHC1     , 0          , 0   ), // USDHC1_CMD
@@ -459,6 +451,86 @@ const pin_obj_t * const pin_adc1[] = {
 };
 
 const pin_obj_t * const pin_adc2[] = {
+  &pin_AD_B1_11, // 0
+  NULL,    // 1
+  NULL,    // 2
+  NULL,    // 3
+  NULL,    // 4
+  &pin_AD_B1_00, // 5
+  &pin_AD_B1_01, // 6
+  &pin_AD_B1_02, // 7
+  &pin_AD_B1_03, // 8
+  &pin_AD_B1_04, // 9
+  &pin_AD_B1_05, // 10
+  &pin_AD_B1_06, // 11
+  &pin_AD_B1_07, // 12
+  &pin_AD_B1_08, // 13
+  NULL,    // 14
+  &pin_AD_B1_10, // 15
+  NULL,    // 16
+};
+
+const pin_obj_t * const pin_acmp1[] = {
+  NULL,    // 0
+  NULL,    // 1
+  NULL,    // 2
+  NULL,    // 3
+  NULL,    // 4
+  NULL,    // 5
+  NULL,    // 6
+  NULL,    // 7
+  NULL,    // 8
+  NULL,    // 9
+  NULL,    // 10
+  NULL,    // 11
+  NULL,    // 12
+  NULL,    // 13
+  NULL,    // 14
+  NULL,    // 15
+  NULL,    // 16
+};
+
+const pin_obj_t * const pin_acmp2[] = {
+  NULL,    // 0
+  NULL,    // 1
+  NULL,    // 2
+  NULL,    // 3
+  NULL,    // 4
+  NULL,    // 5
+  NULL,    // 6
+  NULL,    // 7
+  NULL,    // 8
+  NULL,    // 9
+  NULL,    // 10
+  NULL,    // 11
+  NULL,    // 12
+  NULL,    // 13
+  NULL,    // 14
+  NULL,    // 15
+  NULL,    // 16
+};
+
+const pin_obj_t * const pin_acmp3[] = {
+  NULL,    // 0
+  NULL,    // 1
+  NULL,    // 2
+  NULL,    // 3
+  NULL,    // 4
+  NULL,    // 5
+  NULL,    // 6
+  NULL,    // 7
+  NULL,    // 8
+  NULL,    // 9
+  NULL,    // 10
+  NULL,    // 11
+  NULL,    // 12
+  NULL,    // 13
+  NULL,    // 14
+  NULL,    // 15
+  NULL,    // 16
+};
+
+const pin_obj_t * const pin_acmp4[] = {
   NULL,    // 0
   NULL,    // 1
   NULL,    // 2

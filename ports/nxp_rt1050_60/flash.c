@@ -93,6 +93,12 @@ flexspi_device_config_t deviceconfig = {
     .AHBWriteWaitInterval = 0,
 };
 
+#ifdef BOARD_OMVRT1
+#define ERASE_CODE (0x20)
+#else
+#define ERASE_CODE (0xD7)
+#endif
+
 const uint32_t customLUT[CUSTOM_LUT_LENGTH] = {
         /* Normal read mode -SDR */
         [4 * NOR_CMD_LUT_SEQ_IDX_READ_NORMAL] =
@@ -122,7 +128,7 @@ const uint32_t customLUT[CUSTOM_LUT_LENGTH] = {
 
         /* Erase Sector  */
         [4 * NOR_CMD_LUT_SEQ_IDX_ERASESECTOR] =
-            FLEXSPI_LUT_SEQ(kFLEXSPI_Command_SDR, kFLEXSPI_1PAD, 0xD7, kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_1PAD, 0x18),
+            FLEXSPI_LUT_SEQ(kFLEXSPI_Command_SDR, kFLEXSPI_1PAD, ERASE_CODE, kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_1PAD, 0x18),
 
         /* Page Program - single mode */
         [4 * NOR_CMD_LUT_SEQ_IDX_PAGEPROGRAM_SINGLE] =
@@ -382,6 +388,7 @@ int flexspi_nor_init(void){
     FLEXSPI_UpdateLUT(EXAMPLE_FLEXSPI, 0, customLUT, CUSTOM_LUT_LENGTH);
 	    /* Enter quad mode. */
     status = flexspi_nor_enable_quad_mode(EXAMPLE_FLEXSPI);
+	
 	__set_PRIMASK(primask);
 }
 #if 0

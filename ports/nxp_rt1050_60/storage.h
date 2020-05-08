@@ -30,11 +30,11 @@
 /* must set the block_size == 1, and sector_size = 4096? why?*/
 #define PAGE_SIZE (256)
 #define SECTOR_SIZE 0x1000 /* 4K */
-#define MAX_FLASH_SIZE (0x800000)
+#define MAX_FLASH_SIZE (4 * 1024 * 1024)
 // 4096 if FF_MAX_SS != FF_MIN_SS; else 512; especially for spi flash
 #define FLASH_BLOCK_SIZE (512) 
 // maybe the MP use more space than the usual fatfs
-#define TOTAL_FLASH_SIZE (FLASH_BLOCK_SIZE * 2048)
+#define TOTAL_FLASH_SIZE (FLASH_BLOCK_SIZE * 4096)
 #define SECTOR_OFFSET (MAX_FLASH_SIZE - TOTAL_FLASH_SIZE)    /* 16K */
 // must bigget than 128s, ff.c 5577, so TOTAL_FLASH_SIZE > 0x100000
 #define FLASH_NUM_BLOCKS (TOTAL_FLASH_SIZE / FLASH_BLOCK_SIZE)

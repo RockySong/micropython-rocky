@@ -5,7 +5,11 @@
 #define MICROPY_HW_MCU_NAME         "i.MX RT105x"
 #define MICROPY_HW_UART_REPL    	(repl_uart_id)	// uart ID of REPL uart, must be the same as repl_uart_id in uart.h
 #define MICROPY_HW_HAS_SWITCH       (1)
+#ifndef EVK1050_60_HYPER
 #define MICROPY_HW_HAS_FLASH        (1)
+#else
+#define MICROPY_HW_HAS_FLASH        (0)
+#endif
 #define MICROPY_HW_HAS_SDCARD       (1)
 #define MICROPY_HW_HAS_LCD          (0)
 #define MICROPY_HW_ENABLE_RNG       (1)
@@ -17,6 +21,11 @@
 #define MICROPY_MW_ENABLE_SWIM		(0)
 #define MICROPY_HW_ENABLE_STORAGE   (1)
 // XTAL is 12MHz
+#if defined(BOARD_OMVRT1)
+#define FLASH_CAP                   (4 * 1024 * 1024)
+#elif defined(EVK1050_60_QSPI)
+#define FLASH_CAP                   (8 * 1024 * 1024)
+#endif
 
 typedef enum _enum_rootPtrs
 {

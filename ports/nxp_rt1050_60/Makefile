@@ -346,6 +346,7 @@ SRC_C = \
 	usb_app.c \
 	usrsw.c \
 	storage.c \
+	ioctl_key.c \
 	fatfs_port.c \
 	sdcard.c \
 	usbd_msc_storage.c \
