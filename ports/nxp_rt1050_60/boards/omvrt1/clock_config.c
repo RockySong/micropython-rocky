@@ -89,8 +89,9 @@ void BOARD_BootClockRUN(void)
 #endif
 
 	CLOCK_InitUsb1Pll(&usb1PllConfig); /* Configure USB1 PLL to 480M. Also used by FlexSPI */
-	CLOCK_InitUsb1Pfd(kCLOCK_Pfd0, 15);
-	
+	CLOCK_InitUsb1Pfd(kCLOCK_Pfd0, 24); // pfd0MHz = 480 * 18 / 24 = 360
+    CLOCK_SetMux(kCLOCK_FlexspiMux, 0x3); /* Choose PLL3 PFD0 clock as flexspi source clock. */
+    CLOCK_SetDiv(kCLOCK_FlexspiDiv, 3-1);   /* flexspi clock 360/3=120MHz. */	
     CLOCK_SetDiv(kCLOCK_ArmDiv, 2-1); /* Set ARM PODF to 0, divide by 2 */
     CLOCK_SetDiv(kCLOCK_AhbDiv, 0x0); /* Set AHB PODF to 0, divide by 1 */
     CLOCK_SetDiv(kCLOCK_IpgDiv, 0x3); /* Set IPG PODF to 3, divede by 4 */
