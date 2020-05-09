@@ -15,6 +15,10 @@ extern uint32_t Load$$OVERLAY_HAAR$$Base;
 extern uint32_t Load$$OVERLAY_HAAR$$Length;
 extern uint32_t Image$$OVERLAY_HAAR$$Base;
 
+extern uint32_t Load$$OVERLAY_FLASH$$Base;
+extern uint32_t Load$$OVERLAY_FLASH$$Length;
+extern uint32_t Image$$OVERLAY_FLASH$$Base;
+
 extern uint32_t Load$$OVERLAY_FLASHPGM$$Base;
 extern uint32_t Load$$OVERLAY_FLASHPGM$$Length;
 extern uint32_t Image$$OVERLAY_FLASHPGM$$Base;
@@ -109,6 +113,9 @@ int OverlaySwitch(uint8_t ovlyNdx) {
 		#endif
 		#if defined(XIP_EXTERNAL_FLASH) && defined(EVK1050_60_HYPER) 
 		OVERLAY_CASE(FLASHPGM)
+		#endif
+		#if 1
+		OVERLAY_CASE(FLASH)
 		#endif
 	default:
 		return -1L;

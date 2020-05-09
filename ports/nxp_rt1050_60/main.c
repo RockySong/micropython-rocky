@@ -70,6 +70,7 @@
 #include "modnetwork.h"
 #include "virtual_com.h"
 #include "fsl_cache.h"
+#include "overlay_manager.h" 
 #ifdef MICROPY_PY_RTTHREAD	
 #include "rtthread.h"
 #endif
@@ -154,9 +155,6 @@ static const char fresh_boot_py[] __ALIGNED(4) =
 "\r\n"
 "import machine\r\n"
 "import pyb\r\n"
-"#pyb.main('main.py') # main script to run after this one\r\n"
-"#pyb.usb_mode('VCP+MSC') # act as a serial and a storage device\r\n"
-"#pyb.usb_mode('VCP+HID') # act as a serial device and a mouse\r\n"
 ;
 
 static const char fresh_selftest_py[] =
@@ -236,18 +234,6 @@ static const char fresh_selftest_py[] =
 
 static const char fresh_main_py[] __ALIGNED(4) =
 "# main.py -- put your code here!\n"
-"import pyb, time\n"
-"led = pyb.LED(1)\n"
-"usb = pyb.USB_VCP()\n"
-"while (usb.isconnected()==False):\n"
-"   led.on()\n"
-"   time.sleep(150)\n"
-"   led.off()\n"
-"   time.sleep(100)\n"
-"   led.on()\n"
-"   time.sleep(150)\n"
-"   led.off()\n"
-"   time.sleep(600)\n"
 ;
 
 static const char fresh_pybcdc_inf[] __ALIGNED(4) =
@@ -721,6 +707,7 @@ inline uint32_t lfs_popc(uint32_t a) {
     return (((a + (a >> 4)) & 0x0f0f0f0f) * 0x01010101) >> 24;
 #endif
 }
+bool flash_mounted = false; 
 int main(void) { // ResetHandler -> __scatterload -> __rt_entry -> main
 	snvs_hp_rtc_config_t snvsRtcConfig;
 	snvs_hp_rtc_datetime_t rtcDate;
@@ -824,8 +811,15 @@ soft_reset:
 #endif
     if (first_soft_reset) {
 		// rocky: OMVRT1 uses GD32 flash, not yet supported internal file system
-        #if defined(EVK1050_60_HYPER)
+        #if MICROPY_HW_HAS_FLASH
+		OverlaySwitch(OVLY_FLASH);
         storage_init();
+		__ISB();
+		__DSB();
+		volatile uint32_t t1, t2;
+		t1 = HAL_GetTick();
+		t2 = t1 + 1000;
+		while (HAL_GetTick() < t2) {HAL_WFI();}
 		#endif
     }
 
@@ -910,7 +904,7 @@ soft_reset:
     // Initialise the local flash filesystem.
     // Create it if needed, mount in on /flash, and set it as current dir.
 	bool mounted_flash;
-	#if MICROPY_HW_HAS_FLASH && !defined(XIP_EXTERNAL_FLASH) && defined(EVK1050_60_HYPER) 
+	#if MICROPY_HW_HAS_FLASH
     mounted_flash = init_flash_fs(reset_mode);
 	#else
 	mounted_flash = 0;
@@ -947,6 +941,7 @@ soft_reset:
         mp_obj_list_append(mp_sys_path, MP_OBJ_NEW_QSTR(MP_QSTR__slash_sd_slash_lib));
     }
     if (mounted_flash) {
+		flash_mounted = true;
         mp_obj_list_append(mp_sys_path, MP_OBJ_NEW_QSTR(MP_QSTR__slash_flash));
         mp_obj_list_append(mp_sys_path, MP_OBJ_NEW_QSTR(MP_QSTR__slash_flash_slash_lib));
     }

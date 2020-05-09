@@ -199,6 +199,7 @@ STATIC const mp_rom_map_elem_t pyb_module_globals_table[] = {
 #endif
 
 #if MICROPY_HW_HAS_FLASH
+	{ MP_ROM_QSTR(MP_QSTR_flash), MP_ROM_PTR(&pyb_flash_obj)  },
     { MP_ROM_QSTR(MP_QSTR_Flash), MP_ROM_PTR(&pyb_flash_type) },
 #endif
 

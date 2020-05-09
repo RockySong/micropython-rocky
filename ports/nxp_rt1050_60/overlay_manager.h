@@ -9,6 +9,7 @@
 #define OVLY_HAAR		2
 #define OVLY_CODE_HAAR	2
 
+#define OVLY_FLASH      3
 #define OVLY_FLASHPGM	3
 
 extern int OverlaySwitch(uint8_t ovlyNdx);
