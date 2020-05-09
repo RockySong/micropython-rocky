@@ -60,7 +60,7 @@ typedef enum {
     LED_RED=1,
     LED_GREEN=2,
     LED_BLUE=3,
-    LED_IR=4,    
+    LED_IR=4,
 } pyb_led_t;
 
 void led_init(void);

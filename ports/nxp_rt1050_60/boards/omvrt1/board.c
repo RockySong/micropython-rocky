@@ -104,7 +104,7 @@ void BOARD_ConfigMPU(void)
 	// MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_FULL, 0, 0, 1, 1, 0, ARM_MPU_REGION_SIZE_16KB);    
 
 	/* Region 5 setting, flexspi region */
-    MPU->RBAR = ARM_MPU_RBAR(rgnNdx++, 0x60000000U);
+    MPU->RBAR = ARM_MPU_RBAR(7, 0x60000000U);
     MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_FULL, 0, 0, 1, 1, 0, ARM_MPU_REGION_SIZE_512MB); 
 
 //	/* Region 6 setting, set whole SDRAM can be accessed by cache */

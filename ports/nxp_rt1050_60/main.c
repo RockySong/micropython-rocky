@@ -233,7 +233,7 @@ static const char fresh_selftest_py[] =
 ;
 
 static const char fresh_main_py[] __ALIGNED(4) =
-"# main.py -- put your code here!\n"
+"# main.py -- put your code here!\r\n"
 ;
 
 static const char fresh_pybcdc_inf[] __ALIGNED(4) =
@@ -296,7 +296,7 @@ MP_NOINLINE STATIC bool init_flash_fs(uint reset_mode) {
         }
 
         // set label
-        f_setlabel(&vfs_fat->fatfs, "pybflash");
+        f_setlabel(&vfs_fat->fatfs, "omvrt1");
 
         // create empty main.py
         FIL fp;
@@ -311,15 +311,6 @@ MP_NOINLINE STATIC bool init_flash_fs(uint reset_mode) {
         f_write(&fp, fresh_pybcdc_inf, sizeof(fresh_pybcdc_inf) - 1 /* don't count null terminator */, &n);
         f_close(&fp);
 
-        // create readme file
-        f_open(&vfs_fat->fatfs, &fp, "/README.txt", FA_WRITE | FA_CREATE_ALWAYS);
-        f_write(&fp, fresh_readme_txt, sizeof(fresh_readme_txt) - 1 /* don't count null terminator */, &n);
-        f_close(&fp);
-
-	    // Create default selftest.py
-	    f_open(&vfs_fat->fatfs, &fp, "/selftest.py", FA_WRITE | FA_CREATE_ALWAYS);
-	    f_write(&fp, fresh_selftest_py, sizeof(fresh_selftest_py) - 1 /* don't count null terminator */, &n);
-	    f_close(&fp);
 
         // keep LED on for at least 200ms
         sys_tick_wait_at_least(start_tick, 200);
@@ -810,9 +801,7 @@ soft_reset:
     }
 #endif
     if (first_soft_reset) {
-		// rocky: OMVRT1 uses GD32 flash, not yet supported internal file system
         #if MICROPY_HW_HAS_FLASH
-		OverlaySwitch(OVLY_FLASH);
         storage_init();
 		__ISB();
 		__DSB();

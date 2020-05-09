@@ -255,7 +255,7 @@ STATIC mp_obj_t led_obj_make_new(const mp_obj_type_t *type, size_t n_args, size_
     self =  gc_alloc(sizeof(*self), GC_ALLOC_FLAG_HAS_FINALISER);
 
 
-    Mux_Take(self, "pin", led_id, "led", &self->mux);
+    Mux_Take(self, "led", led_id, "-", &self->mux);
     if (self->mux.pPinObj == 0) {
         /* downward compatible with previous hard-coded pin object mapping
         drop the allocated pyb_led_obj_t instance to GC */

@@ -123,9 +123,9 @@ def CIFAR10Test(loopCnt = 600, isFull = False, barLen = 105):
     sensor.set_auto_gain(False)
     #sensor.set_framerate(0<<9|1<<12)
     if isFull:
-        net = nn.load('/cifar10.network')
+        net = nn.load('cifar10.network')
     else:
-        net = nn.load('/cifar10_fast.network')
+        net = nn.load('cifar10_fast.network')
     labels = ['plane', 'auto', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
     clock = time.clock()
     tAvg = 0.0
@@ -267,7 +267,7 @@ while (True):
     #pyb.LED(2).on()
     #pyb.LED(3).on()
     #pyb.LED(4).off()
-    #CorrTest(9000)
+    CorrTest(9000)
     CIFAR10Test(40000, True)
     QRCodeTest(40000)
     BlobTest(thresholds3, 30000)

@@ -391,6 +391,13 @@ int flexspi_nor_init(void){
 	
 	__set_PRIMASK(primask);
 }
+
+void flexspi_nor_reset(void) 
+{
+    // 2020-0509-1448_rocky: in case this "inline" function is failed to inline and put to flash
+    FLEXSPI_SoftwareReset(FLEXSPI);
+}
+
 #if 0
 #define FLASH_BANK_1     ((uint32_t)1U) /*!< Bank 1   */
 #define FLASH_PAGE_SIZE  256

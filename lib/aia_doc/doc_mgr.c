@@ -166,11 +166,8 @@ int DOC_DoWork(int arg_cnt, mp_obj_t *args) {
 	
 	char *path;
 	extern bool flash_mounted, s_cardInserted;
-	if(s_cardInserted)
-		path = "/aia_doc/doc_load.py";
-	else
-		path = "/flash" "/aia_doc/doc_load.py";
-	mp_import_stat_t stat = mp_import_stat(path);
+	path = "aia_doc/doc_load.py";
+    mp_import_stat_t stat = mp_import_stat(path);
 	if (stat == MP_IMPORT_STAT_FILE) {
 		nlr_buf_t nlr;
 		if (nlr_push(&nlr) == 0) {
@@ -182,6 +179,7 @@ int DOC_DoWork(int arg_cnt, mp_obj_t *args) {
 		}
 		else {
             mp_printf(&mp_plat_print, "doc script rasied an except!\r\n");
+            while(1) {}
 		}
 	} else {
         mp_printf(&mp_plat_print, "doc script does not found, please copy it to root folder\r\n");

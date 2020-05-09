@@ -72,7 +72,6 @@ LR_XIP_FLASH ROM_BASE + 0x2000 {
 	OVERLAY_FLASH+0 OVERLAY 12*1024{
 		fsl_flexspi.o (+RO)
 		flash.o (+RO)
-		storage.o (+RO)
 	}
 	
     DTCM_START_PLACEHOLDER 0x20000000 EMPTY 0 {}

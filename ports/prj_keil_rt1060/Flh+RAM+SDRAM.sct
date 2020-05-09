@@ -67,7 +67,6 @@ LR_XIP_FLASH ROM_BASE + 0x2000 {
 	OVERLAY_FLASH +0 OVERLAY {
 		fsl_flexspi.o (+RO)
 		flash.o (+RO)
-		storage.o (+RO)
 		}
 		
 	OVERLAY_CODE_BLOB +0 OVERLAY 0x3000{

@@ -306,7 +306,7 @@ int OpenMV_Main(uint32_t first_soft_reset)
     if (stat == MP_IMPORT_STAT_FILE) {
 		nlr_buf_t nlr;
 		if (nlr_push(&nlr) == 0) {
-			int ret = pyexec_file("/cmm_load.py");
+			int ret = pyexec_file("cmm_load.py");
 			if (ret & PYEXEC_FORCED_EXIT) {
 				ret = 1;
 			}			
@@ -314,6 +314,7 @@ int OpenMV_Main(uint32_t first_soft_reset)
 		}
 		else {
             mp_printf(&mp_plat_print, "cmm script rasied an except!\r\n");
+            while(1) {}
 		}
     }    
 	if (!usbdbg_script_ready()) {

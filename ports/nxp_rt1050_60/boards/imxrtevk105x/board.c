@@ -99,23 +99,16 @@ void BOARD_ConfigMPU(void)
 	MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_FULL, 0, 0, 1, 0, 0, ARM_MPU_REGION_SIZE_512KB);
 	// MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_FULL, 0, 0, 1, 1, 0, ARM_MPU_REGION_SIZE_256KB);
 
-    MPU->RBAR = ARM_MPU_RBAR(4, 0x60000000U);
-    MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_FULL, 0, 0, 1, 0, 0, ARM_MPU_REGION_SIZE_512MB); 
-
-    MPU->RBAR = ARM_MPU_RBAR(5, 0x60380000U);
-    MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_FULL, 1, 0, 0, 0, 0, ARM_MPU_REGION_SIZE_512KB); 
-
 	/* Region 5 setting, set whole SDRAM can be accessed by cache */
-    MPU->RBAR = ARM_MPU_RBAR(6, 0x80000000U);
+    MPU->RBAR = ARM_MPU_RBAR(4, 0x80000000U);
     MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_FULL, 0, 0, 1, 1, 0, ARM_MPU_REGION_SIZE_32MB);    
 
     /* Region 6 setting, set last 1MB of SDRAM can't be accessed by cache, glocal variables which are not expected to be accessed by cache can be put here */
-    MPU->RBAR = ARM_MPU_RBAR(7, 0x81F00000U);
+    MPU->RBAR = ARM_MPU_RBAR(5, 0x81F00000U);
     MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_FULL, 1, 0, 0, 0, 0, ARM_MPU_REGION_SIZE_1MB);   
   
-
-    // MPU->RBAR = ARM_MPU_RBAR(7, 0xC0000000U);
-    // MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_FULL, 2, 0, 0, 0, 0, ARM_MPU_REGION_SIZE_512MB);
+    MPU->RBAR = ARM_MPU_RBAR(7, 0x60000000U);
+    MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_FULL, 0, 0, 1, 0, 0, ARM_MPU_REGION_SIZE_512MB); 
 
     /* Enable MPU, enable background region for priviliged access */ 
     ARM_MPU_Enable(MPU_CTRL_PRIVDEFENA_Msk);

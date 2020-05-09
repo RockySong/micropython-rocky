@@ -104,7 +104,7 @@ int OverlaySwitch(uint8_t ovlyNdx) {
 	uint8_t ovlyNdxBkup = ovlyNdx;
 	const uint32_t *pSrc;
 	uint32_t *pDst;
-	uint32_t cb;
+	uint32_t cb = 0;
 	
 	switch (ovlyNdx) {
 		#if !defined(OMV_SENSOR_ONLY) && !defined(OMV_MPY_ONLY)		
@@ -114,19 +114,19 @@ int OverlaySwitch(uint8_t ovlyNdx) {
 		#if defined(XIP_EXTERNAL_FLASH) && defined(EVK1050_60_HYPER) 
 		OVERLAY_CASE(FLASHPGM)
 		#endif
-		#if 1
-		OVERLAY_CASE(FLASH)
-		#endif
 	default:
-		return -1L;
+        // no overlaid data for this index
+        ;
 	}
 
 	if (cb != 0) {
 		memcpy(pDst, pSrc, cb);
 	}
 	// >>> copy code
+    cb = 0;
 	switch (ovlyNdx) {
 		OVERLAY_CASE(CODE_BLOB)
+		OVERLAY_CASE(FLASH)
 	default:
 		return -1L;
 	}

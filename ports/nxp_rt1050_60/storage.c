@@ -39,17 +39,19 @@
 //#include "flash_pgm.h"
 #include "led.h"
 #include "storage.h"
-
+#include "overlay_manager.h"
 //#define SDRAM_DISK_TEST
 #ifdef SDRAM_DISK_TEST
 char fake_fs[1024*1024];
 #endif
 static bool flash_is_initialised = false;
 void storage_init(void) {
+    uint32_t old = OverlaySwitch(OVLY_FLASH);
     if (!flash_is_initialised) {
         flexspi_nor_init();
         flash_is_initialised = true;
     }
+    OverlaySwitch(old);
 }
 
 uint32_t storage_get_block_size(void) {
@@ -147,7 +149,7 @@ bool storage_read_block(uint8_t *dest, uint32_t block) {
 		}else{
 		#endif
 			uint32_t destAdrss = FLASH_MEM_BASE + FLASH_ADDR_OFFSET + addr + offset;
-			FLEXSPI_SoftwareReset(FLEXSPI);
+			// flexspi_nor_reset();
 			memcpy(dest, (char*)destAdrss, FLASH_BLOCK_SIZE);
 			__DSB();		
 		#ifdef SDRAM_DISK_TEST
@@ -161,6 +163,7 @@ bool storage_read_block(uint8_t *dest, uint32_t block) {
 // must has a clean flash && make the fatfs first, in case some error
 // buffer for a mem-pool and disable the cache
 static char buf[SECTOR_SIZE] = {0};
+bool storage_write_block(const uint8_t *src, uint32_t block) __attribute__((section(".ram_code"))) ;
 bool storage_write_block(const uint8_t *src, uint32_t block) {
     //printf("WR %u\n", block);
     if (block == 0) {
@@ -182,6 +185,10 @@ bool storage_write_block(const uint8_t *src, uint32_t block) {
 		uint32_t offset = addr & 0xfff;
 		addr = (addr >> 12) << 12;
 		// for sdram test, a fake sdram disk
+        uint32_t old = OverlaySwitch(OVLY_FLASH);
+        // disable execute
+        MPU->RBAR = ARM_MPU_RBAR(7, 0x60000000U);
+        MPU->RASR = ARM_MPU_RASR(1, ARM_MPU_AP_FULL, 0, 0, 1, 1, 0, ARM_MPU_REGION_SIZE_512MB);         
 		#ifdef SDRAM_DISK_TEST
 		uint32_t destAdrss = (uint32_t)(&fake_fs[0])+ addr;
 		if(destAdrss > (uint32_t)(&fake_fs[0])){
@@ -189,7 +196,7 @@ bool storage_write_block(const uint8_t *src, uint32_t block) {
 		}
 		else{
 		#endif
-			FLEXSPI_SoftwareReset(FLEXSPI);
+			flexspi_nor_reset();
 			uint32_t destAdrss = FLASH_MEM_BASE + FLASH_ADDR_OFFSET + addr;
 			memcpy(buf, (char*)destAdrss, SECTOR_SIZE);
 			__DSB();
@@ -205,13 +212,17 @@ bool storage_write_block(const uint8_t *src, uint32_t block) {
 			for (int i = 0; i < SECTOR_SIZE; i += PAGE_SIZE) {
 				result = flexspi_nor_flash_page_program(FLEXSPI, addr + FLASH_ADDR_OFFSET + i, (uint32_t*)(buf+i));	
 				if (result != 0) {
-					__set_PRIMASK(primask);
-					return result;
+					result = false;
+                    break;
 				}
 			}
 		#ifdef SDRAM_DISK_TEST
 		}
-		#endif
+		#endif        
+        // enable execute
+        MPU->RBAR = ARM_MPU_RBAR(7, 0x60000000U);
+        MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_FULL, 0, 0, 1, 1, 0, ARM_MPU_REGION_SIZE_512MB);                 
+        OverlaySwitch(old);
 		__set_PRIMASK(primask);
 		return true;
     }
