@@ -72,8 +72,10 @@ mp_obj_t DOC_FastSearch(mp_obj_t strSeg, mp_obj_t objLen)
 			ProcKey:
 			if (memcmp("#### ", sLine, 5) == 0)
 			{
-				if (memcmp(sLine + 5, s_doc.szKey, keyLen) == 0)
+				if (memcmp(sLine + 5, s_doc.szKey, keyLen) == 0 && 
+                    (sLine[5+keyLen] == '\r' || sLine[5+keyLen] == '\n'))
 				{
+                    // we do NOT allow spaces / tabs follow the key, so the pc_make_doc_hash.py should take care of it
 					s_doc.state = kWantLang;
 				}
 			}

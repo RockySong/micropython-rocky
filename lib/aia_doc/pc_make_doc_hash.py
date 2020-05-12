@@ -39,6 +39,7 @@ def modmain():
             fd.close()
             state = 0
             for sLine in lst:
+                sLine = sLine.rstrip()
                 if state == 0:
                     if sLine[:5] == '#### ':
                         state = 1
