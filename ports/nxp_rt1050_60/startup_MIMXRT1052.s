@@ -351,7 +351,9 @@ ConfigFlexRAM	PROC
 				ldr		r2,	[r0]
 				orr		r2, #7				; enable ITCM, DTCM, apply IOMUXC's cfg instead of FUSE config
 				str		r2,	[r0]
-				
+				;+++++++++++ barrier +++++++++++
+                DSB
+                ;+++++++++++ barrier +++++++++++
 				ldr		r0, =0x20000000
 				ldr		r1, =0x20078000
 				ldr		r2, =0
@@ -388,6 +390,8 @@ ConfigFlexRAM_OCRAM	PROC
 				orr		r2, #7				; enable ITCM, DTCM, apply IOMUXC's cfg instead of FUSE config
 				str		r2,	[r0]
 				
+                DMB
+                
 				ldr		r0, =0x20200000
 				ldr		r1, =0x20278000
 				ldr		r2, =0
