@@ -485,3 +485,4 @@ ports/prj_keil_rt1060_evk/Listings
 ports/prj_keil_rt1060_evk/Objects_SDRAM
 ports/prj_keil_rt1060/out_evk1050_pybonly_qspi/objects
 ports/prj_keil_rt1060/out_evk1050_qspi/objects
+ports/prj_keil_rt1060/out_evk1050_qspi/listing/startup_mimxrt1052.lst

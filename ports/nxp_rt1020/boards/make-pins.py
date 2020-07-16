@@ -291,6 +291,10 @@ class Pins(object):
         with open(filename, 'r') as csvfile:
             rows = csv.reader(csvfile)
             for row in rows:
+                i = 0
+                for token in row:
+                    row[i] = token.upper()
+                    i += 1
                 try:
                     (port_num, pin_num) = parse_port_pin(row[gpio_col][3:])
                 except:
@@ -316,7 +320,12 @@ class Pins(object):
                 if n == 1:
                     continue
                 s = row[0]
-                nameLen = dictPinNameLen[s[:2]]
+                if s.find('PMIC_ON') == 0:
+                    nameLen = 11    # PMIC_ON_REQ
+                elif s.find('PMIC_STBY') == 0:
+                    nameLen = 13 # PMIC_STBY_REQ
+                else:
+                    nameLen = dictPinNameLen[s[:2]]
                 sPinName = s[0: nameLen]
                 sAfName = s[nameLen+1:]
                 myPin = self.find_pin(sPinName)
@@ -330,8 +339,8 @@ class Pins(object):
 
                 for af in myPin.alt_fn:
                     if af.idx == afNdx:
-                        if sAfName == 'LPSPI2_SDO':
-                            i = 3
+                        #if sAfName == 'LPSPI2_SDO':
+                        #    i = 3
                         if af.af_str != sAfName:
                             pass
                            # print('warning: mux naming inconsistent: {:s} != {:s}'.format(af.af_str, sAfName))
@@ -533,8 +542,8 @@ def main():
     )
     
     if len(sys.argv) < 2:
-        sys.argv = ['./make-pins.py', '--board', './fire1020evk/pins.csv', '--af', './mimxrt102x_af.csv', 
-        '--pinmap', './mimxrt102x_pinmap.csv', '--prefix', './mimxrt102x_prefix.c', '--hdr', '../build-fire1020evk/genhdr/pins.h', 
+        sys.argv = ['./make-pins.py', '--board', './fire1020evk/pins.csv', '--af', './1020_af.csv',
+        '--pinmap', './mimxrt102x_pinmap.csv', '--prefix', './mimxrt102x_prefix.c', '--hdr', '../build-fire1020evk/genhdr/pins.h',
         '--qstr', '../build-fire1020evk/pins_qstr.h', '--af-const', '../build-fire1020evk/genhdr/pins_af_const.h', 
         '--af-py', '../build-fire1020evk/pins_af.py']
     args = parser.parse_args(sys.argv[1:])

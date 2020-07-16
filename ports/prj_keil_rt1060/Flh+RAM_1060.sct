@@ -43,7 +43,7 @@ LR_XIP_FLASH ROM_BASE + 0x2000 {
 
 	VECTOR_RAM 0 EMPTY 1*1024 { ; RAM vector region (in RAMX)
 	}
-	ER_ITCM +0 ITCM_SIZE - 8*1024 - 1*1024 { ; Stack region growing down
+	ER_ITCM +0 ITCM_SIZE - 12*1024 - 1*1024 { ; Stack region growing down
 		// vm.o pendsv.o objfun.o (+RO)
 		// nlrthumb.o (+RO)
 		// framebuffer.o fb_alloc.o (+RO)

@@ -73,7 +73,7 @@ void BOARD_InitDebugConsole(void)
 /* MPU configuration. */
 void BOARD_ConfigMPU(void)
 {
-	uint32_t rgn = 0;
+    int c = 'abc';
     /* Disable I cache and D cache */ 
     SCB_DisableICache();
     SCB_DisableDCache();

@@ -42,7 +42,12 @@ def main():
             n1 = sLine.find('GPIO')
             if n1 < 0:
                 continue
+            spaceNdx = sLine.find(' ')
+            comboName = sLine[:spaceNdx]
             pinName = sLine[:n1-1]
+            sMapVal = sLine[spaceNdx + 1 :-1]
+            sMapVal = sMapVal.replace(' ', '')
+            dict[pinName] = [(comboName[len(pinName) + 1:], sMapVal)]
         else:
             lst = sLine.split(' ')
             sMapVal = ''.join(lst[1:])
