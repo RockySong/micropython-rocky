@@ -615,7 +615,6 @@ RAM_CODE void CSI_IRQHandler(void)
 
 void CsiFragModeInit(void) {
 
-	CLOCK_EnableClock(kCLOCK_Csi);
 	CSI_Reset(CSI);
 	
 	s_pCSI->CSICR1 = CSICR1_INIT_VAL;
@@ -763,7 +762,7 @@ int sensor_init()
     } else { // Read OV sensor ID.
         cambus_readb(s_sensor.slv_addr, OV_CHIP_ID, &s_sensor.chip_id);
         // Initialize sensor struct.
-        switch (119) {
+        switch (s_sensor.chip_id) {
             case OV9650_ID:
                 ov9650_init(&s_sensor);
                 break;
