@@ -140,7 +140,8 @@ bool mp_hal_pin_config_alt(mp_hal_pin_obj_t pin, uint32_t padCfg,  uint8_t fn) {
     return true;
 }
 
-void mp_hal_ConfigGPIO(const pin_obj_t *p, uint32_t gpioModeAndPadCfg, uint32_t isInitialHighForOutput)
+void mp_hal_ConfigGPIO(const pin_obj_t *p, 
+    uint32_t gpioModeAndPadCfg, uint32_t isInitialHighForOutput)
 {
 	GPIO_Type *pGPIO = p->gpio;
 	uint32_t pinMask = 1 << p->pin;

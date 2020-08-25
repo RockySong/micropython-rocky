@@ -159,6 +159,8 @@ typedef signed int ssize_t;
 #define MICROPY_PY_NETWORK          (0)
 #endif
 
+#define MICROPY_ERROR_REPORTING (MICROPY_ERROR_REPORTING_DETAILED)
+
 //#define MICROPY_PY_RTTHREAD
 
 // fatfs configuration used in ffconf.h

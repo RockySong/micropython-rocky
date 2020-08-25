@@ -486,3 +486,7 @@ ports/prj_keil_rt1060_evk/Objects_SDRAM
 ports/prj_keil_rt1060/out_evk1050_pybonly_qspi/objects
 ports/prj_keil_rt1060/out_evk1050_qspi/objects
 ports/prj_keil_rt1060/out_evk1050_qspi/listing/startup_mimxrt1052.lst
+ports/prj_keil_rt1060/out_evk1050_pybonly_sdram
+ports/nxp_rt1050_60/boards/imxrtevk105x/flash_fs_init.7z
+lib/aia_doc.7z
+ports/nxp_rt1050_60/boards/imxrtevk105x/sdcard_fs_init.7z

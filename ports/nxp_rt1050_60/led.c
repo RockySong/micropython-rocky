@@ -269,6 +269,7 @@ STATIC mp_obj_t led_obj_make_new(const mp_obj_type_t *type, size_t n_args, size_
     self->base.type = &pyb_led_type;
     self->led_id = led_id;    
     self->led_pin = self->mux.pPinObj;
+    mp_hal_ConfigGPIO(self->led_pin, GPIO_MODE_OUTPUT_PP, 1);
     // return static led object
     return self;
 }

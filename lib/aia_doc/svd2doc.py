@@ -315,6 +315,7 @@ def doc_gen_peripherals(device = {}):
 
     lst.append('type help(\'p.{perip name}\') such as p.GPIO1 to check details')
     lst.append('输入help(\'p.外设名\') 例如 p.GPIO1 以查看细节')
+    lst.append('</lang>')
     lst.append('#### perip')
     lst.append('<link=peripherals>')
     lst.append('#### jicunqi')

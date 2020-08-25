@@ -124,8 +124,8 @@ mp_obj_t DOC_FastSearch(mp_obj_t strSeg, mp_obj_t objLen)
 		}
 		else if (s_doc.state == kWantEnd)
 		{
-			if (memcmp("</lang>", sLine, 7) == 0 || 
-			    memcmp("<lang=", sLine, 6) == 0 || memcmp("#### ", sLine, 5) == 0)
+			if (memcmp("</lang>", sLine, 7) == 0 /*|| 
+			    memcmp("<lang=", sLine, 6) == 0 || memcmp("#### ", sLine, 5) == 0*/)
 			{				
 				ret = kSearchOK;
 				break;
@@ -176,7 +176,7 @@ int DOC_DoWork(int arg_cnt, mp_obj_t *args) {
 			int ret = pyexec_file(path);
 			if (ret & PYEXEC_FORCED_EXIT) {
 				ret = 1;
-			}			
+			}
 			nlr_pop();
 		}
 		else {
@@ -184,7 +184,7 @@ int DOC_DoWork(int arg_cnt, mp_obj_t *args) {
             while(1) {}
 		}
 	} else {
-        mp_printf(&mp_plat_print, "doc script does not found, please copy it to root folder\r\n");
+        mp_printf(&mp_plat_print, "doc script does not found, please copy it to /aia_doc folder\r\n");
 		return -1;
     }
 	return s_doc.isFound;
