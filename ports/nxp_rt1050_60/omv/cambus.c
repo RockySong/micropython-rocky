@@ -81,7 +81,7 @@ int cambus_init()
      * 111 divide by 8
      */
     CLOCK_SetDiv(kCLOCK_CsiDiv, 0);
-    CLOCK_EnableClock(kCLOCK_Csi);
+    // CLOCK_EnableClock(kCLOCK_Csi);
     /*
      * For RT1050, there is not dedicate clock gate for CSI MCLK, it use CSI
      * clock gate.
