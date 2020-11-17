@@ -10,11 +10,15 @@ def compute_hash(key, modulo=17):
 def open_helpfile(key):
     hash = compute_hash(key)
     try:
-        sPath = '/aia_doc/zzhsh_%02d.md' % hash
+        sPath = '/sd/aia_doc/zzhsh_%02d.md' % hash
         fd = open(sPath, 'rb')
     except:
-        sPath = '/flash/aia_doc/zzhsh_%02d.md' % hash
-        fd = open(sPath, 'rb')    
+        try:
+            sPath = '/aia_doc/zzhsh_%02d.md' % hash
+            fd = open(sPath, 'rb')
+        except:
+            sPath = '/flash/aia_doc/zzhsh_%02d.md' % hash
+            fd = open(sPath, 'rb')    
     return fd
 
 def modmain():
@@ -27,7 +31,7 @@ def modmain():
     key = blob[0]
     lang = blob[1]
     print('\033[0;0m', end='')  # start of doc help entry
-    print('='*20,'\033[0;45;4m', end='') # pink
+    print('='*20,'\033[0;45m\033[4m', end='') # green
     print(key, end='')
     print('\033[0m','='*20)  # no color
     hash = compute_hash(key, 17)
