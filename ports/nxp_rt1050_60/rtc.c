@@ -114,8 +114,9 @@ int	rtc_info_init()
     rtcDate.hour = 11;
     rtcDate.minute = 30;
     rtcDate.second = 35;
-	PRINTF("Current datetime: %04d-%02d-%02d %02d:%02d:%02d\r\n", rtcDate.year, rtcDate.month, rtcDate.day,
+	/*PRINTF("Current datetime: %04d-%02d-%02d %02d:%02d:%02d\r\n", rtcDate.year, rtcDate.month, rtcDate.day,
                rtcDate.hour, rtcDate.minute, rtcDate.second);
+    */
 	return rtcDate.year;
 }
 
@@ -127,7 +128,6 @@ int rtc_init_start() {
     BOARD_ConfigMPU();
     BOARD_BootClockRUN();
     BOARD_InitDebugConsole();
-    PRINTF("SNVS HP example:\r\n");
     /* Enable SNVS alarm interrupt */
     SNVS_HP_RTC_EnableInterrupts(SNVS, kSNVS_RTC_AlarmInterrupt);
     /* Enable at the NVIC */
@@ -143,8 +143,9 @@ int rtc_init_start() {
 		{
 		/* Get date time */
         SNVS_HP_RTC_GetDatetime(SNVS, &rtcDate);
-		mp_printf(&mp_plat_print, "Current datetime1: %04d-%02d-%02d %02d:%02d:%02d\r\n", rtcDate.year, rtcDate.month, rtcDate.day,
+		/*mp_printf(&mp_plat_print, "Current datetime1: %04d-%02d-%02d %02d:%02d:%02d\r\n", rtcDate.year, rtcDate.month, rtcDate.day,
                rtcDate.hour, rtcDate.minute, rtcDate.second);
+        */
 		return rtcDate.second;
 		}
     }

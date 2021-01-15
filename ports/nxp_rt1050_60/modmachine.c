@@ -216,10 +216,10 @@ STATIC mp_obj_t machine_freq(mp_uint_t n_args, const mp_obj_t *args) {
     if (n_args == 0) {
         // get
         mp_obj_t tuple[4] = {
-           mp_obj_new_int(1), // (HAL_RCC_GetSysClockFreq()),
-           mp_obj_new_int(2), // (HAL_RCC_GetHCLKFreq()),
-           mp_obj_new_int(3), // (HAL_RCC_GetPCLK1Freq()),
-           mp_obj_new_int(4), // (HAL_RCC_GetPCLK2Freq()),
+           mp_obj_new_int(CLOCK_GetFreq(kCLOCK_OscClk) / 1000000), 
+           mp_obj_new_int(CLOCK_GetFreq(kCLOCK_CpuClk) / 1000000), 
+           mp_obj_new_int(CLOCK_GetFreq(kCLOCK_AhbClk) / 1000000), 
+           mp_obj_new_int(CLOCK_GetFreq(kCLOCK_IpgClk) / 1000000), 
         };
         return mp_obj_new_tuple(4, tuple);
     } else {

@@ -274,7 +274,7 @@ volatile uint8_t g_isMainDotPyRunning;
 int OpenMV_Main(uint32_t first_soft_reset)
 {
 	int ret = 0;
-	PRINTF("Enter OpenMV main\r\n");
+	// PRINTF("Enter OpenMV main\r\n");
 	// SCnSCB->ACTLR |= SCnSCB_ACTLR_DISDEFWBUF_Msk;
 /*    
 	extint_init0();
